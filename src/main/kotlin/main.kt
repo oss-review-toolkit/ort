@@ -133,10 +133,10 @@ object ProvenanceAnalzyer {
         }
     }
 
-    @Parameter(names = arrayOf("--package-managers", "-m"), description = "A list of package managers to activate.", listConverter = PackageManagerListConverter::class)
+    @Parameter(names = arrayOf("--package-managers", "-m"), description = "A list of package managers to activate.", listConverter = PackageManagerListConverter::class, order = 0)
     var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
 
-    @Parameter(names = arrayOf("--help", "-h"), help = true)
+    @Parameter(names = arrayOf("--help", "-h"), description = "Display the command line help.", help = true, order = 100)
     var help = false
 
     @Parameter(description = "project path(s)")
