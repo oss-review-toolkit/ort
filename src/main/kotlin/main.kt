@@ -160,7 +160,7 @@ object ProvenanceAnalzyer {
         println("The following package managers are activated:")
         println(packageManagers.map { it.javaClass.name }.joinToString(", "))
 
-        for (projectPath in projectPaths.orEmpty()) {
+        projectPaths!!.forEach { projectPath ->
             println("Scanning project path '$projectPath'.")
         }
     }
