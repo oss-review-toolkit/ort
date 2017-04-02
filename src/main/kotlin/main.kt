@@ -139,8 +139,8 @@ object ProvenanceAnalzyer {
     @Parameter(names = arrayOf("--help", "-h"), help = true)
     var help = false
 
-    @Parameter
-    var projectPath: String? = null
+    @Parameter(description = "project path(s)")
+    var projectPaths: List<String>? = null
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -151,12 +151,16 @@ object ProvenanceAnalzyer {
             exitProcess(1)
         }
 
-        if (projectPath == null) {
-            println("Please specify a project path.")
+        if (projectPaths == null) {
+            println("Please specify at least one project path.")
             exitProcess(2)
         }
 
         println("The following package managers are activated:")
         println(packageManagers.map { it.javaClass.name }.joinToString(", "))
+
+        for (projectPath in projectPaths.orEmpty()) {
+            println("Scanning project path '$projectPath'.")
+        }
     }
 }
