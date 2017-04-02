@@ -6,18 +6,22 @@ import java.util.ArrayList
 
 import kotlin.system.exitProcess
 
-interface PackageManager {
+abstract class PackageManager {
     // Returns the URL to the package manager's homepage.
-    fun homepageUrl(): String
+    abstract fun homepageUrl(): String
 
     // Returns the name of the programming language this package manager is primarily used with.
-    fun primaryLanguage(): String
+    abstract fun primaryLanguage(): String
 
     // Returns a prioritized list of glob patterns of definition files supported by this package manager.
-    fun pathsToDefinitionFiles(): List<String>
+    abstract fun pathsToDefinitionFiles(): List<String>
+
+    override fun toString(): String {
+        return javaClass.name
+    }
 }
 
-object Bower: PackageManager {
+object Bower: PackageManager() {
     override fun homepageUrl(): String = "https://bower.io/"
 
     override fun primaryLanguage(): String = "JavaScript"
@@ -27,7 +31,7 @@ object Bower: PackageManager {
     }
 }
 
-object Bundler: PackageManager {
+object Bundler: PackageManager() {
     override fun homepageUrl(): String = "http://bundler.io/"
 
     override fun primaryLanguage(): String = "Ruby"
@@ -37,7 +41,7 @@ object Bundler: PackageManager {
     }
 }
 
-object CocoaPods: PackageManager {
+object CocoaPods: PackageManager() {
     override fun homepageUrl(): String = "https://cocoapods.org/"
 
     override fun primaryLanguage(): String = "Objective-C"
@@ -47,7 +51,7 @@ object CocoaPods: PackageManager {
     }
 }
 
-object Godep: PackageManager {
+object Godep: PackageManager() {
     override fun homepageUrl(): String = "https://godoc.org/github.com/tools/godep"
 
     override fun primaryLanguage(): String = "Go"
@@ -57,7 +61,7 @@ object Godep: PackageManager {
     }
 }
 
-object Gradle: PackageManager {
+object Gradle: PackageManager() {
     override fun homepageUrl(): String = "https://gradle.org/"
 
     override fun primaryLanguage(): String = "Java"
@@ -67,7 +71,7 @@ object Gradle: PackageManager {
     }
 }
 
-object Maven: PackageManager {
+object Maven: PackageManager() {
     override fun homepageUrl(): String = "https://maven.apache.org/"
 
     override fun primaryLanguage(): String = "Java"
@@ -77,7 +81,7 @@ object Maven: PackageManager {
     }
 }
 
-object NPM: PackageManager {
+object NPM: PackageManager() {
     override fun homepageUrl(): String = "https://www.npmjs.com/"
 
     override fun primaryLanguage(): String = "JavaScript"
@@ -87,7 +91,7 @@ object NPM: PackageManager {
     }
 }
 
-object PIP: PackageManager {
+object PIP: PackageManager() {
     override fun homepageUrl(): String = "https://pip.pypa.io/"
 
     override fun primaryLanguage(): String = "Python"
