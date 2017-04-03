@@ -27,7 +27,7 @@ object Bower: PackageManager() {
     override fun primaryLanguage(): String = "JavaScript"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("bower.json")
+        return listOf("bower.json")
     }
 }
 
@@ -37,7 +37,7 @@ object Bundler: PackageManager() {
     override fun primaryLanguage(): String = "Ruby"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("Gemfile.lock", "Gemfile")
+        return listOf("Gemfile.lock", "Gemfile")
     }
 }
 
@@ -47,7 +47,7 @@ object CocoaPods: PackageManager() {
     override fun primaryLanguage(): String = "Objective-C"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("Podfile.lock", "Podfile")
+        return listOf("Podfile.lock", "Podfile")
     }
 }
 
@@ -57,7 +57,7 @@ object Godep: PackageManager() {
     override fun primaryLanguage(): String = "Go"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("Godeps/Godeps.json")
+        return listOf("Godeps/Godeps.json")
     }
 }
 
@@ -67,7 +67,7 @@ object Gradle: PackageManager() {
     override fun primaryLanguage(): String = "Java"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("build.gradle")
+        return listOf("build.gradle")
     }
 }
 
@@ -77,7 +77,7 @@ object Maven: PackageManager() {
     override fun primaryLanguage(): String = "Java"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("pom.xml", "build.sbt", "build.scala")
+        return listOf("pom.xml", "build.sbt", "build.scala")
     }
 }
 
@@ -87,7 +87,7 @@ object NPM: PackageManager() {
     override fun primaryLanguage(): String = "JavaScript"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("package.json")
+        return listOf("package.json")
     }
 }
 
@@ -97,13 +97,13 @@ object PIP: PackageManager() {
     override fun primaryLanguage(): String = "Python"
 
     override fun pathsToDefinitionFiles(): List<String> {
-        return arrayListOf("setup.py", "requirements*.txt")
+        return listOf("setup.py", "requirements*.txt")
     }
 }
 
 object ProvenanceAnalzyer {
     // Prioritized list of package managers.
-    val PACKAGE_MANAGERS = arrayListOf(
+    val PACKAGE_MANAGERS = listOf(
         Gradle,
         Maven,
         NPM,
