@@ -6,100 +6,71 @@ import java.util.ArrayList
 
 import kotlin.system.exitProcess
 
-abstract class PackageManager {
-    // Returns the URL to the package manager's homepage.
-    abstract fun homepageUrl(): String
-
-    // Returns the name of the programming language this package manager is primarily used with.
-    abstract fun primaryLanguage(): String
-
-    // Returns a prioritized list of glob patterns of definition files supported by this package manager.
-    abstract fun pathsToDefinitionFiles(): List<String>
-
+/**
+ * A class representing a package manager that handles software dependencies.
+ *
+ * @property homepageUrl The URL to the package manager's homepage.
+ * @property primaryLanguage The name of the programming language this package manager is primarily used with.
+ * @property pathsToDefinitionFiles A prioritized list of glob patterns of definition files supported by this package manager.
+ *
+ */
+abstract class PackageManager(
+    val homepageUrl: String,
+    val primaryLanguage: String,
+    val pathsToDefinitionFiles: List<String>
+) {
     override fun toString(): String {
         return javaClass.name
     }
 }
 
-object Bower: PackageManager() {
-    override fun homepageUrl(): String = "https://bower.io/"
+object Bower: PackageManager(
+    "https://bower.io/",
+    "JavaScript",
+    listOf("bower.json")
+)
 
-    override fun primaryLanguage(): String = "JavaScript"
+object Bundler: PackageManager(
+    "http://bundler.io/",
+    "Ruby",
+    listOf("Gemfile.lock", "Gemfile")
+)
 
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("bower.json")
-    }
-}
+object CocoaPods: PackageManager(
+    "https://cocoapods.org/",
+    "Objective-C",
+    listOf("Podfile.lock", "Podfile")
+)
 
-object Bundler: PackageManager() {
-    override fun homepageUrl(): String = "http://bundler.io/"
+object Godep: PackageManager(
+    "https://godoc.org/github.com/tools/godep",
+    "Go",
+    listOf("Godeps/Godeps.json")
+)
 
-    override fun primaryLanguage(): String = "Ruby"
+object Gradle: PackageManager(
+    "https://gradle.org/",
+    "Java",
+    listOf("build.gradle")
+)
 
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("Gemfile.lock", "Gemfile")
-    }
-}
+object Maven: PackageManager(
+    "https://maven.apache.org/",
+    "Java",
+    listOf("pom.xml", "build.sbt", "build.scala")
+)
 
-object CocoaPods: PackageManager() {
-    override fun homepageUrl(): String = "https://cocoapods.org/"
+object NPM: PackageManager(
+    "https://www.npmjs.com/",
+    "JavaScript",
+    listOf("package.json")
+)
 
-    override fun primaryLanguage(): String = "Objective-C"
-
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("Podfile.lock", "Podfile")
-    }
-}
-
-object Godep: PackageManager() {
-    override fun homepageUrl(): String = "https://godoc.org/github.com/tools/godep"
-
-    override fun primaryLanguage(): String = "Go"
-
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("Godeps/Godeps.json")
-    }
-}
-
-object Gradle: PackageManager() {
-    override fun homepageUrl(): String = "https://gradle.org/"
-
-    override fun primaryLanguage(): String = "Java"
-
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("build.gradle")
-    }
-}
-
-object Maven: PackageManager() {
-    override fun homepageUrl(): String = "https://maven.apache.org/"
-
-    override fun primaryLanguage(): String = "Java"
-
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("pom.xml", "build.sbt", "build.scala")
-    }
-}
-
-object NPM: PackageManager() {
-    override fun homepageUrl(): String = "https://www.npmjs.com/"
-
-    override fun primaryLanguage(): String = "JavaScript"
-
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("package.json")
-    }
-}
-
-object PIP: PackageManager() {
-    override fun homepageUrl(): String = "https://pip.pypa.io/"
-
-    override fun primaryLanguage(): String = "Python"
-
-    override fun pathsToDefinitionFiles(): List<String> {
-        return listOf("setup.py", "requirements*.txt")
-    }
-}
+object PIP: PackageManager(
+    "https://pip.pypa.io/",
+    "Python",
+    listOf("setup.py", "requirements*.txt")
+)
 
 object ProvenanceAnalzyer {
     // Prioritized list of package managers.
