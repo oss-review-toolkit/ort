@@ -2,6 +2,12 @@ import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
+import java.nio.file.Files
+import java.nio.file.FileVisitResult
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 import java.util.ArrayList
 
 import kotlin.system.exitProcess
@@ -19,6 +25,8 @@ abstract class PackageManager(
     val primaryLanguage: String,
     val pathsToDefinitionFiles: List<String>
 ) {
+    val globForDefinitionFiles = "{" + pathsToDefinitionFiles.joinToString(",") + "}"
+
     override fun toString(): String {
         return javaClass.name
     }
@@ -139,7 +147,22 @@ object ProvenanceAnalzyer {
         println(packageManagers.map { it.javaClass.name }.joinToString(", "))
 
         projectPaths!!.forEach { projectPath ->
-            println("Scanning project path '$projectPath'.")
+            val absolutePath = Paths.get(projectPath).toAbsolutePath()
+            println("Scanning project path '$absolutePath'.")
+
+            Files.walkFileTree(absolutePath, object : SimpleFileVisitor<Path>() {
+                override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                    packageManagers.forEach { manager ->
+                        val matches = Files.newDirectoryStream(dir, manager.globForDefinitionFiles).toList()
+                        if (matches.isNotEmpty()) {
+                            println("Path '$dir' is managed by ${manager.javaClass.name}: ${matches.map { it.fileName }}.")
+                            return FileVisitResult.SKIP_SUBTREE
+                        }
+                    }
+
+                    return FileVisitResult.CONTINUE
+                }
+            })
         }
     }
 }
