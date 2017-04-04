@@ -57,7 +57,7 @@ object Gradle: PackageManager(
 object Maven: PackageManager(
     "https://maven.apache.org/",
     "Java",
-    listOf("pom.xml", "build.sbt", "build.scala")
+    listOf("pom.xml")
 )
 
 object NPM: PackageManager(
@@ -72,11 +72,18 @@ object PIP: PackageManager(
     listOf("setup.py", "requirements*.txt")
 )
 
+object SBT: PackageManager(
+    "http://www.scala-sbt.org/",
+    "Scala",
+    listOf("build.sbt", "build.scala")
+)
+
 object ProvenanceAnalzyer {
     // Prioritized list of package managers.
     val PACKAGE_MANAGERS = listOf(
         Gradle,
         Maven,
+        SBT,
         NPM,
         CocoaPods,
         Godep,
