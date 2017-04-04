@@ -137,6 +137,8 @@ object ProvenanceAnalzyer {
         println("The following package managers are activated:")
         println(packageManagers.map { it.javaClass.name }.joinToString(", "))
 
+        val managedProjectPaths = HashMap<PackageManager, MutableSet<Path>>()
+
         projectPaths!!.forEach { projectPath ->
             val absolutePath = Paths.get(projectPath).toAbsolutePath()
             println("Scanning project path '$absolutePath'.")
@@ -146,7 +148,7 @@ object ProvenanceAnalzyer {
                     packageManagers.forEach { manager ->
                         val matches = Files.newDirectoryStream(dir, manager.globForDefinitionFiles).toList()
                         if (matches.isNotEmpty()) {
-                            println("Path '$dir' is managed by ${manager.javaClass.name}: ${matches.map { it.fileName }}.")
+                            managedProjectPaths.getOrPut(manager) { mutableSetOf() }.addAll(matches)
                             return FileVisitResult.SKIP_SUBTREE
                         }
                     }
@@ -154,6 +156,10 @@ object ProvenanceAnalzyer {
                     return FileVisitResult.CONTINUE
                 }
             })
+        }
+
+        managedProjectPaths.forEach { manager, paths ->
+            println("$manager project(s) found in: $paths.")
         }
     }
 }
