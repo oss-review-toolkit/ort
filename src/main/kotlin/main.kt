@@ -8,7 +8,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
-import java.util.ArrayList
 
 import kotlin.system.exitProcess
 
@@ -102,20 +101,12 @@ object ProvenanceAnalzyer {
 
     class PackageManagerListConverter: IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
-            val activePackageManagers = ArrayList<PackageManager>()
-
             // Map lower-cased package manager class names to their instances.
             val packageManagerNames = packageManagers.associateBy { it.javaClass.name.toLowerCase() }
 
+            // Determine active package managers.
             val names = managers.toLowerCase().split(",")
-            for (name in names) {
-                val manager = packageManagerNames.get(name)
-                if (manager != null) {
-                    activePackageManagers.add(manager)
-                }
-            }
-
-            return activePackageManagers
+            return names.mapNotNull { packageManagerNames[it] }
         }
     }
 
