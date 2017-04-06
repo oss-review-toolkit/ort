@@ -85,7 +85,7 @@ object SBT: PackageManager(
     listOf("build.sbt", "build.scala")
 )
 
-object ProvenanceAnalzyer {
+object ProvenanceAnalyzer {
     // Prioritized list of package managers.
     val PACKAGE_MANAGERS = listOf(
         Gradle,
