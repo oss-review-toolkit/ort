@@ -135,7 +135,7 @@ object ProvenanceAnalyzer {
         }
 
         println("The following package managers are activated:")
-        println(packageManagers.map { it.javaClass.name }.joinToString(", "))
+        println("\t" + packageManagers.map { it.javaClass.name }.joinToString(", "))
 
         val managedProjectPaths = HashMap<PackageManager, MutableSet<Path>>()
 
@@ -159,7 +159,8 @@ object ProvenanceAnalyzer {
         }
 
         managedProjectPaths.forEach { manager, paths ->
-            println("$manager project(s) found in: $paths.")
+            println("$manager projects found in:")
+            println(paths.map { "\t$it" }.joinToString("\n"))
         }
     }
 }
