@@ -16,5 +16,5 @@ repositories {
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.1'
 
-    compile 'com.beust:jcommander:1.66'
+    compile 'com.beust:jcommander:1.69'
 }
