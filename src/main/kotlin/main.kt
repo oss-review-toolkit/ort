@@ -151,7 +151,6 @@ object ProvenanceAnalyzer {
                         val matches = Files.newDirectoryStream(dir, manager.globForDefinitionFiles).toList()
                         if (matches.isNotEmpty()) {
                             managedProjectPaths.getOrPut(manager) { mutableSetOf() }.addAll(matches)
-                            return FileVisitResult.SKIP_SUBTREE
                         }
                     }
 
