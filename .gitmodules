@@ -1,0 +1,4 @@
+[submodule "src/funTest/resources/projects/external/jgnash"]
+	path = src/funTest/resources/projects/external/jgnash
+	url = https://github.com/ccavanaugh/jgnash.git
+	shallow = true
