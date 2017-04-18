@@ -27,6 +27,7 @@ abstract class PackageManager(
     val globForDefinitionFiles = "{" + pathsToDefinitionFiles.joinToString(",") + "}"
 
     override fun toString(): String {
+        // To make JCommander display a proper name in list parameters of this custom type.
         return javaClass.name
     }
 }
@@ -137,6 +138,7 @@ object ProvenanceAnalyzer {
         println("The following package managers are activated:")
         println("\t" + packageManagers.map { it.javaClass.name }.joinToString(", "))
 
+        // Map of paths managed by the respective package manager.
         val managedProjectPaths = HashMap<PackageManager, MutableSet<Path>>()
 
         projectPaths!!.forEach { projectPath ->
