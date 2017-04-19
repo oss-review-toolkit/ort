@@ -124,7 +124,8 @@ object ProvenanceAnalyzer {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val jc = JCommander(this, *args)
+        val jc = JCommander(this)
+        jc.parse(*args)
         jc.programName = "pran"
 
         if (help) {
