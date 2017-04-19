@@ -26,8 +26,10 @@ abstract class PackageManager(
 ) {
     val globForDefinitionFiles = "{" + pathsToDefinitionFiles.joinToString(",") + "}"
 
+    /**
+     * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.
+     */
     override fun toString(): String {
-        // To make JCommander display a proper name in list parameters of this custom type.
         return javaClass.name
     }
 }
