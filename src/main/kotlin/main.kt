@@ -142,7 +142,7 @@ object ProvenanceAnalyzer {
         System.err.println("\t" + packageManagers.map { it.javaClass.name }.joinToString(", "))
 
         // Map of paths managed by the respective package manager.
-        val managedProjectPaths = HashMap<PackageManager, MutableSet<Path>>()
+        val managedProjectPaths = HashMap<PackageManager, MutableList<Path>>()
 
         projectPaths!!.forEach { projectPath ->
             val absolutePath = Paths.get(projectPath).toAbsolutePath()
@@ -153,7 +153,7 @@ object ProvenanceAnalyzer {
                     packageManagers.forEach { manager ->
                         val matches = Files.newDirectoryStream(dir, manager.globForDefinitionFiles).toList()
                         if (matches.isNotEmpty()) {
-                            managedProjectPaths.getOrPut(manager) { mutableSetOf() }.addAll(matches)
+                            managedProjectPaths.getOrPut(manager) { mutableListOf() }.addAll(matches)
                         }
                     }
 
