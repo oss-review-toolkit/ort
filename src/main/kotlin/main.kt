@@ -3,6 +3,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
 import java.nio.file.Files
+import java.nio.file.FileSystems
 import java.nio.file.FileVisitResult
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -24,7 +25,8 @@ abstract class PackageManager(
     val primaryLanguage: String,
     val pathsToDefinitionFiles: List<String>
 ) {
-    val globForDefinitionFiles = "{" + pathsToDefinitionFiles.joinToString(",") + "}"
+    // Create a recursive glob matcher for all definition files.
+    val globForDefinitionFiles = FileSystems.getDefault().getPathMatcher("glob:**/{" + pathsToDefinitionFiles.joinToString(",") + "}")
 
     /**
      * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.
@@ -149,11 +151,10 @@ object ProvenanceAnalyzer {
             System.err.println("Scanning project path '$absolutePath'.")
 
             Files.walkFileTree(absolutePath, object : SimpleFileVisitor<Path>() {
-                override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                override fun visitFile(file: Path, attributes: BasicFileAttributes): FileVisitResult {
                     packageManagers.forEach { manager ->
-                        val matches = Files.newDirectoryStream(dir, manager.globForDefinitionFiles).toList()
-                        if (matches.isNotEmpty()) {
-                            managedProjectPaths.getOrPut(manager) { mutableListOf() }.addAll(matches)
+                        if (manager.globForDefinitionFiles.matches(file)) {
+                            managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file.parent)
                         }
                     }
 
