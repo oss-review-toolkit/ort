@@ -1,7 +1,7 @@
 plugins {
     // We need to hard-code the version here because of
     // https://github.com/gradle/gradle/issues/1697
-    id 'org.jetbrains.kotlin.jvm' version '1.1.1'
+    id 'org.jetbrains.kotlin.jvm' version '1.1.2'
 }
 
 apply plugin: 'application'
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.1'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.2'
 
     compile 'com.beust:jcommander:1.69'
 }
