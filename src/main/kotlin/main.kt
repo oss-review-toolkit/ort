@@ -150,17 +150,23 @@ object ProvenanceAnalyzer {
             val absolutePath = Paths.get(projectPath).toAbsolutePath()
             System.err.println("Scanning project path '$absolutePath'.")
 
-            Files.walkFileTree(absolutePath, object : SimpleFileVisitor<Path>() {
-                override fun visitFile(file: Path, attributes: BasicFileAttributes): FileVisitResult {
-                    packageManagers.forEach { manager ->
-                        if (manager.globForDefinitionFiles.matches(file)) {
-                            managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file.parent)
+            if (packageManagers.size == 1 && Files.isRegularFile(absolutePath)) {
+                // If only one package manager is activated, treat given paths to files as definition files for that
+                // package manager despite their name.
+                managedProjectPaths.getOrPut(packageManagers.first()) { mutableListOf() }.add(absolutePath)
+            } else {
+                Files.walkFileTree(absolutePath, object : SimpleFileVisitor<Path>() {
+                    override fun visitFile(file: Path, attributes: BasicFileAttributes): FileVisitResult {
+                        packageManagers.forEach { manager ->
+                            if (manager.globForDefinitionFiles.matches(file)) {
+                                managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file)
+                            }
                         }
-                    }
 
-                    return FileVisitResult.CONTINUE
-                }
-            })
+                        return FileVisitResult.CONTINUE
+                    }
+                })
+            }
         }
 
         managedProjectPaths.forEach { manager, paths ->
