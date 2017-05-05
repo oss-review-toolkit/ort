@@ -6,7 +6,7 @@ plugins {
 
 apply plugin: 'application'
 
-mainClassName = 'ProvenanceAnalzyer'
+mainClassName = 'ProvenanceAnalyzer'
 applicationName = 'pran'
 
 repositories {
