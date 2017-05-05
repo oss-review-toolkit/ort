@@ -136,19 +136,19 @@ object ProvenanceAnalyzer {
         }
 
         if (projectPaths == null) {
-            System.err.println("Please specify at least one project path.")
+            println("Please specify at least one project path.")
             exitProcess(2)
         }
 
-        System.err.println("The following package managers are activated:")
-        System.err.println("\t" + packageManagers.map { it.javaClass.name }.joinToString(", "))
+        println("The following package managers are activated:")
+        println("\t" + packageManagers.map { it.javaClass.name }.joinToString(", "))
 
         // Map of paths managed by the respective package manager.
         val managedProjectPaths = HashMap<PackageManager, MutableList<Path>>()
 
         projectPaths!!.forEach { projectPath ->
             val absolutePath = Paths.get(projectPath).toAbsolutePath()
-            System.err.println("Scanning project path '$absolutePath'.")
+            println("Scanning project path '$absolutePath'.")
 
             if (packageManagers.size == 1 && Files.isRegularFile(absolutePath)) {
                 // If only one package manager is activated, treat given paths to files as definition files for that
@@ -170,8 +170,8 @@ object ProvenanceAnalyzer {
         }
 
         managedProjectPaths.forEach { manager, paths ->
-            System.err.println("$manager projects found in:")
-            System.err.println(paths.map { "\t$it" }.joinToString("\n"))
+            println("$manager projects found in:")
+            println(paths.map { "\t$it" }.joinToString("\n"))
         }
     }
 }
