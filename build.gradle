@@ -8,6 +8,11 @@ apply plugin: 'application'
 
 mainClassName = 'ProvenanceAnalyzer'
 applicationName = 'pran'
+applicationDefaultJvmArgs = [
+        '-Dorg.slf4j.simpleLogger.levelInBrackets=true',
+        '-Dorg.slf4j.simpleLogger.showLogName=false',
+        '-Dorg.slf4j.simpleLogger.showThreadName=false'
+]
 
 repositories {
     jcenter()
@@ -17,4 +22,9 @@ dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.2'
 
     compile 'com.beust:jcommander:1.69'
+
+    // Use slf4j-simple as logger for kotlin-logging, as the latter is a wrapper for slf4j and depends on an
+    // implementation of slf4j.
+    compile 'io.github.microutils:kotlin-logging:1.4.4'
+    compile 'org.slf4j:slf4j-simple:1.7.25'
 }

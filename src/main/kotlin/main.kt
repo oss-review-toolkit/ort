@@ -12,6 +12,8 @@ import java.nio.file.attribute.BasicFileAttributes
 
 import kotlin.system.exitProcess
 
+import mu.KotlinLogging
+
 /**
  * A class representing a package manager that handles software dependencies.
  *
@@ -91,6 +93,8 @@ object SBT: PackageManager(
 )
 
 object ProvenanceAnalyzer {
+    private val logger = KotlinLogging.logger {}
+
     // Prioritized list of package managers.
     val PACKAGE_MANAGERS = listOf(
         Gradle,
@@ -136,7 +140,7 @@ object ProvenanceAnalyzer {
         }
 
         if (projectPaths == null) {
-            println("Please specify at least one project path.")
+            logger.error("Please specify at least one project path.")
             exitProcess(2)
         }
 
