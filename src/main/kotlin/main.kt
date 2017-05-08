@@ -220,9 +220,7 @@ object ProvenanceAnalyzer {
 
             // Print a sorted, de-duplicated list of dependencies.
             val dependencies = manager.resolveDependencies(paths)
-            dependencies.toSortedSet().forEach {
-                println(it)
-            }
+            dependencies.toSortedSet().forEach(::println)
         }
     }
 }
