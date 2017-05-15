@@ -14,6 +14,26 @@ applicationDefaultJvmArgs = [
         '-Dorg.slf4j.simpleLogger.showThreadName=false'
 ]
 
+sourceSets {
+    funTest {
+        kotlin {
+            srcDir 'src/funTest/kotlin'
+        }
+
+        resources {
+            srcDir 'src/funTest/resources'
+        }
+
+        compileClasspath += main.output
+        runtimeClasspath += main.output
+    }
+}
+
+configurations {
+    funTestCompile.extendsFrom mainCompile
+    funTestRuntime.extendsFrom mainRuntime
+}
+
 repositories {
     jcenter()
 }
@@ -27,4 +47,16 @@ dependencies {
     // implementation of slf4j.
     compile 'io.github.microutils:kotlin-logging:1.4.4'
     compile 'org.slf4j:slf4j-simple:1.7.25'
+
+    funTestCompile 'io.kotlintest:kotlintest:2.0.2'
 }
+
+task funTest(type: Test) {
+    description = 'Runs the functional tests.'
+    group = 'Verification'
+    classpath = sourceSets.funTest.runtimeClasspath
+    testClassesDir = sourceSets.funTest.output.classesDir
+    reports.html.destination = file("${buildDir}/reports/tests/funTest")
+}
+
+check.dependsOn funTest
