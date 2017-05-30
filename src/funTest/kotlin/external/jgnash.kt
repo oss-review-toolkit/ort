@@ -1,14 +1,11 @@
+package com.here.provenanceanalyzer.functionaltest
+
+import Maven
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
-
-import java.io.File
 import java.nio.file.Paths
 
 class JgnashTest : StringSpec() {
-
-    fun readResource(path: String): List<String> {
-        return File(javaClass.getResource(path).toURI()).readLines()
-    }
 
     init {
         "computed dependencies are correct" {
