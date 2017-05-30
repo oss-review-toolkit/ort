@@ -1,0 +1,9 @@
+{
+  "name": "HD-Live-Map-Viewer",
+  "version": "2.0.0",
+  "dependencies": {
+    "long": {
+      "version": "3.2.0"
+    }
+  }
+}
