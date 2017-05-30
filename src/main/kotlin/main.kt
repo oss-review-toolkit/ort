@@ -2,6 +2,7 @@ import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.FileSystems
 import java.nio.file.FileVisitResult
@@ -111,6 +112,33 @@ object NPM : PackageManager(
         listOf("package.json")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
+        val result = mutableMapOf<Path, Dependency>()
+
+        definitionFiles.forEach { definitionFile ->
+            val parent = definitionFile.parent.toFile()
+            val shrinkwrapLockfile = File(parent, "npm-shrinkwrap.json")
+            result[definitionFile] = when {
+                File(parent, "yarn.lock").isFile ->
+                    resolveYarnDependencies(parent)
+                shrinkwrapLockfile.isFile ->
+                    resolveShrinkwrapDependencies(shrinkwrapLockfile)
+                else ->
+                    resolveNpmDependencies(parent)
+            }
+        }
+
+        return result
+    }
+
+    private fun resolveNpmDependencies(parent: File): Dependency {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun resolveShrinkwrapDependencies(lockfile: File): Dependency {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun resolveYarnDependencies(parent: File): Dependency {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
