@@ -1,8 +1,11 @@
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
+import com.beust.klaxon.array
+import com.beust.klaxon.lookup
 import com.beust.klaxon.obj
 import com.beust.klaxon.string
 
@@ -158,8 +161,35 @@ object NPM : PackageManager(
         return Dependency(artifact = name, version = version, dependencies = dependencies, scope = "production")
     }
 
+    /**
+     * Resolve dependencies using yarn. Does not support detection of scope, all dependencies are marked as production
+     * dependencies.
+     */
     private fun resolveYarnDependencies(parent: File): Dependency {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val process = ProcessBuilder("yarn", "list", "--json", "--no-progress").directory(parent).start()
+        if (process.waitFor() != 0) {
+            throw Exception("Yarn failed with exit code ${process.exitValue()}.")
+        }
+        val jsonObject = Parser().parse(process.inputStream) as JsonObject
+        val data = jsonObject.obj("data")!!
+        val jsonDependencies = data.array<JsonObject>("trees")!!
+        val dependencies = parseYarnDependencies(jsonDependencies)
+        // The "todo"s below will be replaced once parsing of package.json is implemented.
+        return Dependency(artifact = "todo", version = "todo", dependencies = dependencies,
+                scope = "production")
+    }
+
+    private fun parseYarnDependencies(jsonDependencies: JsonArray<JsonObject>): List<Dependency> {
+        val result = mutableListOf<Dependency>()
+        jsonDependencies.forEach { jsonDependency ->
+            val data = jsonDependency.string("name")!!.split("@")
+            val children = jsonDependency.array<JsonObject>("children")
+            val dependencies = if (children != null) parseYarnDependencies(children) else listOf()
+            val dependency = Dependency(artifact = data[0], version = data[1], dependencies = dependencies,
+                    scope = "production")
+            result.add(dependency)
+        }
+        return result
     }
 }
 
