@@ -57,6 +57,7 @@ dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.2'
 
     compile 'com.beust:jcommander:1.72'
+    compile 'com.beust:klaxon:0.31'
 
     // Use slf4j-simple as logger for kotlin-logging, as the latter is a wrapper for slf4j and depends on an
     // implementation of slf4j.

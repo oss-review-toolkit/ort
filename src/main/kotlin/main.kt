@@ -1,6 +1,10 @@
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import com.beust.klaxon.JsonObject
+import com.beust.klaxon.Parser
+import com.beust.klaxon.obj
+import com.beust.klaxon.string
 
 import java.io.File
 import java.nio.file.Files
@@ -134,8 +138,24 @@ object NPM : PackageManager(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    /**
+     * Resolve dependencies using the npm-shrinkwrap.json file. Does not support detection of scope, all dependencies
+     * are marked as production dependencies. Because the shrinkwrap file does not contain information about the
+     * dependency tree all dependencies are added as top-level dependencies.
+     */
     private fun resolveShrinkwrapDependencies(lockfile: File): Dependency {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val jsonObject = Parser().parse(lockfile.inputStream()) as JsonObject
+        val name = jsonObject.string("name")!!
+        val version = jsonObject.string("version")!!
+        val jsonDependencies = jsonObject.obj("dependencies")
+        val dependencies = mutableListOf<Dependency>()
+        jsonDependencies!!.map.forEach { name, versionObject ->
+            val version = (versionObject as JsonObject).string("version")!!
+            val dependency = Dependency(artifact = name, version = version, dependencies = listOf(),
+                    scope = "production")
+            dependencies.add(dependency)
+        }
+        return Dependency(artifact = name, version = version, dependencies = dependencies, scope = "production")
     }
 
     private fun resolveYarnDependencies(parent: File): Dependency {
