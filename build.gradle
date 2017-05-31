@@ -32,22 +32,9 @@ applicationDefaultJvmArgs = [
 
 sourceSets {
     funTest {
-        kotlin {
-            srcDir 'src/funTest/kotlin'
-        }
-
-        resources {
-            srcDir 'src/funTest/resources'
-        }
-
-        compileClasspath += main.output
-        runtimeClasspath += main.output
+        kotlin.srcDir file('src/funTest/kotlin')
+        resources.srcDir file('src/funTest/resources')
     }
-}
-
-configurations {
-    funTestCompile.extendsFrom mainCompile
-    funTestRuntime.extendsFrom mainRuntime
 }
 
 repositories {
@@ -64,6 +51,11 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.4.4'
     compile 'org.slf4j:slf4j-simple:1.7.25'
 
+    funTestCompile sourceSets.main.output
+    funTestCompile sourceSets.test.output
+    funTestCompile configurations.testCompile
+    funTestRuntime configurations.testRuntime
+
     funTestCompile 'io.kotlintest:kotlintest:2.0.2'
 }
 
@@ -72,7 +64,6 @@ task funTest(type: Test) {
     group = 'Verification'
     classpath = sourceSets.funTest.runtimeClasspath
     testClassesDir = sourceSets.funTest.output.classesDir
-    reports.html.destination = file("${buildDir}/reports/tests/funTest")
 }
 
 check.dependsOn funTest
