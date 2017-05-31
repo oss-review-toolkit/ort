@@ -38,9 +38,10 @@ abstract class PackageManager(
     }
 
     /**
-     * Return a list of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved).
+     * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
+     * for each provided path.
      */
-    abstract fun resolveDependencies(definitionFiles: List<Path>): List<String>
+    abstract fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency>
 }
 
 object Bower : PackageManager(
@@ -48,7 +49,7 @@ object Bower : PackageManager(
         "JavaScript",
         listOf("bower.json")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -59,7 +60,7 @@ object Bundler : PackageManager(
         // See http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
         listOf("Gemfile.lock", "Gemfile")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -69,7 +70,7 @@ object CocoaPods : PackageManager(
         "Objective-C",
         listOf("Podfile.lock", "Podfile")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -79,7 +80,7 @@ object Godep : PackageManager(
         "Go",
         listOf("Godeps/Godeps.json")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -89,7 +90,7 @@ object Gradle : PackageManager(
         "Java",
         listOf("build.gradle")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -99,7 +100,7 @@ object Maven : PackageManager(
         "Java",
         listOf("pom.xml")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -109,7 +110,7 @@ object NPM : PackageManager(
         "JavaScript",
         listOf("package.json")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -120,7 +121,7 @@ object PIP : PackageManager(
         // See https://caremad.io/posts/2013/07/setup-vs-requirement/.
         listOf("setup.py", "requirements*.txt")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -130,7 +131,7 @@ object SBT : PackageManager(
         "Scala",
         listOf("build.sbt", "build.scala")
 ) {
-    override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
+    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -222,7 +223,7 @@ object ProvenanceAnalyzer {
 
             // Print a sorted, de-duplicated list of dependencies.
             val dependencies = manager.resolveDependencies(paths)
-            dependencies.toSortedSet().forEach(::println)
+            dependencies.forEach(::println)
         }
     }
 }
