@@ -37,6 +37,7 @@
   "license": "LicenseRef-LICENSE",
   "private": true,
   "dependencies": {
-    "long": "^3.2.0"
+    "long": "^3.2.0",
+    "cheerio": "1.0.0-rc.1"
   }
 }
