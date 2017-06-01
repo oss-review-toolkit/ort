@@ -23,9 +23,9 @@ import mu.KotlinLogging
  *
  */
 abstract class PackageManager(
-    val homepageUrl: String,
-    val primaryLanguage: String,
-    val pathsToDefinitionFiles: List<String>
+        val homepageUrl: String,
+        val primaryLanguage: String,
+        val pathsToDefinitionFiles: List<String>
 ) {
     // Create a recursive glob matcher for all definition files.
     val globForDefinitionFiles = FileSystems.getDefault().getPathMatcher("glob:**/{" + pathsToDefinitionFiles.joinToString(",") + "}")!!
@@ -43,90 +43,90 @@ abstract class PackageManager(
     abstract fun resolveDependencies(definitionFiles: List<Path>): List<String>
 }
 
-object Bower: PackageManager(
-    "https://bower.io/",
-    "JavaScript",
-    listOf("bower.json")
+object Bower : PackageManager(
+        "https://bower.io/",
+        "JavaScript",
+        listOf("bower.json")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object Bundler: PackageManager(
-    "http://bundler.io/",
-    "Ruby",
-    listOf("Gemfile.lock", "Gemfile")
+object Bundler : PackageManager(
+        "http://bundler.io/",
+        "Ruby",
+        listOf("Gemfile.lock", "Gemfile")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object CocoaPods: PackageManager(
-    "https://cocoapods.org/",
-    "Objective-C",
-    listOf("Podfile.lock", "Podfile")
+object CocoaPods : PackageManager(
+        "https://cocoapods.org/",
+        "Objective-C",
+        listOf("Podfile.lock", "Podfile")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object Godep: PackageManager(
-    "https://godoc.org/github.com/tools/godep",
-    "Go",
-    listOf("Godeps/Godeps.json")
+object Godep : PackageManager(
+        "https://godoc.org/github.com/tools/godep",
+        "Go",
+        listOf("Godeps/Godeps.json")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object Gradle: PackageManager(
-    "https://gradle.org/",
-    "Java",
-    listOf("build.gradle")
+object Gradle : PackageManager(
+        "https://gradle.org/",
+        "Java",
+        listOf("build.gradle")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object Maven: PackageManager(
-    "https://maven.apache.org/",
-    "Java",
-    listOf("pom.xml")
+object Maven : PackageManager(
+        "https://maven.apache.org/",
+        "Java",
+        listOf("pom.xml")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object NPM: PackageManager(
-    "https://www.npmjs.com/",
-    "JavaScript",
-    listOf("package.json")
+object NPM : PackageManager(
+        "https://www.npmjs.com/",
+        "JavaScript",
+        listOf("package.json")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object PIP: PackageManager(
-    "https://pip.pypa.io/",
-    "Python",
-    listOf("setup.py", "requirements*.txt")
+object PIP : PackageManager(
+        "https://pip.pypa.io/",
+        "Python",
+        listOf("setup.py", "requirements*.txt")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-object SBT: PackageManager(
-    "http://www.scala-sbt.org/",
-    "Scala",
-    listOf("build.sbt", "build.scala")
+object SBT : PackageManager(
+        "http://www.scala-sbt.org/",
+        "Scala",
+        listOf("build.sbt", "build.scala")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -138,18 +138,18 @@ object ProvenanceAnalyzer {
 
     // Prioritized list of package managers.
     val PACKAGE_MANAGERS = listOf(
-        Gradle,
-        Maven,
-        SBT,
-        NPM,
-        CocoaPods,
-        Godep,
-        Bower,
-        PIP,
-        Bundler
+            Gradle,
+            Maven,
+            SBT,
+            NPM,
+            CocoaPods,
+            Godep,
+            Bower,
+            PIP,
+            Bundler
     )
 
-    class PackageManagerListConverter: IStringConverter<List<PackageManager>> {
+    class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
             // Map lower-cased package manager class names to their instances.
             val packageManagerNames = packageManagers.associateBy { it.javaClass.name.toLowerCase() }
