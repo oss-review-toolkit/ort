@@ -56,6 +56,7 @@ object Bower : PackageManager(
 object Bundler : PackageManager(
         "http://bundler.io/",
         "Ruby",
+        // See http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
         listOf("Gemfile.lock", "Gemfile")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
@@ -116,6 +117,7 @@ object NPM : PackageManager(
 object PIP : PackageManager(
         "https://pip.pypa.io/",
         "Python",
+        // See https://caremad.io/posts/2013/07/setup-vs-requirement/.
         listOf("setup.py", "requirements*.txt")
 ) {
     override fun resolveDependencies(definitionFiles: List<Path>): List<String> {
