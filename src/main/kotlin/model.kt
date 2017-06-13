@@ -4,6 +4,7 @@ class Dependency(
         val group: String? = null,
         val artifact: String,
         val version: String,
+        val scope: String,
         val dependencies: List<Dependency> = listOf(),
         val scm: URL? = null
 ) {
@@ -12,7 +13,7 @@ class Dependency(
     }
 
     private fun toString(indent: String): String {
-        val stringBuilder = StringBuilder("${indent}${group}:${artifact}:${version}:${scm}\n")
+        val stringBuilder = StringBuilder("${indent}${group}:${artifact}:${version}:${scope}:${scm}\n")
         dependencies.forEach { dependency ->
             stringBuilder.append(dependency.toString("${indent}  "))
         }
