@@ -137,7 +137,7 @@ object NPM : PackageManager(
         return result
     }
 
-    private fun resolveNpmDependencies(parent: File): Dependency {
+    fun resolveNpmDependencies(parent: File): Dependency {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -146,7 +146,7 @@ object NPM : PackageManager(
      * are marked as production dependencies. Because the shrinkwrap file does not contain information about the
      * dependency tree all dependencies are added as top-level dependencies.
      */
-    private fun resolveShrinkwrapDependencies(lockfile: File): Dependency {
+    fun resolveShrinkwrapDependencies(lockfile: File): Dependency {
         val jsonObject = Parser().parse(lockfile.inputStream()) as JsonObject
         val name = jsonObject.string("name")!!
         val version = jsonObject.string("version")!!
@@ -165,7 +165,7 @@ object NPM : PackageManager(
      * Resolve dependencies using yarn. Does not support detection of scope, all dependencies are marked as production
      * dependencies.
      */
-    private fun resolveYarnDependencies(parent: File): Dependency {
+    fun resolveYarnDependencies(parent: File): Dependency {
         val process = ProcessBuilder("yarn", "list", "--json", "--no-progress").directory(parent).start()
         if (process.waitFor() != 0) {
             throw Exception("Yarn failed with exit code ${process.exitValue()}.")
