@@ -16,6 +16,6 @@ class JgnashTest : StringSpec() {
             val resolvedDependencies = Maven.resolveDependencies(listOf(Paths.get("projects/external/jgnash/pom.xml")))
 
             resolvedDependencies shouldBe expectedDependencies
-        }
+        }.config(enabled = false)
     }
 }
