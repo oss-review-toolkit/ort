@@ -39,5 +39,8 @@
   "dependencies": {
     "long": "^3.2.0",
     "cheerio": "1.0.0-rc.1"
+  },
+  "devDependencies": {
+    "cson": "~4.1.0"
   }
 }
