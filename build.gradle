@@ -76,7 +76,7 @@ task funTest(type: Test) {
     description = 'Runs the functional tests.'
     group = 'Verification'
     classpath = sourceSets.funTest.runtimeClasspath
-    testClassesDir = sourceSets.funTest.output.classesDir
+    testClassesDirs = sourceSets.funTest.output.classesDirs
 }
 
 check.dependsOn funTest
