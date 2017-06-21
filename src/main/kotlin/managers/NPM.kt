@@ -12,6 +12,7 @@ import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
 
 import java.io.File
+import java.io.IOException
 import java.nio.file.Path
 
 object NPM : PackageManager(
@@ -72,7 +73,7 @@ object NPM : PackageManager(
         val command = if (OS.isWindows) "yarn.cmd" else "yarn"
         val process = ProcessBuilder(command, "list", "--json", "--no-progress").directory(parent).start()
         if (process.waitFor() != 0) {
-            throw Exception("Yarn failed with exit code ${process.exitValue()}.")
+            throw IOException("Yarn failed with exit code ${process.exitValue()}.")
         }
         val jsonObject = Parser().parse(process.inputStream) as JsonObject
         val data = jsonObject.obj("data")!!
