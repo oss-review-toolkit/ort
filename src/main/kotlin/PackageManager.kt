@@ -1,9 +1,23 @@
 package com.here.provenanceanalyzer
 
+import com.here.provenanceanalyzer.managers.*
 import com.here.provenanceanalyzer.model.Dependency
 
 import java.nio.file.FileSystems
 import java.nio.file.Path
+
+// Prioritized list of package managers.
+val PACKAGE_MANAGERS = listOf(
+        Gradle,
+        Maven,
+        SBT,
+        NPM,
+        CocoaPods,
+        Godep,
+        Bower,
+        PIP,
+        Bundler
+)
 
 /**
  * A class representing a package manager that handles software dependencies.

@@ -4,8 +4,6 @@ import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.here.provenanceanalyzer.managers.*
-
 import java.nio.file.Files
 import java.nio.file.FileVisitResult
 import java.nio.file.Path
@@ -19,19 +17,6 @@ import mu.KotlinLogging
 
 object Main {
     private val logger = KotlinLogging.logger {}
-
-    // Prioritized list of package managers.
-    val PACKAGE_MANAGERS = listOf(
-            Gradle,
-            Maven,
-            SBT,
-            NPM,
-            CocoaPods,
-            Godep,
-            Bower,
-            PIP,
-            Bundler
-    )
 
     class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
