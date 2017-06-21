@@ -42,5 +42,8 @@
   },
   "devDependencies": {
     "cson": "~4.1.0"
+  },
+  "peerDependencies": {
+    "tea": "2.x"
   }
 }
