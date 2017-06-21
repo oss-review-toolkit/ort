@@ -45,5 +45,11 @@
   },
   "peerDependencies": {
     "tea": "2.x"
-  }
+  },
+  "bundledDependencies": [
+    "maximatch"
+  ],
+  "bundleDependencies": [
+    "randomatic"
+  ]
 }
