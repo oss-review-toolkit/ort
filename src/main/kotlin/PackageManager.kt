@@ -18,7 +18,9 @@ abstract class PackageManager(
         val primaryLanguage: String,
         val pathsToDefinitionFiles: List<String>
 ) {
-    // Create a recursive glob matcher for all definition files.
+    /**
+     * The recursive glob matcher for all definition files.
+     */
     val globForDefinitionFiles = FileSystems.getDefault().getPathMatcher("glob:**/{" + pathsToDefinitionFiles.joinToString(",") + "}")!!
 
     /**
