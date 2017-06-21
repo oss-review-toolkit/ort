@@ -166,7 +166,8 @@ object NPM : PackageManager(
      * dependencies.
      */
     fun resolveYarnDependencies(parent: File): Dependency {
-        val process = ProcessBuilder("yarn", "list", "--json", "--no-progress").directory(parent).start()
+        val command = if (OS.isWindows) "yarn.cmd" else "yarn"
+        val process = ProcessBuilder(command, "list", "--json", "--no-progress").directory(parent).start()
         if (process.waitFor() != 0) {
             throw Exception("Yarn failed with exit code ${process.exitValue()}.")
         }
