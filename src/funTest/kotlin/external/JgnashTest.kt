@@ -1,12 +1,13 @@
 package com.here.provenanceanalyzer.functionaltest
 
-import Maven
+import com.here.provenanceanalyzer.managers.Maven
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
+
 import java.nio.file.Paths
 
 class JgnashTest : StringSpec() {
-
     init {
         "computed dependencies are correct" {
             val expectedDependencies = readResource("/projects/external/jgnash-expected-maven-dependencies.txt")

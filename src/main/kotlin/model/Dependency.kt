@@ -1,3 +1,5 @@
+package com.here.provenanceanalyzer.model
+
 import java.net.URL
 
 class Dependency(

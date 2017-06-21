@@ -1,12 +1,13 @@
 package com.here.provenanceanalyzer.functionaltest
 
+import com.here.provenanceanalyzer.managers.NPM
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class ProjectNpmTest : StringSpec() {
-
+class NpmTest : StringSpec() {
     init {
         "computed yarn dependencies are correct" {
             val expectedDependencies = readResource("/projects/synthetic/project-npm-expected-yarn-dependencies.txt")

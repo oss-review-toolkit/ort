@@ -34,7 +34,8 @@ dependencyUpdates.resolutionStrategy = {
     }
 }
 
-mainClassName = 'ProvenanceAnalyzer'
+mainClassName = 'Main'
+
 applicationName = 'pran'
 applicationDefaultJvmArgs = [
         '-Dorg.slf4j.simpleLogger.levelInBrackets=true',
