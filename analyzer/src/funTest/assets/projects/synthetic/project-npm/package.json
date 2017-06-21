@@ -51,5 +51,8 @@
   ],
   "bundleDependencies": [
     "randomatic"
-  ]
+  ],
+  "optionalDependencies": {
+    "promise": "~7.3.1"
+  }
 }

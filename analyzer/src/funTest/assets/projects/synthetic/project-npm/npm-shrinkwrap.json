@@ -7,6 +7,12 @@
       "from": "@types/node@>=6.0.46 <7.0.0",
       "resolved": "https://registry.npmjs.org/@types/node/-/node-6.0.78.tgz"
     },
+    "asap": {
+      "version": "2.0.5",
+      "from": "asap@>=2.0.3 <2.1.0",
+      "resolved": "https://registry.npmjs.org/asap/-/asap-2.0.5.tgz",
+      "optional": true
+    },
     "boolbase": {
       "version": "1.0.0",
       "from": "boolbase@>=1.0.0 <1.1.0",
@@ -167,6 +173,12 @@
       "version": "1.0.7",
       "from": "process-nextick-args@>=1.0.6 <1.1.0",
       "resolved": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz"
+    },
+    "promise": {
+      "version": "7.3.1",
+      "from": "promise@>=7.3.1 <7.4.0",
+      "resolved": "https://registry.npmjs.org/promise/-/promise-7.3.1.tgz",
+      "optional": true
     },
     "randomatic": {
       "version": "1.1.7",
