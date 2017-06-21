@@ -38,6 +38,11 @@ object Main {
     @Parameter(description = "project path(s)")
     var projectPaths: List<String>? = null
 
+    /**
+     * The entry point for the application.
+     *
+     * @param args The list of process arguments.
+     */
     @JvmStatic
     fun main(args: Array<String>) {
         val jc = JCommander(this)
