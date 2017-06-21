@@ -80,4 +80,4 @@ task funTest(type: Test) {
     testClassesDirs = sourceSets.funTest.output.classesDirs
 }
 
-check.dependsOn funTest
+check.dependsOn detektCheck, funTest
