@@ -148,17 +148,19 @@ object NPM : PackageManager(
      */
     fun resolveShrinkwrapDependencies(lockfile: File): Dependency {
         val jsonObject = Parser().parse(lockfile.inputStream()) as JsonObject
-        val name = jsonObject.string("name")!!
-        val version = jsonObject.string("version")!!
-        val jsonDependencies = jsonObject.obj("dependencies")
+
+        val projectName = jsonObject.string("name")!!
+        val projectVersion = jsonObject.string("version")!!
+        val projectDependencies = jsonObject.obj("dependencies")!!
+
         val dependencies = mutableListOf<Dependency>()
-        jsonDependencies!!.map.forEach { name, versionObject ->
+        projectDependencies.forEach { name, versionObject ->
             val version = (versionObject as JsonObject).string("version")!!
             val dependency = Dependency(artifact = name, version = version, dependencies = listOf(),
                     scope = "production")
             dependencies.add(dependency)
         }
-        return Dependency(artifact = name, version = version, dependencies = dependencies, scope = "production")
+        return Dependency(artifact = projectName, version = projectVersion, dependencies = dependencies, scope = "production")
     }
 
     /**
