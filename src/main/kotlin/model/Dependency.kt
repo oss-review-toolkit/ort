@@ -1,14 +1,12 @@
 package com.here.provenanceanalyzer.model
 
-import java.net.URL
-
 class Dependency(
         val group: String? = null,
         val artifact: String,
         val version: String,
         val scope: String,
         val dependencies: List<Dependency> = listOf(),
-        val scm: URL? = null
+        val scm: String? = null
 ) {
     override fun toString(): String {
         return toString("")
