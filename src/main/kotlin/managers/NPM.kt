@@ -58,7 +58,7 @@ object NPM : PackageManager(
         // Get all production dependencies.
         val prodJson = processToJson(parent, "npm", "list", "--json", "--only=prod")
         val prodDependencies = if (prodJson.contains("dependencies")) {
-            parseNpmDependencies(prodJson["dependencies"].obj, "production")
+            parseNpmDependencies(modulesDir, prodJson["dependencies"].obj, "production")
         } else {
             listOf()
         }
@@ -66,7 +66,7 @@ object NPM : PackageManager(
         // Get all dev dependencies.
         val devJson = processToJson(parent, "npm", "list", "--json", "--only=dev")
         val devDependencies = if (devJson.contains("dependencies")) {
-            parseNpmDependencies(devJson["dependencies"].obj, "development")
+            parseNpmDependencies(modulesDir, devJson["dependencies"].obj, "development")
         } else {
             listOf()
         }
@@ -81,16 +81,27 @@ object NPM : PackageManager(
                 scope = "production")
     }
 
-    private fun parseNpmDependencies(json: JsonObject, scope: String): List<Dependency> {
+    private fun parseNpmDependencies(modulesDir: File, json: JsonObject, scope: String): List<Dependency> {
         val result = mutableListOf<Dependency>()
         json.forEach { key, jsonElement ->
             val version = jsonElement["version"].string
             val dependencies = if (jsonElement.obj.contains("dependencies")) {
-                parseNpmDependencies(jsonElement["dependencies"].obj, scope)
+                parseNpmDependencies(modulesDir, jsonElement["dependencies"].obj, scope)
             } else {
                 listOf()
             }
-            val dependency = Dependency(artifact = key, version = version, dependencies = dependencies, scope = scope)
+
+            var scm: String? = null
+            val packageFile = File(modulesDir, "${key}/package.json")
+            if (packageFile.isFile) {
+                val packageJson = Gson().fromJson<JsonObject>(packageFile.readText())
+                if (packageJson.contains("repository")) {
+                    scm = packageJson["repository"]["url"].string
+                }
+            }
+
+            val dependency = Dependency(artifact = key, version = version, dependencies = dependencies, scope = scope,
+                    scm = scm)
             result.add(dependency)
         }
         return result
