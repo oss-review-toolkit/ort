@@ -73,6 +73,10 @@ dependencies {
     funTestCompile 'io.kotlintest:kotlintest:2.0.2'
 }
 
+detekt {
+    config = 'detekt.yml'
+}
+
 task funTest(type: Test) {
     description = 'Runs the functional tests.'
     group = 'Verification'
