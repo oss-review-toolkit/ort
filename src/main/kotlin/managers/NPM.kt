@@ -15,6 +15,7 @@ import com.google.gson.JsonObject
 import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
+import com.here.provenanceanalyzer.ProcessCapture
 
 import java.io.File
 import java.io.IOException
@@ -76,11 +77,11 @@ object NPM : PackageManager(
      */
     fun resolveYarnDependencies(parent: File): Dependency {
         val command = if (OS.isWindows) "yarn.cmd" else "yarn"
-        val process = ProcessBuilder(command, "list", "--json", "--no-progress").directory(parent).start()
-        if (process.waitFor() != 0) {
+        val process = ProcessCapture(parent, command, "list", "--json", "--no-progress")
+        if (process.exitValue() != 0) {
             throw IOException("Yarn failed with exit code ${process.exitValue()}.")
         }
-        val jsonString = process.inputStream.bufferedReader().use { it.readText() }
+        val jsonString = process.stdout()
         val jsonObject = Gson().fromJson<JsonObject>(jsonString)
         val jsonDependencies = jsonObject["data"]["trees"].array
         val dependencies = parseYarnDependencies(jsonDependencies)
