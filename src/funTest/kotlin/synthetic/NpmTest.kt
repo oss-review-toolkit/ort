@@ -21,10 +21,10 @@ class NpmTest : StringSpec() {
             }
         }
 
-        "computed shrinkwrap dependencies are correct" {
-            val expectedDependencies = readResource("/projects/synthetic/project-npm-expected-shrinkwrap-dependencies.txt")
-            val resolvedDependencies = NPM.resolveShrinkwrapDependencies(
-                    File("src/funTest/resources/projects/synthetic/project-npm/npm-shrinkwrap.json"))
+        "computed NPM dependencies are correct" {
+            val expectedDependencies = readResource("/projects/synthetic/project-npm-expected-npm-dependencies.txt")
+            val resolvedDependencies = NPM.resolveNpmDependencies(
+                    File("src/funTest/resources/projects/synthetic/project-npm"))
 
             val resolvedDependencyList = resolvedDependencies.toString().split("\n").filter { it.isNotEmpty() }
             resolvedDependencyList.size shouldBe expectedDependencies.size
@@ -33,5 +33,4 @@ class NpmTest : StringSpec() {
             }
         }
     }
-
 }
