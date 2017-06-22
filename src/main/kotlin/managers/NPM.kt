@@ -1,11 +1,16 @@
 package com.here.provenanceanalyzer.managers
 
-import com.beust.klaxon.JsonArray
-import com.beust.klaxon.JsonObject
-import com.beust.klaxon.Parser
-import com.beust.klaxon.array
-import com.beust.klaxon.obj
-import com.beust.klaxon.string
+import com.github.salomonbrys.kotson.array
+import com.github.salomonbrys.kotson.contains
+import com.github.salomonbrys.kotson.forEach
+import com.github.salomonbrys.kotson.fromJson
+import com.github.salomonbrys.kotson.get
+import com.github.salomonbrys.kotson.nullArray
+import com.github.salomonbrys.kotson.obj
+import com.github.salomonbrys.kotson.string
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 
 import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.OS
@@ -49,15 +54,15 @@ object NPM : PackageManager(
      * dependency tree all dependencies are added as top-level dependencies.
      */
     fun resolveShrinkwrapDependencies(lockfile: File): Dependency {
-        val jsonObject = Parser().parse(lockfile.inputStream()) as JsonObject
+        val jsonObject = Gson().fromJson<JsonObject>(lockfile.readText())
 
-        val projectName = jsonObject.string("name")!!
-        val projectVersion = jsonObject.string("version")!!
-        val projectDependencies = jsonObject.obj("dependencies")!!
+        val projectName = jsonObject["name"].string
+        val projectVersion = jsonObject["version"].string
+        val projectDependencies = jsonObject["dependencies"].obj
 
         val dependencies = mutableListOf<Dependency>()
         projectDependencies.forEach { name, versionObject ->
-            val version = (versionObject as JsonObject).string("version")!!
+            val version = versionObject["version"].string
             val dependency = Dependency(artifact = name, version = version, dependencies = listOf(),
                     scope = "production")
             dependencies.add(dependency)
@@ -75,21 +80,24 @@ object NPM : PackageManager(
         if (process.waitFor() != 0) {
             throw IOException("Yarn failed with exit code ${process.exitValue()}.")
         }
-        val jsonObject = Parser().parse(process.inputStream) as JsonObject
-        val data = jsonObject.obj("data")!!
-        val jsonDependencies = data.array<JsonObject>("trees")!!
+        val jsonString = process.inputStream.bufferedReader().use { it.readText() }
+        val jsonObject = Gson().fromJson<JsonObject>(jsonString)
+        val jsonDependencies = jsonObject["data"]["trees"].array
         val dependencies = parseYarnDependencies(jsonDependencies)
         // The "todo"s below will be replaced once parsing of package.json is implemented.
         return Dependency(artifact = "todo", version = "todo", dependencies = dependencies,
                 scope = "production")
     }
 
-    private fun parseYarnDependencies(jsonDependencies: JsonArray<JsonObject>): List<Dependency> {
+    private fun parseYarnDependencies(jsonDependencies: JsonArray): List<Dependency> {
         val result = mutableListOf<Dependency>()
         jsonDependencies.forEach { jsonDependency ->
-            val data = jsonDependency.string("name")!!.split("@")
-            val children = jsonDependency.array<JsonObject>("children")
-            val dependencies = if (children != null) parseYarnDependencies(children) else listOf()
+            val data = jsonDependency["name"].string.split("@")
+            val dependencies = if (jsonDependency.obj.contains("children")) {
+                parseYarnDependencies(jsonDependency["children"].array)
+            } else {
+                listOf()
+            }
             val dependency = Dependency(artifact = data[0], version = data[1], dependencies = dependencies,
                     scope = "production")
             result.add(dependency)
