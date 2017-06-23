@@ -1,4 +1,4 @@
-null:todo:todo:production:null
+null:HD-Live-Map-Viewer:2.0.0:production:null
   null:domelementtype:1.3.0:production:git://github.com/FB55/domelementtype.git
   null:long:3.2.0:production:https://github.com/dcodeIO/long.js.git
   null:cheerio:1.0.0-rc.1:production:git://github.com/cheeriojs/cheerio.git

@@ -137,8 +137,13 @@ object NPM : PackageManager(
         val jsonObject = processToJson(parent, command, "list", "--json", "--no-progress")
         val jsonDependencies = jsonObject["data"]["trees"].array
         val dependencies = parseYarnDependencies(jsonDependencies, yarnMetadata)
-        // The "todo"s below will be replaced once parsing of package.json is implemented.
-        return Dependency(artifact = "todo", version = "todo", dependencies = dependencies,
+
+        // Read name and version of root project from package.json.
+        val jsonPackage = Gson().fromJson<JsonObject>(File(parent, "package.json").readText())
+        val name = jsonPackage["name"].string
+        val version = jsonPackage["version"].string
+
+        return Dependency(artifact = name, version = version, dependencies = dependencies,
                 scope = "production")
     }
 
