@@ -13,9 +13,9 @@ data class Dependency(
     }
 
     private fun toString(indent: String): String {
-        val stringBuilder = StringBuilder("${indent}${group}:${artifact}:${version}:${scope}:${scm}\n")
+        val stringBuilder = StringBuilder("$indent$group:$artifact:$version:$scope:$scm\n")
         dependencies.forEach { dependency ->
-            stringBuilder.append(dependency.toString("${indent}  "))
+            stringBuilder.append(dependency.toString("$indent  "))
         }
         return stringBuilder.toString()
     }

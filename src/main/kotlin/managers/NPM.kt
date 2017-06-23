@@ -95,7 +95,7 @@ object NPM : PackageManager(
             }
 
             var scm: String? = null
-            val packageFile = File(modulesDir, "${key}/package.json")
+            val packageFile = File(modulesDir, "$key/package.json")
             if (packageFile.isFile) {
                 val packageJson = Gson().fromJson<JsonObject>(packageFile.readText())
                 if (packageJson.contains("repository")) {
@@ -157,8 +157,7 @@ object NPM : PackageManager(
                 listOf()
             }
 
-            val metadata = yarnMetadata[name] ?: throw IOException("Could not get Yarn metadata for package " +
-                    "'${name}'.")
+            val metadata = yarnMetadata[name] ?: throw IOException("Could not get Yarn metadata for package '$name'.")
             val dependency = Dependency(artifact = name, version = metadata.resolvedVersion,
                     dependencies = dependencies, scope = "production", scm = metadata.repositoryUrl)
             result.add(dependency)
