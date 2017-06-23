@@ -45,7 +45,7 @@ object NPM : PackageManager(
      */
     fun resolveNpmDependencies(parent: File): Dependency {
         val modulesDir = File(parent, "node_modules")
-        if (modulesDir.exists()) {
+        if (modulesDir.isDirectory) {
             throw IllegalArgumentException("node_modules directory already exists.")
         }
 
