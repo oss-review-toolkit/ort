@@ -60,7 +60,7 @@ object Main {
         }
 
         println("The following package managers are activated:")
-        println("\t" + packageManagers.map { it.javaClass.name }.joinToString(", "))
+        println("\t" + packageManagers.map { it.javaClass.simpleName }.joinToString(", "))
 
         // Map of paths managed by the respective package manager.
         val managedProjectPaths = HashMap<PackageManager, MutableList<File>>()
