@@ -126,13 +126,14 @@ object NPM : PackageManager(
     private fun parseYarnDependencies(jsonDependencies: JsonArray): List<Dependency> {
         val result = mutableListOf<Dependency>()
         jsonDependencies.forEach { jsonDependency ->
-            val data = jsonDependency["name"].string.split("@")
+            val name = jsonDependency["name"].string.substringBeforeLast("@")
+            val version = jsonDependency["name"].string.substringAfterLast("@")
             val dependencies = if (jsonDependency.obj.contains("children")) {
                 parseYarnDependencies(jsonDependency["children"].array)
             } else {
                 listOf()
             }
-            val dependency = Dependency(artifact = data[0], version = data[1], dependencies = dependencies,
+            val dependency = Dependency(artifact = name, version = version, dependencies = dependencies,
                     scope = "production")
             result.add(dependency)
         }

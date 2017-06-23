@@ -43,13 +43,13 @@ null:todo:todo:production:null
     null:readable-stream:^2.0.2:production:null
   null:lodash:4.17.4:production:null
   null:parse5:3.0.2:production:null
-    null::types/node:production:null
+    null:@types/node:^6.0.46:production:null
   null:requirefresh:2.1.0:production:null
     null:editions:^1.1.1:production:null
   null:safefs:4.1.0:production:null
     null:editions:^1.1.1:production:null
     null:graceful-fs:^4.1.4:production:null
-  null::types/node:production:null
+  null:@types/node:6.0.78:production:null
   null:boolbase:1.0.0:production:null
   null:css-what:2.1.0:production:null
   null:domhandler:2.4.1:production:null
