@@ -1,6 +1,5 @@
 package com.here.provenanceanalyzer.managers
 
-import com.github.salomonbrys.kotson.array
 import com.github.salomonbrys.kotson.contains
 import com.github.salomonbrys.kotson.forEach
 import com.github.salomonbrys.kotson.fromJson
@@ -8,7 +7,6 @@ import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.obj
 import com.github.salomonbrys.kotson.string
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 
 import com.here.provenanceanalyzer.model.Dependency
@@ -24,13 +22,19 @@ object NPM : PackageManager(
         "JavaScript",
         listOf("package.json")
 ) {
-    private data class YarnMetadata(val name: String, val resolvedVersion: String, val repositoryUrl: String)
+    private val npm = if (OS.isWindows) "npm.cmd" else "npm"
 
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         val result = mutableMapOf<File, Dependency>()
 
         definitionFiles.forEach { definitionFile ->
             val parent = definitionFile.parentFile
+
+            val modulesDir = File(parent, "node_modules")
+            if (modulesDir.isDirectory) {
+                throw IllegalArgumentException("node_modules directory already exists.")
+            }
+
             result[definitionFile] = if (File(parent, "yarn.lock").isFile) {
                 resolveYarnDependencies(parent)
             } else {
@@ -45,18 +49,17 @@ object NPM : PackageManager(
      * Resolve dependencies using NPM. Supports detection of production and development scope.
      */
     fun resolveNpmDependencies(parent: File): Dependency {
-        val modulesDir = File(parent, "node_modules")
-        if (modulesDir.isDirectory) {
-            throw IllegalArgumentException("node_modules directory already exists.")
-        }
-
-        val npm = if (OS.isWindows) "npm.cmd" else "npm"
-
         // Install all NPM dependencies to enable NPM to list dependencies.
         val install = ProcessCapture(parent, npm, "install")
         if (install.exitValue() != 0) {
             throw IOException("npm install failed with exit code ${install.exitValue()}.")
         }
+
+        return parseInstalledDependencies(parent)
+    }
+
+    private fun parseInstalledDependencies(parent: File): Dependency {
+        val modulesDir = File(parent, "node_modules")
 
         // Get all production dependencies.
         val prodJson = processToJson(parent, npm, "list", "--json", "--only=prod")
@@ -99,7 +102,12 @@ object NPM : PackageManager(
             if (packageFile.isFile) {
                 val packageJson = Gson().fromJson<JsonObject>(packageFile.readText())
                 if (packageJson.contains("repository")) {
-                    scm = packageJson["repository"]["url"].string
+                    val repository = packageJson["repository"]
+
+                    // For some packages "yarn install" generates a non-conforming shortcut repository entry like this:
+                    // "repository": "git://..."
+                    // For details about the correct format see: https://docs.npmjs.com/files/package.json#repository
+                    scm = if (repository.isJsonObject) packageJson["repository"]["url"].string else repository.string
                 }
             }
 
@@ -111,58 +119,17 @@ object NPM : PackageManager(
     }
 
     /**
-     * Resolve dependencies using yarn. Does not support detection of scope, all dependencies are marked as production
-     * dependencies.
+     * Resolve dependencies using yarn. Supports detection of production and development scope.
      */
     fun resolveYarnDependencies(parent: File): Dependency {
+        // Install all NPM dependencies to enable NPM to list dependencies.
         val yarn = if (OS.isWindows) "yarn.cmd" else "yarn"
-
-        // Get package metadata using yarn licenses ls.
-        val yarnMetadata = mutableMapOf<String, YarnMetadata>()
-        val jsonLicenses = processToJson(parent, yarn, "licenses", "ls", "--json", "--no-progress")
-
-        val header = jsonLicenses["data"]["head"].array.map { it.string }
-        val nameIndex = header.indexOf("Name")
-        val versionIndex = header.indexOf("Version")
-        val urlIndex = header.indexOf("URL")
-
-        jsonLicenses["data"]["body"].array.forEach { jsonElement ->
-            val array = jsonElement.array
-            val metadata = YarnMetadata(array[nameIndex].string, array[versionIndex].string, array[urlIndex].string)
-            yarnMetadata[metadata.name] = metadata
+        val install = ProcessCapture(parent, yarn, "install")
+        if (install.exitValue() != 0) {
+            throw IOException("yarn install failed with exit code ${install.exitValue()}.")
         }
 
-        // Get dependency tree using yarn list.
-        val jsonObject = processToJson(parent, yarn, "list", "--json", "--no-progress")
-        val jsonDependencies = jsonObject["data"]["trees"].array
-        val dependencies = parseYarnDependencies(jsonDependencies, yarnMetadata)
-
-        // Read name and version of root project from package.json.
-        val jsonPackage = Gson().fromJson<JsonObject>(File(parent, "package.json").readText())
-        val name = jsonPackage["name"].string
-        val version = jsonPackage["version"].string
-
-        return Dependency(artifact = name, version = version, dependencies = dependencies,
-                scope = "production")
-    }
-
-    private fun parseYarnDependencies(jsonDependencies: JsonArray, yarnMetadata: Map<String, YarnMetadata>)
-            : List<Dependency> {
-        val result = mutableListOf<Dependency>()
-        jsonDependencies.forEach { jsonDependency ->
-            val name = jsonDependency["name"].string.substringBeforeLast("@")
-            val dependencies = if (jsonDependency.obj.contains("children")) {
-                parseYarnDependencies(jsonDependency["children"].array, yarnMetadata)
-            } else {
-                listOf()
-            }
-
-            val metadata = yarnMetadata[name] ?: throw IOException("Could not get Yarn metadata for package '$name'.")
-            val dependency = Dependency(artifact = name, version = metadata.resolvedVersion,
-                    dependencies = dependencies, scope = "production", scm = metadata.repositoryUrl)
-            result.add(dependency)
-        }
-        return result
+        return parseInstalledDependencies(parent)
     }
 
     private fun processToJson(workingDir: File, vararg command: String): JsonObject {
