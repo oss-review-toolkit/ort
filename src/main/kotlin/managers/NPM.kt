@@ -25,6 +25,8 @@ object NPM : PackageManager(
         "JavaScript",
         listOf("package.json")
 ) {
+    private data class YarnMetadata(val name: String, val resolvedVersion: String, val repositoryUrl: String)
+
     override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
         val result = mutableMapOf<Path, Dependency>()
 
@@ -115,26 +117,46 @@ object NPM : PackageManager(
      */
     fun resolveYarnDependencies(parent: File): Dependency {
         val command = if (OS.isWindows) "yarn.cmd" else "yarn"
+
+        // Get package metadata using yarn licenses ls.
+        val yarnMetadata = mutableMapOf<String, YarnMetadata>()
+        val jsonLicenses = processToJson(parent, command, "licenses", "ls", "--json", "--no-progress")
+
+        val header = jsonLicenses["data"]["head"].array.map { it.string }
+        val nameIndex = header.indexOf("Name")
+        val versionIndex = header.indexOf("Version")
+        val urlIndex = header.indexOf("URL")
+
+        jsonLicenses["data"]["body"].array.forEach { jsonElement ->
+            val array = jsonElement.array
+            val metadata = YarnMetadata(array[nameIndex].string, array[versionIndex].string, array[urlIndex].string)
+            yarnMetadata[metadata.name] = metadata
+        }
+
+        // Get dependency tree using yarn list.
         val jsonObject = processToJson(parent, command, "list", "--json", "--no-progress")
         val jsonDependencies = jsonObject["data"]["trees"].array
-        val dependencies = parseYarnDependencies(jsonDependencies)
+        val dependencies = parseYarnDependencies(jsonDependencies, yarnMetadata)
         // The "todo"s below will be replaced once parsing of package.json is implemented.
         return Dependency(artifact = "todo", version = "todo", dependencies = dependencies,
                 scope = "production")
     }
 
-    private fun parseYarnDependencies(jsonDependencies: JsonArray): List<Dependency> {
+    private fun parseYarnDependencies(jsonDependencies: JsonArray, yarnMetadata: Map<String, YarnMetadata>)
+            : List<Dependency> {
         val result = mutableListOf<Dependency>()
         jsonDependencies.forEach { jsonDependency ->
             val name = jsonDependency["name"].string.substringBeforeLast("@")
-            val version = jsonDependency["name"].string.substringAfterLast("@")
             val dependencies = if (jsonDependency.obj.contains("children")) {
-                parseYarnDependencies(jsonDependency["children"].array)
+                parseYarnDependencies(jsonDependency["children"].array, yarnMetadata)
             } else {
                 listOf()
             }
-            val dependency = Dependency(artifact = name, version = version, dependencies = dependencies,
-                    scope = "production")
+
+            val metadata = yarnMetadata[name] ?: throw IOException("Could not get Yarn metadata for package " +
+                    "'${name}'.")
+            val dependency = Dependency(artifact = name, version = metadata.resolvedVersion,
+                    dependencies = dependencies, scope = "production", scm = metadata.repositoryUrl)
             result.add(dependency)
         }
         return result
