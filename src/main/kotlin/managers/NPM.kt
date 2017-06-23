@@ -116,11 +116,11 @@ object NPM : PackageManager(
      * dependencies.
      */
     fun resolveYarnDependencies(parent: File): Dependency {
-        val command = if (OS.isWindows) "yarn.cmd" else "yarn"
+        val yarn = if (OS.isWindows) "yarn.cmd" else "yarn"
 
         // Get package metadata using yarn licenses ls.
         val yarnMetadata = mutableMapOf<String, YarnMetadata>()
-        val jsonLicenses = processToJson(parent, command, "licenses", "ls", "--json", "--no-progress")
+        val jsonLicenses = processToJson(parent, yarn, "licenses", "ls", "--json", "--no-progress")
 
         val header = jsonLicenses["data"]["head"].array.map { it.string }
         val nameIndex = header.indexOf("Name")
@@ -134,7 +134,7 @@ object NPM : PackageManager(
         }
 
         // Get dependency tree using yarn list.
-        val jsonObject = processToJson(parent, command, "list", "--json", "--no-progress")
+        val jsonObject = processToJson(parent, yarn, "list", "--json", "--no-progress")
         val jsonDependencies = jsonObject["data"]["trees"].array
         val dependencies = parseYarnDependencies(jsonDependencies, yarnMetadata)
 
