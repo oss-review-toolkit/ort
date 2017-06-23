@@ -1,6 +1,6 @@
 package com.here.provenanceanalyzer.model
 
-class Dependency(
+data class Dependency(
         val group: String? = null,
         val artifact: String,
         val version: String,
