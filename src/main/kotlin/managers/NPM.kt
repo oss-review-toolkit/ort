@@ -49,14 +49,16 @@ object NPM : PackageManager(
             throw IllegalArgumentException("node_modules directory already exists.")
         }
 
+        val npm = if (OS.isWindows) "npm.cmd" else "npm"
+
         // Install all NPM dependencies to enable NPM to list dependencies.
-        val install = ProcessBuilder("npm", "install").directory(parent).start()
-        if (install.waitFor() != 0) {
+        val install = ProcessCapture(parent, npm, "install")
+        if (install.exitValue() != 0) {
             throw IOException("npm install failed with exit code ${install.exitValue()}.")
         }
 
         // Get all production dependencies.
-        val prodJson = processToJson(parent, "npm", "list", "--json", "--only=prod")
+        val prodJson = processToJson(parent, npm, "list", "--json", "--only=prod")
         val prodDependencies = if (prodJson.contains("dependencies")) {
             parseNpmDependencies(modulesDir, prodJson["dependencies"].obj, "production")
         } else {
@@ -64,7 +66,7 @@ object NPM : PackageManager(
         }
 
         // Get all dev dependencies.
-        val devJson = processToJson(parent, "npm", "list", "--json", "--only=dev")
+        val devJson = processToJson(parent, npm, "list", "--json", "--only=dev")
         val devDependencies = if (devJson.contains("dependencies")) {
             parseNpmDependencies(modulesDir, devJson["dependencies"].obj, "development")
         } else {
