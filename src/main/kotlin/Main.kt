@@ -21,7 +21,7 @@ object Main {
     class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
             // Map lower-cased package manager class names to their instances.
-            val packageManagerNames = packageManagers.associateBy { it.javaClass.name.toLowerCase() }
+            val packageManagerNames = packageManagers.associateBy { it.javaClass.simpleName.toLowerCase() }
 
             // Determine active package managers.
             val names = managers.toLowerCase().split(",")
