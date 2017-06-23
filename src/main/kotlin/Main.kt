@@ -75,13 +75,15 @@ object Main {
                 managedProjectPaths.getOrPut(packageManagers.first()) { mutableListOf() }.add(absolutePath)
             } else {
                 Files.walkFileTree(absolutePath, object : SimpleFileVisitor<Path>() {
-                    override fun visitFile(file: Path, attributes: BasicFileAttributes): FileVisitResult {
-                        packageManagers.forEach { manager ->
-                            if (manager.globForDefinitionFiles.matches(file)) {
-                                managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file)
+                    override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
+                        dir.toFile().listFiles().forEach {
+                            val file = it.toPath()
+                            packageManagers.forEach { manager ->
+                                if (manager.globForDefinitionFiles.matches(file)) {
+                                    managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file)
+                                }
                             }
                         }
-
                         return FileVisitResult.CONTINUE
                     }
                 })
