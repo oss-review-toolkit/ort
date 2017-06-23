@@ -4,10 +4,10 @@ import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.FileVisitResult
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
@@ -63,23 +63,22 @@ object Main {
         println("\t" + packageManagers.map { it.javaClass.name }.joinToString(", "))
 
         // Map of paths managed by the respective package manager.
-        val managedProjectPaths = HashMap<PackageManager, MutableList<Path>>()
+        val managedProjectPaths = HashMap<PackageManager, MutableList<File>>()
 
         projectPaths!!.forEach { projectPath ->
-            val absolutePath = Paths.get(projectPath).toAbsolutePath()
+            val absolutePath = File(projectPath).absoluteFile
             println("Scanning project path '$absolutePath'.")
 
-            if (packageManagers.size == 1 && Files.isRegularFile(absolutePath)) {
+            if (packageManagers.size == 1 && absolutePath.isFile) {
                 // If only one package manager is activated, treat given paths to files as definition files for that
                 // package manager despite their name.
                 managedProjectPaths.getOrPut(packageManagers.first()) { mutableListOf() }.add(absolutePath)
             } else {
-                Files.walkFileTree(absolutePath, object : SimpleFileVisitor<Path>() {
+                Files.walkFileTree(absolutePath.toPath(), object : SimpleFileVisitor<Path>() {
                     override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
-                        dir.toFile().listFiles().forEach {
-                            val file = it.toPath()
+                        dir.toFile().listFiles().forEach { file ->
                             packageManagers.forEach { manager ->
-                                if (manager.globForDefinitionFiles.matches(file)) {
+                                if (manager.globForDefinitionFiles.matches(file.toPath())) {
                                     managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file)
                                 }
                             }

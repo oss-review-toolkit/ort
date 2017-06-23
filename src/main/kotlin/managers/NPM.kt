@@ -27,11 +27,11 @@ object NPM : PackageManager(
 ) {
     private data class YarnMetadata(val name: String, val resolvedVersion: String, val repositoryUrl: String)
 
-    override fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency> {
-        val result = mutableMapOf<Path, Dependency>()
+    override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
+        val result = mutableMapOf<File, Dependency>()
 
         definitionFiles.forEach { definitionFile ->
-            val parent = definitionFile.parent.toFile()
+            val parent = definitionFile.parentFile
             result[definitionFile] = if (File(parent, "yarn.lock").isFile) {
                 resolveYarnDependencies(parent)
             } else {

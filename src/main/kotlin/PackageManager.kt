@@ -3,8 +3,8 @@ package com.here.provenanceanalyzer
 import com.here.provenanceanalyzer.managers.*
 import com.here.provenanceanalyzer.model.Dependency
 
+import java.io.File
 import java.nio.file.FileSystems
-import java.nio.file.Path
 
 // Prioritized list of package managers.
 val PACKAGE_MANAGERS = listOf(
@@ -48,5 +48,5 @@ abstract class PackageManager(
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
-    abstract fun resolveDependencies(definitionFiles: List<Path>): Map<Path, Dependency>
+    abstract fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency>
 }
