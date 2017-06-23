@@ -41,7 +41,7 @@ object Main {
     /**
      * The entry point for the application.
      *
-     * @param args The list of process arguments.
+     * @param args The list of application arguments.
      */
     @JvmStatic
     fun main(args: Array<String>) {
@@ -93,7 +93,7 @@ object Main {
             println("$manager projects found in:")
             println(paths.map { "\t$it" }.joinToString("\n"))
 
-            // Print a sorted, de-duplicated list of dependencies.
+            // Print the list of dependencies.
             val dependencies = manager.resolveDependencies(paths)
             dependencies.forEach(::println)
         }
