@@ -18,7 +18,6 @@ import com.here.provenanceanalyzer.ProcessCapture
 
 import java.io.File
 import java.io.IOException
-import java.nio.file.Path
 
 object NPM : PackageManager(
         "https://www.npmjs.com/",
