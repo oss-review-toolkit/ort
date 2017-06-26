@@ -1,10 +1,16 @@
 package com.here.provenanceanalyzer
 
-import java.io.File
+import com.github.salomonbrys.kotson.fromJson
+
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.io.IOException
 import java.io.OutputStream
 
 object OS {
@@ -49,4 +55,16 @@ class ProcessCapture(directory: File, vararg command: String) {
 
     fun stdout() = stdoutStream.toString()
     fun stderr() = stderrStream.toString()
+}
+
+/**
+ * Parse the standard output of a process as JSON.
+ */
+fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonObject {
+    val process = ProcessCapture(workingDir, *command)
+    if (process.exitValue() != 0) {
+        throw IOException("${command.joinToString(" ")} failed with exit code ${process.exitValue()}")
+    }
+    val jsonString = process.stdout()
+    return Gson().fromJson<JsonObject>(jsonString)
 }

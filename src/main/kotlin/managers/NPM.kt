@@ -6,6 +6,7 @@ import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get
 import com.github.salomonbrys.kotson.obj
 import com.github.salomonbrys.kotson.string
+
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
@@ -13,6 +14,7 @@ import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.ProcessCapture
+import com.here.provenanceanalyzer.parseJsonProcessOutput
 
 import java.io.File
 import java.io.IOException
@@ -62,7 +64,7 @@ object NPM : PackageManager(
         val modulesDir = File(parent, "node_modules")
 
         // Get all production dependencies.
-        val prodJson = processToJson(parent, npm, "list", "--json", "--only=prod")
+        val prodJson = parseJsonProcessOutput(parent, npm, "list", "--json", "--only=prod")
         val prodDependencies = if (prodJson.contains("dependencies")) {
             parseNpmDependencies(modulesDir, prodJson["dependencies"].obj, "production")
         } else {
@@ -70,7 +72,7 @@ object NPM : PackageManager(
         }
 
         // Get all dev dependencies.
-        val devJson = processToJson(parent, npm, "list", "--json", "--only=dev")
+        val devJson = parseJsonProcessOutput(parent, npm, "list", "--json", "--only=dev")
         val devDependencies = if (devJson.contains("dependencies")) {
             parseNpmDependencies(modulesDir, devJson["dependencies"].obj, "development")
         } else {
@@ -130,14 +132,5 @@ object NPM : PackageManager(
         }
 
         return parseInstalledDependencies(parent)
-    }
-
-    private fun processToJson(workingDir: File, vararg command: String): JsonObject {
-        val process = ProcessCapture(workingDir, *command)
-        if (process.exitValue() != 0) {
-            throw IOException("${command.joinToString(" ")} failed with exit code ${process.exitValue()}")
-        }
-        val jsonString = process.stdout()
-        return Gson().fromJson<JsonObject>(jsonString)
     }
 }
