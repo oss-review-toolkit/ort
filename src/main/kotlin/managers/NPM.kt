@@ -24,7 +24,18 @@ object NPM : PackageManager(
         "JavaScript",
         listOf("package.json")
 ) {
-    private val npm = if (OS.isWindows) "npm.cmd" else "npm"
+    val npm: String
+    val yarn: String
+
+    init {
+        if (OS.isWindows) {
+            npm = "npm.cmd"
+            yarn = "yarn.cmd"
+        } else {
+            npm = "npm"
+            yarn = "yarn"
+        }
+    }
 
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         val result = mutableMapOf<File, Dependency>()
@@ -125,7 +136,6 @@ object NPM : PackageManager(
      */
     fun resolveYarnDependencies(parent: File): Dependency {
         // Install all NPM dependencies to enable NPM to list dependencies.
-        val yarn = if (OS.isWindows) "yarn.cmd" else "yarn"
         val install = ProcessCapture(parent, yarn, "install")
         if (install.exitValue() != 0) {
             throw IOException("yarn install failed with exit code ${install.exitValue()}.")

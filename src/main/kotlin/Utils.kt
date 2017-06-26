@@ -1,9 +1,13 @@
 package com.here.provenanceanalyzer
 
 import com.github.salomonbrys.kotson.fromJson
+import com.github.salomonbrys.kotson.jsonArray
 
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+
+import com.here.provenanceanalyzer.managers.NPM
 
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
@@ -66,5 +70,12 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonElemen
         throw IOException("${command.joinToString(" ")} failed with exit code ${process.exitValue()}: ${process.stderr()}")
     }
 
-    return Gson().fromJson<JsonElement>(process.stdout())
+    val gson = Gson()
+
+    // Wrap yarn's output, which is one JSON object per line, so the output as a whole can be parsed as a JSON array.
+    if (command.first() == NPM.yarn && command.contains("--json")) {
+        return jsonArray(process.stdout().lines().map { gson.fromJson<JsonObject>(it) })
+    }
+
+    return gson.fromJson<JsonElement>(process.stdout())
 }
