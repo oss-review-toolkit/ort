@@ -3,7 +3,7 @@ package com.here.provenanceanalyzer
 import com.github.salomonbrys.kotson.fromJson
 
 import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.google.gson.JsonElement
 
 import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
@@ -60,11 +60,11 @@ class ProcessCapture(directory: File, vararg command: String) {
 /**
  * Parse the standard output of a process as JSON.
  */
-fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonObject {
+fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonElement {
     val process = ProcessCapture(workingDir, *command)
     if (process.exitValue() != 0) {
         throw IOException("${command.joinToString(" ")} failed with exit code ${process.exitValue()}")
     }
-    val jsonString = process.stdout()
-    return Gson().fromJson<JsonObject>(jsonString)
+
+    return Gson().fromJson<JsonElement>(process.stdout())
 }

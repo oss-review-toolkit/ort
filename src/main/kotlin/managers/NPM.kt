@@ -64,7 +64,7 @@ object NPM : PackageManager(
         val modulesDir = File(parent, "node_modules")
 
         // Get all production dependencies.
-        val prodJson = parseJsonProcessOutput(parent, npm, "list", "--json", "--only=prod")
+        val prodJson = parseJsonProcessOutput(parent, npm, "list", "--json", "--only=prod") as JsonObject
         val prodDependencies = if (prodJson.contains("dependencies")) {
             parseNpmDependencies(modulesDir, prodJson["dependencies"].obj, "production")
         } else {
@@ -72,7 +72,7 @@ object NPM : PackageManager(
         }
 
         // Get all dev dependencies.
-        val devJson = parseJsonProcessOutput(parent, npm, "list", "--json", "--only=dev")
+        val devJson = parseJsonProcessOutput(parent, npm, "list", "--json", "--only=dev") as JsonObject
         val devDependencies = if (devJson.contains("dependencies")) {
             parseNpmDependencies(modulesDir, devJson["dependencies"].obj, "development")
         } else {
