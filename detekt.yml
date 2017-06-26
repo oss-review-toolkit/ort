@@ -1,2 +1,8 @@
 build:
-    failThreshold: 25
+    failThreshold: 24
+
+complexity:
+    LargeClass:
+        threshold: 150
+    NestedBlockDepth:
+        threshold: 4
