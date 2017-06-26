@@ -14,7 +14,7 @@ class NpmTest : StringSpec() {
             val resolvedDependencies = NPM.resolveYarnDependencies(
                     File("src/funTest/resources/projects/synthetic/project-npm"))
 
-            val resolvedDependencyList = resolvedDependencies.toString().split("\n").filter { it.isNotEmpty() }
+            val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }
             resolvedDependencyList.size shouldBe expectedDependencies.size
             resolvedDependencyList.zip(expectedDependencies).forEach { (resolved, expected) ->
                 resolved shouldBe expected
@@ -26,7 +26,7 @@ class NpmTest : StringSpec() {
             val resolvedDependencies = NPM.resolveNpmDependencies(
                     File("src/funTest/resources/projects/synthetic/project-npm"))
 
-            val resolvedDependencyList = resolvedDependencies.toString().split("\n").filter { it.isNotEmpty() }
+            val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }
             resolvedDependencyList.size shouldBe expectedDependencies.size
             resolvedDependencyList.zip(expectedDependencies).forEach { (resolved, expected) ->
                 resolved shouldBe expected
