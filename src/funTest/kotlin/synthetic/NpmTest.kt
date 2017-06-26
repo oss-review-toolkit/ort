@@ -9,7 +9,7 @@ import java.io.File
 
 class NpmTest : StringSpec() {
     init {
-        "computed yarn dependencies are correct" {
+        "yarn dependencies are resolved correctly" {
             val expectedDependencies = readResource("/projects/synthetic/project-npm-expected-yarn-dependencies.txt")
             val resolvedDependencies = NPM.resolveYarnDependencies(
                     File("src/funTest/resources/projects/synthetic/project-npm"))
@@ -21,7 +21,7 @@ class NpmTest : StringSpec() {
             }
         }
 
-        "computed NPM dependencies are correct" {
+        "NPM dependencies are resolved correctly" {
             val expectedDependencies = readResource("/projects/synthetic/project-npm-expected-npm-dependencies.txt")
             val resolvedDependencies = NPM.resolveNpmDependencies(
                     File("src/funTest/resources/projects/synthetic/project-npm"))
