@@ -45,7 +45,7 @@ object NPM : PackageManager(
 
             val modulesDir = File(parent, "node_modules")
             if (modulesDir.isDirectory) {
-                throw IllegalArgumentException("node_modules directory already exists.")
+                throw IllegalArgumentException("'$modulesDir' directory already exists.")
             }
 
             result[definitionFile] = if (File(parent, "yarn.lock").isFile) {
