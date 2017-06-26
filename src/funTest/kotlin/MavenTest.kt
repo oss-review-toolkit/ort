@@ -7,7 +7,7 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class JgnashTest : StringSpec() {
+class MavenTest : StringSpec() {
     init {
         "computed dependencies are correct" {
             val expectedDependencies = readResource("/projects/external/jgnash-expected-maven-dependencies.txt")
