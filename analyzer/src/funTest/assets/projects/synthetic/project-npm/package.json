@@ -46,12 +46,6 @@
   "peerDependencies": {
     "tea": "2.x"
   },
-  "bundledDependencies": [
-    "maximatch"
-  ],
-  "bundleDependencies": [
-    "randomatic"
-  ],
   "optionalDependencies": {
     "promise": "~7.3.1"
   }
