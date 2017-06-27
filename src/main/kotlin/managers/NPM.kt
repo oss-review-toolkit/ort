@@ -49,9 +49,9 @@ object NPM : PackageManager(
             }
 
             result[definitionFile] = if (File(parent, "yarn.lock").isFile) {
-                resolveYarnDependencies(parent)
+                installDependencies(parent, yarn)
             } else {
-                resolveNpmDependencies(parent)
+                installDependencies(parent, npm)
             }
         }
 
@@ -59,16 +59,16 @@ object NPM : PackageManager(
     }
 
     /**
-     * Resolve dependencies using NPM. Supports detection of production and development scope.
+     * Resolve dependencies using the given package manager command. Supports detection of production and development scope.
      */
-    fun resolveNpmDependencies(parent: File): Dependency {
+    fun installDependencies(workingDir: File, managerCommand: String): Dependency {
         // Install all NPM dependencies to enable NPM to list dependencies.
-        val install = ProcessCapture(parent, npm, "install")
+        val install = ProcessCapture(workingDir, managerCommand, "install")
         if (install.exitValue() != 0) {
-            throw IOException("npm install failed with exit code ${install.exitValue()}.")
+            throw IOException("'$managerCommand install' failed with exit code ${install.exitValue()}: ${install.stderr()}")
         }
 
-        return parseInstalledDependencies(parent)
+        return parseInstalledDependencies(workingDir)
     }
 
     private fun parseInstalledDependencies(parent: File): Dependency {
@@ -129,18 +129,5 @@ object NPM : PackageManager(
             result.add(dependency)
         }
         return result
-    }
-
-    /**
-     * Resolve dependencies using yarn. Supports detection of production and development scope.
-     */
-    fun resolveYarnDependencies(parent: File): Dependency {
-        // Install all NPM dependencies to enable NPM to list dependencies.
-        val install = ProcessCapture(parent, yarn, "install")
-        if (install.exitValue() != 0) {
-            throw IOException("yarn install failed with exit code ${install.exitValue()}.")
-        }
-
-        return parseInstalledDependencies(parent)
     }
 }

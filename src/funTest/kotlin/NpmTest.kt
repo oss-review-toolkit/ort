@@ -31,7 +31,7 @@ class NpmTest : StringSpec() {
         "yarn dependencies are resolved correctly" {
             val expectedDependenciesList = readResource("/projects/synthetic/project-npm-expected-yarn-dependencies.txt")
 
-            val resolvedDependencies = NPM.resolveYarnDependencies(projectDir)
+            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.yarn)
             val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }
 
             resolvedDependencyList.zip(expectedDependenciesList).forEach { (resolved, expected) ->
@@ -46,7 +46,7 @@ class NpmTest : StringSpec() {
         "NPM dependencies are resolved correctly" {
             val expectedDependenciesList = readResource("/projects/synthetic/project-npm-expected-npm-dependencies.txt")
 
-            val resolvedDependencies = NPM.resolveNpmDependencies(projectDir)
+            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.npm)
             val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }
 
             resolvedDependencyList.zip(expectedDependenciesList).forEach { (resolved, expected) ->
