@@ -30,8 +30,14 @@ class ProcessCapture(workingDir: File, vararg command: String) {
     private val process = builder.start()
 
     init {
-        stdoutFile.deleteOnExit()
-        stderrFile.deleteOnExit()
+        if (Main.debug) {
+            Main.logger.debug("Keeping temporary files:")
+            Main.logger.debug(stdoutFile.absolutePath)
+            Main.logger.debug(stderrFile.absolutePath)
+        } else {
+            stdoutFile.deleteOnExit()
+            stderrFile.deleteOnExit()
+        }
 
         process.waitFor()
     }

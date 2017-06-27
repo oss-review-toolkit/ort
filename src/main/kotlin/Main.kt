@@ -16,7 +16,7 @@ import kotlin.system.exitProcess
 import mu.KotlinLogging
 
 object Main {
-    private val logger = KotlinLogging.logger {}
+    val logger = KotlinLogging.logger {}
 
     class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
@@ -31,6 +31,9 @@ object Main {
 
     @Parameter(names = arrayOf("--package-managers", "-m"), description = "A list of package managers to activate.", listConverter = PackageManagerListConverter::class, order = 0)
     var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
+
+    @Parameter(names = arrayOf("--debug"), description = "Enable debug logging and keep temporary files.", order = 0)
+    var debug = false
 
     @Parameter(names = arrayOf("--help", "-h"), description = "Display the command line help.", help = true, order = 100)
     var help = false
