@@ -42,9 +42,19 @@ class ProcessCapture(workingDir: File, vararg command: String) {
         process.waitFor()
     }
 
+    /**
+     * Return the exit value of the terminated process.
+     */
     fun exitValue() = process.exitValue()
 
+    /**
+     * Return the standard output stream of the terminated process as a string.
+     */
     fun stdout() = stdoutFile.readText()
+
+    /**
+     * Return the standard errors stream of the terminated process as a string.
+     */
     fun stderr() = stderrFile.readText()
 }
 
