@@ -62,7 +62,7 @@ dependencies {
 
     // Use slf4j-simple as logger for kotlin-logging, as the latter is a wrapper for slf4j and depends on an
     // implementation of slf4j.
-    compile 'io.github.microutils:kotlin-logging:1.4.4'
+    compile 'io.github.microutils:kotlin-logging:1.4.5'
     compile 'org.slf4j:slf4j-simple:1.7.25'
 
     funTestCompile sourceSets.main.output
