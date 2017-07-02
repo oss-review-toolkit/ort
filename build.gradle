@@ -12,7 +12,7 @@ plugins {
 
     // Note that the detekt Gradle plugin version does not necessarily
     // match the detekt tool version.
-    id 'io.gitlab.arturbosch.detekt' version '1.0.0.M12.2'
+    id 'io.gitlab.arturbosch.detekt' version '1.0.0.M12.3'
 
     id 'com.github.ben-manes.versions' version '0.15.0'
 }
@@ -76,7 +76,6 @@ dependencies {
 detekt {
     profile('main') {
         config = 'detekt.yml'
-        input = projectDir
     }
 }
 
