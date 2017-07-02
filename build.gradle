@@ -14,7 +14,7 @@ plugins {
     // match the detekt tool version.
     id 'io.gitlab.arturbosch.detekt' version '1.0.0.M12.2'
 
-    id 'com.github.ben-manes.versions' version '0.14.0'
+    id 'com.github.ben-manes.versions' version '0.15.0'
 }
 
 // Apply core plugins.
