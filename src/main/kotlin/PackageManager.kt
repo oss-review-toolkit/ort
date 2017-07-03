@@ -24,7 +24,8 @@ val PACKAGE_MANAGERS = listOf(
  *
  * @property homepageUrl The URL to the package manager's homepage.
  * @property primaryLanguage The name of the programming language this package manager is primarily used with.
- * @property pathsToDefinitionFiles A prioritized list of glob patterns of definition files supported by this package manager.
+ * @property pathsToDefinitionFiles A prioritized list of glob patterns of definition files supported by this package
+ *                                  manager.
  *
  */
 abstract class PackageManager(
@@ -35,7 +36,8 @@ abstract class PackageManager(
     /**
      * The recursive glob matcher for all definition files.
      */
-    val globForDefinitionFiles = FileSystems.getDefault().getPathMatcher("glob:**/{" + pathsToDefinitionFiles.joinToString(",") + "}")!!
+    val globForDefinitionFiles = FileSystems.getDefault().getPathMatcher(
+            "glob:**/{" + pathsToDefinitionFiles.joinToString(",") + "}")!!
 
     /**
      * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.

@@ -71,7 +71,8 @@ class ProcessCapture(workingDir: File, vararg command: String) {
 fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonElement {
     val process = ProcessCapture(workingDir, *command)
     if (process.exitValue() != 0) {
-        throw IOException("${command.joinToString(" ")} failed with exit code ${process.exitValue()}: ${process.stderr()}")
+        throw IOException(
+                "${command.joinToString(" ")} failed with exit code ${process.exitValue()}: ${process.stderr()}")
     }
 
     val gson = Gson()

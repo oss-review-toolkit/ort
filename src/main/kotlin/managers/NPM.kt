@@ -59,13 +59,15 @@ object NPM : PackageManager(
     }
 
     /**
-     * Resolve dependencies using the given package manager command. Supports detection of production and development scope.
+     * Resolve dependencies using the given package manager command. Supports detection of production and development
+     * scope.
      */
     fun installDependencies(workingDir: File, managerCommand: String): Dependency {
         // Install all NPM dependencies to enable NPM to list dependencies.
         val install = ProcessCapture(workingDir, managerCommand, "install")
         if (install.exitValue() != 0) {
-            throw IOException("'$managerCommand install' failed with exit code ${install.exitValue()}: ${install.stderr()}")
+            throw IOException(
+                    "'$managerCommand install' failed with exit code ${install.exitValue()}: ${install.stderr()}")
         }
 
         return parseInstalledDependencies(workingDir)
