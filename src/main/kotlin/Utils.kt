@@ -12,12 +12,19 @@ import com.here.provenanceanalyzer.managers.NPM
 import java.io.File
 import java.io.IOException
 
+/**
+ * Operating-System-specific utility functions.
+ */
 object OS {
     private val OS_NAME = System.getProperty("os.name").toLowerCase()
 
     val isWindows = OS_NAME.contains("windows")
 }
 
+/**
+ * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
+ * standard error streams by redirecting output to temporary files.
+ */
 class ProcessCapture(workingDir: File, vararg command: String) {
     val stdoutFile = File.createTempFile(command.first(), ".stdout")!!
     val stderrFile = File.createTempFile(command.first(), ".stderr")!!

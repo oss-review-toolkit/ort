@@ -15,6 +15,9 @@ import kotlin.system.exitProcess
 
 import mu.KotlinLogging
 
+/**
+ * The main entry point of the application.
+ */
 object Main {
     val logger = KotlinLogging.logger {}
 

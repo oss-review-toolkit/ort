@@ -1,7 +1,7 @@
 # Configuration of Detekt rule sets, see: https://github.com/arturbosch/detekt#rulesets
 
 build:
-    failThreshold: 29
+    failThreshold: 26
 
 complexity:
     LargeClass:
