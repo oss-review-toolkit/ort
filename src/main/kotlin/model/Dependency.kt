@@ -13,10 +13,11 @@ data class Dependency(
     }
 
     private fun toString(indent: String): String {
-        val stringBuilder = StringBuilder("$indent$group:$artifact:$version:$scope:$scm\n")
-        dependencies.forEach { dependency ->
-            stringBuilder.append(dependency.toString("$indent  "))
+        return buildString {
+            append("$indent$group:$artifact:$version:$scope:$scm\n")
+            dependencies.forEach { dependency ->
+                append(dependency.toString("$indent  "))
+            }
         }
-        return stringBuilder.toString()
     }
 }
