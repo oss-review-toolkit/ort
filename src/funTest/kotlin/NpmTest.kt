@@ -10,7 +10,7 @@ import java.io.File
 
 class NpmTest : StringSpec() {
 
-    val projectDir = File("src/funTest/resources/projects/synthetic/project-npm")
+    val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
@@ -29,8 +29,8 @@ class NpmTest : StringSpec() {
 
     init {
         "yarn dependencies are resolved correctly" {
-            val expectedDependenciesList = readResource(
-                    "/projects/synthetic/project-npm-expected-yarn-dependencies.txt")
+            val expectedDependenciesList = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-yarn-dependencies.txt").readLines()
 
             val resolvedDependencies = NPM.installDependencies(projectDir, NPM.yarn)
             val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }
@@ -45,7 +45,8 @@ class NpmTest : StringSpec() {
         }
 
         "NPM dependencies are resolved correctly" {
-            val expectedDependenciesList = readResource("/projects/synthetic/project-npm-expected-npm-dependencies.txt")
+            val expectedDependenciesList = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-npm-dependencies.txt").readLines()
 
             val resolvedDependencies = NPM.installDependencies(projectDir, NPM.npm)
             val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }

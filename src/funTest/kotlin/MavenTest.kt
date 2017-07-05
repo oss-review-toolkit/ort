@@ -10,7 +10,8 @@ import java.io.File
 class MavenTest : StringSpec() {
     init {
         "computed dependencies are correct" {
-            val expectedDependencies = readResource("/projects/external/jgnash-expected-maven-dependencies.txt")
+            val expectedDependencies = File(
+                    "src/funTest/assets/projects/external/jgnash-expected-maven-dependencies.txt").readLines()
             val resolvedDependencies = Maven.resolveDependencies(listOf(File("projects/external/jgnash/pom.xml")))
 
             resolvedDependencies shouldBe expectedDependencies
