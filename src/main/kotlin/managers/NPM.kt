@@ -122,7 +122,7 @@ object NPM : PackageManager(
                     // For some packages "yarn install" generates a non-conforming shortcut repository entry like this:
                     // "repository": "git://..."
                     // For details about the correct format see: https://docs.npmjs.com/files/package.json#repository
-                    scm = if (repository.isJsonObject) packageJson["repository"]["url"].string else repository.string
+                    scm = if (repository.isJsonObject) repository["url"].string else repository.string
                 }
             }
 
