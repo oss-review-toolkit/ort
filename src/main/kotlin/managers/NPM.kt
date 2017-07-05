@@ -59,8 +59,8 @@ object NPM : PackageManager(
     }
 
     /**
-     * Resolve dependencies using the given package manager command. Supports detection of production and development
-     * scope.
+     * Install dependencies using the given package manager command. Parse dependencies afterwards to return a
+     * dependency tree.
      */
     fun installDependencies(workingDir: File, managerCommand: String): Dependency {
         // Install all NPM dependencies to enable NPM to list dependencies.
