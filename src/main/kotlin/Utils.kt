@@ -26,6 +26,7 @@ object OS {
  * standard error streams by redirecting output to temporary files.
  */
 class ProcessCapture(workingDir: File, vararg command: String) {
+    val commandLine = command.joinToString(" ")
     val stdoutFile = File.createTempFile(command.first(), ".stdout")!!
     val stderrFile = File.createTempFile(command.first(), ".stderr")!!
 
@@ -72,7 +73,7 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonElemen
     val process = ProcessCapture(workingDir, *command)
     if (process.exitValue() != 0) {
         throw IOException(
-                "${command.joinToString(" ")} failed with exit code ${process.exitValue()}: ${process.stderr()}")
+                "'${process.commandLine}' failed with exit code ${process.exitValue()}: ${process.stderr()}")
     }
 
     val gson = Gson()
