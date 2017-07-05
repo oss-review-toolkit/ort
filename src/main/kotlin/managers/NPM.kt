@@ -48,11 +48,11 @@ object NPM : PackageManager(
                 throw IllegalArgumentException("'$modulesDir' directory already exists.")
             }
 
-            result[definitionFile] = if (File(parent, "yarn.lock").isFile) {
-                installDependencies(parent, yarn)
-            } else {
-                installDependencies(parent, npm)
-            }
+            // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+            // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
+            // the same dependency is only ever downloaded once.
+            val isYarn = File(parent, "yarn.lock").isFile
+            result[definitionFile] = installDependencies(parent, if (isYarn) yarn else npm)
         }
 
         return result
@@ -79,7 +79,7 @@ object NPM : PackageManager(
         // Get all production dependencies.
         val prodJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=prod") as JsonObject
         val prodDependencies = if (prodJson.contains("dependencies")) {
-            parseNpmDependencies(modulesDir, prodJson["dependencies"].obj, "production")
+            parseNodeModules(modulesDir, prodJson["dependencies"].obj, "production")
         } else {
             listOf()
         }
@@ -87,7 +87,7 @@ object NPM : PackageManager(
         // Get all dev dependencies.
         val devJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=dev") as JsonObject
         val devDependencies = if (devJson.contains("dependencies")) {
-            parseNpmDependencies(modulesDir, devJson["dependencies"].obj, "development")
+            parseNodeModules(modulesDir, devJson["dependencies"].obj, "development")
         } else {
             listOf()
         }
@@ -102,12 +102,12 @@ object NPM : PackageManager(
                 scope = "production")
     }
 
-    private fun parseNpmDependencies(modulesDir: File, json: JsonObject, scope: String): List<Dependency> {
+    private fun parseNodeModules(modulesDir: File, json: JsonObject, scope: String): List<Dependency> {
         val result = mutableListOf<Dependency>()
         json.forEach { key, jsonElement ->
             val version = jsonElement["version"].string
             val dependencies = if (jsonElement.obj.contains("dependencies")) {
-                parseNpmDependencies(modulesDir, jsonElement["dependencies"].obj, scope)
+                parseNodeModules(modulesDir, jsonElement["dependencies"].obj, scope)
             } else {
                 listOf()
             }
