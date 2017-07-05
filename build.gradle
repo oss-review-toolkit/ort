@@ -45,8 +45,8 @@ applicationDefaultJvmArgs = [
 
 sourceSets {
     funTest {
-        kotlin.srcDir file('src/funTest/kotlin')
-        resources.srcDir file('src/funTest/resources')
+        kotlin.srcDirs 'src/funTest/kotlin'
+        resources.srcDirs 'src/funTest/resources'
     }
 }
 
