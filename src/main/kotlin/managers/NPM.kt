@@ -21,6 +21,8 @@ import com.here.provenanceanalyzer.parseJsonProcessOutput
 import java.io.File
 import java.io.IOException
 
+import kotlin.system.measureTimeMillis
+
 object NPM : PackageManager(
         "https://www.npmjs.com/",
         "JavaScript",
@@ -45,20 +47,22 @@ object NPM : PackageManager(
         definitionFiles.forEach { definitionFile ->
             val parent = definitionFile.parentFile
 
-            println("Start resolving ${javaClass.simpleName} dependencies in '${parent.name}'...")
+            println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}'...")
 
             val modulesDir = File(parent, "node_modules")
             if (modulesDir.isDirectory) {
                 throw IllegalArgumentException("'$modulesDir' directory already exists.")
             }
 
-            // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
-            // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
-            // the same dependency is only ever downloaded once.
-            val isYarn = File(parent, "yarn.lock").isFile
-            result[definitionFile] = installDependencies(parent, if (isYarn) yarn else npm)
+            val elapsed = measureTimeMillis {
+                // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+                // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
+                // the same dependency is only ever downloaded once.
+                val isYarn = File(parent, "yarn.lock").isFile
+                result[definitionFile] = installDependencies(parent, if (isYarn) yarn else npm)
+            }
 
-            println("Done resolving ${javaClass.simpleName} dependencies in '${parent.name}'.")
+            println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
         }
 
         return result
