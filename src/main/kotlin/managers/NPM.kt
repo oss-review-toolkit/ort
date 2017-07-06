@@ -67,7 +67,7 @@ object NPM : PackageManager(
         val install = ProcessCapture(workingDir, managerCommand, "install")
         if (install.exitValue() != 0) {
             throw IOException(
-                    "'${install.commandLine}' failed with exit code ${install.exitValue()}: ${install.stderr()}")
+                    "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
         }
 
         return parseInstalledDependencies(workingDir)

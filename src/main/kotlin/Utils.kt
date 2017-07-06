@@ -73,7 +73,7 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonElemen
     val process = ProcessCapture(workingDir, *command)
     if (process.exitValue() != 0) {
         throw IOException(
-                "'${process.commandLine}' failed with exit code ${process.exitValue()}: ${process.stderr()}")
+                "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}")
     }
 
     val gson = Gson()
