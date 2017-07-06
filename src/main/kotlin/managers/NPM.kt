@@ -11,9 +11,11 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 
 import com.here.provenanceanalyzer.model.Dependency
+import com.here.provenanceanalyzer.Main
 import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.ProcessCapture
+import com.here.provenanceanalyzer.log
 import com.here.provenanceanalyzer.parseJsonProcessOutput
 
 import java.io.File
@@ -43,6 +45,8 @@ object NPM : PackageManager(
         definitionFiles.forEach { definitionFile ->
             val parent = definitionFile.parentFile
 
+            println("Start resolving ${javaClass.simpleName} dependencies in '${parent.name}'...")
+
             val modulesDir = File(parent, "node_modules")
             if (modulesDir.isDirectory) {
                 throw IllegalArgumentException("'$modulesDir' directory already exists.")
@@ -53,6 +57,8 @@ object NPM : PackageManager(
             // the same dependency is only ever downloaded once.
             val isYarn = File(parent, "yarn.lock").isFile
             result[definitionFile] = installDependencies(parent, if (isYarn) yarn else npm)
+
+            println("Done resolving ${javaClass.simpleName} dependencies in '${parent.name}'.")
         }
 
         return result
@@ -63,6 +69,10 @@ object NPM : PackageManager(
      * dependency tree.
      */
     fun installDependencies(workingDir: File, managerCommand: String): Dependency {
+        if (Main.debug) {
+            log.debug("Using '$managerCommand' to install ${javaClass.simpleName} dependencies.")
+        }
+
         // Install all NPM dependencies to enable NPM to list dependencies.
         val install = ProcessCapture(workingDir, managerCommand, "install")
         if (install.exitValue() != 0) {
@@ -76,7 +86,11 @@ object NPM : PackageManager(
     private fun parseInstalledDependencies(workingDir: File): Dependency {
         val modulesDir = File(workingDir, "node_modules")
 
-        // Get all production dependencies.
+        // List only production dependencies.
+        if (Main.debug) {
+            log.debug("Using '$npm' to list production dependencies.")
+        }
+
         val prodJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=prod") as JsonObject
         val prodDependencies = if (prodJson.contains("dependencies")) {
             parseNodeModules(modulesDir, prodJson["dependencies"].obj, "production")
@@ -84,7 +98,11 @@ object NPM : PackageManager(
             listOf()
         }
 
-        // Get all dev dependencies.
+        // List only dev dependencies.
+        if (Main.debug) {
+            log.debug("Using '$npm' to list development dependencies.")
+        }
+
         val devJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=dev") as JsonObject
         val devDependencies = if (devJson.contains("dependencies")) {
             parseNodeModules(modulesDir, devJson["dependencies"].obj, "development")
