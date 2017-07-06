@@ -15,12 +15,12 @@ import kotlin.system.exitProcess
 
 import mu.KotlinLogging
 
+internal val log = KotlinLogging.logger {}
+
 /**
  * The main entry point of the application.
  */
 object Main {
-    val logger = KotlinLogging.logger {}
-
     class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
             // Map lower-cased package manager class names to their instances.
@@ -63,7 +63,7 @@ object Main {
         }
 
         if (projectPaths == null) {
-            logger.error("Please specify at least one project path.")
+            log.error("Please specify at least one project path.")
             exitProcess(2)
         }
 

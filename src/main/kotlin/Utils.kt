@@ -39,9 +39,9 @@ class ProcessCapture(workingDir: File, vararg command: String) {
 
     init {
         if (Main.debug) {
-            Main.logger.debug("Keeping temporary files:")
-            Main.logger.debug(stdoutFile.absolutePath)
-            Main.logger.debug(stderrFile.absolutePath)
+            log.debug("Keeping temporary files:")
+            log.debug(stdoutFile.absolutePath)
+            log.debug(stderrFile.absolutePath)
         } else {
             stdoutFile.deleteOnExit()
             stderrFile.deleteOnExit()
