@@ -122,11 +122,12 @@ object NPM : PackageManager(
     private fun parseInstalledDependencies(workingDir: File): Dependency {
         val modulesDir = File(workingDir, "node_modules")
 
-        // List only production dependencies.
+        // Collect first-order production dependencies and their transitive production dependencies.
         if (Main.debug) {
             log.debug("Using '$npm' to list production dependencies.")
         }
 
+        // Note that listing dependencies fails if peer dependencies are missing.
         val prodJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=prod") as JsonObject
         val prodDependencies = if (prodJson.contains("dependencies")) {
             parseNodeModules(modulesDir, prodJson["dependencies"].obj, "production")
@@ -134,11 +135,12 @@ object NPM : PackageManager(
             listOf()
         }
 
-        // List only dev dependencies.
+        // Collect first-order development dependencies and their transitive production dependencies.
         if (Main.debug) {
             log.debug("Using '$npm' to list development dependencies.")
         }
 
+        // Note that listing dependencies fails if peer dependencies are missing.
         val devJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=dev") as JsonObject
         val devDependencies = if (devJson.contains("dependencies")) {
             parseNodeModules(modulesDir, devJson["dependencies"].obj, "development")
