@@ -83,5 +83,5 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonElemen
         return jsonArray(process.stdoutFile.readLines().map { gson.fromJson<JsonObject>(it) })
     }
 
-    return gson.fromJson<JsonElement>(process.stdout())
+    return gson.fromJson(process.stdout())
 }
