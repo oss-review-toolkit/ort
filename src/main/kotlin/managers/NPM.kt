@@ -18,6 +18,8 @@ import com.here.provenanceanalyzer.ProcessCapture
 import com.here.provenanceanalyzer.log
 import com.here.provenanceanalyzer.parseJsonProcessOutput
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 import java.io.IOException
 
@@ -48,10 +50,10 @@ object NPM : PackageManager(
             throw IOException("Unable to determine the $npm version:\n${version.stderr()}")
         }
 
-        val expectedVersion = "5.1.0"
-        val actualVersion = version.stdout().trim()
+        val expectedVersion = Semver("5.1.0", Semver.SemverType.NPM)
+        val actualVersion = Semver(version.stdout().trim(), Semver.SemverType.NPM)
         if (actualVersion != expectedVersion) {
-            throw IOException("Unsupported $npm version $actualVersion, version $expectedVersion is required.")
+            throw IOException("Unsupported $npm version ${actualVersion.value}, version ${expectedVersion.value} is required.")
         }
     }
 

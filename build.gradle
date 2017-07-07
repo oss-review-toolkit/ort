@@ -59,6 +59,7 @@ dependencies {
 
     compile 'com.beust:jcommander:1.72'
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
+    compile 'com.vdurmont:semver4j:2.0.2'
 
     // Use slf4j-simple as logger for kotlin-logging, as the latter is a wrapper for slf4j and depends on an
     // implementation of slf4j.
