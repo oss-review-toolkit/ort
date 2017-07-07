@@ -41,6 +41,10 @@ object NPM : PackageManager(
         }
     }
 
+    override fun command(workingDir: File): String {
+        return if (File(workingDir, "yarn.lock").isFile) yarn else npm
+    }
+
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         val result = mutableMapOf<File, Dependency>()
 
@@ -58,8 +62,7 @@ object NPM : PackageManager(
                 // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
                 // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
                 // the same dependency is only ever downloaded once.
-                val isYarn = File(parent, "yarn.lock").isFile
-                result[definitionFile] = installDependencies(parent, if (isYarn) yarn else npm)
+                result[definitionFile] = installDependencies(parent, command(parent))
             }
 
             println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")

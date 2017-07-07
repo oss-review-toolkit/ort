@@ -10,6 +10,10 @@ object CocoaPods : PackageManager(
         "Objective-C",
         listOf("Podfile.lock", "Podfile")
 ) {
+    override fun command(workingDir: File): String {
+        return "pod"
+    }
+
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

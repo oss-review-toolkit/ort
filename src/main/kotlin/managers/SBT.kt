@@ -10,6 +10,10 @@ object SBT : PackageManager(
         "Scala",
         listOf("build.sbt", "build.scala")
 ) {
+    override fun command(workingDir: File): String {
+        return "sbt"
+    }
+
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -10,6 +10,10 @@ object Godep : PackageManager(
         "Go",
         listOf("Godeps/Godeps.json")
 ) {
+    override fun command(workingDir: File): String {
+        return "godep"
+    }
+
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

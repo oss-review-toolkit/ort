@@ -47,6 +47,12 @@ abstract class PackageManager(
     }
 
     /**
+     * Return the name of the package manager's command line application. As the preferred command might depend on the
+     * working directory it needs to be provided.
+     */
+    abstract fun command(workingDir: File): String
+
+    /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */

@@ -11,6 +11,10 @@ object PIP : PackageManager(
         // See https://caremad.io/posts/2013/07/setup-vs-requirement/.
         listOf("setup.py", "requirements*.txt")
 ) {
+    override fun command(workingDir: File): String {
+        return "pip"
+    }
+
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

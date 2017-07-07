@@ -10,6 +10,10 @@ object Maven : PackageManager(
         "Java",
         listOf("pom.xml")
 ) {
+    override fun command(workingDir: File): String {
+        return "mvn"
+    }
+
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
