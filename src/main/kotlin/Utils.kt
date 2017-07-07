@@ -25,7 +25,9 @@ object OS {
  * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
  * standard error streams by redirecting output to temporary files.
  */
-class ProcessCapture(workingDir: File, vararg command: String) {
+class ProcessCapture(workingDir: File?, vararg command: String) {
+    constructor(vararg command: String) : this(null, *command)
+
     val commandLine = command.joinToString(" ")
     val stdoutFile = File.createTempFile(command.first(), ".stdout")!!
     val stderrFile = File.createTempFile(command.first(), ".stderr")!!
