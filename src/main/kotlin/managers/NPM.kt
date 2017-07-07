@@ -29,14 +29,17 @@ object NPM : PackageManager(
         listOf("package.json")
 ) {
     val npm: String
+    val npmInstallPeers: String
     val yarn: String
 
     init {
         if (OS.isWindows) {
             npm = "npm.cmd"
+            npmInstallPeers = "npm-install-peers.cmd"
             yarn = "yarn.cmd"
         } else {
             npm = "npm"
+            npmInstallPeers = "npm-install-peers"
             yarn = "yarn"
         }
 
@@ -94,6 +97,14 @@ object NPM : PackageManager(
         // Install all NPM dependencies to enable NPM to list dependencies.
         val install = ProcessCapture(workingDir, managerCommand, "install")
         if (install.exitValue() != 0) {
+            throw IOException(
+                    "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
+        }
+
+        // Note: Running this might leave the working directory in a dirty state as it potentially modifies
+        // "package.json" and lock files.
+        val installPeers = ProcessCapture(workingDir, npmInstallPeers)
+        if (installPeers.exitValue() != 0) {
             throw IOException(
                     "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
         }
