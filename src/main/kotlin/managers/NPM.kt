@@ -72,14 +72,19 @@ object NPM : PackageManager(
                 throw IllegalArgumentException("'$modulesDir' directory already exists.")
             }
 
-            val elapsed = measureTimeMillis {
-                // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
-                // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
-                // the same dependency is only ever downloaded once.
-                result[definitionFile] = installDependencies(parent, command(parent))
-            }
+            try {
+                val elapsed = measureTimeMillis {
+                    // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+                    // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
+                    // the same dependency is only ever downloaded once.
+                    result[definitionFile] = installDependencies(parent, command(parent))
+                }
 
-            println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
+                println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
+            } finally {
+                // Delete node_modules folder to not pollute the scan.
+                modulesDir.deleteRecursively()
+            }
         }
 
         return result
@@ -138,9 +143,6 @@ object NPM : PackageManager(
         } else {
             listOf()
         }
-
-        // Delete node_modules folder to not pollute the scan.
-        modulesDir.deleteRecursively()
 
         val artifact = prodJson["name"].string
         val version = prodJson["version"].string
