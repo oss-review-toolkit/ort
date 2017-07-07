@@ -39,6 +39,17 @@ object NPM : PackageManager(
             npm = "npm"
             yarn = "yarn"
         }
+
+        val version = ProcessCapture(npm, "--version")
+        if (version.exitValue() != 0) {
+            throw IOException("Unable to determine the $npm version:\n${version.stderr()}")
+        }
+
+        val expectedVersion = "5.1.0"
+        val actualVersion = version.stdout().trim()
+        if (actualVersion != expectedVersion) {
+            throw IOException("Unsupported $npm version $actualVersion, version $expectedVersion is required.")
+        }
     }
 
     override fun command(workingDir: File): String {
