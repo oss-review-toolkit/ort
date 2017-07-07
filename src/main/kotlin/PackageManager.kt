@@ -31,7 +31,7 @@ val PACKAGE_MANAGERS = listOf(
 abstract class PackageManager(
         val homepageUrl: String,
         val primaryLanguage: String,
-        val pathsToDefinitionFiles: List<String>
+        private val pathsToDefinitionFiles: List<String>
 ) {
     /**
      * The recursive glob matcher for all definition files.
