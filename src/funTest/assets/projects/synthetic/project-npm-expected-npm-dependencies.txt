@@ -4,20 +4,29 @@ null:HD-Live-Map-Viewer:2.0.0:production:null
       null:boolbase:1.0.0:production:git+https://github.com/fb55/boolbase.git
       null:css-what:2.1.0:production:git+https://github.com/fb55/css-what.git
       null:domutils:1.5.1:production:git://github.com/FB55/domutils.git
+        null:dom-serializer:0.1.0:production:git://github.com/cheeriojs/dom-renderer.git
+        null:domelementtype:1.3.0:production:git://github.com/FB55/domelementtype.git
       null:nth-check:1.0.1:production:git+https://github.com/fb55/nth-check.git
+        null:boolbase:1.0.0:production:git+https://github.com/fb55/boolbase.git
     null:dom-serializer:0.1.0:production:git://github.com/cheeriojs/dom-renderer.git
       null:domelementtype:1.1.3:production:git://github.com/FB55/domelementtype.git
+      null:entities:1.1.1:production:git://github.com/fb55/node-entities.git
     null:entities:1.1.1:production:git://github.com/fb55/node-entities.git
     null:htmlparser2:3.9.2:production:git://github.com/fb55/htmlparser2.git
       null:domelementtype:1.3.0:production:git://github.com/FB55/domelementtype.git
       null:domhandler:2.4.1:production:git://github.com/fb55/DomHandler.git
+        null:domelementtype:1.3.0:production:git://github.com/FB55/domelementtype.git
+      null:domutils:1.5.1:production:git://github.com/FB55/domutils.git
+      null:entities:1.1.1:production:git://github.com/fb55/node-entities.git
       null:inherits:2.0.3:production:git://github.com/isaacs/inherits.git
       null:readable-stream:2.3.2:production:git://github.com/nodejs/readable-stream.git
         null:core-util-is:1.0.2:production:git://github.com/isaacs/core-util-is.git
+        null:inherits:2.0.3:production:git://github.com/isaacs/inherits.git
         null:isarray:1.0.0:production:git://github.com/juliangruber/isarray.git
         null:process-nextick-args:1.0.7:production:git+https://github.com/calvinmetcalf/process-nextick-args.git
         null:safe-buffer:5.1.1:production:git://github.com/feross/safe-buffer.git
         null:string_decoder:1.0.3:production:git://github.com/rvagg/string_decoder.git
+          null:safe-buffer:5.1.1:production:git://github.com/feross/safe-buffer.git
         null:util-deprecate:1.0.2:production:git://github.com/TooTallNate/util-deprecate.git
     null:lodash:4.17.4:production:git+https://github.com/lodash/lodash.git
     null:parse5:3.0.2:production:git://github.com/inikulin/parse5.git
@@ -25,13 +34,20 @@ null:HD-Live-Map-Viewer:2.0.0:production:null
   null:long:3.2.0:production:git+https://github.com/dcodeIO/long.js.git
   null:promise:7.3.1:production:git+https://github.com/then/promise.git
     null:asap:2.0.5:production:git+https://github.com/kriskowal/asap.git
+  null:tea:0.1.0:production:git+ssh://git@github.com/logicalparadox/idris.git
   null:cson:4.1.0:development:git+https://github.com/bevry/cson.git
     null:coffee-script:1.12.6:development:git://github.com/jashkenas/coffeescript.git
     null:cson-parser:1.3.5:development:git+ssh://git@github.com/groupon/cson-parser.git
+      null:coffee-script:1.12.6:development:git://github.com/jashkenas/coffeescript.git
     null:extract-opts:3.3.1:development:git+ssh://git@github.com/bevry/extract-opts.git
       null:eachr:3.2.0:development:git+ssh://git@github.com/bevry/eachr.git
+        null:editions:1.3.3:development:git+https://github.com/bevry/editions.git
+        null:typechecker:4.4.1:development:git+ssh://git@github.com/bevry/typechecker.git
       null:editions:1.3.3:development:git+https://github.com/bevry/editions.git
       null:typechecker:4.4.1:development:git+ssh://git@github.com/bevry/typechecker.git
+        null:editions:1.3.3:development:git+https://github.com/bevry/editions.git
     null:requirefresh:2.1.0:development:git+ssh://git@github.com/bevry/requirefresh.git
+      null:editions:1.3.3:development:git+https://github.com/bevry/editions.git
     null:safefs:4.1.0:development:git+ssh://git@github.com/bevry/safefs.git
+      null:editions:1.3.3:development:git+https://github.com/bevry/editions.git
       null:graceful-fs:4.1.11:development:git+https://github.com/isaacs/node-graceful-fs.git
