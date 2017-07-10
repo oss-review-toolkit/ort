@@ -19,7 +19,7 @@ null:HD-Live-Map-Viewer:2.0.0:production:null
       null:domutils:1.5.1:production:git://github.com/FB55/domutils.git
       null:entities:1.1.1:production:git://github.com/fb55/node-entities.git
       null:inherits:2.0.3:production:git://github.com/isaacs/inherits.git
-      null:readable-stream:2.3.2:production:git://github.com/nodejs/readable-stream.git
+      null:readable-stream:2.3.3:production:git://github.com/nodejs/readable-stream.git
         null:core-util-is:1.0.2:production:git://github.com/isaacs/core-util-is.git
         null:inherits:2.0.3:production:git://github.com/isaacs/inherits.git
         null:isarray:1.0.0:production:git://github.com/juliangruber/isarray.git
@@ -30,7 +30,7 @@ null:HD-Live-Map-Viewer:2.0.0:production:null
         null:util-deprecate:1.0.2:production:git://github.com/TooTallNate/util-deprecate.git
     null:lodash:4.17.4:production:git+https://github.com/lodash/lodash.git
     null:parse5:3.0.2:production:git://github.com/inikulin/parse5.git
-      null:@types/node:6.0.78:production:https://www.github.com/DefinitelyTyped/DefinitelyTyped.git
+      null:@types/node:6.0.79:production:https://www.github.com/DefinitelyTyped/DefinitelyTyped.git
   null:long:3.2.0:production:git+https://github.com/dcodeIO/long.js.git
   null:promise:7.3.1:production:git+https://github.com/then/promise.git
     null:asap:2.0.5:production:git+https://github.com/kriskowal/asap.git
