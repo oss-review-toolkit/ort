@@ -38,17 +38,17 @@ object Main {
 
     @Parameter(names = arrayOf("--package-managers", "-m"), description = "A list of package managers to activate.",
             listConverter = PackageManagerListConverter::class, order = 0)
-    var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
+    private var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
 
     @Parameter(names = arrayOf("--debug"), description = "Enable debug logging and keep temporary files.", order = 0)
-    var debug = false
+    private var debug = false
 
     @Parameter(names = arrayOf("--help", "-h"), description = "Display the command line help.", help = true,
             order = 100)
-    var help = false
+    private var help = false
 
     @Parameter(description = "project path(s)")
-    var projectPaths: List<String>? = null
+    private var projectPaths: List<String>? = null
 
     /**
      * The entry point for the application.
