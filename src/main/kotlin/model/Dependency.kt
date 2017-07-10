@@ -14,7 +14,8 @@ data class Dependency(
 
     private fun toString(indent: String): String {
         return buildString {
-            append("$indent$group:$artifact:$version:$scope:$scm\n")
+            append("$indent$group:$artifact:$version:$scope:$scm")
+            append(System.lineSeparator())
             dependencies.forEach { dependency ->
                 append(dependency.toString("$indent  "))
             }

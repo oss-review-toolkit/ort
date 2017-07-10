@@ -29,35 +29,20 @@ class NpmTest : StringSpec() {
 
     init {
         "yarn dependencies are resolved correctly" {
-            val expectedDependenciesList = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-yarn-dependencies.txt").readLines()
+            val expectedDependencies = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-yarn-dependencies.txt").readText()
+            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.yarn).toString()
 
-            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.yarn)
-            val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }
-
-            resolvedDependencyList.zip(expectedDependenciesList).forEach { (resolved, expected) ->
-                resolved shouldBe expected
-            }
-
-            // As zip() returns a list of pairs whose length is that of the shortest collection we need to compare the
-            // sizes, too.
-            resolvedDependencyList.size shouldBe expectedDependenciesList.size
+            resolvedDependencies shouldBe expectedDependencies
         }
 
         "NPM dependencies are resolved correctly" {
-            val expectedDependenciesList = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-npm-dependencies.txt").readLines()
+            val expectedDependencies = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-npm-dependencies.txt").readText()
 
-            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.npm)
-            val resolvedDependencyList = resolvedDependencies.toString().lines().filter { it.isNotEmpty() }
+            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.npm).toString()
 
-            resolvedDependencyList.zip(expectedDependenciesList).forEach { (resolved, expected) ->
-                resolved shouldBe expected
-            }
-
-            // As zip() returns a list of pairs whose length is that of the shortest collection we need to compare the
-            // sizes, too.
-            resolvedDependencyList.size shouldBe expectedDependenciesList.size
+            resolvedDependencies shouldBe expectedDependencies
         }
     }
 }
