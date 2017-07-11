@@ -25,7 +25,7 @@ object Main {
         log.level = ch.qos.logback.classic.Level.INFO
     }
 
-    class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
+    private class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
             // Map lower-cased package manager class names to their instances.
             val packageManagerNames = packageManagers.associateBy { it.javaClass.simpleName.toLowerCase() }
