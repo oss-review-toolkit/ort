@@ -13,14 +13,18 @@ import java.nio.file.attribute.BasicFileAttributes
 
 import kotlin.system.exitProcess
 
-import mu.KotlinLogging
-
-internal val log = KotlinLogging.logger {}
+@Suppress("UnsafeCast")
+internal val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
 
 /**
  * The main entry point of the application.
  */
 object Main {
+    init {
+        // Change the default log level from DEBUG to INFO before any other constructors are run.
+        log.level = ch.qos.logback.classic.Level.INFO
+    }
+
     class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
             // Map lower-cased package manager class names to their instances.
@@ -56,6 +60,10 @@ object Main {
         val jc = JCommander(this)
         jc.parse(*args)
         jc.programName = "pran"
+
+        if (debug) {
+            log.level = ch.qos.logback.classic.Level.DEBUG
+        }
 
         if (help) {
             jc.usage()

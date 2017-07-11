@@ -44,7 +44,7 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
     private val process = builder.start()
 
     init {
-        if (Main.debug) {
+        if (log.isDebugEnabled) {
             log.debug("Keeping temporary files:")
             log.debug(stdoutFile.absolutePath)
             log.debug(stderrFile.absolutePath)

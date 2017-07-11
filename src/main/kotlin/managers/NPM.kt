@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.managers
 
+import ch.frankel.slf4k.*
+
 import com.github.salomonbrys.kotson.contains
 import com.github.salomonbrys.kotson.forEach
 import com.github.salomonbrys.kotson.fromJson
@@ -11,7 +13,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 
 import com.here.provenanceanalyzer.model.Dependency
-import com.here.provenanceanalyzer.Main
 import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.ProcessCapture
@@ -98,9 +99,7 @@ object NPM : PackageManager(
      * dependency tree.
      */
     fun installDependencies(workingDir: File, managerCommand: String): Dependency {
-        if (Main.debug) {
-            log.debug("Using '$managerCommand' to install ${javaClass.simpleName} dependencies.")
-        }
+        log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         val install = ProcessCapture(workingDir, managerCommand, "install")
@@ -124,9 +123,7 @@ object NPM : PackageManager(
         val modulesDir = File(workingDir, "node_modules")
 
         // Collect first-order production dependencies and their transitive production dependencies.
-        if (Main.debug) {
-            log.debug("Using '$npm' to list production dependencies.")
-        }
+        log.debug { "Using '$npm' to list production dependencies." }
 
         // Note that listing dependencies fails if peer dependencies are missing.
         @Suppress("UnsafeCast")
@@ -138,9 +135,7 @@ object NPM : PackageManager(
         }
 
         // Collect first-order development dependencies and their transitive production dependencies.
-        if (Main.debug) {
-            log.debug("Using '$npm' to list development dependencies.")
-        }
+        log.debug { "Using '$npm' to list development dependencies." }
 
         // Note that listing dependencies fails if peer dependencies are missing.
         @Suppress("UnsafeCast")
