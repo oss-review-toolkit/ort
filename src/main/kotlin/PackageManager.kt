@@ -36,6 +36,7 @@ abstract class PackageManager(
     /**
      * The recursive glob matcher for all definition files.
      */
+    @Suppress("UnsafeCallOnNullableType")
     val globForDefinitionFiles = FileSystems.getDefault().getPathMatcher(
             "glob:**/{" + pathsToDefinitionFiles.joinToString(",") + "}")!!
 

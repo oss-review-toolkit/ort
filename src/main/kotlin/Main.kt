@@ -73,6 +73,7 @@ object Main {
         // Map of paths managed by the respective package manager.
         val managedProjectPaths = HashMap<PackageManager, MutableList<File>>()
 
+        @Suppress("UnsafeCallOnNullableType")
         projectPaths!!.forEach { projectPath ->
             val absolutePath = File(projectPath).absoluteFile
             println("Scanning project path '$absolutePath'.")

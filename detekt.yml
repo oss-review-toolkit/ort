@@ -1,10 +1,14 @@
 # Configuration of Detekt rule sets, see: https://github.com/arturbosch/detekt#rulesets
 
 build:
-    failThreshold: 17
+    failThreshold: 16
 
 complexity:
     LargeClass:
         threshold: 150
     NestedBlockDepth:
         threshold: 4
+
+performance:
+    SpreadOperator:
+        active: false

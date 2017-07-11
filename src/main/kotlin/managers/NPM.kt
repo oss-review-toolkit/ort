@@ -53,7 +53,8 @@ object NPM : PackageManager(
         val expectedVersion = Semver("5.1.0", Semver.SemverType.NPM)
         val actualVersion = Semver(version.stdout().trim(), Semver.SemverType.NPM)
         if (actualVersion != expectedVersion) {
-            throw IOException("Unsupported $npm version ${actualVersion.value}, version ${expectedVersion.value} is required.")
+            throw IOException(
+                    "Unsupported $npm version ${actualVersion.value}, version ${expectedVersion.value} is required.")
         }
     }
 
@@ -128,6 +129,7 @@ object NPM : PackageManager(
         }
 
         // Note that listing dependencies fails if peer dependencies are missing.
+        @Suppress("UnsafeCast")
         val prodJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=prod") as JsonObject
         val prodDependencies = if (prodJson.contains("dependencies")) {
             parseNodeModules(modulesDir, prodJson["dependencies"].obj, "production")
@@ -141,6 +143,7 @@ object NPM : PackageManager(
         }
 
         // Note that listing dependencies fails if peer dependencies are missing.
+        @Suppress("UnsafeCast")
         val devJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=dev") as JsonObject
         val devDependencies = if (devJson.contains("dependencies")) {
             parseNodeModules(modulesDir, devJson["dependencies"].obj, "development")

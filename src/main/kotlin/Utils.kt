@@ -29,7 +29,11 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
     constructor(vararg command: String) : this(null, *command)
 
     val commandLine = command.joinToString(" ")
+
+    @Suppress("UnsafeCallOnNullableType")
     val stdoutFile = File.createTempFile(command.first(), ".stdout")!!
+
+    @Suppress("UnsafeCallOnNullableType")
     val stderrFile = File.createTempFile(command.first(), ".stderr")!!
 
     private val builder = ProcessBuilder(*command)
