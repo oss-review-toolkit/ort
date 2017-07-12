@@ -79,7 +79,7 @@ object Main {
         println("\t" + packageManagers.map { it.javaClass.simpleName }.joinToString(", "))
 
         // Map of paths managed by the respective package manager.
-        val managedProjectPaths = HashMap<PackageManager, MutableList<File>>()
+        val managedProjectPaths = mutableMapOf<PackageManager, MutableList<File>>()
 
         @Suppress("UnsafeCallOnNullableType")
         projectPaths!!.forEach { projectPath ->
