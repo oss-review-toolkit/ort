@@ -68,7 +68,7 @@ dependencies {
     funTestCompile configurations.testCompile
     funTestRuntime configurations.testRuntime
 
-    funTestCompile 'io.kotlintest:kotlintest:2.0.3'
+    funTestCompile 'io.kotlintest:kotlintest:2.0.4'
 }
 
 compileKotlin {
