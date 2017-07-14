@@ -20,6 +20,7 @@ import com.here.provenanceanalyzer.log
 import com.here.provenanceanalyzer.parseJsonProcessOutput
 
 import com.vdurmont.semver4j.Semver
+import com.vdurmont.semver4j.Semver.SemverType
 
 import java.io.File
 import java.io.IOException
@@ -51,8 +52,8 @@ object NPM : PackageManager(
             throw IOException("Unable to determine the $npm version:\n${version.stderr()}")
         }
 
-        val expectedVersion = Semver("5.1.0", Semver.SemverType.NPM)
-        val actualVersion = Semver(version.stdout().trim(), Semver.SemverType.NPM)
+        val expectedVersion = Semver("5.1.0", SemverType.NPM)
+        val actualVersion = Semver(version.stdout().trim(), SemverType.NPM)
         if (actualVersion != expectedVersion) {
             throw IOException(
                     "Unsupported $npm version ${actualVersion.value}, version ${expectedVersion.value} is required.")
@@ -149,8 +150,8 @@ object NPM : PackageManager(
         val artifact = prodJson["name"].string
         val version = prodJson["version"].string
 
-        return Dependency(artifact = artifact, version = version, dependencies = prodDependencies + devDependencies,
-                scope = "production")
+        return Dependency(artifact = artifact, version = Semver(version, SemverType.NPM),
+                dependencies = prodDependencies + devDependencies, scope = "production")
     }
 
     private fun parseNodeModules(modulesDir: File, json: JsonObject, scope: String): List<Dependency> {
@@ -177,8 +178,8 @@ object NPM : PackageManager(
                 }
             }
 
-            val dependency = Dependency(artifact = key, version = version, dependencies = dependencies, scope = scope,
-                    scm = scm)
+            val dependency = Dependency(artifact = key, version = Semver(version, SemverType.NPM),
+                    dependencies = dependencies, scope = scope, scm = scm)
             result.add(dependency)
         }
         return result
