@@ -19,6 +19,7 @@ plugins {
 
 // Apply core plugins.
 apply plugin: 'application'
+apply plugin: 'jacoco'
 
 dependencyUpdates.resolutionStrategy = {
     componentSelection { rules ->
@@ -93,11 +94,28 @@ detekt {
     }
 }
 
+jacoco {
+    toolVersion = '0.7.9'
+}
+
 task funTest(type: Test) {
     description = 'Runs the functional tests.'
     group = 'Verification'
     classpath = sourceSets.funTest.runtimeClasspath
     testClassesDirs = sourceSets.funTest.output.classesDirs
+}
+
+task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
+    description = 'Generates the code coverage report for the functional tests.'
+    group = 'Reporting'
+
+    executionData funTest
+    sourceSets sourceSets.main
+
+    reports {
+        // Enable XML in addition to HTML for CI integration.
+        xml.enabled true
+    }
 }
 
 check.dependsOn detektCheck, funTest
