@@ -9,8 +9,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class NpmTest : StringSpec() {
-
-    val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
