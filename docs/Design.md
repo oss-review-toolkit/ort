@@ -1,8 +1,8 @@
 # Package Manager Considerations
 
-## Existing Definition File Parsers
+## Python
 
-### Python
+### Existing Definition File Parsers
 
 - https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_managers/pip.rb
 
@@ -23,3 +23,16 @@
 - https://github.com/fossas/srclib-pip/
 
   An add-on for [srclib](https://github.com/sourcegraph/srclib) that manually parses `requirements.txt` files.
+
+- https://github.com/blackducksoftware/hub-detect/blob/master/src/main/resources/pip-inspector.py
+
+  Uses the `pip.req.parse_requirements` API. `setup.py` seems to be recognized but not yet handled.
+
+### Conclusions
+
+While using `pip.req.parse_requirements` to parse `requirements.txt` files and using `distutils.core.setup` to parse `setup.py` files looks like an elegant solution, they cannot handle e.g. defining common includes as part of `requirements.txt` files that look like:
+
+    # common requirements
+    -i http://foo.bar.com/ptpi/devpi/dev/+simple/
+
+That is why calling `pip download` probably is the way to go to correctly determine the dependencies, even if that already downloads the dependencies at a stage where we would only need the dependency graph.
