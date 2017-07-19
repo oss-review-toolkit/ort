@@ -46,7 +46,13 @@ object NPM : PackageManager(
             npmInstallPeers = "npm-install-peers"
             yarn = "yarn"
         }
+    }
 
+    override fun command(workingDir: File): String {
+        return if (File(workingDir, "yarn.lock").isFile) yarn else npm
+    }
+
+    override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         val version = ProcessCapture(npm, "--version")
         if (version.exitValue() != 0) {
             throw IOException("Unable to determine the $npm version:\n${version.stderr()}")
@@ -58,13 +64,7 @@ object NPM : PackageManager(
             throw IOException(
                     "Unsupported $npm version ${actualVersion.value}, version ${expectedVersion.value} is required.")
         }
-    }
 
-    override fun command(workingDir: File): String {
-        return if (File(workingDir, "yarn.lock").isFile) yarn else npm
-    }
-
-    override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
         val result = mutableMapOf<File, Dependency>()
 
         definitionFiles.forEach { definitionFile ->
