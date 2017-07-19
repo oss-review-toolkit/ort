@@ -88,7 +88,9 @@ object NPM : PackageManager(
                 println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
             } finally {
                 // Delete node_modules folder to not pollute the scan.
-                modulesDir.deleteRecursively()
+                if (!modulesDir.deleteRecursively()) {
+                    throw IOException("Unable to delete the '$modulesDir' directory.")
+                }
             }
         }
 
