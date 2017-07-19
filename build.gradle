@@ -49,12 +49,19 @@ repositories {
     jcenter()
 }
 
+ext {
+    jacksonVersion = '2.9.0'
+}
+
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.3-2'
 
     compile 'com.beust:jcommander:1.72'
-    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile 'com.vdurmont:semver4j:2.0.2'
+    compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
 
     // Use logback-classic as the logger for slf4k as it allows to change the log level at runtime.
     compile 'ch.frankel.log4k:slf4k-api:1.0.0'

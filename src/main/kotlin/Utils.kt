@@ -1,16 +1,16 @@
 package com.here.provenanceanalyzer
 
-import com.github.salomonbrys.kotson.fromJson
-import com.github.salomonbrys.kotson.jsonArray
-
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 
 import com.here.provenanceanalyzer.managers.NPM
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 import java.io.IOException
+import java.net.URI
 
 /**
  * Operating-System-specific utility functions.
@@ -75,19 +75,65 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
 /**
  * Parse the standard output of a process as JSON.
  */
-fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonElement {
+fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonNode {
     val process = ProcessCapture(workingDir, *command)
     if (process.exitValue() != 0) {
         throw IOException(
                 "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}")
     }
 
-    val gson = Gson()
+    val mapper = ObjectMapper()
 
     // Wrap yarn's output, which is one JSON object per line, so the output as a whole can be parsed as a JSON array.
     if (command.first() == NPM.yarn && command.contains("--json")) {
-        return jsonArray(process.stdoutFile.readLines().map { gson.fromJson<JsonObject>(it) })
+        val array = JsonNodeFactory.instance.arrayNode()
+        process.stdoutFile.readLines().forEach { array.add(mapper.readTree(it)) }
+        return array
     }
 
-    return gson.fromJson(process.stdout())
+    return mapper.readTree(process.stdout())
+}
+
+/**
+ * Normalize a VCS URL by converting it to a common pattern. For example NPM defines some shortcuts for GitHub or GitLab
+ * URLs which are converted to full URLs so that they can be used in a common way.
+ *
+ * @param vcsUrl The URL to normalize.
+ * @param semverType Required to convert package manager specific shortcuts.
+ */
+fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType) :String {
+    // A hierarchical URI looks like
+    //     [scheme:][//authority][path][?query][#fragment]
+    // where a server-based "authority" has the syntax
+    //     [user-info@]host[:port]
+    val uri = URI(vcsUrl)
+
+    if (semverType == Semver.SemverType.NPM) {
+        // https://docs.npmjs.com/files/package.json#repository
+        val path = uri.schemeSpecificPart
+        if (path != null) {
+            if (uri.authority == null && uri.query == null && uri.fragment == null) {
+                // Handle shortcut URLs.
+                when (uri.scheme) {
+                    null -> return "https://github.com/$path.git"
+                    "gist" -> return "https://gist.github.com/$path"
+                    "bitbucket" -> return "https://bitbucket.org/$path.git"
+                    "gitlab" -> return "https://gitlab.com/$path.git"
+                }
+            }
+        }
+    }
+
+    if (uri.host.endsWith("github.com")) {
+        // Ensure the path ends in ".git".
+        val path = if (uri.path.endsWith(".git")) uri.path else uri.path + ".git"
+
+        // Remove any user name and "www" prefix.
+        val host = uri.authority.substringAfter("@").removePrefix("www.")
+
+        return "https://" + host + path
+    }
+
+    // Return the URL unmodified.
+    return vcsUrl
 }

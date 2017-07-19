@@ -1,32 +1,36 @@
 package com.here.provenanceanalyzer.managers
 
-import ch.frankel.slf4k.*
+import ch.frankel.slf4k.debug
+import ch.frankel.slf4k.info
+import ch.frankel.slf4k.warn
 
-import com.github.salomonbrys.kotson.contains
-import com.github.salomonbrys.kotson.forEach
-import com.github.salomonbrys.kotson.fromJson
-import com.github.salomonbrys.kotson.get
-import com.github.salomonbrys.kotson.obj
-import com.github.salomonbrys.kotson.string
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-
-import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.ProcessCapture
 import com.here.provenanceanalyzer.log
-import com.here.provenanceanalyzer.parseJsonProcessOutput
+import com.here.provenanceanalyzer.model.Dependency
+import com.here.provenanceanalyzer.model.Package
+import com.here.provenanceanalyzer.model.Project
+import com.here.provenanceanalyzer.model.ScanResult
+import com.here.provenanceanalyzer.model.Scope
 
 import com.vdurmont.semver4j.Semver
 import com.vdurmont.semver4j.Semver.SemverType
 
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
+import java.net.URL
+import java.net.URLEncoder
 
 import kotlin.system.measureTimeMillis
 
+@Suppress("LargeClass")
 object NPM : PackageManager(
         "https://www.npmjs.com/",
         "JavaScript",
@@ -34,6 +38,9 @@ object NPM : PackageManager(
 ) {
     val npm: String
     val yarn: String
+
+    private val jsonMapper = ObjectMapper().registerKotlinModule()
+    private val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
     init {
         if (OS.isWindows) {
@@ -53,13 +60,13 @@ object NPM : PackageManager(
         var lockfileCount = 0
         listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock").forEach {
             if (File(workingDir, it).isFile) {
-                lockfileCount ++
+                lockfileCount++
             }
         }
         return lockfileCount
     }
 
-    override fun resolveDependencies(definitionFiles: List<File>): Map<File, Dependency> {
+    override fun resolveDependencies(definitionFiles: List<File>): Map<File, ScanResult> {
         val version = ProcessCapture(npm, "--version")
         if (version.exitValue() != 0) {
             throw IOException("Unable to determine the $npm version:\n${version.stderr()}")
@@ -72,31 +79,244 @@ object NPM : PackageManager(
                     "Unsupported $npm version ${actualVersion.value}, version ${expectedVersion.value} is required.")
         }
 
-        val result = mutableMapOf<File, Dependency>()
+        val result = mutableMapOf<File, ScanResult>()
 
         definitionFiles.forEach { definitionFile ->
             val parent = definitionFile.parentFile
 
-            println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}'...")
+            log.debug { "Resolving ${javaClass.simpleName} dependencies in '${parent.name}'..." }
 
             val elapsed = measureTimeMillis {
-                // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
-                // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
-                // the same dependency is only ever downloaded once.
-                result[definitionFile] = installDependencies(parent)
+                try {
+                    // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+                    // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
+                    // the same dependency is only ever downloaded once.
+                    installDependencies(parent)
+
+                    val packages = parseInstalledModules(parent)
+
+                    val dependencies = Scope("dependencies", true,
+                            parseDependencies(definitionFile, "dependencies", packages))
+                    val devDependencies = Scope("devDependencies", false,
+                            parseDependencies(definitionFile, "devDependencies", packages))
+
+                    // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
+
+                    val project = parseProject(definitionFile, listOf(dependencies, devDependencies),
+                            packages.values.toList().sortedBy { it.identifier })
+                    result[definitionFile] = project
+                } finally {
+                    // Delete node_modules folder to not pollute the scan.
+                    val modulesDir = File(definitionFile.parent, "node_modules")
+                    if (!modulesDir.deleteRecursively()) {
+                        throw IOException("Unable to delete the '$modulesDir' directory.")
+                    }
+                }
             }
 
-            println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
+            log.debug { "Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s." }
         }
 
         return result
     }
 
+    @Suppress("ComplexMethod")
+    private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
+        val packages = mutableMapOf<String, Package>()
+        val nodeModulesDir = File(rootDirectory, "node_modules")
+
+        log.info { "Searching for package.json files in ${nodeModulesDir.absolutePath}..." }
+
+        nodeModulesDir.walkTopDown().filter {
+            it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
+        }.forEach {
+            log.debug { "Found module: ${it.absolutePath}" }
+
+            @Suppress("UnsafeCast")
+            val json = jsonMapper.readTree(it) as ObjectNode
+            val rawName = json["name"].asText()
+            val name = rawName.substringAfterLast("/")
+            val namespace = if (rawName.contains("/")) rawName.substringBeforeLast("/") else ""
+            val version = json["version"].asText()
+
+            var description: String
+            var homepageUrl: String
+            var downloadUrl: String
+            var hash: String
+            var vcsUrl = ""
+            var vcsRevision = ""
+
+            val identifier = "$rawName@$version"
+
+            // Download package info from registry.npmjs.org.
+            // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
+            log.debug { "Retrieving package info for $identifier" }
+            val encodedName = if (rawName.startsWith("@")) {
+                "@${URLEncoder.encode(rawName.substringAfter("@"), "UTF-8")}"
+            } else {
+                rawName
+            }
+            val url = URL("https://registry.npmjs.org/$encodedName")
+            try {
+                val packageInfo = jsonMapper.readTree(url.readText())
+                val infoJson = packageInfo["versions"][version]
+
+                description = infoJson["description"].asText()
+                homepageUrl = if (infoJson["homepage"] != null) infoJson["homepage"].asText() else ""
+
+                val dist = infoJson["dist"]
+                downloadUrl = dist["tarball"].asText()
+                hash = dist["shasum"].asText()
+
+                if (infoJson["repository"] != null) {
+                    val repository = infoJson["repository"]
+                    vcsUrl = repository["url"].asText()
+                }
+                vcsRevision = if (infoJson["gitHead"] != null) infoJson["gitHead"].asText() else ""
+            } catch (e: FileNotFoundException) {
+                // Fallback to getting detailed info from the package.json file. Some info will likely be missing.
+
+                description = if (json["description"] != null) json["description"].asText() else ""
+                homepageUrl = if (json["homepage"] != null) json["homepage"].asText() else ""
+                downloadUrl = if (json["_resolved"] != null) json["_resolved"].asText() else ""
+                hash = if (json["_integrity"] != null) json["_integrity"].asText() else ""
+
+                vcsUrl = if (json["repository"] != null) {
+                    if (json["repository"].textValue() != null)
+                        json["repository"].asText()
+                    else
+                        json["repository"]["url"].asText()
+                } else ""
+            }
+
+            val module = Package("NPM", namespace, name, description, version, homepageUrl, downloadUrl,
+                    hash, vcsUrl, vcsRevision)
+
+            require(module.name.isNotEmpty()) {
+                "Generated package info for $identifier has no name."
+            }
+
+            require(module.version.isNotEmpty()) {
+                "Generated package info for $identifier has no version."
+            }
+
+            packages[identifier] = module
+        }
+
+        return packages
+    }
+
+    private fun isValidNodeModulesDirectory(rootModulesDir: File, modulesDir: File?): Boolean {
+        if (modulesDir == null) {
+            return false
+        }
+
+        var currentDir: File = modulesDir
+        while (currentDir != rootModulesDir) {
+            if (currentDir.name != "node_modules") {
+                return false
+            }
+
+            currentDir = currentDir.parentFile.parentFile
+            if (currentDir.name.startsWith("@")) {
+                currentDir = currentDir.parentFile
+            }
+        }
+
+        return true
+    }
+
+    private fun nodeModulesDirForPackageJson(packageJson: File): File? {
+        var modulesDir = packageJson.parentFile.parentFile
+        if (modulesDir.name.startsWith("@")) {
+            modulesDir = modulesDir.parentFile
+        }
+
+        return if (modulesDir.name == "node_modules") modulesDir else null
+    }
+
+    private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>): List<Dependency> {
+        // Read package.json
+        val jsonMapper = ObjectMapper()
+        val json = jsonMapper.readTree(packageJson)
+        val dependencies = mutableListOf<Dependency>()
+        if (json[scope] != null) {
+            log.debug { "Looking for dependencies in scope $scope" }
+            val dependencyMap = json[scope]
+            dependencyMap.fields().forEach { (name, _) ->
+                val dependency = buildTree(packageJson.parentFile, packageJson.parentFile, name, packages)
+                dependencies.add(dependency)
+            }
+        } else {
+            log.warn { "Could not find scope $scope in ${packageJson.absolutePath}" }
+        }
+        dependencies.sortBy { it.identifier }
+        return dependencies
+    }
+
+    private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>): Dependency {
+        log.debug { "Building dependency tree for $name from directory ${startDir.absolutePath}" }
+        val jsonMapper = ObjectMapper()
+        val nodeModulesDir = File(startDir, "node_modules")
+        val moduleDir = File(nodeModulesDir, name)
+        val packageFile = File(moduleDir, "package.json")
+        if (packageFile.isFile) {
+            log.debug { "Found package file for module $name: ${packageFile.absolutePath}" }
+            val packageJson = jsonMapper.readTree(packageFile)
+            val version = packageJson["version"].asText()
+            val packageInfo = packages["$name@$version"] ?:
+                    throw IOException("Could not find package info for $name@$version")
+            val dependencies = mutableListOf<Dependency>()
+            if (packageJson["dependencies"] != null) {
+                val dependencyMap = packageJson["dependencies"]
+                dependencyMap.fields().forEach { (name, _) ->
+                    val dependency = buildTree(rootDir, packageFile.parentFile, name, packages)
+                    dependencies.add(dependency)
+                }
+            }
+            // TODO: make the identifier below a dynamic getter in the dependency class which is not serialized
+            dependencies.sortBy { it.identifier }
+            return Dependency(packageInfo.name, packageInfo.namespace, packageInfo.version, packageInfo.hash,
+                    dependencies)
+        } else if (rootDir == startDir) {
+            log.error("Could not find module $name")
+            return Dependency(name, "", "unknown, package not installed", "", listOf())
+        } else {
+            var parent = startDir.parentFile.parentFile
+
+            // For scoped packages we need to go one more dir up.
+            if (parent.name == "node_modules") {
+                parent = parent.parentFile
+            }
+            log.debug {
+                "Could not find package file for $name in ${startDir.absolutePath}, looking in " +
+                        "${parent.absolutePath} instead"
+            }
+            return buildTree(rootDir, parent, name, packages)
+        }
+    }
+
+    private fun parseProject(packageJson: File, scopes: List<Scope>, packages: List<Package>): ScanResult {
+        val json = jsonMapper.readTree(packageJson)
+        val name = json["name"].asText()
+        val version = json["version"].asText()
+        val vcsUrl = if (json["repository"] != null) {
+            if (json["repository"].textValue() != null)
+                json["repository"].asText()
+            else
+                json["repository"]["url"].asText()
+        } else ""
+        val homepageUrl = if (json["homepage"] != null) json["homepage"].asText() else ""
+
+        // TODO: parse revision from vcs
+
+        return ScanResult(Project(name, listOf(), version, vcsUrl, "", homepageUrl, scopes), packages)
+    }
+
     /**
-     * Install dependencies using the given package manager command. Parse dependencies afterwards to return a
-     * dependency tree.
+     * Install dependencies using the given package manager command.
      */
-    fun installDependencies(workingDir: File): Dependency {
+    fun installDependencies(workingDir: File) {
         val modulesDir = File(workingDir, "node_modules")
         require(!modulesDir.isDirectory) { "'$modulesDir' directory already exists." }
 
@@ -111,89 +331,15 @@ object NPM : PackageManager(
         val managerCommand = command(workingDir)
         log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
 
-        val rootDependency: Dependency
-
-        try {
-            // Install all NPM dependencies to enable NPM to list dependencies.
-            val install = ProcessCapture(workingDir, managerCommand, "install")
-            if (install.exitValue() != 0) {
-                throw IOException(
-                        "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
-            }
-
-            rootDependency = parseInstalledDependencies(workingDir)
-        } finally {
-            // Delete node_modules folder to not pollute the scan.
-            if (!modulesDir.deleteRecursively()) {
-                throw IOException("Unable to delete the '$modulesDir' directory.")
-            }
+        // Install all NPM dependencies to enable NPM to list dependencies.
+        val install = ProcessCapture(workingDir, managerCommand, "install")
+        if (install.exitValue() != 0) {
+            throw IOException(
+                    "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
         }
 
-        return rootDependency
+        // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
+        // platforms except for Mac.
     }
 
-    private fun parseInstalledDependencies(workingDir: File): Dependency {
-        val modulesDir = File(workingDir, "node_modules")
-
-        // Collect first-order production dependencies and their transitive production dependencies.
-        log.debug { "Using '$npm' to list production dependencies." }
-
-        // Note that listing dependencies fails if peer dependencies are missing.
-        @Suppress("UnsafeCast")
-        val prodJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=prod") as JsonObject
-        val prodDependencies = if (prodJson.contains("dependencies")) {
-            parseNodeModules(modulesDir, prodJson["dependencies"].obj, "dependencies")
-        } else {
-            listOf()
-        }
-
-        // Collect first-order development dependencies and their transitive production dependencies.
-        log.debug { "Using '$npm' to list development dependencies." }
-
-        // Note that listing dependencies fails if peer dependencies are missing.
-        @Suppress("UnsafeCast")
-        val devJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=dev") as JsonObject
-        val devDependencies = if (devJson.contains("dependencies")) {
-            parseNodeModules(modulesDir, devJson["dependencies"].obj, "devDependencies")
-        } else {
-            listOf()
-        }
-
-        val artifact = prodJson["name"].string
-        val version = prodJson["version"].string
-
-        return Dependency(artifact = artifact, version = Semver(version, SemverType.NPM),
-                dependencies = prodDependencies + devDependencies, scope = "root")
-    }
-
-    private fun parseNodeModules(modulesDir: File, json: JsonObject, scope: String): List<Dependency> {
-        val result = mutableListOf<Dependency>()
-        json.forEach { key, jsonElement ->
-            val version = jsonElement["version"].string
-            val dependencies = if (jsonElement.obj.contains("dependencies")) {
-                parseNodeModules(modulesDir, jsonElement["dependencies"].obj, scope)
-            } else {
-                listOf()
-            }
-
-            var scm: String? = null
-            val packageFile = File(modulesDir, "$key/package.json")
-            if (packageFile.isFile) {
-                val packageJson = Gson().fromJson<JsonObject>(packageFile.readText())
-                if (packageJson.contains("repository")) {
-                    val repository = packageJson["repository"]
-
-                    // For some packages "yarn install" generates a non-conforming shortcut repository entry like this:
-                    // "repository": "git://..."
-                    // For details about the correct format see: https://docs.npmjs.com/files/package.json#repository
-                    scm = if (repository.isJsonObject) repository["url"].string else repository.string
-                }
-            }
-
-            val dependency = Dependency(artifact = key, version = Semver(version, SemverType.NPM),
-                    dependencies = dependencies, scope = scope, scm = scm)
-            result.add(dependency)
-        }
-        return result
-    }
 }

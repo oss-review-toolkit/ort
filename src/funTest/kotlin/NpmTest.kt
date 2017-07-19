@@ -1,5 +1,10 @@
 package com.here.provenanceanalyzer.functionaltest
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+
 import com.here.provenanceanalyzer.managers.NPM
 
 import io.kotlintest.TestCaseContext
@@ -15,6 +20,7 @@ import java.io.File
 
 class NpmTest : StringSpec() {
     private val projectBaseDir = File("src/funTest/assets/projects/synthetic/project-npm")
+    private val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
@@ -40,37 +46,37 @@ class NpmTest : StringSpec() {
         "yarn dependencies are resolved correctly" {
             val workingDir = File(projectBaseDir, "yarn")
             val packageFile = File(workingDir, "package.json")
-            val expectedDependencies = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-yarn-dependencies.txt").readText()
+            val expectedResult = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-output.yml").readText()
 
-            val resolvedDependencies = NPM.resolveDependencies(listOf(packageFile))[packageFile].toString()
+            val result = NPM.resolveDependencies(listOf(packageFile))[packageFile]
 
             NPM.command(workingDir) shouldBe NPM.yarn
-            resolvedDependencies shouldBe expectedDependencies
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
         "NPM shrinkwrap dependencies are resolved correctly" {
             val workingDir = File(projectBaseDir, "shrinkwrap")
             val packageFile = File(workingDir, "package.json")
-            val expectedDependencies = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-npm-dependencies.txt").readText()
+            val expectedResult = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-output.yml").readText()
 
-            val resolvedDependencies = NPM.resolveDependencies(listOf(packageFile))[packageFile].toString()
+            val result = NPM.resolveDependencies(listOf(packageFile))[packageFile]
 
             NPM.command(workingDir) shouldBe NPM.npm
-            resolvedDependencies shouldBe expectedDependencies
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
         "NPM package-lock dependencies are resolved correctly" {
             val workingDir = File(projectBaseDir, "package-lock")
             val packageFile = File(workingDir, "package.json")
-            val expectedDependencies = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-npm-dependencies.txt").readText()
+            val expectedResult = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-output.yml").readText()
 
-            val resolvedDependencies = NPM.resolveDependencies(listOf(packageFile))[packageFile].toString()
+            val result = NPM.resolveDependencies(listOf(packageFile))[packageFile]
 
             NPM.command(workingDir) shouldBe NPM.npm
-            resolvedDependencies shouldBe expectedDependencies
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
         "NPM aborts when no lockfile is present" {
