@@ -20,11 +20,6 @@ internal val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.log
  * The main entry point of the application.
  */
 object Main {
-    init {
-        // Change the default log level from DEBUG to INFO before any other constructors are run.
-        log.level = ch.qos.logback.classic.Level.INFO
-    }
-
     private class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
         override fun convert(managers: String): List<PackageManager> {
             // Map lower-cased package manager class names to their instances.
