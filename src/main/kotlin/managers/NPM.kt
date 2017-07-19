@@ -72,26 +72,14 @@ object NPM : PackageManager(
 
             println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}'...")
 
-            val modulesDir = File(parent, "node_modules")
-            if (modulesDir.isDirectory) {
-                throw IllegalArgumentException("'$modulesDir' directory already exists.")
+            val elapsed = measureTimeMillis {
+                // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+                // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
+                // the same dependency is only ever downloaded once.
+                result[definitionFile] = installDependencies(parent, command(parent))
             }
 
-            try {
-                val elapsed = measureTimeMillis {
-                    // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
-                    // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
-                    // the same dependency is only ever downloaded once.
-                    result[definitionFile] = installDependencies(parent, command(parent))
-                }
-
-                println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
-            } finally {
-                // Delete node_modules folder to not pollute the scan.
-                if (!modulesDir.deleteRecursively()) {
-                    throw IOException("Unable to delete the '$modulesDir' directory.")
-                }
-            }
+            println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
         }
 
         return result
@@ -104,22 +92,38 @@ object NPM : PackageManager(
     fun installDependencies(workingDir: File, managerCommand: String): Dependency {
         log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
 
-        // Install all NPM dependencies to enable NPM to list dependencies.
-        val install = ProcessCapture(workingDir, managerCommand, "install")
-        if (install.exitValue() != 0) {
-            throw IOException(
-                    "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
+        val modulesDir = File(workingDir, "node_modules")
+        if (modulesDir.isDirectory) {
+            throw IllegalArgumentException("'$modulesDir' directory already exists.")
         }
 
-        // Note: Running this might leave the working directory in a dirty state as it potentially modifies
-        // "package.json" and lock files.
-        val installPeers = ProcessCapture(workingDir, npmInstallPeers)
-        if (installPeers.exitValue() != 0) {
-            throw IOException(
-                    "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
+        val rootDependency: Dependency
+
+        try {
+            // Install all NPM dependencies to enable NPM to list dependencies.
+            val install = ProcessCapture(workingDir, managerCommand, "install")
+            if (install.exitValue() != 0) {
+                throw IOException(
+                        "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
+            }
+
+            // Note: Running this might leave the working directory in a dirty state as it potentially modifies
+            // "package.json" and lock files.
+            val installPeers = ProcessCapture(workingDir, npmInstallPeers)
+            if (installPeers.exitValue() != 0) {
+                throw IOException(
+                        "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
+            }
+
+            rootDependency = parseInstalledDependencies(workingDir)
+        } finally {
+            // Delete node_modules folder to not pollute the scan.
+            if (!modulesDir.deleteRecursively()) {
+                throw IOException("Unable to delete the '$modulesDir' directory.")
+            }
         }
 
-        return parseInstalledDependencies(workingDir)
+        return rootDependency
     }
 
     private fun parseInstalledDependencies(workingDir: File): Dependency {
