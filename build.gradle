@@ -12,7 +12,7 @@ plugins {
 
     // Note that the detekt Gradle plugin version does not necessarily
     // match the detekt tool version.
-    id 'io.gitlab.arturbosch.detekt' version '1.0.0.M13'
+    id 'io.gitlab.arturbosch.detekt' version '1.0.0.M13.2'
 
     id 'com.github.ben-manes.versions' version '0.15.0'
 }
@@ -87,7 +87,7 @@ compileTestKotlin {
 }
 
 detekt {
-    version = '1.0.0.M13'
+    version = '1.0.0.M13.2'
 
     profile('main') {
         config = 'detekt.yml'
