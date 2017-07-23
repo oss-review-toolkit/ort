@@ -157,7 +157,7 @@ object NPM : PackageManager(
         val version = prodJson["version"].string
 
         return Dependency(artifact = artifact, version = Semver(version, SemverType.NPM),
-                dependencies = prodDependencies + devDependencies, scope = "production")
+                dependencies = prodDependencies + devDependencies, scope = "root")
     }
 
     private fun parseNodeModules(modulesDir: File, json: JsonObject, scope: String): List<Dependency> {

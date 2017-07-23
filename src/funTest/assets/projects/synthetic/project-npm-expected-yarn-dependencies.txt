@@ -1,4 +1,4 @@
-null:HD-Live-Map-Viewer:2.0.0:production:null
+null:HD-Live-Map-Viewer:2.0.0:root:null
   null:cheerio:1.0.0-rc.1:production:https://github.com/cheeriojs/cheerio.git
     null:css-select:1.2.0:production:https://github.com/fb55/css-select.git
       null:boolbase:1.0.0:production:https://github.com/fb55/boolbase.git
