@@ -93,9 +93,7 @@ object NPM : PackageManager(
         log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
 
         val modulesDir = File(workingDir, "node_modules")
-        if (modulesDir.isDirectory) {
-            throw IllegalArgumentException("'$modulesDir' directory already exists.")
-        }
+        require(!modulesDir.isDirectory) { "'$modulesDir' directory already exists." }
 
         val rootDependency: Dependency
 
