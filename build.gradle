@@ -47,10 +47,6 @@ sourceSets {
 
 repositories {
     jcenter()
-
-    maven {
-        url 'http://dl.bintray.com/nfrankel/maven'
-    }
 }
 
 dependencies {
