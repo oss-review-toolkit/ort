@@ -134,7 +134,7 @@ object NPM : PackageManager(
         @Suppress("UnsafeCast")
         val prodJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=prod") as JsonObject
         val prodDependencies = if (prodJson.contains("dependencies")) {
-            parseNodeModules(modulesDir, prodJson["dependencies"].obj, "production")
+            parseNodeModules(modulesDir, prodJson["dependencies"].obj, "dependencies")
         } else {
             listOf()
         }
@@ -146,7 +146,7 @@ object NPM : PackageManager(
         @Suppress("UnsafeCast")
         val devJson = parseJsonProcessOutput(workingDir, npm, "list", "--json", "--only=dev") as JsonObject
         val devDependencies = if (devJson.contains("dependencies")) {
-            parseNodeModules(modulesDir, devJson["dependencies"].obj, "development")
+            parseNodeModules(modulesDir, devJson["dependencies"].obj, "devDependencies")
         } else {
             listOf()
         }
