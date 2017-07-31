@@ -3,23 +3,32 @@ package com.here.provenanceanalyzer.functionaltest
 import com.here.provenanceanalyzer.managers.NPM
 
 import io.kotlintest.TestCaseContext
+import io.kotlintest.matchers.endWith
+import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
 class NpmTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
+    private val projectBaseDir = File("src/funTest/assets/projects/synthetic/project-npm")
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         try {
             test()
         } catch (exception: Exception) {
-            // Make sure the node_modules directory is always deleted to prevent side-effects from failing tests.
-            val nodeModulesDir = File(projectDir, "node_modules")
-            if (nodeModulesDir.isDirectory) {
-                nodeModulesDir.deleteRecursively()
+            // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
+            // from failing tests.
+            projectBaseDir.listFiles().forEach {
+                if (it.isDirectory) {
+                    val nodeModulesDir = File(it, "node_modules")
+                    if (nodeModulesDir.isDirectory) {
+                        nodeModulesDir.deleteRecursively()
+                    }
+                }
             }
 
             throw exception
@@ -28,20 +37,43 @@ class NpmTest : StringSpec() {
 
     init {
         "yarn dependencies are resolved correctly" {
+            val workingDir = File(projectBaseDir, "yarn")
             val expectedDependencies = File(
                     "src/funTest/assets/projects/synthetic/project-npm-expected-yarn-dependencies.txt").readText()
-            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.yarn).toString()
+            val resolvedDependencies = NPM.installDependencies(workingDir).toString()
 
+            NPM.command(workingDir) shouldBe NPM.yarn
             resolvedDependencies shouldBe expectedDependencies
         }
 
-        "NPM dependencies are resolved correctly" {
+        "NPM shrinkwrap dependencies are resolved correctly" {
+            val workingDir = File(projectBaseDir, "shrinkwrap")
             val expectedDependencies = File(
                     "src/funTest/assets/projects/synthetic/project-npm-expected-npm-dependencies.txt").readText()
 
-            val resolvedDependencies = NPM.installDependencies(projectDir, NPM.npm).toString()
+            val resolvedDependencies = NPM.installDependencies(workingDir).toString()
 
+            NPM.command(workingDir) shouldBe NPM.npm
             resolvedDependencies shouldBe expectedDependencies
+        }
+
+        "NPM package-lock dependencies are resolved correctly" {
+            val workingDir = File(projectBaseDir, "package-lock")
+            val expectedDependencies = File(
+                    "src/funTest/assets/projects/synthetic/project-npm-expected-npm-dependencies.txt").readText()
+
+            val resolvedDependencies = NPM.installDependencies(workingDir).toString()
+
+            NPM.command(workingDir) shouldBe NPM.npm
+            resolvedDependencies shouldBe expectedDependencies
+        }
+
+        "NPM aborts when the node_modules directory already exists" {
+            val exception = shouldThrow<IllegalArgumentException> {
+                NPM.installDependencies(File(projectBaseDir, "node-modules"))
+            }
+            @Suppress("UnsafeCallOnNullableType")
+            exception.message!! should endWith("directory already exists.")
         }
     }
 }

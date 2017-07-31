@@ -73,7 +73,7 @@ object NPM : PackageManager(
                 // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
                 // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
                 // the same dependency is only ever downloaded once.
-                result[definitionFile] = installDependencies(parent, command(parent))
+                result[definitionFile] = installDependencies(parent)
             }
 
             println("Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s.")
@@ -86,7 +86,8 @@ object NPM : PackageManager(
      * Install dependencies using the given package manager command. Parse dependencies afterwards to return a
      * dependency tree.
      */
-    fun installDependencies(workingDir: File, managerCommand: String): Dependency {
+    fun installDependencies(workingDir: File): Dependency {
+        val managerCommand = command(workingDir)
         log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
 
         val modulesDir = File(workingDir, "node_modules")

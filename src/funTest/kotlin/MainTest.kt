@@ -19,7 +19,7 @@ class MainTest : StringSpec() {
             val streamOut = ByteArrayOutputStream()
             System.setOut(PrintStream(streamOut))
 
-            Main.main(arrayOf("-m", "NPM", "src/funTest/assets/projects/synthetic/project-npm"))
+            Main.main(arrayOf("-m", "NPM", "src/funTest/assets/projects/synthetic/project-npm/package-lock"))
 
             // Restore standard output.
             System.setOut(standardOut)
