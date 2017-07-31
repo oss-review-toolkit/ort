@@ -8,6 +8,7 @@ import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.shouldThrow
+import io.kotlintest.matchers.startWith
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -66,6 +67,22 @@ class NpmTest : StringSpec() {
 
             NPM.command(workingDir) shouldBe NPM.npm
             resolvedDependencies shouldBe expectedDependencies
+        }
+
+        "NPM aborts when no lockfile is present" {
+            val exception = shouldThrow<IllegalArgumentException> {
+                NPM.installDependencies(File(projectBaseDir, "no-lockfile"))
+            }
+            @Suppress("UnsafeCallOnNullableType")
+            exception.message!! should startWith("No lockfile found in")
+        }
+
+        "NPM aborts when multiple lockfiles are present" {
+            val exception = shouldThrow<IllegalArgumentException> {
+                NPM.installDependencies(File(projectBaseDir, "multiple-lockfiles"))
+            }
+            @Suppress("UnsafeCallOnNullableType")
+            exception.message!! should endWith("contains multiple lockfiles. It is ambiguous which one to use.")
         }
 
         "NPM aborts when the node_modules directory already exists" {
