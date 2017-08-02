@@ -36,7 +36,7 @@ dependencyUpdates.resolutionStrategy = {
 }
 
 applicationName = 'pran'
-mainClassName = 'Main'
+mainClassName = 'com.here.provenanceanalyzer.Main'
 
 sourceSets {
     funTest {
