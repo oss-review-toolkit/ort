@@ -16,3 +16,5 @@ performance:
 style:
     WildcardImport:
         active: false
+    ForbiddenComment:
+        active: false
