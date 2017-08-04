@@ -64,7 +64,9 @@ dependencies {
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
 
     // Use logback-classic as the logger for slf4k as it allows to change the log level at runtime.
-    compile 'ch.frankel.log4k:slf4k-api:1.0.0'
+    compile('ch.frankel.log4k:slf4k-api:1.0.0') {
+        exclude module: 'kotlin-runtime'
+    }
     compile 'ch.qos.logback:logback-classic:1.2.3'
 
     funTestCompile sourceSets.main.output
