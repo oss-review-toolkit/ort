@@ -1,11 +1,10 @@
 package com.here.provenanceanalyzer.functionaltest
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.provenanceanalyzer.managers.NPM
+import com.here.provenanceanalyzer.model.yamlMapper
+import com.here.provenanceanalyzer.parseJsonProcessOutput
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.endWith
@@ -20,7 +19,6 @@ import java.io.File
 
 class NpmTest : StringSpec() {
     private val projectBaseDir = File("src/funTest/assets/projects/synthetic/project-npm")
-    private val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {

@@ -4,10 +4,7 @@ import ch.frankel.slf4k.debug
 import ch.frankel.slf4k.info
 import ch.frankel.slf4k.warn
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
@@ -18,6 +15,7 @@ import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.Project
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.model.Scope
+import com.here.provenanceanalyzer.model.jsonMapper
 
 import com.vdurmont.semver4j.Semver
 import com.vdurmont.semver4j.Semver.SemverType
@@ -38,9 +36,6 @@ object NPM : PackageManager(
 ) {
     val npm: String
     val yarn: String
-
-    private val jsonMapper = ObjectMapper().registerKotlinModule()
-    private val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
     init {
         if (OS.isWindows) {
@@ -237,7 +232,6 @@ object NPM : PackageManager(
 
     private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>): List<Dependency> {
         // Read package.json
-        val jsonMapper = ObjectMapper()
         val json = jsonMapper.readTree(packageJson)
         val dependencies = mutableListOf<Dependency>()
         if (json[scope] != null) {
@@ -256,7 +250,6 @@ object NPM : PackageManager(
 
     private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>): Dependency {
         log.debug { "Building dependency tree for $name from directory ${startDir.absolutePath}" }
-        val jsonMapper = ObjectMapper()
         val nodeModulesDir = File(startDir, "node_modules")
         val moduleDir = File(nodeModulesDir, name)
         val packageFile = File(moduleDir, "package.json")

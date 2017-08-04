@@ -1,10 +1,10 @@
 package com.here.provenanceanalyzer
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 
 import com.here.provenanceanalyzer.managers.NPM
+import com.here.provenanceanalyzer.model.jsonMapper
 
 import com.vdurmont.semver4j.Semver
 
@@ -82,16 +82,14 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonNode {
                 "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}")
     }
 
-    val mapper = ObjectMapper()
-
     // Wrap yarn's output, which is one JSON object per line, so the output as a whole can be parsed as a JSON array.
     if (command.first() == NPM.yarn && command.contains("--json")) {
         val array = JsonNodeFactory.instance.arrayNode()
-        process.stdoutFile.readLines().forEach { array.add(mapper.readTree(it)) }
+        process.stdoutFile.readLines().forEach { array.add(jsonMapper.readTree(it)) }
         return array
     }
 
-    return mapper.readTree(process.stdout())
+    return jsonMapper.readTree(process.stdout())
 }
 
 /**
