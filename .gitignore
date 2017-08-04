@@ -1,6 +1,6 @@
 /.gradle/
-/.idea/
-/build/
-/out/
+.idea/
+build/
+out/
 /local.properties
 /*.iml

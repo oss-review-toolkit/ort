@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./gradlew check
+./gradlew provenance-analyzer:check
 
