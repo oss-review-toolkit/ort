@@ -31,14 +31,20 @@ object Main {
         }
     }
 
-    @Parameter(names = arrayOf("--package-managers", "-m"), description = "A list of package managers to activate.",
-            listConverter = PackageManagerListConverter::class, order = 0)
+    @Parameter(names = arrayOf("--package-managers", "-m"),
+            description = "A list of package managers to activate.",
+            listConverter = PackageManagerListConverter::class,
+            order = 0)
     private var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
 
-    @Parameter(names = arrayOf("--debug"), description = "Enable debug logging and keep temporary files.", order = 0)
+    @Parameter(names = arrayOf("--debug"),
+            description = "Enable debug logging and keep temporary files.",
+            order = 0)
     private var debug = false
 
-    @Parameter(names = arrayOf("--help", "-h"), description = "Display the command line help.", help = true,
+    @Parameter(names = arrayOf("--help", "-h"),
+            description = "Display the command line help.",
+            help = true,
             order = 100)
     private var help = false
 
