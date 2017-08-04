@@ -3,6 +3,8 @@ package com.here.provenanceanalyzer
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import com.here.provenanceanalyzer.model.jsonMapper
+import com.here.provenanceanalyzer.model.yamlMapper
 
 import java.io.File
 import java.nio.file.Files
@@ -31,6 +33,11 @@ object Main {
         }
     }
 
+    enum class OutputFormat(val fileEnding: String) {
+        JSON(".json"),
+        YAML(".yml")
+    }
+
     @Parameter(names = arrayOf("--package-managers", "-m"),
             description = "A list of package managers to activate.",
             listConverter = PackageManagerListConverter::class,
@@ -51,11 +58,16 @@ object Main {
     @Parameter(description = "project path(s)")
     private var projectPaths: List<String>? = null
 
+    @Parameter(names = arrayOf("--output-format", "-f"),
+            description = "The data format used for dependency information.")
+    private var outputFormat: OutputFormat = OutputFormat.YAML
+
     /**
      * The entry point for the application.
      *
      * @param args The list of application arguments.
      */
+    @Suppress("ComplexMethod")
     @JvmStatic
     fun main(args: Array<String>) {
         val jc = JCommander(this)
@@ -111,9 +123,21 @@ object Main {
             println("$manager projects found in:")
             println(paths.map { "\t$it" }.joinToString("\n"))
 
+            val mapper = when (outputFormat) {
+                OutputFormat.JSON -> jsonMapper
+                OutputFormat.YAML -> yamlMapper
+            }
+
+            val userDir = File(System.getProperty("user.dir"))
+
             // Print the list of dependencies.
-            val dependencies = manager.resolveDependencies(paths)
-            dependencies.forEach(::println)
+            val results = manager.resolveDependencies(paths)
+            results.forEach { definitionFile, scanResult ->
+                val outputFile = File(definitionFile.parent, "provenance${outputFormat.fileEnding}")
+                println("Writing results for ${definitionFile.toRelativeString(userDir)} to " +
+                        "${outputFile.toRelativeString(userDir)}.")
+                mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
+            }
         }
     }
 }
