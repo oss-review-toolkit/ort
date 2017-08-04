@@ -102,11 +102,17 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonNode {
  * @param semverType Required to convert package manager specific shortcuts.
  */
 fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType) :String {
+    var url = vcsUrl
+
+    if (url.startsWith("git@github.com:")) {
+        url = url.replace("git@github.com:", "https://github.com/")
+    }
+
     // A hierarchical URI looks like
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
     //     [user-info@]host[:port]
-    val uri = URI(vcsUrl)
+    val uri = URI(url)
 
     if (semverType == Semver.SemverType.NPM) {
         // https://docs.npmjs.com/files/package.json#repository
@@ -135,5 +141,5 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType) :String {
     }
 
     // Return the URL unmodified.
-    return vcsUrl
+    return url
 }
