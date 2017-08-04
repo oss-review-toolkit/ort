@@ -3,8 +3,6 @@ package com.here.provenanceanalyzer.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import com.here.provenanceanalyzer.normalizeVcsUrl
-
 import com.vdurmont.semver4j.Semver
 
 @JsonIgnoreProperties("identifier", "normalizedVcsUrl", "semverType")
