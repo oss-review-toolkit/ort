@@ -3,6 +3,8 @@ package com.here.provenanceanalyzer
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+
+import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.jsonMapper
 import com.here.provenanceanalyzer.model.yamlMapper
 
@@ -31,11 +33,6 @@ object Main {
             val names = managers.toLowerCase().split(",")
             return names.mapNotNull { packageManagerNames[it] }
         }
-    }
-
-    enum class OutputFormat(val fileEnding: String) {
-        JSON(".json"),
-        YAML(".yml")
     }
 
     @Parameter(names = arrayOf("--package-managers", "-m"),
