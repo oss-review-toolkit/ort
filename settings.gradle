@@ -1,2 +1,3 @@
+include 'graph'
 include 'model'
 include 'provenance-analyzer'
