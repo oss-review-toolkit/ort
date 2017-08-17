@@ -44,7 +44,7 @@ object Main {
     fun main(args: Array<String>) {
         val jc = JCommander(this)
         jc.parse(*args)
-        jc.programName = "pran"
+        jc.programName = "graph"
 
         if (help || provenanceFilePath == null) {
             jc.usage()
