@@ -26,6 +26,11 @@ object Main {
             order = 100)
     private var help = false
 
+    @Parameter(names = arrayOf("--output", "-o"),
+            description = "",
+            required = true)
+    private var outputPath: String? = null
+
     /**
      * The entry point for the application.
      *
@@ -53,12 +58,21 @@ object Main {
             else -> throw IllegalArgumentException("Provided input file is neither JSON or YAML.")
         }
 
+        val outputDirectory = File(outputPath)
+        if (!outputDirectory.exists()) {
+            outputDirectory.mkdirs()
+        } else require(outputDirectory.isDirectory) {
+            "Output directory is not a directory: ${outputDirectory.absolutePath}"
+        }
+
         val scanResult = mapper.readValue(provenanceFile, ScanResult::class.java)
 
         scanResult.packages.forEach {
             val print = fun(string: String) = println("${it.identifier}: $string")
 
-            print("Start to download source code")
+            val targetDir = File(outputDirectory, "${it.name}/${it.version}") // TODO: add namespace to path
+            targetDir.mkdirs()
+            print("Download source code to ${targetDir.absolutePath}")
 
             if (!it.normalizedVcsUrl.isNullOrBlank()) {
                 print("Try to download from VCS: ${it.normalizedVcsUrl}")
@@ -81,7 +95,7 @@ object Main {
                     else -> {
                         val vcs = applicablesVcs.first()
                         print("Use ${vcs.javaClass.simpleName}")
-                        vcs.download(it.normalizedVcsUrl!!, it.vcsRevision)
+                        vcs.download(it.normalizedVcsUrl!!, it.vcsRevision, targetDir)
                     }
                 }
             } else {

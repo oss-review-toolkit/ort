@@ -1,8 +1,10 @@
 package com.here.provenanceanalyzer.downloader
 
+import java.io.File
+
 object Git : VersionControlSystem() {
 
-    override fun download(vcsUrl: String, vcsRevision: String?): Boolean {
+    override fun download(vcsUrl: String, vcsRevision: String?, targetDir: File): Boolean {
         return false
     }
 
