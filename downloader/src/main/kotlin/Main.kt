@@ -95,7 +95,11 @@ object Main {
                     else -> {
                         val vcs = applicablesVcs.first()
                         print("Use ${vcs.javaClass.simpleName}")
-                        vcs.download(it.normalizedVcsUrl!!, it.vcsRevision, targetDir)
+                        try {
+                            vcs.download(it.normalizedVcsUrl!!, it.vcsRevision, targetDir)
+                        } catch (e: IllegalArgumentException) {
+                            print("ERROR: Could not download source code: ${e.message}")
+                        }
                     }
                 }
             } else {
