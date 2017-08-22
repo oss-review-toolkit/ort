@@ -1,5 +1,3 @@
-import sun.misc.OSEnvironment
-
 // Apply third-party plugins.
 plugins {
     // We need to hard-code the version here because of

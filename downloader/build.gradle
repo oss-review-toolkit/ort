@@ -1,5 +1,3 @@
-import sun.misc.OSEnvironment
-
 // Apply third-party plugins.
 plugins {
     // We need to hard-code the version here because of
@@ -30,8 +28,6 @@ dependencyUpdates.resolutionStrategy = {
         }
     }
 }
-
-import org.apache.tools.ant.taskdefs.condition.Os
 
 applicationName = 'downloader'
 mainClassName = 'com.here.provenanceanalyzer.downloader.Main'
