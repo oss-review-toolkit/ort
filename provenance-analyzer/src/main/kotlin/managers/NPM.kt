@@ -71,7 +71,7 @@ object NPM : PackageManager(
         val actualVersion = Semver(version.stdout().trim(), SemverType.NPM)
         if (actualVersion != expectedVersion) {
             throw IOException(
-                    "Unsupported $npm version ${actualVersion.value}, version ${expectedVersion.value} is required.")
+                    "Unsupported $npm version $actualVersion, version $expectedVersion is required.")
         }
 
         val result = mutableMapOf<File, ScanResult>()

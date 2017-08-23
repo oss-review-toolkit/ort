@@ -15,7 +15,7 @@ dependencies {
     compile project(':model')
 
     compile 'com.beust:jcommander:1.72'
-    compile 'com.vdurmont:semver4j:2.0.2'
+    compile 'com.vdurmont:semver4j:2.0.3'
 
     funTestCompile sourceSets.main.output
     funTestCompile sourceSets.test.output
