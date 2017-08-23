@@ -77,18 +77,21 @@ object NPM : PackageManager(
         val result = mutableMapOf<File, ScanResult>()
 
         definitionFiles.forEach { definitionFile ->
-            val parent = definitionFile.parentFile
+            val workingDir = definitionFile.parentFile
 
-            log.debug { "Resolving ${javaClass.simpleName} dependencies in '${parent.name}'..." }
+            log.debug { "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}'..." }
 
             val elapsed = measureTimeMillis {
+                val modulesDir = File(workingDir, "node_modules")
+                require(!modulesDir.isDirectory) { "'$modulesDir' directory already exists." }
+
                 try {
                     // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
                     // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
                     // the same dependency is only ever downloaded once.
-                    installDependencies(parent)
+                    installDependencies(workingDir)
 
-                    val packages = parseInstalledModules(parent)
+                    val packages = parseInstalledModules(workingDir)
 
                     val dependencies = Scope("dependencies", true,
                             parseDependencies(definitionFile, "dependencies", packages))
@@ -102,14 +105,13 @@ object NPM : PackageManager(
                     result[definitionFile] = project
                 } finally {
                     // Delete node_modules folder to not pollute the scan.
-                    val modulesDir = File(definitionFile.parent, "node_modules")
                     if (!modulesDir.deleteRecursively()) {
                         throw IOException("Unable to delete the '$modulesDir' directory.")
                     }
                 }
             }
 
-            log.debug { "Resolving ${javaClass.simpleName} dependencies in '${parent.name}' took ${elapsed / 1000}s." }
+            log.debug { "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s." }
         }
 
         return result
@@ -310,9 +312,6 @@ object NPM : PackageManager(
      * Install dependencies using the given package manager command.
      */
     fun installDependencies(workingDir: File) {
-        val modulesDir = File(workingDir, "node_modules")
-        require(!modulesDir.isDirectory) { "'$modulesDir' directory already exists." }
-
         val lockfileCount = countLockfiles(workingDir)
         when {
             lockfileCount == 0 -> throw IllegalArgumentException("No lockfile found in ${workingDir}, dependency " +

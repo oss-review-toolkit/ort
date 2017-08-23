@@ -30,7 +30,8 @@ class NpmTest : StringSpec() {
             projectBaseDir.listFiles().forEach {
                 if (it.isDirectory) {
                     val nodeModulesDir = File(it, "node_modules")
-                    if (nodeModulesDir.isDirectory) {
+                    val gitKeepFile = File(nodeModulesDir, ".gitkeep")
+                    if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
                         nodeModulesDir.deleteRecursively()
                     }
                 }
