@@ -47,7 +47,7 @@ object Main {
             exitProcess(1)
         }
 
-        var provenanceFile = File(provenanceFilePath)
+        val provenanceFile = File(provenanceFilePath)
         require(provenanceFile.isFile) {
             "Provided path is not a file: ${provenanceFile.absolutePath}"
         }
