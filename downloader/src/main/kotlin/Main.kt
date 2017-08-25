@@ -85,15 +85,15 @@ object Main {
                 } else {
                     print("Download revision ${it.vcsRevision}")
                 }
-                val applicablesVcs = VERSION_CONTROL_SYSTEMS.filter { vcs -> vcs.isApplicable(it.normalizedVcsUrl!!) }
+                val applicableVcs = VERSION_CONTROL_SYSTEMS.filter { vcs -> vcs.isApplicable(it.normalizedVcsUrl!!) }
                 when {
-                    applicablesVcs.isEmpty() ->
+                    applicableVcs.isEmpty() ->
                         print("ERROR: Could not find applicable VCS for URL ${it.normalizedVcsUrl}")
-                    applicablesVcs.size > 1 ->
+                    applicableVcs.size > 1 ->
                         print("ERROR: Found multiple applicable VCS for URL ${it.normalizedVcsUrl}: " +
-                                applicablesVcs.joinToString())
+                                applicableVcs.joinToString())
                     else -> {
-                        val vcs = applicablesVcs.first()
+                        val vcs = applicableVcs.first()
                         print("Use ${vcs.javaClass.simpleName}")
                         try {
                             vcs.download(it.normalizedVcsUrl!!, it.vcsRevision, targetDir)
