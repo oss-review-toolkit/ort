@@ -11,9 +11,6 @@ import com.here.provenanceanalyzer.model.yamlMapper
 import org.graphstream.graph.Edge
 import org.graphstream.graph.implementations.SingleGraph
 import org.graphstream.graph.implementations.SingleNode
-import org.graphstream.ui.layout.Eades84Layout
-import org.graphstream.ui.layout.HierarchicalLayout
-import org.graphstream.ui.layout.springbox.implementations.LinLog
 import org.graphstream.ui.layout.springbox.implementations.SpringBox
 
 import java.io.File
