@@ -79,13 +79,13 @@ object Main {
         val rootNode = graph.addNode<SingleNode>(project.name)
         rootNode.addAttribute("ui.label", project.name)
 
-        project.scopes.forEach { scope ->
-            println("Adding scope ${scope.name}.")
-            val scopeNode = graph.addNode<SingleNode>(scope.name)
-            scopeNode.addAttribute("ui.label", scope.name)
-            graph.addEdge<Edge>(scope.name, rootNode, scopeNode)
+        project.scopes.forEach { (name, _, dependencies) ->
+            println("Adding scope ${name}.")
+            val scopeNode = graph.addNode<SingleNode>(name)
+            scopeNode.addAttribute("ui.label", name)
+            graph.addEdge<Edge>(name, rootNode, scopeNode)
 
-            scope.dependencies.forEach { dependency ->
+            dependencies.forEach { dependency ->
                 addDependency(scopeNode, dependency)
             }
         }
