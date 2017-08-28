@@ -307,10 +307,10 @@ object NPM : PackageManager(
         val lockFiles = listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock")
         val lockFileCount = lockFiles.count { File(workingDir, it).isFile }
         when {
-            lockFileCount == 0 -> throw IllegalArgumentException("No lockfile found in ${workingDir}, dependency " +
-                    "versions are unstable.")
-            lockFileCount > 1 -> throw IllegalArgumentException("${workingDir} contains multiple lockfiles. It is " +
-                    "ambiguous which one to use.")
+            lockFileCount == 0 -> throw IllegalArgumentException(
+                    "No lockfile found in ${workingDir}, dependency versions are unstable.")
+            lockFileCount > 1 -> throw IllegalArgumentException(
+                    "${workingDir} contains multiple lockfiles. It is ambiguous which one to use.")
         }
 
         val managerCommand = command(workingDir)
