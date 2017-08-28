@@ -9,6 +9,10 @@ complexity:
     NestedBlockDepth:
         threshold: 4
 
+comments:
+    CommentOverPrivateMethod:
+        active: false
+
 performance:
     SpreadOperator:
         active: false

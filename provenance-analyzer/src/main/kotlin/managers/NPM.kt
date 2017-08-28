@@ -303,7 +303,7 @@ object NPM : PackageManager(
     /**
      * Install dependencies using the given package manager command.
      */
-    fun installDependencies(workingDir: File) {
+    private fun installDependencies(workingDir: File) {
         val lockFiles = listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock").filter {
             File(workingDir, it).isFile
         }
