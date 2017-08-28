@@ -18,6 +18,8 @@ data class Package(
         @JsonProperty("download_url")
         val downloadUrl: String?,
         val hash: String, // e.g. sha1, sha512, ... of download
+        @JsonProperty("vcs_provider")
+        val vcsProvider: String?,
         @JsonProperty("vcs_url")
         val vcsUrl: String?,
         @JsonProperty("vcs_revision")

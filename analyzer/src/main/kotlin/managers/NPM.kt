@@ -4,6 +4,7 @@ import ch.frankel.slf4k.debug
 import ch.frankel.slf4k.info
 import ch.frankel.slf4k.warn
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.provenanceanalyzer.OS
@@ -134,6 +135,7 @@ object NPM : PackageManager(
             var homepageUrl: String
             var downloadUrl: String
             var hash: String
+            var vcsProvider = ""
             var vcsUrl = ""
             var vcsRevision = ""
 
@@ -159,9 +161,9 @@ object NPM : PackageManager(
                 downloadUrl = dist["tarball"].asText()
                 hash = dist["shasum"].asText()
 
-                if (infoJson["repository"] != null) {
-                    val repository = infoJson["repository"]
-                    vcsUrl = repository["url"].asText()
+                with(parseRepository(infoJson)) {
+                    vcsProvider = first
+                    vcsUrl = second
                 }
                 vcsRevision = if (infoJson["gitHead"] != null) infoJson["gitHead"].asText() else ""
             } catch (e: FileNotFoundException) {
@@ -172,16 +174,14 @@ object NPM : PackageManager(
                 downloadUrl = if (json["_resolved"] != null) json["_resolved"].asText() else ""
                 hash = if (json["_integrity"] != null) json["_integrity"].asText() else ""
 
-                vcsUrl = if (json["repository"] != null) {
-                    if (json["repository"].textValue() != null)
-                        json["repository"].asText()
-                    else
-                        json["repository"]["url"].asText()
-                } else ""
+                with(parseRepository(json)) {
+                    vcsProvider = first
+                    vcsUrl = second
+                }
             }
 
             val module = Package("NPM", namespace, name, description, version, homepageUrl, downloadUrl,
-                    hash, vcsUrl, vcsRevision)
+                    hash, vcsProvider, vcsUrl, vcsRevision)
 
             require(module.name.isNotEmpty()) {
                 "Generated package info for $identifier has no name."
@@ -244,6 +244,22 @@ object NPM : PackageManager(
         return dependencies
     }
 
+    private fun parseRepository(node: JsonNode): Pair<String, String> {
+        var type = ""
+        var url = ""
+        if (node["repository"] != null) {
+            if (node["repository"].textValue() != null)
+                url = node["repository"].asText()
+            else {
+                val typeNode = node["repository"]["type"]
+                val urlNode = node["repository"]["url"]
+                type = if (typeNode != null) typeNode.asText() else ""
+                url = if (urlNode != null) urlNode.asText() else ""
+            }
+        }
+        return Pair(type, url)
+    }
+
     private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>): Dependency {
         log.debug { "Building dependency tree for $name from directory ${startDir.absolutePath}" }
         val nodeModulesDir = File(startDir, "node_modules")
@@ -289,17 +305,15 @@ object NPM : PackageManager(
         val json = jsonMapper.readTree(packageJson)
         val name = json["name"].asText()
         val version = json["version"].asText()
-        val vcsUrl = if (json["repository"] != null) {
-            if (json["repository"].textValue() != null)
-                json["repository"].asText()
-            else
-                json["repository"]["url"].asText()
-        } else ""
+        val (vcsProvider, vcsUrl) = parseRepository(json)
         val homepageUrl = if (json["homepage"] != null) json["homepage"].asText() else ""
 
         // TODO: parse revision from vcs
 
-        return ScanResult(Project(name, listOf(), version, vcsUrl, "", homepageUrl, scopes), packages)
+        return ScanResult(
+                Project(name, listOf(), version, vcsProvider, vcsUrl, "", homepageUrl, scopes),
+                packages
+        )
     }
 
     /**
