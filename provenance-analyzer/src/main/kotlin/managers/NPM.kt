@@ -57,6 +57,8 @@ object NPM : PackageManager(
             throw IOException("Unable to determine the $npm version:\n${version.stderr()}")
         }
 
+        // We do not actually depend on any feature specific to an NPM 5.x minor version but still want to stick to a
+        // fixed version to be sure to get consistent results.
         val expectedVersion = Semver("5.1.0", SemverType.NPM)
         val actualVersion = Semver(version.stdout().trim(), SemverType.NPM)
         if (actualVersion != expectedVersion) {
