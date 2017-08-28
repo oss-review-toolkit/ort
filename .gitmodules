@@ -1,4 +1,4 @@
 [submodule "jgnash"]
-	path = provenance-analyzer/src/funTest/assets/projects/external/jgnash
+	path = analyzer/src/funTest/assets/projects/external/jgnash
 	url = https://github.com/ccavanaugh/jgnash.git
 	ignore = untracked
