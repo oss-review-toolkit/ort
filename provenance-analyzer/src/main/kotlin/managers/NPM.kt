@@ -51,16 +51,6 @@ object NPM : PackageManager(
         return if (File(workingDir, "yarn.lock").isFile) yarn else npm
     }
 
-    private fun countLockfiles(workingDir: File): Int {
-        var lockfileCount = 0
-        listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock").forEach {
-            if (File(workingDir, it).isFile) {
-                lockfileCount++
-            }
-        }
-        return lockfileCount
-    }
-
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, ScanResult> {
         val version = ProcessCapture(npm, "--version")
         if (version.exitValue() != 0) {
@@ -314,11 +304,12 @@ object NPM : PackageManager(
      * Install dependencies using the given package manager command.
      */
     fun installDependencies(workingDir: File) {
-        val lockfileCount = countLockfiles(workingDir)
+        val lockFiles = listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock")
+        val lockFileCount = lockFiles.count { File(workingDir, it).isFile }
         when {
-            lockfileCount == 0 -> throw IllegalArgumentException("No lockfile found in ${workingDir}, dependency " +
+            lockFileCount == 0 -> throw IllegalArgumentException("No lockfile found in ${workingDir}, dependency " +
                     "versions are unstable.")
-            lockfileCount > 1 -> throw IllegalArgumentException("${workingDir} contains multiple lockfiles. It is " +
+            lockFileCount > 1 -> throw IllegalArgumentException("${workingDir} contains multiple lockfiles. It is " +
                     "ambiguous which one to use.")
         }
 
