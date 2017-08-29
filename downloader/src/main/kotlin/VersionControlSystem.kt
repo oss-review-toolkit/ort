@@ -14,8 +14,17 @@ abstract class VersionControlSystem {
     abstract fun download(vcsUrl: String, vcsRevision: String?, targetDir: File): Boolean
 
     /**
-     * Check if this VCS can download from the provided URL.
+     * Return true if the provider name matches this VCS. For example for SVN it should return true on "svn",
+     * "subversion", or any other spelling that clearly identifies SVN.
      */
-    abstract fun isApplicable(vcsUrl: String): Boolean
+    abstract fun isApplicableProvider(vcsProvider: String): Boolean
+
+    /**
+     * Return true if this VCS can download from the provided URL. Should only return true when it's almost unambiguous,
+     * for example when the URL ends on ".git" for Git or contains "/svn/" for SVN, but not when it contains the string
+     * "git" as this could also be part of the host or project names.
+     */
+    abstract fun isApplicableUrl(vcsUrl: String): Boolean
+
 
 }

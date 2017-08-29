@@ -85,13 +85,25 @@ object Main {
                 } else {
                     print("Download revision ${it.vcsRevision}")
                 }
-                val applicableVcs = VERSION_CONTROL_SYSTEMS.filter { vcs -> vcs.isApplicable(it.normalizedVcsUrl!!) }
+                val applicableVcs = mutableListOf<VersionControlSystem>()
+                if (!it.vcsProvider.isNullOrEmpty()) {
+                    print("Detect VCS from provider name ${it.vcsProvider}")
+                    applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                        vcs.isApplicableProvider(it.vcsProvider!!)
+                    })
+                }
+                if (applicableVcs.isEmpty()) {
+                    print("Could not find VCS provider or no provider defined, try to detect provider from URL " +
+                            "${it.normalizedVcsUrl}")
+                    applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                        vcs.isApplicableUrl(it.normalizedVcsUrl!!)
+                    })
+                }
                 when {
                     applicableVcs.isEmpty() ->
-                        print("ERROR: Could not find applicable VCS for URL ${it.normalizedVcsUrl}")
+                        print("ERROR: Could not find applicable VCS")
                     applicableVcs.size > 1 ->
-                        print("ERROR: Found multiple applicable VCS for URL ${it.normalizedVcsUrl}: " +
-                                applicableVcs.joinToString())
+                        print("ERROR: Found multiple applicable VCS: ${applicableVcs.joinToString()}")
                     else -> {
                         val vcs = applicableVcs.first()
                         print("Use ${vcs.javaClass.simpleName}")

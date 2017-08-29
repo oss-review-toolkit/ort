@@ -13,7 +13,9 @@ object Git : VersionControlSystem() {
         return true
     }
 
-    override fun isApplicable(vcsUrl: String) = vcsUrl.endsWith(".git")
+    override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)
+
+    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
     private fun runGitCommand(targetDir: File, vararg args: String) {
         val builder = ProcessBuilder("git", *args)
