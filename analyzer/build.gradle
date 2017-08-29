@@ -30,6 +30,10 @@ task funTest(type: Test) {
     group = 'Verification'
     classpath = sourceSets.funTest.runtimeClasspath
     testClassesDirs = sourceSets.funTest.output.classesDirs
+
+    testLogging {
+        events 'started', 'passed', 'skipped', 'failed'
+    }
 }
 
 task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
