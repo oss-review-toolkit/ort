@@ -35,29 +35,30 @@ object Main {
         }
     }
 
-    @Parameter(names = arrayOf("--package-managers", "-m"),
-            description = "A list of package managers to activate.",
+    @Parameter(description = "A list of package managers to activate.",
+            names = arrayOf("--package-managers", "-m"),
             listConverter = PackageManagerListConverter::class,
             order = 0)
     private var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
 
-    @Parameter(names = arrayOf("--debug"),
-            description = "Enable debug logging and keep temporary files.",
+    @Parameter(description = "The data format used for dependency information.",
+            names = arrayOf("--output-format", "-f"),
+            order = 0)
+    private var outputFormat: OutputFormat = OutputFormat.YAML
+
+    @Parameter(description = "Enable debug logging and keep temporary files.",
+            names = arrayOf("--debug"),
             order = 0)
     private var debug = false
 
-    @Parameter(names = arrayOf("--help", "-h"),
-            description = "Display the command line help.",
+    @Parameter(description = "Display the command line help.",
+            names = arrayOf("--help", "-h"),
             help = true,
             order = 100)
     private var help = false
 
     @Parameter(description = "project path(s)")
     private var projectPaths: List<String>? = null
-
-    @Parameter(names = arrayOf("--output-format", "-f"),
-            description = "The data format used for dependency information.")
-    private var outputFormat: OutputFormat = OutputFormat.YAML
 
     /**
      * The entry point for the application.
