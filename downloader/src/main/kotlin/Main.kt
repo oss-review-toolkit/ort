@@ -102,6 +102,7 @@ object Main {
                 when {
                     applicableVcs.isEmpty() ->
                         print("ERROR: Could not find applicable VCS")
+                        // TODO: Decide if we want to do a trial-and-error with all available VCS here.
                     applicableVcs.size > 1 ->
                         print("ERROR: Found multiple applicable VCS: ${applicableVcs.joinToString()}")
                     else -> {
@@ -116,7 +117,9 @@ object Main {
                 }
             } else {
                 print("No VCS URL provided")
+                // TODO: This should also be tried if the VCS checkout does not work.
                 print("Try to download source package: ...")
+                // TODO: Implement downloading of source package.
                 print("ERROR: No source package URL provided")
             }
         }
