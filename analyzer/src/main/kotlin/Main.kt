@@ -119,7 +119,7 @@ object Main {
 
         managedProjectPaths.forEach { manager, paths ->
             println("$manager projects found in:")
-            println(paths.map { "\t$it" }.joinToString("\n"))
+            println(paths.joinToString("\n") { "\t$it" })
 
             val mapper = when (outputFormat) {
                 OutputFormat.JSON -> jsonMapper
