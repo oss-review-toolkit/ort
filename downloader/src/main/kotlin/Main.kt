@@ -110,6 +110,7 @@ object Main {
                         print("Use ${vcs.javaClass.simpleName}")
                         try {
                             vcs.download(it.normalizedVcsUrl!!, it.vcsRevision, targetDir)
+                            print("Downloaded source code to ${targetDir.absolutePath}")
                         } catch (e: IllegalArgumentException) {
                             print("ERROR: Could not download source code: ${e.message}")
                         }
