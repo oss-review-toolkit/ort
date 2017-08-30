@@ -325,10 +325,10 @@ object NPM : PackageManager(
         }
         when (lockFiles.size) {
             0 -> throw IllegalArgumentException(
-                    "No lockfile found in ${workingDir}, dependency versions are unstable.")
+                    "No lockfile found in $workingDir, dependency versions are unstable.")
             1 -> log.debug { "Found lock file '${lockFiles.first()}'." }
             else -> throw IllegalArgumentException(
-                    "${workingDir} contains multiple lockfiles. It is ambiguous which one to use.")
+                    "$workingDir contains multiple lockfiles. It is ambiguous which one to use.")
         }
 
         val managerCommand = command(workingDir)

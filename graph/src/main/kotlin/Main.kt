@@ -80,7 +80,7 @@ object Main {
         rootNode.addAttribute("ui.label", project.name)
 
         project.scopes.forEach { (name, _, dependencies) ->
-            println("Adding scope ${name}.")
+            println("Adding scope $name.")
             val scopeNode = graph.addNode<SingleNode>(name)
             scopeNode.addAttribute("ui.label", name)
             graph.addEdge<Edge>(name, rootNode, scopeNode)
