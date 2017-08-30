@@ -41,6 +41,13 @@ object Main {
             order = 0)
     private var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
 
+    @Parameter(description = "The project directory to scan.",
+            names = arrayOf("--input-dir", "-i"),
+            required = true,
+            order = 0)
+    @Suppress("LateinitUsage")
+    private lateinit var projectPath: File
+
     @Parameter(description = "The data format used for dependency information.",
             names = arrayOf("--output-format", "-f"),
             order = 0)
@@ -61,9 +68,6 @@ object Main {
             help = true,
             order = 100)
     private var help = false
-
-    @Parameter(description = "project path(s)")
-    private var projectPaths: List<String>? = null
 
     /**
      * The entry point for the application.
@@ -90,40 +94,32 @@ object Main {
             exitProcess(1)
         }
 
-        if (projectPaths == null) {
-            log.error("Please specify at least one project path.")
-            exitProcess(2)
-        }
-
         println("The following package managers are activated:")
         println("\t" + packageManagers.map { it.javaClass.simpleName }.joinToString(", "))
 
         // Map of paths managed by the respective package manager.
         val managedProjectPaths = mutableMapOf<PackageManager, MutableList<File>>()
 
-        @Suppress("UnsafeCallOnNullableType")
-        projectPaths!!.forEach { projectPath ->
-            val absolutePath = File(projectPath).absoluteFile
-            println("Scanning project path '$absolutePath'.")
+        val absoluteProjectPath = projectPath.absoluteFile
+        println("Scanning project path '$absoluteProjectPath'.")
 
-            if (packageManagers.size == 1 && absolutePath.isFile) {
-                // If only one package manager is activated, treat given paths to files as definition files for that
-                // package manager despite their name.
-                managedProjectPaths.getOrPut(packageManagers.first()) { mutableListOf() }.add(absolutePath)
-            } else {
-                Files.walkFileTree(absolutePath.toPath(), object : SimpleFileVisitor<Path>() {
-                    override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
-                        dir.toFile().listFiles().forEach { file ->
-                            packageManagers.forEach { manager ->
-                                if (manager.globForDefinitionFiles.matches(file.toPath())) {
-                                    managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file)
-                                }
+        if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+            // If only one package manager is activated, treat given paths to files as definition files for that
+            // package manager despite their name.
+            managedProjectPaths.getOrPut(packageManagers.first()) { mutableListOf() }.add(absoluteProjectPath)
+        } else {
+            Files.walkFileTree(absoluteProjectPath.toPath(), object : SimpleFileVisitor<Path>() {
+                override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
+                    dir.toFile().listFiles().forEach { file ->
+                        packageManagers.forEach { manager ->
+                            if (manager.globForDefinitionFiles.matches(file.toPath())) {
+                                managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file)
                             }
                         }
-                        return FileVisitResult.CONTINUE
                     }
-                })
-            }
+                    return FileVisitResult.CONTINUE
+                }
+            })
         }
 
         managedProjectPaths.forEach { manager, paths ->
