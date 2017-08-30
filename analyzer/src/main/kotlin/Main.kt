@@ -46,6 +46,11 @@ object Main {
             order = 0)
     private var outputFormat: OutputFormat = OutputFormat.YAML
 
+    @Parameter(description = "Enable info logging.",
+            names = arrayOf("--info"),
+            order = 0)
+    private var info = false
+
     @Parameter(description = "Enable debug logging and keep temporary files.",
             names = arrayOf("--debug"),
             order = 0)
@@ -71,6 +76,10 @@ object Main {
         val jc = JCommander(this)
         jc.parse(*args)
         jc.programName = "pran"
+
+        if (info) {
+            log.level = ch.qos.logback.classic.Level.INFO
+        }
 
         if (debug) {
             log.level = ch.qos.logback.classic.Level.DEBUG
