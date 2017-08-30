@@ -26,7 +26,8 @@ class MainTest : StringSpec() {
             val lines = streamOut.toString().lines()
 
             lines.component1() shouldBe "The following package managers are activated:"
-            lines.component2().trim() shouldBe "NPM"
+            lines.component2() shouldBe "\tNPM"
+            lines.component3().startsWith("\t") shouldBe false
         }
     }
 }
