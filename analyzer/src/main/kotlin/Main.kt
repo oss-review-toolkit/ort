@@ -124,21 +124,21 @@ object Main {
 
         managedProjectPaths.forEach { manager, paths ->
             println("$manager projects found in:")
-            println(paths.joinToString("\n") { "\t$it" })
+            println(paths.joinToString("\n") {
+                "\t${it.toRelativeString(absoluteProjectPath)}"
+            })
 
             val mapper = when (outputFormat) {
                 OutputFormat.JSON -> jsonMapper
                 OutputFormat.YAML -> yamlMapper
             }
 
-            val userDir = File(System.getProperty("user.dir"))
-
             // Print the list of dependencies.
             val results = manager.resolveDependencies(paths)
             results.forEach { definitionFile, scanResult ->
                 val outputFile = File(definitionFile.parent, "provenance${outputFormat.fileEnding}")
-                println("Writing results for ${definitionFile.toRelativeString(userDir)} to " +
-                        "${outputFile.toRelativeString(userDir)}.")
+                println("Writing results for ${definitionFile.toRelativeString(absoluteProjectPath)} to " +
+                        "${outputFile.toRelativeString(absoluteProjectPath)}.")
                 mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
             }
         }
