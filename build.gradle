@@ -1,7 +1,7 @@
 plugins {
     // We need to hard-code the version here because of
     // https://github.com/gradle/gradle/issues/1697
-    id 'org.jetbrains.kotlin.jvm' version '1.1.4-2' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.1.4-3' apply false
 
     // Note that the detekt Gradle plugin version does not necessarily
     // match the detekt tool version.
@@ -44,7 +44,7 @@ subprojects {
     }
 
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-2'
+        compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.4-3'
 
         compile('ch.frankel.log4k:slf4k-api:1.0.0') {
             // Our version of the Kotlin runtime is provided by the Gradle plugin.
