@@ -1,17 +1,26 @@
 package com.here.provenanceanalyzer.functionaltest
 
 import com.here.provenanceanalyzer.Main
+import io.kotlintest.Spec
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.PrintStream
 
 /**
  * A test for the main entry point of the application.
  */
 class MainTest : StringSpec() {
+    private val outputDir = createTempDir()
+
+    override fun interceptSpec(context: Spec, spec: () -> Unit) {
+        spec()
+        outputDir.deleteRecursively()
+    }
+
     init {
         "Activating only NPM works" {
             // Redirect standard output to a stream.
@@ -19,7 +28,11 @@ class MainTest : StringSpec() {
             val streamOut = ByteArrayOutputStream()
             System.setOut(PrintStream(streamOut))
 
-            Main.main(arrayOf("-m", "NPM", "-i", "src/funTest/assets/projects/synthetic/project-npm/package-lock"))
+            Main.main(arrayOf(
+                    "-m", "NPM",
+                    "-i", "src/funTest/assets/projects/synthetic/project-npm/package-lock",
+                    "-o", File(outputDir, "package-lock").path
+            ))
 
             // Restore standard output.
             System.setOut(standardOut)

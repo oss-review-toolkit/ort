@@ -48,6 +48,13 @@ object Main {
     @Suppress("LateinitUsage")
     private lateinit var projectPath: File
 
+    @Parameter(description = "The directory to write dependency information to.",
+            names = arrayOf("--output-dir", "-o"),
+            required = true,
+            order = 0)
+    @Suppress("LateinitUsage")
+    private lateinit var outputPath: File
+
     @Parameter(description = "The data format used for dependency information.",
             names = arrayOf("--output-format", "-f"),
             order = 0)
@@ -94,6 +101,12 @@ object Main {
             exitProcess(1)
         }
 
+        val absoluteOutputPath = outputPath.absoluteFile
+        if (absoluteOutputPath.exists()) {
+            log.error("The output directory '$absoluteOutputPath' must not exist yet.")
+            exitProcess(2)
+        }
+
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", ") { it.javaClass.simpleName })
 
@@ -101,7 +114,7 @@ object Main {
         val managedProjectPaths = mutableMapOf<PackageManager, MutableList<File>>()
 
         val absoluteProjectPath = projectPath.absoluteFile
-        println("Scanning project path '$absoluteProjectPath'.")
+        println("Scanning project path:\n\t$absoluteProjectPath")
 
         if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat given paths to files as definition files for that
@@ -136,10 +149,17 @@ object Main {
             // Print the list of dependencies.
             val results = manager.resolveDependencies(paths)
             results.forEach { definitionFile, scanResult ->
-                val outputFile = File(definitionFile.parent, "provenance${outputFormat.fileEnding}")
-                println("Writing results for ${definitionFile.toRelativeString(absoluteProjectPath)} to " +
-                        "${outputFile.toRelativeString(absoluteProjectPath)}.")
-                mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
+                // Mirror the directory structure from the project in the output.
+                val outputDir = File(absoluteOutputPath,
+                        definitionFile.parentFile.toRelativeString(absoluteProjectPath))
+                if (outputDir.mkdirs()) {
+                    val outputFile = File(outputDir, definitionFile.name.replace('.', '-') +
+                            "-provenance" + outputFormat.fileEnding)
+                    println("Writing results for\n\t$definitionFile\nto\n\t$outputFile")
+                    mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
+                } else {
+                    log.error("Unable to create output directory '$outputDir'.")
+                }
             }
         }
     }
