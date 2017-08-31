@@ -1,7 +1,7 @@
 // Apply core plugins.
 apply plugin: 'application'
 
-applicationName = 'pran'
+applicationName = 'analyzer'
 mainClassName = 'com.here.provenanceanalyzer.Main'
 
 sourceSets {

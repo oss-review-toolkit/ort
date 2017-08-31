@@ -79,7 +79,7 @@ object Main {
     fun main(args: Array<String>) {
         val jc = JCommander(this)
         jc.parse(*args)
-        jc.programName = "pran"
+        jc.programName = "analyzer"
 
         if (info) {
             log.level = ch.qos.logback.classic.Level.INFO
