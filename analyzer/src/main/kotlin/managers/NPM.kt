@@ -1,8 +1,6 @@
 package com.here.provenanceanalyzer.managers
 
-import ch.frankel.slf4k.debug
-import ch.frankel.slf4k.info
-import ch.frankel.slf4k.warn
+import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -235,7 +233,9 @@ object NPM : PackageManager(
             val dependencyMap = json[scope]
             dependencyMap.fields().forEach { (name, _) ->
                 val dependency = buildTree(packageJson.parentFile, packageJson.parentFile, name, packages)
-                dependencies.add(dependency)
+                if (dependency != null) {
+                    dependencies.add(dependency)
+                }
             }
         } else {
             log.warn { "Could not find scope $scope in ${packageJson.absolutePath}" }
@@ -260,31 +260,51 @@ object NPM : PackageManager(
         return Pair(type, url)
     }
 
-    private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>): Dependency {
+    private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>,
+                          dependencyBranch: List<String> = listOf()): Dependency? {
         log.debug { "Building dependency tree for $name from directory ${startDir.absolutePath}" }
+
         val nodeModulesDir = File(startDir, "node_modules")
         val moduleDir = File(nodeModulesDir, name)
         val packageFile = File(moduleDir, "package.json")
+
         if (packageFile.isFile) {
             log.debug { "Found package file for module $name: ${packageFile.absolutePath}" }
+
             val packageJson = jsonMapper.readTree(packageFile)
             val version = packageJson["version"].asText()
-            val packageInfo = packages["$name@$version"] ?:
-                    throw IOException("Could not find package info for $name@$version")
+            val identifier = "$name@$version"
+
+            if (dependencyBranch.contains(identifier)) {
+                log.warn {
+                    "Not adding circular dependency $identifier to the tree, it is already on this branch of the " +
+                            "dependency tree: ${dependencyBranch.joinToString(" -> ")}"
+                }
+                return null
+            }
+
+            val newDependencyBranch = dependencyBranch + identifier
+            val packageInfo = packages[identifier] ?:
+                    throw IOException("Could not find package info for $identifier")
             val dependencies = mutableListOf<Dependency>()
+
             if (packageJson["dependencies"] != null) {
                 val dependencyMap = packageJson["dependencies"]
-                dependencyMap.fields().forEach { (name, _) ->
-                    val dependency = buildTree(rootDir, packageFile.parentFile, name, packages)
-                    dependencies.add(dependency)
+                dependencyMap.fields().forEach { (dependencyName, _) ->
+                    val dependency = buildTree(rootDir, packageFile.parentFile, dependencyName, packages,
+                            newDependencyBranch)
+                    if (dependency != null) {
+                        dependencies.add(dependency)
+                    }
                 }
             }
-            // TODO: make the identifier below a dynamic getter in the dependency class which is not serialized
+
             dependencies.sortBy { it.identifier }
+
             return Dependency(packageInfo.name, packageInfo.namespace, packageInfo.version, packageInfo.hash,
                     dependencies)
         } else if (rootDir == startDir) {
-            log.error("Could not find module $name")
+            log.error { "Could not find module $name" }
             return Dependency(name, "", "unknown, package not installed", "", listOf())
         } else {
             var parent = startDir.parentFile.parentFile
@@ -297,7 +317,7 @@ object NPM : PackageManager(
                 "Could not find package file for $name in ${startDir.absolutePath}, looking in " +
                         "${parent.absolutePath} instead"
             }
-            return buildTree(rootDir, parent, name, packages)
+            return buildTree(rootDir, parent, name, packages, dependencyBranch)
         }
     }
 
