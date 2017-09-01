@@ -9,6 +9,7 @@ import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.ProcessCapture
 import com.here.provenanceanalyzer.log
+import com.here.provenanceanalyzer.requireCommandVersion
 import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.Project
@@ -51,19 +52,10 @@ object NPM : PackageManager(
     }
 
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, ScanResult> {
-        val version = ProcessCapture(npm, "--version")
-        if (version.exitValue() != 0) {
-            throw IOException("Unable to determine the $npm version:\n${version.stderr()}")
-        }
-
-        // We do not actually depend on any feature specific to an NPM 5.x minor version but still want to stick to a
-        // fixed version to be sure to get consistent results.
-        val expectedVersion = Semver("5.1.0", SemverType.NPM)
-        val actualVersion = Semver(version.stdout().trim(), SemverType.NPM)
-        if (actualVersion != expectedVersion) {
-            throw IOException(
-                    "Unsupported $npm version $actualVersion, version $expectedVersion is required.")
-        }
+        // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
+        // stick to fixed versions to be sure to get consistent results.
+        requireCommandVersion(npm, Semver("5.1.0", SemverType.NPM))
+        requireCommandVersion(yarn, Semver("0.27.5", SemverType.NPM))
 
         val result = mutableMapOf<File, ScanResult>()
 

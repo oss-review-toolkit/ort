@@ -91,3 +91,19 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonNode {
 
     return jsonMapper.readTree(process.stdout())
 }
+
+/**
+ * Run a command to check it for specific version.
+ */
+fun requireCommandVersion(command: String, expectedVersion: Semver, versionArgument: String = "--version") {
+    val version = ProcessCapture(command, versionArgument)
+    if (version.exitValue() != 0) {
+        throw IOException("Unable to determine the $command version:\n${version.stderr()}")
+    }
+
+    val actualVersion = Semver(version.stdout().trim(), expectedVersion.type)
+    if (actualVersion != expectedVersion) {
+        throw IOException(
+                "Unsupported $command version $actualVersion, version $expectedVersion is required.")
+    }
+}
