@@ -27,7 +27,7 @@ object Main {
     private var help = false
 
     @Parameter(names = arrayOf("--output", "-o"),
-            description = "",
+            description = "The output directory to download the source code to.",
             required = true)
     private var outputPath: String? = null
 
