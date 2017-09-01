@@ -28,6 +28,10 @@
 
   Uses the `pip.req.parse_requirements` API. `setup.py` seems to be recognized but not yet handled.
 
+- https://github.com/kennethreitz/pipenv
+
+  Converts `requirements.txt` and `setup.py` files to `Pipfile{.lock}` files. Does not properly support `--(extra-)index-url` yet.
+
 ### Conclusions
 
 While using `pip.req.parse_requirements` to parse `requirements.txt` files and using `distutils.core.setup` to parse `setup.py` files looks like an elegant solution, they cannot handle e.g. defining common includes as part of `requirements.txt` files that look like:
