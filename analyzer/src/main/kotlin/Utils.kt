@@ -45,6 +45,7 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
 
     init {
         if (log.isDebugEnabled) {
+            // No need to use curly-braces-syntax for logging here as the log level check is already done above.
             log.debug("Keeping temporary files:")
             log.debug(stdoutFile.absolutePath)
             log.debug(stderrFile.absolutePath)

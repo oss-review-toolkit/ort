@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer
 
+import ch.frankel.slf4k.*
+
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
@@ -103,7 +105,7 @@ object Main {
 
         val absoluteOutputPath = outputPath.absoluteFile
         if (absoluteOutputPath.exists()) {
-            log.error("The output directory '$absoluteOutputPath' must not exist yet.")
+            log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
             exitProcess(2)
         }
 
@@ -158,7 +160,7 @@ object Main {
                     println("Writing results for\n\t$definitionFile\nto\n\t$outputFile")
                     mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
                 } else {
-                    log.error("Unable to create output directory '$outputDir'.")
+                    log.error { "Unable to create output directory '$outputDir'." }
                 }
             }
         }
