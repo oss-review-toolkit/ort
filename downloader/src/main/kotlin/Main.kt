@@ -1,9 +1,11 @@
 package com.here.provenanceanalyzer.downloader
 
+import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
 import com.here.provenanceanalyzer.model.OutputFormat
+import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.model.jsonMapper
 import com.here.provenanceanalyzer.model.yamlMapper
@@ -17,6 +19,17 @@ import kotlin.system.exitProcess
  */
 object Main {
 
+    enum class DataEntity {
+        PACKAGES,
+        PROJECT
+    }
+
+    private class DataEntityListConverter : IStringConverter<List<DataEntity>> {
+        override fun convert(sources: String): List<DataEntity> {
+            return sources.toUpperCase().split(",").map { DataEntity.valueOf(it) }
+        }
+    }
+
     @Parameter(description = "provenance data file path")
     private var provenanceFilePath: String? = null
 
@@ -28,8 +41,15 @@ object Main {
 
     @Parameter(names = arrayOf("--output", "-o"),
             description = "The output directory to download the source code to.",
-            required = true)
+            required = true,
+            order = 0)
     private var outputPath: String? = null
+
+    @Parameter(names = arrayOf("--entities", "-e"),
+            description = "The data entities from the provenance data file to download.",
+            listConverter = DataEntityListConverter::class,
+            order = 0)
+    private var entities: List<DataEntity> = DataEntity.values().asList()
 
     /**
      * The entry point for the application.
@@ -67,62 +87,75 @@ object Main {
 
         val scanResult = mapper.readValue(provenanceFile, ScanResult::class.java)
 
-        scanResult.packages.forEach {
-            val print = fun(string: String) = println("${it.identifier}: $string")
+        if (entities.contains(DataEntity.PROJECT)) {
+            val project = scanResult.project
+            val projectPackage = Package("", "", project.name, "", project.version, project.homepageUrl, "",
+                    "", project.vcsProvider, project.vcsUrl, project.revision)
+            download(projectPackage, outputDirectory)
+        }
 
-            val targetDir = File(outputDirectory, "${it.name}/${it.version}") // TODO: add namespace to path
-            targetDir.mkdirs()
-            print("Download source code to ${targetDir.absolutePath}")
+        if (entities.contains(DataEntity.PACKAGES)) {
+            scanResult.packages.forEach {
+                download(it, outputDirectory)
+            }
+        }
+    }
 
-            if (!it.normalizedVcsUrl.isNullOrBlank()) {
-                print("Try to download from VCS: ${it.normalizedVcsUrl}")
-                if (it.vcsUrl != it.normalizedVcsUrl) {
-                    print("URL was normalized, original URL was ${it.vcsUrl}")
-                }
-                if (it.vcsRevision.isNullOrEmpty()) {
-                    print("WARNING: No VCS revision provided, downloaded source code does likely not match version " +
-                            it.version)
-                } else {
-                    print("Download revision ${it.vcsRevision}")
-                }
-                val applicableVcs = mutableListOf<VersionControlSystem>()
-                if (!it.vcsProvider.isNullOrEmpty()) {
-                    print("Detect VCS from provider name ${it.vcsProvider}")
-                    applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
-                        vcs.isApplicableProvider(it.vcsProvider!!)
-                    })
-                }
-                if (applicableVcs.isEmpty()) {
-                    print("Could not find VCS provider or no provider defined, try to detect provider from URL " +
-                            "${it.normalizedVcsUrl}")
-                    applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
-                        vcs.isApplicableUrl(it.normalizedVcsUrl!!)
-                    })
-                }
-                when {
-                    applicableVcs.isEmpty() ->
-                        print("ERROR: Could not find applicable VCS")
-                        // TODO: Decide if we want to do a trial-and-error with all available VCS here.
-                    applicableVcs.size > 1 ->
-                        print("ERROR: Found multiple applicable VCS: ${applicableVcs.joinToString()}")
-                    else -> {
-                        val vcs = applicableVcs.first()
-                        print("Use ${vcs.javaClass.simpleName}")
-                        try {
-                            vcs.download(it.normalizedVcsUrl!!, it.vcsRevision, targetDir)
-                            print("Downloaded source code to ${targetDir.absolutePath}")
-                        } catch (e: IllegalArgumentException) {
-                            print("ERROR: Could not download source code: ${e.message}")
-                        }
+    private fun download(target: Package, outputDirectory: File) {
+        val print = fun(string: String) = println("${target.identifier}: $string")
+
+        val targetDir = File(outputDirectory, "${target.name}/${target.version}") // TODO: add namespace to path
+        targetDir.mkdirs()
+        print("Download source code to ${targetDir.absolutePath}")
+
+        if (!target.normalizedVcsUrl.isNullOrBlank()) {
+            print("Try to download from VCS: ${target.normalizedVcsUrl}")
+            if (target.vcsUrl != target.normalizedVcsUrl) {
+                print("URL was normalized, original URL was ${target.vcsUrl}")
+            }
+            if (target.vcsRevision.isNullOrEmpty()) {
+                print("WARNING: No VCS revision provided, downloaded source code does likely not match version " +
+                        target.version)
+            } else {
+                print("Download revision ${target.vcsRevision}")
+            }
+            val applicableVcs = mutableListOf<VersionControlSystem>()
+            if (!target.vcsProvider.isNullOrEmpty()) {
+                print("Detect VCS from provider name ${target.vcsProvider}")
+                applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                    vcs.isApplicableProvider(target.vcsProvider!!)
+                })
+            }
+            if (applicableVcs.isEmpty()) {
+                print("Could not find VCS provider or no provider defined, try to detect provider from URL " +
+                        "${target.normalizedVcsUrl}")
+                applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                    vcs.isApplicableUrl(target.normalizedVcsUrl!!)
+                })
+            }
+            when {
+                applicableVcs.isEmpty() ->
+                    print("ERROR: Could not find applicable VCS")
+            // TODO: Decide if we want to do a trial-and-error with all available VCS here.
+                applicableVcs.size > 1 ->
+                    print("ERROR: Found multiple applicable VCS: ${applicableVcs.joinToString()}")
+                else -> {
+                    val vcs = applicableVcs.first()
+                    print("Use ${vcs.javaClass.simpleName}")
+                    try {
+                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, targetDir)
+                        print("Downloaded source code to ${targetDir.absolutePath}")
+                    } catch (e: IllegalArgumentException) {
+                        print("ERROR: Could not download source code: ${e.message}")
                     }
                 }
-            } else {
-                print("No VCS URL provided")
-                // TODO: This should also be tried if the VCS checkout does not work.
-                print("Try to download source package: ...")
-                // TODO: Implement downloading of source package.
-                print("ERROR: No source package URL provided")
             }
+        } else {
+            print("No VCS URL provided")
+            // TODO: This should also be tried if the VCS checkout does not work.
+            print("Try to download source package: ...")
+            // TODO: Implement downloading of source package.
+            print("ERROR: No source package URL provided")
         }
     }
 
