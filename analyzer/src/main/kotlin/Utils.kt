@@ -101,7 +101,13 @@ fun requireCommandVersion(command: String, expectedVersion: Semver, versionArgum
         throw IOException("Unable to determine the $command version:\n${version.stderr()}")
     }
 
-    val actualVersion = Semver(version.stdout().trim(), expectedVersion.type)
+    var versionString = version.stdout().trim()
+    if (versionString.isEmpty()) {
+        // Fall back to trying to read the version from stderr.
+        versionString = version.stderr().trim()
+    }
+
+    val actualVersion = Semver(versionString, expectedVersion.type)
     if (actualVersion != expectedVersion) {
         throw IOException(
                 "Unsupported $command version $actualVersion, version $expectedVersion is required.")
