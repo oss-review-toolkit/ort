@@ -10,7 +10,6 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
-import java.net.URI
 
 /**
  * Operating-System-specific utility functions.
