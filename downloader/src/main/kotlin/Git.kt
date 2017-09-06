@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.downloader
 
+import ch.frankel.slf4k.*
+
 import java.io.File
 
 object Git : VersionControlSystem() {
@@ -8,8 +10,14 @@ object Git : VersionControlSystem() {
         runGitCommand(targetDir, "init")
         runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
         val committish = if (vcsRevision.isNullOrEmpty()) "master" else vcsRevision!!
-        runGitCommand(targetDir, "fetch", "origin", committish)
-        runGitCommand(targetDir, "reset", "--hard", "FETCH_HEAD")
+        try {
+            runGitCommand(targetDir, "fetch", "origin", committish)
+            runGitCommand(targetDir, "reset", "--hard", "FETCH_HEAD")
+        } catch (e: IllegalArgumentException) {
+            log.warn { "Could not fetch '$committish': ${e.message}" }
+            runGitCommand(targetDir, "fetch", "origin")
+            runGitCommand(targetDir, "checkout", committish)
+        }
         return true
     }
 

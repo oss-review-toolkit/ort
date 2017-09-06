@@ -14,6 +14,9 @@ import java.io.File
 
 import kotlin.system.exitProcess
 
+@Suppress("UnsafeCast")
+internal val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
+
 /**
  * The main entry point of the application.
  */
