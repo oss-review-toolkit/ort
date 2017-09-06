@@ -102,32 +102,32 @@ object Main {
     }
 
     private fun download(target: Package, outputDirectory: File) {
-        val print = fun(string: String) = println("${target.identifier}: $string")
+        val p = fun(string: String) = println("${target.identifier}: $string")
 
         val targetDir = File(outputDirectory, "${target.name}/${target.version}") // TODO: add namespace to path
         targetDir.mkdirs()
-        print("Download source code to ${targetDir.absolutePath}")
+        p("Download source code to ${targetDir.absolutePath}")
 
         if (!target.normalizedVcsUrl.isNullOrBlank()) {
-            print("Try to download from VCS: ${target.normalizedVcsUrl}")
+            p("Try to download from VCS: ${target.normalizedVcsUrl}")
             if (target.vcsUrl != target.normalizedVcsUrl) {
-                print("URL was normalized, original URL was ${target.vcsUrl}")
+                p("URL was normalized, original URL was ${target.vcsUrl}")
             }
             if (target.vcsRevision.isNullOrEmpty()) {
-                print("WARNING: No VCS revision provided, downloaded source code does likely not match version " +
+                p("WARNING: No VCS revision provided, downloaded source code does likely not match version " +
                         target.version)
             } else {
-                print("Download revision ${target.vcsRevision}")
+                p("Download revision ${target.vcsRevision}")
             }
             val applicableVcs = mutableListOf<VersionControlSystem>()
             if (!target.vcsProvider.isNullOrEmpty()) {
-                print("Detect VCS from provider name ${target.vcsProvider}")
+                p("Detect VCS from provider name ${target.vcsProvider}")
                 applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
                     vcs.isApplicableProvider(target.vcsProvider!!)
                 })
             }
             if (applicableVcs.isEmpty()) {
-                print("Could not find VCS provider or no provider defined, try to detect provider from URL " +
+                p("Could not find VCS provider or no provider defined, try to detect provider from URL " +
                         "${target.normalizedVcsUrl}")
                 applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
                     vcs.isApplicableUrl(target.normalizedVcsUrl!!)
@@ -135,27 +135,27 @@ object Main {
             }
             when {
                 applicableVcs.isEmpty() ->
-                    print("ERROR: Could not find applicable VCS")
+                    p("ERROR: Could not find applicable VCS")
             // TODO: Decide if we want to do a trial-and-error with all available VCS here.
                 applicableVcs.size > 1 ->
-                    print("ERROR: Found multiple applicable VCS: ${applicableVcs.joinToString()}")
+                    p("ERROR: Found multiple applicable VCS: ${applicableVcs.joinToString()}")
                 else -> {
                     val vcs = applicableVcs.first()
-                    print("Use ${vcs.javaClass.simpleName}")
+                    p("Use ${vcs.javaClass.simpleName}")
                     try {
                         vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, targetDir)
-                        print("Downloaded source code to ${targetDir.absolutePath}")
+                        p("Downloaded source code to ${targetDir.absolutePath}")
                     } catch (e: IllegalArgumentException) {
-                        print("ERROR: Could not download source code: ${e.message}")
+                        p("ERROR: Could not download source code: ${e.message}")
                     }
                 }
             }
         } else {
-            print("No VCS URL provided")
+            p("No VCS URL provided")
             // TODO: This should also be tried if the VCS checkout does not work.
-            print("Try to download source package: ...")
+            p("Try to download source package: ...")
             // TODO: Implement downloading of source package.
-            print("ERROR: No source package URL provided")
+            p("ERROR: No source package URL provided")
         }
     }
 
