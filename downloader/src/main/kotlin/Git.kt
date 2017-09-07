@@ -9,7 +9,10 @@ object Git : VersionControlSystem() {
     override fun download(vcsUrl: String, vcsRevision: String?, targetDir: File): Boolean {
         runGitCommand(targetDir, "init")
         runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
+
+        @Suppress("UnsafeCallOnNullableType")
         val committish = if (vcsRevision.isNullOrEmpty()) "master" else vcsRevision!!
+
         try {
             runGitCommand(targetDir, "fetch", "origin", committish)
             runGitCommand(targetDir, "reset", "--hard", "FETCH_HEAD")

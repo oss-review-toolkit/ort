@@ -126,6 +126,7 @@ object Main {
             if (!target.vcsProvider.isNullOrEmpty()) {
                 p("Detect VCS from provider name ${target.vcsProvider}")
                 applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                    @Suppress("UnsafeCallOnNullableType")
                     vcs.isApplicableProvider(target.vcsProvider!!)
                 })
             }
@@ -133,6 +134,7 @@ object Main {
                 p("Could not find VCS provider or no provider defined, try to detect provider from URL " +
                         "${target.normalizedVcsUrl}")
                 applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                    @Suppress("UnsafeCallOnNullableType")
                     vcs.isApplicableUrl(target.normalizedVcsUrl!!)
                 })
             }
@@ -146,6 +148,7 @@ object Main {
                     val vcs = applicableVcs.first()
                     p("Use ${vcs.javaClass.simpleName}")
                     try {
+                        @Suppress("UnsafeCallOnNullableType")
                         vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, targetDir)
                         p("Downloaded source code to ${targetDir.absolutePath}")
                     } catch (e: IllegalArgumentException) {
