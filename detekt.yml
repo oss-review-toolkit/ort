@@ -1,17 +1,21 @@
 # Configuration of Detekt rule sets, see: https://github.com/arturbosch/detekt#rulesets
 
 build:
-    failThreshold: 12
+    failThreshold: 1
+    weights:
+        comments: 0
+
+comments:
+  CommentOverPrivateMethod:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
 
 complexity:
     LargeClass:
         threshold: 150
     NestedBlockDepth:
         threshold: 4
-
-comments:
-    CommentOverPrivateMethod:
-        active: false
 
 performance:
     SpreadOperator:
