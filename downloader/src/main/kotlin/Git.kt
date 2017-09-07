@@ -31,7 +31,8 @@ object Git : VersionControlSystem() {
         val process = builder.start()
         process.waitFor()
         require(process.exitValue() == 0) {
-            "Git command ${args.joinToString(" ")} failed: ${process.errorStream.bufferedReader().use { it.readText() }}"
+            "Git command ${args.joinToString(" ")} failed: " +
+                    process.errorStream.bufferedReader().use { it.readText() }
         }
     }
 
