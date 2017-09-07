@@ -3,7 +3,8 @@ package com.here.provenanceanalyzer.downloader
 import java.io.File
 
 val VERSION_CONTROL_SYSTEMS = listOf(
-        Git
+        Git,
+        GitRepo
 )
 
 abstract class VersionControlSystem {
@@ -25,6 +26,5 @@ abstract class VersionControlSystem {
      * "git" as this could also be part of the host or project names.
      */
     abstract fun isApplicableUrl(vcsUrl: String): Boolean
-
 
 }
