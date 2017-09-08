@@ -3,6 +3,7 @@ package com.here.provenanceanalyzer.downloader
 import ch.frankel.slf4k.*
 
 import com.here.provenanceanalyzer.util.log
+import com.here.provenanceanalyzer.util.ProcessCapture
 
 import java.io.File
 
@@ -31,13 +32,9 @@ object Git : VersionControlSystem() {
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
     private fun runGitCommand(targetDir: File, vararg args: String) {
-        val builder = ProcessBuilder("git", *args)
-                .directory(targetDir)
-        val process = builder.start()
-        process.waitFor()
+        val process = ProcessCapture(targetDir, "git", *args)
         require(process.exitValue() == 0) {
-            "Git command ${args.joinToString(" ")} failed: " +
-                    process.errorStream.bufferedReader().use { it.readText() }
+            "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}"
         }
     }
 
