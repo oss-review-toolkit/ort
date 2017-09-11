@@ -6,6 +6,8 @@ data class Project(
         val name: String,
         val aliases: List<String>,
         val version: String,
+        @JsonProperty("vcs_path")
+        val vcsPath: String?,
         @JsonProperty("vcs_provider")
         val vcsProvider: String,
         @JsonProperty("vcs_url")

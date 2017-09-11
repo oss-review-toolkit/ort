@@ -126,6 +126,7 @@ object NPM : PackageManager(
             var downloadUrl: String
             var hash: String
             var hashAlgorithm = ""
+            val vcsPath = ""
             var vcsProvider = ""
             var vcsUrl = ""
             var vcsRevision = ""
@@ -174,7 +175,7 @@ object NPM : PackageManager(
             }
 
             val module = Package("NPM", namespace, name, description, version, homepageUrl, downloadUrl,
-                    hash, hashAlgorithm, vcsProvider, vcsUrl, vcsRevision)
+                    hash, hashAlgorithm, vcsPath, vcsProvider, vcsUrl, vcsRevision)
 
             require(module.name.isNotEmpty()) {
                 "Generated package info for $identifier has no name."
@@ -320,13 +321,14 @@ object NPM : PackageManager(
         val json = jsonMapper.readTree(packageJson)
         val name = json["name"].asText()
         val version = json["version"].asText()
+        val vcsPath = ""
         val (vcsProvider, vcsUrl) = parseRepository(json)
         val homepageUrl = if (json["homepage"] != null) json["homepage"].asText() else ""
 
         // TODO: parse revision from vcs
 
         return ScanResult(
-                Project(name, listOf(), version, vcsProvider, vcsUrl, "", homepageUrl, scopes),
+                Project(name, listOf(), version, vcsPath, vcsProvider, vcsUrl, "", homepageUrl, scopes),
                 packages
         )
     }
