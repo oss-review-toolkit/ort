@@ -3,7 +3,6 @@ package com.here.provenanceanalyzer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 
-import com.here.provenanceanalyzer.managers.NPM
 import com.here.provenanceanalyzer.model.jsonMapper
 
 import com.vdurmont.semver4j.Semver
@@ -75,15 +74,15 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
 /**
  * Parse the standard output of a process as JSON.
  */
-fun parseJsonProcessOutput(workingDir: File, vararg command: String): JsonNode {
+fun parseJsonProcessOutput(workingDir: File, vararg command: String, multiJson: Boolean = false): JsonNode {
     val process = ProcessCapture(workingDir, *command)
     if (process.exitValue() != 0) {
         throw IOException(
                 "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}")
     }
 
-    // Wrap yarn's output, which is one JSON object per line, so the output as a whole can be parsed as a JSON array.
-    if (command.first() == NPM.yarn && command.contains("--json")) {
+    // Support parsing multiple lines with one JSON object per line by wrapping the whole output into a JSON array.
+    if (multiJson) {
         val array = JsonNodeFactory.instance.arrayNode()
         process.stdoutFile.readLines().forEach { array.add(jsonMapper.readTree(it)) }
         return array
