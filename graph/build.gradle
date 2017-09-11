@@ -6,9 +6,9 @@ import org.apache.tools.ant.taskdefs.condition.Os
 applicationName = 'graph'
 mainClassName = 'com.here.provenanceanalyzer.graph.Main'
 if (Os.isFamily(Os.FAMILY_UNIX)) {
-    applicationDefaultJvmArgs = ['-Dsun.java2d.directx=True']
-} else if (Os.isFamily(Os.FAMILY_WINDOWS)) {
     applicationDefaultJvmArgs = ['-Dsun.java2d.opengl=True']
+} else if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    applicationDefaultJvmArgs = ['-Dsun.java2d.directx=True']
 }
 
 dependencies {
