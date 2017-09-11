@@ -55,6 +55,11 @@ data class Package(
         val hash: String,
 
         /**
+         * The optional name of the algorithm used to calculate the hash.
+         */
+        val hashAlgorithm: String?,
+
+        /**
          * The optional name of the VCS provider, for example Git or SVN.
          */
         @JsonProperty("vcs_provider")

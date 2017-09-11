@@ -90,7 +90,7 @@ object Main {
         if (entities.contains(DataEntity.PROJECT)) {
             val project = scanResult.project
             val projectPackage = Package("", "", project.name, "", project.version, project.homepageUrl, "",
-                    "", project.vcsProvider, project.vcsUrl, project.revision)
+                    "", "", project.vcsProvider, project.vcsUrl, project.revision)
             download(projectPackage, outputDirectory)
         }
 

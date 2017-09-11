@@ -125,6 +125,7 @@ object NPM : PackageManager(
             var homepageUrl: String
             var downloadUrl: String
             var hash: String
+            var hashAlgorithm = ""
             var vcsProvider = ""
             var vcsUrl = ""
             var vcsRevision = ""
@@ -150,6 +151,7 @@ object NPM : PackageManager(
                 val dist = infoJson["dist"]
                 downloadUrl = dist["tarball"].asText()
                 hash = dist["shasum"].asText()
+                // TODO: add detection of hash algorithm
 
                 with(parseRepository(infoJson)) {
                     vcsProvider = first
@@ -163,6 +165,7 @@ object NPM : PackageManager(
                 homepageUrl = if (json["homepage"] != null) json["homepage"].asText() else ""
                 downloadUrl = if (json["_resolved"] != null) json["_resolved"].asText() else ""
                 hash = if (json["_integrity"] != null) json["_integrity"].asText() else ""
+                // TODO: add detection of hash algorithm
 
                 with(parseRepository(json)) {
                     vcsProvider = first
@@ -171,7 +174,7 @@ object NPM : PackageManager(
             }
 
             val module = Package("NPM", namespace, name, description, version, homepageUrl, downloadUrl,
-                    hash, vcsProvider, vcsUrl, vcsRevision)
+                    hash, hashAlgorithm, vcsProvider, vcsUrl, vcsRevision)
 
             require(module.name.isNotEmpty()) {
                 "Generated package info for $identifier has no name."
