@@ -1,7 +1,7 @@
 dependencies {
-    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
 
     compile "com.vdurmont:semver4j:$semverVersion"
 
