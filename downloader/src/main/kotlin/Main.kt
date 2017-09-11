@@ -146,7 +146,7 @@ object Main {
                     p("Use ${vcs.javaClass.simpleName}")
                     try {
                         @Suppress("UnsafeCallOnNullableType")
-                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, targetDir)
+                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath, targetDir)
                         p("Downloaded source code to ${targetDir.absolutePath}")
                     } catch (e: IllegalArgumentException) {
                         p("ERROR: Could not download source code: ${e.message}")

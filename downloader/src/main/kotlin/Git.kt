@@ -6,12 +6,30 @@ import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.ProcessCapture
 
 import java.io.File
+import java.io.IOException
 
 object Git : VersionControlSystem() {
 
-    override fun download(vcsUrl: String, vcsRevision: String?, targetDir: File): Boolean {
+    /**
+     * Clones the Git repository using the native Git command.
+     *
+     * @param vcsPath If this parameter is not null or empty, the working tree is deleted and the path is selectively
+     *                checked out using 'git checkout HEAD -- vcsPath'.
+     */
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File): Boolean {
         runGitCommand(targetDir, "init")
         runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
+
+        if (vcsPath != null && vcsPath.isNotEmpty()) {
+            log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
+            runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
+            val gitInfoDir = File(targetDir, ".git/info")
+            if (gitInfoDir.mkdir()) {
+                File(targetDir, ".git/info/sparse-checkout").writeText(vcsPath)
+            } else {
+                throw IOException("Could not create directory ${gitInfoDir.absolutePath}")
+            }
+        }
 
         @Suppress("UnsafeCallOnNullableType")
         val committish = if (vcsRevision.isNullOrEmpty()) "master" else vcsRevision!!
@@ -24,6 +42,7 @@ object Git : VersionControlSystem() {
             runGitCommand(targetDir, "fetch", "origin")
             runGitCommand(targetDir, "checkout", committish)
         }
+
         return true
     }
 
