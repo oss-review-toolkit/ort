@@ -6,6 +6,7 @@ mainClassName = 'com.here.provenanceanalyzer.downloader.Main'
 
 dependencies {
     compile project(':model')
+    compile project(':util')
 
-    compile 'com.beust:jcommander:1.72'
+    compile "com.beust:jcommander:$jcommanderVersion"
 }

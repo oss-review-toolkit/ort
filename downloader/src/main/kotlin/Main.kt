@@ -7,15 +7,12 @@ import com.beust.jcommander.Parameter
 import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.ScanResult
-import com.here.provenanceanalyzer.model.jsonMapper
-import com.here.provenanceanalyzer.model.yamlMapper
+import com.here.provenanceanalyzer.util.jsonMapper
+import com.here.provenanceanalyzer.util.yamlMapper
 
 import java.io.File
 
 import kotlin.system.exitProcess
-
-@Suppress("UnsafeCast")
-internal val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
 
 /**
  * The main entry point of the application.

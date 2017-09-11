@@ -5,17 +5,17 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
-import com.here.provenanceanalyzer.ProcessCapture
-import com.here.provenanceanalyzer.log
-import com.here.provenanceanalyzer.requireCommandVersion
 import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.Project
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.model.Scope
-import com.here.provenanceanalyzer.model.jsonMapper
+import com.here.provenanceanalyzer.util.OS
+import com.here.provenanceanalyzer.util.ProcessCapture
+import com.here.provenanceanalyzer.util.jsonMapper
+import com.here.provenanceanalyzer.util.log
+import com.here.provenanceanalyzer.util.requireCommandVersion
 
 import com.vdurmont.semver4j.Semver
 import com.vdurmont.semver4j.Semver.SemverType

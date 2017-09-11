@@ -1,9 +1,6 @@
-ext {
-    jacksonVersion = '2.9.0'
-}
-
 dependencies {
-    compile 'com.vdurmont:semver4j:2.0.3'
+    compile "com.vdurmont:semver4j:$semverVersion"
+
     compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"

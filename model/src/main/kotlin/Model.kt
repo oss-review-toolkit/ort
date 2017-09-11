@@ -1,13 +1,8 @@
 package com.here.provenanceanalyzer.model
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.vdurmont.semver4j.Semver
-import java.net.URI
 
-val jsonMapper = ObjectMapper().registerKotlinModule()
-val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
+import java.net.URI
 
 /**
  * Normalize a VCS URL by converting it to a common pattern. For example NPM defines some shortcuts for GitHub or GitLab

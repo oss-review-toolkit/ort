@@ -1,8 +1,8 @@
 package com.here.provenanceanalyzer.managers
 
-import com.here.provenanceanalyzer.OS
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.model.ScanResult
+import com.here.provenanceanalyzer.util.OS
 
 import java.io.File
 

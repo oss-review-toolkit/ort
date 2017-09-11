@@ -2,6 +2,8 @@ package com.here.provenanceanalyzer.downloader
 
 import ch.frankel.slf4k.*
 
+import com.here.provenanceanalyzer.util.log
+
 import java.io.File
 
 object Git : VersionControlSystem() {

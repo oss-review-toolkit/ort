@@ -2,19 +2,20 @@ package com.here.provenanceanalyzer.graph
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
-import com.here.provenanceanalyzer.model.Dependency
 
+import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.ScanResult
-import com.here.provenanceanalyzer.model.jsonMapper
-import com.here.provenanceanalyzer.model.yamlMapper
+import com.here.provenanceanalyzer.util.jsonMapper
+import com.here.provenanceanalyzer.util.yamlMapper
+
 import org.graphstream.graph.Edge
 import org.graphstream.graph.implementations.SingleGraph
 import org.graphstream.graph.implementations.SingleNode
 import org.graphstream.ui.layout.springbox.implementations.SpringBox
 
 import java.io.File
-import java.util.*
+import java.util.UUID
 
 import kotlin.system.exitProcess
 
