@@ -152,7 +152,7 @@ object Main {
             }
 
             // Print the list of dependencies.
-            val results = manager.resolveDependencies(paths)
+            val results = manager.resolveDependencies(absoluteProjectPath, paths)
             results.forEach { definitionFile, scanResult ->
                 // Mirror the directory structure from the project in the output.
                 val outputDir = File(absoluteOutputPath,

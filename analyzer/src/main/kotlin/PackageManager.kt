@@ -57,5 +57,5 @@ abstract class PackageManager(
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
-    abstract fun resolveDependencies(definitionFiles: List<File>): Map<File, ScanResult>
+    abstract fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, ScanResult>
 }
