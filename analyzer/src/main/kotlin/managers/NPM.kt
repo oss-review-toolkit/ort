@@ -5,6 +5,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
+import com.here.provenanceanalyzer.Main
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.model.Package
@@ -15,7 +16,7 @@ import com.here.provenanceanalyzer.util.OS
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.jsonMapper
 import com.here.provenanceanalyzer.util.log
-import com.here.provenanceanalyzer.util.requireCommandVersion
+import com.here.provenanceanalyzer.util.checkCommandVersion
 
 import com.vdurmont.semver4j.Semver
 import com.vdurmont.semver4j.Semver.SemverType
@@ -54,8 +55,8 @@ object NPM : PackageManager(
     override fun resolveDependencies(definitionFiles: List<File>): Map<File, ScanResult> {
         // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
-        requireCommandVersion(npm, Semver("5.3.0", SemverType.NPM))
-        requireCommandVersion(yarn, Semver("1.0.1", SemverType.NPM))
+        checkCommandVersion(npm, Semver("5.3.0", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
+        checkCommandVersion(yarn, Semver("1.0.1", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
 
         val result = mutableMapOf<File, ScanResult>()
 

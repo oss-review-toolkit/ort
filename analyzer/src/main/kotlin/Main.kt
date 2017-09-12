@@ -60,6 +60,11 @@ object Main {
             order = 0)
     private var outputFormat: OutputFormat = OutputFormat.YAML
 
+    @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
+            names = arrayOf("--ignore-versions"),
+            order = 0)
+    var ignoreVersions = false
+
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),
             order = 0)
