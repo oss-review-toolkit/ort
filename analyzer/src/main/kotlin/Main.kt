@@ -147,11 +147,17 @@ object Main {
             })
         }
 
+        // Print a summary of all projects found per package manager.
         managedProjectPaths.forEach { manager, paths ->
             println("$manager projects found in:")
             println(paths.joinToString("\n") {
                 "\t${it.toRelativeString(absoluteProjectPath)}"
             })
+        }
+
+        // Resolve dependencies per package manager.
+        managedProjectPaths.forEach { manager, paths ->
+            println("Resolving $manager project dependencies...")
 
             val mapper = when (outputFormat) {
                 OutputFormat.JSON -> jsonMapper
