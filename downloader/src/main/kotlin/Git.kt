@@ -27,7 +27,7 @@ object Git : VersionControlSystem() {
             if (gitInfoDir.mkdir()) {
                 File(targetDir, ".git/info/sparse-checkout").writeText(vcsPath)
             } else {
-                throw IOException("Could not create directory ${gitInfoDir.absolutePath}")
+                throw IOException("Could not create directory '${gitInfoDir.absolutePath}'.")
             }
         }
 
