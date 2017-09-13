@@ -1,0 +1,12 @@
+// Apply core plugins.
+apply plugin: 'application'
+
+applicationName = 'scanner'
+mainClassName = 'com.here.provenanceanalyzer.scanner.Main'
+
+dependencies {
+    compile project(':model')
+    compile project(':util')
+
+    compile "com.beust:jcommander:$jcommanderVersion"
+}
