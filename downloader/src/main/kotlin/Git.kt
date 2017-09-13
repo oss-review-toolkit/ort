@@ -31,8 +31,7 @@ object Git : VersionControlSystem() {
             }
         }
 
-        @Suppress("UnsafeCallOnNullableType")
-        val committish = if (vcsRevision.isNullOrEmpty()) "master" else vcsRevision!!
+        val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
 
         try {
             runGitCommand(targetDir, "fetch", "origin", committish)

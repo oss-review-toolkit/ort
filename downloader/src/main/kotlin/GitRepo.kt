@@ -15,10 +15,8 @@ object GitRepo : VersionControlSystem() {
      * @param vcsPath The path to the repo manifest file in the repository. Defaults to "manifest.xml" if not provided.
      */
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File): Boolean {
-        @Suppress("UnsafeCallOnNullableType")
-        val revision = if (vcsRevision.isNullOrEmpty()) "master" else vcsRevision!!
-        @Suppress("UnsafeCallOnNullableType")
-        val manifestPath = if (vcsPath.isNullOrEmpty()) "manifest.xml" else vcsPath!!
+        val revision = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
+        val manifestPath = if (vcsPath != null && vcsPath.isNotEmpty()) vcsPath else "manifest.xml"
 
         log.debug { "Initialize git-repo from $vcsUrl with branch $revision and manifest $manifestPath." }
         runRepoCommand(targetDir, "init", "--depth", "1", "-b", revision, "-u", vcsUrl, "-m", manifestPath)
