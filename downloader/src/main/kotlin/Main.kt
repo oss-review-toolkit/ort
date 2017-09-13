@@ -88,10 +88,7 @@ object Main {
         val scanResult = mapper.readValue(provenanceFile, ScanResult::class.java)
 
         if (entities.contains(DataEntity.PROJECT)) {
-            val project = scanResult.project
-            val projectPackage = Package("", "", project.name, "", project.version, project.homepageUrl, "",
-                    "", "", project.vcsPath, project.vcsProvider, project.vcsUrl, project.revision)
-            download(projectPackage, outputDirectory)
+            download(scanResult.project.asPackage(), outputDirectory)
         }
 
         if (entities.contains(DataEntity.PACKAGES)) {

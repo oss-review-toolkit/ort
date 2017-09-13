@@ -16,4 +16,12 @@ data class Project(
         @JsonProperty("homepage_url")
         val homepageUrl: String,
         val scopes: List<Scope>
-)
+) {
+
+    /**
+     * Return a [Package] representation of this [Project].
+     */
+    fun asPackage(): Package = Package("", "", name, "", version, homepageUrl, "", "", "", vcsPath, vcsProvider,
+            vcsUrl, revision)
+
+}
