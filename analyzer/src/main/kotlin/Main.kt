@@ -128,13 +128,20 @@ object Main {
         } else {
             Files.walkFileTree(absoluteProjectPath.toPath(), object : SimpleFileVisitor<Path>() {
                 override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
-                    dir.toFile().listFiles().forEach { file ->
-                        packageManagers.forEach { manager ->
-                            if (manager.globForDefinitionFiles.matches(file.toPath())) {
-                                managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(file)
+                    val filesInDir = dir.toFile().listFiles()
+
+                    packageManagers.forEach { manager ->
+                        val matches = manager.matchersForDefinitionFiles.mapNotNull { glob ->
+                            filesInDir.find { file ->
+                                glob.matches(file.toPath())
                             }
                         }
+
+                        if (matches.isNotEmpty()) {
+                            managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(matches.first())
+                        }
                     }
+
                     return FileVisitResult.CONTINUE
                 }
             })

@@ -9,7 +9,7 @@ object PIP : PackageManager(
         "https://pip.pypa.io/",
         "Python",
         // See https://caremad.io/posts/2013/07/setup-vs-requirement/.
-        listOf("setup.py", "requirements*.txt")
+        listOf("requirements*.txt", "setup.py")
 ) {
     override fun command(workingDir: File): String {
         return "pip"
