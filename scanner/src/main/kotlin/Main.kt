@@ -1,5 +1,6 @@
 package com.here.provenanceanalyzer.scanner
 
+import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
@@ -18,6 +19,13 @@ import kotlin.system.exitProcess
  */
 object Main {
 
+    private class ScannerConverter : IStringConverter<Scanner> {
+        override fun convert(scannerName: String): Scanner {
+            return SCANNERS.find { it.javaClass.simpleName.toLowerCase() == scannerName.toLowerCase() } ?:
+                    throw IllegalArgumentException("No scanner matching '$scannerName' found.")
+        }
+    }
+
     @Parameter(description = "The provenance data file to use.",
             names = arrayOf("--input-file", "-i"),
             required = true,
@@ -32,12 +40,18 @@ object Main {
     @Suppress("LateinitUsage")
     private lateinit var outputPath: String
 
+    @Parameter(description = "The scanner to use.",
+            names = arrayOf("--scanner", "-s"),
+            converter = ScannerConverter::class,
+            order = 0)
+    private var scanner: Scanner = ScanCode
+
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),
             order = 0)
     private var info = false
 
-    @Parameter(description = "Enable debug logging and keep temporary files.",
+    @Parameter(description = "Enable debug logging.",
             names = arrayOf("--debug"),
             order = 0)
     private var debug = false
@@ -89,6 +103,8 @@ object Main {
         }
 
         val scanResult = mapper.readValue(provenanceFile, ScanResult::class.java)
+
+        println("Using scanner '$scanner'.")
 
         // TODO: check if project scan result in cache
         // TODO: download & scan project or used cached result
