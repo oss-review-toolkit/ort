@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.util
 
+import ch.frankel.slf4k.*
+
 import java.io.File
 
 /**
@@ -25,6 +27,8 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
     private val process = builder.start()
 
     init {
+        log.info { "Running '$commandLine'..." }
+
         if (log.isDebugEnabled) {
             // No need to use curly-braces-syntax for logging here as the log level check is already done above.
             log.debug("Keeping temporary files:")
