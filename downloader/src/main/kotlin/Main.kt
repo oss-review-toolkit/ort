@@ -75,7 +75,7 @@ object Main {
         val mapper = when {
             provenanceFile.name.endsWith(OutputFormat.JSON.fileEnding) -> jsonMapper
             provenanceFile.name.endsWith(OutputFormat.YAML.fileEnding) -> yamlMapper
-            else -> throw IllegalArgumentException("Provided input file is neither JSON or YAML.")
+            else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
         }
 
         val outputDirectory = File(outputPath)
