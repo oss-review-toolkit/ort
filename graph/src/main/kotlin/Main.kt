@@ -7,6 +7,7 @@ import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.util.jsonMapper
+import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.yamlMapper
 
 import org.graphstream.graph.Edge
@@ -24,11 +25,25 @@ import kotlin.system.exitProcess
  */
 object Main {
 
-    @Parameter(description = "provenance data file path")
-    private var provenanceFilePath: String? = null
+    @Parameter(description = "The provenance data file to use.",
+            names = arrayOf("--input-file", "-i"),
+            required = true,
+            order = 0)
+    @Suppress("LateinitUsage")
+    private lateinit var provenanceFilePath: String
 
-    @Parameter(names = arrayOf("--help", "-h"),
-            description = "Display the command line help.",
+    @Parameter(description = "Enable info logging.",
+            names = arrayOf("--info"),
+            order = 0)
+    private var info = false
+
+    @Parameter(description = "Enable debug logging and keep temporary files.",
+            names = arrayOf("--debug"),
+            order = 0)
+    private var debug = false
+
+    @Parameter(description = "Display the command line help.",
+            names = arrayOf("--help", "-h"),
             help = true,
             order = 100)
     private var help = false
@@ -44,7 +59,15 @@ object Main {
         jc.parse(*args)
         jc.programName = "graph"
 
-        if (help || provenanceFilePath == null) {
+        if (info) {
+            log.level = ch.qos.logback.classic.Level.INFO
+        }
+
+        if (debug) {
+            log.level = ch.qos.logback.classic.Level.DEBUG
+        }
+
+        if (help) {
             jc.usage()
             exitProcess(1)
         }
