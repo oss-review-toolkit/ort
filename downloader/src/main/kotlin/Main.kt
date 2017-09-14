@@ -122,7 +122,16 @@ object Main {
         }
     }
 
-    private fun download(target: Package, outputDirectory: File) {
+    /**
+     * Download the source code of the [target] package to a folder inside [outputDirectory]. The folder name is created
+     * from the [name][Package.name] and [version][Package.version] of the [target] package.
+     *
+     * @param target The description of the package to download.
+     * @param outputDirectory The parent directory to download the source code to.
+     *
+     * @return The directory containing the source code, or null if the source code could not be downloaded.
+     */
+    fun download(target: Package, outputDirectory: File): File? {
         val p = fun(string: String) = println("${target.identifier}: $string")
 
         val targetDir = File(outputDirectory, "${target.name}/${target.version}") // TODO: add namespace to path
@@ -167,8 +176,12 @@ object Main {
                     p("Use ${vcs.javaClass.simpleName}")
                     try {
                         @Suppress("UnsafeCallOnNullableType")
-                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath, targetDir)
-                        p("Downloaded source code to ${targetDir.absolutePath}")
+                        if (vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath, targetDir)) {
+                            p("Downloaded source code to ${targetDir.absolutePath}")
+                            return targetDir
+                        } else {
+                            p("Error downloading source code.")
+                        }
                     } catch (e: IllegalArgumentException) {
                         p("ERROR: Could not download source code: ${e.message}")
                     }
@@ -181,6 +194,8 @@ object Main {
             // TODO: Implement downloading of source package.
             p("ERROR: No source package URL provided")
         }
+
+        return null
     }
 
 }
