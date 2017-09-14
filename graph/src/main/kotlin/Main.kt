@@ -54,9 +54,9 @@ object Main {
             "Provided path is not a file: ${provenanceFile.absolutePath}"
         }
 
-        val mapper = when {
-            provenanceFile.name.endsWith(OutputFormat.JSON.fileEnding) -> jsonMapper
-            provenanceFile.name.endsWith(OutputFormat.YAML.fileEnding) -> yamlMapper
+        val mapper = when (provenanceFile.extension) {
+            OutputFormat.JSON.fileEnding -> jsonMapper
+            OutputFormat.YAML.fileEnding -> yamlMapper
             else -> throw IllegalArgumentException("Provided input file is neither JSON or YAML.")
         }
 
