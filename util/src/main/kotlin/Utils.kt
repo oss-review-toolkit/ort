@@ -38,10 +38,10 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String, multiJson: 
 }
 
 /**
- * Run a command to check it for specific version.
+ * Run a command to get its version.
  */
-fun checkCommandVersion(command: String, expectedVersion: Semver, versionArgument: String = "--version",
-                        ignoreActualVersion: Boolean = false) {
+fun getCommandVersion(command: String, versionArgument: String = "--version",
+                      semverType: Semver.SemverType = Semver.SemverType.LOOSE): Semver {
     val version = ProcessCapture(command, versionArgument)
     if (version.exitValue() != 0) {
         throw IOException("Unable to determine the $command version:\n${version.stderr()}")
@@ -53,7 +53,15 @@ fun checkCommandVersion(command: String, expectedVersion: Semver, versionArgumen
         versionString = version.stderr().trim()
     }
 
-    val actualVersion = Semver(versionString, expectedVersion.type)
+    return Semver(versionString, semverType)
+}
+
+/**
+ * Run a command to check it for specific version.
+ */
+fun checkCommandVersion(command: String, expectedVersion: Semver, versionArgument: String = "--version",
+                        ignoreActualVersion: Boolean = false) {
+    val actualVersion = getCommandVersion(command, versionArgument, expectedVersion.type)
     if (actualVersion != expectedVersion) {
         val messagePrefix = "Unsupported $command version $actualVersion, version $expectedVersion is "
         if (ignoreActualVersion) {
