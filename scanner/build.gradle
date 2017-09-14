@@ -5,6 +5,7 @@ applicationName = 'scanner'
 mainClassName = 'com.here.provenanceanalyzer.scanner.Main'
 
 dependencies {
+    compile project(':downloader')
     compile project(':model')
     compile project(':util')
 

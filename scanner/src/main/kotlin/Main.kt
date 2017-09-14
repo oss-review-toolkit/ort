@@ -106,14 +106,8 @@ object Main {
 
         println("Using scanner '$scanner'.")
 
-        // TODO: check if project scan result in cache
-        // TODO: download & scan project or used cached result
-        // TODO: archive result in cache
-
-        // TODO: for each package
-        // TODO: check if package scan result in cache
-        // TODO: download & scan package or use cached result
-        // TODO: archive result in cache
+        scanner.scan(scanResult.project.asPackage(), outputDirectory)
+        scanResult.packages.forEach { scanner.scan(it, outputDirectory) }
     }
 
 }

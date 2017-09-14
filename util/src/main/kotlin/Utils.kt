@@ -73,3 +73,11 @@ fun checkCommandVersion(command: String, expectedVersion: Semver, versionArgumen
         }
     }
 }
+
+fun File.safeMkdirs() {
+    if (this.isDirectory || this.mkdirs()) {
+        return
+    }
+
+    throw IOException("Could not create directory ${this.absolutePath}.")
+}
