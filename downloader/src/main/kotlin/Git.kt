@@ -24,7 +24,7 @@ object Git : VersionControlSystem() {
             log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
             runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
             val gitInfoDir = File(targetDir, ".git/info")
-            if (gitInfoDir.mkdir()) {
+            if (gitInfoDir.isDirectory || gitInfoDir.mkdir()) {
                 File(targetDir, ".git/info/sparse-checkout").writeText(vcsPath)
             } else {
                 throw IOException("Could not create directory '${gitInfoDir.absolutePath}'.")
