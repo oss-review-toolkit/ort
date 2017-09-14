@@ -8,6 +8,7 @@ import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.util.jsonMapper
+import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.yamlMapper
 
 import java.io.File
@@ -30,26 +31,41 @@ object Main {
         }
     }
 
-    @Parameter(description = "provenance data file path")
-    private var provenanceFilePath: String? = null
-
-    @Parameter(names = arrayOf("--help", "-h"),
-            description = "Display the command line help.",
-            help = true,
-            order = 100)
-    private var help = false
-
-    @Parameter(names = arrayOf("--output", "-o"),
-            description = "The output directory to download the source code to.",
+    @Parameter(description = "The provenance data file to use.",
+            names = arrayOf("--input-file", "-i"),
             required = true,
             order = 0)
-    private var outputPath: String? = null
+    @Suppress("LateinitUsage")
+    private lateinit var provenanceFilePath: String
 
-    @Parameter(names = arrayOf("--entities", "-e"),
-            description = "The data entities from the provenance data file to download.",
+    @Parameter(description = "The output directory to download the source code to.",
+            names = arrayOf("--output", "-o"),
+            required = true,
+            order = 0)
+    @Suppress("LateinitUsage")
+    private lateinit var outputPath: String
+
+    @Parameter(description = "The data entities from the provenance data file to download.",
+            names = arrayOf("--entities", "-e"),
             listConverter = DataEntityListConverter::class,
             order = 0)
     private var entities: List<DataEntity> = DataEntity.values().asList()
+
+    @Parameter(description = "Enable info logging.",
+            names = arrayOf("--info"),
+            order = 0)
+    private var info = false
+
+    @Parameter(description = "Enable debug logging and keep temporary files.",
+            names = arrayOf("--debug"),
+            order = 0)
+    private var debug = false
+
+    @Parameter(description = "Display the command line help.",
+            names = arrayOf("--help", "-h"),
+            help = true,
+            order = 100)
+    private var help = false
 
     /**
      * The entry point for the application.
@@ -62,7 +78,15 @@ object Main {
         jc.parse(*args)
         jc.programName = "downloader"
 
-        if (help || provenanceFilePath == null) {
+        if (info) {
+            log.level = ch.qos.logback.classic.Level.INFO
+        }
+
+        if (debug) {
+            log.level = ch.qos.logback.classic.Level.DEBUG
+        }
+
+        if (help) {
             jc.usage()
             exitProcess(1)
         }
