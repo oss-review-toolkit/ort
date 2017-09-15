@@ -29,7 +29,6 @@ object ScanCode : Scanner() {
         // TODO: Check if scan result for package is available in cache
 
         val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
-
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
 
         val sourceDirectory = Main.download(pkg, downloadDirectory)
