@@ -24,7 +24,7 @@ object ScanCode : Scanner() {
             it.substringAfter("ScanCode version ")
         })
 
-        log.info { "Detected ScanCode version ${scancodeVersion}." }
+        log.info { "Detected ScanCode version $scancodeVersion." }
 
         // TODO: Check if scan result for package is available in cache
 
