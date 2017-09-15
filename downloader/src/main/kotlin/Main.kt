@@ -9,6 +9,7 @@ import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.util.jsonMapper
 import com.here.provenanceanalyzer.util.log
+import com.here.provenanceanalyzer.util.safeMkdirs
 import com.here.provenanceanalyzer.util.yamlMapper
 
 import java.io.File
@@ -102,12 +103,7 @@ object Main {
             else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
         }
 
-        val outputDirectory = File(outputPath)
-        if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs()
-        } else require(outputDirectory.isDirectory) {
-            "Output directory is not a directory: ${outputDirectory.absolutePath}"
-        }
+        val outputDirectory = File(outputPath).apply { safeMkdirs() }
 
         val scanResult = mapper.readValue(provenanceFile, ScanResult::class.java)
 
@@ -134,8 +130,8 @@ object Main {
     fun download(target: Package, outputDirectory: File): File? {
         val p = fun(string: String) = println("${target.identifier}: $string")
 
-        val targetDir = File(outputDirectory, "${target.name}/${target.version}") // TODO: add namespace to path
-        targetDir.mkdirs()
+        // TODO: add namespace to path
+        val targetDir = File(outputDirectory, "${target.name}/${target.version}").apply { safeMkdirs() }
         p("Download source code to ${targetDir.absolutePath}")
 
         if (!target.normalizedVcsUrl.isNullOrBlank()) {

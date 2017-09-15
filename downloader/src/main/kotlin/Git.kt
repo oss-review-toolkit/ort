@@ -4,9 +4,9 @@ import ch.frankel.slf4k.*
 
 import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.ProcessCapture
+import com.here.provenanceanalyzer.util.safeMkdirs
 
 import java.io.File
-import java.io.IOException
 
 object Git : VersionControlSystem() {
 
@@ -23,12 +23,8 @@ object Git : VersionControlSystem() {
         if (vcsPath != null && vcsPath.isNotEmpty()) {
             log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
             runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
-            val gitInfoDir = File(targetDir, ".git/info")
-            if (gitInfoDir.isDirectory || gitInfoDir.mkdir()) {
-                File(targetDir, ".git/info/sparse-checkout").writeText(vcsPath)
-            } else {
-                throw IOException("Could not create directory '${gitInfoDir.absolutePath}'.")
-            }
+            val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
+            File(gitInfoDir, "sparse-checkout").writeText(vcsPath)
         }
 
         val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
