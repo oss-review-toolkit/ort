@@ -14,9 +14,9 @@ import java.io.File
 
 object ScanCode : Scanner() {
 
-    const val OUTPUT_FORMAT = "json"
-    const val SCANCODE_PROCESSES = 6
-    const val SCANCODE_TIMEOUT = 600
+    private const val OUTPUT_FORMAT = "json"
+    private const val SCANCODE_PROCESSES = 6
+    private const val SCANCODE_TIMEOUT = 600
 
     override fun scan(pkg: Package, outputDirectory: File) {
         val scancodeVersion = getCommandVersion("scancode", transform = {
