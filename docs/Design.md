@@ -10,7 +10,7 @@
 
 - https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_managers/pip.rb
 
-  Uses a [helper script](https://github.com/pivotal/LicenseFinder/blob/master/bin/license_finder_pip.py) to parse `requirements.txt` via the `pip.req.parse_requirements` API from Ruby code.
+  Uses a [helper script](https://github.com/pivotal/LicenseFinder/blob/master/bin/license_finder_pip.py) to parse only `requirements.txt` via the `pip.req.parse_requirements` API from Ruby code.
 
 - https://github.com/librariesio/bibliothecary/blob/master/lib/bibliothecary/parsers/pypi.rb
 
@@ -22,11 +22,11 @@
 
 - https://github.com/sourcegraph/pydep
 
-  Uses `pip.req.parse_requirements` for `requirements.txt` files (see [this article](http://jelly.codes/articles/python-pip-module/)) and a `distutils.core.setup` replacement to parse `setup.py` files (similar to [this approach](https://stackoverflow.com/a/27790447/1127485)).
+  Uses `pip.req.parse_requirements` for `requirements.txt` files (see [this article](http://jelly.codes/articles/python-pip-module/)) and a `distutils.core.setup` replacement to parse `setup.py` files (similar to [this approach](https://stackoverflow.com/a/27790447/1127485)). Has JSON output, but outputs dependencies in a flat list as opposed to a tree.
 
 - https://github.com/fossas/srclib-pip/
 
-  An add-on for [srclib](https://github.com/sourcegraph/srclib) that manually parses `requirements.txt` files.
+  An add-on for [srclib](https://github.com/sourcegraph/srclib) that manually parses `requirements.txt` files only.
 
 - https://github.com/blackducksoftware/hub-detect/blob/master/src/main/resources/pip-inspector.py
 
@@ -34,9 +34,9 @@
 
 ### Conclusions
 
-While using `pip.req.parse_requirements` to parse `requirements.txt` files and using `distutils.core.setup` to parse `setup.py` files looks like an elegant solution, they cannot handle e.g. defining common includes as part of `requirements.txt` files that look like:
+While using `pip.req.parse_requirements` to parse `requirements.txt` files and using `distutils.core.setup` to parse `setup.py` files basically is an elegant solution, that approach cannot handle e.g. custom / extra index URLs defined as part of `requirements.txt` files like:
 
     # common requirements
     -i http://foo.bar.com/ptpi/devpi/dev/+simple/
 
-That is why calling `pip download` probably is the way to go to correctly determine the dependencies, even if that already downloads the dependencies at a stage where we would only need the dependency graph.
+That is why calling `pip` and inspecting the output probably is the way to go to correctly determine the dependencies, even if that already downloads the dependencies at a stage where we would only need the dependency graph.
