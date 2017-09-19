@@ -175,7 +175,7 @@ object NPM : PackageManager(
                 }
             }
 
-            val module = Package("NPM", namespace, name, description, version, homepageUrl, downloadUrl,
+            val module = Package(javaClass.simpleName, namespace, name, description, version, homepageUrl, downloadUrl,
                     hash, hashAlgorithm, vcsPath, vcsProvider, vcsUrl, vcsRevision)
 
             require(module.name.isNotEmpty()) {
