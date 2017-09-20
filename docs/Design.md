@@ -4,6 +4,10 @@
 
 ### Existing Definition File Parsers
 
+- https://github.com/kennethreitz/pipenv
+
+  A new package manager designed around `Pipfile{.lock}` files. Does not offer automatic migration from `requirements.txt` / `setup.py` files ([anymore](https://github.com/kennethreitz/pipenv/issues/11#issuecomment-286778251)).
+
 - https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_managers/pip.rb
 
   Uses a [helper script](https://github.com/pivotal/LicenseFinder/blob/master/bin/license_finder_pip.py) to parse `requirements.txt` via the `pip.req.parse_requirements` API from Ruby code.
@@ -27,10 +31,6 @@
 - https://github.com/blackducksoftware/hub-detect/blob/master/src/main/resources/pip-inspector.py
 
   Uses the `pip.req.parse_requirements` API. `setup.py` seems to be recognized but not yet handled.
-
-- https://github.com/kennethreitz/pipenv
-
-  Converts `requirements.txt` and `setup.py` files to `Pipfile{.lock}` files. Does not properly support `--(extra-)index-url` yet.
 
 ### Conclusions
 
