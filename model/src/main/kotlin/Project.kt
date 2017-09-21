@@ -21,7 +21,7 @@ data class Project(
     /**
      * Return a [Package] representation of this [Project].
      */
-    fun asPackage(): Package = Package("", "", name, "", version, homepageUrl, "", "", "", vcsPath, vcsProvider,
+    fun asPackage() = Package("", "", name, "", version, homepageUrl, "", "", "", vcsPath, vcsProvider,
             vcsUrl, revision)
 
 }
