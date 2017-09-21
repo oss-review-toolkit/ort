@@ -6,7 +6,7 @@
 
 - https://github.com/kennethreitz/pipenv
 
-  A new package manager designed around `Pipfile{.lock}` files. Does not offer automatic migration from `requirements.txt` / `setup.py` files ([anymore](https://github.com/kennethreitz/pipenv/issues/11#issuecomment-286778251)).
+  A new package manager designed around `Pipfile{.lock}` files. Claims to offer [import of requirements.txt files](http://docs.pipenv.org/en/latest/advanced.html#importing-from-requirements-txt) and [import of setup.py files](https://github.com/kennethreitz/pipenv/issues/592), but it does not actually work, or only in very simple cases.
 
 - https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_managers/pip.rb
 
