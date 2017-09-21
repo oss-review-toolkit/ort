@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.provenanceanalyzer.Main
 import com.here.provenanceanalyzer.PackageManager
-import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.model.Package
+import com.here.provenanceanalyzer.model.PackageReference
 import com.here.provenanceanalyzer.model.Project
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.model.Scope
@@ -221,10 +221,11 @@ object NPM : PackageManager(
         return if (modulesDir.name == "node_modules") modulesDir else null
     }
 
-    private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>): List<Dependency> {
+    private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>)
+            :List<PackageReference> {
         // Read package.json
         val json = jsonMapper.readTree(packageJson)
-        val dependencies = mutableListOf<Dependency>()
+        val dependencies = mutableListOf<PackageReference>()
         if (json[scope] != null) {
             log.debug { "Looking for dependencies in scope $scope" }
             val dependencyMap = json[scope]
@@ -258,7 +259,7 @@ object NPM : PackageManager(
     }
 
     private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>,
-                          dependencyBranch: List<String> = listOf()): Dependency? {
+                          dependencyBranch: List<String> = listOf()): PackageReference? {
         log.debug { "Building dependency tree for $name from directory ${startDir.absolutePath}" }
 
         val nodeModulesDir = File(startDir, "node_modules")
@@ -283,7 +284,7 @@ object NPM : PackageManager(
             val newDependencyBranch = dependencyBranch + identifier
             val packageInfo = packages[identifier] ?:
                     throw IOException("Could not find package info for $identifier")
-            val dependencies = mutableListOf<Dependency>()
+            val dependencies = mutableListOf<PackageReference>()
 
             if (packageJson["dependencies"] != null) {
                 val dependencyMap = packageJson["dependencies"]
@@ -298,11 +299,11 @@ object NPM : PackageManager(
 
             dependencies.sortBy { it.identifier }
 
-            return Dependency(packageInfo.name, packageInfo.namespace, packageInfo.version, packageInfo.hash,
+            return PackageReference(packageInfo.name, packageInfo.namespace, packageInfo.version, packageInfo.hash,
                     dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
-            return Dependency(name, "", "unknown, package not installed", "", listOf())
+            return PackageReference(name, "", "unknown, package not installed", "", listOf())
         } else {
             var parent = startDir.parentFile.parentFile
 

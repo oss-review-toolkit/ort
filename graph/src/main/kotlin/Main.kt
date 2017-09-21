@@ -3,8 +3,8 @@ package com.here.provenanceanalyzer.graph
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.here.provenanceanalyzer.model.Dependency
 import com.here.provenanceanalyzer.model.OutputFormat
+import com.here.provenanceanalyzer.model.PackageReference
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.util.jsonMapper
 import com.here.provenanceanalyzer.util.log
@@ -120,7 +120,7 @@ object Main {
 
     }
 
-    private fun addDependency(parent: SingleNode, dependency: Dependency) {
+    private fun addDependency(parent: SingleNode, dependency: PackageReference) {
         val identifier = "${dependency.namespace}:${dependency.name}:${dependency.version}"
         val dependencyNode = parent.graph.addNode<SingleNode>(UUID.randomUUID().toString())
         dependencyNode.addAttribute("ui.label", identifier)
