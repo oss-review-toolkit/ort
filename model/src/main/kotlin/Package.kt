@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.vdurmont.semver4j.Semver
 
 /**
- * A descriptor for a software package. It contains general information like the name, version, and how to retrieve the
- * package and its source code. However, it does not contain information about the package's dependencies. This is
- * because at this stage we would only be able to get the declared dependencies, whereas we are interested in the
- * resolved dependencies. Resolved dependencies might differ from declared dependencies due to specified version ranges,
- * or change depending on how the package is used in a project due to the build system's dependency resolution process.
- * For example, if multiple versions of the same package are used in a project, the build system might decide to align
- * on a single version of that package.
+ * A generic descriptor for a software package. It contains all relevant meta-data about a package like the name,
+ * version, and how to retrieve the package and its source code. It does not contain information about the package's
+ * dependencies, however. This is because at this stage we would only be able to get the declared dependencies, whereas
+ * we are interested in the resolved dependencies. Resolved dependencies might differ from declared dependencies due to
+ * specified version ranges, or change depending on how the package is used in a project due to the build system's
+ * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
+ * system might decide to align on a single version of that package.
  */
 @JsonIgnoreProperties("identifier", "normalizedVcsUrl", "semverType")
 data class Package(
