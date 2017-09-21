@@ -175,6 +175,7 @@ object Main {
                             "-provenance." + outputFormat.fileEnding)
                     println("Writing results for\n\t$definitionFile\nto\n\t$outputFile")
                     mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
+                    println("done.")
                 } else {
                     log.error { "Unable to create output directory '$outputDir'." }
                 }
