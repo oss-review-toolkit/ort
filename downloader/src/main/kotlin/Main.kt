@@ -128,6 +128,7 @@ object Main {
      * @return The directory containing the source code, or null if the source code could not be downloaded.
      */
     fun download(target: Package, outputDirectory: File): File? {
+        // TODO: return also SHA1 which was finally cloned
         val p = fun(string: String) = println("${target.identifier}: $string")
 
         // TODO: add namespace to path

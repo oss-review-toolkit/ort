@@ -1,6 +1,7 @@
 package com.here.provenanceanalyzer.scanner
 
-import ch.frankel.slf4k.*
+import ch.frankel.slf4k.error
+import ch.frankel.slf4k.info
 import ch.qos.logback.classic.Level
 
 import com.here.provenanceanalyzer.downloader.Main
@@ -31,6 +32,13 @@ object ScanCode : Scanner() {
         val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
 
+        val resultsFile = File(scanResultsDirectory,
+                "${pkg.name}-${pkg.version}_scancode-$scancodeVersion.$OUTPUT_FORMAT")
+
+        if (ScanResultsCache.read(pkg, resultsFile)) {
+            return
+        }
+
         val sourceDirectory = Main.download(pkg, downloadDirectory)
         if (sourceDirectory != null) {
             val scancodeOptions = mutableListOf("--copyright", "--license", "--info", "--diag",
@@ -38,9 +46,6 @@ object ScanCode : Scanner() {
             if (log.isEnabledFor(Level.DEBUG)) {
                 scancodeOptions.add("--verbose")
             }
-
-            val resultsFile = File(scanResultsDirectory,
-                    "${pkg.name}-${pkg.version}_scancode-$scancodeVersion.$OUTPUT_FORMAT")
 
             println("Run ScanCode in directory '${sourceDirectory.absolutePath}'.")
             val process = ProcessCapture(sourceDirectory,
@@ -52,6 +57,7 @@ object ScanCode : Scanner() {
 
             if (process.exitValue() == 0) {
                 println("Stored ScanCode results in ${resultsFile.absolutePath}.")
+                ScanResultsCache.write(pkg, resultsFile)
             } else {
                 log.error {
                     "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}"

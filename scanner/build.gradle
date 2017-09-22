@@ -10,4 +10,7 @@ dependencies {
     compile project(':util')
 
     compile "com.beust:jcommander:$jcommanderVersion"
+    compile 'com.github.kittinunf.fuel:fuel:1.10.0'
+
+    testCompile 'io.kotlintest:kotlintest:2.0.5'
 }
