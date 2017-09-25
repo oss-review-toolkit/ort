@@ -1,0 +1,14 @@
+---
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "Gradle sample"
+  version: ""
+  aliases: []
+  vcs_path: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  homepage_url: ""
+  scopes: []
+packages: []

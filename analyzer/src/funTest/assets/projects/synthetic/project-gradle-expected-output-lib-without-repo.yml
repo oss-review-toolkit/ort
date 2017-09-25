@@ -1,0 +1,141 @@
+---
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "lib-without-repo"
+  version: ""
+  aliases: []
+  vcs_path: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  homepage_url: ""
+  scopes:
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "compileOnly"
+    delivered: true
+    dependencies: []
+  - name: "default"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "runtime"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "runtimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "testCompile"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "junit:junit:4.12"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency junit:junit:4.12 because no\
+        \ repositories are defined."
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "junit:junit:4.12"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency junit:junit:4.12 because no\
+        \ repositories are defined."
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "testCompileOnly"
+    delivered: true
+    dependencies: []
+  - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "junit:junit:4.12"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency junit:junit:4.12 because no\
+        \ repositories are defined."
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+  - name: "testRuntimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "junit:junit:4.12"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency junit:junit:4.12 because no\
+        \ repositories are defined."
+    - namespace: ""
+      name: "org.apache.commons:commons-text:1.1"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: Cannot resolve external dependency org.apache.commons:commons-text:1.1\
+        \ because no repositories are defined."
+packages: []

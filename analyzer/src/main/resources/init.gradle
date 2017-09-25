@@ -1,0 +1,128 @@
+import groovy.transform.Immutable
+
+import javax.inject.Inject
+
+import org.gradle.tooling.provider.model.ToolingModelBuilder
+import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
+
+// Apply the DependencyTreePlugin defined below to register a custom model for the Tooling API. The plugin is required
+// to get an instance of ToolingModelBuilderRegistry by dependency injection.
+// See:
+// https://docs.gradle.org/current/userguide/init_scripts.html#sec:init_script_plugins
+// https://github.com/gradle/gradle/blob/176c18d/subprojects/docs/src/samples/toolingApi/customModel/plugin/src/main/java/org/gradle/sample/plugin/CustomPlugin.java
+apply plugin: DependencyTreePlugin
+
+interface DependencyTreeModel {
+    String getName()
+
+    List<Configuration> getConfigurations()
+
+    List<String> getErrors()
+}
+
+@Immutable
+class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
+    String name
+    List<Configuration> configurations
+    List<String> errors
+}
+
+interface Configuration {
+    String getName()
+
+    List<Dependency> getDependencies()
+}
+
+@Immutable
+class ConfigurationImpl implements Configuration, Serializable {
+    String name
+    List<Dependency> dependencies
+}
+
+interface Dependency {
+    String getGroupId()
+
+    String getArtifactId()
+
+    String getVersion()
+
+    List<Dependency> getDependencies()
+
+    String getError()
+}
+
+@Immutable
+class DependencyImpl implements Dependency, Serializable {
+    String groupId
+    String artifactId
+    String version
+    List<Dependency> dependencies
+    String error
+}
+
+class DependencyTreePlugin implements Plugin<Gradle> {
+
+    private final ToolingModelBuilderRegistry registry
+
+    @Inject
+    DependencyTreePlugin(ToolingModelBuilderRegistry registry) {
+        this.registry = registry
+    }
+
+    void apply(Gradle gradle) {
+        registry.register(new DependencyTreeModelBuilder())
+    }
+
+    private static class DependencyTreeModelBuilder implements ToolingModelBuilder {
+        @Override
+        boolean canBuild(String modelName) {
+            return modelName == "DependencyTreeModel"
+        }
+
+        @Override
+        Object buildAll(String modelName, Project project) {
+
+            List<String> errors = []
+
+            List<Configuration> configurations = project.configurations.collect { configuration ->
+                if (configuration.isCanBeResolved()) {
+                    ResolutionResult result = configuration.getIncoming().getResolutionResult()
+                    List<Dependency> dependencies = result.getRoot().getDependencies().collect { parseDependency(it) }
+
+                    new ConfigurationImpl(configuration.name, dependencies)
+                } else {
+                    errors.add("Configuration '${configuration.name}' cannot be resolved.")
+                    null
+                }
+            }.findAll { it != null }
+
+            return new DependencyTreeModelImpl(project.name, configurations, errors)
+        }
+
+        Dependency parseDependency(DependencyResult dependencyResult) {
+            if (dependencyResult instanceof ResolvedDependencyResult) {
+                List<Dependency> dependencies = dependencyResult.selected.dependencies.collect { dependency ->
+                    parseDependency(dependency)
+                }
+
+                ComponentIdentifier id = dependencyResult.selected.id
+                if (id instanceof ModuleComponentIdentifier) {
+                    return new DependencyImpl(id.group, id.module, id.version, dependencies, null)
+                } else if (id instanceof ProjectComponentIdentifier) {
+                    // TODO: Decide how to mark project dependencies in the model.
+                    return new DependencyImpl("", id.displayName, "", dependencies, null)
+                } else {
+                    return new DependencyImpl("", id.displayName, "", dependencies,
+                            "Unknown id type: ${id.getClass().simpleName}")
+                }
+            } else if (dependencyResult instanceof UnresolvedDependencyResult) {
+                return new DependencyImpl("", "${dependencyResult.attempted.displayName}", "", [],
+                        "Unresolved: ${dependencyResult.failure.message}")
+            } else {
+                return new DependencyImpl("", dependencyResult.requested.displayName, "", [],
+                        "Unknown result type: ${dependencyResult.getClass().simpleName}")
+            }
+        }
+    }
+
+}

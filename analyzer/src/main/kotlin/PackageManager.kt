@@ -27,7 +27,7 @@ abstract class PackageManager(
          */
         val ALL by lazy {
             listOf(
-                    // TODO: Gradle,
+                    Gradle,
                     // TODO: Maven,
                     // TODO: SBT,
                     NPM,

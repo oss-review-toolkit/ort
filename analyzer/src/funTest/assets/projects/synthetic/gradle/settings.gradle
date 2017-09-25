@@ -1,0 +1,5 @@
+rootProject.name = 'Gradle sample'
+
+include ':app'
+include ':lib'
+include ':lib-without-repo'

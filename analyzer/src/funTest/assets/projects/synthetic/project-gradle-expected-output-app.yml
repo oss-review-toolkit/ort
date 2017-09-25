@@ -1,0 +1,224 @@
+---
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "app"
+  version: ""
+  aliases: []
+  vcs_path: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  homepage_url: ""
+  scopes:
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "compileOnly"
+    delivered: true
+    dependencies: []
+  - name: "default"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "runtime"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "runtimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "testCompile"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "testCompileOnly"
+    delivered: true
+    dependencies: []
+  - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "testRuntimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :lib"
+      version: ""
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+packages:
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :lib"
+  version: ""
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_path: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.commons"
+  name: "commons-lang3"
+  version: "3.5"
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_path: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.commons"
+  name: "commons-text"
+  version: "1.1"
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_path: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""

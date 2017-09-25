@@ -16,6 +16,7 @@ dependencies {
 
     compile "com.beust:jcommander:$jcommanderVersion"
     compile "com.vdurmont:semver4j:$semverVersion"
+    compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
 
     funTestCompile sourceSets.main.output
     funTestCompile sourceSets.test.output
