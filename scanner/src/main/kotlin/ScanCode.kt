@@ -33,7 +33,7 @@ object ScanCode : Scanner() {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
 
         val resultsFile = File(scanResultsDirectory,
-                "${pkg.name}-${pkg.version}_scancode-$scancodeVersion.$OUTPUT_FORMAT")
+                "${pkg.name}-${pkg.version}_scancode.$OUTPUT_FORMAT")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
             return
