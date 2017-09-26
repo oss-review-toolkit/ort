@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.scanner
 
+import ch.frankel.slf4k.*
+
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
@@ -119,8 +121,16 @@ object Main {
 
         println("Using scanner '$scanner'.")
 
-        scanner.scan(scanResult.project.asPackage(), outputDirectory)
-        scanResult.packages.forEach { scanner.scan(it, outputDirectory) }
+        val packages = mutableListOf(scanResult.project.asPackage())
+        packages.addAll(scanResult.packages)
+
+        packages.forEach { pkg ->
+            try {
+                scanner.scan(pkg, outputDirectory)
+            } catch (e: ScanException) {
+                log.error { "Could not scan ${pkg.identifier}: ${e.message}" }
+            }
+        }
     }
 
 }

@@ -1,7 +1,6 @@
 package com.here.provenanceanalyzer.scanner
 
-import ch.frankel.slf4k.error
-import ch.frankel.slf4k.info
+import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
 import com.here.provenanceanalyzer.downloader.DownloadException
@@ -27,8 +26,6 @@ object ScanCode : Scanner() {
         })
 
         log.info { "Detected ScanCode version $scancodeVersion." }
-
-        // TODO: Check if scan result for package is available in cache
 
         val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
@@ -62,7 +59,7 @@ object ScanCode : Scanner() {
                     println("Stored ScanCode results in ${resultsFile.absolutePath}.")
                     ScanResultsCache.write(pkg, resultsFile)
                 } else {
-                    log.error { failMessage }
+                    throw ScanException(failMessage)
                 }
             }
 
@@ -70,7 +67,7 @@ object ScanCode : Scanner() {
             // TODO: convert json output to html
             // TODO: Add results of license scan to YAML model
         } catch (e: DownloadException) {
-            log.error { "Package ${pkg.identifier} could not be scanned: ${e.message}" }
+            throw ScanException("Package ${pkg.identifier} could not be scanned.", e)
         }
     }
 
