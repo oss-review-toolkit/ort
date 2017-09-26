@@ -57,12 +57,12 @@ object ScanCode : Scanner() {
                     "-f", OUTPUT_FORMAT,
                     ".", resultsFile.absolutePath)
 
-            if (process.exitValue() == 0) {
-                println("Stored ScanCode results in ${resultsFile.absolutePath}.")
-                ScanResultsCache.write(pkg, resultsFile)
-            } else {
-                log.error {
-                    "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}"
+            with(process) {
+                if (exitValue() == 0) {
+                    println("Stored ScanCode results in ${resultsFile.absolutePath}.")
+                    ScanResultsCache.write(pkg, resultsFile)
+                } else {
+                    log.error { failMessage }
                 }
             }
 

@@ -159,7 +159,7 @@ object PIP : PackageManager(
         // to a test.
         with(pip) {
             if (exitValue() != 0) {
-                log.error { "'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}" }
+                log.error { failMessage }
             }
         }
 

@@ -27,6 +27,12 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
 
     private val process = builder.start()
 
+    /**
+     * A generic error message, can be used when [exitValue] is not 0.
+     */
+    val failMessage
+            get() = "'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}"
+
     init {
         log.info { "Running '$commandLine'..." }
 
@@ -63,7 +69,7 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
      */
     fun requireSuccess(): ProcessCapture {
         if (exitValue() != 0) {
-            throw IOException("'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}")
+            throw IOException(failMessage)
         }
         return this
     }
