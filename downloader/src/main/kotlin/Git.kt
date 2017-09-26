@@ -15,30 +15,34 @@ object Git : VersionControlSystem() {
      *
      * @param vcsPath If this parameter is not null or empty, the working tree is deleted and the path is selectively
      *                checked out using 'git checkout HEAD -- vcsPath'.
+     *
+     * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File): Boolean {
-        runGitCommand(targetDir, "init")
-        runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
-
-        if (vcsPath != null && vcsPath.isNotEmpty()) {
-            log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
-            runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
-            val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-            File(gitInfoDir, "sparse-checkout").writeText(vcsPath)
-        }
-
-        val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
-
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File) {
         try {
-            runGitCommand(targetDir, "fetch", "origin", committish)
-            runGitCommand(targetDir, "reset", "--hard", "FETCH_HEAD")
-        } catch (e: IllegalArgumentException) {
-            log.warn { "Could not fetch '$committish': ${e.message}" }
-            runGitCommand(targetDir, "fetch", "origin")
-            runGitCommand(targetDir, "checkout", committish)
-        }
+            runGitCommand(targetDir, "init")
+            runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
 
-        return true
+            if (vcsPath != null && vcsPath.isNotEmpty()) {
+                log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
+                runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
+                val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
+                File(gitInfoDir, "sparse-checkout").writeText(vcsPath)
+            }
+
+            val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
+
+            try {
+                runGitCommand(targetDir, "fetch", "origin", committish)
+                runGitCommand(targetDir, "reset", "--hard", "FETCH_HEAD")
+            } catch (e: IllegalArgumentException) {
+                log.warn { "Could not fetch '$committish': ${e.message}" }
+                runGitCommand(targetDir, "fetch", "origin")
+                runGitCommand(targetDir, "checkout", committish)
+            }
+        } catch (e: IllegalArgumentException) {
+            throw DownloadException("Could not clone $vcsUrl.", e)
+        }
     }
 
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)

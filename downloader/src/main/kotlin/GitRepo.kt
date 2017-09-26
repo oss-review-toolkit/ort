@@ -13,18 +13,22 @@ object GitRepo : VersionControlSystem() {
      * Clones the Git repositories defined in the manifest file using the Git Repo tool.
      *
      * @param vcsPath The path to the repo manifest file in the repository. Defaults to "manifest.xml" if not provided.
+     *
+     * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File): Boolean {
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File) {
         val revision = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
         val manifestPath = if (vcsPath != null && vcsPath.isNotEmpty()) vcsPath else "manifest.xml"
 
-        log.debug { "Initialize git-repo from $vcsUrl with branch $revision and manifest $manifestPath." }
-        runRepoCommand(targetDir, "init", "--depth", "1", "-b", revision, "-u", vcsUrl, "-m", manifestPath)
+        try {
+            log.debug { "Initialize git-repo from $vcsUrl with branch $revision and manifest $manifestPath." }
+            runRepoCommand(targetDir, "init", "--depth", "1", "-b", revision, "-u", vcsUrl, "-m", manifestPath)
 
-        log.debug { "Start git-repo sync." }
-        runRepoCommand(targetDir, "sync", "-c")
-
-        return true
+            log.debug { "Start git-repo sync." }
+            runRepoCommand(targetDir, "sync", "-c")
+        } catch (e: IllegalArgumentException) {
+            throw DownloadException("Could not clone $vcsUrl/$manifestPath", e)
+        }
     }
 
     override fun isApplicableProvider(vcsProvider: String) =

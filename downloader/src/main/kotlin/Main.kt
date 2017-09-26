@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.downloader
 
+import ch.frankel.slf4k.*
+
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
@@ -107,15 +109,24 @@ object Main {
 
         val scanResult = mapper.readValue(provenanceFile, ScanResult::class.java)
 
+        val packages = mutableListOf<Package>()
+
         if (entities.contains(DataEntity.PROJECT)) {
-            download(scanResult.project.asPackage(), outputDirectory)
+            packages.add(scanResult.project.asPackage())
         }
 
         if (entities.contains(DataEntity.PACKAGES)) {
-            scanResult.packages.forEach {
-                download(it, outputDirectory)
+            packages.addAll(scanResult.packages)
+        }
+
+        packages.forEach { pkg ->
+            try {
+                download(pkg, outputDirectory)
+            } catch (e: DownloadException) {
+                log.error { "Could not download '${pkg.identifier}': ${e.message}" }
             }
         }
+
     }
 
     /**
@@ -127,7 +138,7 @@ object Main {
      *
      * @return The directory containing the source code, or null if the source code could not be downloaded.
      */
-    fun download(target: Package, outputDirectory: File): File? {
+    fun download(target: Package, outputDirectory: File): File {
         // TODO: return also SHA1 which was finally cloned
         val p = fun(string: String) = println("${target.identifier}: $string")
 
@@ -164,23 +175,20 @@ object Main {
             }
             when {
                 applicableVcs.isEmpty() ->
-                    p("ERROR: Could not find applicable VCS")
-            // TODO: Decide if we want to do a trial-and-error with all available VCS here.
+                    // TODO: Decide if we want to do a trial-and-error with all available VCS here.
+                    throw DownloadException("Could not find applicable VCS.")
                 applicableVcs.size > 1 ->
-                    p("ERROR: Found multiple applicable VCS: ${applicableVcs.joinToString()}")
+                    throw DownloadException("Found multiple applicable VCS: ${applicableVcs.joinToString()}")
                 else -> {
                     val vcs = applicableVcs.first()
                     p("Use ${vcs.javaClass.simpleName}")
                     try {
                         @Suppress("UnsafeCallOnNullableType")
-                        if (vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath, targetDir)) {
-                            p("Downloaded source code to ${targetDir.absolutePath}")
-                            return targetDir
-                        } else {
-                            p("Error downloading source code.")
-                        }
+                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath, targetDir)
+                        p("Downloaded source code to ${targetDir.absolutePath}")
+                        return targetDir
                     } catch (e: IllegalArgumentException) {
-                        p("ERROR: Could not download source code: ${e.message}")
+                        throw DownloadException("Could not download source code.", e)
                     }
                 }
             }
@@ -189,10 +197,8 @@ object Main {
             // TODO: This should also be tried if the VCS checkout does not work.
             p("Try to download source package: ...")
             // TODO: Implement downloading of source package.
-            p("ERROR: No source package URL provided")
+            throw DownloadException("No source package URL provided.")
         }
-
-        return null
     }
 
 }

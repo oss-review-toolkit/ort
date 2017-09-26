@@ -4,6 +4,7 @@ import ch.frankel.slf4k.error
 import ch.frankel.slf4k.info
 import ch.qos.logback.classic.Level
 
+import com.here.provenanceanalyzer.downloader.DownloadException
 import com.here.provenanceanalyzer.downloader.Main
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.util.ProcessCapture
@@ -39,8 +40,9 @@ object ScanCode : Scanner() {
             return
         }
 
-        val sourceDirectory = Main.download(pkg, downloadDirectory)
-        if (sourceDirectory != null) {
+        try {
+            val sourceDirectory = Main.download(pkg, downloadDirectory)
+
             val scancodeOptions = mutableListOf("--copyright", "--license", "--info", "--diag",
                     "--only-findings", "--strip-root")
             if (log.isEnabledFor(Level.DEBUG)) {
@@ -67,8 +69,8 @@ object ScanCode : Scanner() {
             // TODO: convert json output to spdx
             // TODO: convert json output to html
             // TODO: Add results of license scan to YAML model
-        } else {
-            log.error { "Package ${pkg.identifier} could not be scanned." }
+        } catch (e: DownloadException) {
+            log.error { "Package ${pkg.identifier} could not be scanned: ${e.message}" }
         }
     }
 
