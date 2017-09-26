@@ -6,6 +6,7 @@ import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.log
 
 import java.io.File
+import java.io.IOException
 
 object GitRepo : VersionControlSystem() {
 
@@ -26,7 +27,7 @@ object GitRepo : VersionControlSystem() {
 
             log.debug { "Start git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
-        } catch (e: IllegalArgumentException) {
+        } catch (e: IOException) {
             throw DownloadException("Could not clone $vcsUrl/$manifestPath", e)
         }
     }
@@ -37,10 +38,7 @@ object GitRepo : VersionControlSystem() {
     override fun isApplicableUrl(vcsUrl: String) = false
 
     private fun runRepoCommand(targetDir: File, vararg args: String) {
-        val process = ProcessCapture(targetDir, "repo", *args)
-        require(process.exitValue() == 0) {
-            "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}"
-        }
+        ProcessCapture(targetDir, "repo", *args).requireSuccess()
     }
 
 }

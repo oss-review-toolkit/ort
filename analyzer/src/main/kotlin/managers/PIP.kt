@@ -84,18 +84,10 @@ object PIP : PackageManager(
             // not on PyPI, install it from Git instead.
             val pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install",
                     "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION")
-            with(pip) {
-                if (exitValue() != 0) {
-                    throw IOException("'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}")
-                }
-            }
+            pip.requireSuccess()
 
             val pydep = runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
-            with(pydep) {
-                if (exitValue() != 0) {
-                    throw IOException("'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}")
-                }
-            }
+            pydep.requireSuccess()
 
             val (projectName, projectVersion, projectRepo) = jsonMapper.readTree(pydep.stdout()).let {
                 listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
@@ -138,12 +130,7 @@ object PIP : PackageManager(
         // Create an out-of-tree virtualenv.
         println("Creating a virtualenv for the '${workingDir.name}' project directory...")
         val virtualEnvDir = createTempDir(workingDir.name, "virtualenv")
-        val virtualEnv = ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path)
-        with(virtualEnv) {
-            if (exitValue() != 0) {
-                throw IOException("'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}")
-            }
-        }
+        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
 
         var pip: ProcessCapture
 
@@ -153,11 +140,7 @@ object PIP : PackageManager(
         // We only depend on pipdeptree to be at least version 0.5.0 for JSON output, but we stick to a fixed
         // version to be sure to get consistent results.
         pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pipdeptree==$PIPDEPTREE_VERSION")
-        with(pip) {
-            if (exitValue() != 0) {
-                throw IOException("'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}")
-            }
-        }
+        pip.requireSuccess()
 
         // TODO: Find a way to make installation of packages with native extensions work on Windows where often
         // the appropriate compiler is missing / not set up, e.g. by using pre-built packages from

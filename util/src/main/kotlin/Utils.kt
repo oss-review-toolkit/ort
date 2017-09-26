@@ -21,11 +21,7 @@ val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
  * Parse the standard output of a process as JSON.
  */
 fun parseJsonProcessOutput(workingDir: File, vararg command: String, multiJson: Boolean = false): JsonNode {
-    val process = ProcessCapture(workingDir, *command)
-    if (process.exitValue() != 0) {
-        throw IOException(
-                "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}")
-    }
+    val process = ProcessCapture(workingDir, *command).requireSuccess()
 
     // Support parsing multiple lines with one JSON object per line by wrapping the whole output into a JSON array.
     if (multiJson) {
@@ -43,10 +39,7 @@ fun parseJsonProcessOutput(workingDir: File, vararg command: String, multiJson: 
 fun getCommandVersion(command: String, versionArgument: String = "--version",
                       semverType: Semver.SemverType = Semver.SemverType.LOOSE,
                       transform: (String) -> String = { it }): Semver {
-    val version = ProcessCapture(command, versionArgument)
-    if (version.exitValue() != 0) {
-        throw IOException("Unable to determine the $command version:\n${version.stderr()}")
-    }
+    val version = ProcessCapture(command, versionArgument).requireSuccess()
 
     var versionString = transform(version.stdout().trim())
     if (versionString.isEmpty()) {

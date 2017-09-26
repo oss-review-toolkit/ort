@@ -3,6 +3,7 @@ package com.here.provenanceanalyzer.util
 import ch.frankel.slf4k.*
 
 import java.io.File
+import java.io.IOException
 
 /**
  * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
@@ -56,4 +57,14 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
      * Return the standard errors stream of the terminated process as a string.
      */
     fun stderr() = stderrFile.readText()
+
+    /**
+     * Throw an [IOException] in case [exitValue] is not 0.
+     */
+    fun requireSuccess(): ProcessCapture {
+        if (exitValue() != 0) {
+            throw IOException("'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}")
+        }
+        return this
+    }
 }

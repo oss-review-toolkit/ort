@@ -7,6 +7,7 @@ import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.safeMkdirs
 
 import java.io.File
+import java.io.IOException
 
 object Git : VersionControlSystem() {
 
@@ -35,12 +36,12 @@ object Git : VersionControlSystem() {
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "reset", "--hard", "FETCH_HEAD")
-            } catch (e: IllegalArgumentException) {
+            } catch (e: IOException) {
                 log.warn { "Could not fetch '$committish': ${e.message}" }
                 runGitCommand(targetDir, "fetch", "origin")
                 runGitCommand(targetDir, "checkout", committish)
             }
-        } catch (e: IllegalArgumentException) {
+        } catch (e: IOException) {
             throw DownloadException("Could not clone $vcsUrl.", e)
         }
     }
@@ -50,10 +51,7 @@ object Git : VersionControlSystem() {
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
     private fun runGitCommand(targetDir: File, vararg args: String) {
-        val process = ProcessCapture(targetDir, "git", *args)
-        require(process.exitValue() == 0) {
-            "'${process.commandLine}' failed with exit code ${process.exitValue()}:\n${process.stderr()}"
-        }
+        ProcessCapture(targetDir, "git", *args).requireSuccess()
     }
 
 }

@@ -365,11 +365,7 @@ object NPM : PackageManager(
         log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        val install = ProcessCapture(workingDir, managerCommand, "install")
-        if (install.exitValue() != 0) {
-            throw IOException(
-                    "'${install.commandLine}' failed with exit code ${install.exitValue()}:\n${install.stderr()}")
-        }
+        ProcessCapture(workingDir, managerCommand, "install").requireSuccess()
 
         // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         // platforms except for Mac.
