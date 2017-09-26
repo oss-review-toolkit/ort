@@ -7,6 +7,8 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
 import com.here.provenanceanalyzer.model.OutputFormat
+import com.here.provenanceanalyzer.model.Package
+import com.here.provenanceanalyzer.model.Project
 import com.here.provenanceanalyzer.model.ScanResult
 import com.here.provenanceanalyzer.util.jsonMapper
 import com.here.provenanceanalyzer.util.log
@@ -20,6 +22,23 @@ import kotlin.system.exitProcess
  * The main entry point of the application.
  */
 object Main {
+
+    enum class SummaryFormat {
+        JSON,
+        YAML
+    }
+
+    private class SummaryEntry(
+            val scopes: MutableList<String> = mutableListOf(),
+            val errors: MutableList<String> = mutableListOf()
+    )
+
+    private class SummaryFormatListConverter : IStringConverter<List<SummaryFormat>> {
+        override fun convert(formats: String): List<SummaryFormat> {
+            val names = formats.toUpperCase().split(",")
+            return names.map { SummaryFormat.valueOf(it) }
+        }
+    }
 
     private class ScannerConverter : IStringConverter<Scanner> {
         override fun convert(scannerName: String): Scanner {
@@ -53,6 +72,12 @@ object Main {
             order = 0)
     @Suppress("LateinitUsage")
     private var cacheConfigurationFile: File? = null
+
+    @Parameter(description = "The list of file formats for the summary files.",
+            names = arrayOf("--summary-format", "-f"),
+            listConverter = SummaryFormatListConverter::class,
+            order = 0)
+    private var summaryFormats: List<SummaryFormat> = listOf(SummaryFormat.YAML)
 
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),
@@ -124,12 +149,38 @@ object Main {
         val packages = mutableListOf(scanResult.project.asPackage())
         packages.addAll(scanResult.packages)
 
+        val summary = mutableMapOf<String, SummaryEntry>()
+
         packages.forEach { pkg ->
+            val entry = summary.getOrPut(pkg.identifier) { SummaryEntry() }
+            entry.scopes.addAll(findScopesForPackage(pkg, scanResult.project))
             try {
                 scanner.scan(pkg, outputDirectory)
             } catch (e: ScanException) {
                 log.error { "Could not scan ${pkg.identifier}: ${e.message}" }
+                var cause: Throwable? = e
+                while (cause != null) {
+                    entry.errors.add("${cause.javaClass.simpleName}: ${cause.message}")
+                    cause = cause.cause
+                }
             }
+        }
+
+        writeSummary(outputDirectory, summary)
+    }
+
+    private fun findScopesForPackage(pkg: Package, project: Project): List<String> {
+        return project.scopes.filter { it.contains(pkg) }.map { it.name }
+    }
+
+    private fun writeSummary(outputDirectory: File, summary: MutableMap<String, SummaryEntry>) {
+        summaryFormats.forEach { format ->
+            val summaryFile = File(outputDirectory, "scan-summary.${format.name.toLowerCase()}")
+            val mapper = when (format) {
+                SummaryFormat.JSON -> jsonMapper
+                SummaryFormat.YAML -> yamlMapper
+            }
+            mapper.writerWithDefaultPrettyPrinter().writeValue(summaryFile, summary)
         }
     }
 

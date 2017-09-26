@@ -25,4 +25,15 @@ data class Scope(
          * dependencies.
          */
         val dependencies: List<PackageReference>
-)
+) {
+    fun contains(pkg: Package): Boolean {
+        return contains(pkg.identifier)
+    }
+
+    fun contains(packageIdentifier: String): Boolean {
+        return dependencies.find { pkgRef ->
+            // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
+            pkgRef.identifier == packageIdentifier.substringAfter(":") || pkgRef.dependsOn(packageIdentifier)
+        } != null
+    }
+}

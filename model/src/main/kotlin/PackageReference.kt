@@ -41,4 +41,15 @@ data class PackageReference(
         val dependencies: List<PackageReference>
 ) {
     val identifier = "$namespace:$name:$version"
+
+    fun dependsOn(pkg: Package): Boolean {
+        return dependsOn(pkg.identifier)
+    }
+
+    fun dependsOn(packageIdentifier: String): Boolean {
+        return dependencies.find { pkgRef ->
+            // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
+            pkgRef.identifier == packageIdentifier.substringAfter(":") || pkgRef.dependsOn(packageIdentifier)
+        } != null
+    }
 }
