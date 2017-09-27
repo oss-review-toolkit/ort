@@ -7,11 +7,6 @@ import com.here.provenanceanalyzer.util.log
 
 import java.io.File
 
-private var cacheDelegate: ScanResultsCache = object : ScanResultsCache {
-    override fun read(pkg: Package, target: File) = false
-    override fun write(pkg: Package, source: File) = false
-}
-
 interface ScanResultsCache {
 
     /**
@@ -30,10 +25,13 @@ interface ScanResultsCache {
      */
     fun write(pkg: Package, source: File): Boolean
 
-    companion object : ScanResultsCache by cacheDelegate {
+    companion object : ScanResultsCache {
 
-        val cache: ScanResultsCache
-            get() = cacheDelegate
+        var cache = object : ScanResultsCache {
+            override fun read(pkg: Package, target: File) = false
+            override fun write(pkg: Package, source: File) = false
+        }
+            private set
 
         fun configure(configuration: Map<String, String>) {
             val type = configuration["type"] ?: throw IllegalArgumentException("Cache type is missing.")
@@ -46,12 +44,16 @@ interface ScanResultsCache {
                     val url = configuration["url"] ?:
                             throw IllegalArgumentException("URL for Artifactory cache is missing.")
 
-                    cacheDelegate = ArtifactoryCache(url, apiToken)
+                    cache = ArtifactoryCache(url, apiToken)
                     log.info { "Using Artifactory cache '$url'." }
                 }
                 else -> throw IllegalArgumentException("Cache type '${configuration["type"]}' unknown.")
             }
         }
+
+        override fun read(pkg: Package, target: File) = cache.read(pkg, target)
+
+        override fun write(pkg: Package, source: File) = cache.write(pkg, source)
     }
 
 }
