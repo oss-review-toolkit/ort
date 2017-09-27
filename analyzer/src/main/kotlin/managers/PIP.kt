@@ -109,6 +109,8 @@ object PIP : PackageManager(
             }
 
             val project = Project(
+                    packageManager = javaClass.simpleName,
+                    namespace = "",
                     name = projectName,
                     aliases = emptyList(),
                     version = projectVersion,

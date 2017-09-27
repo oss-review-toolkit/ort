@@ -3,6 +3,9 @@ package com.here.provenanceanalyzer.model
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Project(
+        @JsonProperty("package_manager")
+        val packageManager: String,
+        val namespace: String,
         val name: String,
         val aliases: List<String>,
         val version: String,
@@ -21,7 +24,7 @@ data class Project(
     /**
      * Return a [Package] representation of this [Project].
      */
-    fun asPackage() = Package("", "", name, "", version, homepageUrl, "", "", "", vcsPath, vcsProvider,
-            vcsUrl, revision)
+    fun asPackage() = Package(packageManager, namespace, name, "", version, homepageUrl, "", "", "", vcsPath,
+            vcsProvider, vcsUrl, revision)
 
 }

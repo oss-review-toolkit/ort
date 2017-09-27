@@ -29,7 +29,7 @@ import java.net.URLEncoder
 
 import kotlin.system.measureTimeMillis
 
-@Suppress("LargeClass")
+@Suppress("LargeClass", "TooManyFunctions")
 object NPM : PackageManager(
         "https://www.npmjs.com/",
         "JavaScript",
@@ -118,8 +118,7 @@ object NPM : PackageManager(
             @Suppress("UnsafeCast")
             val json = jsonMapper.readTree(it) as ObjectNode
             val rawName = json["name"].asText()
-            val name = rawName.substringAfterLast("/")
-            val namespace = if (rawName.contains("/")) rawName.substringBeforeLast("/") else ""
+            val (namespace, name) = splitNamespaceAndName(rawName)
             val version = json["version"].asText()
 
             var description: String
@@ -222,7 +221,7 @@ object NPM : PackageManager(
     }
 
     private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>)
-            :List<PackageReference> {
+            : List<PackageReference> {
         // Read package.json
         val json = jsonMapper.readTree(packageJson)
         val dependencies = mutableListOf<PackageReference>()
@@ -321,7 +320,8 @@ object NPM : PackageManager(
 
     private fun parseProject(packageJson: File, scopes: List<Scope>, packages: List<Package>): ScanResult {
         val json = jsonMapper.readTree(packageJson)
-        val name = json["name"].asText()
+        val rawName = json["name"].asText()
+        val (namespace, name) = splitNamespaceAndName(rawName)
         val version = json["version"].asText()
         val vcsPath = ""
         val (vcsProvider, vcsUrl) = parseRepository(json)
@@ -329,10 +329,21 @@ object NPM : PackageManager(
 
         // TODO: parse revision from vcs
 
-        return ScanResult(
-                Project(name, listOf(), version, vcsPath, vcsProvider, vcsUrl, "", homepageUrl, scopes),
-                packages
+        val project = Project(
+                packageManager = javaClass.simpleName,
+                namespace = namespace,
+                name = name,
+                aliases = emptyList(),
+                version = version,
+                vcsPath = vcsPath,
+                vcsProvider = vcsProvider,
+                vcsUrl = vcsUrl,
+                revision = "",
+                homepageUrl = homepageUrl,
+                scopes = scopes
         )
+
+        return ScanResult(project, packages)
     }
 
     /**
@@ -362,6 +373,12 @@ object NPM : PackageManager(
 
         // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         // platforms except for Mac.
+    }
+
+    private fun splitNamespaceAndName(rawName: String): Pair<String, String> {
+        val name = rawName.substringAfterLast("/")
+        val namespace = rawName.removeSuffix(name).removeSuffix("/")
+        return Pair(namespace, name)
     }
 
 }

@@ -1,5 +1,7 @@
 ---
 project:
+  package_manager: "NPM"
+  namespace: ""
   name: "HD-Live-Map-Viewer"
   aliases: []
   version: "2.0.0"
