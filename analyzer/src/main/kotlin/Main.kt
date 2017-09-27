@@ -5,6 +5,7 @@ import ch.frankel.slf4k.*
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import com.beust.jcommander.ParameterException
 
 import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.util.jsonMapper
@@ -24,22 +25,21 @@ import kotlin.system.exitProcess
  * The main entry point of the application.
  */
 object Main {
-    private class PackageManagerListConverter : IStringConverter<List<PackageManager>> {
-        override fun convert(managers: String): List<PackageManager> {
-            // Map lower-cased package manager class names to their instances.
-            val packageManagerNames = packageManagers.associateBy { it.javaClass.simpleName.toLowerCase() }
+    private class PackageManagerConverter : IStringConverter<PackageManager> {
+        override fun convert(name: String): PackageManager {
+            // Map upper-cased package manager class names to their instances.
+            val packageManagerNames = packageManagers.associateBy { it.javaClass.simpleName.toUpperCase() }
 
-            // Determine active package managers.
-            val names = managers.toLowerCase().split(",")
-            return names.mapNotNull { packageManagerNames[it] }
+            return packageManagerNames[name.toUpperCase()] ?:
+                    throw ParameterException("Package managers must be contained in $ALL_PACKAGE_MANAGERS.")
         }
     }
 
     @Parameter(description = "A list of package managers to activate.",
             names = arrayOf("--package-managers", "-m"),
-            listConverter = PackageManagerListConverter::class,
+            converter = PackageManagerConverter::class,
             order = 0)
-    private var packageManagers: List<PackageManager> = PACKAGE_MANAGERS
+    private var packageManagers: List<PackageManager> = ALL_PACKAGE_MANAGERS
 
     @Parameter(description = "The project directory to scan.",
             names = arrayOf("--input-dir", "-i"),

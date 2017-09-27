@@ -5,6 +5,7 @@ import ch.frankel.slf4k.*
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import com.beust.jcommander.ParameterException
 
 import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.Package
@@ -28,22 +29,28 @@ object Main {
         YAML
     }
 
+    val ALL_SUMMARY_FORMATS = SummaryFormat.values().asList()
+
     private class SummaryEntry(
             val scopes: MutableList<String> = mutableListOf(),
             val errors: MutableList<String> = mutableListOf()
     )
 
-    private class SummaryFormatListConverter : IStringConverter<List<SummaryFormat>> {
-        override fun convert(formats: String): List<SummaryFormat> {
-            val names = formats.toUpperCase().split(",")
-            return names.map { SummaryFormat.valueOf(it) }
+    private class SummaryFormatConverter : IStringConverter<SummaryFormat> {
+        override fun convert(name: String): SummaryFormat {
+            try {
+                return SummaryFormat.valueOf(name.toUpperCase())
+            } catch (e: IllegalArgumentException) {
+                throw ParameterException("Summary formats must be contained in $ALL_SUMMARY_FORMATS.")
+            }
         }
     }
 
     private class ScannerConverter : IStringConverter<Scanner> {
         override fun convert(scannerName: String): Scanner {
-            return SCANNERS.find { it.javaClass.simpleName.toLowerCase() == scannerName.toLowerCase() } ?:
-                    throw IllegalArgumentException("No scanner matching '$scannerName' found.")
+            // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
+            return ALL_SCANNERS.find { it.javaClass.simpleName.toUpperCase() == scannerName.toUpperCase() } ?:
+                    throw ParameterException("The scanner must be one of $ALL_SCANNERS.")
         }
     }
 
@@ -75,7 +82,7 @@ object Main {
 
     @Parameter(description = "The list of file formats for the summary files.",
             names = arrayOf("--summary-format", "-f"),
-            listConverter = SummaryFormatListConverter::class,
+            converter = SummaryFormatConverter::class,
             order = 0)
     private var summaryFormats: List<SummaryFormat> = listOf(SummaryFormat.YAML)
 

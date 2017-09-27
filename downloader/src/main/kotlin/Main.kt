@@ -5,6 +5,7 @@ import ch.frankel.slf4k.*
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import com.beust.jcommander.ParameterException
 
 import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.Package
@@ -29,9 +30,15 @@ object Main {
         PROJECT
     }
 
-    private class DataEntityListConverter : IStringConverter<List<DataEntity>> {
-        override fun convert(sources: String): List<DataEntity> {
-            return sources.toUpperCase().split(",").map { DataEntity.valueOf(it) }
+    val ALL_DATA_ENTITIES = DataEntity.values().asList()
+
+    private class DataEntityConverter : IStringConverter<DataEntity> {
+        override fun convert(name: String): DataEntity {
+            try {
+                return DataEntity.valueOf(name.toUpperCase())
+            } catch (e: IllegalArgumentException) {
+                throw ParameterException("Data entities must be contained in $ALL_DATA_ENTITIES.")
+            }
         }
     }
 
@@ -51,9 +58,9 @@ object Main {
 
     @Parameter(description = "The data entities from the provenance data file to download.",
             names = arrayOf("--entities", "-e"),
-            listConverter = DataEntityListConverter::class,
+            converter = DataEntityConverter::class,
             order = 0)
-    private var entities: List<DataEntity> = DataEntity.values().asList()
+    private var entities: List<DataEntity> = ALL_DATA_ENTITIES
 
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),

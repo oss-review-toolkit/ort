@@ -4,7 +4,7 @@ import com.here.provenanceanalyzer.model.Package
 
 import java.io.File
 
-val SCANNERS = listOf(
+val ALL_SCANNERS = listOf(
         ScanCode
 )
 

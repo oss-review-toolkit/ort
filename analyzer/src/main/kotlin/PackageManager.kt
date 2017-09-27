@@ -7,7 +7,7 @@ import java.io.File
 import java.nio.file.FileSystems
 
 // Prioritized list of package managers.
-val PACKAGE_MANAGERS = listOf(
+val ALL_PACKAGE_MANAGERS = listOf(
         Gradle,
         Maven,
         SBT,
