@@ -45,8 +45,10 @@ class NpmTest : StringSpec() {
         "yarn dependencies are resolved correctly" {
             val workingDir = File(projectDir, "yarn")
             val packageFile = File(workingDir, "package.json")
-            val expectedResult = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-output.yml").readText()
+            val expectedResult =
+                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                            .readText()
+                            .replaceFirst("project-npm", "project-npm-yarn")
 
             val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -57,8 +59,10 @@ class NpmTest : StringSpec() {
         "NPM shrinkwrap dependencies are resolved correctly" {
             val workingDir = File(projectDir, "shrinkwrap")
             val packageFile = File(workingDir, "package.json")
-            val expectedResult = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-output.yml").readText()
+            val expectedResult =
+                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                            .readText()
+                            .replaceFirst("project-npm", "project-npm-shrinkwrap")
 
             val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -69,8 +73,10 @@ class NpmTest : StringSpec() {
         "NPM package-lock dependencies are resolved correctly" {
             val workingDir = File(projectDir, "package-lock")
             val packageFile = File(workingDir, "package.json")
-            val expectedResult = File(
-                    "src/funTest/assets/projects/synthetic/project-npm-expected-output.yml").readText()
+            val expectedResult =
+                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                            .readText()
+                            .replaceFirst("project-npm", "project-npm-package-lock")
 
             val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
