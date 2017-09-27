@@ -1,11 +1,15 @@
 {
-  "name": "HD-Live-Map-Viewer",
+  "name": "project-npm-shrinkwrap",
   "version": "2.0.0",
-  "description": "HD Live Map Viewer",
+  "description": "NPM test project with npm-shrinkwrap.json.",
   "main": "bundle.js",
   "config": {
     "devHost": "localhost",
     "devPort": 8000
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heremaps/oss-review-toolkit.git"
   },
   "scripts": {
     "client-clean": "rm -rf build && mkdir build",
