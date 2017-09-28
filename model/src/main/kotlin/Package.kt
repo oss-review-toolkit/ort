@@ -17,7 +17,7 @@ import com.vdurmont.semver4j.Semver
 @JsonIgnoreProperties("identifier", "normalizedVcsUrl", "semverType")
 data class Package(
         /**
-         * Name of the package manager that was used to discover this dependency, for example Maven or NPM.
+         * Name of the package manager that was used to discover this package, for example Maven or NPM.
          */
         @JsonProperty("package_manager")
         val packageManager: String,
