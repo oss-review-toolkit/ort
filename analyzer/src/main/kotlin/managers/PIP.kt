@@ -40,7 +40,7 @@ object PIP : PackageManager(
     }
 
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String): ProcessCapture {
-        return runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *commandArgs)
+        return runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
     }
 
     private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String)
@@ -149,10 +149,10 @@ object PIP : PackageManager(
         pip = if (definitionFile.name == "setup.py") {
             // TODO: Check what types of dependencies this covers: "install_requires", "extras_require",
             // "tests_require".
-            runPipInVirtualEnv(virtualEnvDir, workingDir, *TRUSTED_HOSTS, "install", ".")
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", ".")
         } else {
             // In "setup.py"-speak, "requirements.txt" just contains "install_requires".
-            runPipInVirtualEnv(virtualEnvDir, workingDir, *TRUSTED_HOSTS, "install", "-r", definitionFile.name)
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "-r", definitionFile.name)
         }
 
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
