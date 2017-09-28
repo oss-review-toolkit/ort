@@ -26,14 +26,20 @@ data class Scope(
          */
         val dependencies: List<PackageReference>
 ) {
+    /**
+     * Returns whether the given package is contained as a (transitive) dependency in this scope.
+     */
     fun contains(pkg: Package): Boolean {
         return contains(pkg.identifier)
     }
 
-    fun contains(packageIdentifier: String): Boolean {
+    /**
+     * Returns whether the package identified by [pkgId] is contained as a (transitive) dependency in this scope.
+     */
+    fun contains(pkgId: String): Boolean {
         return dependencies.find { pkgRef ->
             // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
-            pkgRef.identifier == packageIdentifier.substringAfter(":") || pkgRef.dependsOn(packageIdentifier)
+            pkgRef.identifier == pkgId.substringAfter(":") || pkgRef.dependsOn(pkgId)
         } != null
     }
 }
