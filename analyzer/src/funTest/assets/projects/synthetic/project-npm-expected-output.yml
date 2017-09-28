@@ -8,7 +8,7 @@ project:
   vcs_path: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/heremaps/oss-review-toolkit.git"
-  revision: ""
+  vcs_revision: ""
   homepage_url: ""
   scopes:
   - name: "dependencies"

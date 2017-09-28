@@ -109,7 +109,7 @@ object PIP : PackageManager(
                     vcsPath = null,
                     vcsProvider = "",
                     vcsUrl = projectRepo,
-                    revision = "",
+                    vcsRevision = "",
                     homepageUrl = "",
                     scopes = emptyList()
             )

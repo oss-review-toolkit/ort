@@ -85,7 +85,7 @@ data class Package(
         val vcsUrl: String?,
 
         /**
-         * The optional revision of the VCS that this [version] of the package was built from.
+         * The optional VCS-specific revision (tag, branch, SHA1) that this [version] of the package was built from.
          */
         @JsonProperty("vcs_revision")
         val vcsRevision: String?

@@ -338,7 +338,7 @@ object NPM : PackageManager(
                 vcsPath = vcsPath,
                 vcsProvider = vcsProvider,
                 vcsUrl = vcsUrl,
-                revision = "",
+                vcsRevision = "",
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
