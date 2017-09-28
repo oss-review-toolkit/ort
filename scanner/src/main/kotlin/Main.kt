@@ -33,6 +33,7 @@ object Main {
 
     private class SummaryEntry(
             val scopes: MutableList<String> = mutableListOf(),
+            val licenses: MutableList<String> = mutableListOf(),
             val errors: MutableList<String> = mutableListOf()
     )
 
@@ -162,7 +163,9 @@ object Main {
             val entry = summary.getOrPut(pkg.identifier) { SummaryEntry() }
             entry.scopes.addAll(findScopesForPackage(pkg, scanResult.project))
             try {
-                scanner.scan(pkg, outputDirectory)
+                println("Scanning ${pkg.identifier}")
+                entry.licenses.addAll(scanner.scan(pkg, outputDirectory).sorted())
+                println("Found licenses for ${pkg.identifier}: ${entry.licenses.joinToString()}")
             } catch (e: ScanException) {
                 log.error { "Could not scan ${pkg.identifier}: ${e.message}" }
                 var cause: Throwable? = e

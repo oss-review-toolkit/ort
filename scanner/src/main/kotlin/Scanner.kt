@@ -16,8 +16,10 @@ abstract class Scanner {
      * @param pkg The package to scan.
      * @param outputDirectory The directory to store scan results in.
      *
+     * @return The set of found licenses.
+     *
      * @throws ScanException In case the package could not be scanned.
      */
-    abstract fun scan(pkg: Package, outputDirectory: File)
+    abstract fun scan(pkg: Package, outputDirectory: File): Set<String>
 
 }
