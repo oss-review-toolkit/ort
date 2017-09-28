@@ -40,16 +40,26 @@ data class PackageReference(
          */
         val dependencies: List<PackageReference>
 ) {
+    /**
+     * The minimum human readable information to identify the package referred to. As references are specific to the
+     * package manager, it is not explicitly included.
+     */
     val identifier = "$namespace:$name:$version"
 
+    /**
+     * Returns whether the given package is a (transitive) dependency of this reference.
+     */
     fun dependsOn(pkg: Package): Boolean {
         return dependsOn(pkg.identifier)
     }
 
-    fun dependsOn(packageIdentifier: String): Boolean {
+    /**
+     * Returns whether the package identified by [pkgId] is a (transitive) dependency of this reference.
+     */
+    fun dependsOn(pkgId: String): Boolean {
         return dependencies.find { pkgRef ->
             // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
-            pkgRef.identifier == packageIdentifier.substringAfter(":") || pkgRef.dependsOn(packageIdentifier)
+            pkgRef.identifier == pkgId.substringAfter(":") || pkgRef.dependsOn(pkgId)
         } != null
     }
 }
