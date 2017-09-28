@@ -15,7 +15,8 @@ import java.io.File
 
 object ScanCode : Scanner() {
 
-    private const val OUTPUT_FORMAT = "json"
+    private const val OUTPUT_EXTENSION = "json"
+    private const val OUTPUT_FORMAT = "json-pp"
     private const val SCANCODE_PROCESSES = 6
     private const val SCANCODE_TIMEOUT = 600
 
@@ -31,7 +32,7 @@ object ScanCode : Scanner() {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
 
         val resultsFile = File(scanResultsDirectory,
-                "${pkg.name}-${pkg.version}_scancode.$OUTPUT_FORMAT")
+                "${pkg.name}-${pkg.version}_scancode.$OUTPUT_EXTENSION")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
             return
