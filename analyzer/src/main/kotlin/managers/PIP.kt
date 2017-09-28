@@ -79,9 +79,9 @@ object PIP : PackageManager(
             // List all packages installed locally in the virtualenv in JSON format.
             val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
 
-            // Install pydep after running pipdeptree but before looking at the dependencies because it downgrades
-            // pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As pydep is
-            // not on PyPI, install it from Git instead.
+            // Install pydep after running any other command but before looking at the dependencies because it
+            // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
+            // pydep is not on PyPI, install it from Git instead.
             val pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install",
                     "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION")
             pip.requireSuccess()
