@@ -67,6 +67,11 @@ fun checkCommandVersion(command: String, expectedVersion: Semver, versionArgumen
     }
 }
 
+/**
+ * Create all missing intermediate directories without failing if any already exists.
+ *
+ * @throws IOException if any missing directory could not be created.
+ */
 fun File.safeMkdirs() {
     if (this.isDirectory || this.mkdirs()) {
         return
