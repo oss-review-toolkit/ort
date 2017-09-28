@@ -187,6 +187,7 @@ object Main {
                 SummaryFormat.JSON -> jsonMapper
                 SummaryFormat.YAML -> yamlMapper
             }
+            println("Writing scan summary to ${summaryFile.absolutePath}.")
             mapper.writerWithDefaultPrettyPrinter().writeValue(summaryFile, summary)
         }
     }
