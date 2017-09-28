@@ -3,7 +3,6 @@ package com.here.provenanceanalyzer.scanner
 import ch.frankel.slf4k.info
 
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.Method
 
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.util.log
@@ -44,9 +43,9 @@ class ArtifactoryCache(
         log.info { "Writing scan results to Artifactory cache: $cachePath" }
 
         val response = Fuel
-                .upload("$url/$cachePath", Method.PUT)
-                .header(mapOf("X-JFrog-Art-Api" to apiToken))
-                .source { _, _ -> source }
+                .put("$url/$cachePath")
+                .header("X-JFrog-Art-Api" to apiToken)
+                .body(source.readText())
                 .responseString()
 
         if (response.second.statusCode == 201) {
