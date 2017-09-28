@@ -7,6 +7,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.here.provenanceanalyzer.model.ALL_OUTPUT_FORMATS
 import com.here.provenanceanalyzer.model.OutputFormat
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.Project
@@ -23,26 +24,18 @@ import kotlin.system.exitProcess
  * The main entry point of the application.
  */
 object Main {
-
-    enum class SummaryFormat {
-        JSON,
-        YAML
-    }
-
-    val ALL_SUMMARY_FORMATS = SummaryFormat.values().asList()
-
     private class SummaryEntry(
             val scopes: MutableList<String> = mutableListOf(),
             val licenses: MutableList<String> = mutableListOf(),
             val errors: MutableList<String> = mutableListOf()
     )
 
-    private class SummaryFormatConverter : IStringConverter<SummaryFormat> {
-        override fun convert(name: String): SummaryFormat {
+    private class OutputFormatConverter : IStringConverter<OutputFormat> {
+        override fun convert(name: String): OutputFormat {
             try {
-                return SummaryFormat.valueOf(name.toUpperCase())
+                return OutputFormat.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                throw ParameterException("Summary formats must be contained in $ALL_SUMMARY_FORMATS.")
+                throw ParameterException("Summary formats must be contained in $ALL_OUTPUT_FORMATS.")
             }
         }
     }
@@ -83,9 +76,9 @@ object Main {
 
     @Parameter(description = "The list of file formats for the summary files.",
             names = arrayOf("--summary-format", "-f"),
-            converter = SummaryFormatConverter::class,
+            converter = OutputFormatConverter::class,
             order = 0)
-    private var summaryFormats: List<SummaryFormat> = listOf(SummaryFormat.YAML)
+    private var summaryFormats: List<OutputFormat> = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),
@@ -185,14 +178,13 @@ object Main {
 
     private fun writeSummary(outputDirectory: File, summary: MutableMap<String, SummaryEntry>) {
         summaryFormats.forEach { format ->
-            val summaryFile = File(outputDirectory, "scan-summary.${format.name.toLowerCase()}")
+            val summaryFile = File(outputDirectory, "scan-summary.${format.fileEnding}")
             val mapper = when (format) {
-                SummaryFormat.JSON -> jsonMapper
-                SummaryFormat.YAML -> yamlMapper
+                OutputFormat.JSON -> jsonMapper
+                OutputFormat.YAML -> yamlMapper
             }
             println("Writing scan summary to ${summaryFile.absolutePath}.")
             mapper.writerWithDefaultPrettyPrinter().writeValue(summaryFile, summary)
         }
     }
-
 }

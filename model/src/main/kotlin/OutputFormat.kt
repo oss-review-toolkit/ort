@@ -14,3 +14,5 @@ enum class OutputFormat(val fileEnding: String) {
      */
     YAML("yml")
 }
+
+val ALL_OUTPUT_FORMATS = OutputFormat.values().asList()
