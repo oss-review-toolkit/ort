@@ -22,6 +22,7 @@ class ArtifactoryCache(
 
         val response = Fuel
                 .download("$url/$cachePath")
+                .header("X-JFrog-Art-Api" to apiToken)
                 .destination { _, _ -> target }
                 .responseString()
 
