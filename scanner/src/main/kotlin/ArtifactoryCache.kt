@@ -25,15 +25,15 @@ class ArtifactoryCache(
                 .destination { _, _ -> target }
                 .responseString()
 
-        if (response.second.statusCode == 200) {
-            log.info { "Downloaded $cachePath from Artifactory cache." }
-            return true
-        } else {
+        return (response.second.statusCode == 200).also {
             log.info {
-                "Could not get $cachePath from Artifactory cache: ${response.second.statusCode} - " +
-                        response.second.responseMessage
+                if (it) {
+                    "Downloaded $cachePath from Artifactory cache."
+                } else {
+                    "Could not get $cachePath from Artifactory cache: ${response.second.statusCode} - " +
+                            response.second.responseMessage
+                }
             }
-            return false
         }
     }
 
@@ -48,15 +48,15 @@ class ArtifactoryCache(
                 .body(source.readText())
                 .responseString()
 
-        if (response.second.statusCode == 201) {
-            log.info { "Uploaded $cachePath to Artifactory cache." }
-            return true
-        } else {
+        return (response.second.statusCode == 201).also {
             log.info {
-                "Could not upload $cachePath to artifactory cache: ${response.second.statusCode} - " +
-                        response.second.responseMessage
+                if (it) {
+                    "Uploaded $cachePath to Artifactory cache."
+                } else {
+                    "Could not upload $cachePath to artifactory cache: ${response.second.statusCode} - " +
+                            response.second.responseMessage
+                }
             }
-            return false
         }
     }
 
