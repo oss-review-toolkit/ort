@@ -23,7 +23,7 @@ dependencies {
     funTestCompile configurations.testCompile
     funTestRuntime configurations.testRuntime
 
-    funTestCompile 'io.kotlintest:kotlintest:2.0.5'
+    funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
 
 task funTest(type: Test) {
