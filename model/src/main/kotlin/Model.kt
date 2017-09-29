@@ -11,8 +11,8 @@ import java.net.URI
  * @param vcsUrl The URL to normalize.
  * @param semverType Required to convert package manager specific shortcuts.
  */
-fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType) :String {
-    var url = vcsUrl
+fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType): String {
+    var url = vcsUrl.trimEnd('/')
 
     if (url.startsWith("git@github.com:")) {
         url = url.replace("git@github.com:", "https://github.com/")

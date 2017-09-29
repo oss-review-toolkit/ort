@@ -52,5 +52,18 @@ class ModelTest : WordSpec({
                 normalizeVcsUrl(actualUrl, Semver.SemverType.STRICT) shouldBe expectedUrl
             }
         }
+
+        "handles trailing slash correctly" {
+            val packages = mapOf(
+                    "https://github.com/kilian/electron-to-chromium/"
+                            to "https://github.com/kilian/electron-to-chromium.git",
+                    "git://github.com/isaacs/inherits.git/"
+                            to "https://github.com/isaacs/inherits.git"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl, Semver.SemverType.STRICT) shouldBe expectedUrl
+            }
+        }
     }
 })
