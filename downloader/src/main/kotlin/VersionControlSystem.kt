@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.downloader
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 
 val VERSION_CONTROL_SYSTEMS = listOf(
@@ -14,7 +16,7 @@ abstract class VersionControlSystem {
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File)
+    abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File)
 
     /**
      * Return true if the provider name matches this VCS. For example for SVN it should return true on "svn",

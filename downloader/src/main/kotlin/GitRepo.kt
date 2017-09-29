@@ -5,6 +5,8 @@ import ch.frankel.slf4k.*
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.log
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 import java.io.IOException
 
@@ -17,7 +19,7 @@ object GitRepo : VersionControlSystem() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File) {
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File) {
         val revision = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
         val manifestPath = if (vcsPath != null && vcsPath.isNotEmpty()) vcsPath else "manifest.xml"
 

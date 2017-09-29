@@ -6,6 +6,8 @@ import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.safeMkdirs
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 import java.io.IOException
 
@@ -19,7 +21,7 @@ object Git : VersionControlSystem() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File) {
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File) {
         try {
             // Do not use "git clone" to have more control over what is being fetched.
             runGitCommand(targetDir, "init")
@@ -37,15 +39,49 @@ object Git : VersionControlSystem() {
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
+                return
             } catch (e: IOException) {
                 log.warn {
                     "Could not fetch only '$committish': ${e.message}\n" +
-                    "Falling back to fetching everything."
+                            "Falling back to fetching everything."
                 }
-                runGitCommand(targetDir, "fetch", "origin")
-                runGitCommand(targetDir, "checkout", committish)
             }
+
+            log.info { "Fetching origin and trying to checkout '$committish'." }
+
+            runGitCommand(targetDir, "fetch", "origin")
+
+            try {
+                runGitCommand(targetDir, "checkout", committish)
+                return
+            } catch (e: IOException) {
+                log.warn { "Could not checkout '$committish': ${e.message}" }
+            }
+
+            log.info { "Trying to guess tag for version '$version'." }
+
+            val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
+                    .stdout()
+                    .lines()
+                    .find { it.split("\t").last().endsWith(version.toString()) }
+                    ?.substringAfter("\t")
+
+            if (tag != null) {
+                log.info { "Using '$tag'." }
+                runGitCommand(targetDir, "fetch", "origin", tag)
+                runGitCommand(targetDir, "checkout", "FETCH_HEAD")
+                return
+            }
+
+            log.warn { "No matching tag found for version '$version', checking out remote HEAD." }
+
+            val head = runGitCommand(targetDir, "ls-remote", "origin", "HEAD").stdout().split("\t").first()
+            log.info { "Remote HEAD points to $head." }
+
+            runGitCommand(targetDir, "checkout", head)
+
         } catch (e: IOException) {
+            log.error { "Could not clone $vcsUrl: ${e.message}" }
             throw DownloadException("Could not clone $vcsUrl.", e)
         }
     }
@@ -54,8 +90,8 @@ object Git : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
-    private fun runGitCommand(targetDir: File, vararg args: String) {
-        ProcessCapture(targetDir, "git", *args).requireSuccess()
+    private fun runGitCommand(targetDir: File, vararg args: String): ProcessCapture {
+        return ProcessCapture(targetDir, "git", *args).requireSuccess()
     }
 
 }
