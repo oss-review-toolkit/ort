@@ -19,7 +19,7 @@ object GitRepo : VersionControlSystem() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File)
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
             : String {
         val revision = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
         val manifestPath = if (vcsPath != null && vcsPath.isNotEmpty()) vcsPath else "manifest.xml"

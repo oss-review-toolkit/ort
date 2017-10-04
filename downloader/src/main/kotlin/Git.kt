@@ -6,8 +6,6 @@ import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.safeMkdirs
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 
@@ -21,7 +19,7 @@ object Git : VersionControlSystem() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File)
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
             : String {
         try {
             // Do not use "git clone" to have more control over what is being fetched.
@@ -59,22 +57,26 @@ object Git : VersionControlSystem() {
                 log.warn { "Could not checkout '$committish': ${e.message}" }
             }
 
-            log.info { "Trying to guess tag for version '$version'." }
+            if (version.isNotBlank()) {
+                log.info { "Trying to guess tag for version '$version'." }
 
-            val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
-                    .stdout()
-                    .lines()
-                    .find { it.split("\t").last().endsWith(version.toString()) }
-                    ?.substringAfter("\t")
+                val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
+                        .stdout()
+                        .lines()
+                        .find { it.split("\t").last().endsWith(version) }
+                        ?.substringAfter("\t")
 
-            if (tag != null) {
-                log.info { "Using '$tag'." }
-                runGitCommand(targetDir, "fetch", "origin", tag)
-                runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return getRevision(targetDir)
+                if (tag != null) {
+                    log.info { "Using '$tag'." }
+                    runGitCommand(targetDir, "fetch", "origin", tag)
+                    runGitCommand(targetDir, "checkout", "FETCH_HEAD")
+                    return getRevision(targetDir)
+                }
+
+                log.warn { "No matching tag found for version '$version'." }
             }
 
-            log.warn { "No matching tag found for version '$version', checking out remote HEAD." }
+            log.info { "Checking out remote HEAD." }
 
             val head = runGitCommand(targetDir, "ls-remote", "origin", "HEAD").stdout().split("\t").first()
             log.info { "Remote HEAD points to $head." }

@@ -15,8 +15,6 @@ import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.safeMkdirs
 import com.here.provenanceanalyzer.util.yamlMapper
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 
@@ -194,8 +192,8 @@ object Main {
                     p("Use ${vcs.javaClass.simpleName}")
                     try {
                         @Suppress("UnsafeCallOnNullableType")
-                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath,
-                                Semver(target.version), targetDir)
+                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath, target.version,
+                                targetDir)
                         p("Downloaded source code to ${targetDir.absolutePath}")
                         return targetDir
                     } catch (e: IOException) {

@@ -1,7 +1,5 @@
 package com.here.provenanceanalyzer.downloader
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 
 val VERSION_CONTROL_SYSTEMS = listOf(
@@ -18,7 +16,7 @@ abstract class VersionControlSystem {
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File)
+    abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
             : String
 
     /**
