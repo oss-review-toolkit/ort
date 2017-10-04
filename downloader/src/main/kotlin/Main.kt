@@ -192,9 +192,9 @@ object Main {
                     p("Use ${vcs.javaClass.simpleName}")
                     try {
                         @Suppress("UnsafeCallOnNullableType")
-                        vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath, target.version,
-                                targetDir)
-                        p("Downloaded source code to ${targetDir.absolutePath}")
+                        val revision = vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath,
+                                target.version, targetDir)
+                        p("Downloaded source code revision $revision to ${targetDir.absolutePath}")
                         return targetDir
                     } catch (e: IOException) {
                         throw DownloadException("Could not download source code.", e)

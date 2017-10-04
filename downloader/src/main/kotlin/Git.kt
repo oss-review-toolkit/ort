@@ -94,9 +94,7 @@ object Git : VersionControlSystem() {
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
     private fun getRevision(targetDir: File): String {
-        val revision = runGitCommand(targetDir, "rev-parse", "HEAD").stdout().trim()
-        println("Checked out revision $revision.")
-        return revision
+        return runGitCommand(targetDir, "rev-parse", "HEAD").stdout().trim()
     }
 
     private fun runGitCommand(targetDir: File, vararg args: String): ProcessCapture {

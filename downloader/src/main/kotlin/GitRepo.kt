@@ -35,10 +35,8 @@ object GitRepo : VersionControlSystem() {
     }
 
     private fun getManifestRevision(targetDir: File): String {
-        val revision = ProcessCapture(File(targetDir, ".repo/manifests"), "git", "rev-parse", "HEAD").requireSuccess()
+        return ProcessCapture(File(targetDir, ".repo/manifests"), "git", "rev-parse", "HEAD").requireSuccess()
                 .stdout().trim()
-        println("Checked out manifest revision $revision.")
-        return revision
     }
 
     override fun isApplicableProvider(vcsProvider: String) =
