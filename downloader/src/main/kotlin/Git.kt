@@ -21,6 +21,7 @@ object Git : VersionControlSystem() {
      */
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, targetDir: File) {
         try {
+            // Do not use "git clone" to have more control over what is being fetched.
             runGitCommand(targetDir, "init")
             runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
 
