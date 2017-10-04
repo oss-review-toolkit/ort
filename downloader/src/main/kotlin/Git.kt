@@ -9,7 +9,19 @@ import com.here.provenanceanalyzer.util.safeMkdirs
 import java.io.File
 import java.io.IOException
 
-object Git : VersionControlSystem() {
+abstract class GitBase : VersionControlSystem() {
+
+    override fun getRevision(workingDir: File): String {
+        return runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trim()
+    }
+
+    protected fun runGitCommand(workingDir: File, vararg args: String): ProcessCapture {
+        return ProcessCapture(workingDir, "git", *args).requireSuccess()
+    }
+
+}
+
+object Git : GitBase() {
 
     /**
      * Clones the Git repository using the native Git command.
@@ -92,13 +104,5 @@ object Git : VersionControlSystem() {
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
-
-    private fun getRevision(targetDir: File): String {
-        return runGitCommand(targetDir, "rev-parse", "HEAD").stdout().trim()
-    }
-
-    private fun runGitCommand(targetDir: File, vararg args: String): ProcessCapture {
-        return ProcessCapture(targetDir, "git", *args).requireSuccess()
-    }
 
 }

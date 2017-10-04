@@ -32,4 +32,9 @@ abstract class VersionControlSystem {
      */
     abstract fun isApplicableUrl(vcsUrl: String): Boolean
 
+    /**
+     * Return the VCS-specific revision for the given [workingDir].
+     */
+    abstract fun getRevision(workingDir: File): String
+
 }

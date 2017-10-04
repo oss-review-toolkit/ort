@@ -8,7 +8,7 @@ import com.here.provenanceanalyzer.util.log
 import java.io.File
 import java.io.IOException
 
-object GitRepo : VersionControlSystem() {
+object GitRepo : GitBase() {
 
     /**
      * Clones the Git repositories defined in the manifest file using the Git Repo tool.
@@ -28,15 +28,10 @@ object GitRepo : VersionControlSystem() {
 
             log.debug { "Start git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
-            return getManifestRevision(targetDir)
+            return getRevision(File(targetDir, ".repo/manifests"))
         } catch (e: IOException) {
             throw DownloadException("Could not clone $vcsUrl/$manifestPath", e)
         }
-    }
-
-    private fun getManifestRevision(targetDir: File): String {
-        return ProcessCapture(File(targetDir, ".repo/manifests"), "git", "rev-parse", "HEAD").requireSuccess()
-                .stdout().trim()
     }
 
     override fun isApplicableProvider(vcsProvider: String) =
