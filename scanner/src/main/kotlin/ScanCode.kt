@@ -3,8 +3,6 @@ package com.here.provenanceanalyzer.scanner
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
-import com.fasterxml.jackson.databind.node.ArrayNode
-
 import com.here.provenanceanalyzer.downloader.DownloadException
 import com.here.provenanceanalyzer.downloader.Main
 import com.here.provenanceanalyzer.model.Package

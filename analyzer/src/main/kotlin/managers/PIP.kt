@@ -18,7 +18,6 @@ import com.here.provenanceanalyzer.util.log
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
-import java.io.IOException
 
 object PIP : PackageManager(
         "https://pip.pypa.io/",

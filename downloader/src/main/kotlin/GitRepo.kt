@@ -5,8 +5,6 @@ import ch.frankel.slf4k.*
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.log
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 
