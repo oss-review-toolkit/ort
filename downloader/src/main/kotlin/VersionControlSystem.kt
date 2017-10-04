@@ -14,9 +14,12 @@ abstract class VersionControlSystem {
     /**
      * Use this VCS to download the source code from the specified URL.
      *
+     * @return A String identifying the revision that was downloaded.
+     *
      * @throws DownloadException In case the download failed.
      */
     abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File)
+            : String
 
     /**
      * Return true if the provider name matches this VCS. For example for SVN it should return true on "svn",

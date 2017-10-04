@@ -21,7 +21,8 @@ object Git : VersionControlSystem() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File) {
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File)
+            : String {
         try {
             // Do not use "git clone" to have more control over what is being fetched.
             runGitCommand(targetDir, "init")
@@ -39,7 +40,7 @@ object Git : VersionControlSystem() {
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return
+                return getRevision(targetDir)
             } catch (e: IOException) {
                 log.warn {
                     "Could not fetch only '$committish': ${e.message}\n" +
@@ -53,7 +54,7 @@ object Git : VersionControlSystem() {
 
             try {
                 runGitCommand(targetDir, "checkout", committish)
-                return
+                return getRevision(targetDir)
             } catch (e: IOException) {
                 log.warn { "Could not checkout '$committish': ${e.message}" }
             }
@@ -70,7 +71,7 @@ object Git : VersionControlSystem() {
                 log.info { "Using '$tag'." }
                 runGitCommand(targetDir, "fetch", "origin", tag)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return
+                return getRevision(targetDir)
             }
 
             log.warn { "No matching tag found for version '$version', checking out remote HEAD." }
@@ -79,7 +80,7 @@ object Git : VersionControlSystem() {
             log.info { "Remote HEAD points to $head." }
 
             runGitCommand(targetDir, "checkout", head)
-
+            return getRevision(targetDir)
         } catch (e: IOException) {
             log.error { "Could not clone $vcsUrl: ${e.message}" }
             throw DownloadException("Could not clone $vcsUrl.", e)
@@ -89,6 +90,12 @@ object Git : VersionControlSystem() {
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
+
+    private fun getRevision(targetDir: File): String {
+        val revision = runGitCommand(targetDir, "rev-parse", "HEAD").stdout().trim()
+        println("Checked out revision $revision.")
+        return revision
+    }
 
     private fun runGitCommand(targetDir: File, vararg args: String): ProcessCapture {
         return ProcessCapture(targetDir, "git", *args).requireSuccess()

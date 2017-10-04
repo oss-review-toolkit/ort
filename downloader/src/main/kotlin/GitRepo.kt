@@ -19,7 +19,8 @@ object GitRepo : VersionControlSystem() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File) {
+    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: Semver, targetDir: File)
+            : String {
         val revision = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
         val manifestPath = if (vcsPath != null && vcsPath.isNotEmpty()) vcsPath else "manifest.xml"
 
@@ -29,9 +30,17 @@ object GitRepo : VersionControlSystem() {
 
             log.debug { "Start git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
+            return getManifestRevision(targetDir)
         } catch (e: IOException) {
             throw DownloadException("Could not clone $vcsUrl/$manifestPath", e)
         }
+    }
+
+    private fun getManifestRevision(targetDir: File): String {
+        val revision = ProcessCapture(File(targetDir, ".repo/manifests"), "git", "rev-parse", "HEAD").requireSuccess()
+                .stdout().trim()
+        println("Checked out manifest revision $revision.")
+        return revision
     }
 
     override fun isApplicableProvider(vcsProvider: String) =
