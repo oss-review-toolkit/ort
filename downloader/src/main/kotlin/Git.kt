@@ -32,7 +32,7 @@ object Git : VersionControlSystem() {
                 File(gitInfoDir, "sparse-checkout").writeText(vcsPath)
             }
 
-            val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "master"
+            val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "HEAD"
 
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
