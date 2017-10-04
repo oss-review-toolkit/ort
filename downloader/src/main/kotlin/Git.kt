@@ -62,9 +62,9 @@ object Git : VersionControlSystem() {
 
                 val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
                         .stdout()
-                        .lines()
-                        .find { it.split("\t").last().endsWith(version) }
-                        ?.substringAfter("\t")
+                        .lineSequence()
+                        .map { it.split("\t").last() }
+                        .find { it.endsWith(version.toString()) }
 
                 if (tag != null) {
                     log.info { "Using '$tag'." }
