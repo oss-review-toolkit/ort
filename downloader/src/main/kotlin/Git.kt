@@ -36,7 +36,7 @@ object Git : VersionControlSystem() {
 
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
-                runGitCommand(targetDir, "reset", "--hard", "FETCH_HEAD")
+                runGitCommand(targetDir, "checkout", "FETCH_HEAD")
             } catch (e: IOException) {
                 log.warn { "Could not fetch '$committish': ${e.message}" }
                 runGitCommand(targetDir, "fetch", "origin")
