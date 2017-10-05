@@ -20,6 +20,7 @@ import com.here.provenanceanalyzer.util.log
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
+import java.net.URL
 import java.util.SortedSet
 
 object PIP : PackageManager(
@@ -102,34 +103,33 @@ object PIP : PackageManager(
                 parseDependencies(projectName, allDependencies, packageTemplates, installDependencies)
 
                 packageTemplates.mapTo(packages) { pkg ->
-                    // PIP only allows to have one version of a package installed at a time, so there is no need to
-                    // specify a version here.
-                    pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "show", pkg.name)
-                    if (pip.exitValue() == 0) {
-                        val info = pip.stdout().lines().associate {
-                            val pair = it.split(Regex(": "), 2)
-                            pair.first() to pair.last()
-                        }
+                    // See https://wiki.python.org/moin/PyPIJSON.
+                    // TODO: Use OkHttp for proper caching.
+                    val pkgJson = URL("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json").readText()
+                    val pkgData = jsonMapper.readTree(pkgJson)
 
-                        // Amend package information with more details.
-                        Package(
-                                packageManager = pkg.packageManager,
-                                namespace = pkg.namespace,
-                                name = pkg.name,
-                                description = info["Summary"] ?: pkg.description,
-                                version = pkg.version,
-                                homepageUrl = info["Home-page"] ?: pkg.homepageUrl,
-                                downloadUrl = pkg.downloadUrl,
-                                hash = pkg.hash,
-                                hashAlgorithm = pkg.hashAlgorithm,
-                                vcsPath = pkg.vcsPath,
-                                vcsProvider = pkg.vcsProvider,
-                                vcsUrl = pkg.vcsUrl,
-                                vcsRevision = pkg.vcsRevision
-                        )
-                    } else {
-                        pkg
-                    }
+                    val pkgInfo = pkgData["info"]
+
+                    // TODO: Support multiple package types of the same package version. Arbitrarily choose the first
+                    // for now.
+                    val pkgRelease = pkgData["releases"][pkg.version][0]
+
+                    // Amend package information with more details.
+                    Package(
+                            packageManager = pkg.packageManager,
+                            namespace = pkg.namespace,
+                            name = pkg.name,
+                            description = pkgInfo["summary"]?.asText() ?: pkg.description,
+                            version = pkg.version,
+                            homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
+                            downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
+                            hash = pkgRelease["md5_digest"]?.asText() ?: pkg.hash,
+                            hashAlgorithm = "MD5",
+                            vcsPath = pkg.vcsPath,
+                            vcsProvider = pkg.vcsProvider,
+                            vcsUrl = pkg.vcsUrl,
+                            vcsRevision = pkg.vcsRevision
+                    )
                 }
             } else {
                 log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
