@@ -91,13 +91,7 @@ object Git : GitBase() {
                 log.warn { "No matching tag found for version '$version'." }
             }
 
-            log.info { "Checking out remote HEAD." }
-
-            val head = runGitCommand(targetDir, "ls-remote", "origin", "HEAD").stdout().split("\t").first()
-            log.info { "Remote HEAD points to $head." }
-
-            runGitCommand(targetDir, "checkout", head)
-            return getRevision(targetDir)
+            throw IOException("Unable to determine a committish to checkout.")
         } catch (e: IOException) {
             log.error { "Could not clone $vcsUrl: ${e.message}" }
             throw DownloadException("Could not clone $vcsUrl.", e)
