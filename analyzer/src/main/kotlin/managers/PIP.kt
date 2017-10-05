@@ -18,6 +18,7 @@ import com.here.provenanceanalyzer.util.log
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
+import java.util.SortedSet
 
 object PIP : PackageManager(
         "https://pip.pypa.io/",
@@ -73,7 +74,7 @@ object PIP : PackageManager(
         definitionFiles.forEach { definitionFile ->
             val (virtualEnvDir, workingDir) = setupVirtualEnv(definitionFile)
 
-            val packages = mutableListOf<Package>()
+            val packages = sortedSetOf<Package>()
 
             // List all packages installed locally in the virtualenv in JSON format.
             val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
@@ -113,7 +114,6 @@ object PIP : PackageManager(
                     scopes = emptyList()
             )
 
-            packages.sortBy { it.identifier }
             result[definitionFile] = ScanResult(project, packages)
 
             // Remove the virtualenv by simply deleting the directory.
@@ -166,7 +166,7 @@ object PIP : PackageManager(
     }
 
     private fun addPackagesForDependencies(rootPackageName: String, allDependencies: Iterable<JsonNode>,
-                                           packages: MutableList<Package>) {
+                                           packages: SortedSet<Package>) {
         // pipdeptree returns JSON like:
         // [
         //     {

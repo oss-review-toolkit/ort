@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.model
 
+import java.util.SortedSet
+
 /**
  * A class that bundles all information generated during a scan.
  */
@@ -11,7 +13,7 @@ data class ScanResult(
         val project: Project,
 
         /**
-         * The list of identified packages used by the project.
+         * The set of identified packages used by the project.
          */
-        val packages: List<Package>
+        val packages: SortedSet<Package>
 )

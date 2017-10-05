@@ -89,7 +89,7 @@ data class Package(
          */
         @JsonProperty("vcs_revision")
         val vcsRevision: String?
-) {
+) : Comparable<Package> {
     /**
      * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].
      */
@@ -109,4 +109,9 @@ data class Package(
      * @see normalizeVcsUrl
      */
     val normalizedVcsUrl = if (vcsUrl == null) null else normalizeVcsUrl(vcsUrl, semverType)
+
+    /**
+     * A comparison function to sort packages by their identifier.
+     */
+    override fun compareTo(other: Package) = compareValuesBy(this, other, { it.identifier })
 }

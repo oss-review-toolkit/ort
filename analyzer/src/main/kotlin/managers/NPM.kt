@@ -26,6 +26,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URL
 import java.net.URLEncoder
+import java.util.SortedSet
 
 import kotlin.system.measureTimeMillis
 
@@ -85,7 +86,7 @@ object NPM : PackageManager(
                     // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
 
                     val project = parseProject(definitionFile, listOf(dependencies, devDependencies),
-                            packages.values.toList().sortedBy { it.identifier })
+                            packages.values.toSortedSet())
                     result[definitionFile] = project
                 } finally {
                     // Delete node_modules folder to not pollute the scan.
@@ -318,7 +319,7 @@ object NPM : PackageManager(
         }
     }
 
-    private fun parseProject(packageJson: File, scopes: List<Scope>, packages: List<Package>): ScanResult {
+    private fun parseProject(packageJson: File, scopes: List<Scope>, packages: SortedSet<Package>): ScanResult {
         val json = jsonMapper.readTree(packageJson)
         val rawName = json["name"].asText()
         val (namespace, name) = splitNamespaceAndName(rawName)
