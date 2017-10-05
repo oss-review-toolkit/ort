@@ -76,7 +76,7 @@ object Git : GitBase() {
                         .stdout()
                         .lineSequence()
                         .map { it.split("\t").last() }
-                        .find { it.endsWith(version.toString()) }
+                        .find { it.endsWith(version) || it.endsWith(version.replace('.', '_')) }
 
                 if (tag != null) {
                     log.info { "Using '$tag'." }
