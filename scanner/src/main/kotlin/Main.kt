@@ -147,7 +147,7 @@ object Main {
 
         println("Using scanner '$scanner'.")
 
-        val packages = mutableListOf(scanResult.project.asPackage())
+        val packages = mutableListOf(scanResult.project.toPackage())
         packages.addAll(scanResult.packages)
 
         val summary = mutableMapOf<String, SummaryEntry>()

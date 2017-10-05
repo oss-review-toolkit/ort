@@ -87,7 +87,7 @@ data class Project(
     /**
      * Return a [Package] representation of this [Project].
      */
-    fun asPackage() = Package(packageManager, namespace, name, "", version, homepageUrl, "", "", "", vcsPath,
+    fun toPackage() = Package(packageManager, namespace, name, "", version, homepageUrl, "", "", "", vcsPath,
             vcsProvider, vcsUrl, vcsRevision)
 
 }

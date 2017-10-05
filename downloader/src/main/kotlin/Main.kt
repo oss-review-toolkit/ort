@@ -120,7 +120,7 @@ object Main {
         val packages = mutableListOf<Package>()
 
         if (entities.contains(DataEntity.PROJECT)) {
-            packages.add(scanResult.project.asPackage())
+            packages.add(scanResult.project.toPackage())
         }
 
         if (entities.contains(DataEntity.PACKAGES)) {
