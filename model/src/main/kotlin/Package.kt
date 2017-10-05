@@ -62,6 +62,7 @@ data class Package(
         /**
          * The optional name of the algorithm used to calculate the hash.
          */
+        @JsonProperty("hash_algorithm")
         val hashAlgorithm: String?,
 
         /**
