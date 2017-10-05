@@ -112,6 +112,12 @@ data class Package(
     val normalizedVcsUrl = if (vcsUrl == null) null else normalizeVcsUrl(vcsUrl, semverType)
 
     /**
+     * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
+     * dependencies still need to be filled out.
+     */
+    fun toReference() = PackageReference(name, namespace, version, "", sortedSetOf())
+
+    /**
      * A comparison function to sort packages by their identifier.
      */
     override fun compareTo(other: Package) = compareValuesBy(this, other, { it.identifier })
