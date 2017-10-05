@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.here.provenanceanalyzer.Main
 import com.here.provenanceanalyzer.PackageManager
 import com.here.provenanceanalyzer.model.Package
+import com.here.provenanceanalyzer.model.PackageReference
 import com.here.provenanceanalyzer.model.Project
 import com.here.provenanceanalyzer.model.ScanResult
+import com.here.provenanceanalyzer.model.Scope
 import com.here.provenanceanalyzer.util.OS
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.checkCommandVersion
@@ -74,8 +76,6 @@ object PIP : PackageManager(
         definitionFiles.forEach { definitionFile ->
             val (virtualEnvDir, workingDir) = setupVirtualEnv(definitionFile)
 
-            val packages = sortedSetOf<Package>()
-
             // List all packages installed locally in the virtualenv in JSON format.
             val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
 
@@ -93,12 +93,20 @@ object PIP : PackageManager(
                 listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
             }
 
+            val packages = sortedSetOf<Package>()
+            val installDependencies = sortedSetOf<PackageReference>()
+
             if (pipdeptree.exitValue() == 0) {
-                val dependencies = jsonMapper.readTree(pipdeptree.stdout())
-                addPackagesForDependencies(projectName, dependencies, packages)
+                val allDependencies = jsonMapper.readTree(pipdeptree.stdout())
+                parseDependencies(projectName, allDependencies, packages, installDependencies)
             } else {
                 log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
             }
+
+            // TODO: Handle "extras" and "tests" dependencies.
+            val scopes = listOf(
+                    Scope("install", true, installDependencies)
+            )
 
             val project = Project(
                     packageManager = javaClass.simpleName,
@@ -111,7 +119,7 @@ object PIP : PackageManager(
                     vcsUrl = projectRepo,
                     vcsRevision = "",
                     homepageUrl = "",
-                    scopes = emptyList()
+                    scopes = scopes
             )
 
             result[definitionFile] = ScanResult(project, packages)
@@ -146,11 +154,10 @@ object PIP : PackageManager(
         // http://www.lfd.uci.edu/~gohlke/pythonlibs/
         println("Installing dependencies for the '${workingDir.name}' project directory...")
         pip = if (definitionFile.name == "setup.py") {
-            // TODO: Check what types of dependencies this covers: "install_requires", "extras_require",
-            // "tests_require".
+            // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", ".")
         } else {
-            // In "setup.py"-speak, "requirements.txt" just contains "install_requires".
+            // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "-r", definitionFile.name)
         }
 
@@ -165,8 +172,8 @@ object PIP : PackageManager(
         return listOf(virtualEnvDir, workingDir)
     }
 
-    private fun addPackagesForDependencies(rootPackageName: String, allDependencies: Iterable<JsonNode>,
-                                           packages: SortedSet<Package>) {
+    private fun parseDependencies(rootPackageName: String, allDependencies: Iterable<JsonNode>,
+                                  packages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>) {
         // pipdeptree returns JSON like:
         // [
         //     {
@@ -222,7 +229,10 @@ object PIP : PackageManager(
             )
             packages.add(dependencyPackage)
 
-            addPackagesForDependencies(packageName, allDependencies, packages)
+            val packageRef = dependencyPackage.toReference()
+            installDependencies.add(packageRef)
+
+            parseDependencies(packageName, allDependencies, packages, packageRef.dependencies)
         }
     }
 }
