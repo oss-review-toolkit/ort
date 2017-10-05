@@ -47,6 +47,7 @@ object Git : GitBase() {
 
             val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "HEAD"
 
+            // Do safe network bandwidth, first try to only fetch exactly the committish we want.
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
@@ -58,8 +59,8 @@ object Git : GitBase() {
                 }
             }
 
+            // Fall back to fetching everything.
             log.info { "Fetching origin and trying to checkout '$committish'." }
-
             runGitCommand(targetDir, "fetch", "origin")
 
             try {
@@ -69,6 +70,8 @@ object Git : GitBase() {
                 log.warn { "Could not checkout '$committish': ${e.message}" }
             }
 
+            // If checking out the provided committish did not work and we have a version, try finding a tag
+            // belonging to the version to checkout.
             if (version.isNotBlank()) {
                 log.info { "Trying to guess tag for version '$version'." }
 
