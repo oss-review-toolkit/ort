@@ -82,7 +82,7 @@ object PIP : PackageManager(
             // Install pydep after running any other command but before looking at the dependencies because it
             // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
             // pydep is not on PyPI, install it from Git instead.
-            val pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install",
+            var pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install",
                     "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION")
             pip.requireSuccess()
 
@@ -98,7 +98,39 @@ object PIP : PackageManager(
 
             if (pipdeptree.exitValue() == 0) {
                 val allDependencies = jsonMapper.readTree(pipdeptree.stdout())
-                parseDependencies(projectName, allDependencies, packages, installDependencies)
+                val packageTemplates = sortedSetOf<Package>()
+                parseDependencies(projectName, allDependencies, packageTemplates, installDependencies)
+
+                packageTemplates.mapTo(packages) { pkg ->
+                    // PIP only allows to have one version of a package installed at a time, so there is no need to
+                    // specify a version here.
+                    pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "show", pkg.name)
+                    if (pip.exitValue() == 0) {
+                        val info = pip.stdout().lines().associate {
+                            val pair = it.split(Regex(": "), 2)
+                            pair.first() to pair.last()
+                        }
+
+                        // Amend package information with more details.
+                        Package(
+                                packageManager = pkg.packageManager,
+                                namespace = pkg.namespace,
+                                name = pkg.name,
+                                description = info["Summary"] ?: pkg.description,
+                                version = pkg.version,
+                                homepageUrl = info["Home-page"] ?: pkg.homepageUrl,
+                                downloadUrl = pkg.downloadUrl,
+                                hash = pkg.hash,
+                                hashAlgorithm = pkg.hashAlgorithm,
+                                vcsPath = pkg.vcsPath,
+                                vcsProvider = pkg.vcsProvider,
+                                vcsUrl = pkg.vcsUrl,
+                                vcsRevision = pkg.vcsRevision
+                        )
+                    } else {
+                        pkg
+                    }
+                }
             } else {
                 log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
             }
