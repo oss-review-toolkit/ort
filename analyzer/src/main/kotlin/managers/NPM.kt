@@ -222,10 +222,10 @@ object NPM : PackageManager(
     }
 
     private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>)
-            : List<PackageReference> {
+            : SortedSet<PackageReference> {
         // Read package.json
         val json = jsonMapper.readTree(packageJson)
-        val dependencies = mutableListOf<PackageReference>()
+        val dependencies = sortedSetOf<PackageReference>()
         if (json[scope] != null) {
             log.debug { "Looking for dependencies in scope $scope" }
             val dependencyMap = json[scope]
@@ -238,7 +238,7 @@ object NPM : PackageManager(
         } else {
             log.warn { "Could not find scope $scope in ${packageJson.absolutePath}" }
         }
-        dependencies.sortBy { it.identifier }
+
         return dependencies
     }
 
@@ -284,7 +284,7 @@ object NPM : PackageManager(
             val newDependencyBranch = dependencyBranch + identifier
             val packageInfo = packages[identifier] ?:
                     throw IOException("Could not find package info for $identifier")
-            val dependencies = mutableListOf<PackageReference>()
+            val dependencies = sortedSetOf<PackageReference>()
 
             if (packageJson["dependencies"] != null) {
                 val dependencyMap = packageJson["dependencies"]
@@ -297,13 +297,11 @@ object NPM : PackageManager(
                 }
             }
 
-            dependencies.sortBy { it.identifier }
-
             return PackageReference(packageInfo.name, packageInfo.namespace, packageInfo.version, packageInfo.hash,
                     dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
-            return PackageReference(name, "", "unknown, package not installed", "", listOf())
+            return PackageReference(name, "", "unknown, package not installed", "", sortedSetOf())
         } else {
             var parent = startDir.parentFile.parentFile
 

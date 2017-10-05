@@ -3,6 +3,8 @@ package com.here.provenanceanalyzer.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import java.util.SortedSet
+
 /**
  * A human-readable reference to a software package. Strictly speaking, a [packageHash] would be enough to uniquely
  * refer to a package in a machine readable form. However, to make the serialized reference more readable for human
@@ -38,8 +40,8 @@ data class PackageReference(
          * The list of references to packages this package depends on. Note that this list depends on the scope in
          * which this package reference is used.
          */
-        val dependencies: List<PackageReference>
-) {
+        val dependencies: SortedSet<PackageReference>
+) : Comparable<PackageReference> {
     /**
      * The minimum human readable information to identify the package referred to. As references are specific to the
      * package manager, it is not explicitly included.
@@ -62,4 +64,9 @@ data class PackageReference(
             pkgRef.identifier == pkgId.substringAfter(":") || pkgRef.dependsOn(pkgId)
         } != null
     }
+
+    /**
+     * A comparison function to sort package references by their identifier.
+     */
+    override fun compareTo(other: PackageReference) = compareValuesBy(this, other, { it.identifier })
 }
