@@ -10,6 +10,21 @@ import io.kotlintest.specs.WordSpec
 @Suppress("UnsafeCallOnNullableType", "UnsafeCast")
 class ScanResultsCacheTest : WordSpec() {
 
+    private fun ArtifactoryCache.getStringField(name: String): String {
+        javaClass.getDeclaredField(name).let {
+            it.isAccessible = true
+            return it.get(this) as String
+        }
+    }
+
+    private fun ArtifactoryCache.getApiToken(): String {
+        return getStringField("apiToken")
+    }
+
+    private fun ArtifactoryCache.getUrl(): String {
+        return getStringField("url")
+    }
+
     init {
         "ScanResultsCache.configure" should {
             "fail if the cache type is missing" {
@@ -77,21 +92,6 @@ class ScanResultsCacheTest : WordSpec() {
                 (ScanResultsCache.cache as ArtifactoryCache).getUrl() shouldBe "someUrl"
             }
         }
-    }
-
-    fun ArtifactoryCache.getStringField(name: String): String {
-        javaClass.getDeclaredField(name).let {
-            it.isAccessible = true
-            return it.get(this) as String
-        }
-    }
-
-    fun ArtifactoryCache.getApiToken(): String {
-        return getStringField("apiToken")
-    }
-
-    fun ArtifactoryCache.getUrl(): String {
-        return getStringField("url")
     }
 
 }
