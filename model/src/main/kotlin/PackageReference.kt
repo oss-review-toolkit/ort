@@ -11,14 +11,14 @@ import java.util.SortedSet
 @JsonIgnoreProperties("identifier")
 data class PackageReference(
         /**
-         * The name of the package.
-         */
-        val name: String,
-
-        /**
          * The namespace of the package, for example the group id in Maven or the scope in NPM.
          */
         val namespace: String,
+
+        /**
+         * The name of the package.
+         */
+        val name: String,
 
         /**
          * The version of the package.

@@ -29,14 +29,14 @@ data class Project(
         val name: String,
 
         /**
-         * Alternate project names, like abbreviations or code names.
-         */
-        val aliases: List<String>,
-
-        /**
          * The version of the project.
          */
         val version: String,
+
+        /**
+         * Alternate project names, like abbreviations or code names.
+         */
+        val aliases: List<String>,
 
         /**
          * The optional path inside the VCS to take into account. The actual meaning depends on the VCS provider. For

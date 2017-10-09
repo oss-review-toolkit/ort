@@ -175,7 +175,7 @@ object NPM : PackageManager(
                 }
             }
 
-            val module = Package(javaClass.simpleName, namespace, name, description, version, homepageUrl, downloadUrl,
+            val module = Package(javaClass.simpleName, namespace, name, version, description, homepageUrl, downloadUrl,
                     hash, hashAlgorithm, vcsPath, vcsProvider, vcsUrl, vcsRevision)
 
             require(module.name.isNotEmpty()) {
@@ -297,10 +297,10 @@ object NPM : PackageManager(
                 }
             }
 
-            return PackageReference(packageInfo.name, packageInfo.namespace, packageInfo.version, dependencies)
+            return PackageReference(packageInfo.namespace, packageInfo.name, packageInfo.version, dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
-            return PackageReference(name, "", "unknown, package not installed", sortedSetOf())
+            return PackageReference("", name, "unknown, package not installed", sortedSetOf())
         } else {
             var parent = startDir.parentFile.parentFile
 
@@ -331,8 +331,8 @@ object NPM : PackageManager(
                 packageManager = javaClass.simpleName,
                 namespace = namespace,
                 name = name,
-                aliases = emptyList(),
                 version = version,
+                aliases = emptyList(),
                 vcsPath = vcsPath,
                 vcsProvider = vcsProvider,
                 vcsUrl = vcsUrl,

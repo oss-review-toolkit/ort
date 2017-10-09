@@ -33,14 +33,14 @@ data class Package(
         val name: String,
 
         /**
-         * The description of the package, as provided by the package manager.
-         */
-        val description: String,
-
-        /**
          * The version of the package.
          */
         val version: String,
+
+        /**
+         * The description of the package, as provided by the package manager.
+         */
+        val description: String,
 
         /**
          * The homepage of the package.
@@ -115,7 +115,7 @@ data class Package(
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
      * dependencies still need to be filled out.
      */
-    fun toReference() = PackageReference(name, namespace, version, sortedSetOf())
+    fun toReference() = PackageReference(namespace, name, version, sortedSetOf())
 
     /**
      * A comparison function to sort packages by their identifier.
