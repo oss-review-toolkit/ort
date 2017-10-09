@@ -16,7 +16,6 @@ import com.here.provenanceanalyzer.util.safeMkdirs
 import com.here.provenanceanalyzer.util.yamlMapper
 
 import java.io.File
-import java.io.IOException
 
 import kotlin.system.exitProcess
 
@@ -196,7 +195,7 @@ object Main {
                                 target.version, targetDir)
                         p("Downloaded source code revision $revision to ${targetDir.absolutePath}")
                         return targetDir
-                    } catch (e: IOException) {
+                    } catch (e: DownloadException) {
                         throw DownloadException("Could not download source code.", e)
                     }
                 }
