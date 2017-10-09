@@ -40,7 +40,7 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType): String {
         }
     }
 
-    if (uri.host.endsWith("github.com")) {
+    if (uri.host != null && uri.host.endsWith("github.com")) {
         // Ensure the path ends in ".git".
         val path = if (uri.path.endsWith(".git")) uri.path else uri.path + ".git"
 
