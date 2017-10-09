@@ -17,197 +17,158 @@ project:
     - name: "cheerio"
       namespace: ""
       version: "1.0.0-rc.1"
-      package_hash: "2af37339eab713ef6b72cde98cefa672b87641fe"
       dependencies:
       - name: "css-select"
         namespace: ""
         version: "1.2.0"
-        package_hash: "2b3a110539c5355f1cd8d314623e870b121ec858"
         dependencies:
         - name: "boolbase"
           namespace: ""
           version: "1.0.0"
-          package_hash: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
           dependencies: []
         - name: "css-what"
           namespace: ""
           version: "2.1.0"
-          package_hash: "9467d032c38cfaefb9f2d79501253062f87fa1bd"
           dependencies: []
         - name: "domutils"
           namespace: ""
           version: "1.5.1"
-          package_hash: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
           dependencies:
           - name: "dom-serializer"
             namespace: ""
             version: "0.1.0"
-            package_hash: "073c697546ce0780ce23be4a28e293e40bc30c82"
             dependencies:
             - name: "domelementtype"
               namespace: ""
               version: "1.1.3"
-              package_hash: "bd28773e2642881aec51544924299c5cd822185b"
               dependencies: []
             - name: "entities"
               namespace: ""
               version: "1.1.1"
-              package_hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
               dependencies: []
           - name: "domelementtype"
             namespace: ""
             version: "1.3.0"
-            package_hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
             dependencies: []
         - name: "nth-check"
           namespace: ""
           version: "1.0.1"
-          package_hash: "9929acdf628fc2c41098deab82ac580cf149aae4"
           dependencies:
           - name: "boolbase"
             namespace: ""
             version: "1.0.0"
-            package_hash: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
             dependencies: []
       - name: "dom-serializer"
         namespace: ""
         version: "0.1.0"
-        package_hash: "073c697546ce0780ce23be4a28e293e40bc30c82"
         dependencies:
         - name: "domelementtype"
           namespace: ""
           version: "1.1.3"
-          package_hash: "bd28773e2642881aec51544924299c5cd822185b"
           dependencies: []
         - name: "entities"
           namespace: ""
           version: "1.1.1"
-          package_hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
           dependencies: []
       - name: "entities"
         namespace: ""
         version: "1.1.1"
-        package_hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
         dependencies: []
       - name: "htmlparser2"
         namespace: ""
         version: "3.9.2"
-        package_hash: "1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
         dependencies:
         - name: "domelementtype"
           namespace: ""
           version: "1.3.0"
-          package_hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
           dependencies: []
         - name: "domhandler"
           namespace: ""
           version: "2.4.1"
-          package_hash: "892e47000a99be55bbf3774ffea0561d8879c259"
           dependencies:
           - name: "domelementtype"
             namespace: ""
             version: "1.3.0"
-            package_hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
             dependencies: []
         - name: "domutils"
           namespace: ""
           version: "1.5.1"
-          package_hash: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
           dependencies:
           - name: "dom-serializer"
             namespace: ""
             version: "0.1.0"
-            package_hash: "073c697546ce0780ce23be4a28e293e40bc30c82"
             dependencies:
             - name: "domelementtype"
               namespace: ""
               version: "1.1.3"
-              package_hash: "bd28773e2642881aec51544924299c5cd822185b"
               dependencies: []
             - name: "entities"
               namespace: ""
               version: "1.1.1"
-              package_hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
               dependencies: []
           - name: "domelementtype"
             namespace: ""
             version: "1.3.0"
-            package_hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
             dependencies: []
         - name: "entities"
           namespace: ""
           version: "1.1.1"
-          package_hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
           dependencies: []
         - name: "inherits"
           namespace: ""
           version: "2.0.3"
-          package_hash: "633c2c83e3da42a502f52466022480f4208261de"
           dependencies: []
         - name: "readable-stream"
           namespace: ""
           version: "2.3.3"
-          package_hash: "368f2512d79f9d46fdfc71349ae7878bbc1eb95c"
           dependencies:
           - name: "core-util-is"
             namespace: ""
             version: "1.0.2"
-            package_hash: "b5fd54220aa2bc5ab57aab7140c940754503c1a7"
             dependencies: []
           - name: "inherits"
             namespace: ""
             version: "2.0.3"
-            package_hash: "633c2c83e3da42a502f52466022480f4208261de"
             dependencies: []
           - name: "isarray"
             namespace: ""
             version: "1.0.0"
-            package_hash: "bb935d48582cba168c06834957a54a3e07124f11"
             dependencies: []
           - name: "process-nextick-args"
             namespace: ""
             version: "1.0.7"
-            package_hash: "150e20b756590ad3f91093f25a4f2ad8bff30ba3"
             dependencies: []
           - name: "safe-buffer"
             namespace: ""
             version: "5.1.1"
-            package_hash: "893312af69b2123def71f57889001671eeb2c853"
             dependencies: []
           - name: "string_decoder"
             namespace: ""
             version: "1.0.3"
-            package_hash: "0fc67d7c141825de94282dd536bec6b9bce860ab"
             dependencies:
             - name: "safe-buffer"
               namespace: ""
               version: "5.1.1"
-              package_hash: "893312af69b2123def71f57889001671eeb2c853"
               dependencies: []
           - name: "util-deprecate"
             namespace: ""
             version: "1.0.2"
-            package_hash: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
             dependencies: []
       - name: "lodash"
         namespace: ""
         version: "4.17.4"
-        package_hash: "78203a4d1c328ae1d86dca6460e369b57f4055ae"
         dependencies: []
       - name: "parse5"
         namespace: ""
         version: "3.0.2"
-        package_hash: "05eff57f0ef4577fb144a79f8b9a967a6cc44510"
         dependencies:
         - name: "node"
           namespace: "@types"
           version: "6.0.79"
-          package_hash: "5efe7d4a6d8c453c7e9eaf55d931f4a22fac5169"
           dependencies: []
     - name: "long"
       namespace: ""
       version: "3.2.0"
-      package_hash: "d821b7138ca1cb581c172990ef14db200b5c474b"
       dependencies: []
   - name: "devDependencies"
     delivered: false
@@ -215,87 +176,70 @@ project:
     - name: "cson"
       namespace: ""
       version: "4.1.0"
-      package_hash: "b1075344fa9d9fe5cf88d80f21d9366296b865c7"
       dependencies:
       - name: "coffee-script"
         namespace: ""
         version: "1.12.6"
-        package_hash: "285a3f7115689065064d6bf9ef4572db66695cbf"
         dependencies: []
       - name: "cson-parser"
         namespace: ""
         version: "1.3.5"
-        package_hash: "7ec675e039145533bf2a6a856073f1599d9c2d24"
         dependencies:
         - name: "coffee-script"
           namespace: ""
           version: "1.12.6"
-          package_hash: "285a3f7115689065064d6bf9ef4572db66695cbf"
           dependencies: []
       - name: "extract-opts"
         namespace: ""
         version: "3.3.1"
-        package_hash: "5abbedc98c0d5202e3278727f9192d7e086c6be1"
         dependencies:
         - name: "eachr"
           namespace: ""
           version: "3.2.0"
-          package_hash: "2c35e43ea086516f7997cf80b7aa64d55a4a4484"
           dependencies:
           - name: "editions"
             namespace: ""
             version: "1.3.3"
-            package_hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
             dependencies: []
           - name: "typechecker"
             namespace: ""
             version: "4.4.1"
-            package_hash: "f97b95f51b038417212d677d45a373ee7bced7e6"
             dependencies:
             - name: "editions"
               namespace: ""
               version: "1.3.3"
-              package_hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
               dependencies: []
         - name: "editions"
           namespace: ""
           version: "1.3.3"
-          package_hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
           dependencies: []
         - name: "typechecker"
           namespace: ""
           version: "4.4.1"
-          package_hash: "f97b95f51b038417212d677d45a373ee7bced7e6"
           dependencies:
           - name: "editions"
             namespace: ""
             version: "1.3.3"
-            package_hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
             dependencies: []
       - name: "requirefresh"
         namespace: ""
         version: "2.1.0"
-        package_hash: "742dccc20f3a96918d66c6f1597dc8ffebc4f6f5"
         dependencies:
         - name: "editions"
           namespace: ""
           version: "1.3.3"
-          package_hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
           dependencies: []
       - name: "safefs"
         namespace: ""
         version: "4.1.0"
-        package_hash: "f82aeb4bdd7ae51f653eb20f6728b3058c8d6445"
         dependencies:
         - name: "editions"
           namespace: ""
           version: "1.3.3"
-          package_hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
           dependencies: []
         - name: "graceful-fs"
           namespace: ""
           version: "4.1.11"
-          package_hash: "0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
           dependencies: []
 packages:
 - package_manager: "NPM"

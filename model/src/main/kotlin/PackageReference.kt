@@ -29,14 +29,6 @@ data class PackageReference(
         val version: String,
 
         /**
-         * A hash to uniquely identify the package in a machine-readable way. This *could* be implemented by simply
-         * hashing the human-readable properties that uniquely identify the package. Note that this is different from
-         * the package hash for the binary artifact of the package.
-         */
-        @JsonProperty("package_hash")
-        val packageHash: String,
-
-        /**
          * The list of references to packages this package depends on. Note that this list depends on the scope in
          * which this package reference is used.
          */

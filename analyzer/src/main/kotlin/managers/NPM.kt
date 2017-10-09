@@ -297,11 +297,10 @@ object NPM : PackageManager(
                 }
             }
 
-            return PackageReference(packageInfo.name, packageInfo.namespace, packageInfo.version, packageInfo.hash,
-                    dependencies)
+            return PackageReference(packageInfo.name, packageInfo.namespace, packageInfo.version, dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
-            return PackageReference(name, "", "unknown, package not installed", "", sortedSetOf())
+            return PackageReference(name, "", "unknown, package not installed", sortedSetOf())
         } else {
             var parent = startDir.parentFile.parentFile
 
