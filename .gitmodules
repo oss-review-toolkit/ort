@@ -6,3 +6,6 @@
 	path = analyzer/src/funTest/assets/projects/external/scancode-toolkit
 	url = https://github.com/nexb/scancode-toolkit.git
 	ignore = untracked
+[submodule "spdx-tools-python"]
+	path = analyzer/src/funTest/assets/projects/external/spdx-tools-python
+	url = https://github.com/spdx/tools-python.git
