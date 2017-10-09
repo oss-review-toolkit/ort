@@ -1,0 +1,103 @@
+---
+project:
+  package_manager: "PIP"
+  namespace: ""
+  name: "spdx-tools"
+  aliases: []
+  version: "0.5.4"
+  vcs_path: null
+  vcs_provider: ""
+  vcs_url: "https://github.com/spdx/tools-python"
+  vcs_revision: ""
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    delivered: true
+    dependencies:
+    - name: "ply"
+      namespace: ""
+      version: "3.10"
+      dependencies: []
+    - name: "rdflib"
+      namespace: ""
+      version: "4.2.2"
+      dependencies:
+      - name: "isodate"
+        namespace: ""
+        version: "0.5.4"
+        dependencies: []
+      - name: "pyparsing"
+        namespace: ""
+        version: "2.2.0"
+        dependencies: []
+    - name: "six"
+      namespace: ""
+      version: "1.11.0"
+      dependencies: []
+packages:
+- package_manager: "PIP"
+  namespace: ""
+  name: "isodate"
+  description: "An ISO 8601 date/time/duration parser and formatter"
+  version: "0.5.4"
+  homepage_url: "http://cheeseshop.python.org/pypi/isodate"
+  download_url: "https://pypi.python.org/packages/f4/5b/fe03d46ced80639b7be9285492dc8ce069b841c0cebe5baacdd9b090b164/isodate-0.5.4.tar.gz"
+  hash: "9da3ea2af54a6261d854e73d2266030e"
+  hash_algorithm: "MD5"
+  vcs_path: null
+  vcs_provider: null
+  vcs_url: null
+  vcs_revision: null
+- package_manager: "PIP"
+  namespace: ""
+  name: "ply"
+  description: "Python Lex & Yacc"
+  version: "3.10"
+  homepage_url: "http://www.dabeaz.com/ply/"
+  download_url: "https://pypi.python.org/packages/ce/3d/1f9ca69192025046f02a02ffc61bfbac2731aab06325a218370fd93e18df/ply-3.10.tar.gz"
+  hash: "1d63c166ab250bab87d8dcc42dcca70e"
+  hash_algorithm: "MD5"
+  vcs_path: null
+  vcs_provider: null
+  vcs_url: null
+  vcs_revision: null
+- package_manager: "PIP"
+  namespace: ""
+  name: "pyparsing"
+  description: "Python parsing module"
+  version: "2.2.0"
+  homepage_url: "http://pyparsing.wikispaces.com/"
+  download_url: "https://pypi.python.org/packages/6a/8a/718fd7d3458f9fab8e67186b00abdd345b639976bc7fb3ae722e1b026a50/pyparsing-2.2.0-py2.py3-none-any.whl"
+  hash: "7247e7896688eff4bc8c7fc5d0cdd2b0"
+  hash_algorithm: "MD5"
+  vcs_path: null
+  vcs_provider: null
+  vcs_url: null
+  vcs_revision: null
+- package_manager: "PIP"
+  namespace: ""
+  name: "rdflib"
+  description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
+    \ language for representing information."
+  version: "4.2.2"
+  homepage_url: "https://github.com/RDFLib/rdflib"
+  download_url: "https://pypi.python.org/packages/3c/fe/630bacb652680f6d481b9febbb3e2c3869194a1a5fc3401a4a41195a2f8f/rdflib-4.2.2-py3-none-any.whl"
+  hash: "380422af59a6f0e5cc62879f68de3397"
+  hash_algorithm: "MD5"
+  vcs_path: null
+  vcs_provider: null
+  vcs_url: null
+  vcs_revision: null
+- package_manager: "PIP"
+  namespace: ""
+  name: "six"
+  description: "Python 2 and 3 compatibility utilities"
+  version: "1.11.0"
+  homepage_url: "http://pypi.python.org/pypi/six/"
+  download_url: "https://pypi.python.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl"
+  hash: "866ab722be6bdfed6830f3179af65468"
+  hash_algorithm: "MD5"
+  vcs_path: null
+  vcs_provider: null
+  vcs_url: null
+  vcs_revision: null
