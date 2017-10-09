@@ -297,7 +297,7 @@ object NPM : PackageManager(
                 }
             }
 
-            return PackageReference(packageInfo.namespace, packageInfo.name, packageInfo.version, dependencies)
+            return packageInfo.toReference(dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
             return PackageReference("", name, "unknown, package not installed", sortedSetOf())

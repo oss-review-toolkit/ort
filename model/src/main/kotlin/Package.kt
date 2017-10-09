@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 import com.vdurmont.semver4j.Semver
 
+import java.util.SortedSet
+
 /**
  * A generic descriptor for a software package. It contains all relevant meta-data about a package like the name,
  * version, and how to retrieve the package and its source code. It does not contain information about the package's
@@ -115,7 +117,8 @@ data class Package(
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
      * dependencies still need to be filled out.
      */
-    fun toReference() = PackageReference(namespace, name, version, sortedSetOf())
+    fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf())
+            = PackageReference(namespace, name, version, dependencies)
 
     /**
      * A comparison function to sort packages by their identifier.
