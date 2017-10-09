@@ -7,7 +7,6 @@ mainClassName = 'com.here.provenanceanalyzer.Main'
 sourceSets {
     funTest {
         kotlin.srcDirs 'src/funTest/kotlin'
-        resources.srcDirs 'src/funTest/resources'
     }
 }
 
