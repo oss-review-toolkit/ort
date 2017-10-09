@@ -56,7 +56,7 @@ object Main {
     private lateinit var provenanceFilePath: String
 
     @Parameter(description = "The output directory to store the scan results and source code of packages.",
-            names = arrayOf("--output", "-o"),
+            names = arrayOf("--output-dir", "-o"),
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
