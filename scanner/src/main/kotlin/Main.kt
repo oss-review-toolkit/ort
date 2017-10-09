@@ -85,7 +85,7 @@ object Main {
             order = 0)
     private var info = false
 
-    @Parameter(description = "Enable debug logging.",
+    @Parameter(description = "Enable debug logging and keep any temporary files.",
             names = arrayOf("--debug"),
             order = 0)
     private var debug = false
