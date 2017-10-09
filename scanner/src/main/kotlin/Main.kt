@@ -68,11 +68,11 @@ object Main {
             order = 0)
     private var scanner: Scanner = ScanCode
 
-    @Parameter(description = "The path to the cache configuration file.",
-            names = arrayOf("--cache", "-c"),
+    @Parameter(description = "The path to the configuration file.",
+            names = arrayOf("--config", "-c"),
             order = 0)
     @Suppress("LateinitUsage")
-    private var cacheConfigurationFile: File? = null
+    private var configFile: File? = null
 
     @Parameter(description = "The list of file formats for the summary files.",
             names = arrayOf("--summary-format", "-f"),
@@ -131,11 +131,8 @@ object Main {
             else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
         }
 
-        if (cacheConfigurationFile != null) {
-            val mapType = yamlMapper.typeFactory.constructMapType(HashMap::class.java, String::class.java,
-                    String::class.java)
-            val cacheConfiguration: HashMap<String, String> = yamlMapper.readValue(cacheConfigurationFile, mapType)
-            ScanResultsCache.configure(cacheConfiguration)
+        if (configFile != null) {
+            ScanResultsCache.configure(yamlMapper.readTree(configFile))
         }
 
         val outputDirectory = File(outputPath)

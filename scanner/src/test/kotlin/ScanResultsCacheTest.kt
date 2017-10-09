@@ -1,5 +1,7 @@
 package com.here.provenanceanalyzer.scanner
 
+import com.here.provenanceanalyzer.util.yamlMapper
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.shouldThrow
@@ -12,44 +14,62 @@ class ScanResultsCacheTest : WordSpec() {
         "ScanResultsCache.configure" should {
             "fail if the cache type is missing" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    ScanResultsCache.configure(mapOf())
+                    val config = yamlMapper.readTree("""
+                        scanner:
+                          cache:
+                    """)
+                    ScanResultsCache.configure(config)
                 }
                 exception.message shouldBe "Cache type is missing."
             }
 
             "fail if the cache type is unknown" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    ScanResultsCache.configure(mapOf("type" to "abcd"))
+                    val config = yamlMapper.readTree("""
+                        scanner:
+                          cache:
+                            type: abcd
+                    """)
+                    ScanResultsCache.configure(config)
                 }
                 exception.message shouldBe "Cache type 'abcd' unknown."
             }
 
             "fail if the Artifactory URL is missing" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    ScanResultsCache.configure(mapOf(
-                            "type" to "artifactory",
-                            "apiToken" to "someApiToken"
-                    ))
+                    val config = yamlMapper.readTree("""
+                        scanner:
+                          cache:
+                            type: Artifactory
+                            apiToken: someApiToken
+                    """)
+                    ScanResultsCache.configure(config)
                 }
                 exception.message shouldBe "URL for Artifactory cache is missing."
             }
 
             "fail if the Artifactory apiToken is missing" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    ScanResultsCache.configure(mapOf(
-                            "type" to "artifactory",
-                            "url" to "someUrl"
-                    ))
+                    val config = yamlMapper.readTree("""
+                        scanner:
+                          cache:
+                            type: Artifactory
+                            url: someUrl
+                    """)
+                    ScanResultsCache.configure(config)
                 }
                 exception.message shouldBe "API token for Artifactory cache is missing."
             }
 
             "configure the Artifactory cache correctly" {
-                ScanResultsCache.configure(mapOf(
-                        "type" to "artifactory",
-                        "apiToken" to "someApiToken",
-                        "url" to "someUrl"
-                ))
+                val config = yamlMapper.readTree("""
+                        scanner:
+                          cache:
+                            type: Artifactory
+                            apiToken: someApiToken
+                            url: someUrl
+                    """)
+                ScanResultsCache.configure(config)
 
                 ScanResultsCache.cache shouldNotBe null
                 ScanResultsCache.cache::class shouldBe ArtifactoryCache::class

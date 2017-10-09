@@ -2,6 +2,8 @@ package com.here.provenanceanalyzer.scanner
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.util.log
 
@@ -33,21 +35,24 @@ interface ScanResultsCache {
         }
             private set
 
-        fun configure(configuration: Map<String, String>) {
-            val type = configuration["type"] ?: throw IllegalArgumentException("Cache type is missing.")
+        fun configure(config: JsonNode?) {
+            // Return early if there is no cache configuration.
+            val cacheNode = config?.get("scanner")?.get("cache") ?: return
+
+            val type = cacheNode["type"]?.asText() ?: throw IllegalArgumentException("Cache type is missing.")
 
             when (type.toLowerCase()) {
                 "artifactory" -> {
-                    val apiToken = configuration["apiToken"] ?:
+                    val apiToken = cacheNode["apiToken"]?.asText() ?:
                             throw IllegalArgumentException("API token for Artifactory cache is missing.")
 
-                    val url = configuration["url"] ?:
+                    val url = cacheNode["url"]?.asText() ?:
                             throw IllegalArgumentException("URL for Artifactory cache is missing.")
 
                     cache = ArtifactoryCache(url, apiToken)
                     log.info { "Using Artifactory cache '$url'." }
                 }
-                else -> throw IllegalArgumentException("Cache type '${configuration["type"]}' unknown.")
+                else -> throw IllegalArgumentException("Cache type '$type' unknown.")
             }
         }
 
