@@ -30,6 +30,10 @@ object GitRepo : GitBase() {
             runRepoCommand(targetDir, "sync", "-c")
             return getRevision(File(targetDir, ".repo/manifests"))
         } catch (e: IOException) {
+            if (Main.stacktrace) {
+                e.printStackTrace()
+            }
+
             throw DownloadException("Could not clone $vcsUrl/$manifestPath", e)
         }
     }

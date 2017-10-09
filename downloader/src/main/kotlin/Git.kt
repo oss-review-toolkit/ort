@@ -31,6 +31,7 @@ object Git : GitBase() {
      *
      * @throws DownloadException In case the download failed.
      */
+    @Suppress("ComplexMethod")
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
             : String {
         try {
@@ -53,6 +54,10 @@ object Git : GitBase() {
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
                 return getRevision(targetDir)
             } catch (e: IOException) {
+                if (Main.stacktrace) {
+                    e.printStackTrace()
+                }
+
                 log.warn {
                     "Could not fetch only '$committish': ${e.message}\n" +
                             "Falling back to fetching everything."
@@ -67,6 +72,10 @@ object Git : GitBase() {
                 runGitCommand(targetDir, "checkout", committish)
                 return getRevision(targetDir)
             } catch (e: IOException) {
+                if (Main.stacktrace) {
+                    e.printStackTrace()
+                }
+
                 log.warn { "Could not checkout '$committish': ${e.message}" }
             }
 
@@ -93,6 +102,10 @@ object Git : GitBase() {
 
             throw IOException("Unable to determine a committish to checkout.")
         } catch (e: IOException) {
+            if (Main.stacktrace) {
+                e.printStackTrace()
+            }
+
             log.error { "Could not clone $vcsUrl: ${e.message}" }
             throw DownloadException("Could not clone $vcsUrl.", e)
         }

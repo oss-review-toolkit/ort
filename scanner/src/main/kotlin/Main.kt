@@ -35,6 +35,10 @@ object Main {
             try {
                 return OutputFormat.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
+                if (stacktrace) {
+                    e.printStackTrace()
+                }
+
                 throw ParameterException("Summary formats must be contained in $ALL_OUTPUT_FORMATS.")
             }
         }
@@ -89,6 +93,11 @@ object Main {
             names = arrayOf("--debug"),
             order = 0)
     private var debug = false
+
+    @Parameter(description = "Print out the stacktrace for all exceptions.",
+            names = arrayOf("--stacktrace"),
+            order = 0)
+    var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = arrayOf("--help", "-h"),
@@ -157,6 +166,10 @@ object Main {
                 entry.licenses.addAll(scanner.scan(pkg, outputDirectory).sorted())
                 println("Found licenses for ${pkg.identifier}: ${entry.licenses.joinToString()}")
             } catch (e: ScanException) {
+                if (stacktrace) {
+                    e.printStackTrace()
+                }
+
                 log.error { "Could not scan ${pkg.identifier}: ${e.message}" }
                 var cause: Throwable? = e
                 while (cause != null) {

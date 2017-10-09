@@ -75,6 +75,11 @@ object Main {
             order = 0)
     private var debug = false
 
+    @Parameter(description = "Print out the stacktrace for all exceptions.",
+            names = arrayOf("--stacktrace"),
+            order = 0)
+    var stacktrace = false
+
     @Parameter(description = "Display the command line help.",
             names = arrayOf("--help", "-h"),
             help = true,

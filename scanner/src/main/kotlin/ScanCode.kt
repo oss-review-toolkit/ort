@@ -70,6 +70,10 @@ object ScanCode : Scanner() {
             // TODO: convert json output to html
             // TODO: Add results of license scan to YAML model
         } catch (e: DownloadException) {
+            if (com.here.provenanceanalyzer.scanner.Main.stacktrace) {
+                e.printStackTrace()
+            }
+
             throw ScanException("Package ${pkg.identifier} could not be scanned.", e)
         }
     }

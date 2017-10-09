@@ -161,6 +161,10 @@ object NPM : PackageManager(
                 }
                 vcsRevision = if (infoJson["gitHead"] != null) infoJson["gitHead"].asText() else ""
             } catch (e: FileNotFoundException) {
+                if (Main.stacktrace) {
+                    e.printStackTrace()
+                }
+
                 // Fallback to getting detailed info from the package.json file. Some info will likely be missing.
 
                 description = if (json["description"] != null) json["description"].asText() else ""

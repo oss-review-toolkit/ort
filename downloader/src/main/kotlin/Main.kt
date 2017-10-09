@@ -36,6 +36,10 @@ object Main {
             try {
                 return DataEntity.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
+                if (stacktrace) {
+                    e.printStackTrace()
+                }
+
                 throw ParameterException("Data entities must be contained in $ALL_DATA_ENTITIES.")
             }
         }
@@ -71,6 +75,11 @@ object Main {
             order = 0)
     private var debug = false
 
+    @Parameter(description = "Print out the stacktrace for all exceptions.",
+            names = arrayOf("--stacktrace"),
+            order = 0)
+    var stacktrace = false
+
     @Parameter(description = "Display the command line help.",
             names = arrayOf("--help", "-h"),
             help = true,
@@ -83,6 +92,7 @@ object Main {
      * @param args The list of application arguments.
      */
     @JvmStatic
+    @Suppress("ComplexMethod")
     fun main(args: Array<String>) {
         val jc = JCommander(this)
         jc.parse(*args)
@@ -130,6 +140,10 @@ object Main {
             try {
                 download(pkg, outputDirectory)
             } catch (e: DownloadException) {
+                if (stacktrace) {
+                    e.printStackTrace()
+                }
+
                 log.error { "Could not download '${pkg.identifier}': ${e.message}" }
             }
         }
@@ -196,6 +210,10 @@ object Main {
                         p("Downloaded source code revision $revision to ${targetDir.absolutePath}")
                         return targetDir
                     } catch (e: DownloadException) {
+                        if (stacktrace) {
+                            e.printStackTrace()
+                        }
+
                         throw DownloadException("Could not download source code.", e)
                     }
                 }
