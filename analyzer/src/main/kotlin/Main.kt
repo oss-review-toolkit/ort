@@ -177,7 +177,7 @@ object Main {
                         definitionFile.parentFile.toRelativeString(absoluteProjectPath))
                 if (outputDir.mkdirs()) {
                     val outputFile = File(outputDir, definitionFile.name.replace('.', '-') +
-                            "-provenance." + outputFormat.fileEnding)
+                            "-dependencies." + outputFormat.fileEnding)
                     println("Writing results for\n\t$definitionFile\nto\n\t$outputFile")
                     mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
                     println("done.")
