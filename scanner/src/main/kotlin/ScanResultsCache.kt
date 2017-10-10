@@ -5,7 +5,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.Package
-import com.here.provenanceanalyzer.util.log
+import com.here.ort.util.log
 
 import java.io.File
 

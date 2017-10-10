@@ -12,9 +12,9 @@ import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.ScanResult
-import com.here.provenanceanalyzer.util.jsonMapper
-import com.here.provenanceanalyzer.util.log
-import com.here.provenanceanalyzer.util.yamlMapper
+import com.here.ort.util.jsonMapper
+import com.here.ort.util.log
+import com.here.ort.util.yamlMapper
 
 import java.io.File
 

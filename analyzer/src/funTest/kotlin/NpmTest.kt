@@ -3,8 +3,8 @@ package com.here.ort.analyzer
 import com.fasterxml.jackson.databind.node.ArrayNode
 
 import com.here.ort.analyzer.managers.NPM
-import com.here.provenanceanalyzer.util.parseJsonProcessOutput
-import com.here.provenanceanalyzer.util.yamlMapper
+import com.here.ort.util.parseJsonProcessOutput
+import com.here.ort.util.yamlMapper
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.endWith

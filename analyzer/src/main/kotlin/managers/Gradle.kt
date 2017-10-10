@@ -2,7 +2,7 @@ package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.ScanResult
-import com.here.provenanceanalyzer.util.OS
+import com.here.ort.util.OS
 
 import java.io.File
 

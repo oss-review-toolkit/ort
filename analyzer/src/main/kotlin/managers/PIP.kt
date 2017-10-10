@@ -11,11 +11,11 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ScanResult
 import com.here.ort.model.Scope
-import com.here.provenanceanalyzer.util.OS
-import com.here.provenanceanalyzer.util.ProcessCapture
-import com.here.provenanceanalyzer.util.checkCommandVersion
-import com.here.provenanceanalyzer.util.jsonMapper
-import com.here.provenanceanalyzer.util.log
+import com.here.ort.util.OS
+import com.here.ort.util.ProcessCapture
+import com.here.ort.util.checkCommandVersion
+import com.here.ort.util.jsonMapper
+import com.here.ort.util.log
 
 import com.vdurmont.semver4j.Semver
 

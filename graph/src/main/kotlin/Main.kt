@@ -6,9 +6,9 @@ import com.beust.jcommander.Parameter
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.PackageReference
 import com.here.ort.model.ScanResult
-import com.here.provenanceanalyzer.util.jsonMapper
-import com.here.provenanceanalyzer.util.log
-import com.here.provenanceanalyzer.util.yamlMapper
+import com.here.ort.util.jsonMapper
+import com.here.ort.util.log
+import com.here.ort.util.yamlMapper
 
 import org.graphstream.graph.Edge
 import org.graphstream.graph.implementations.SingleGraph

@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.util
+package com.here.ort.util
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper

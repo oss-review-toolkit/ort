@@ -6,11 +6,11 @@ import ch.qos.logback.classic.Level
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
-import com.here.provenanceanalyzer.util.ProcessCapture
-import com.here.provenanceanalyzer.util.getCommandVersion
-import com.here.provenanceanalyzer.util.jsonMapper
-import com.here.provenanceanalyzer.util.log
-import com.here.provenanceanalyzer.util.safeMkdirs
+import com.here.ort.util.ProcessCapture
+import com.here.ort.util.getCommandVersion
+import com.here.ort.util.jsonMapper
+import com.here.ort.util.log
+import com.here.ort.util.safeMkdirs
 
 import java.io.File
 

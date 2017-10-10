@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.util
+package com.here.ort.util
 
 /**
  * Operating-System-specific utility functions.
