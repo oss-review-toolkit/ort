@@ -1,6 +1,6 @@
-package com.here.provenanceanalyzer.functionaltest
+package com.here.ort.analyzer
 
-import com.here.provenanceanalyzer.managers.Maven
+import com.here.ort.analyzer.managers.Maven
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec

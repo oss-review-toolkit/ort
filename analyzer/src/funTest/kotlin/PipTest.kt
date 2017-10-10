@@ -1,6 +1,6 @@
-package com.here.provenanceanalyzer.functionaltest
+package com.here.ort.analyzer
 
-import com.here.provenanceanalyzer.managers.PIP
+import com.here.ort.analyzer.managers.PIP
 import com.here.provenanceanalyzer.util.yamlMapper
 
 import io.kotlintest.matchers.shouldBe

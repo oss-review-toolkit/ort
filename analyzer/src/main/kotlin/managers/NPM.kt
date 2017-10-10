@@ -1,12 +1,12 @@
-package com.here.provenanceanalyzer.managers
+package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.here.provenanceanalyzer.Main
-import com.here.provenanceanalyzer.PackageManager
+import com.here.ort.analyzer.Main
+import com.here.ort.analyzer.PackageManager
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.model.PackageReference
 import com.here.provenanceanalyzer.model.Project

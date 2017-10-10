@@ -1,8 +1,8 @@
-package com.here.provenanceanalyzer.functionaltest
+package com.here.ort.analyzer
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 
-import com.here.provenanceanalyzer.managers.NPM
+import com.here.ort.analyzer.managers.NPM
 import com.here.provenanceanalyzer.util.parseJsonProcessOutput
 import com.here.provenanceanalyzer.util.yamlMapper
 

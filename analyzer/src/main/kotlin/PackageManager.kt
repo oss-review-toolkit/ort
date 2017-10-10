@@ -1,6 +1,6 @@
-package com.here.provenanceanalyzer
+package com.here.ort.analyzer
 
-import com.here.provenanceanalyzer.managers.*
+import com.here.ort.analyzer.managers.*
 import com.here.provenanceanalyzer.model.ScanResult
 
 import java.io.File
