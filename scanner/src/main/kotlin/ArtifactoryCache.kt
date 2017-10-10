@@ -8,6 +8,7 @@ import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.util.log
 
 import java.io.File
+import java.net.HttpURLConnection
 
 class ArtifactoryCache(
         private val url: String,
@@ -25,7 +26,7 @@ class ArtifactoryCache(
                 .destination { _, _ -> target }
                 .responseString()
 
-        return (response.second.statusCode == 200).also {
+        return (response.second.statusCode == HttpURLConnection.HTTP_OK).also {
             log.info {
                 if (it) {
                     "Downloaded $cachePath from Artifactory cache."
@@ -48,7 +49,7 @@ class ArtifactoryCache(
                 .body(source.readText())
                 .responseString()
 
-        return (response.second.statusCode == 201).also {
+        return (response.second.statusCode == HttpURLConnection.HTTP_CREATED).also {
             log.info {
                 if (it) {
                     "Uploaded $cachePath to Artifactory cache."
