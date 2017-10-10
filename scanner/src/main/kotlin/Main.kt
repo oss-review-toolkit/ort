@@ -52,12 +52,12 @@ object Main {
         }
     }
 
-    @Parameter(description = "The provenance data file to use.",
+    @Parameter(description = "The dependencies analysis file to use.",
             names = arrayOf("--input-file", "-i"),
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var provenanceFilePath: String
+    private lateinit var dependenciesFilePath: String
 
     @Parameter(description = "The output directory to store the scan results and source code of packages.",
             names = arrayOf("--output-dir", "-o"),
@@ -129,12 +129,12 @@ object Main {
             exitProcess(1)
         }
 
-        val provenanceFile = File(provenanceFilePath)
-        require(provenanceFile.isFile) {
-            "Provided path is not a file: ${provenanceFile.absolutePath}"
+        val dependenciesFile = File(dependenciesFilePath)
+        require(dependenciesFile.isFile) {
+            "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
 
-        val mapper = when (provenanceFile.extension) {
+        val mapper = when (dependenciesFile.extension) {
             OutputFormat.JSON.fileEnding -> jsonMapper
             OutputFormat.YAML.fileEnding -> yamlMapper
             else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
@@ -149,7 +149,7 @@ object Main {
             "The output directory '${outputDirectory.absolutePath}' must not exist yet."
         }
 
-        val scanResult = mapper.readValue(provenanceFile, ScanResult::class.java)
+        val scanResult = mapper.readValue(dependenciesFile, ScanResult::class.java)
 
         println("Using scanner '$scanner'.")
 
