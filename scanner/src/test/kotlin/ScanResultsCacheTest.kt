@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.scanner
+package com.here.ort.scanner
 
 import com.here.provenanceanalyzer.util.yamlMapper
 

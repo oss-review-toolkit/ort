@@ -2,7 +2,7 @@
 apply plugin: 'application'
 
 applicationName = 'scanner'
-mainClassName = 'com.here.provenanceanalyzer.scanner.Main'
+mainClassName = 'com.here.ort.scanner.Main'
 
 sourceSets {
     funTest {

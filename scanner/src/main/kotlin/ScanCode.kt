@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.scanner
+package com.here.ort.scanner
 
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level

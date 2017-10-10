@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.scanner
+package com.here.ort.scanner
 
 class ScanException : Exception {
     constructor(cause: Exception): super(cause)
