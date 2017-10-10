@@ -4,7 +4,7 @@ apply plugin: 'application'
 import org.apache.tools.ant.taskdefs.condition.Os
 
 applicationName = 'graph'
-mainClassName = 'com.here.provenanceanalyzer.graph.Main'
+mainClassName = 'com.here.ort.graph.Main'
 if (Os.isFamily(Os.FAMILY_UNIX)) {
     applicationDefaultJvmArgs = ['-Dsun.java2d.opengl=True']
 } else if (Os.isFamily(Os.FAMILY_WINDOWS)) {

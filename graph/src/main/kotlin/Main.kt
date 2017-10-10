@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.graph
+package com.here.ort.graph
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
