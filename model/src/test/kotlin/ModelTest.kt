@@ -1,6 +1,7 @@
-package com.here.provenanceanalyzer.model
+package com.here.ort.model
 
 import com.vdurmont.semver4j.Semver
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 

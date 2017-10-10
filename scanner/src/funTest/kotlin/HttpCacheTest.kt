@@ -1,6 +1,6 @@
 package com.here.provenanceanalyzer.scanner.functionaltest
 
-import com.here.provenanceanalyzer.model.Package
+import com.here.ort.model.Package
 import com.here.provenanceanalyzer.scanner.ArtifactoryCache
 
 import com.sun.net.httpserver.HttpExchange

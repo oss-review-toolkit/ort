@@ -5,7 +5,7 @@ import ch.qos.logback.classic.Level
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
-import com.here.provenanceanalyzer.model.Package
+import com.here.ort.model.Package
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.getCommandVersion
 import com.here.provenanceanalyzer.util.jsonMapper

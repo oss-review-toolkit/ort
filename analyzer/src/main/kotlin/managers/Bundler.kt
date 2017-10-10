@@ -1,7 +1,7 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManager
-import com.here.provenanceanalyzer.model.ScanResult
+import com.here.ort.model.ScanResult
 
 import java.io.File
 

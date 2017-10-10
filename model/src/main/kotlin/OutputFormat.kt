@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.model
+package com.here.ort.model
 
 /**
  * An enumeration of supported output file formats.

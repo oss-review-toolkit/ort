@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.provenanceanalyzer.model.Package
-import com.here.provenanceanalyzer.model.PackageReference
-import com.here.provenanceanalyzer.model.Project
-import com.here.provenanceanalyzer.model.ScanResult
-import com.here.provenanceanalyzer.model.Scope
+import com.here.ort.model.Package
+import com.here.ort.model.PackageReference
+import com.here.ort.model.Project
+import com.here.ort.model.ScanResult
+import com.here.ort.model.Scope
 import com.here.provenanceanalyzer.util.OS
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.checkCommandVersion

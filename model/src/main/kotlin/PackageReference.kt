@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.model
+package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

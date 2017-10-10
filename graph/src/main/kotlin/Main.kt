@@ -3,9 +3,9 @@ package com.here.ort.graph
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.here.provenanceanalyzer.model.OutputFormat
-import com.here.provenanceanalyzer.model.PackageReference
-import com.here.provenanceanalyzer.model.ScanResult
+import com.here.ort.model.OutputFormat
+import com.here.ort.model.PackageReference
+import com.here.ort.model.ScanResult
 import com.here.provenanceanalyzer.util.jsonMapper
 import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.yamlMapper

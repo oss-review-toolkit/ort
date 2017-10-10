@@ -7,7 +7,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.here.provenanceanalyzer.model.OutputFormat
+import com.here.ort.model.OutputFormat
 import com.here.provenanceanalyzer.util.jsonMapper
 import com.here.provenanceanalyzer.util.log
 import com.here.provenanceanalyzer.util.yamlMapper
