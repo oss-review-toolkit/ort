@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.downloader
+package com.here.ort.downloader
 
 import ch.frankel.slf4k.*
 

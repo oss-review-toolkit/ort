@@ -2,7 +2,7 @@
 apply plugin: 'application'
 
 applicationName = 'downloader'
-mainClassName = 'com.here.provenanceanalyzer.downloader.Main'
+mainClassName = 'com.here.ort.downloader.Main'
 
 dependencies {
     compile project(':model')

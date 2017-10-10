@@ -3,8 +3,8 @@ package com.here.provenanceanalyzer.scanner
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
-import com.here.provenanceanalyzer.downloader.DownloadException
-import com.here.provenanceanalyzer.downloader.Main
+import com.here.ort.downloader.DownloadException
+import com.here.ort.downloader.Main
 import com.here.provenanceanalyzer.model.Package
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.getCommandVersion

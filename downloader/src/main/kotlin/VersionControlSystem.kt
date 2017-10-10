@@ -1,4 +1,6 @@
-package com.here.provenanceanalyzer.downloader
+package com.here.ort.downloader
+
+import com.here.ort.downloader.vcs.*
 
 import java.io.File
 

@@ -1,4 +1,4 @@
-package com.here.provenanceanalyzer.downloader
+package com.here.ort.downloader
 
 class DownloadException : Exception {
     constructor(cause: Exception): super(cause)

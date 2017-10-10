@@ -1,7 +1,9 @@
-package com.here.provenanceanalyzer.downloader
+package com.here.ort.downloader.vcs
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.downloader.DownloadException
+import com.here.ort.downloader.Main
 import com.here.provenanceanalyzer.util.ProcessCapture
 import com.here.provenanceanalyzer.util.log
 
