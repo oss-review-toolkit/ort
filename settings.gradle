@@ -1,3 +1,5 @@
+rootProject.name = 'oss-review-toolkit'
+
 include 'analyzer'
 include 'downloader'
 include 'graph'
