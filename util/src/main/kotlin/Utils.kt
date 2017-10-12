@@ -18,6 +18,11 @@ val jsonMapper = ObjectMapper().registerKotlinModule()
 val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
 /**
+ * Return the directory to store user-specific configuration in.
+ */
+fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
+
+/**
  * Parse the standard output of a process as JSON.
  */
 fun parseJsonProcessOutput(workingDir: File, vararg command: String, multiJson: Boolean = false): JsonNode {
