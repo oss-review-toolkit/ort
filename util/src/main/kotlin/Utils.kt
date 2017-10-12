@@ -10,12 +10,53 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
+import java.net.URLConnection
+
+import okhttp3.Cache
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
 
 val jsonMapper = ObjectMapper().registerKotlinModule()
 val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
+
+/**
+ * A helper class to manage OkHttp instances backed by distinct cache directories.
+ */
+object OkHttpClientHelper {
+    private val clients = mutableMapOf<String, OkHttpClient>()
+
+    /**
+     * Guess the media type based on the file component of a string.
+     */
+    fun guessMediaType(name: String): MediaType? {
+        val contentType = URLConnection.guessContentTypeFromName(name) ?: "application/octet-stream"
+        return MediaType.parse(contentType)
+    }
+
+    /**
+     * Create a request body for the specified file.
+     */
+    fun createRequestBody(source: File) = RequestBody.create(guessMediaType(source.name), source)
+
+    /**
+     * Execute a request using the client for the specified cache directory.
+     */
+    fun execute(cacheSubDirectory: String, request: Request): Response {
+        var client = clients.getOrPut(cacheSubDirectory) {
+            val cacheDirectory = File(getUserConfigDirectory(), "cache/$cacheSubDirectory")
+            val cache = Cache(cacheDirectory, 10 * 1024 * 1024)
+            OkHttpClient.Builder().cache(cache).build()
+        }
+
+        return client.newCall(request).execute()
+    }
+}
 
 /**
  * Return the directory to store user-specific configuration in.

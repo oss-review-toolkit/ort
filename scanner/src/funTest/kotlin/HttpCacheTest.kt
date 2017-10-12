@@ -86,9 +86,7 @@ class HttpCacheTest : StringSpec() {
             resultFile.readText() shouldEqual resultContent
 
             // Clean up.
-            // TODO: Change this after https://github.com/kittinunf/Fuel/pull/255 has been merged.
-            resultFile.deleteOnExit()
-            //resultFile.delete() shouldBe true
+            resultFile.delete() shouldBe true
         }
     }
 }

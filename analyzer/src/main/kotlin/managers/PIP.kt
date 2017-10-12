@@ -11,6 +11,7 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ScanResult
 import com.here.ort.model.Scope
+import com.here.ort.util.OkHttpClientHelper
 import com.here.ort.util.OS
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.checkCommandVersion
@@ -20,8 +21,9 @@ import com.here.ort.util.log
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
-import java.net.URL
 import java.util.SortedSet
+
+import okhttp3.Request
 
 object PIP : PackageManager(
         "https://pip.pypa.io/",
@@ -104,8 +106,14 @@ object PIP : PackageManager(
 
                 packageTemplates.mapTo(packages) { pkg ->
                     // See https://wiki.python.org/moin/PyPIJSON.
-                    // TODO: Use OkHttp for proper caching.
-                    val pkgJson = URL("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json").readText()
+                    val pkgRequest = Request.Builder()
+                            .get()
+                            .url("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json")
+                            .build()
+
+                    val pkgJson = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
+                        response.body()?.string()
+                    }
 
                     @Suppress("CatchException")
                     try {
