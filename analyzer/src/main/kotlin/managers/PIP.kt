@@ -106,30 +106,42 @@ object PIP : PackageManager(
                     // See https://wiki.python.org/moin/PyPIJSON.
                     // TODO: Use OkHttp for proper caching.
                     val pkgJson = URL("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json").readText()
-                    val pkgData = jsonMapper.readTree(pkgJson)
 
-                    val pkgInfo = pkgData["info"]
+                    @Suppress("CatchException")
+                    try {
+                        val pkgData = jsonMapper.readTree(pkgJson)
+                        val pkgInfo = pkgData["info"]
 
-                    // TODO: Support multiple package types of the same package version. Arbitrarily choose the first
-                    // for now.
-                    val pkgRelease = pkgData["releases"][pkg.version][0]
+                        // TODO: Support multiple package types of the same package version. Arbitrarily choose the
+                        // first for now.
+                        val pkgRelease = pkgData["releases"][pkg.version][0]
 
-                    // Amend package information with more details.
-                    Package(
-                            packageManager = pkg.packageManager,
-                            namespace = pkg.namespace,
-                            name = pkg.name,
-                            version = pkg.version,
-                            description = pkgInfo["summary"]?.asText() ?: pkg.description,
-                            homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
-                            downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
-                            hash = pkgRelease["md5_digest"]?.asText() ?: pkg.hash,
-                            hashAlgorithm = "MD5",
-                            vcsPath = pkg.vcsPath,
-                            vcsProvider = pkg.vcsProvider,
-                            vcsUrl = pkg.vcsUrl,
-                            vcsRevision = pkg.vcsRevision
-                    )
+                        // Amend package information with more details.
+                        Package(
+                                packageManager = pkg.packageManager,
+                                namespace = pkg.namespace,
+                                name = pkg.name,
+                                version = pkg.version,
+                                description = pkgInfo["summary"]?.asText() ?: pkg.description,
+                                homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
+                                downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
+                                hash = pkgRelease["md5_digest"]?.asText() ?: pkg.hash,
+                                hashAlgorithm = "MD5",
+                                vcsPath = pkg.vcsPath,
+                                vcsProvider = pkg.vcsProvider,
+                                vcsUrl = pkg.vcsUrl,
+                                vcsRevision = pkg.vcsRevision
+                        )
+                    } catch (e: Exception) {
+                        if (Main.stacktrace) {
+                            e.printStackTrace()
+                        }
+
+                        log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
+
+                        // Fall back to returning the original package data.
+                        pkg
+                    }
                 }
             } else {
                 log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
