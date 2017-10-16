@@ -1,0 +1,14 @@
+{
+  "name": "npmnestedmaven",
+  "version": "1.0.0",
+  "description": "A dummy NPM project with a nested Maven project",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sebastian Schuberth",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heremaps/oss-review-toolkit.git"
+  }
+}
