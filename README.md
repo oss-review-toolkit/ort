@@ -181,6 +181,22 @@ Usage: scanner [options]
       Display the command line help.
 ```
 
+## Development
+
+The toolkit is written in [Kotlin](https://kotlinlang.org/) and uses [Gradle](https://gradle.org/) as the build system.
+We recommend the [IntelliJ IDEA Community Edition](https://www.jetbrains.com/idea/download/) as the IDE which can
+directly import the Gradle build files.
+
+The most important root project Gradle tasks are listed in the table below.
+
+| Task        | Purpose                                                           |
+| ----------- | ----------------------------------------------------------------- |
+| assemble    | Build the JAR artifacts for all projects                          |
+| detektCheck | Run static code analysis on all projects                          |
+| test        | Run unit tests for all projects                                   |
+| funTest     | Run functional tests for all projects                             |
+| installDist | Build all projects and install the start scripts for distribution |
+
 ## License
 
 Copyright (c) 2017 HERE Europe B.V.
