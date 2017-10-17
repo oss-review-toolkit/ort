@@ -26,11 +26,15 @@ import kotlin.system.exitProcess
  */
 object Main {
     private class PackageManagerConverter : IStringConverter<PackageManager> {
-        override fun convert(name: String): PackageManager {
+        companion object {
             // Map upper-cased package manager class names to their instances.
-            val packageManagerNames = packageManagers.associateBy { it.javaClass.simpleName.toUpperCase() }
+            val PACKAGE_MANAGER_NAMES = ALL_PACKAGE_MANAGERS.associateBy {
+                it.javaClass.simpleName.toUpperCase()
+            }
+        }
 
-            return packageManagerNames[name.toUpperCase()] ?:
+        override fun convert(name: String): PackageManager {
+            return PACKAGE_MANAGER_NAMES[name.toUpperCase()] ?:
                     throw ParameterException("Package managers must be contained in $ALL_PACKAGE_MANAGERS.")
         }
     }
