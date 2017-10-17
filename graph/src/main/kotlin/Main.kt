@@ -30,7 +30,7 @@ object Main {
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var dependenciesFilePath: String
+    private lateinit var dependenciesFile: File
 
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),
@@ -77,7 +77,6 @@ object Main {
             exitProcess(1)
         }
 
-        val dependenciesFile = File(dependenciesFilePath)
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
