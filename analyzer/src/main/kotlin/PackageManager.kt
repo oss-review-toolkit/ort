@@ -6,19 +6,6 @@ import com.here.ort.model.ScanResult
 import java.io.File
 import java.nio.file.FileSystems
 
-// Prioritized list of package managers.
-val ALL_PACKAGE_MANAGERS = listOf(
-        // TODO: Gradle,
-        // TODO: Maven,
-        // TODO: SBT,
-        NPM,
-        // TODO: CocoaPods,
-        // TODO: Godep,
-        // TODO: Bower,
-        PIP
-        // TODO: Bundler
-)
-
 /**
  * A class representing a package manager that handles software dependencies.
  *
@@ -33,6 +20,26 @@ abstract class PackageManager(
         val primaryLanguage: String,
         private val globsForDefinitionFiles: List<String>
 ) {
+    companion object {
+        /**
+         * The prioritized list of all available package managers. This needs to be initialized lazily to ensure the
+         * referred objects, which derive from this class, exist.
+         */
+        val ALL by lazy {
+            listOf(
+                    // TODO: Gradle,
+                    // TODO: Maven,
+                    // TODO: SBT,
+                    NPM,
+                    // TODO: CocoaPods,
+                    // TODO: Godep,
+                    // TODO: Bower,
+                    PIP
+                    // TODO: Bundler
+            )
+        }
+    }
+
     /**
      * The glob matchers for all definition files.
      */

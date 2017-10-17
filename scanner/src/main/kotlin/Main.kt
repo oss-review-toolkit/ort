@@ -7,7 +7,6 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.here.ort.model.ALL_OUTPUT_FORMATS
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
@@ -40,7 +39,7 @@ object Main {
                     e.printStackTrace()
                 }
 
-                throw ParameterException("Summary formats must be contained in $ALL_OUTPUT_FORMATS.")
+                throw ParameterException("Summary formats must be contained in ${OutputFormat.ALL}.")
             }
         }
     }
@@ -48,8 +47,8 @@ object Main {
     private class ScannerConverter : IStringConverter<Scanner> {
         override fun convert(scannerName: String): Scanner {
             // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-            return ALL_SCANNERS.find { it.javaClass.simpleName.toUpperCase() == scannerName.toUpperCase() } ?:
-                    throw ParameterException("The scanner must be one of $ALL_SCANNERS.")
+            return Scanner.ALL.find { it.javaClass.simpleName.toUpperCase() == scannerName.toUpperCase() } ?:
+                    throw ParameterException("The scanner must be one of ${Scanner.ALL}.")
         }
     }
 

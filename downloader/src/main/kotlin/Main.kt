@@ -26,10 +26,15 @@ object Main {
 
     enum class DataEntity {
         PACKAGES,
-        PROJECT
-    }
+        PROJECT;
 
-    val ALL_DATA_ENTITIES = DataEntity.values().asList()
+        companion object {
+            /**
+             * The list of all available data entities.
+             */
+            @JvmField val ALL = DataEntity.values().asList()
+        }
+    }
 
     private class DataEntityConverter : IStringConverter<DataEntity> {
         override fun convert(name: String): DataEntity {
@@ -40,7 +45,7 @@ object Main {
                     e.printStackTrace()
                 }
 
-                throw ParameterException("Data entities must be contained in $ALL_DATA_ENTITIES.")
+                throw ParameterException("Data entities must be contained in ${DataEntity.ALL}.")
             }
         }
     }
@@ -63,7 +68,7 @@ object Main {
             names = arrayOf("--entities", "-e"),
             converter = DataEntityConverter::class,
             order = 0)
-    private var entities: List<DataEntity> = ALL_DATA_ENTITIES
+    private var entities = DataEntity.ALL
 
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),

@@ -12,7 +12,12 @@ enum class OutputFormat(val fileEnding: String) {
     /**
      * Specifies the [YAML](http://yaml.org/) format.
      */
-    YAML("yml")
-}
+    YAML("yml");
 
-val ALL_OUTPUT_FORMATS = OutputFormat.values().asList()
+    companion object {
+        /**
+         * The list of all available output formats.
+         */
+        @JvmField val ALL = OutputFormat.values().asList()
+    }
+}

@@ -28,14 +28,14 @@ object Main {
     private class PackageManagerConverter : IStringConverter<PackageManager> {
         companion object {
             // Map upper-cased package manager class names to their instances.
-            val PACKAGE_MANAGER_NAMES = ALL_PACKAGE_MANAGERS.associateBy {
+            val PACKAGE_MANAGER_NAMES = PackageManager.ALL.associateBy {
                 it.javaClass.simpleName.toUpperCase()
             }
         }
 
         override fun convert(name: String): PackageManager {
             return PACKAGE_MANAGER_NAMES[name.toUpperCase()] ?:
-                    throw ParameterException("Package managers must be contained in $ALL_PACKAGE_MANAGERS.")
+                    throw ParameterException("Package managers must be contained in ${PackageManager.ALL}.")
         }
     }
 
@@ -43,7 +43,7 @@ object Main {
             names = arrayOf("--package-managers", "-m"),
             converter = PackageManagerConverter::class,
             order = 0)
-    private var packageManagers: List<PackageManager> = ALL_PACKAGE_MANAGERS
+    private var packageManagers = PackageManager.ALL
 
     @Parameter(description = "The project directory to scan.",
             names = arrayOf("--input-dir", "-i"),

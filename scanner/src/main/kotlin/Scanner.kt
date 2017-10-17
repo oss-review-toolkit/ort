@@ -5,11 +5,19 @@ import com.here.ort.scanner.scanners.*
 
 import java.io.File
 
-val ALL_SCANNERS = listOf(
-        ScanCode
-)
-
 abstract class Scanner {
+
+    companion object {
+        /**
+         * The list of all available scanners. This needs to be initialized lazily to ensure the referred objects,
+         * which derive from this class, exist.
+         */
+        val ALL by lazy {
+            listOf(
+                    ScanCode
+            )
+        }
+    }
 
     /**
      * Scan the provided package for open source licenses.
