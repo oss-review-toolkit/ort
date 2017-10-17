@@ -1,4 +1,4 @@
-package com.here.ort.scanner
+package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
@@ -6,6 +6,9 @@ import ch.qos.logback.classic.Level
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
+import com.here.ort.scanner.ScanException
+import com.here.ort.scanner.ScanResultsCache
+import com.here.ort.scanner.Scanner
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.getCommandVersion
 import com.here.ort.util.jsonMapper

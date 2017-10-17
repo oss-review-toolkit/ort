@@ -1,6 +1,7 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.Package
+import com.here.ort.scanner.scanners.*
 
 import java.io.File
 
