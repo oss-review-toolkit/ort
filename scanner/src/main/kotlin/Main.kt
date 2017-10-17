@@ -57,14 +57,14 @@ object Main {
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var dependenciesFilePath: String
+    private lateinit var dependenciesFile: File
 
     @Parameter(description = "The output directory to store the scan results and source code of packages.",
             names = arrayOf("--output-dir", "-o"),
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var outputPath: String
+    private lateinit var outputDir: File
 
     @Parameter(description = "The scanner to use.",
             names = arrayOf("--scanner", "-s"),
@@ -129,7 +129,6 @@ object Main {
             exitProcess(1)
         }
 
-        val dependenciesFile = File(dependenciesFilePath)
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
@@ -144,9 +143,8 @@ object Main {
             ScanResultsCache.configure(yamlMapper.readTree(configFile))
         }
 
-        val outputDirectory = File(outputPath)
-        require(!outputDirectory.exists()) {
-            "The output directory '${outputDirectory.absolutePath}' must not exist yet."
+        require(!outputDir.exists()) {
+            "The output directory '${outputDir.absolutePath}' must not exist yet."
         }
 
         val scanResult = mapper.readValue(dependenciesFile, ScanResult::class.java)
@@ -163,7 +161,7 @@ object Main {
             entry.scopes.addAll(findScopesForPackage(pkg, scanResult.project))
             try {
                 println("Scanning ${pkg.identifier}")
-                entry.licenses.addAll(scanner.scan(pkg, outputDirectory).sorted())
+                entry.licenses.addAll(scanner.scan(pkg, outputDir).sorted())
                 println("Found licenses for ${pkg.identifier}: ${entry.licenses.joinToString()}")
             } catch (e: ScanException) {
                 if (stacktrace) {
@@ -179,7 +177,7 @@ object Main {
             }
         }
 
-        writeSummary(outputDirectory, summary)
+        writeSummary(outputDir, summary)
     }
 
     private fun findScopesForPackage(pkg: Package, project: Project): List<String> {
