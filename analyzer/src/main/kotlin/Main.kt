@@ -50,14 +50,14 @@ object Main {
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var projectPath: File
+    private lateinit var inputDir: File
 
     @Parameter(description = "The directory to write dependency information to.",
             names = arrayOf("--output-dir", "-o"),
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var outputPath: File
+    private lateinit var outputDir: File
 
     @Parameter(description = "The data format used for dependency information.",
             names = arrayOf("--output-format", "-f"),
@@ -115,7 +115,7 @@ object Main {
             exitProcess(1)
         }
 
-        val absoluteOutputPath = outputPath.absoluteFile
+        val absoluteOutputPath = outputDir.absoluteFile
         if (absoluteOutputPath.exists()) {
             log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
             exitProcess(2)
@@ -127,7 +127,7 @@ object Main {
         // Map of paths managed by the respective package manager.
         val managedProjectPaths = mutableMapOf<PackageManager, MutableList<File>>()
 
-        val absoluteProjectPath = projectPath.absoluteFile
+        val absoluteProjectPath = inputDir.absoluteFile
         println("Scanning project path:\n\t$absoluteProjectPath")
 
         if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
