@@ -321,6 +321,8 @@ object NPM : PackageManager(
     }
 
     private fun parseProject(packageJson: File, scopes: List<Scope>, packages: SortedSet<Package>): ScanResult {
+        log.debug { "Parsing project info from ${packageJson.absolutePath}." }
+
         val json = jsonMapper.readTree(packageJson)
         val rawName = json["name"].asText()
         val (namespace, name) = splitNamespaceAndName(rawName)
