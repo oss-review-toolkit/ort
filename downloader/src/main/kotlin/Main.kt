@@ -55,14 +55,14 @@ object Main {
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var dependenciesFilePath: String
+    private lateinit var dependenciesFile: File
 
     @Parameter(description = "The output directory to download the source code to.",
             names = arrayOf("--output-dir", "-o"),
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
-    private lateinit var outputPath: String
+    private lateinit var outputDir: File
 
     @Parameter(description = "The data entities from the dependencies analysis file to download.",
             names = arrayOf("--entities", "-e"),
@@ -116,7 +116,6 @@ object Main {
             exitProcess(1)
         }
 
-        val dependenciesFile = File(dependenciesFilePath)
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
@@ -127,7 +126,7 @@ object Main {
             else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
         }
 
-        val outputDirectory = File(outputPath).apply { safeMkdirs() }
+        outputDir.safeMkdirs()
 
         val scanResult = mapper.readValue(dependenciesFile, ScanResult::class.java)
 
@@ -143,7 +142,7 @@ object Main {
 
         packages.forEach { pkg ->
             try {
-                download(pkg, outputDirectory)
+                download(pkg, outputDir)
             } catch (e: DownloadException) {
                 if (stacktrace) {
                     e.printStackTrace()
