@@ -8,15 +8,15 @@ import java.nio.file.FileSystems
 
 // Prioritized list of package managers.
 val ALL_PACKAGE_MANAGERS = listOf(
-        Gradle,
-        Maven,
-        SBT,
+        // TODO: Gradle,
+        // TODO: Maven,
+        // TODO: SBT,
         NPM,
-        CocoaPods,
-        Godep,
-        Bower,
-        PIP,
-        Bundler
+        // TODO: CocoaPods,
+        // TODO: Godep,
+        // TODO: Bower,
+        PIP
+        // TODO: Bundler
 )
 
 /**
