@@ -147,7 +147,7 @@ object NPM : PackageManager(
                 val packageInfo = jsonMapper.readTree(url.readText())
                 val infoJson = packageInfo["versions"][version]
 
-                description = infoJson["description"].asText()
+                description = if (infoJson["description"] != null) infoJson["description"].asText() else ""
                 homepageUrl = if (infoJson["homepage"] != null) infoJson["homepage"].asText() else ""
 
                 val dist = infoJson["dist"]
