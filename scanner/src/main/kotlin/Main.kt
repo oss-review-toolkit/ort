@@ -53,12 +53,16 @@ object Main {
     }
 
     @Parameter(description = "The dependencies analysis file to use. Source code will be downloaded automatically if " +
-            "needed.",
+            "needed. This parameter and --input-path are mutually exclusive.",
             names = arrayOf("--dependencies-file", "-d"),
-            required = true,
             order = 0)
-    @Suppress("LateinitUsage")
-    private lateinit var dependenciesFile: File
+    private var dependenciesFile: File? = null
+
+    @Parameter(description = "The input directory or file to scan. This parameter and --dependencies-file are " +
+            "mutually exclusive.",
+            names = arrayOf("--input-path", "-i"),
+            order = 0)
+    private var inputPath: File? = null
 
     @Parameter(description = "The output directory to store the scan results and source code of packages.",
             names = arrayOf("--output-dir", "-o"),
@@ -130,52 +134,52 @@ object Main {
             exitProcess(1)
         }
 
-        require(dependenciesFile.isFile) {
-            "Provided path is not a file: ${dependenciesFile.absolutePath}"
-        }
-
-        val mapper = when (dependenciesFile.extension) {
-            OutputFormat.JSON.fileEnding -> jsonMapper
-            OutputFormat.YAML.fileEnding -> yamlMapper
-            else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
-        }
-
-        if (configFile != null) {
-            ScanResultsCache.configure(yamlMapper.readTree(configFile))
+        if ((dependenciesFile != null) == (inputPath != null)) {
+            throw IllegalArgumentException("Either --dependencies-file or --input-path must be specified.")
         }
 
         require(!outputDir.exists()) {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
         }
 
-        val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+        if (configFile != null) {
+            ScanResultsCache.configure(yamlMapper.readTree(configFile))
+        }
 
         println("Using scanner '$scanner'.")
 
-        val packages = mutableListOf(analyzerResult.project.toPackage())
-        packages.addAll(analyzerResult.packages)
-
         val summary = mutableMapOf<String, SummaryEntry>()
 
-        packages.forEach { pkg ->
-            val entry = summary.getOrPut(pkg.identifier) { SummaryEntry() }
-            entry.scopes.addAll(findScopesForPackage(pkg, analyzerResult.project))
-            try {
-                println("Scanning ${pkg.identifier}")
-                entry.licenses.addAll(scanner.scan(pkg, outputDir).sorted())
-                println("Found licenses for ${pkg.identifier}: ${entry.licenses.joinToString()}")
-            } catch (e: ScanException) {
-                if (stacktrace) {
-                    e.printStackTrace()
-                }
-
-                log.error { "Could not scan ${pkg.identifier}: ${e.message}" }
-                var cause: Throwable? = e
-                while (cause != null) {
-                    entry.errors.add("${cause.javaClass.simpleName}: ${cause.message}")
-                    cause = cause.cause
-                }
+        dependenciesFile?.let { dependenciesFile ->
+            require(dependenciesFile.isFile) {
+                "Provided path is not a file: ${dependenciesFile.absolutePath}"
             }
+
+            val mapper = when (dependenciesFile.extension) {
+                OutputFormat.JSON.fileEnding -> jsonMapper
+                OutputFormat.YAML.fileEnding -> yamlMapper
+                else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
+            }
+
+            val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+
+            val packages = mutableListOf(analyzerResult.project.toPackage())
+            packages.addAll(analyzerResult.packages)
+
+            packages.forEach { pkg ->
+                val entry = summary.getOrPut(pkg.identifier) { SummaryEntry() }
+                entry.scopes.addAll(findScopesForPackage(pkg, analyzerResult.project))
+                scanEntry(entry, pkg.identifier, pkg)
+            }
+        }
+
+        inputPath?.let { inputPath ->
+            require(inputPath.exists()) {
+                "Provided path does not exist: ${inputPath.absolutePath}"
+            }
+
+            val entry = summary.getOrPut(inputPath.absolutePath) { SummaryEntry() }
+            scanEntry(entry, inputPath.absolutePath, inputPath)
         }
 
         writeSummary(outputDir, summary)
@@ -183,6 +187,29 @@ object Main {
 
     private fun findScopesForPackage(pkg: Package, project: Project): List<String> {
         return project.scopes.filter { it.contains(pkg) }.map { it.name }
+    }
+
+    private fun scanEntry(entry: SummaryEntry, identifier: String, input: Any) {
+        try {
+            println("Scanning '$identifier'...")
+            when (input) {
+                is Package -> entry.licenses.addAll(scanner.scan(input, outputDir).sorted())
+                is File -> entry.licenses.addAll(scanner.scan(input, outputDir).sorted())
+            }
+            println("Found licenses for '$identifier: ${entry.licenses.joinToString()}")
+        } catch (e: ScanException) {
+            if (stacktrace) {
+                e.printStackTrace()
+            }
+
+            log.error { "Could not scan '$identifier': ${e.message}" }
+
+            var cause: Throwable? = e
+            while (cause != null) {
+                entry.errors.add("${cause.javaClass.simpleName}: ${cause.message}")
+                cause = cause.cause
+            }
+        }
     }
 
     private fun writeSummary(outputDirectory: File, summary: MutableMap<String, SummaryEntry>) {

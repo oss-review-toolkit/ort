@@ -21,17 +21,13 @@ object ScanCode : Scanner() {
 
     private const val OUTPUT_EXTENSION = "json"
     private const val OUTPUT_FORMAT = "json-pp"
-    private const val SCANCODE_PROCESSES = 6
-    private const val SCANCODE_TIMEOUT = 600
+    private const val PROCESSES = 6
+    private const val TIMEOUT = 600
+
+    private val DEFAULT_OPTIONS = listOf("--copyright", "--license", "--info", "--diag", "--only-findings",
+            "--strip-root")
 
     override fun scan(pkg: Package, outputDirectory: File): Set<String> {
-        val scancodeVersion = getCommandVersion("scancode", transform = {
-            // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
-            it.substringAfter("ScanCode version ")
-        })
-
-        log.info { "Detected ScanCode version $scancodeVersion." }
-
         val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
 
@@ -42,43 +38,61 @@ object ScanCode : Scanner() {
             return parseLicenses(resultsFile)
         }
 
-        try {
-            val sourceDirectory = Main.download(pkg, downloadDirectory)
-
-            val scancodeOptions = mutableListOf("--copyright", "--license", "--info", "--diag",
-                    "--only-findings", "--strip-root")
-            if (log.isEnabledFor(Level.DEBUG)) {
-                scancodeOptions.add("--verbose")
-            }
-
-            println("Run ScanCode in directory '${sourceDirectory.absolutePath}'.")
-            val process = ProcessCapture(sourceDirectory,
-                    "scancode", *scancodeOptions.toTypedArray(),
-                    "--timeout", SCANCODE_TIMEOUT.toString(),
-                    "-n", SCANCODE_PROCESSES.toString(),
-                    "-f", OUTPUT_FORMAT,
-                    ".", resultsFile.absolutePath)
-
-            with(process) {
-                if (exitValue() == 0) {
-                    println("Stored ScanCode results in ${resultsFile.absolutePath}.")
-                    ScanResultsCache.write(pkg, resultsFile)
-                    return parseLicenses(resultsFile)
-                } else {
-                    throw ScanException(failMessage)
-                }
-            }
-
-            // TODO: convert json output to spdx
-            // TODO: convert json output to html
-            // TODO: Add results of license scan to YAML model
+        val sourceDirectory = try {
+            Main.download(pkg, downloadDirectory)
         } catch (e: DownloadException) {
             if (Main.stacktrace) {
                 e.printStackTrace()
             }
 
-            throw ScanException("Package ${pkg.identifier} could not be scanned.", e)
+            throw ScanException("Package '${pkg.identifier}' could not be scanned.", e)
         }
+
+        return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, resultsFile) }
+    }
+
+    override fun scan(path: File, outputDirectory: File): Set<String> {
+        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
+
+        val resultsFile = File(scanResultsDirectory,
+                "${path.nameWithoutExtension}_scancode.$OUTPUT_EXTENSION")
+
+        return scanPath(path, resultsFile)
+    }
+
+    private fun scanPath(path: File, resultsFile: File): Set<String> {
+        val scancodeVersion = getCommandVersion("scancode", transform = {
+            // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
+            it.substringAfter("ScanCode version ")
+        })
+
+        log.info { "Detected ScanCode version $scancodeVersion." }
+
+        val scancodeOptions = DEFAULT_OPTIONS.toMutableList()
+        if (log.isEnabledFor(Level.DEBUG)) {
+            scancodeOptions.add("--verbose")
+        }
+
+        println("Running ScanCode in directory '${path.absolutePath}'...")
+        val process = ProcessCapture(path,
+                "scancode", *scancodeOptions.toTypedArray(),
+                "--timeout", TIMEOUT.toString(),
+                "-n", PROCESSES.toString(),
+                "-f", OUTPUT_FORMAT,
+                ".", resultsFile.absolutePath)
+
+        with(process) {
+            if (exitValue() == 0) {
+                println("Stored ScanCode results in '${resultsFile.absolutePath}'.")
+                return parseLicenses(resultsFile)
+            } else {
+                throw ScanException(failMessage)
+            }
+        }
+
+        // TODO: convert json output to spdx
+        // TODO: convert json output to html
+        // TODO: Add results of license scan to YAML model
     }
 
     private fun parseLicenses(resultsFile: File): Set<String> {
