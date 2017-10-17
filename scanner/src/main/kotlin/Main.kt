@@ -10,7 +10,7 @@ import com.beust.jcommander.ParameterException
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
-import com.here.ort.model.ScanResult
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
@@ -148,18 +148,18 @@ object Main {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
         }
 
-        val scanResult = mapper.readValue(dependenciesFile, ScanResult::class.java)
+        val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
 
         println("Using scanner '$scanner'.")
 
-        val packages = mutableListOf(scanResult.project.toPackage())
-        packages.addAll(scanResult.packages)
+        val packages = mutableListOf(analyzerResult.project.toPackage())
+        packages.addAll(analyzerResult.packages)
 
         val summary = mutableMapOf<String, SummaryEntry>()
 
         packages.forEach { pkg ->
             val entry = summary.getOrPut(pkg.identifier) { SummaryEntry() }
-            entry.scopes.addAll(findScopesForPackage(pkg, scanResult.project))
+            entry.scopes.addAll(findScopesForPackage(pkg, analyzerResult.project))
             try {
                 println("Scanning ${pkg.identifier}")
                 entry.licenses.addAll(scanner.scan(pkg, outputDir).sorted())

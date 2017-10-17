@@ -5,7 +5,7 @@ import com.beust.jcommander.Parameter
 
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.PackageReference
-import com.here.ort.model.ScanResult
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
 import com.here.ort.util.yamlMapper
@@ -87,16 +87,13 @@ object Main {
             else -> throw IllegalArgumentException("Provided input file is neither JSON or YAML.")
         }
 
-        val scanResult = mapper.readValue(dependenciesFile, ScanResult::class.java)
-
-        showGraph(scanResult)
+        showGraph(mapper.readValue(dependenciesFile, AnalyzerResult::class.java))
     }
 
-    private fun showGraph(scanResult: ScanResult) {
+    private fun showGraph(analyzerResult: AnalyzerResult) {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer")
 
-        val project = scanResult.project
-
+        val project = analyzerResult.project
         val graph = SingleGraph(project.name)
 
         graph.setStrict(true)

@@ -9,7 +9,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
-import com.here.ort.model.ScanResult
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.util.OkHttpClientHelper
 import com.here.ort.util.OS
@@ -69,12 +69,12 @@ object PIP : PackageManager(
         return process
     }
 
-    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, ScanResult> {
+    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, AnalyzerResult> {
         // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
         checkCommandVersion("virtualenv", Semver("15.1.0"), ignoreActualVersion = Main.ignoreVersions)
 
-        val result = mutableMapOf<File, ScanResult>()
+        val result = mutableMapOf<File, AnalyzerResult>()
 
         definitionFiles.forEach { definitionFile ->
             val (virtualEnvDir, workingDir) = setupVirtualEnv(definitionFile)
@@ -174,7 +174,7 @@ object PIP : PackageManager(
                     scopes = scopes
             )
 
-            result[definitionFile] = ScanResult(project, packages)
+            result[definitionFile] = AnalyzerResult(project, packages)
 
             // Remove the virtualenv by simply deleting the directory.
             virtualEnvDir.deleteRecursively()

@@ -10,7 +10,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
-import com.here.ort.model.ScanResult
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.util.OS
 import com.here.ort.util.ProcessCapture
@@ -53,13 +53,13 @@ object NPM : PackageManager(
         return if (File(workingDir, "yarn.lock").isFile) yarn else npm
     }
 
-    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, ScanResult> {
+    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, AnalyzerResult> {
         // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
         checkCommandVersion(npm, Semver("5.3.0", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
         checkCommandVersion(yarn, Semver("1.1.0", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
 
-        val result = mutableMapOf<File, ScanResult>()
+        val result = mutableMapOf<File, AnalyzerResult>()
 
         definitionFiles.forEach { definitionFile ->
             val workingDir = definitionFile.parentFile
@@ -320,7 +320,7 @@ object NPM : PackageManager(
         }
     }
 
-    private fun parseProject(packageJson: File, scopes: List<Scope>, packages: SortedSet<Package>): ScanResult {
+    private fun parseProject(packageJson: File, scopes: List<Scope>, packages: SortedSet<Package>): AnalyzerResult {
         log.debug { "Parsing project info from ${packageJson.absolutePath}." }
 
         val json = jsonMapper.readTree(packageJson)
@@ -347,7 +347,7 @@ object NPM : PackageManager(
                 scopes = scopes
         )
 
-        return ScanResult(project, packages)
+        return AnalyzerResult(project, packages)
     }
 
     /**

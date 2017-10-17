@@ -175,7 +175,7 @@ object Main {
 
             // Print the list of dependencies.
             val results = manager.resolveDependencies(absoluteProjectPath, paths)
-            results.forEach { definitionFile, scanResult ->
+            results.forEach { definitionFile, analyzerResult ->
                 // Mirror the directory structure from the project in the output.
                 val outputDir = File(absoluteOutputPath,
                         definitionFile.parentFile.toRelativeString(absoluteProjectPath))
@@ -183,7 +183,7 @@ object Main {
                     val outputFile = File(outputDir, definitionFile.name.replace('.', '-') +
                             "-dependencies." + outputFormat.fileEnding)
                     println("Writing results for\n\t$definitionFile\nto\n\t$outputFile")
-                    mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, scanResult)
+                    mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, analyzerResult)
                     println("done.")
                 } else {
                     log.error { "Unable to create output directory '$outputDir'." }

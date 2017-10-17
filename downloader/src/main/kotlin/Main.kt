@@ -9,7 +9,7 @@ import com.beust.jcommander.ParameterException
 
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
-import com.here.ort.model.ScanResult
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
 import com.here.ort.util.safeMkdirs
@@ -128,16 +128,15 @@ object Main {
 
         outputDir.safeMkdirs()
 
-        val scanResult = mapper.readValue(dependenciesFile, ScanResult::class.java)
-
+        val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
         val packages = mutableListOf<Package>()
 
         if (entities.contains(DataEntity.PROJECT)) {
-            packages.add(scanResult.project.toPackage())
+            packages.add(analyzerResult.project.toPackage())
         }
 
         if (entities.contains(DataEntity.PACKAGES)) {
-            packages.addAll(scanResult.packages)
+            packages.addAll(analyzerResult.packages)
         }
 
         packages.forEach { pkg ->

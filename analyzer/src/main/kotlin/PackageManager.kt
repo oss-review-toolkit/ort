@@ -1,7 +1,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.*
-import com.here.ort.model.ScanResult
+import com.here.ort.model.AnalyzerResult
 
 import java.io.File
 import java.nio.file.FileSystems
@@ -64,5 +64,5 @@ abstract class PackageManager(
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
-    abstract fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, ScanResult>
+    abstract fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, AnalyzerResult>
 }

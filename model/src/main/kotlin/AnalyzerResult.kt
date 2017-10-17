@@ -3,11 +3,11 @@ package com.here.ort.model
 import java.util.SortedSet
 
 /**
- * A class that bundles all information generated during a scan.
+ * A class that bundles all information generated during an analysis.
  */
-data class ScanResult(
+data class AnalyzerResult(
         /**
-         * The project that was scanned. The tree of dependencies is implicitly contained in the scopes in the form
+         * The project that was analyzed. The tree of dependencies is implicitly contained in the scopes in the form
          * of package references.
          */
         val project: Project,
