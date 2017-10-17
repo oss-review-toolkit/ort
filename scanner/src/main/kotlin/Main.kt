@@ -52,7 +52,8 @@ object Main {
         }
     }
 
-    @Parameter(description = "The dependencies analysis file to use.",
+    @Parameter(description = "The dependencies analysis file to use. Source code will be downloaded automatically if " +
+            "needed.",
             names = arrayOf("--dependencies-file", "-d"),
             required = true,
             order = 0)
