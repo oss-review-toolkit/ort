@@ -18,6 +18,7 @@ project:
       name: "ply"
       version: "3.10"
       dependencies: []
+      errors: []
     - namespace: ""
       name: "rdflib"
       version: "4.2.2"
@@ -30,14 +31,19 @@ project:
           name: "six"
           version: "1.11.0"
           dependencies: []
+          errors: []
+        errors: []
       - namespace: ""
         name: "pyparsing"
         version: "2.2.0"
         dependencies: []
+        errors: []
+      errors: []
     - namespace: ""
       name: "six"
       version: "1.11.0"
       dependencies: []
+      errors: []
 packages:
 - package_manager: "PIP"
   namespace: ""

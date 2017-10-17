@@ -29,7 +29,12 @@ data class PackageReference(
          * The list of references to packages this package depends on. Note that this list depends on the scope in
          * which this package reference is used.
          */
-        val dependencies: SortedSet<PackageReference>
+        val dependencies: SortedSet<PackageReference>,
+
+        /**
+         * A list of errors that occured handling this [PackageReference].
+         */
+        val errors: List<String> = emptyList()
 ) : Comparable<PackageReference> {
     /**
      * The minimum human readable information to identify the package referred to. As references are specific to the
