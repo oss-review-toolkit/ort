@@ -125,3 +125,8 @@ fun File.safeMkdirs() {
 
     throw IOException("Could not create directory ${this.absolutePath}.")
 }
+
+/**
+ * Convenience function for [JsonNode] that returns an empty string if [JsonNode.asText] is called on a null object.
+ */
+fun JsonNode?.asTextOrEmpty() = if (this != null) this.asText() else ""

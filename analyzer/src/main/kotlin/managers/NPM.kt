@@ -7,16 +7,17 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.util.OS
 import com.here.ort.util.ProcessCapture
+import com.here.ort.util.asTextOrEmpty
+import com.here.ort.util.checkCommandVersion
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
-import com.here.ort.util.checkCommandVersion
 
 import com.vdurmont.semver4j.Semver
 import com.vdurmont.semver4j.Semver.SemverType
@@ -147,8 +148,8 @@ object NPM : PackageManager(
                 val packageInfo = jsonMapper.readTree(url.readText())
                 val infoJson = packageInfo["versions"][version]
 
-                description = if (infoJson["description"] != null) infoJson["description"].asText() else ""
-                homepageUrl = if (infoJson["homepage"] != null) infoJson["homepage"].asText() else ""
+                description = infoJson["description"].asTextOrEmpty()
+                homepageUrl = infoJson["homepage"].asTextOrEmpty()
 
                 val dist = infoJson["dist"]
                 downloadUrl = dist["tarball"].asText()
@@ -159,7 +160,7 @@ object NPM : PackageManager(
                     vcsProvider = first
                     vcsUrl = second
                 }
-                vcsRevision = if (infoJson["gitHead"] != null) infoJson["gitHead"].asText() else ""
+                vcsRevision = infoJson["gitHead"].asTextOrEmpty()
             } catch (e: FileNotFoundException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -167,10 +168,10 @@ object NPM : PackageManager(
 
                 // Fallback to getting detailed info from the package.json file. Some info will likely be missing.
 
-                description = if (json["description"] != null) json["description"].asText() else ""
-                homepageUrl = if (json["homepage"] != null) json["homepage"].asText() else ""
-                downloadUrl = if (json["_resolved"] != null) json["_resolved"].asText() else ""
-                hash = if (json["_integrity"] != null) json["_integrity"].asText() else ""
+                description = json["description"].asTextOrEmpty()
+                homepageUrl = json["homepage"].asTextOrEmpty()
+                downloadUrl = json["_resolved"].asTextOrEmpty()
+                hash = json["_integrity"].asTextOrEmpty()
                 // TODO: add detection of hash algorithm
 
                 with(parseRepository(json)) {
@@ -253,10 +254,8 @@ object NPM : PackageManager(
             if (node["repository"].textValue() != null)
                 url = node["repository"].asText()
             else {
-                val typeNode = node["repository"]["type"]
-                val urlNode = node["repository"]["url"]
-                type = if (typeNode != null) typeNode.asText() else ""
-                url = if (urlNode != null) urlNode.asText() else ""
+                type = node["repository"]["type"].asTextOrEmpty()
+                url = node["repository"]["url"].asTextOrEmpty()
             }
         }
         return Pair(type, url)
@@ -329,7 +328,7 @@ object NPM : PackageManager(
         val version = json["version"].asText()
         val vcsPath = ""
         val (vcsProvider, vcsUrl) = parseRepository(json)
-        val homepageUrl = if (json["homepage"] != null) json["homepage"].asText() else ""
+        val homepageUrl = json["homepage"].asTextOrEmpty()
 
         // TODO: parse revision from vcs
 
