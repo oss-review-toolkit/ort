@@ -31,7 +31,8 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
      * A generic error message, can be used when [exitValue] is not 0.
      */
     val failMessage
-            get() = "'$commandLine' failed with exit code ${exitValue()}:\n${stderr()}"
+        get() = "'$commandLine' in directory '${builder.directory()?.let { it } ?: System.getProperty("user.dir")}' " +
+                "failed with exit code ${exitValue()}:\n${stderr()}"
 
     init {
         log.info { "Running '$commandLine'..." }
