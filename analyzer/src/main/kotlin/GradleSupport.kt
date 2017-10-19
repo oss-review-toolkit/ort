@@ -1,5 +1,5 @@
-// These interfaces must match the interfaces defined in src/resources/init.gradle, because they are used to deserialize
-// the model created there. Because it is not possible to declare a package in init.gradle also no package is declared
+// These interfaces must match the interfaces defined in src/resources/init.gradle because they are used to deserialize
+// the model created there. As it is not possible to declare a package in init.gradle also no package is declared
 // here.
 
 interface DependencyTreeModel {
