@@ -55,6 +55,32 @@ Usage: analyzer [options]
       Display the command line help.
 ```
 
+### [graph](./graph/src/main/kotlin)
+
+In order to quickly visualize dependency information from an analysis the Graph tool can be used. Given a dependency
+analysis file it diplays a simple representation of the dependency graph in a GUI. The graph is interactive in the sense
+that nodes can be dragged & dropped with the mouse to rearrange them for a better overview.
+
+The `graph` command line tool takes the following arguments:
+
+```
+Usage: graph [options]
+  Options:
+    --info
+      Enable info logging.
+      Default: false
+    --debug
+      Enable debug logging and keep any temporary files.
+      Default: false
+    --stacktrace
+      Print out the stacktrace for all exceptions.
+      Default: false
+  * --dependencies-file, -d
+      The dependencies analysis file to use.
+    --help, -h
+      Display the command line help.
+```
+
 ## License
 
 Copyright (c) 2017 HERE Europe B.V.
