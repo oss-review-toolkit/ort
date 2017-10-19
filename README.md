@@ -83,7 +83,7 @@ Usage: graph [options]
 
 ### [downloader](./downloader/src/main/kotlin)
 
-Taking a single ABCD-syle dependency file as the input (`-i`), the Downloader retrieves the source code of all contained
+Taking a single ABCD-syle dependencies file as the input (`-d`), the Downloader retrieves the source code of all contained
 packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs and using
 the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
@@ -92,6 +92,8 @@ The `downloader` command line tool takes the following arguments:
 ```
 Usage: downloader [options]
   Options:
+  * --dependencies-file, -d
+      The dependencies analysis file to use.
     --debug
       Enable debug logging and keep any temporary files.
       Default: false
@@ -106,8 +108,6 @@ Usage: downloader [options]
     --entities, -e
       The data entities from the dependencies analysis file to download.
       Default: [PACKAGES, PROJECT]
-  * --input-file, -i
-      The dependencies analysis file to use.
     --help, -h
       Display the command line help.
 ```
