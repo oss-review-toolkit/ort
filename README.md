@@ -112,6 +112,59 @@ Usage: downloader [options]
       Display the command line help.
 ```
 
+### [scanner](./scanner/src/main/kotlin)
+
+This tool wraps underlying license / copyright scanners with a common API. This way all supported scanners can be used
+in the same way to easily run them and compare their results. If passed a dependencies analysis file (`-d`), the Scanner
+will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In order to not
+download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a (remote) cache, hosted
+e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented). Using the example of
+configuring an Artifactory cache, the YAML-based configuration file would look like:
+
+```
+scanner:
+  cache:
+    type: Artifactory
+    url: "https://artifactory.domain.com/artifactory/generic-repository-name"
+    apiToken: $ARTIFACTORY_API_KEY
+```
+
+The `scanner` command line tool takes the following arguments:
+
+```
+Usage: scanner [options]
+  Options:
+  * --output-dir, -o
+      The output directory to store the scan results and source code of
+      packages.
+    --summary-format, -f
+      The list of file formats for the summary files.
+      Default: [YAML]
+    --info
+      Enable info logging.
+      Default: false
+    --dependencies-file, -d
+      The dependencies analysis file to use. Source code will be downloaded
+      automatically if needed. This parameter and --input-path are mutually
+      exclusive.
+    --debug
+      Enable debug logging and keep any temporary files.
+      Default: false
+    --input-path, -i
+      The input directory or file to scan. This parameter and
+      --dependencies-file are mutually exclusive.
+    --stacktrace
+      Print out the stacktrace for all exceptions.
+      Default: false
+    --scanner, -s
+      The scanner to use.
+      Default: ScanCode
+    --config, -c
+      The path to the configuration file.
+    --help, -h
+      Display the command line help.
+```
+
 ## License
 
 Copyright (c) 2017 HERE Europe B.V.
