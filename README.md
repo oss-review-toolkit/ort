@@ -13,7 +13,7 @@ The Analyzer determines the dependencies of software projects inside the specifi
 querying whatever [supported package manager](./analyzer/src/main/kotlin/managers) is found. No modifications to your
 existing project source code, or especially to the build system, are necessary for that to work. The tree of transitive
 dependencies per project is written out as [ABCD](https://github.com/nexB/aboutcode/tree/master/aboutcode-data)-style
-YAML (or JSON, see `-f`) files to the specified output directory (`-d`) whose inner structure mirrors the one from the
+YAML (or JSON, see `-f`) files to the specified output directory (`-o`) whose inner structure mirrors the one from the
 input directory. The output files exactly document the status quo of all package-related meta-data. They can and
 probably need to be further processed or manually edited before passing them to one of the other tools.
 
