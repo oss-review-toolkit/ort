@@ -74,12 +74,14 @@ object ScanCode : Scanner() {
         }
 
         println("Running ScanCode in directory '${path.absolutePath}'...")
-        val process = ProcessCapture(path,
+        val process = ProcessCapture(
                 "scancode", *scancodeOptions.toTypedArray(),
                 "--timeout", TIMEOUT.toString(),
                 "-n", PROCESSES.toString(),
                 "-f", OUTPUT_FORMAT,
-                ".", resultsFile.absolutePath)
+                path.absolutePath,
+                resultsFile.absolutePath
+        )
 
         with(process) {
             if (exitValue() == 0) {
