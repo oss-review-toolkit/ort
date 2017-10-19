@@ -57,8 +57,8 @@ Usage: analyzer [options]
 
 ### [graph](./graph/src/main/kotlin)
 
-In order to quickly visualize dependency information from an analysis the Graph tool can be used. Given a dependency
-analysis file it diplays a simple representation of the dependency graph in a GUI. The graph is interactive in the sense
+In order to quickly visualize dependency information from an analysis the Graph tool can be used. Given a dependencies
+file (`-d`) it diplays a simple representation of the dependency graph in a GUI. The graph is interactive in the sense
 that nodes can be dragged & dropped with the mouse to rearrange them for a better overview.
 
 The `graph` command line tool takes the following arguments:
