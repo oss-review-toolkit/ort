@@ -12,3 +12,4 @@ project:
   homepage_url: ""
   scopes: []
 packages: []
+allowDynamicVersions: true

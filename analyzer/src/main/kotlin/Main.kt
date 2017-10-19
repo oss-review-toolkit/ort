@@ -69,6 +69,13 @@ object Main {
             order = 0)
     var ignoreVersions = false
 
+    @Parameter(description = "Allow dynamic versions of dependencies. This can result in unstable results when " +
+            "dependencies use version ranges. This option only affects package managers that support lock files, " +
+            "like NPM.",
+            names = arrayOf("--allow-dynamic-versions"),
+            order = 0)
+    var allowDynamicVersions = false
+
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),
             order = 0)

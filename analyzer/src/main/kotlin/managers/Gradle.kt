@@ -76,7 +76,7 @@ object Gradle : PackageManager(
                 val project = Project(javaClass.simpleName, "", dependencyTreeModel.name, "", emptyList(), "", "", "",
                         "", "", scopes)
 
-                result.put(definitionFile, AnalyzerResult(project, packages.values.toSortedSet()))
+                result.put(definitionFile, AnalyzerResult(project, packages.values.toSortedSet(), true))
             } catch (e: BuildException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()

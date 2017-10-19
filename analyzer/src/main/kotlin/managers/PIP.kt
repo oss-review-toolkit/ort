@@ -174,7 +174,7 @@ object PIP : PackageManager(
                     scopes = scopes
             )
 
-            result[definitionFile] = AnalyzerResult(project, packages)
+            result[definitionFile] = AnalyzerResult(project, packages, true)
 
             // Remove the virtualenv by simply deleting the directory.
             virtualEnvDir.deleteRecursively()

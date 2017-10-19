@@ -111,3 +111,4 @@ packages:
   vcs_provider: null
   vcs_url: null
   vcs_revision: null
+allowDynamicVersions: true

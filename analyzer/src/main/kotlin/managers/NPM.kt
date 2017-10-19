@@ -346,22 +346,24 @@ object NPM : PackageManager(
                 scopes = scopes
         )
 
-        return AnalyzerResult(project, packages)
+        return AnalyzerResult(project, packages, Main.allowDynamicVersions)
     }
 
     /**
      * Install dependencies using the given package manager command.
      */
     private fun installDependencies(workingDir: File) {
-        val lockFiles = listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock").filter {
-            File(workingDir, it).isFile
-        }
-        when (lockFiles.size) {
-            0 -> throw IllegalArgumentException(
-                    "No lockfile found in $workingDir, dependency versions are unstable.")
-            1 -> log.debug { "Found lock file '${lockFiles.first()}'." }
-            else -> throw IllegalArgumentException(
-                    "$workingDir contains multiple lockfiles. It is ambiguous which one to use.")
+        if (!Main.allowDynamicVersions) {
+            val lockFiles = listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock").filter {
+                File(workingDir, it).isFile
+            }
+            when (lockFiles.size) {
+                0 -> throw IllegalArgumentException(
+                        "No lockfile found in $workingDir, dependency versions are unstable.")
+                1 -> log.debug { "Found lock file '${lockFiles.first()}'." }
+                else -> throw IllegalArgumentException(
+                        "$workingDir contains multiple lockfiles. It is ambiguous which one to use.")
+            }
         }
 
         val managerCommand = command(workingDir)

@@ -222,3 +222,4 @@ packages:
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
+allowDynamicVersions: true
