@@ -192,10 +192,14 @@ object Main {
     private fun scanEntry(entry: SummaryEntry, identifier: String, input: Any) {
         try {
             println("Scanning '$identifier'...")
-            when (input) {
-                is Package -> entry.licenses.addAll(scanner.scan(input, outputDir).sorted())
-                is File -> entry.licenses.addAll(scanner.scan(input, outputDir).sorted())
+
+            val result = when (input) {
+                is Package -> scanner.scan(input, outputDir)
+                is File -> scanner.scan(input, outputDir)
+                else -> throw IllegalArgumentException("Unsupported scan input.")
             }
+            entry.licenses.addAll(result.sorted())
+
             println("Found licenses for '$identifier: ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {
             if (stacktrace) {
