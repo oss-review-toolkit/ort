@@ -81,6 +81,37 @@ Usage: graph [options]
       Display the command line help.
 ```
 
+### [downloader](./downloader/src/main/kotlin)
+
+Taking a single ABCD-syle dependency file as the input (`-i`), the Downloader retrieves the source code of all contained
+packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs and using
+the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
+
+The `downloader` command line tool takes the following arguments:
+
+```
+Usage: downloader [options]
+  Options:
+    --debug
+      Enable debug logging and keep any temporary files.
+      Default: false
+  * --output-dir, -o
+      The output directory to download the source code to.
+    --info
+      Enable info logging.
+      Default: false
+    --stacktrace
+      Print out the stacktrace for all exceptions.
+      Default: false
+    --entities, -e
+      The data entities from the dependencies analysis file to download.
+      Default: [PACKAGES, PROJECT]
+  * --input-file, -i
+      The dependencies analysis file to use.
+    --help, -h
+      Display the command line help.
+```
+
 ## License
 
 Copyright (c) 2017 HERE Europe B.V.
