@@ -26,7 +26,7 @@ import kotlin.system.exitProcess
 object Main {
 
     @Parameter(description = "The dependencies analysis file to use.",
-            names = arrayOf("--input-file", "-i"),
+            names = arrayOf("--dependencies-file", "-d"),
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
