@@ -9,3 +9,4 @@
 [submodule "spdx-tools-python"]
 	path = analyzer/src/funTest/assets/projects/external/spdx-tools-python
 	url = https://github.com/spdx/tools-python.git
+	ignore = untracked
