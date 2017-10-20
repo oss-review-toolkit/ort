@@ -31,11 +31,11 @@ Several existing similar tools have been looked at before developing the Analyze
 
   A new package manager designed around `Pipfile{.lock}` files. Claims to offer [import of requirements.txt files](http://docs.pipenv.org/en/latest/advanced.html#importing-from-requirements-txt) and [import of setup.py files](https://github.com/kennethreitz/pipenv/issues/592), but it does not actually work, or only in very simple cases.
 
-- https://github.com/pivotal/LicenseFinder/blob/master/lib/license_finder/package_managers/pip.rb
+- https://github.com/pivotal/LicenseFinder/blob/b784114/lib/license_finder/package_managers/pip.rb
 
-  Uses a [helper script](https://github.com/pivotal/LicenseFinder/blob/master/bin/license_finder_pip.py) to parse only `requirements.txt` via the `pip.req.parse_requirements` API from Ruby code.
+  Uses a [helper script](https://github.com/pivotal/LicenseFinder/blob/3c073e7/bin/license_finder_pip.py) to parse only `requirements.txt` via the `pip.req.parse_requirements` API from Ruby code.
 
-- https://github.com/librariesio/bibliothecary/blob/master/lib/bibliothecary/parsers/pypi.rb
+- https://github.com/librariesio/bibliothecary/blob/8704537/lib/bibliothecary/parsers/pypi.rb
 
   Manually parses `requirements.txt`, `setup.py` and `Pipfile{.lock}` files. Only supports basic syntax.
 
@@ -51,7 +51,7 @@ Several existing similar tools have been looked at before developing the Analyze
 
   An add-on for [srclib](https://github.com/sourcegraph/srclib) that manually parses `requirements.txt` files only.
 
-- https://github.com/blackducksoftware/hub-detect/blob/master/src/main/resources/pip-inspector.py
+- https://github.com/blackducksoftware/hub-detect/blob/c5665d1/src/main/resources/pip-inspector.py
 
   Uses the `pip.req.parse_requirements` API. `setup.py` seems to be recognized but not yet handled.
 
