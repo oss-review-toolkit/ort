@@ -5,6 +5,22 @@ your software deliverables. The different tools in the suite are designed as lib
 minimal command line interface (for scripted use,
 [doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
 
+## Installation
+
+After cloning the Git repository, on the command line do execute
+
+```
+./gradlew installDist
+```
+
+to build the tools and install the start scripts for distribution. The individual start scripts can then be run directly
+from their respective locations at
+
+* `./analyzer/build/install/analyzer/bin/analyzer`
+* `./graph/build/install/graph/bin/graph`
+* `./downloader/build/install/downloader/bin/downloader`
+* `./scanner/build/install/scanner/bin/scanner`
+
 ## Usage
 
 ### [analyzer](./analyzer/src/main/kotlin)
