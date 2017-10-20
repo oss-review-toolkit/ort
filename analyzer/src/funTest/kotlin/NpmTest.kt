@@ -106,15 +106,18 @@ class NpmTest : StringSpec() {
             exception.message!! should endWith("contains multiple lockfiles. It is ambiguous which one to use.")
         }
 
-        "NPM aborts when the node_modules directory already exists" {
+        "NPM dependencies are resolved even if the node_modules directory already exists" {
             val workingDir = File(projectDir, "node-modules")
             val packageFile = File(workingDir, "package.json")
+            val expectedResult =
+                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                            .readText()
+                            .replaceFirst("project-npm", "project-npm-node-modules")
 
-            val exception = shouldThrow<IllegalArgumentException> {
-                NPM.resolveDependencies(projectDir, listOf(packageFile))
-            }
-            @Suppress("UnsafeCallOnNullableType")
-            exception.message!! should endWith("directory already exists.")
+            val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+
+            NPM.command(workingDir) shouldBe NPM.npm
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
 }

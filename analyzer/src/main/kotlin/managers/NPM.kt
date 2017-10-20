@@ -27,6 +27,8 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URL
 import java.net.URLEncoder
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
 import kotlin.system.measureTimeMillis
@@ -69,9 +71,18 @@ object NPM : PackageManager(
 
             val elapsed = measureTimeMillis {
                 val modulesDir = File(workingDir, "node_modules")
-                require(!modulesDir.isDirectory) { "'$modulesDir' directory already exists." }
 
+                var tempModulesDir: File? = null
                 try {
+                    // Temporarily move away any existing "node_modules" directory within the same filesystem to ensure
+                    // the move can be performed atomically.
+                    if (modulesDir.isDirectory) {
+                        val tempDir = createTempDir("analyzer", ".tmp", workingDir)
+                        tempModulesDir = File(tempDir, "node_modules")
+                        log.warn { "'$modulesDir' already exists, temporarily moving it to '$tempModulesDir'." }
+                        Files.move(modulesDir.toPath(), tempModulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                    }
+
                     // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
                     // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
                     // the same dependency is only ever downloaded once.
@@ -93,6 +104,15 @@ object NPM : PackageManager(
                     // Delete node_modules folder to not pollute the scan.
                     if (!modulesDir.deleteRecursively()) {
                         throw IOException("Unable to delete the '$modulesDir' directory.")
+                    }
+
+                    // Restore any previously existing "node_modules" directory.
+                    if (tempModulesDir != null) {
+                        log.info { "Restoring original '$modulesDir' directory from '$tempModulesDir'." }
+                        Files.move(tempModulesDir.toPath(), modulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                        if (!tempModulesDir.parentFile.delete()) {
+                            throw IOException("Unable to delete the '${tempModulesDir.parent}' directory.")
+                        }
                     }
                 }
             }
