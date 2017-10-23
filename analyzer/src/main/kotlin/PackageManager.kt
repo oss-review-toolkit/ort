@@ -1,10 +1,17 @@
 package com.here.ort.analyzer
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.analyzer.managers.*
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.util.log
 
 import java.io.File
 import java.nio.file.FileSystems
+
+import kotlin.system.measureTimeMillis
+
+typealias ResolutionResult = MutableMap<File, AnalyzerResult>
 
 /**
  * A class representing a package manager that handles software dependencies.
@@ -64,5 +71,40 @@ abstract class PackageManager(
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
-    abstract fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, AnalyzerResult>
+    open fun resolveDependencies(projectDir: File, definitionFiles: List<File>): ResolutionResult {
+        prepareResolution()
+
+        val result = mutableMapOf<File, AnalyzerResult>()
+
+        definitionFiles.forEach { definitionFile ->
+            val workingDir = definitionFile.parentFile
+
+            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
+
+            val elapsed = measureTimeMillis {
+                resolveDependency(projectDir, workingDir, definitionFile, result)
+            }
+
+            log.info {
+                "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s."
+            }
+        }
+
+        return result
+    }
+
+    /**
+     * Optional preparation step for dependency resolution, like checking for prerequisites.
+     */
+    protected open fun prepareResolution() {
+        log.debug { "Resolving ${javaClass.simpleName} dependencies does not define any preparation." }
+    }
+
+    /**
+     * Resolve dependencies for single [definitionFile], amending the [result].
+     */
+    protected open fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File,
+                                         result: ResolutionResult) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

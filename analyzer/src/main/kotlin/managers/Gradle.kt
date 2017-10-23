@@ -7,6 +7,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.ResolutionResult
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -44,63 +45,47 @@ object Gradle : PackageManager(
         return if (File(workingDir, wrapper).isFile) wrapper else gradle
     }
 
-    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, AnalyzerResult> {
-        val result = mutableMapOf<File, AnalyzerResult>()
+    override fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File, result: ResolutionResult) {
+        val connection = GradleConnector
+                .newConnector()
+                .forProjectDirectory(workingDir)
+                .connect()
 
-        definitionFiles.forEach { definitionFile ->
-            val workingDir = definitionFile.parentFile
+        try {
+            val initScriptFile = File.createTempFile("init", "gradle")
+            initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
 
-            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
+            val dependencyTreeModel = connection
+                    .model(DependencyTreeModel::class.java)
+                    .withArguments("--init-script", initScriptFile.absolutePath)
+                    .get()
 
-            val elapsed = measureTimeMillis {
-                val connection = GradleConnector
-                        .newConnector()
-                        .forProjectDirectory(workingDir)
-                        .connect()
+            if (!initScriptFile.delete()) {
+                log.warn { "Init script file '${initScriptFile.absolutePath}' could not be deleted." }
+            }
 
-                try {
-                    val initScriptFile = File.createTempFile("init", "gradle")
-                    initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
-
-                    val dependencyTreeModel = connection
-                            .model(DependencyTreeModel::class.java)
-                            .withArguments("--init-script", initScriptFile.absolutePath)
-                            .get()
-
-                    if (!initScriptFile.delete()) {
-                        log.warn { "Init script file '${initScriptFile.absolutePath}' could not be deleted." }
-                    }
-
-                    val packages = mutableMapOf<String, Package>()
-                    val scopes = dependencyTreeModel.configurations.map { configuration ->
-                        val dependencies = configuration.dependencies.map { dependency ->
-                            parseDependency(dependency, packages)
-                        }
-
-                        Scope(configuration.name, true, dependencies.toSortedSet())
-                    }
-
-                    val project = Project(javaClass.simpleName, "", dependencyTreeModel.name, "", emptyList(), "", "", "",
-                            "", "", scopes)
-
-                    result.put(definitionFile, AnalyzerResult(project, packages.values.toSortedSet(), true))
-                } catch (e: BuildException) {
-                    if (Main.stacktrace) {
-                        e.printStackTrace()
-                    }
-
-                    log.error { "Could not analyze '${definitionFile.absolutePath}': ${e.message}" }
-                } finally {
-                    connection.close()
+            val packages = mutableMapOf<String, Package>()
+            val scopes = dependencyTreeModel.configurations.map { configuration ->
+                val dependencies = configuration.dependencies.map { dependency ->
+                    parseDependency(dependency, packages)
                 }
+
+                Scope(configuration.name, true, dependencies.toSortedSet())
             }
 
-            log.info {
-                "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s."
+            val project = Project(javaClass.simpleName, "", dependencyTreeModel.name, "", emptyList(), "", "", "",
+                    "", "", scopes)
+
+            result.put(definitionFile, AnalyzerResult(project, packages.values.toSortedSet(), true))
+        } catch (e: BuildException) {
+            if (Main.stacktrace) {
+                e.printStackTrace()
             }
+
+            log.error { "Could not analyze '${definitionFile.absolutePath}': ${e.message}" }
+        } finally {
+            connection.close()
         }
-
-        return result
     }
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>): PackageReference {

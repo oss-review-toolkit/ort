@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.ResolutionResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -22,8 +23,6 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.util.SortedSet
-
-import kotlin.system.measureTimeMillis
 
 import okhttp3.Request
 
@@ -71,131 +70,117 @@ object PIP : PackageManager(
         return process
     }
 
-    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, AnalyzerResult> {
+    override fun prepareResolution() {
         // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
         checkCommandVersion("virtualenv", Semver("15.1.0"), ignoreActualVersion = Main.ignoreVersions)
-
-        val result = mutableMapOf<File, AnalyzerResult>()
-
-        definitionFiles.forEach { definitionFile ->
-            val (virtualEnvDir, workingDir) = setupVirtualEnv(definitionFile)
-
-            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
-
-            val elapsed = measureTimeMillis {
-                // List all packages installed locally in the virtualenv in JSON format.
-                val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
-
-                // Install pydep after running any other command but before looking at the dependencies because it
-                // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
-                // pydep is not on PyPI, install it from Git instead.
-                var pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install",
-                        "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION")
-                pip.requireSuccess()
-
-                val pydep = runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
-                pydep.requireSuccess()
-
-                val (projectName, projectVersion, projectRepo) = jsonMapper.readTree(pydep.stdout()).let {
-                    listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
-                }
-
-                val packages = sortedSetOf<Package>()
-                val installDependencies = sortedSetOf<PackageReference>()
-
-                if (pipdeptree.exitValue() == 0) {
-                    val allDependencies = jsonMapper.readTree(pipdeptree.stdout())
-                    val packageTemplates = sortedSetOf<Package>()
-                    parseDependencies(projectName, allDependencies, packageTemplates, installDependencies)
-
-                    packageTemplates.mapTo(packages) { pkg ->
-                        // See https://wiki.python.org/moin/PyPIJSON.
-                        val pkgRequest = Request.Builder()
-                                .get()
-                                .url("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json")
-                                .build()
-
-                        val pkgJson = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
-                            response.body()?.string()
-                        }
-
-                        @Suppress("CatchException")
-                        try {
-                            val pkgData = jsonMapper.readTree(pkgJson)
-                            val pkgInfo = pkgData["info"]
-
-                            // TODO: Support multiple package types of the same package version. Arbitrarily choose the
-                            // first for now.
-                            val pkgRelease = pkgData["releases"][pkg.version][0]
-
-                            // Amend package information with more details.
-                            Package(
-                                    packageManager = pkg.packageManager,
-                                    namespace = pkg.namespace,
-                                    name = pkg.name,
-                                    version = pkg.version,
-                                    description = pkgInfo["summary"]?.asText() ?: pkg.description,
-                                    homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
-                                    downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
-                                    hash = pkgRelease["md5_digest"]?.asText() ?: pkg.hash,
-                                    hashAlgorithm = "MD5",
-                                    vcsPath = pkg.vcsPath,
-                                    vcsProvider = pkg.vcsProvider,
-                                    vcsUrl = pkg.vcsUrl,
-                                    vcsRevision = pkg.vcsRevision
-                            )
-                        } catch (e: Exception) {
-                            if (Main.stacktrace) {
-                                e.printStackTrace()
-                            }
-
-                            log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
-
-                            // Fall back to returning the original package data.
-                            pkg
-                        }
-                    }
-                } else {
-                    log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
-                }
-
-                // TODO: Handle "extras" and "tests" dependencies.
-                val scopes = listOf(
-                        Scope("install", true, installDependencies)
-                )
-
-                val project = Project(
-                        packageManager = javaClass.simpleName,
-                        namespace = "",
-                        name = projectName,
-                        version = projectVersion,
-                        aliases = emptyList(),
-                        vcsPath = null,
-                        vcsProvider = "",
-                        vcsUrl = projectRepo,
-                        vcsRevision = "",
-                        homepageUrl = "",
-                        scopes = scopes
-                )
-
-                result[definitionFile] = AnalyzerResult(project, packages, true)
-
-                // Remove the virtualenv by simply deleting the directory.
-                virtualEnvDir.deleteRecursively()
-            }
-
-            log.info {
-                "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s."
-            }
-        }
-
-        return result
     }
 
-    private fun setupVirtualEnv(definitionFile: File): List<File> {
-        val workingDir = definitionFile.parentFile
+    override fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File, result: ResolutionResult) {
+        val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
+        // List all packages installed locally in the virtualenv in JSON format.
+        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
+
+        // Install pydep after running any other command but before looking at the dependencies because it
+        // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
+        // pydep is not on PyPI, install it from Git instead.
+        var pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install",
+                "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION")
+        pip.requireSuccess()
+
+        val pydep = runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
+        pydep.requireSuccess()
+
+        val (projectName, projectVersion, projectRepo) = jsonMapper.readTree(pydep.stdout()).let {
+            listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
+        }
+
+        val packages = sortedSetOf<Package>()
+        val installDependencies = sortedSetOf<PackageReference>()
+
+        if (pipdeptree.exitValue() == 0) {
+            val allDependencies = jsonMapper.readTree(pipdeptree.stdout())
+            val packageTemplates = sortedSetOf<Package>()
+            parseDependencies(projectName, allDependencies, packageTemplates, installDependencies)
+
+            packageTemplates.mapTo(packages) { pkg ->
+                // See https://wiki.python.org/moin/PyPIJSON.
+                val pkgRequest = Request.Builder()
+                        .get()
+                        .url("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json")
+                        .build()
+
+                val pkgJson = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
+                    response.body()?.string()
+                }
+
+                @Suppress("CatchException")
+                try {
+                    val pkgData = jsonMapper.readTree(pkgJson)
+                    val pkgInfo = pkgData["info"]
+
+                    // TODO: Support multiple package types of the same package version. Arbitrarily choose the
+                    // first for now.
+                    val pkgRelease = pkgData["releases"][pkg.version][0]
+
+                    // Amend package information with more details.
+                    Package(
+                            packageManager = pkg.packageManager,
+                            namespace = pkg.namespace,
+                            name = pkg.name,
+                            version = pkg.version,
+                            description = pkgInfo["summary"]?.asText() ?: pkg.description,
+                            homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
+                            downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
+                            hash = pkgRelease["md5_digest"]?.asText() ?: pkg.hash,
+                            hashAlgorithm = "MD5",
+                            vcsPath = pkg.vcsPath,
+                            vcsProvider = pkg.vcsProvider,
+                            vcsUrl = pkg.vcsUrl,
+                            vcsRevision = pkg.vcsRevision
+                    )
+                } catch (e: Exception) {
+                    if (Main.stacktrace) {
+                        e.printStackTrace()
+                    }
+
+                    log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
+
+                    // Fall back to returning the original package data.
+                    pkg
+                }
+            }
+        } else {
+            log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
+        }
+
+        // TODO: Handle "extras" and "tests" dependencies.
+        val scopes = listOf(
+                Scope("install", true, installDependencies)
+        )
+
+        val project = Project(
+                packageManager = javaClass.simpleName,
+                namespace = "",
+                name = projectName,
+                version = projectVersion,
+                aliases = emptyList(),
+                vcsPath = null,
+                vcsProvider = "",
+                vcsUrl = projectRepo,
+                vcsRevision = "",
+                homepageUrl = "",
+                scopes = scopes
+        )
+
+        result[definitionFile] = AnalyzerResult(project, packages, true)
+
+        // Remove the virtualenv by simply deleting the directory.
+        virtualEnvDir.deleteRecursively()
+    }
+
+    private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
         println("Creating a virtualenv for the '${workingDir.name}' project directory...")
         val virtualEnvDir = createTempDir(workingDir.name, "virtualenv")
@@ -231,7 +216,7 @@ object PIP : PackageManager(
             }
         }
 
-        return listOf(virtualEnvDir, workingDir)
+        return virtualEnvDir
     }
 
     private fun parseDependencies(rootPackageName: String, allDependencies: Iterable<JsonNode>,

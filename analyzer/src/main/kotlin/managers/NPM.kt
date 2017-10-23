@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.ResolutionResult
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -31,8 +32,6 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
-import kotlin.system.measureTimeMillis
-
 @Suppress("LargeClass", "TooManyFunctions")
 object NPM : PackageManager(
         "https://www.npmjs.com/",
@@ -56,73 +55,59 @@ object NPM : PackageManager(
         return if (File(workingDir, "yarn.lock").isFile) yarn else npm
     }
 
-    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>): Map<File, AnalyzerResult> {
+    override fun prepareResolution() {
         // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
         checkCommandVersion(npm, Semver("5.3.0", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
         checkCommandVersion(yarn, Semver("1.1.0", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
+    }
 
-        val result = mutableMapOf<File, AnalyzerResult>()
+    override fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File, result: ResolutionResult) {
+        val modulesDir = File(workingDir, "node_modules")
 
-        definitionFiles.forEach { definitionFile ->
-            val workingDir = definitionFile.parentFile
+        var tempModulesDir: File? = null
+        try {
+            // Temporarily move away any existing "node_modules" directory within the same filesystem to ensure
+            // the move can be performed atomically.
+            if (modulesDir.isDirectory) {
+                val tempDir = createTempDir("analyzer", ".tmp", workingDir)
+                tempModulesDir = File(tempDir, "node_modules")
+                log.warn { "'$modulesDir' already exists, temporarily moving it to '$tempModulesDir'." }
+                Files.move(modulesDir.toPath(), tempModulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+            }
 
-            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
+            // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
+            // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
+            // the same dependency is only ever downloaded once.
+            installDependencies(workingDir)
 
-            val elapsed = measureTimeMillis {
-                val modulesDir = File(workingDir, "node_modules")
+            val packages = parseInstalledModules(workingDir)
 
-                var tempModulesDir: File? = null
-                try {
-                    // Temporarily move away any existing "node_modules" directory within the same filesystem to ensure
-                    // the move can be performed atomically.
-                    if (modulesDir.isDirectory) {
-                        val tempDir = createTempDir("analyzer", ".tmp", workingDir)
-                        tempModulesDir = File(tempDir, "node_modules")
-                        log.warn { "'$modulesDir' already exists, temporarily moving it to '$tempModulesDir'." }
-                        Files.move(modulesDir.toPath(), tempModulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-                    }
+            val dependencies = Scope("dependencies", true,
+                    parseDependencies(definitionFile, "dependencies", packages))
+            val devDependencies = Scope("devDependencies", false,
+                    parseDependencies(definitionFile, "devDependencies", packages))
 
-                    // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
-                    // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
-                    // the same dependency is only ever downloaded once.
-                    installDependencies(workingDir)
+            // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
 
-                    val packages = parseInstalledModules(workingDir)
+            val project = parseProject(definitionFile, listOf(dependencies, devDependencies),
+                    packages.values.toSortedSet())
+            result[definitionFile] = project
+        } finally {
+            // Delete node_modules folder to not pollute the scan.
+            if (!modulesDir.deleteRecursively()) {
+                throw IOException("Unable to delete the '$modulesDir' directory.")
+            }
 
-                    val dependencies = Scope("dependencies", true,
-                            parseDependencies(definitionFile, "dependencies", packages))
-                    val devDependencies = Scope("devDependencies", false,
-                            parseDependencies(definitionFile, "devDependencies", packages))
-
-                    // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
-
-                    val project = parseProject(definitionFile, listOf(dependencies, devDependencies),
-                            packages.values.toSortedSet())
-                    result[definitionFile] = project
-                } finally {
-                    // Delete node_modules folder to not pollute the scan.
-                    if (!modulesDir.deleteRecursively()) {
-                        throw IOException("Unable to delete the '$modulesDir' directory.")
-                    }
-
-                    // Restore any previously existing "node_modules" directory.
-                    if (tempModulesDir != null) {
-                        log.info { "Restoring original '$modulesDir' directory from '$tempModulesDir'." }
-                        Files.move(tempModulesDir.toPath(), modulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-                        if (!tempModulesDir.parentFile.delete()) {
-                            throw IOException("Unable to delete the '${tempModulesDir.parent}' directory.")
-                        }
-                    }
+            // Restore any previously existing "node_modules" directory.
+            if (tempModulesDir != null) {
+                log.info { "Restoring original '$modulesDir' directory from '$tempModulesDir'." }
+                Files.move(tempModulesDir.toPath(), modulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                if (!tempModulesDir.parentFile.delete()) {
+                    throw IOException("Unable to delete the '${tempModulesDir.parent}' directory.")
                 }
             }
-
-            log.info {
-                "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s."
-            }
         }
-
-        return result
     }
 
     @Suppress("ComplexMethod")
