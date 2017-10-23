@@ -20,6 +20,8 @@ import org.gradle.tooling.GradleConnector
 
 import java.io.File
 
+import kotlin.system.measureTimeMillis
+
 object Gradle : PackageManager(
         "https://gradle.org/",
         "Java",
@@ -50,45 +52,51 @@ object Gradle : PackageManager(
 
             println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
 
-            val connection = GradleConnector
-                    .newConnector()
-                    .forProjectDirectory(workingDir)
-                    .connect()
+            val elapsed = measureTimeMillis {
+                val connection = GradleConnector
+                        .newConnector()
+                        .forProjectDirectory(workingDir)
+                        .connect()
 
-            try {
-                val initScriptFile = File.createTempFile("init", "gradle")
-                initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
+                try {
+                    val initScriptFile = File.createTempFile("init", "gradle")
+                    initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
 
-                val dependencyTreeModel = connection
-                        .model(DependencyTreeModel::class.java)
-                        .withArguments("--init-script", initScriptFile.absolutePath)
-                        .get()
+                    val dependencyTreeModel = connection
+                            .model(DependencyTreeModel::class.java)
+                            .withArguments("--init-script", initScriptFile.absolutePath)
+                            .get()
 
-                if (!initScriptFile.delete()) {
-                    log.warn { "Init script file '${initScriptFile.absolutePath}' could not be deleted." }
-                }
-
-                val packages = mutableMapOf<String, Package>()
-                val scopes = dependencyTreeModel.configurations.map { configuration ->
-                    val dependencies = configuration.dependencies.map { dependency ->
-                        parseDependency(dependency, packages)
+                    if (!initScriptFile.delete()) {
+                        log.warn { "Init script file '${initScriptFile.absolutePath}' could not be deleted." }
                     }
 
-                    Scope(configuration.name, true, dependencies.toSortedSet())
+                    val packages = mutableMapOf<String, Package>()
+                    val scopes = dependencyTreeModel.configurations.map { configuration ->
+                        val dependencies = configuration.dependencies.map { dependency ->
+                            parseDependency(dependency, packages)
+                        }
+
+                        Scope(configuration.name, true, dependencies.toSortedSet())
+                    }
+
+                    val project = Project(javaClass.simpleName, "", dependencyTreeModel.name, "", emptyList(), "", "", "",
+                            "", "", scopes)
+
+                    result.put(definitionFile, AnalyzerResult(project, packages.values.toSortedSet(), true))
+                } catch (e: BuildException) {
+                    if (Main.stacktrace) {
+                        e.printStackTrace()
+                    }
+
+                    log.error { "Could not analyze '${definitionFile.absolutePath}': ${e.message}" }
+                } finally {
+                    connection.close()
                 }
+            }
 
-                val project = Project(javaClass.simpleName, "", dependencyTreeModel.name, "", emptyList(), "", "", "",
-                        "", "", scopes)
-
-                result.put(definitionFile, AnalyzerResult(project, packages.values.toSortedSet(), true))
-            } catch (e: BuildException) {
-                if (Main.stacktrace) {
-                    e.printStackTrace()
-                }
-
-                log.error { "Could not analyze '${definitionFile.absolutePath}': ${e.message}" }
-            } finally {
-                connection.close()
+            log.info {
+                "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s."
             }
         }
 
