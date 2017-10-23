@@ -97,7 +97,6 @@ object Main {
      * @param args The list of application arguments.
      */
     @JvmStatic
-    @Suppress("ComplexMethod")
     fun main(args: Array<String>) {
         val jc = JCommander(this)
         jc.parse(*args)

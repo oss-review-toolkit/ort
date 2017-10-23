@@ -110,7 +110,6 @@ object NPM : PackageManager(
         }
     }
 
-    @Suppress("ComplexMethod")
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = File(rootDirectory, "node_modules")
