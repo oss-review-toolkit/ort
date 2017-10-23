@@ -48,7 +48,7 @@ class NpmTest : StringSpec() {
             val expectedResult =
                     File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
                             .readText()
-                            .replaceFirst("project-npm", "project-npm-yarn")
+                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
 
             val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -62,7 +62,7 @@ class NpmTest : StringSpec() {
             val expectedResult =
                     File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
                             .readText()
-                            .replaceFirst("project-npm", "project-npm-shrinkwrap")
+                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
 
             val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -76,7 +76,7 @@ class NpmTest : StringSpec() {
             val expectedResult =
                     File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
                             .readText()
-                            .replaceFirst("project-npm", "project-npm-package-lock")
+                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
 
             val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -112,7 +112,7 @@ class NpmTest : StringSpec() {
             val expectedResult =
                     File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
                             .readText()
-                            .replaceFirst("project-npm", "project-npm-node-modules")
+                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
 
             val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
