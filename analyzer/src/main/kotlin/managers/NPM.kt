@@ -117,7 +117,7 @@ object NPM : PackageManager(
                 }
             }
 
-            log.debug {
+            log.info {
                 "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s."
             }
         }
