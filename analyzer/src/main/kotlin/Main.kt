@@ -173,8 +173,6 @@ object Main {
 
         // Resolve dependencies per package manager.
         managedProjectPaths.forEach { manager, paths ->
-            println("Resolving $manager project dependencies...")
-
             val mapper = when (outputFormat) {
                 OutputFormat.JSON -> jsonMapper
                 OutputFormat.YAML -> yamlMapper

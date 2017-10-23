@@ -46,9 +46,13 @@ object Gradle : PackageManager(
         val result = mutableMapOf<File, AnalyzerResult>()
 
         definitionFiles.forEach { definitionFile ->
+            val workingDir = definitionFile.parentFile
+
+            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
+
             val connection = GradleConnector
                     .newConnector()
-                    .forProjectDirectory(definitionFile.parentFile)
+                    .forProjectDirectory(workingDir)
                     .connect()
 
             try {

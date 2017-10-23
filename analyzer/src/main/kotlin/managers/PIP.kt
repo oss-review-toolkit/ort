@@ -79,6 +79,8 @@ object PIP : PackageManager(
         definitionFiles.forEach { definitionFile ->
             val (virtualEnvDir, workingDir) = setupVirtualEnv(definitionFile)
 
+            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
+
             // List all packages installed locally in the virtualenv in JSON format.
             val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
 

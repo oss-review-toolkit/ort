@@ -67,7 +67,7 @@ object NPM : PackageManager(
         definitionFiles.forEach { definitionFile ->
             val workingDir = definitionFile.parentFile
 
-            log.debug { "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}'..." }
+            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
 
             val elapsed = measureTimeMillis {
                 val modulesDir = File(workingDir, "node_modules")
