@@ -13,11 +13,11 @@ import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.matchers.startWith
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class NpmTest : StringSpec() {
+class NpmTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
 
     @Suppress("CatchException")
@@ -42,82 +42,86 @@ class NpmTest : StringSpec() {
     }
 
     init {
-        "yarn dependencies are resolved correctly" {
-            val workingDir = File(projectDir, "yarn")
-            val packageFile = File(workingDir, "package.json")
-            val expectedResult =
-                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
-                            .readText()
-                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+        "NPM" should {
+            "resolve shrinkwrap dependencies correctly" {
+                val workingDir = File(projectDir, "shrinkwrap")
+                val packageFile = File(workingDir, "package.json")
+                val expectedResult =
+                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                                .readText()
+                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
 
-            val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
-            NPM.command(workingDir) shouldBe NPM.yarn
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
-
-        "NPM shrinkwrap dependencies are resolved correctly" {
-            val workingDir = File(projectDir, "shrinkwrap")
-            val packageFile = File(workingDir, "package.json")
-            val expectedResult =
-                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
-                            .readText()
-                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
-
-            val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
-
-            NPM.command(workingDir) shouldBe NPM.npm
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
-
-        "NPM package-lock dependencies are resolved correctly" {
-            val workingDir = File(projectDir, "package-lock")
-            val packageFile = File(workingDir, "package.json")
-            val expectedResult =
-                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
-                            .readText()
-                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
-
-            val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
-
-            NPM.command(workingDir) shouldBe NPM.npm
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
-
-        "NPM aborts when no lockfile is present" {
-            val workingDir = File(projectDir, "no-lockfile")
-            val packageFile = File(workingDir, "package.json")
-
-            val exception = shouldThrow<IllegalArgumentException> {
-                NPM.resolveDependencies(projectDir, listOf(packageFile))
+                NPM.command(workingDir) shouldBe NPM.npm
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
-            @Suppress("UnsafeCallOnNullableType")
-            exception.message!! should startWith("No lockfile found in")
-        }
 
-        "NPM aborts when multiple lockfiles are present" {
-            val workingDir = File(projectDir, "multiple-lockfiles")
-            val packageFile = File(workingDir, "package.json")
+            "resolve package-lock dependencies correctly" {
+                val workingDir = File(projectDir, "package-lock")
+                val packageFile = File(workingDir, "package.json")
+                val expectedResult =
+                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                                .readText()
+                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
 
-            val exception = shouldThrow<IllegalArgumentException> {
-                NPM.resolveDependencies(projectDir, listOf(packageFile))
+                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+
+                NPM.command(workingDir) shouldBe NPM.npm
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
-            @Suppress("UnsafeCallOnNullableType")
-            exception.message!! should endWith("contains multiple lockfiles. It is ambiguous which one to use.")
+
+            "abort if no lockfile is present" {
+                val workingDir = File(projectDir, "no-lockfile")
+                val packageFile = File(workingDir, "package.json")
+
+                val exception = shouldThrow<IllegalArgumentException> {
+                    NPM.resolveDependencies(projectDir, listOf(packageFile))
+                }
+                @Suppress("UnsafeCallOnNullableType")
+                exception.message!! should startWith("No lockfile found in")
+            }
+
+            "abort if multiple lockfiles are present" {
+                val workingDir = File(projectDir, "multiple-lockfiles")
+                val packageFile = File(workingDir, "package.json")
+
+                val exception = shouldThrow<IllegalArgumentException> {
+                    NPM.resolveDependencies(projectDir, listOf(packageFile))
+                }
+                @Suppress("UnsafeCallOnNullableType")
+                exception.message!! should endWith("contains multiple lockfiles. It is ambiguous which one to use.")
+            }
+
+            "resolve dependencies even if the node_modules directory already exists" {
+                val workingDir = File(projectDir, "node-modules")
+                val packageFile = File(workingDir, "package.json")
+                val expectedResult =
+                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                                .readText()
+                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+
+                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+
+                NPM.command(workingDir) shouldBe NPM.npm
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
         }
 
-        "NPM dependencies are resolved even if the node_modules directory already exists" {
-            val workingDir = File(projectDir, "node-modules")
-            val packageFile = File(workingDir, "package.json")
-            val expectedResult =
-                    File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
-                            .readText()
-                            .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+        "yarn" should {
+            "resolve dependencies correctly" {
+                val workingDir = File(projectDir, "yarn")
+                val packageFile = File(workingDir, "package.json")
+                val expectedResult =
+                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                                .readText()
+                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
 
-            val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
-            NPM.command(workingDir) shouldBe NPM.npm
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                NPM.command(workingDir) shouldBe NPM.yarn
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
         }
     }
 }
