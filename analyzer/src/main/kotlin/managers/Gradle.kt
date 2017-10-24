@@ -21,8 +21,6 @@ import org.gradle.tooling.GradleConnector
 
 import java.io.File
 
-import kotlin.system.measureTimeMillis
-
 object Gradle : PackageManager(
         "https://gradle.org/",
         "Java",
