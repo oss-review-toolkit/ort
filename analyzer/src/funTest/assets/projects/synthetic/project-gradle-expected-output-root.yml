@@ -1,4 +1,5 @@
 ---
+allowDynamicVersions: true
 project:
   package_manager: "Gradle"
   namespace: ""
@@ -12,4 +13,3 @@ project:
   homepage_url: ""
   scopes: []
 packages: []
-allowDynamicVersions: true

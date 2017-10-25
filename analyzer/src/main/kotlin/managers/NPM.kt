@@ -350,7 +350,7 @@ object NPM : PackageManager(
                 scopes = scopes
         )
 
-        return AnalyzerResult(project, packages, Main.allowDynamicVersions)
+        return AnalyzerResult(Main.allowDynamicVersions, project, packages)
     }
 
     /**

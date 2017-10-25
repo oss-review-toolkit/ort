@@ -1,4 +1,5 @@
 ---
+allowDynamicVersions: false
 project:
   package_manager: "NPM"
   namespace: ""
@@ -775,4 +776,3 @@ packages:
   vcs_provider: "git"
   vcs_url: "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
   vcs_revision: ""
-allowDynamicVersions: false

@@ -1,4 +1,5 @@
 ---
+allowDynamicVersions: true
 project:
   package_manager: "Gradle"
   namespace: ""
@@ -230,4 +231,3 @@ packages:
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
-allowDynamicVersions: true
