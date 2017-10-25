@@ -7,6 +7,8 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.fasterxml.jackson.databind.ObjectMapper
+
 import com.here.ort.model.OutputFormat
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
@@ -63,6 +65,9 @@ object Main {
             names = arrayOf("--output-format", "-f"),
             order = 0)
     private var outputFormat: OutputFormat = OutputFormat.YAML
+
+    @Suppress("LateinitUsage")
+    private lateinit var mapper: ObjectMapper
 
     @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
             names = arrayOf("--ignore-versions"),
@@ -128,6 +133,11 @@ object Main {
             exitProcess(2)
         }
 
+        mapper = when (outputFormat) {
+            OutputFormat.JSON -> jsonMapper
+            OutputFormat.YAML -> yamlMapper
+        }
+
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", ") { it.javaClass.simpleName })
 
@@ -173,11 +183,6 @@ object Main {
 
         // Resolve dependencies per package manager.
         managedProjectPaths.forEach { manager, paths ->
-            val mapper = when (outputFormat) {
-                OutputFormat.JSON -> jsonMapper
-                OutputFormat.YAML -> yamlMapper
-            }
-
             // Print the list of dependencies.
             val results = manager.resolveDependencies(absoluteProjectPath, paths)
             results.forEach { definitionFile, analyzerResult ->
