@@ -9,6 +9,7 @@ import com.beust.jcommander.ParameterException
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
@@ -102,6 +103,22 @@ object Main {
             order = 100)
     private var help = false
 
+    private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: AnalyzerResult) {
+        // Mirror the directory structure from the project in the output.
+        val currentDir = if (currentPath.isFile) currentPath.parentFile else currentPath
+        val cutputDir = File(outputRoot,
+                currentDir.toRelativeString(projectRoot))
+        if (cutputDir.mkdirs()) {
+            val outputFile = File(cutputDir, currentPath.name.replace('.', '-') +
+                    "-dependencies." + outputFormat.fileEnding)
+            println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
+            mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
+            println("done.")
+        } else {
+            log.error { "Unable to create output directory '$cutputDir'." }
+        }
+    }
+
     /**
      * The entry point for the application.
      *
@@ -186,18 +203,7 @@ object Main {
             // Print the list of dependencies.
             val results = manager.resolveDependencies(absoluteProjectPath, paths)
             results.forEach { definitionFile, analyzerResult ->
-                // Mirror the directory structure from the project in the output.
-                val outputDir = File(absoluteOutputPath,
-                        definitionFile.parentFile.toRelativeString(absoluteProjectPath))
-                if (outputDir.mkdirs()) {
-                    val outputFile = File(outputDir, definitionFile.name.replace('.', '-') +
-                            "-dependencies." + outputFormat.fileEnding)
-                    println("Writing results for\n\t$definitionFile\nto\n\t$outputFile")
-                    mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, analyzerResult)
-                    println("done.")
-                } else {
-                    log.error { "Unable to create output directory '$outputDir'." }
-                }
+                writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
             }
         }
     }
