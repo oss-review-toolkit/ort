@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OutputFormat
+import com.here.ort.model.Project
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
 import com.here.ort.util.yamlMapper
@@ -188,6 +189,26 @@ object Main {
                     return FileVisitResult.CONTINUE
                 }
             })
+        }
+
+        if (managedProjectPaths.isEmpty()) {
+            println("No package-managed projects found.")
+            val project = Project(
+                    namespace = "",
+                    packageManager = "",
+                    name = absoluteProjectPath.name,
+                    version = "",
+                    aliases = emptyList(),
+                    vcsPath = "", // TODO
+                    vcsProvider = "", // TODO,
+                    vcsUrl = "", // TODO,
+                    vcsRevision = "", // TODO,
+                    homepageUrl = "",
+                    scopes = emptyList()
+            )
+            val analyzerResult = AnalyzerResult(allowDynamicVersions, project, sortedSetOf())
+            writeResultFile(absoluteProjectPath, absoluteProjectPath, absoluteOutputPath, analyzerResult)
+            exitProcess(0)
         }
 
         // Print a summary of all projects found per package manager.
