@@ -4,12 +4,19 @@ import com.here.ort.downloader.vcs.*
 
 import java.io.File
 
-val VERSION_CONTROL_SYSTEMS = listOf(
-        Git,
-        GitRepo
-)
-
 abstract class VersionControlSystem {
+    companion object {
+        /**
+         * The prioritized list of all available version control systems. This needs to be initialized lazily to ensure
+         * the referred objects, which derive from this class, exist.
+         */
+        val ALL by lazy {
+            listOf(
+                    Git,
+                    GitRepo
+            )
+        }
+    }
 
     /**
      * Use this VCS to download the source code from the specified URL.
@@ -38,5 +45,4 @@ abstract class VersionControlSystem {
      * Return the VCS-specific revision for the given [workingDir].
      */
     abstract fun getRevision(workingDir: File): String
-
 }

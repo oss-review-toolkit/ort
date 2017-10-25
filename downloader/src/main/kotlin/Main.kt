@@ -183,7 +183,7 @@ object Main {
             val applicableVcs = mutableListOf<VersionControlSystem>()
             if (!target.vcsProvider.isNullOrEmpty()) {
                 p("Detect VCS from provider name ${target.vcsProvider}")
-                applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                applicableVcs.addAll(VersionControlSystem.ALL.filter { vcs ->
                     @Suppress("UnsafeCallOnNullableType")
                     vcs.isApplicableProvider(target.vcsProvider!!)
                 })
@@ -191,7 +191,7 @@ object Main {
             if (applicableVcs.isEmpty()) {
                 p("Could not find VCS provider or no provider defined, try to detect provider from URL " +
                         "${target.normalizedVcsUrl}")
-                applicableVcs.addAll(VERSION_CONTROL_SYSTEMS.filter { vcs ->
+                applicableVcs.addAll(VersionControlSystem.ALL.filter { vcs ->
                     @Suppress("UnsafeCallOnNullableType")
                     vcs.isApplicableUrl(target.normalizedVcsUrl!!)
                 })
