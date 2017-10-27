@@ -5,6 +5,8 @@ import com.vdurmont.semver4j.Semver
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
+import java.nio.file.Paths
+
 class UtilsTest : WordSpec({
     "normalizeVcsUrl" should {
         "properly handle NPM shortcut URLs" {
@@ -60,6 +62,34 @@ class UtilsTest : WordSpec({
                             to "https://github.com/kilian/electron-to-chromium.git",
                     "git://github.com/isaacs/inherits.git/"
                             to "https://github.com/isaacs/inherits.git"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
+            }
+        }
+
+        "handle file schemes correctly" {
+            var userDir = System.getProperty("user.dir").replace("\\", "/")
+            var userRoot = Paths.get(userDir).root.toString().replace("\\", "/")
+
+            if (!userDir.startsWith("/")) {
+                userDir = "/" + userDir
+            }
+
+            if (!userRoot.startsWith("/")) {
+                userRoot = "/" + userRoot
+            }
+
+            val packages = mapOf(
+                    "relative/path/to/local/file"
+                            to "file://$userDir/relative/path/to/local/file",
+                    "relative/path/to/local/dir/"
+                            to "file://$userDir/relative/path/to/local/dir",
+                    "/absolute/path/to/local/file"
+                            to "file://${userRoot}absolute/path/to/local/file",
+                    "/absolute/path/to/local/dir/"
+                            to "file://${userRoot}absolute/path/to/local/dir"
             )
 
             packages.forEach { actualUrl, expectedUrl ->

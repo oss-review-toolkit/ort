@@ -11,6 +11,7 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.io.IOException
 import java.net.URI
+import java.net.URISyntaxException
 import java.net.URLConnection
 
 import okhttp3.Cache
@@ -132,7 +133,12 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
     //     [user-info@]host[:port]
-    val uri = URI(url)
+    val uri = try {
+        URI(url)
+    } catch (e: URISyntaxException) {
+        // Fall back to a file if the URL is a Windows path.
+        return File(url).toSafeURI().toString()
+    }
 
     if (semverType == Semver.SemverType.NPM) {
         // https://docs.npmjs.com/files/package.json#repository
@@ -150,6 +156,11 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
         }
     }
 
+    if (uri.scheme == null) {
+        // Fall back to a file if the URL is a Linux path.
+        return File(url).toSafeURI().toString()
+    }
+
     if (uri.host != null && uri.host.endsWith("github.com")) {
         // Ensure the path ends in ".git".
         val path = if (uri.path.endsWith(".git")) uri.path else uri.path + ".git"
@@ -161,7 +172,7 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
     }
 
     // Return the URL unmodified.
-    return url
+    return uri.toString()
 }
 
 /**
