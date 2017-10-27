@@ -167,30 +167,30 @@ object Main {
 
         // TODO: add namespace to path
         val targetDir = File(outputDirectory, "${target.name}/${target.version}").apply { safeMkdirs() }
-        p("Download source code to ${targetDir.absolutePath}")
+        p("Downloading source code to '${targetDir.absolutePath}'...")
 
         if (!target.normalizedVcsUrl.isNullOrBlank()) {
-            p("Try to download from VCS: ${target.normalizedVcsUrl}")
+            p("Trying to download from URL '${target.normalizedVcsUrl}'...")
             if (target.vcsUrl != target.normalizedVcsUrl) {
-                p("URL was normalized, original URL was ${target.vcsUrl}")
+                p("URL was normalized, original URL was '${target.vcsUrl}'.")
             }
             if (target.vcsRevision.isNullOrEmpty()) {
-                p("WARNING: No VCS revision provided, downloaded source code does likely not match version " +
+                p("WARNING: No VCS revision provided, downloaded source code does likely not match revision " +
                         target.version)
             } else {
-                p("Download revision ${target.vcsRevision}")
+                p("Downloading revision '${target.vcsRevision}'.")
             }
             val applicableVcs = mutableListOf<VersionControlSystem>()
             if (!target.vcsProvider.isNullOrEmpty()) {
-                p("Detect VCS from provider name ${target.vcsProvider}")
+                p("Detecting VCS from provider name '${target.vcsProvider}'...")
                 applicableVcs.addAll(VersionControlSystem.ALL.filter { vcs ->
                     @Suppress("UnsafeCallOnNullableType")
                     vcs.isApplicableProvider(target.vcsProvider!!)
                 })
             }
             if (applicableVcs.isEmpty()) {
-                p("Could not find VCS provider or no provider defined, try to detect provider from URL " +
-                        "${target.normalizedVcsUrl}")
+                p("Could not find a VCS provider for '${target.vcsProvider}', trying to detect provider from URL " +
+                        "'${target.normalizedVcsUrl}'...")
                 applicableVcs.addAll(VersionControlSystem.ALL.filter { vcs ->
                     @Suppress("UnsafeCallOnNullableType")
                     vcs.isApplicableUrl(target.normalizedVcsUrl!!)
@@ -199,17 +199,17 @@ object Main {
             when {
                 applicableVcs.isEmpty() ->
                     // TODO: Decide if we want to do a trial-and-error with all available VCS here.
-                    throw DownloadException("Could not find applicable VCS.")
+                    throw DownloadException("Could not find an applicable VCS provider.")
                 applicableVcs.size > 1 ->
-                    throw DownloadException("Found multiple applicable VCS: ${applicableVcs.joinToString()}")
+                    throw DownloadException("Multiple applicable VCS providers found: ${applicableVcs.joinToString()}")
                 else -> {
                     val vcs = applicableVcs.first()
-                    p("Use ${vcs.javaClass.simpleName}")
+                    p("Using VCS provider '${vcs.javaClass.simpleName}'.")
                     try {
                         @Suppress("UnsafeCallOnNullableType")
                         val revision = vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath,
                                 target.version, targetDir)
-                        p("Downloaded source code revision $revision to ${targetDir.absolutePath}")
+                        p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
                         return targetDir
                     } catch (e: DownloadException) {
                         if (stacktrace) {
@@ -221,11 +221,11 @@ object Main {
                 }
             }
         } else {
-            p("No VCS URL provided")
+            p("No VCS URL provided.")
             // TODO: This should also be tried if the VCS checkout does not work.
-            p("Try to download source package: ...")
+            p("Trying to download source package ...")
             // TODO: Implement downloading of source package.
-            throw DownloadException("No source package URL provided.")
+            throw DownloadException("No source code package URL provided.")
         }
     }
 
