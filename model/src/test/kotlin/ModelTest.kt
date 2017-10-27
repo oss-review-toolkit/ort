@@ -54,7 +54,7 @@ class ModelTest : WordSpec({
             }
         }
 
-        "handles trailing slash correctly" {
+        "handle trailing slash correctly" {
             val packages = mapOf(
                     "https://github.com/kilian/electron-to-chromium/"
                             to "https://github.com/kilian/electron-to-chromium.git",
