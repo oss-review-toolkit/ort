@@ -111,7 +111,7 @@ data class Package(
      *
      * @see normalizeVcsUrl
      */
-    val normalizedVcsUrl = if (vcsUrl == null) null else normalizeVcsUrl(vcsUrl, semverType)
+    val normalizedVcsUrl = vcsUrl?.let { normalizeVcsUrl(it, semverType) }
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
