@@ -37,7 +37,7 @@ class ModelTest : WordSpec({
             )
 
             packages.forEach { actualUrl, expectedUrl ->
-                normalizeVcsUrl(actualUrl, Semver.SemverType.STRICT) shouldBe expectedUrl
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
 
@@ -50,7 +50,7 @@ class ModelTest : WordSpec({
             )
 
             packages.forEach { actualUrl, expectedUrl ->
-                normalizeVcsUrl(actualUrl, Semver.SemverType.STRICT) shouldBe expectedUrl
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
 
@@ -63,7 +63,7 @@ class ModelTest : WordSpec({
             )
 
             packages.forEach { actualUrl, expectedUrl ->
-                normalizeVcsUrl(actualUrl, Semver.SemverType.STRICT) shouldBe expectedUrl
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
     }
