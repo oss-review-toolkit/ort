@@ -191,7 +191,7 @@ object Main {
 
     private fun scanEntry(entry: SummaryEntry, identifier: String, input: Any) {
         try {
-            println("Scanning '$identifier'...")
+            println("Scanning package '$identifier'...")
 
             val result = when (input) {
                 is Package -> scanner.scan(input, outputDir)
