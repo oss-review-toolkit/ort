@@ -62,6 +62,11 @@ abstract class VersionControlSystem {
     abstract fun isApplicableDirectory(vcsDirectory: File): Boolean
 
     /**
+     * Return the relative path of [workingDir] with respect to the VCS root directory.
+     */
+    abstract fun getPathToRoot(workingDir: File): String
+
+    /**
      * Return the VCS-specific revision for the given [workingDir].
      */
     abstract fun getRevision(workingDir: File): String

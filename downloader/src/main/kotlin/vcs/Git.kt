@@ -14,6 +14,10 @@ import java.io.IOException
 
 abstract class GitBase : VersionControlSystem() {
 
+    override fun getPathToRoot(workingDir: File): String {
+        return runGitCommand(workingDir, "rev-parse", "--show-prefix").stdout().trim()
+    }
+
     override fun getRevision(workingDir: File): String {
         return runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trim()
     }
