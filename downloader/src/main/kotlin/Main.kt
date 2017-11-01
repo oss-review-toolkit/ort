@@ -161,6 +161,7 @@ object Main {
      *
      * @return The directory containing the source code, or null if the source code could not be downloaded.
      */
+    @Suppress("ComplexMethod")
     fun download(target: Package, outputDirectory: File): File {
         // TODO: return also SHA1 which was finally cloned
         val p = fun(string: String) = println("${target.identifier}: $string")
@@ -171,31 +172,37 @@ object Main {
 
         if (!target.normalizedVcsUrl.isNullOrBlank()) {
             p("Trying to download from URL '${target.normalizedVcsUrl}'...")
+
             if (target.vcsUrl != target.normalizedVcsUrl) {
                 p("URL was normalized, original URL was '${target.vcsUrl}'.")
             }
+
             if (target.vcsRevision.isNullOrEmpty()) {
                 p("WARNING: No VCS revision provided, downloaded source code does likely not match revision " +
                         target.version)
             } else {
                 p("Downloading revision '${target.vcsRevision}'.")
             }
+
             val applicableVcs = mutableListOf<VersionControlSystem>()
-            if (!target.vcsProvider.isNullOrEmpty()) {
-                p("Detecting VCS from provider name '${target.vcsProvider}'...")
-                applicableVcs.addAll(VersionControlSystem.ALL.filter { vcs ->
-                    @Suppress("UnsafeCallOnNullableType")
-                    vcs.isApplicableProvider(target.vcsProvider!!)
-                })
+
+            target.vcsProvider?.let { provider ->
+                if (provider.isNotBlank()) {
+                    p("Detecting VCS from provider name '$provider'...")
+                    applicableVcs.addAll(VersionControlSystem.fromProvider(provider))
+                }
             }
+
             if (applicableVcs.isEmpty()) {
-                p("Could not find a VCS provider for '${target.vcsProvider}', trying to detect provider from URL " +
-                        "'${target.normalizedVcsUrl}'...")
-                applicableVcs.addAll(VersionControlSystem.ALL.filter { vcs ->
-                    @Suppress("UnsafeCallOnNullableType")
-                    vcs.isApplicableUrl(target.normalizedVcsUrl!!)
-                })
+                target.normalizedVcsUrl?.let { url ->
+                    if (url.isNotBlank()) {
+                        p("Could not find a VCS provider for '${target.vcsProvider}', trying to detect provider " +
+                                "from URL '$url'...")
+                        applicableVcs.addAll(VersionControlSystem.fromUrl(url))
+                    }
+                }
             }
+
             when {
                 applicableVcs.isEmpty() ->
                     // TODO: Decide if we want to do a trial-and-error with all available VCS here.
