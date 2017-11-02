@@ -97,7 +97,7 @@ abstract class PackageManager(
      * Optional preparation step for dependency resolution, like checking for prerequisites.
      */
     protected open fun prepareResolution() {
-        log.debug { "Resolving ${javaClass.simpleName} dependencies does not define any preparation." }
+        log.debug { "Resolution of ${javaClass.simpleName} dependencies does not require preparation." }
     }
 
     /**
