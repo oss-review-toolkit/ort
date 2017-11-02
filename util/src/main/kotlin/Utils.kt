@@ -178,6 +178,14 @@ fun File.safeMkdirs() {
 }
 
 /**
+ * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
+ */
+fun File.toSafeURI(): URI {
+    val fileUri = this.toURI()
+    return URI("file", "", fileUri.path, fileUri.query, fileUri.fragment)
+}
+
+/**
  * Convenience function for [JsonNode] that returns an empty string if [JsonNode.asText] is called on a null object.
  */
 fun JsonNode?.asTextOrEmpty(): String = if (this != null) this.asText() else ""
