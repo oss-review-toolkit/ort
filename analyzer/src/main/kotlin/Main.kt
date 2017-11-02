@@ -9,11 +9,13 @@ import com.beust.jcommander.ParameterException
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Project
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
+import com.here.ort.util.normalizeVcsUrl
 import com.here.ort.util.yamlMapper
 
 import java.io.File
@@ -192,21 +194,25 @@ object Main {
 
         if (managedProjectPaths.isEmpty()) {
             println("No package-managed projects found.")
+
+            val vcs = VersionControlSystem.fromDirectory(absoluteProjectPath).firstOrNull()
             val project = Project(
-                    namespace = "",
                     packageManager = "",
+                    namespace = "",
                     name = absoluteProjectPath.name,
                     version = "",
                     aliases = emptyList(),
-                    vcsPath = "", // TODO
-                    vcsProvider = "", // TODO,
-                    vcsUrl = "", // TODO,
-                    vcsRevision = "", // TODO,
+                    vcsPath = vcs?.getPathToRoot(absoluteProjectPath),
+                    vcsProvider = vcs?.javaClass?.simpleName ?: "",
+                    vcsUrl = vcs?.getRemoteUrl(absoluteProjectPath) ?: "",
+                    vcsRevision = vcs?.getWorkingRevision(absoluteProjectPath) ?: "",
                     homepageUrl = "",
                     scopes = emptyList()
             )
+
             val analyzerResult = AnalyzerResult(allowDynamicVersions, project, sortedSetOf())
             writeResultFile(absoluteProjectPath, absoluteProjectPath, absoluteOutputPath, analyzerResult)
+
             exitProcess(0)
         }
 

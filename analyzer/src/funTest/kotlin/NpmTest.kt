@@ -3,6 +3,7 @@ package com.here.ort.analyzer
 import com.fasterxml.jackson.databind.node.ArrayNode
 
 import com.here.ort.analyzer.managers.NPM
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.util.parseJsonProcessOutput
 import com.here.ort.util.yamlMapper
 
@@ -19,6 +20,7 @@ import java.io.File
 
 class NpmTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
+    private val vcsRevision = VersionControlSystem.fromDirectory(projectDir).first().getWorkingRevision(projectDir)
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
@@ -47,9 +49,11 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
                 val expectedResult =
-                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                        File(projectDir.parentFile, "project-npm-expected-output.yml")
                                 .readText()
                                 .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
+                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -61,9 +65,11 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectDir, "package-lock")
                 val packageFile = File(workingDir, "package.json")
                 val expectedResult =
-                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                        File(projectDir.parentFile, "project-npm-expected-output.yml")
                                 .readText()
                                 .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
+                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -97,9 +103,11 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
                 val expectedResult =
-                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                        File(projectDir.parentFile, "project-npm-expected-output.yml")
                                 .readText()
                                 .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
+                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -113,9 +121,11 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectDir, "yarn")
                 val packageFile = File(workingDir, "package.json")
                 val expectedResult =
-                        File("src/funTest/assets/projects/synthetic/project-npm-expected-output.yml")
+                        File(projectDir.parentFile, "project-npm-expected-output.yml")
                                 .readText()
                                 .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
+                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 

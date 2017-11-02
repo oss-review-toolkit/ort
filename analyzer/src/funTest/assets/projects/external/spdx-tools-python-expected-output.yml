@@ -6,11 +6,11 @@ project:
   name: "spdx-tools"
   version: "0.5.4"
   aliases: []
-  vcs_path: null
-  vcs_provider: ""
-  vcs_url: "https://github.com/spdx/tools-python"
-  vcs_revision: ""
-  homepage_url: ""
+  vcs_path: ""
+  vcs_provider: "Git"
+  vcs_url: "https://github.com/spdx/tools-python.git"
+  vcs_revision: "a48022e65a8897d0e4f2e93d8e53695d2c13ea23"
+  homepage_url: "https://github.com/spdx/tools-python"
   scopes:
   - name: "install"
     delivered: true

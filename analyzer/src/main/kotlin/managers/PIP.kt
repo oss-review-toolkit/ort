@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.ResolutionResult
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -93,7 +94,11 @@ object PIP : PackageManager(
         val pydep = runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
         pydep.requireSuccess()
 
-        val (projectName, projectVersion, projectRepo) = jsonMapper.readTree(pydep.stdout()).let {
+        // What pydep actually returns as "repo_url" is either setup.py's
+        // - "url", denoting the "home page for the package", or
+        // - "download_url", denoting the "location where the package may be downloaded".
+        // So the best we can do it so map this the project's homepage URL.
+        val (projectName, projectVersion, projectHomepage) = jsonMapper.readTree(pydep.stdout()).let {
             listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
         }
 
@@ -161,17 +166,18 @@ object PIP : PackageManager(
                 Scope("install", true, installDependencies)
         )
 
+        val vcs = VersionControlSystem.fromDirectory(projectDir).firstOrNull()
         val project = Project(
                 packageManager = javaClass.simpleName,
                 namespace = "",
                 name = projectName,
                 version = projectVersion,
                 aliases = emptyList(),
-                vcsPath = null,
-                vcsProvider = "",
-                vcsUrl = projectRepo,
-                vcsRevision = "",
-                homepageUrl = "",
+                vcsPath = vcs?.getPathToRoot(projectDir),
+                vcsProvider = vcs?.javaClass?.simpleName ?: "",
+                vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
+                vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
+                homepageUrl = projectHomepage,
                 scopes = scopes
         )
 

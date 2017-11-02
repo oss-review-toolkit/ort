@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.ResolutionResult
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -331,11 +332,29 @@ object NPM : PackageManager(
         val rawName = json["name"].asText()
         val (namespace, name) = splitNamespaceAndName(rawName)
         val version = json["version"].asText()
-        val vcsPath = ""
-        val (vcsProvider, vcsUrl) = parseRepository(json)
+        val (vcsProviderFromPackage, vcsUrlFromPackage) = parseRepository(json)
         val homepageUrl = json["homepage"].asTextOrEmpty()
 
-        // TODO: parse revision from vcs
+        val projectDir = packageJson.parentFile
+        val vcs = VersionControlSystem.fromDirectory(projectDir).firstOrNull()
+
+        val vcsProviderFromDirectory = vcs?.javaClass?.simpleName ?: ""
+        if (vcsProviderFromDirectory != vcsProviderFromPackage) {
+            log.warn {
+                "The VCS provider '$vcsProviderFromPackage' specified in 'package.json' does not match " +
+                "'$vcsProviderFromDirectory' as detected from the project directory. Will use " +
+                "'$vcsProviderFromPackage'."
+            }
+        }
+
+        val vcsUrlFromDirectory = vcs?.getRemoteUrl(projectDir) ?: ""
+        if (vcsUrlFromDirectory != vcsUrlFromPackage) {
+            log.warn {
+                "The VCS URL '$vcsUrlFromPackage' specified in 'package.json' does not match " +
+                        "'$vcsUrlFromDirectory' as detected from the project directory. Will use " +
+                        "'$vcsUrlFromPackage'."
+            }
+        }
 
         val project = Project(
                 packageManager = javaClass.simpleName,
@@ -343,10 +362,10 @@ object NPM : PackageManager(
                 name = name,
                 version = version,
                 aliases = emptyList(),
-                vcsPath = vcsPath,
-                vcsProvider = vcsProvider,
-                vcsUrl = vcsUrl,
-                vcsRevision = "",
+                vcsPath = vcs?.getPathToRoot(projectDir),
+                vcsProvider = vcsProviderFromPackage,
+                vcsUrl = vcsUrlFromPackage,
+                vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )

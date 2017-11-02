@@ -6,8 +6,8 @@ project:
   name: "lib"
   version: ""
   aliases: []
-  vcs_path: ""
-  vcs_provider: ""
+  vcs_path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+  vcs_provider: "Git"
   vcs_url: ""
   vcs_revision: ""
   homepage_url: ""
