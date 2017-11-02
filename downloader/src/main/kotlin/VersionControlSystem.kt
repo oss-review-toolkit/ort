@@ -70,4 +70,9 @@ abstract class VersionControlSystem {
      * Return the VCS-specific revision for the given [workingDir].
      */
     abstract fun getWorkingRevision(workingDir: File): String
+
+    /**
+     * Return the URL of the (remote) repository the [workingDir] was cloned from.
+     */
+    abstract fun getRemoteUrl(workingDir: File): String
 }

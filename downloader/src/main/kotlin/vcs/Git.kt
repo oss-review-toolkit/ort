@@ -22,6 +22,10 @@ abstract class GitBase : VersionControlSystem() {
         return runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trim()
     }
 
+    override fun getRemoteUrl(workingDir: File): String {
+        return runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trim()
+    }
+
     protected fun runGitCommand(workingDir: File, vararg args: String): ProcessCapture {
         return ProcessCapture(workingDir, "git", *args).requireSuccess()
     }

@@ -47,6 +47,10 @@ object GitRepo : GitBase() {
 
     override fun isApplicableDirectory(vcsDirectory: File) = File(vcsDirectory, ".repo").isDirectory
 
+    override fun getRemoteUrl(workingDir: File): String {
+        return super.getRemoteUrl(File(workingDir, ".repo/manifests"))
+    }
+
     private fun runRepoCommand(targetDir: File, vararg args: String) {
         ProcessCapture(targetDir, "repo", *args).requireSuccess()
     }
