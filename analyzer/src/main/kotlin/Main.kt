@@ -107,16 +107,15 @@ object Main {
     private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: AnalyzerResult) {
         // Mirror the directory structure from the project in the output.
         val currentDir = if (currentPath.isFile) currentPath.parentFile else currentPath
-        val cutputDir = File(outputRoot,
-                currentDir.toRelativeString(projectRoot))
-        if (cutputDir.mkdirs()) {
-            val outputFile = File(cutputDir, currentPath.name.replace('.', '-') +
+        val outputDir = File(outputRoot, currentDir.toRelativeString(projectRoot))
+        if (outputDir.mkdirs()) {
+            val outputFile = File(outputDir, currentPath.name.replace('.', '-') +
                     "-dependencies." + outputFormat.fileEnding)
             println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
             mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
             println("done.")
         } else {
-            log.error { "Unable to create output directory '$cutputDir'." }
+            log.error { "Unable to create output directory '$outputDir'." }
         }
     }
 
