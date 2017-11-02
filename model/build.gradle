@@ -1,4 +1,6 @@
 dependencies {
+    compile project(':util')
+
     compile "com.vdurmont:semver4j:$semverVersion"
 
     compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"

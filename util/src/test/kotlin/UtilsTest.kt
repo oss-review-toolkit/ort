@@ -1,11 +1,11 @@
-package com.here.ort.model
+package com.here.ort.util
 
 import com.vdurmont.semver4j.Semver
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
-class ModelTest : WordSpec({
+class UtilsTest : WordSpec({
     "normalizeVcsUrl" should {
         "properly handle NPM shortcut URLs" {
             val packages = mapOf(

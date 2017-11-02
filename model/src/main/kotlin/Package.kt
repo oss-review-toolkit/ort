@@ -3,6 +3,8 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import com.here.ort.util.normalizeVcsUrl
+
 import com.vdurmont.semver4j.Semver
 
 import java.util.SortedSet
