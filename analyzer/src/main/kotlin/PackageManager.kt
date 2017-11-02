@@ -82,7 +82,7 @@ abstract class PackageManager(
             println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
 
             val elapsed = measureTimeMillis {
-                resolveDependency(projectDir, workingDir, definitionFile, result)
+                resolveDependencies(projectDir, workingDir, definitionFile, result)
             }
 
             log.info {
@@ -103,7 +103,7 @@ abstract class PackageManager(
     /**
      * Resolve dependencies for single [definitionFile], amending the [result].
      */
-    protected open fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File,
+    protected open fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File,
                                          result: ResolutionResult) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

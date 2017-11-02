@@ -76,7 +76,8 @@ object PIP : PackageManager(
         checkCommandVersion("virtualenv", Semver("15.1.0"), ignoreActualVersion = Main.ignoreVersions)
     }
 
-    override fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File, result: ResolutionResult) {
+    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File,
+                                     result: ResolutionResult) {
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
         // List all packages installed locally in the virtualenv in JSON format.

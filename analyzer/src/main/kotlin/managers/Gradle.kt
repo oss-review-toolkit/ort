@@ -43,7 +43,8 @@ object Gradle : PackageManager(
         return if (File(workingDir, wrapper).isFile) wrapper else gradle
     }
 
-    override fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File, result: ResolutionResult) {
+    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File,
+                                     result: ResolutionResult) {
         val connection = GradleConnector
                 .newConnector()
                 .forProjectDirectory(workingDir)

@@ -62,7 +62,8 @@ object NPM : PackageManager(
         checkCommandVersion(yarn, Semver("1.1.0", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
     }
 
-    override fun resolveDependency(projectDir: File, workingDir: File, definitionFile: File, result: ResolutionResult) {
+    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File,
+                                     result: ResolutionResult) {
         val modulesDir = File(workingDir, "node_modules")
 
         var tempModulesDir: File? = null
