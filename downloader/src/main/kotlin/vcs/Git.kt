@@ -118,4 +118,7 @@ object Git : GitBase() {
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
+    override fun isApplicableDirectory(vcsDirectory: File)
+            = runGitCommand(vcsDirectory, "rev-parse", "--is-inside-work-tree").stdout().trim().toBoolean()
+
 }

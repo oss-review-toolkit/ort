@@ -45,6 +45,8 @@ object GitRepo : GitBase() {
 
     override fun isApplicableUrl(vcsUrl: String) = false
 
+    override fun isApplicableDirectory(vcsDirectory: File) = File(vcsDirectory, ".repo").isDirectory
+
     private fun runRepoCommand(targetDir: File, vararg args: String) {
         ProcessCapture(targetDir, "repo", *args).requireSuccess()
     }

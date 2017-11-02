@@ -42,6 +42,11 @@ abstract class VersionControlSystem {
     abstract fun isApplicableUrl(vcsUrl: String): Boolean
 
     /**
+     * Return true if the specified local directory is managed by this VCS, false otherwise.
+     */
+    abstract fun isApplicableDirectory(vcsDirectory: File): Boolean
+
+    /**
      * Return the VCS-specific revision for the given [workingDir].
      */
     abstract fun getRevision(workingDir: File): String
