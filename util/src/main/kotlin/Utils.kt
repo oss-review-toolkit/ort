@@ -129,4 +129,4 @@ fun File.safeMkdirs() {
 /**
  * Convenience function for [JsonNode] that returns an empty string if [JsonNode.asText] is called on a null object.
  */
-fun JsonNode?.asTextOrEmpty() = if (this != null) this.asText() else ""
+fun JsonNode?.asTextOrEmpty(): String = if (this != null) this.asText() else ""
