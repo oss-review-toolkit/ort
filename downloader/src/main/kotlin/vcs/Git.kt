@@ -18,7 +18,7 @@ abstract class GitBase : VersionControlSystem() {
         return runGitCommand(workingDir, "rev-parse", "--show-prefix").stdout().trim()
     }
 
-    override fun getRevision(workingDir: File): String {
+    override fun getWorkingRevision(workingDir: File): String {
         return runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trim()
     }
 
@@ -59,7 +59,7 @@ object Git : GitBase() {
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return getRevision(targetDir)
+                return getWorkingRevision(targetDir)
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -77,7 +77,7 @@ object Git : GitBase() {
 
             try {
                 runGitCommand(targetDir, "checkout", committish)
-                return getRevision(targetDir)
+                return getWorkingRevision(targetDir)
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -101,7 +101,7 @@ object Git : GitBase() {
                     log.info { "Using '$tag'." }
                     runGitCommand(targetDir, "fetch", "origin", tag)
                     runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                    return getRevision(targetDir)
+                    return getWorkingRevision(targetDir)
                 }
 
                 log.warn { "No matching tag found for version '$version'." }

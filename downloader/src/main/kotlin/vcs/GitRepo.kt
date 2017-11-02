@@ -30,7 +30,7 @@ object GitRepo : GitBase() {
 
             log.debug { "Start git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
-            return getRevision(File(targetDir, ".repo/manifests"))
+            return getWorkingRevision(File(targetDir, ".repo/manifests"))
         } catch (e: IOException) {
             if (Main.stacktrace) {
                 e.printStackTrace()

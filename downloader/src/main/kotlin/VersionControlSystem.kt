@@ -69,5 +69,5 @@ abstract class VersionControlSystem {
     /**
      * Return the VCS-specific revision for the given [workingDir].
      */
-    abstract fun getRevision(workingDir: File): String
+    abstract fun getWorkingRevision(workingDir: File): String
 }
