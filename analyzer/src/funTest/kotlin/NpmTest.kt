@@ -1,17 +1,13 @@
 package com.here.ort.analyzer
 
-import com.fasterxml.jackson.databind.node.ArrayNode
-
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.util.parseJsonProcessOutput
 import com.here.ort.util.yamlMapper
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.matchers.startWith
 import io.kotlintest.specs.WordSpec

@@ -15,7 +15,6 @@ import com.here.ort.model.OutputFormat
 import com.here.ort.model.Project
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
-import com.here.ort.util.normalizeVcsUrl
 import com.here.ort.util.yamlMapper
 
 import java.io.File

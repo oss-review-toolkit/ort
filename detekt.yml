@@ -22,7 +22,9 @@ performance:
     active: false
 
 style:
-  WildcardImport:
-    active: false
   ForbiddenComment:
+    active: false
+  UnusedImports:
+    active: true
+  WildcardImport:
     active: false
