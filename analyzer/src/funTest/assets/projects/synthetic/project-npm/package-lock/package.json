@@ -38,7 +38,7 @@
     "mocha": "./node_modules/mocha/bin/mocha"
   },
   "author": "",
-  "license": "LicenseRef-LICENSE",
+  "license": "Apache-2.0",
   "private": true,
   "dependencies": {
     "long": "^3.2.0",
