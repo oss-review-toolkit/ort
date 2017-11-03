@@ -5,6 +5,7 @@ project:
   namespace: ""
   name: "app"
   version: ""
+  declared_licenses: []
   aliases: []
   vcs_path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs_provider: "Git"
@@ -188,6 +189,7 @@ packages:
   namespace: ""
   name: "project :lib"
   version: ""
+  declared_licenses: []
   description: ""
   homepage_url: ""
   download_url: ""
@@ -201,6 +203,7 @@ packages:
   namespace: "org.apache.commons"
   name: "commons-lang3"
   version: "3.5"
+  declared_licenses: []
   description: ""
   homepage_url: ""
   download_url: ""
@@ -214,6 +217,7 @@ packages:
   namespace: "org.apache.commons"
   name: "commons-text"
   version: "1.1"
+  declared_licenses: []
   description: ""
   homepage_url: ""
   download_url: ""

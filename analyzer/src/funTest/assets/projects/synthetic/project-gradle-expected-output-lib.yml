@@ -5,6 +5,7 @@ project:
   namespace: ""
   name: "lib"
   version: ""
+  declared_licenses: []
   aliases: []
   vcs_path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs_provider: "Git"
@@ -183,6 +184,7 @@ packages:
   namespace: "junit"
   name: "junit"
   version: "4.12"
+  declared_licenses: []
   description: ""
   homepage_url: ""
   download_url: ""
@@ -196,6 +198,7 @@ packages:
   namespace: "org.apache.commons"
   name: "commons-lang3"
   version: "3.5"
+  declared_licenses: []
   description: ""
   homepage_url: ""
   download_url: ""
@@ -209,6 +212,7 @@ packages:
   namespace: "org.apache.commons"
   name: "commons-text"
   version: "1.1"
+  declared_licenses: []
   description: ""
   homepage_url: ""
   download_url: ""
@@ -222,6 +226,7 @@ packages:
   namespace: "org.hamcrest"
   name: "hamcrest-core"
   version: "1.3"
+  declared_licenses: []
   description: ""
   homepage_url: ""
   download_url: ""

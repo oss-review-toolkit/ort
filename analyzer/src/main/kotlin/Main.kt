@@ -219,6 +219,7 @@ object Main {
                     namespace = "",
                     name = absoluteProjectPath.name,
                     version = "",
+                    declaredLicenses = emptySet(),
                     aliases = emptyList(),
                     vcsPath = vcs?.getPathToRoot(absoluteProjectPath),
                     vcsProvider = vcs?.javaClass?.simpleName ?: "",

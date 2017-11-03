@@ -53,6 +53,13 @@ data class Project(
         val version: String,
 
         /**
+         * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
+         * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
+         */
+        @JsonProperty("declared_licenses")
+        val declaredLicenses: Set<String>,
+
+        /**
          * Alternate project names, like abbreviations or code names.
          */
         val aliases: List<String>,
@@ -106,7 +113,21 @@ data class Project(
     /**
      * Return a [Package] representation of this [Project].
      */
-    fun toPackage() = Package(packageManager, namespace, name, "", version, homepageUrl, "", "", "", vcsPath,
-            vcsProvider, vcsUrl, vcsRevision)
+    fun toPackage() = Package(
+            packageManager = packageManager,
+            namespace = namespace,
+            name = name,
+            version = version,
+            declaredLicenses = declaredLicenses,
+            description = "",
+            homepageUrl = homepageUrl,
+            downloadUrl = "",
+            hash = "",
+            hashAlgorithm = "",
+            vcsPath = vcsPath,
+            vcsProvider = vcsProvider,
+            vcsUrl = vcsUrl,
+            vcsRevision = vcsRevision
+    )
 
 }

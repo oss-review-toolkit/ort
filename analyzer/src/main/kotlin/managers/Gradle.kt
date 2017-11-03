@@ -98,6 +98,7 @@ object Gradle : PackageManager(
                     namespace = "",
                     name = dependencyTreeModel.name,
                     version = "",
+                    declaredLicenses = emptySet(),
                     aliases = emptyList(),
                     vcsPath = vcs?.getPathToRoot(projectDir),
                     vcsProvider = vcs?.javaClass?.simpleName ?: "",
@@ -124,8 +125,22 @@ object Gradle : PackageManager(
             // Only look for a package when there was no error resolving the dependency.
             packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
                 // TODO: add metadata for package
-                Package(javaClass.simpleName, dependency.groupId, dependency.artifactId,
-                        dependency.version, "", "", "", "", "", "", "", "", "")
+                Package(
+                        packageManager = javaClass.simpleName,
+                        namespace = dependency.groupId,
+                        name = dependency.artifactId,
+                        version = dependency.version,
+                        declaredLicenses = emptySet(),
+                        description = "",
+                        homepageUrl = "",
+                        downloadUrl = "",
+                        hash = "",
+                        hashAlgorithm = "",
+                        vcsPath = "",
+                        vcsProvider = "",
+                        vcsUrl = "",
+                        vcsRevision = ""
+                )
             }
         }
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages) }

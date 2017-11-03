@@ -148,6 +148,11 @@ object NPM : PackageManager(
             val (namespace, name) = splitNamespaceAndName(rawName)
             val version = json["version"].asText()
 
+            val declaredLicenses = mutableSetOf<String>()
+            setOf(json["license"]).mapNotNullTo(declaredLicenses) {
+                it?.asText()
+            }
+
             var description: String
             var homepageUrl: String
             var downloadUrl: String
@@ -205,8 +210,22 @@ object NPM : PackageManager(
                 }
             }
 
-            val module = Package(javaClass.simpleName, namespace, name, version, description, homepageUrl, downloadUrl,
-                    hash, hashAlgorithm, vcsPath, vcsProvider, vcsUrl, vcsRevision)
+            val module = Package(
+                    packageManager = javaClass.simpleName,
+                    namespace = namespace,
+                    name = name,
+                    version = version,
+                    declaredLicenses = declaredLicenses,
+                    description = description,
+                    homepageUrl = homepageUrl,
+                    downloadUrl = downloadUrl,
+                    hash = hash,
+                    hashAlgorithm = hashAlgorithm,
+                    vcsPath = vcsPath,
+                    vcsProvider = vcsProvider,
+                    vcsUrl = vcsUrl,
+                    vcsRevision = vcsRevision
+            )
 
             require(module.name.isNotEmpty()) {
                 "Generated package info for $identifier has no name."
@@ -351,6 +370,12 @@ object NPM : PackageManager(
         val rawName = json["name"].asText()
         val (namespace, name) = splitNamespaceAndName(rawName)
         val version = json["version"].asText()
+
+        val declaredLicenses = mutableSetOf<String>()
+        setOf(json["license"]).mapNotNullTo(declaredLicenses) {
+            it?.asText()
+        }
+
         val (vcsProviderFromPackage, vcsUrlFromPackage) = parseRepository(json)
         val homepageUrl = json["homepage"].asTextOrEmpty()
 
@@ -380,6 +405,7 @@ object NPM : PackageManager(
                 namespace = namespace,
                 name = name,
                 version = version,
+                declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
                 vcsPath = vcs?.getPathToRoot(projectDir),
                 vcsProvider = vcsProviderFromPackage,
