@@ -15,15 +15,15 @@ import java.io.IOException
 abstract class GitBase : VersionControlSystem() {
 
     override fun getPathToRoot(workingDir: File): String {
-        return runGitCommand(workingDir, "rev-parse", "--show-prefix").stdout().trim()
+        return runGitCommand(workingDir, "rev-parse", "--show-prefix").stdout().trimEnd()
     }
 
     override fun getWorkingRevision(workingDir: File): String {
-        return runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trim()
+        return runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
     }
 
     override fun getRemoteUrl(workingDir: File): String {
-        return runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trim()
+        return runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
     }
 
     protected fun runGitCommand(workingDir: File, vararg args: String): ProcessCapture {
@@ -127,6 +127,6 @@ object Git : GitBase() {
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
     override fun isApplicableDirectory(vcsDirectory: File)
-            = runGitCommand(vcsDirectory, "rev-parse", "--is-inside-work-tree").stdout().trim().toBoolean()
+            = runGitCommand(vcsDirectory, "rev-parse", "--is-inside-work-tree").stdout().trimEnd().toBoolean()
 
 }
