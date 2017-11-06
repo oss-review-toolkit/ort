@@ -19,10 +19,15 @@
 
 package com.here.ort.scanner
 
+import com.here.ort.downloader.DownloadException
+import com.here.ort.downloader.Main
 import com.here.ort.model.Package
 import com.here.ort.scanner.scanners.*
+import com.here.ort.util.safeMkdirs
 
 import java.io.File
+
+typealias ScannerResult = Set<String>
 
 abstract class Scanner {
 
@@ -39,29 +44,81 @@ abstract class Scanner {
     }
 
     /**
-     * Scan the provided package for license information. If a scan result is found in the cache, it is used without
-     * running the actual scan. If no cached scan result is found, the package's source code is downloaded automatically
-     * and scanned afterwards.
-     *
-     * @param pkg The package to scan.
-     * @param outputDirectory The directory to store scan results in.
-     *
-     * @return The set of found licenses.
-     *
-     * @throws ScanException In case the package could not be scanned.
+     * Return the Java class name as a simply way to refer to the scanner.
      */
-    abstract fun scan(pkg: Package, outputDirectory: File): Set<String>
+    override fun toString(): String {
+        return javaClass.simpleName
+    }
 
     /**
-     * Scan the provided path for license information. Note that no caching will be used in this mode.
+     * Scan the provided [pkg] for license information, writing results to [outputDirectory]. If a scan result is found
+     * in the cache, it is used without running the actual scan. If no cached scan result is found, the package's source
+     * code is downloaded and scanned afterwards.
      *
-     * @param path The directory or file to scan.
-     * @param outputDirectory The directory to store scan results in.
+     * @param pkg The package to scan.
+     * @param outputDirectory The base directory to store scan results in.
      *
      * @return The set of found licenses.
      *
      * @throws ScanException In case the package could not be scanned.
      */
-    abstract fun scan(path: File, outputDirectory: File): Set<String>
+    fun scan(pkg: Package, outputDirectory: File): ScannerResult {
+        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
+        val scannerName = toString().toLowerCase()
+        val resultsFile = File(scanResultsDirectory,
+                "${pkg.name}-${pkg.version}_$scannerName.$resultFileExtension")
+
+        if (ScanResultsCache.read(pkg, resultsFile)) {
+            return toScannerResult(resultsFile)
+        }
+
+        val sourceDirectory = try {
+            val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
+            Main.download(pkg, downloadDirectory)
+        } catch (e: DownloadException) {
+            if (Main.stacktrace) {
+                e.printStackTrace()
+            }
+
+            throw ScanException("Package '${pkg.identifier}' could not be scanned.", e)
+        }
+
+        return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, resultsFile) }
+    }
+
+    /**
+     * Scan the provided [path] for license information, writing results to [outputDirectory]. Note that no caching will
+     * be used in this mode.
+     *
+     * @param path The directory or file to scan.
+     * @param outputDirectory The base directory to store scan results in.
+     *
+     * @return The set of found licenses.
+     *
+     * @throws ScanException In case the package could not be scanned.
+     */
+    fun scan(path: File, outputDirectory: File): ScannerResult {
+        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
+        val scannerName = toString().toLowerCase()
+        val resultsFile = File(scanResultsDirectory,
+                "${path.nameWithoutExtension}_$scannerName.$resultFileExtension")
+
+        return scanPath(path, resultsFile)
+    }
+
+    /**
+     * A property containing the file name extension of the scanner's native output format, without the dot.
+     */
+    protected abstract val resultFileExtension: String
+
+    /**
+     * Scan the provided [path] for license information, writing results to [resultsFile].
+     */
+    protected abstract fun scanPath(path: File, resultsFile: File): ScannerResult
+
+    /**
+     * Convert the scanner's native file format to a [ScannerResult].
+     */
+    protected abstract fun toScannerResult(resultsFile: File): ScannerResult
 
 }
