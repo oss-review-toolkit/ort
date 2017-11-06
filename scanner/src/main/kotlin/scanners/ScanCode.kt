@@ -48,9 +48,9 @@ object ScanCode : Scanner() {
 
     override fun scan(pkg: Package, outputDirectory: File): Set<String> {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-
+        val scannerName = javaClass.simpleName.toLowerCase()
         val resultsFile = File(scanResultsDirectory,
-                "${pkg.name}-${pkg.version}_scancode.$OUTPUT_EXTENSION")
+                "${pkg.name}-${pkg.version}_$scannerName.$OUTPUT_EXTENSION")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
             return parseLicenses(resultsFile)
@@ -72,9 +72,9 @@ object ScanCode : Scanner() {
 
     override fun scan(path: File, outputDirectory: File): Set<String> {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-
+        val scannerName = javaClass.simpleName.toLowerCase()
         val resultsFile = File(scanResultsDirectory,
-                "${path.nameWithoutExtension}_scancode.$OUTPUT_EXTENSION")
+                "${path.nameWithoutExtension}_$scannerName.$OUTPUT_EXTENSION")
 
         return scanPath(path, resultsFile)
     }
