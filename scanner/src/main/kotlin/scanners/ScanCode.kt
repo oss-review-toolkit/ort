@@ -41,7 +41,7 @@ object ScanCode : Scanner() {
     private const val OUTPUT_EXTENSION = "json"
     private const val OUTPUT_FORMAT = "json-pp"
     private const val PROCESSES = 6
-    private const val TIMEOUT = 600
+    private const val TIMEOUT = 300
 
     private val DEFAULT_OPTIONS = listOf("--copyright", "--license", "--info", "--diag", "--only-findings",
             "--strip-root")
