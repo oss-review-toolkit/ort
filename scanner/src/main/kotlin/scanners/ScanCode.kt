@@ -47,7 +47,6 @@ object ScanCode : Scanner() {
             "--strip-root")
 
     override fun scan(pkg: Package, outputDirectory: File): Set<String> {
-        val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
 
         val resultsFile = File(scanResultsDirectory,
@@ -58,6 +57,7 @@ object ScanCode : Scanner() {
         }
 
         val sourceDirectory = try {
+            val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
             Main.download(pkg, downloadDirectory)
         } catch (e: DownloadException) {
             if (Main.stacktrace) {
