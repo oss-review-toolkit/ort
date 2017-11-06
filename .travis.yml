@@ -1,0 +1,20 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+install:
+  - npm install -g npm@5.3.0 yarn@1.1.0
+  - export PATH=$PATH:$TRAVIS_BUILD_DIR/analyzer/src/funTest/assets/projects/external/scancode-toolkit
+
+script:
+  - ./gradlew check
