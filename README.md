@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/heremaps/oss-review-toolkit.svg?branch=master)](https://travis-ci.org/heremaps/oss-review-toolkit)
+
 # OSS Review Toolkit
 
 The OSS Review Toolkit (ORT for short) is a suite of tools to assist with reviewing Open Source Software dependencies in
