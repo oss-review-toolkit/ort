@@ -5,6 +5,7 @@ project:
   namespace: ""
   name: "lib-without-repo"
   version: ""
+  declared_licenses: []
   aliases: []
   vcs_path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs_provider: "Git"

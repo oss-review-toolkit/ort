@@ -149,12 +149,31 @@ object PIP : PackageManager(
                     // first for now.
                     val pkgRelease = pkgData["releases"][pkg.version][0]
 
+                    val declaredLicenses = mutableSetOf<String>()
+
+                    // Use the top-level license field as well as the license classifiers as the declared licenses.
+                    setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
+                        it?.asText()
+                    }
+
+                    // Example license classifier:
+                    // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+                    pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
+                        val classifier = it.asText().split(" :: ")
+                        if (classifier.first() == "License") {
+                            classifier.last()
+                        } else {
+                            null
+                        }
+                    }
+
                     // Amend package information with more details.
                     Package(
                             packageManager = pkg.packageManager,
                             namespace = pkg.namespace,
                             name = pkg.name,
                             version = pkg.version,
+                            declaredLicenses = declaredLicenses,
                             description = pkgInfo["summary"]?.asText() ?: pkg.description,
                             homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
                             downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
@@ -191,6 +210,7 @@ object PIP : PackageManager(
                 namespace = "",
                 name = projectName,
                 version = projectVersion,
+                declaredLicenses = emptySet(),  // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
                 vcsPath = vcs?.getPathToRoot(projectDir),
                 vcsProvider = vcs?.javaClass?.simpleName ?: "",
@@ -289,8 +309,9 @@ object PIP : PackageManager(
                     packageManager = javaClass.simpleName,
                     namespace = "",
                     name = packageName,
-                    description = "",
                     version = packageVersion,
+                    declaredLicenses = emptySet(),
+                    description = "",
                     homepageUrl = null,
                     downloadUrl = null,
                     hash = "",

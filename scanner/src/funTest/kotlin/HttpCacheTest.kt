@@ -75,19 +75,20 @@ class HttpCacheTest : StringSpec() {
             val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
 
             val pkg = Package(
-                    "packageManager",
-                    "namespace",
-                    "name",
-                    "version",
-                    "description",
-                    "homepageUrl",
-                    "downloadUrl",
-                    "hash",
-                    "hashAlgorithm",
-                    "vcsPath",
-                    "vcsProvider",
-                    "vcsUrl",
-                    "vcsRevision"
+                    packageManager = "packageManager",
+                    namespace = "namespace",
+                    name = "name",
+                    version = "version",
+                    declaredLicenses = setOf("license"),
+                    description = "description",
+                    homepageUrl = "homepageUrl",
+                    downloadUrl = "downloadUrl",
+                    hash = "hash",
+                    hashAlgorithm = "hashAlgorithm",
+                    vcsPath = "vcsPath",
+                    vcsProvider = "vcsProvider",
+                    vcsUrl = "vcsUrl",
+                    vcsRevision = "vcsRevision"
             )
 
             val resultFile = createTempFile()

@@ -5,6 +5,8 @@ project:
   namespace: ""
   name: "project-npm"
   version: "2.0.0"
+  declared_licenses:
+  - "Apache-2.0"
   aliases: []
   vcs_path: ""
   vcs_provider: "git"
@@ -303,6 +305,8 @@ packages:
   namespace: ""
   name: "asap"
   version: "2.0.5"
+  declared_licenses:
+  - "MIT"
   description: "High-priority task queue for Node.js and browsers"
   homepage_url: "https://github.com/kriskowal/asap#readme"
   download_url: "https://registry.npmjs.org/asap/-/asap-2.0.5.tgz"
@@ -316,6 +320,8 @@ packages:
   namespace: ""
   name: "boolbase"
   version: "1.0.0"
+  declared_licenses:
+  - "ISC"
   description: "two functions: One that returns true, one that returns false"
   homepage_url: "https://github.com/fb55/boolbase"
   download_url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
@@ -329,6 +335,8 @@ packages:
   namespace: ""
   name: "cheerio"
   version: "1.0.0-rc.1"
+  declared_licenses:
+  - "MIT"
   description: "Tiny, fast, and elegant implementation of core jQuery designed specifically\
     \ for the server"
   homepage_url: "https://github.com/cheeriojs/cheerio#readme"
@@ -343,6 +351,8 @@ packages:
   namespace: ""
   name: "coffee-script"
   version: "1.12.6"
+  declared_licenses:
+  - "MIT"
   description: "Unfancy JavaScript"
   homepage_url: "http://coffeescript.org"
   download_url: "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.6.tgz"
@@ -356,6 +366,8 @@ packages:
   namespace: ""
   name: "core-util-is"
   version: "1.0.2"
+  declared_licenses:
+  - "MIT"
   description: "The `util.is*` functions introduced in Node v0.12."
   homepage_url: "https://github.com/isaacs/core-util-is#readme"
   download_url: "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
@@ -369,6 +381,8 @@ packages:
   namespace: ""
   name: "cson-parser"
   version: "1.3.5"
+  declared_licenses:
+  - "BSD-3-Clause"
   description: "Safe parsing of CSON files"
   homepage_url: "https://github.com/groupon/cson-parser"
   download_url: "https://registry.npmjs.org/cson-parser/-/cson-parser-1.3.5.tgz"
@@ -382,6 +396,8 @@ packages:
   namespace: ""
   name: "cson"
   version: "4.1.0"
+  declared_licenses:
+  - "MIT"
   description: "CoffeeScript-Object-Notation Parser. Same as JSON but for CoffeeScript\
     \ objects."
   homepage_url: "https://github.com/bevry/cson"
@@ -396,6 +412,8 @@ packages:
   namespace: ""
   name: "css-select"
   version: "1.2.0"
+  declared_licenses:
+  - "BSD-like"
   description: "a CSS selector compiler/engine"
   homepage_url: "https://github.com/fb55/css-select#readme"
   download_url: "https://registry.npmjs.org/css-select/-/css-select-1.2.0.tgz"
@@ -409,6 +427,8 @@ packages:
   namespace: ""
   name: "css-what"
   version: "2.1.0"
+  declared_licenses:
+  - "BSD-like"
   description: "a CSS selector parser"
   homepage_url: "https://github.com/fb55/css-what#readme"
   download_url: "https://registry.npmjs.org/css-what/-/css-what-2.1.0.tgz"
@@ -422,6 +442,8 @@ packages:
   namespace: ""
   name: "dom-serializer"
   version: "0.1.0"
+  declared_licenses:
+  - "MIT"
   description: "render dom nodes to string"
   homepage_url: "https://github.com/cheeriojs/dom-renderer"
   download_url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.1.0.tgz"
@@ -435,6 +457,7 @@ packages:
   namespace: ""
   name: "domelementtype"
   version: "1.1.3"
+  declared_licenses: []
   description: "all the types of nodes in htmlparser2's dom"
   homepage_url: "https://github.com/FB55/domelementtype"
   download_url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.1.3.tgz"
@@ -448,6 +471,7 @@ packages:
   namespace: ""
   name: "domelementtype"
   version: "1.3.0"
+  declared_licenses: []
   description: "all the types of nodes in htmlparser2's dom"
   homepage_url: "https://github.com/FB55/domelementtype"
   download_url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.0.tgz"
@@ -461,6 +485,8 @@ packages:
   namespace: ""
   name: "domhandler"
   version: "2.4.1"
+  declared_licenses:
+  - "BSD-2-Clause"
   description: "handler for htmlparser2 that turns pages into a dom"
   homepage_url: "https://github.com/fb55/DomHandler#readme"
   download_url: "https://registry.npmjs.org/domhandler/-/domhandler-2.4.1.tgz"
@@ -474,6 +500,7 @@ packages:
   namespace: ""
   name: "domutils"
   version: "1.5.1"
+  declared_licenses: []
   description: "utilities for working with htmlparser2's dom"
   homepage_url: "https://github.com/FB55/domutils"
   download_url: "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
@@ -487,6 +514,8 @@ packages:
   namespace: ""
   name: "eachr"
   version: "3.2.0"
+  declared_licenses:
+  - "MIT"
   description: "Give eachr an item to iterate (array, object or map) and an iterator,\
     \ then in return eachr gives iterator the value and key of each item, and will\
     \ stop if the iterator returned false."
@@ -502,6 +531,8 @@ packages:
   namespace: ""
   name: "editions"
   version: "1.3.3"
+  declared_licenses:
+  - "MIT"
   description: "Publish multiple editions for your JavaScript packages consistently\
     \ and easily (e.g. source edition, esnext edition, es2015 edition)"
   homepage_url: "https://github.com/bevry/editions"
@@ -516,6 +547,8 @@ packages:
   namespace: ""
   name: "entities"
   version: "1.1.1"
+  declared_licenses:
+  - "BSD-like"
   description: "Encode & decode XML/HTML entities with ease"
   homepage_url: "https://github.com/fb55/node-entities"
   download_url: "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz"
@@ -529,6 +562,8 @@ packages:
   namespace: ""
   name: "extract-opts"
   version: "3.3.1"
+  declared_licenses:
+  - "MIT"
   description: "Extract the options and callback from a function's arguments easily"
   homepage_url: "https://github.com/bevry/extract-opts"
   download_url: "https://registry.npmjs.org/extract-opts/-/extract-opts-3.3.1.tgz"
@@ -542,6 +577,8 @@ packages:
   namespace: ""
   name: "graceful-fs"
   version: "4.1.11"
+  declared_licenses:
+  - "ISC"
   description: "A drop-in replacement for fs, making various improvements."
   homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
   download_url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.11.tgz"
@@ -555,6 +592,8 @@ packages:
   namespace: ""
   name: "htmlparser2"
   version: "3.9.2"
+  declared_licenses:
+  - "MIT"
   description: "Fast & forgiving HTML/XML/RSS parser"
   homepage_url: "https://github.com/fb55/htmlparser2#readme"
   download_url: "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.9.2.tgz"
@@ -568,6 +607,8 @@ packages:
   namespace: ""
   name: "inherits"
   version: "2.0.3"
+  declared_licenses:
+  - "ISC"
   description: "Browser-friendly inheritance fully compatible with standard node.js\
     \ inherits()"
   homepage_url: "https://github.com/isaacs/inherits#readme"
@@ -582,6 +623,8 @@ packages:
   namespace: ""
   name: "isarray"
   version: "1.0.0"
+  declared_licenses:
+  - "MIT"
   description: "Array#isArray for older browsers"
   homepage_url: "https://github.com/juliangruber/isarray"
   download_url: "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
@@ -595,6 +638,8 @@ packages:
   namespace: ""
   name: "lodash"
   version: "4.17.4"
+  declared_licenses:
+  - "MIT"
   description: "Lodash modular utilities."
   homepage_url: "https://lodash.com/"
   download_url: "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
@@ -608,6 +653,8 @@ packages:
   namespace: ""
   name: "long"
   version: "3.2.0"
+  declared_licenses:
+  - "Apache-2.0"
   description: "A Long class for representing a 64-bit two's-complement integer value."
   homepage_url: "https://github.com/dcodeIO/long.js#readme"
   download_url: "https://registry.npmjs.org/long/-/long-3.2.0.tgz"
@@ -621,6 +668,8 @@ packages:
   namespace: ""
   name: "nth-check"
   version: "1.0.1"
+  declared_licenses:
+  - "BSD"
   description: "performant nth-check parser & compiler"
   homepage_url: "https://github.com/fb55/nth-check"
   download_url: "https://registry.npmjs.org/nth-check/-/nth-check-1.0.1.tgz"
@@ -634,6 +683,8 @@ packages:
   namespace: ""
   name: "parse5"
   version: "3.0.2"
+  declared_licenses:
+  - "MIT"
   description: "HTML parsing/serialization toolset for Node.js. WHATWG HTML Living\
     \ Standard (aka HTML5)-compliant."
   homepage_url: "https://github.com/inikulin/parse5"
@@ -648,6 +699,8 @@ packages:
   namespace: ""
   name: "process-nextick-args"
   version: "1.0.7"
+  declared_licenses:
+  - "MIT"
   description: "process.nextTick but always with args"
   homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
   download_url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz"
@@ -661,6 +714,8 @@ packages:
   namespace: ""
   name: "promise"
   version: "7.3.1"
+  declared_licenses:
+  - "MIT"
   description: "Bare bones Promises/A+ implementation"
   homepage_url: "https://github.com/then/promise#readme"
   download_url: "https://registry.npmjs.org/promise/-/promise-7.3.1.tgz"
@@ -674,6 +729,8 @@ packages:
   namespace: ""
   name: "readable-stream"
   version: "2.3.3"
+  declared_licenses:
+  - "MIT"
   description: "Streams3, a user-land copy of the stream library from Node.js"
   homepage_url: "https://github.com/nodejs/readable-stream#readme"
   download_url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.3.tgz"
@@ -687,6 +744,8 @@ packages:
   namespace: ""
   name: "requirefresh"
   version: "2.1.0"
+  declared_licenses:
+  - "MIT"
   description: "Require a file without adding it into the require cache"
   homepage_url: "https://github.com/bevry/requirefresh"
   download_url: "https://registry.npmjs.org/requirefresh/-/requirefresh-2.1.0.tgz"
@@ -700,6 +759,8 @@ packages:
   namespace: ""
   name: "safe-buffer"
   version: "5.1.1"
+  declared_licenses:
+  - "MIT"
   description: "Safer Node.js Buffer API"
   homepage_url: "https://github.com/feross/safe-buffer"
   download_url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.1.tgz"
@@ -713,6 +774,8 @@ packages:
   namespace: ""
   name: "safefs"
   version: "4.1.0"
+  declared_licenses:
+  - "MIT"
   description: "Stop getting EMFILE errors! Open only as many files as the operating\
     \ system supports."
   homepage_url: "https://github.com/bevry/safefs"
@@ -727,6 +790,8 @@ packages:
   namespace: ""
   name: "string_decoder"
   version: "1.0.3"
+  declared_licenses:
+  - "MIT"
   description: "The string_decoder module from Node core"
   homepage_url: "https://github.com/rvagg/string_decoder"
   download_url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.3.tgz"
@@ -740,6 +805,8 @@ packages:
   namespace: ""
   name: "typechecker"
   version: "4.4.1"
+  declared_licenses:
+  - "MIT"
   description: "Utilities to get and check variable types (isString, isPlainObject,\
     \ isRegExp, etc)"
   homepage_url: "https://github.com/bevry/typechecker"
@@ -754,6 +821,8 @@ packages:
   namespace: ""
   name: "util-deprecate"
   version: "1.0.2"
+  declared_licenses:
+  - "MIT"
   description: "The Node.js `util.deprecate()` function with browser support"
   homepage_url: "https://github.com/TooTallNate/util-deprecate"
   download_url: "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
@@ -767,6 +836,8 @@ packages:
   namespace: "@types"
   name: "node"
   version: "6.0.79"
+  declared_licenses:
+  - "MIT"
   description: "TypeScript definitions for Node.js"
   homepage_url: ""
   download_url: "https://registry.npmjs.org/@types/node/-/node-6.0.79.tgz"
