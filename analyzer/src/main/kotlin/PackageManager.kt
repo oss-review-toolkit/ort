@@ -101,7 +101,9 @@ abstract class PackageManager(
             println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
 
             val elapsed = measureTimeMillis {
-                resolveDependencies(projectDir, workingDir, definitionFile, result)
+                resolveDependencies(projectDir, workingDir, definitionFile)?.let {
+                    result[definitionFile] = it
+                }
             }
 
             log.info {
@@ -120,10 +122,9 @@ abstract class PackageManager(
     }
 
     /**
-     * Resolve dependencies for single [definitionFile], amending the [result].
+     * Resolve dependencies for single [definitionFile], returning the [AnalyzerResult].
      */
-    protected open fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File,
-                                         result: ResolutionResult) {
+    protected open fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
