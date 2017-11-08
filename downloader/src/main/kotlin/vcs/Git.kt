@@ -145,7 +145,9 @@ object Git : GitBase() {
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
-    override fun isApplicableDirectory(vcsDirectory: File)
-            = runGitCommand(vcsDirectory, "rev-parse", "--is-inside-work-tree").stdout().trimEnd().toBoolean()
+    override fun isApplicableDirectory(vcsDirectory: File): Boolean {
+        val isInsideWorkTree = ProcessCapture(vcsDirectory, "git", "rev-parse", "--is-inside-work-tree")
+        return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
+    }
 
 }
