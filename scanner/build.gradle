@@ -33,6 +33,10 @@ task funTest(type: Test) {
     classpath = sourceSets.funTest.runtimeClasspath
     testClassesDirs = sourceSets.funTest.output.classesDirs
 
+    // Add the Git submodule for ScanCode to PATH so functional tests can find the scanner.
+    def scanCodePath = rootDir.path + '/analyzer/src/funTest/assets/projects/external/scancode-toolkit'
+    environment('PATH', scanCodePath + File.pathSeparator + System.env['PATH'])
+
     testLogging {
         events 'started', 'passed', 'skipped', 'failed'
         exceptionFormat 'full'
