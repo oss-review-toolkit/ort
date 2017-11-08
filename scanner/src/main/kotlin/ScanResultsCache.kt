@@ -28,6 +28,11 @@ import com.here.ort.util.log
 
 import java.io.File
 
+data class CacheStatistics(
+        var numReads: Int = 0,
+        var numHits: Int = 0
+)
+
 interface ScanResultsCache {
 
     /**
@@ -54,6 +59,8 @@ interface ScanResultsCache {
         }
             private set
 
+        var stats = CacheStatistics()
+
         fun configure(config: JsonNode?) {
             // Return early if there is no cache configuration.
             val cacheNode = config?.get("scanner")?.get("cache") ?: return
@@ -75,7 +82,12 @@ interface ScanResultsCache {
             }
         }
 
-        override fun read(pkg: Package, target: File) = cache.read(pkg, target)
+        override fun read(pkg: Package, target: File) = cache.read(pkg, target).also {
+            ++stats.numReads
+            if (it) {
+                ++stats.numHits
+            }
+        }
 
         override fun write(pkg: Package, source: File) = cache.write(pkg, source)
     }
