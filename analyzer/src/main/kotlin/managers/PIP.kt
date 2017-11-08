@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.ResolutionResult
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -96,8 +95,7 @@ object PIP : PackageManager(
         checkCommandVersion("virtualenv", Semver("15.1.0"), ignoreActualVersion = Main.ignoreVersions)
     }
 
-    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File,
-                                     result: ResolutionResult) {
+    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
         // List all packages installed locally in the virtualenv in JSON format.
@@ -220,10 +218,10 @@ object PIP : PackageManager(
                 scopes = scopes
         )
 
-        result[definitionFile] = AnalyzerResult(true, project, packages)
-
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.deleteRecursively()
+
+        return AnalyzerResult(true, project, packages)
     }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {

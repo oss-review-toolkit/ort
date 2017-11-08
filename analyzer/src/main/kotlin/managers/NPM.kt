@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.ResolutionResult
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
@@ -82,8 +81,7 @@ object NPM : PackageManager(
         checkCommandVersion(yarn, Semver("1.1.0", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
     }
 
-    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File,
-                                     result: ResolutionResult) {
+    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
         val modulesDir = File(workingDir, "node_modules")
 
         var tempModulesDir: File? = null
@@ -111,9 +109,7 @@ object NPM : PackageManager(
 
             // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
 
-            val project = parseProject(definitionFile, listOf(dependencies, devDependencies),
-                    packages.values.toSortedSet())
-            result[definitionFile] = project
+            return parseProject(definitionFile, listOf(dependencies, devDependencies), packages.values.toSortedSet())
         } finally {
             // Delete node_modules folder to not pollute the scan.
             if (!modulesDir.deleteRecursively()) {
