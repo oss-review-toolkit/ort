@@ -25,6 +25,7 @@ import ch.qos.logback.classic.Level
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.Scanner
 import com.here.ort.scanner.ScannerResult
+import com.here.ort.util.OS
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.getCommandVersion
 import com.here.ort.util.jsonMapper
@@ -44,9 +45,11 @@ object ScanCode : Scanner() {
     override val resultFileExtension = "json"
 
     override fun scanPath(path: File, resultsFile: File): ScannerResult {
+        val executable = if (OS.isWindows) "scancode.bat" else "scancode"
+
         log.info { "Detecting the ScanCode version..." }
 
-        val version = getCommandVersion("scancode", transform = {
+        val version = getCommandVersion(executable, transform = {
             // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
             it.substringAfter("ScanCode version ")
         })
@@ -60,7 +63,8 @@ object ScanCode : Scanner() {
 
         println("Running ScanCode in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
-                "scancode", *options.toTypedArray(),
+                executable,
+                *options.toTypedArray(),
                 "--timeout", TIMEOUT.toString(),
                 "-n", PROCESSES.toString(),
                 "-f", OUTPUT_FORMAT,
