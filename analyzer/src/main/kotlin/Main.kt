@@ -151,6 +151,8 @@ object Main {
         jc.parse(*args)
         jc.programName = "analyzer"
 
+        log.level = ch.qos.logback.classic.Level.WARN
+
         if (info) {
             log.level = ch.qos.logback.classic.Level.INFO
         }

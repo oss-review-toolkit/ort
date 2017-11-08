@@ -17,6 +17,10 @@ dependencies {
 
     compile "com.beust:jcommander:$jcommanderVersion"
     compile "com.vdurmont:semver4j:$semverVersion"
+    compile "org.apache.maven:maven-core:$mavenVersion"
+    compile "org.apache.maven:maven-compat:$mavenVersion"
+    compile "org.apache.maven.resolver:maven-resolver-connector-basic:$mavenResolverVersion"
+    compile "org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion"
     compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
 
     funTestCompile sourceSets.main.output

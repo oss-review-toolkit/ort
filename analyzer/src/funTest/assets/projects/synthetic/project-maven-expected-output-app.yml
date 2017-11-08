@@ -1,0 +1,81 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Maven"
+  namespace: "com.here.ort.maven"
+  name: "maven-app"
+  version: "1.0-SNAPSHOT"
+  declared_licenses: []
+  aliases: []
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+  homepage_url: "http://maven.apache.org"
+  scopes:
+  - name: "compile"
+    delivered: true
+    dependencies:
+    - namespace: "com.here.ort.maven"
+      name: "maven-lib"
+      version: "1.0-SNAPSHOT"
+      dependencies:
+      - namespace: "org.apache.commons"
+        name: "commons-text"
+        version: "1.1"
+        dependencies:
+        - namespace: "org.apache.commons"
+          name: "commons-lang3"
+          version: "3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+packages:
+- package_manager: "Maven"
+  namespace: "com.here.ort.maven"
+  name: "maven-lib"
+  version: "1.0-SNAPSHOT"
+  declared_licenses: []
+  description: ""
+  homepage_url: "http://maven.apache.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Maven"
+  namespace: "org.apache.commons"
+  name: "commons-lang3"
+  version: "3.5"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "Apache Commons Lang, a package of Java utility classes for the\n \
+    \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
+    \ as to justify existence in java.lang."
+  homepage_url: "http://commons.apache.org/proper/commons-lang/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://git-wip-us.apache.org/repos/asf?p=commons-lang.git"
+  vcs_revision: "LANG_3_5"
+  vcs_path: ""
+- package_manager: "Maven"
+  namespace: "org.apache.commons"
+  name: "commons-text"
+  version: "1.1"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "Apache Commons Text is a library focused on algorithms working on\
+    \ strings."
+  homepage_url: "http://commons.apache.org/proper/commons-text/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://git-wip-us.apache.org/repos/asf?p=commons-text.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
