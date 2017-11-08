@@ -58,19 +58,23 @@ class NpmTest : WordSpec() {
         }
     }
 
+    private fun patchExpectedResult(workingDir: File): String {
+        val vcsPath = "analyzer/" + workingDir.path.replace("\\", "/")
+        return File(projectDir.parentFile, "project-npm-expected-output.yml")
+                .readText()
+                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+                .replaceFirst("vcs_path: \"\"", "vcs_path: \"$vcsPath\"")
+                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+    }
+
     init {
         "NPM" should {
             "resolve shrinkwrap dependencies correctly" {
                 val workingDir = File(projectDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
-                val expectedResult =
-                        File(projectDir.parentFile, "project-npm-expected-output.yml")
-                                .readText()
-                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
-                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
-                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val expectedResult = patchExpectedResult(workingDir)
 
                 NPM.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -79,14 +83,9 @@ class NpmTest : WordSpec() {
             "resolve package-lock dependencies correctly" {
                 val workingDir = File(projectDir, "package-lock")
                 val packageFile = File(workingDir, "package.json")
-                val expectedResult =
-                        File(projectDir.parentFile, "project-npm-expected-output.yml")
-                                .readText()
-                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
-                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
-                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val expectedResult = patchExpectedResult(workingDir)
 
                 NPM.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -99,6 +98,7 @@ class NpmTest : WordSpec() {
                 val exception = shouldThrow<IllegalArgumentException> {
                     NPM.resolveDependencies(projectDir, listOf(packageFile))
                 }
+
                 @Suppress("UnsafeCallOnNullableType")
                 exception.message!! should startWith("No lockfile found in")
             }
@@ -110,6 +110,7 @@ class NpmTest : WordSpec() {
                 val exception = shouldThrow<IllegalArgumentException> {
                     NPM.resolveDependencies(projectDir, listOf(packageFile))
                 }
+
                 @Suppress("UnsafeCallOnNullableType")
                 exception.message!! should endWith("contains multiple lockfiles. It is ambiguous which one to use.")
             }
@@ -117,14 +118,9 @@ class NpmTest : WordSpec() {
             "resolve dependencies even if the node_modules directory already exists" {
                 val workingDir = File(projectDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
-                val expectedResult =
-                        File(projectDir.parentFile, "project-npm-expected-output.yml")
-                                .readText()
-                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
-                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
-                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val expectedResult = patchExpectedResult(workingDir)
 
                 NPM.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -135,14 +131,9 @@ class NpmTest : WordSpec() {
             "resolve dependencies correctly" {
                 val workingDir = File(projectDir, "yarn")
                 val packageFile = File(workingDir, "package.json")
-                val expectedResult =
-                        File(projectDir.parentFile, "project-npm-expected-output.yml")
-                                .readText()
-                                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
-                                .replaceFirst("vcs_path: \"\"", "vcs_path: \"analyzer/$workingDir\"")
-                                .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
 
                 val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val expectedResult = patchExpectedResult(workingDir)
 
                 NPM.command(workingDir) shouldBe NPM.yarn
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
