@@ -1,0 +1,16 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Maven"
+  namespace: "com.here.ort.maven"
+  name: "maven-project"
+  version: "1.0-SNAPSHOT"
+  declared_licenses: []
+  aliases: []
+  vcs_path: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  homepage_url: "http://maven.apache.org"
+  scopes: []
+packages: []

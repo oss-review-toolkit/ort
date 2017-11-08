@@ -20,19 +20,54 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Maven
+import com.here.ort.util.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class MavenTest : StringSpec({
-    "computed dependencies are correct" {
-        val projectDir = File("projects/external/jgnash")
-        val expectedDependencies = File(
-                "src/funTest/assets/projects/external/jgnash-expected-maven-dependencies.txt").readLines()
-        val resolvedDependencies = Maven.resolveDependencies(projectDir, listOf(File(projectDir, "pom.xml")))
+class MavenTest : StringSpec() {
+    private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic/maven")
 
-        resolvedDependencies shouldBe expectedDependencies
-    }.config(enabled = false)
-})
+    init {
+        "JGnash dependencies are detected correctly" {
+            // TODO: test not only root project of JGnash.
+            val projectDir = File("src/funTest/assets/projects/external/jgnash")
+            val pomFile = File(projectDir, "pom.xml")
+            val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
+
+            val result = Maven.resolveDependencies(projectDir, listOf(pomFile))[pomFile]
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+
+        "Root project dependencies are detected correctly" {
+            val pomFile = File(syntheticProjectDir, "pom.xml")
+            val expectedResult = File(syntheticProjectDir.parentFile, "project-maven-expected-output-root.yml").readText()
+
+            val result = Maven.resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+
+        "Project dependencies are detected correctly" {
+            val pomFileApp = File(syntheticProjectDir, "app/pom.xml")
+            val pomFileLib = File(syntheticProjectDir, "lib/pom.xml")
+            val expectedResult = File(syntheticProjectDir.parentFile, "project-maven-expected-output-app.yml").readText()
+
+            val result = Maven.resolveDependencies(syntheticProjectDir, listOf(pomFileApp, pomFileLib))[pomFileApp]
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+
+        "External dependencies are detected correctly" {
+            val pomFile = File(syntheticProjectDir, "lib/pom.xml")
+            val expectedResult = File(syntheticProjectDir.parentFile, "project-maven-expected-output-lib.yml").readText()
+
+            val result = Maven.resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+    }
+}

@@ -1,0 +1,61 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Maven"
+  namespace: "jgnash"
+  name: "jgnash2"
+  version: "2.30.0"
+  declared_licenses: []
+  aliases: []
+  vcs_path: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/ccavanaugh/jgnash"
+  vcs_revision: "HEAD"
+  homepage_url: "http://sourceforge.net/projects/jgnash/"
+  scopes:
+  - name: "test"
+    delivered: false
+    dependencies:
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies: []
+      errors: []
+    - namespace: "org.hamcrest"
+      name: "hamcrest-all"
+      version: "1.3"
+      dependencies: []
+      errors: []
+packages:
+- package_manager: "Maven"
+  namespace: "junit"
+  name: "junit"
+  version: "4.12"
+  declared_licenses:
+  - "Eclipse Public License 1.0"
+  description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
+    \ and Kent Beck."
+  homepage_url: "http://junit.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_path: ""
+  vcs_provider: "git"
+  vcs_url: "http://github.com/junit-team/junit/tree/master"
+  vcs_revision: "r4.12"
+- package_manager: "Maven"
+  namespace: "org.hamcrest"
+  name: "hamcrest-all"
+  version: "1.3"
+  declared_licenses:
+  - "New BSD License"
+  description: "A self-contained hamcrest jar containing all of the sub-modules in\
+    \ a single artifact."
+  homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-all"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_path: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-all"
+  vcs_revision: "HEAD"

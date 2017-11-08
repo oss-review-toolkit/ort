@@ -18,6 +18,14 @@ dependencies {
     compile "com.beust:jcommander:$jcommanderVersion"
     compile "com.vdurmont:semver4j:$semverVersion"
     compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
+    // TODO: clean up dependencies below, likely not all of them are required
+    compile 'org.apache.maven:maven-core:3.5.2'
+    compile 'org.apache.maven:maven-compat:3.5.2'
+    compile 'org.apache.maven:maven-embedder:3.5.2'
+    compile 'org.apache.maven.resolver:maven-resolver-api:1.1.0'
+    compile 'org.apache.maven.resolver:maven-resolver-connector-basic:1.1.0'
+    compile 'org.apache.maven.resolver:maven-resolver-transport-file:1.1.0'
+    compile 'org.apache.maven.resolver:maven-resolver-transport-http:1.1.0'
 
     funTestCompile sourceSets.main.output
     funTestCompile sourceSets.test.output
