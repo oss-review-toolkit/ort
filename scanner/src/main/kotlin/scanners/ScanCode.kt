@@ -44,21 +44,21 @@ object ScanCode : Scanner() {
     override val resultFileExtension = "json"
 
     override fun scanPath(path: File, resultsFile: File): ScannerResult {
-        val scancodeVersion = getCommandVersion("scancode", transform = {
+        val version = getCommandVersion("scancode", transform = {
             // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
             it.substringAfter("ScanCode version ")
         })
 
-        log.info { "Detected ScanCode version $scancodeVersion." }
+        log.info { "Detected ScanCode version $version." }
 
-        val scancodeOptions = DEFAULT_OPTIONS.toMutableList()
+        val options = DEFAULT_OPTIONS.toMutableList()
         if (log.isEnabledFor(Level.DEBUG)) {
-            scancodeOptions.add("--verbose")
+            options.add("--verbose")
         }
 
         println("Running ScanCode in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
-                "scancode", *scancodeOptions.toTypedArray(),
+                "scancode", *options.toTypedArray(),
                 "--timeout", TIMEOUT.toString(),
                 "-n", PROCESSES.toString(),
                 "-f", OUTPUT_FORMAT,
