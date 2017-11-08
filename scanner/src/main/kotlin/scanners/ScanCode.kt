@@ -44,12 +44,14 @@ object ScanCode : Scanner() {
     override val resultFileExtension = "json"
 
     override fun scanPath(path: File, resultsFile: File): ScannerResult {
+        log.info { "Detecting the ScanCode version..." }
+
         val version = getCommandVersion("scancode", transform = {
             // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
             it.substringAfter("ScanCode version ")
         })
 
-        log.info { "Detected ScanCode version $version." }
+        log.info { "Using ScanCode version $version." }
 
         val options = DEFAULT_OPTIONS.toMutableList()
         if (log.isEnabledFor(Level.DEBUG)) {
