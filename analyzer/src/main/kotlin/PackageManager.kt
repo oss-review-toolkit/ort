@@ -54,7 +54,7 @@ abstract class PackageManager(
         val ALL by lazy {
             listOf(
                     Gradle,
-                    // TODO: Maven,
+                    Maven,
                     // TODO: SBT,
                     NPM,
                     // TODO: CocoaPods,
