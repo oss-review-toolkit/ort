@@ -39,16 +39,23 @@ import java.io.File
 
 import kotlin.system.exitProcess
 
+class ScanSummary(
+        val pkgSummary: PackageSummary,
+        val cacheStats: CacheStatistics
+)
+
+typealias PackageSummary = MutableMap<String, SummaryEntry>
+
+class SummaryEntry(
+        val scopes: MutableList<String> = mutableListOf(),
+        val licenses: MutableList<String> = mutableListOf(),
+        val errors: MutableList<String> = mutableListOf()
+)
+
 /**
  * The main entry point of the application.
  */
 object Main {
-    private class SummaryEntry(
-            val scopes: MutableList<String> = mutableListOf(),
-            val licenses: MutableList<String> = mutableListOf(),
-            val errors: MutableList<String> = mutableListOf()
-    )
-
     private class OutputFormatConverter : IStringConverter<OutputFormat> {
         override fun convert(name: String): OutputFormat {
             try {
@@ -167,7 +174,7 @@ object Main {
 
         println("Using scanner '$scanner'.")
 
-        val summary = mutableMapOf<String, SummaryEntry>()
+        val pkgSummary: PackageSummary = mutableMapOf()
 
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
@@ -186,7 +193,7 @@ object Main {
             packages.addAll(analyzerResult.packages)
 
             packages.forEach { pkg ->
-                val entry = summary.getOrPut(pkg.identifier) { SummaryEntry() }
+                val entry = pkgSummary.getOrPut(pkg.identifier) { SummaryEntry() }
                 entry.scopes.addAll(findScopesForPackage(pkg, analyzerResult.project))
                 scanEntry(entry, pkg.identifier, pkg)
             }
@@ -197,11 +204,11 @@ object Main {
                 "Provided path does not exist: ${inputPath.absolutePath}"
             }
 
-            val entry = summary.getOrPut(inputPath.absolutePath) { SummaryEntry() }
+            val entry = pkgSummary.getOrPut(inputPath.absolutePath) { SummaryEntry() }
             scanEntry(entry, inputPath.absolutePath, inputPath)
         }
 
-        writeSummary(outputDir, summary)
+        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats))
     }
 
     private fun findScopesForPackage(pkg: Package, project: Project): List<String> {
@@ -235,7 +242,7 @@ object Main {
         }
     }
 
-    private fun writeSummary(outputDirectory: File, summary: MutableMap<String, SummaryEntry>) {
+    private fun writeSummary(outputDirectory: File, scanSummary: ScanSummary) {
         summaryFormats.forEach { format ->
             val summaryFile = File(outputDirectory, "scan-summary.${format.fileEnding}")
             val mapper = when (format) {
@@ -243,7 +250,7 @@ object Main {
                 OutputFormat.YAML -> yamlMapper
             }
             println("Writing scan summary to ${summaryFile.absolutePath}.")
-            mapper.writerWithDefaultPrettyPrinter().writeValue(summaryFile, summary)
+            mapper.writerWithDefaultPrettyPrinter().writeValue(summaryFile, scanSummary)
         }
     }
 }
