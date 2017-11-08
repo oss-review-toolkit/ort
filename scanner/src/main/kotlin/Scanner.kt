@@ -65,8 +65,13 @@ abstract class Scanner {
     fun scan(pkg: Package, outputDirectory: File): ScannerResult {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scannerName = toString().toLowerCase()
+
+        // TODO: Consider implementing this logic in the Package class itself when creating the identifier.
+        // Also, think about what to use if we have neither a version nor a hash.
+        val pkgRevision = pkg.version.let { if (it.isNullOrBlank()) pkg.vcsRevision?.take(7) else it }
+
         val resultsFile = File(scanResultsDirectory,
-                "${pkg.name}-${pkg.version}_$scannerName.$resultFileExtension")
+                "${pkg.name}-${pkgRevision}_$scannerName.$resultFileExtension")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
             return toScannerResult(resultsFile)
