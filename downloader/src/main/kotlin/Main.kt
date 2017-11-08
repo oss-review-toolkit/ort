@@ -144,8 +144,6 @@ object Main {
             else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
         }
 
-        outputDir.safeMkdirs()
-
         val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
         val packages = mutableListOf<Package>()
 
