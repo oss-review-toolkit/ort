@@ -32,9 +32,9 @@ class PipTest : StringSpec({
         val workingDir = File("src/funTest/assets/projects/external")
         val projectDir = File(workingDir, "spdx-tools-python")
         val packageFile = File(projectDir, "setup.py")
-        val expectedResult = File(workingDir, "spdx-tools-python-expected-output.yml").readText()
 
         val result = PIP.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+        val expectedResult = File(workingDir, "spdx-tools-python-expected-output.yml").readText()
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
     }
