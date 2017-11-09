@@ -36,6 +36,7 @@ import com.here.ort.util.log
 import com.here.ort.util.yamlMapper
 
 import java.io.File
+import java.util.SortedSet
 
 import kotlin.system.exitProcess
 
@@ -47,8 +48,8 @@ class ScanSummary(
 typealias PackageSummary = MutableMap<String, SummaryEntry>
 
 class SummaryEntry(
-        val scopes: MutableList<String> = mutableListOf(),
-        val licenses: MutableList<String> = mutableListOf(),
+        val scopes: SortedSet<String> = sortedSetOf(),
+        val licenses: SortedSet<String> = sortedSetOf(),
         val errors: MutableList<String> = mutableListOf()
 )
 
@@ -227,7 +228,7 @@ object Main {
                 is File -> scanner.scan(input, outputDir)
                 else -> throw IllegalArgumentException("Unsupported scan input.")
             }
-            entry.licenses.addAll(result.sorted())
+            entry.licenses.addAll(result)
 
             println("Found licenses for '$identifier: ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {
