@@ -1,6 +1,13 @@
-[![Build Status](https://travis-ci.org/heremaps/oss-review-toolkit.svg?branch=master)](https://travis-ci.org/heremaps/oss-review-toolkit)
-
 # OSS Review Toolkit
+
+| Linux | Windows |
+| :---- | :------ |
+[ ![Linux build status][1]][2] | [![Windows build status][3]][4] |
+
+[1]: https://travis-ci.org/heremaps/oss-review-toolkit.svg?branch=master
+[2]: https://travis-ci.org/heremaps/oss-review-toolkit
+[3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
+[4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
 
 The OSS Review Toolkit (ORT for short) is a suite of tools to assist with reviewing Open Source Software dependencies in
 your software deliverables. The different tools in the suite are designed as libraries (for programmatic use) with
