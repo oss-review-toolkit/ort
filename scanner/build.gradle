@@ -34,7 +34,7 @@ task funTest(type: Test) {
     testClassesDirs = sourceSets.funTest.output.classesDirs
 
     // Add the Git submodule for ScanCode to PATH so functional tests can find the scanner.
-    def scanCodePath = rootDir.path + '/analyzer/src/funTest/assets/projects/external/scancode-toolkit'
+    def scanCodePath = "$projectDir/src/funTest/assets/scanners/scancode-toolkit"
     environment('PATH', scanCodePath + File.pathSeparator + System.env['PATH'])
 
     testLogging {
