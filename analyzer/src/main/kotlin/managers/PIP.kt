@@ -115,7 +115,13 @@ object PIP : PackageManager(
         }
         pip.requireSuccess()
 
-        val pydep = runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
+        val pydep = if (OS.isWindows) {
+            // On Windows, the script itself is not executable, so we need to wrap the call by "python".
+            runInVirtualEnv(virtualEnvDir, workingDir, "python",
+                    virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", ".")
+        } else {
+            runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
+        }
         pydep.requireSuccess()
 
         // What pydep actually returns as "repo_url" is either setup.py's
