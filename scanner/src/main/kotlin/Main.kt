@@ -47,9 +47,9 @@ class ScanSummary(
 typealias PackageSummary = MutableMap<String, SummaryEntry>
 
 class SummaryEntry(
-        val scopes: MutableList<String> = mutableListOf(),
-        val licenses: MutableList<String> = mutableListOf(),
-        val errors: MutableList<String> = mutableListOf()
+        val scopes: MutableSet<String> = mutableSetOf(),
+        val licenses: MutableSet<String> = mutableSetOf(),
+        val errors: MutableSet<String> = mutableSetOf()
 )
 
 /**
