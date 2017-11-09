@@ -104,8 +104,15 @@ object PIP : PackageManager(
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
-        var pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install",
-                "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION")
+        val pydepUrl = "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION"
+        var pip = if (OS.isWindows) {
+            // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
+            // https://github.com/pypa/pip/issues/1299.
+            runInVirtualEnv(virtualEnvDir, workingDir, "python", "-m", command(workingDir),
+                    *TRUSTED_HOSTS, "install", pydepUrl)
+        } else {
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", pydepUrl)
+        }
         pip.requireSuccess()
 
         val pydep = runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
