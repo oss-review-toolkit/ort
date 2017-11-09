@@ -220,7 +220,10 @@ object Main {
             println("Scanning package '$identifier'...")
 
             val result = when (input) {
-                is Package -> scanner.scan(input, outputDir)
+                is Package -> {
+                    entry.licenses.addAll(input.declaredLicenses)
+                    scanner.scan(input, outputDir)
+                }
                 is File -> scanner.scan(input, outputDir)
                 else -> throw IllegalArgumentException("Unsupported scan input.")
             }
