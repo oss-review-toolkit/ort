@@ -103,7 +103,7 @@ object Gradle : PackageManager(
                     vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
                     homepageUrl = "",
-                    scopes = scopes
+                    scopes = scopes.toSortedSet()
             )
 
             return AnalyzerResult(true, project, packages.values.toSortedSet())

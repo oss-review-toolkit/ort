@@ -109,7 +109,7 @@ data class Project(
         /**
          * The dependency scopes defined by this project.
          */
-        val scopes: List<Scope>
+        val scopes: SortedSet<Scope>
 ) {
 
     /**
