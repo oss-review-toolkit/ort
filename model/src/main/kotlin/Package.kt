@@ -65,7 +65,7 @@ data class Package(
          * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
          */
         @JsonProperty("declared_licenses")
-        val declaredLicenses: Set<String>,
+        val declaredLicenses: SortedSet<String>,
 
         /**
          * The description of the package, as provided by the package manager.

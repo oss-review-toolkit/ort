@@ -98,8 +98,8 @@ packages:
   name: "rdflib"
   version: "4.2.2"
   declared_licenses:
-  - "https://raw.github.com/RDFLib/rdflib/master/LICENSE"
   - "BSD License"
+  - "https://raw.github.com/RDFLib/rdflib/master/LICENSE"
   description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
     \ language for representing information."
   homepage_url: "https://github.com/RDFLib/rdflib"

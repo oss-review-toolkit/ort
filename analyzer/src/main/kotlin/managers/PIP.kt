@@ -160,7 +160,7 @@ object PIP : PackageManager(
                     // first for now.
                     val pkgRelease = pkgData["releases"][pkg.version][0]
 
-                    val declaredLicenses = mutableSetOf<String>()
+                    val declaredLicenses = sortedSetOf<String>()
 
                     // Use the top-level license field as well as the license classifiers as the declared licenses.
                     setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
@@ -221,7 +221,7 @@ object PIP : PackageManager(
                 namespace = "",
                 name = projectName,
                 version = projectVersion,
-                declaredLicenses = emptySet(),  // TODO: Get the licenses for local projects.
+                declaredLicenses = sortedSetOf(),  // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
                 vcsPath = vcs?.getPathToRoot(projectDir),
                 vcsProvider = vcs?.javaClass?.simpleName ?: "",
@@ -321,7 +321,7 @@ object PIP : PackageManager(
                     namespace = "",
                     name = packageName,
                     version = packageVersion,
-                    declaredLicenses = emptySet(),
+                    declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = null,
                     downloadUrl = null,

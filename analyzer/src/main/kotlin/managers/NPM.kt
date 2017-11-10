@@ -144,7 +144,7 @@ object NPM : PackageManager(
             val (namespace, name) = splitNamespaceAndName(rawName)
             val version = json["version"].asText()
 
-            val declaredLicenses = mutableSetOf<String>()
+            val declaredLicenses = sortedSetOf<String>()
             setOf(json["license"]).mapNotNullTo(declaredLicenses) {
                 it?.asText()
             }
@@ -367,7 +367,7 @@ object NPM : PackageManager(
         val (namespace, name) = splitNamespaceAndName(rawName)
         val version = json["version"].asText()
 
-        val declaredLicenses = mutableSetOf<String>()
+        val declaredLicenses = sortedSetOf<String>()
         setOf(json["license"]).mapNotNullTo(declaredLicenses) {
             it?.asText()
         }
