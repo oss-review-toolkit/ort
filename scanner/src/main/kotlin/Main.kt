@@ -230,7 +230,7 @@ object Main {
             }
             entry.licenses.addAll(result)
 
-            println("Found licenses for '$identifier: ${entry.licenses.joinToString()}")
+            println("Found licenses for '$identifier': ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {
             if (stacktrace) {
                 e.printStackTrace()
