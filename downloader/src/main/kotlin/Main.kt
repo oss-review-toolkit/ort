@@ -184,7 +184,7 @@ object Main {
         val p = fun(string: String) = println("${target.identifier}: $string")
 
         // TODO: add namespace to path
-        val targetDir = File(outputDirectory, "${target.name}/${target.version}").apply { safeMkdirs() }
+        val targetDir = File(outputDirectory, "${target.normalizedName}/${target.version}").apply { safeMkdirs() }
         p("Downloading source code to '${targetDir.absolutePath}'...")
 
         if (target.normalizedVcsUrl.isNotBlank()) {
