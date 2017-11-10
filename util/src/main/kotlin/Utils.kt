@@ -87,11 +87,11 @@ fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 /**
  * Parse the standard output of a process as JSON.
  */
-fun parseJsonProcessOutput(workingDir: File, vararg command: String, multiJson: Boolean = false): JsonNode {
+fun parseJsonProcessOutput(workingDir: File, vararg command: String, jsonLines: Boolean = false): JsonNode {
     val process = ProcessCapture(workingDir, *command).requireSuccess()
 
     // Support parsing multiple lines with one JSON object per line by wrapping the whole output into a JSON array.
-    if (multiJson) {
+    if (jsonLines) {
         val array = JsonNodeFactory.instance.arrayNode()
         process.stdoutFile.readLines().forEach { array.add(jsonMapper.readTree(it)) }
         return array
