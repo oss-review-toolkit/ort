@@ -144,6 +144,28 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
 }
 
 /**
+ * Split a [vcsUrl] into a pair of strings denoting the base repository URL and the path within the repository.
+ */
+fun splitVcsPathFromUrl(vcsUrl: String): Pair<String, String> {
+    val uri = URI(vcsUrl)
+
+    if (uri.host.endsWith("github.com")) {
+        val split = vcsUrl.split("/blob/", "/tree/")
+        if (split.size == 2) {
+            val repo = split.first() + ".git"
+
+            // Remove the blob / tree committish (e.g. a branch name) and any ".git" suffix.
+            val path = split.last().substringAfter("/").substringBeforeLast(".git")
+
+            return Pair(repo, path)
+        }
+    }
+
+    // Fall back to returning just the original URL.
+    return Pair(vcsUrl, "")
+}
+
+/**
  * Create all missing intermediate directories without failing if any already exists.
  *
  * @throws IOException if any missing directory could not be created.
