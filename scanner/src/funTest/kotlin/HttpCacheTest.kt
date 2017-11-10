@@ -79,7 +79,7 @@ class HttpCacheTest : StringSpec() {
                     namespace = "namespace",
                     name = "name",
                     version = "version",
-                    declaredLicenses = setOf("license"),
+                    declaredLicenses = sortedSetOf("license"),
                     description = "description",
                     homepageUrl = "homepageUrl",
                     downloadUrl = "downloadUrl",
