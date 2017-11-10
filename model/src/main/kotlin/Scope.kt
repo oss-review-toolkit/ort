@@ -46,7 +46,7 @@ data class Scope(
          * dependencies.
          */
         val dependencies: SortedSet<PackageReference>
-) {
+) : Comparable<Scope> {
     /**
      * Returns whether the given package is contained as a (transitive) dependency in this scope.
      */
@@ -63,4 +63,9 @@ data class Scope(
             pkgRef.identifier == pkgId.substringAfter(":") || pkgRef.dependsOn(pkgId)
         } != null
     }
+
+    /**
+     * A comparison function to sort scopes by their name.
+     */
+    override fun compareTo(other: Scope) = compareValuesBy(this, other, { it.name })
 }

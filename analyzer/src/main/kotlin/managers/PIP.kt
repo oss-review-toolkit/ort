@@ -211,7 +211,7 @@ object PIP : PackageManager(
         }
 
         // TODO: Handle "extras" and "tests" dependencies.
-        val scopes = listOf(
+        val scopes = sortedSetOf(
                 Scope("install", true, installDependencies)
         )
 

@@ -109,7 +109,7 @@ object NPM : PackageManager(
 
             // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
 
-            return parseProject(definitionFile, listOf(dependencies, devDependencies), packages.values.toSortedSet())
+            return parseProject(definitionFile, sortedSetOf(dependencies, devDependencies), packages.values.toSortedSet())
         } finally {
             // Delete node_modules folder to not pollute the scan.
             if (!modulesDir.deleteRecursively()) {
@@ -359,7 +359,7 @@ object NPM : PackageManager(
         }
     }
 
-    private fun parseProject(packageJson: File, scopes: List<Scope>, packages: SortedSet<Package>): AnalyzerResult {
+    private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>): AnalyzerResult {
         log.debug { "Parsing project info from ${packageJson.absolutePath}." }
 
         val json = jsonMapper.readTree(packageJson)

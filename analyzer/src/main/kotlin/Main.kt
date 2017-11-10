@@ -226,7 +226,7 @@ object Main {
                     vcsUrl = vcs?.getRemoteUrl(absoluteProjectPath) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(absoluteProjectPath) ?: "",
                     homepageUrl = "",
-                    scopes = emptyList()
+                    scopes = sortedSetOf()
             )
 
             val analyzerResult = AnalyzerResult(allowDynamicVersions, project, sortedSetOf())
