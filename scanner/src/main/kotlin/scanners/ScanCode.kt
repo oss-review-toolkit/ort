@@ -87,7 +87,7 @@ object ScanCode : Scanner() {
     }
 
     override fun toScannerResult(resultsFile: File): ScannerResult {
-        val result = mutableSetOf<String>()
+        val result = sortedSetOf<String>()
         val json = jsonMapper.readTree(resultsFile)
         val files = json["files"]
         files?.forEach { file ->
