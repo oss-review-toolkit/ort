@@ -51,7 +51,7 @@ data class PackageReference(
         val dependencies: SortedSet<PackageReference>,
 
         /**
-         * A list of errors that occured handling this [PackageReference].
+         * A list of errors that occurred handling this [PackageReference].
          */
         val errors: List<String> = emptyList()
 ) : Comparable<PackageReference> {
