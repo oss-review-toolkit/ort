@@ -26,8 +26,9 @@ import com.here.ort.scanner.scanners.*
 import com.here.ort.util.safeMkdirs
 
 import java.io.File
+import java.util.SortedSet
 
-typealias ScannerResult = Set<String>
+typealias ScannerResult = SortedSet<String>
 
 abstract class Scanner {
 
