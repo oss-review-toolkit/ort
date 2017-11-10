@@ -89,7 +89,7 @@ object PIP : PackageManager(
         return process
     }
 
-    override fun prepareResolution() {
+    override fun prepareResolution(definitionFiles: List<File>) {
         // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
         checkCommandVersion("virtualenv", Semver("15.1.0"), ignoreActualVersion = Main.ignoreVersions)

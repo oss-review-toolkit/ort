@@ -91,7 +91,7 @@ abstract class PackageManager(
      * for each provided path.
      */
     fun resolveDependencies(projectDir: File, definitionFiles: List<File>): ResolutionResult {
-        prepareResolution()
+        prepareResolution(definitionFiles)
 
         val result = mutableMapOf<File, AnalyzerResult>()
 
@@ -117,7 +117,7 @@ abstract class PackageManager(
     /**
      * Optional preparation step for dependency resolution, like checking for prerequisites.
      */
-    protected open fun prepareResolution() {
+    protected open fun prepareResolution(definitionFiles: List<File>) {
         log.debug { "Resolution of ${javaClass.simpleName} dependencies does not require preparation." }
     }
 
