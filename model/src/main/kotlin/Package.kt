@@ -21,7 +21,9 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.here.ort.util.normalizePackageName
 
+import com.here.ort.util.normalizePackageName
 import com.here.ort.util.normalizeVcsUrl
 
 import com.vdurmont.semver4j.Semver
@@ -37,7 +39,7 @@ import java.util.SortedSet
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
-@JsonIgnoreProperties("identifier", "normalizedVcsUrl", "semverType")
+@JsonIgnoreProperties("identifier", "normalizedVcsUrl", "semverType", "normalizedName")
 data class Package(
         /**
          * The name of the package manager that was used to discover this package, for example Maven or NPM.
@@ -140,6 +142,13 @@ data class Package(
      * @see normalizeVcsUrl
      */
     val normalizedVcsUrl = normalizeVcsUrl(vcsUrl, semverType)
+
+    /**
+     * The normalized package name, so it can be used as downloaded package directory.
+     *
+     * @see normalizePackageName
+     */
+    val normalizedName = normalizePackageName(name)
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the

@@ -183,9 +183,7 @@ object Main {
         // TODO: return also SHA1 which was finally cloned
         val p = fun(string: String) = println("${target.identifier}: $string")
 
-        // TODO: add namespace to path
-        val normalizedName = target.name.replace("[^A-Za-z0-9\\s]".toRegex(), "").trim().replace("\\s".toRegex(), "_")
-        val targetDir = File(outputDirectory, "$normalizedName/${target.version}").apply { safeMkdirs() }
+        val targetDir = File(outputDirectory, "${target.normalizedName}/${target.version}").apply { safeMkdirs() }
         p("Downloading source code to '${targetDir.absolutePath}'...")
 
         if (target.normalizedVcsUrl.isNotBlank()) {
