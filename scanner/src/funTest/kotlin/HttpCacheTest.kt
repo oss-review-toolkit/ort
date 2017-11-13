@@ -85,10 +85,10 @@ class HttpCacheTest : StringSpec() {
                     downloadUrl = "downloadUrl",
                     hash = "hash",
                     hashAlgorithm = "hashAlgorithm",
-                    vcsPath = "vcsPath",
                     vcsProvider = "vcsProvider",
                     vcsUrl = "vcsUrl",
-                    vcsRevision = "vcsRevision"
+                    vcsRevision = "vcsRevision",
+                    vcsPath = "vcsPath"
             )
 
             val resultFile = createTempFile()

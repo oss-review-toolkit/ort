@@ -190,10 +190,10 @@ object PIP : PackageManager(
                             downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
                             hash = pkgRelease["md5_digest"]?.asText() ?: pkg.hash,
                             hashAlgorithm = "MD5",
-                            vcsPath = pkg.vcsPath,
                             vcsProvider = pkg.vcsProvider,
                             vcsUrl = pkg.vcsUrl,
-                            vcsRevision = pkg.vcsRevision
+                            vcsRevision = pkg.vcsRevision,
+                            vcsPath = pkg.vcsPath
                     )
                 } catch (e: Exception) {
                     if (Main.stacktrace) {
@@ -223,10 +223,10 @@ object PIP : PackageManager(
                 version = projectVersion,
                 declaredLicenses = sortedSetOf(),  // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
-                vcsPath = vcs?.getPathToRoot(projectDir),
                 vcsProvider = vcs?.javaClass?.simpleName ?: "",
                 vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
                 vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
+                vcsPath = vcs?.getPathToRoot(projectDir),
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )
@@ -327,10 +327,10 @@ object PIP : PackageManager(
                     downloadUrl = null,
                     hash = "",
                     hashAlgorithm = null,
-                    vcsPath = null,
                     vcsProvider = null,
                     vcsUrl = null,
-                    vcsRevision = null
+                    vcsRevision = null,
+                    vcsPath = null
             )
             packages.add(dependencyPackage)
 

@@ -221,10 +221,10 @@ object Main {
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsPath = vcs?.getPathToRoot(absoluteProjectPath),
                     vcsProvider = vcs?.javaClass?.simpleName ?: "",
                     vcsUrl = vcs?.getRemoteUrl(absoluteProjectPath) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(absoluteProjectPath) ?: "",
+                    vcsPath = vcs?.getPathToRoot(absoluteProjectPath),
                     homepageUrl = "",
                     scopes = sortedSetOf()
             )

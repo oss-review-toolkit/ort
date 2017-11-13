@@ -67,16 +67,6 @@ data class Project(
         val aliases: List<String>,
 
         /**
-         * The optional path inside the VCS to take into account. The actual meaning depends on the VCS provider. For
-         * example for Git only this subfolder of the repository should be cloned, or for Git Repo it is interpreted as
-         * the path to the manifest file.
-         *
-         * @see [Package.vcsPath].
-         */
-        @JsonProperty("vcs_path")
-        val vcsPath: String?,
-
-        /**
          * The name of the VCS provider, for example Git or SVN.
          *
          * @see [Package.vcsProvider].
@@ -99,6 +89,16 @@ data class Project(
          */
         @JsonProperty("vcs_revision")
         val vcsRevision: String,
+
+        /**
+         * The optional path inside the VCS to take into account. The actual meaning depends on the VCS provider. For
+         * example for Git only this subfolder of the repository should be cloned, or for Git Repo it is interpreted as
+         * the path to the manifest file.
+         *
+         * @see [Package.vcsPath].
+         */
+        @JsonProperty("vcs_path")
+        val vcsPath: String?,
 
         /**
          * The URL to the project's homepage.
@@ -126,10 +126,10 @@ data class Project(
             downloadUrl = "",
             hash = "",
             hashAlgorithm = "",
-            vcsPath = vcsPath,
             vcsProvider = vcsProvider,
             vcsUrl = vcsUrl,
-            vcsRevision = vcsRevision
+            vcsRevision = vcsRevision,
+            vcsPath = vcsPath
     )
 
 }
