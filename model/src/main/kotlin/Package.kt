@@ -21,7 +21,9 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.here.ort.util.normalizePackageName
 
+import com.here.ort.util.normalizePackageName
 import com.here.ort.util.normalizeVcsUrl
 
 import com.vdurmont.semver4j.Semver
@@ -140,6 +142,13 @@ data class Package(
      * @see normalizeVcsUrl
      */
     val normalizedVcsUrl = vcsUrl?.let { normalizeVcsUrl(it, semverType) }
+
+    /**
+     * The normalized package name, so it can be used as downloaded package directory.
+     *
+     * @see normalizePackageName
+     */
+    val normalizedName = name?.let { normalizePackageName(it) }
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
