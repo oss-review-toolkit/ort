@@ -217,10 +217,10 @@ object NPM : PackageManager(
                     downloadUrl = downloadUrl,
                     hash = hash,
                     hashAlgorithm = hashAlgorithm,
-                    vcsPath = vcsPath,
                     vcsProvider = vcsProvider,
                     vcsUrl = vcsUrl,
-                    vcsRevision = vcsRevision
+                    vcsRevision = vcsRevision,
+                    vcsPath = vcsPath
             )
 
             require(module.name.isNotEmpty()) {
@@ -403,10 +403,10 @@ object NPM : PackageManager(
                 version = version,
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
-                vcsPath = vcs?.getPathToRoot(projectDir),
                 vcsProvider = vcsProviderFromPackage,
                 vcsUrl = vcsUrlFromPackage,
                 vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
+                vcsPath = vcs?.getPathToRoot(projectDir),
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )

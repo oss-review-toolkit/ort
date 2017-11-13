@@ -96,14 +96,6 @@ data class Package(
         val hashAlgorithm: String?,
 
         /**
-         * The optional path inside the VCS to take into account. The actual meaning depends on the VCS provider. For
-         * example for Git only this subfolder of the repository should be cloned, or for Git Repo it is interpreted as
-         * the path to the manifest file.
-         */
-        @JsonProperty("vcs_path")
-        val vcsPath: String?,
-
-        /**
          * The optional name of the VCS provider, for example Git or SVN.
          */
         @JsonProperty("vcs_provider")
@@ -119,7 +111,15 @@ data class Package(
          * The optional VCS-specific revision (tag, branch, SHA1) that this [version] of the package was built from.
          */
         @JsonProperty("vcs_revision")
-        val vcsRevision: String?
+        val vcsRevision: String?,
+
+        /**
+         * The optional path inside the VCS to take into account. The actual meaning depends on the VCS provider. For
+         * example for Git only this subfolder of the repository should be cloned, or for Git Repo it is interpreted as
+         * the path to the manifest file.
+         */
+        @JsonProperty("vcs_path")
+        val vcsPath: String?
 ) : Comparable<Package> {
     /**
      * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].

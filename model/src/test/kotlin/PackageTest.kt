@@ -39,10 +39,10 @@ class PackageTest : WordSpec({
                     downloadUrl = "",
                     hash = "",
                     hashAlgorithm = "",
-                    vcsPath = "",
                     vcsProvider = "",
                     vcsUrl = "https://github.com/fb55/nth-check",
-                    vcsRevision = ""
+                    vcsRevision = "",
+                    vcsPath = ""
             )
             val expectedUrl = "https://github.com/fb55/nth-check.git"
 
@@ -61,10 +61,10 @@ class PackageTest : WordSpec({
                     downloadUrl = "",
                     hash = "",
                     hashAlgorithm = "",
-                    vcsPath = "",
                     vcsProvider = "",
                     vcsUrl = "npm/npm",
-                    vcsRevision = ""
+                    vcsRevision = "",
+                    vcsPath = ""
             )
             val expectedUrl = "https://github.com/npm/npm.git"
 

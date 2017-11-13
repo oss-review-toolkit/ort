@@ -98,10 +98,10 @@ object Gradle : PackageManager(
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsPath = vcs?.getPathToRoot(projectDir),
                     vcsProvider = vcs?.javaClass?.simpleName ?: "",
                     vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
+                    vcsPath = vcs?.getPathToRoot(projectDir),
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )
@@ -135,10 +135,10 @@ object Gradle : PackageManager(
                         downloadUrl = "",
                         hash = "",
                         hashAlgorithm = "",
-                        vcsPath = "",
                         vcsProvider = "",
                         vcsUrl = "",
-                        vcsRevision = ""
+                        vcsRevision = "",
+                        vcsPath = ""
                 )
             }
         }
