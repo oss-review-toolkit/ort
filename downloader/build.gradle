@@ -4,9 +4,48 @@ apply plugin: 'application'
 applicationName = 'downloader'
 mainClassName = 'com.here.ort.downloader.Main'
 
+sourceSets {
+    funTest {
+        kotlin.srcDirs 'src/funTest/kotlin'
+    }
+}
+
 dependencies {
     compile project(':model')
     compile project(':util')
 
     compile "com.beust:jcommander:$jcommanderVersion"
+
+    funTestCompile sourceSets.main.output
+    funTestCompile sourceSets.test.output
+    funTestCompile configurations.testCompile
+    funTestRuntime configurations.testRuntime
+    funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
+
+task funTest(type: Test) {
+    description = 'Runs the functional tests.'
+    group = 'Verification'
+    classpath = sourceSets.funTest.runtimeClasspath
+    testClassesDirs = sourceSets.funTest.output.classesDirs
+
+    testLogging {
+        events 'started', 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+    }
+}
+
+task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
+    description = 'Generates the code coverage report for the functional tests.'
+    group = 'Reporting'
+
+    executionData funTest
+    sourceSets sourceSets.main
+
+    reports {
+        // Enable XML in addition to HTML for CI integration.
+        xml.enabled true
+    }
+}
+
+check.dependsOn funTest
