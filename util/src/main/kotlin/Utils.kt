@@ -144,11 +144,11 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
 }
 
 /**
- * Normalize a package name into alphanumeric form with underscores. For example Gradle submodules
+ * Normalize a package name into alphanumeric form with underscores and hyphens. For example Gradle submodules
  * are named: "project :moduleName"
  * @param name package name
  */
-fun normalizePackageName(name: String) : String =  name.replace("[^A-Za-z0-9\\s]".toRegex(), "").trim().replace("\\s".toRegex(), "_")
+fun normalizePackageName(name: String) : String =  name.replace("[^A-Za-z0-9\\-_\\s]".toRegex(), "").trim().replace("\\s".toRegex(), "_")
 
 /**
  * Split a [vcsUrl] into a pair of strings denoting the base repository URL and the path within the repository.
