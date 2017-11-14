@@ -114,7 +114,7 @@ object Main {
             names = arrayOf("--summary-format", "-f"),
             converter = OutputFormatConverter::class,
             order = 0)
-    private var summaryFormats: List<OutputFormat> = listOf(OutputFormat.YAML)
+    private var summaryFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Enable info logging.",
             names = arrayOf("--info"),

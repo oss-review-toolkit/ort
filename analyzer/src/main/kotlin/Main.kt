@@ -86,7 +86,7 @@ object Main {
     @Parameter(description = "The data format used for dependency information.",
             names = arrayOf("--output-format", "-f"),
             order = 0)
-    private var outputFormat: OutputFormat = OutputFormat.YAML
+    private var outputFormat = OutputFormat.YAML
 
     @Suppress("LateinitUsage")
     private lateinit var mapper: ObjectMapper
