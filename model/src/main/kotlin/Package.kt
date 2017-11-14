@@ -21,7 +21,6 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.here.ort.util.normalizePackageName
 
 import com.here.ort.util.normalizePackageName
 import com.here.ort.util.normalizeVcsUrl
