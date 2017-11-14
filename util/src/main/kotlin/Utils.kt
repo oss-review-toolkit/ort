@@ -148,7 +148,7 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
  * different operating systems, or that make the path hard to read (like spaces).
  * @param name package name
  */
-fun normalizePackageName(name: String) : String =  name.replace("[^A-Za-z0-9\\-_\\s]".toRegex(), "").trim().replace("\\s".toRegex(), "_")
+fun normalizePackageName(name: String) : String =  name.replace("[^\\w\\-_\\s]".toRegex(), "").trim().replace("\\s".toRegex(), "_")
 
 /**
  * Split a [vcsUrl] into a pair of strings denoting the base repository URL and the path within the repository.
