@@ -113,12 +113,12 @@ object Main {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer")
 
         val project = analyzerResult.project
-        val graph = SingleGraph(project.name)
-
-        graph.setStrict(true)
-        graph.setAutoCreate(true)
-        graph.addAttribute("ui.antialias")
-        graph.addAttribute("ui.quality")
+        val graph = SingleGraph(project.name).apply {
+            isStrict = true
+            setAutoCreate(true)
+            addAttribute("ui.antialias")
+            addAttribute("ui.quality")
+        }
 
         val rootNode = graph.addNode<SingleNode>(project.name)
         rootNode.addAttribute("ui.label", project.name)
