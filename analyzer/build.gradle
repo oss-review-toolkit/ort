@@ -8,6 +8,9 @@ sourceSets {
     funTest {
         kotlin.srcDirs 'src/funTest/kotlin'
     }
+    intTest {
+        kotlin.srcDirs 'src/intTest/kotlin'
+    }
 }
 
 dependencies {
@@ -32,8 +35,13 @@ dependencies {
     funTestCompile sourceSets.test.output
     funTestCompile configurations.testCompile
     funTestRuntime configurations.testRuntime
-
     funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+
+    intTestCompile sourceSets.main.output
+    intTestCompile sourceSets.test.output
+    intTestCompile configurations.testCompile
+    intTestRuntime configurations.testRuntime
+    intTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
 
 task funTest(type: Test) {
@@ -58,6 +66,18 @@ task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
     reports {
         // Enable XML in addition to HTML for CI integration.
         xml.enabled true
+    }
+}
+
+task intTest(type: Test) {
+    description = 'Runs the integration tests.'
+    group = 'Verification'
+    classpath = sourceSets.intTest.runtimeClasspath
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+
+    testLogging {
+        events 'started', 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
     }
 }
 
