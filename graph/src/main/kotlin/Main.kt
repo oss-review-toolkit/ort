@@ -115,7 +115,7 @@ object Main {
         val project = analyzerResult.project
         val graph = SingleGraph(project.name)
 
-        graph.setStrict(true)
+        graph.isStrict = true
         graph.setAutoCreate(true)
         graph.addAttribute("ui.antialias")
         graph.addAttribute("ui.quality")
