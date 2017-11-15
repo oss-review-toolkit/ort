@@ -1,0 +1,5515 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "httpclient"
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs_provider: "Git"
+  vcs_url: "https://github.com/robolectric/robolectric.git"
+  vcs_revision: "757dfd56499a415376ea04bfa520b317bf2e3b58"
+  vcs_path: ""
+  homepage_url: ""
+  scopes:
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies:
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :shadows:framework"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :resources"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.almworks.sqlite4java"
+        name: "sqlite4java"
+        version: "0.282"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.android.apps.common.testing.accessibility.framework"
+        name: "accessibility-test-framework"
+        version: "2.1"
+        dependencies:
+        - namespace: "com.google.protobuf"
+          name: "protobuf-java"
+          version: "2.6.1"
+          dependencies: []
+          errors: []
+        - namespace: "org.hamcrest"
+          name: "hamcrest-core"
+          version: "1.3"
+          dependencies: []
+          errors: []
+        - namespace: "org.hamcrest"
+          name: "hamcrest-library"
+          version: "1.3"
+          dependencies:
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.ibm.icu"
+        name: "icu4j"
+        version: "53.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "5.1.1_r9-robolectric-1"
+      dependencies: []
+      errors: []
+  - name: "compileOnly"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :shadows:framework"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :resources"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.almworks.sqlite4java"
+        name: "sqlite4java"
+        version: "0.282"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.android.apps.common.testing.accessibility.framework"
+        name: "accessibility-test-framework"
+        version: "2.1"
+        dependencies:
+        - namespace: "com.google.protobuf"
+          name: "protobuf-java"
+          version: "2.6.1"
+          dependencies: []
+          errors: []
+        - namespace: "org.hamcrest"
+          name: "hamcrest-core"
+          version: "1.3"
+          dependencies: []
+          errors: []
+        - namespace: "org.hamcrest"
+          name: "hamcrest-library"
+          version: "1.3"
+          dependencies:
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.ibm.icu"
+        name: "icu4j"
+        version: "53.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "5.1.1_r9-robolectric-1"
+      dependencies: []
+      errors: []
+  - name: "default"
+    delivered: true
+    dependencies:
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "earlyRuntime"
+    delivered: true
+    dependencies:
+    - namespace: "org.apache.httpcomponents"
+      name: "httpcore"
+      version: "4.0.1"
+      dependencies: []
+      errors: []
+  - name: "errorprone"
+    delivered: true
+    dependencies:
+    - namespace: "com.google.errorprone"
+      name: "error_prone_core"
+      version: "2.1.2"
+      dependencies:
+      - namespace: "com.github.stephenc.jcip"
+        name: "jcip-annotations"
+        version: "1.0-1"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.auto"
+        name: "auto-common"
+        version: "0.7"
+        dependencies:
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "22.0"
+          dependencies:
+          - namespace: "com.google.code.findbugs"
+            name: "jsr305"
+            version: "3.0.0"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.errorprone"
+            name: "error_prone_annotations"
+            version: "2.1.2"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.j2objc"
+            name: "j2objc-annotations"
+            version: "1.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.mojo"
+            name: "animal-sniffer-annotations"
+            version: "1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.code.findbugs"
+        name: "jFormatString"
+        version: "3.0.0"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.code.findbugs"
+        name: "jsr305"
+        version: "3.0.0"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_annotation"
+        version: "2.1.2"
+        dependencies:
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "22.0"
+          dependencies:
+          - namespace: "com.google.code.findbugs"
+            name: "jsr305"
+            version: "3.0.0"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.errorprone"
+            name: "error_prone_annotations"
+            version: "2.1.2"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.j2objc"
+            name: "j2objc-annotations"
+            version: "1.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.mojo"
+            name: "animal-sniffer-annotations"
+            version: "1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_annotations"
+        version: "2.1.2"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_check_api"
+        version: "2.1.2"
+        dependencies:
+        - namespace: "com.github.kevinstern"
+          name: "software-and-algorithms"
+          version: "1.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.code.findbugs"
+          name: "jsr305"
+          version: "3.0.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotation"
+          version: "2.1.2"
+          dependencies:
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "22.0"
+            dependencies:
+            - namespace: "com.google.code.findbugs"
+              name: "jsr305"
+              version: "3.0.0"
+              dependencies: []
+              errors: []
+            - namespace: "com.google.errorprone"
+              name: "error_prone_annotations"
+              version: "2.1.2"
+              dependencies: []
+              errors: []
+            - namespace: "com.google.j2objc"
+              name: "j2objc-annotations"
+              version: "1.1"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.mojo"
+              name: "animal-sniffer-annotations"
+              version: "1.14"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotations"
+          version: "2.1.2"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "javac"
+          version: "9-dev-r4023-3"
+          dependencies: []
+          errors: []
+        - namespace: "com.googlecode.java-diff-utils"
+          name: "diffutils"
+          version: "1.3.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.checkerframework"
+          name: "dataflow"
+          version: "2.1.14"
+          dependencies:
+          - namespace: "org.checkerframework"
+            name: "javacutil"
+            version: "2.1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "javac"
+        version: "9-dev-r4023-3"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "22.0"
+        dependencies:
+        - namespace: "com.google.code.findbugs"
+          name: "jsr305"
+          version: "3.0.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotations"
+          version: "2.1.2"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.j2objc"
+          name: "j2objc-annotations"
+          version: "1.1"
+          dependencies: []
+          errors: []
+        - namespace: "org.codehaus.mojo"
+          name: "animal-sniffer-annotations"
+          version: "1.14"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.checkerframework"
+        name: "dataflow"
+        version: "2.1.14"
+        dependencies:
+        - namespace: "org.checkerframework"
+          name: "javacutil"
+          version: "2.1.14"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.pcollections"
+        name: "pcollections"
+        version: "2.1.2"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "pegdownDoclet"
+    delivered: true
+    dependencies:
+    - namespace: "ch.raffael.pegdown-doclet"
+      name: "pegdown-doclet"
+      version: "1.3"
+      dependencies:
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "18.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.sourceforge.plantuml"
+        name: "plantuml"
+        version: "8032"
+        dependencies: []
+        errors: []
+      - namespace: "org.pegdown"
+        name: "pegdown"
+        version: "1.6.0"
+        dependencies:
+        - namespace: "org.parboiled"
+          name: "parboiled-java"
+          version: "1.1.7"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-analysis"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.3"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-util"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.parboiled"
+            name: "parboiled-core"
+            version: "1.1.7"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "robolectricProcessor"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :processor"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "ch.raffael.pegdown-doclet"
+        name: "pegdown-doclet"
+        version: "1.3"
+        dependencies:
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "net.sourceforge.plantuml"
+          name: "plantuml"
+          version: "8032"
+          dependencies: []
+          errors: []
+        - namespace: "org.pegdown"
+          name: "pegdown"
+          version: "1.6.0"
+          dependencies:
+          - namespace: "org.parboiled"
+            name: "parboiled-java"
+            version: "1.1.7"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-analysis"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm-tree"
+                version: "5.0.3"
+                dependencies:
+                - namespace: "org.ow2.asm"
+                  name: "asm"
+                  version: "5.0.3"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.ow2.asm"
+              name: "asm-util"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm-tree"
+                version: "5.0.3"
+                dependencies:
+                - namespace: "org.ow2.asm"
+                  name: "asm"
+                  version: "5.0.3"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.3"
+              dependencies: []
+              errors: []
+            - namespace: "org.parboiled"
+              name: "parboiled-core"
+              version: "1.1.7"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.code.gson"
+        name: "gson"
+        version: "2.8.0"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtime"
+    delivered: true
+    dependencies:
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "signatures"
+    delivered: true
+    dependencies: []
+  - name: "testCompile"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :robolectric"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :junit"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :sandbox"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-commons"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.1"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.1"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :resources"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :sandbox"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadows:framework"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :resources"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.almworks.sqlite4java"
+          name: "sqlite4java"
+          version: "0.282"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.android.apps.common.testing.accessibility.framework"
+          name: "accessibility-test-framework"
+          version: "2.1"
+          dependencies:
+          - namespace: "com.google.protobuf"
+            name: "protobuf-java"
+            version: "2.6.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-library"
+            version: "1.3"
+            dependencies:
+            - namespace: "org.hamcrest"
+              name: "hamcrest-core"
+              version: "1.3"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.ibm.icu"
+          name: "icu4j"
+          version: "53.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.thoughtworks.xstream"
+        name: "xstream"
+        version: "1.4.8"
+        dependencies:
+        - namespace: "xmlpull"
+          name: "xmlpull"
+          version: "1.1.3.1"
+          dependencies: []
+          errors: []
+        - namespace: "xpp3"
+          name: "xpp3_min"
+          version: "1.1.4c"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.ant"
+        name: "ant"
+        version: "1.8.0"
+        dependencies:
+        - namespace: "org.apache.ant"
+          name: "ant-launcher"
+          version: "1.8.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.maven"
+        name: "maven-ant-tasks"
+        version: "2.1.3"
+        dependencies:
+        - namespace: "classworlds"
+          name: "classworlds"
+          version: "1.1-alpha-2"
+          dependencies: []
+          errors: []
+        - namespace: "org.apache.ant"
+          name: "ant"
+          version: "1.8.0"
+          dependencies:
+          - namespace: "org.apache.ant"
+            name: "ant-launcher"
+            version: "1.8.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-file"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-http-lightweight"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-http-shared"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "nekohtml"
+              name: "nekohtml"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "nekohtml"
+              name: "xercesMinimal"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-provider-api"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact-manager"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "backport-util-concurrent"
+            name: "backport-util-concurrent"
+            version: "3.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-repository-metadata"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-error-diagnostics"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-model"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-project"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-artifact-manager"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "backport-util-concurrent"
+              name: "backport-util-concurrent"
+              version: "3.1"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-artifact"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-repository-metadata"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-plugin-registry"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-profile"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-settings"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-settings"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-container-default"
+          version: "1.0-alpha-9-stable-1"
+          dependencies:
+          - namespace: "classworlds"
+            name: "classworlds"
+            version: "1.1-alpha-2"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-interpolation"
+          version: "1.11"
+          dependencies: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-utils"
+          version: "1.5.15"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.bouncycastle"
+        name: "bcprov-jdk15on"
+        version: "1.58"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :robolectric"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :junit"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :sandbox"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-commons"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.1"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.1"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :resources"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :sandbox"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadows:framework"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :resources"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.almworks.sqlite4java"
+          name: "sqlite4java"
+          version: "0.282"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.android.apps.common.testing.accessibility.framework"
+          name: "accessibility-test-framework"
+          version: "2.1"
+          dependencies:
+          - namespace: "com.google.protobuf"
+            name: "protobuf-java"
+            version: "2.6.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-library"
+            version: "1.3"
+            dependencies:
+            - namespace: "org.hamcrest"
+              name: "hamcrest-core"
+              version: "1.3"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.ibm.icu"
+          name: "icu4j"
+          version: "53.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.thoughtworks.xstream"
+        name: "xstream"
+        version: "1.4.8"
+        dependencies:
+        - namespace: "xmlpull"
+          name: "xmlpull"
+          version: "1.1.3.1"
+          dependencies: []
+          errors: []
+        - namespace: "xpp3"
+          name: "xpp3_min"
+          version: "1.1.4c"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.ant"
+        name: "ant"
+        version: "1.8.0"
+        dependencies:
+        - namespace: "org.apache.ant"
+          name: "ant-launcher"
+          version: "1.8.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.maven"
+        name: "maven-ant-tasks"
+        version: "2.1.3"
+        dependencies:
+        - namespace: "classworlds"
+          name: "classworlds"
+          version: "1.1-alpha-2"
+          dependencies: []
+          errors: []
+        - namespace: "org.apache.ant"
+          name: "ant"
+          version: "1.8.0"
+          dependencies:
+          - namespace: "org.apache.ant"
+            name: "ant-launcher"
+            version: "1.8.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-file"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-http-lightweight"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-http-shared"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "nekohtml"
+              name: "nekohtml"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "nekohtml"
+              name: "xercesMinimal"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-provider-api"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact-manager"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "backport-util-concurrent"
+            name: "backport-util-concurrent"
+            version: "3.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-repository-metadata"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-error-diagnostics"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-model"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-project"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-artifact-manager"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "backport-util-concurrent"
+              name: "backport-util-concurrent"
+              version: "3.1"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-artifact"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-repository-metadata"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-plugin-registry"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-profile"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-settings"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-settings"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-container-default"
+          version: "1.0-alpha-9-stable-1"
+          dependencies:
+          - namespace: "classworlds"
+            name: "classworlds"
+            version: "1.1-alpha-2"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-interpolation"
+          version: "1.11"
+          dependencies: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-utils"
+          version: "1.5.15"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.bouncycastle"
+        name: "bcprov-jdk15on"
+        version: "1.58"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompileOnly"
+    delivered: true
+    dependencies: []
+  - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :robolectric"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :junit"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :sandbox"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-commons"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.1"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.1"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :resources"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :sandbox"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadows:framework"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :resources"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.almworks.sqlite4java"
+          name: "sqlite4java"
+          version: "0.282"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.android.apps.common.testing.accessibility.framework"
+          name: "accessibility-test-framework"
+          version: "2.1"
+          dependencies:
+          - namespace: "com.google.protobuf"
+            name: "protobuf-java"
+            version: "2.6.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-library"
+            version: "1.3"
+            dependencies:
+            - namespace: "org.hamcrest"
+              name: "hamcrest-core"
+              version: "1.3"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.ibm.icu"
+          name: "icu4j"
+          version: "53.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.thoughtworks.xstream"
+        name: "xstream"
+        version: "1.4.8"
+        dependencies:
+        - namespace: "xmlpull"
+          name: "xmlpull"
+          version: "1.1.3.1"
+          dependencies: []
+          errors: []
+        - namespace: "xpp3"
+          name: "xpp3_min"
+          version: "1.1.4c"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.ant"
+        name: "ant"
+        version: "1.8.0"
+        dependencies:
+        - namespace: "org.apache.ant"
+          name: "ant-launcher"
+          version: "1.8.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.maven"
+        name: "maven-ant-tasks"
+        version: "2.1.3"
+        dependencies:
+        - namespace: "classworlds"
+          name: "classworlds"
+          version: "1.1-alpha-2"
+          dependencies: []
+          errors: []
+        - namespace: "org.apache.ant"
+          name: "ant"
+          version: "1.8.0"
+          dependencies:
+          - namespace: "org.apache.ant"
+            name: "ant-launcher"
+            version: "1.8.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-file"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-http-lightweight"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-http-shared"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "nekohtml"
+              name: "nekohtml"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "nekohtml"
+              name: "xercesMinimal"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-provider-api"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact-manager"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "backport-util-concurrent"
+            name: "backport-util-concurrent"
+            version: "3.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-repository-metadata"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-error-diagnostics"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-model"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-project"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-artifact-manager"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "backport-util-concurrent"
+              name: "backport-util-concurrent"
+              version: "3.1"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-artifact"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-repository-metadata"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-plugin-registry"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-profile"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-settings"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-settings"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-container-default"
+          version: "1.0-alpha-9-stable-1"
+          dependencies:
+          - namespace: "classworlds"
+            name: "classworlds"
+            version: "1.1-alpha-2"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-interpolation"
+          version: "1.11"
+          dependencies: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-utils"
+          version: "1.5.15"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.bouncycastle"
+        name: "bcprov-jdk15on"
+        version: "1.58"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "5.1.1_r9-robolectric-1"
+      dependencies: []
+      errors: []
+  - name: "testRuntimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :robolectric"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :junit"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :sandbox"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-commons"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.1"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.1"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :resources"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :sandbox"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadows:framework"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :resources"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: ""
+            name: "project :utils"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :annotations"
+              version: ""
+              dependencies:
+              - namespace: ""
+                name: "project :shadowapi"
+                version: ""
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "20.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.almworks.sqlite4java"
+          name: "sqlite4java"
+          version: "0.282"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.android.apps.common.testing.accessibility.framework"
+          name: "accessibility-test-framework"
+          version: "2.1"
+          dependencies:
+          - namespace: "com.google.protobuf"
+            name: "protobuf-java"
+            version: "2.6.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.hamcrest"
+            name: "hamcrest-library"
+            version: "1.3"
+            dependencies:
+            - namespace: "org.hamcrest"
+              name: "hamcrest-core"
+              version: "1.3"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.ibm.icu"
+          name: "icu4j"
+          version: "53.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.thoughtworks.xstream"
+        name: "xstream"
+        version: "1.4.8"
+        dependencies:
+        - namespace: "xmlpull"
+          name: "xmlpull"
+          version: "1.1.3.1"
+          dependencies: []
+          errors: []
+        - namespace: "xpp3"
+          name: "xpp3_min"
+          version: "1.1.4c"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.ant"
+        name: "ant"
+        version: "1.8.0"
+        dependencies:
+        - namespace: "org.apache.ant"
+          name: "ant-launcher"
+          version: "1.8.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.apache.maven"
+        name: "maven-ant-tasks"
+        version: "2.1.3"
+        dependencies:
+        - namespace: "classworlds"
+          name: "classworlds"
+          version: "1.1-alpha-2"
+          dependencies: []
+          errors: []
+        - namespace: "org.apache.ant"
+          name: "ant"
+          version: "1.8.0"
+          dependencies:
+          - namespace: "org.apache.ant"
+            name: "ant-launcher"
+            version: "1.8.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-file"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-http-lightweight"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-http-shared"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "nekohtml"
+              name: "nekohtml"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "nekohtml"
+              name: "xercesMinimal"
+              version: "1.9.6.2"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven.wagon"
+          name: "wagon-provider-api"
+          version: "1.0-beta-6"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact-manager"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "backport-util-concurrent"
+            name: "backport-util-concurrent"
+            version: "3.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.apache.maven.wagon"
+            name: "wagon-provider-api"
+            version: "1.0-beta-6"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-repository-metadata"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-artifact"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-error-diagnostics"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-model"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-project"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-artifact-manager"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "backport-util-concurrent"
+              name: "backport-util-concurrent"
+              version: "3.1"
+              dependencies: []
+              errors: []
+            - namespace: "org.apache.maven.wagon"
+              name: "wagon-provider-api"
+              version: "1.0-beta-6"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-artifact"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.apache.maven"
+              name: "maven-repository-metadata"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-artifact"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-plugin-registry"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-profile"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.apache.maven"
+            name: "maven-settings"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.apache.maven"
+              name: "maven-model"
+              version: "2.2.1"
+              dependencies:
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-container-default"
+              version: "1.0-alpha-9-stable-1"
+              dependencies:
+              - namespace: "classworlds"
+                name: "classworlds"
+                version: "1.1-alpha-2"
+                dependencies: []
+                errors: []
+              - namespace: "org.codehaus.plexus"
+                name: "plexus-utils"
+                version: "1.5.15"
+                dependencies: []
+                errors: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-interpolation"
+              version: "1.11"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.apache.maven"
+          name: "maven-settings"
+          version: "2.2.1"
+          dependencies:
+          - namespace: "org.apache.maven"
+            name: "maven-model"
+            version: "2.2.1"
+            dependencies:
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-container-default"
+            version: "1.0-alpha-9-stable-1"
+            dependencies:
+            - namespace: "classworlds"
+              name: "classworlds"
+              version: "1.1-alpha-2"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.plexus"
+              name: "plexus-utils"
+              version: "1.5.15"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-interpolation"
+            version: "1.11"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-container-default"
+          version: "1.0-alpha-9-stable-1"
+          dependencies:
+          - namespace: "classworlds"
+            name: "classworlds"
+            version: "1.1-alpha-2"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.plexus"
+            name: "plexus-utils"
+            version: "1.5.15"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-interpolation"
+          version: "1.11"
+          dependencies: []
+          errors: []
+        - namespace: "org.codehaus.plexus"
+          name: "plexus-utils"
+          version: "1.5.15"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.bouncycastle"
+        name: "bcprov-jdk15on"
+        version: "1.58"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.apache.httpcomponents"
+      name: "httpclient"
+      version: "4.0.3"
+      dependencies:
+      - namespace: "commons-codec"
+        name: "commons-codec"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      - namespace: "commons-logging"
+        name: "commons-logging"
+        version: "1.1.1"
+        dependencies: []
+        errors: []
+      - namespace: "org.apache.httpcomponents"
+        name: "httpcore"
+        version: "4.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "5.1.1_r9-robolectric-1"
+      dependencies: []
+      errors: []
+packages:
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :annotations"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :junit"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :processor"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :resources"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :robolectric"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :sandbox"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :shadowapi"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :shadows:framework"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :utils"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "backport-util-concurrent"
+  name: "backport-util-concurrent"
+  version: "3.1"
+  declared_licenses:
+  - "Public Domain"
+  description: "Dawid Kurzyniec's backport of JSR 166"
+  homepage_url: "http://backport-jsr166.sourceforge.net/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "ch.raffael.pegdown-doclet"
+  name: "pegdown-doclet"
+  version: "1.3"
+  declared_licenses:
+  - "GPL 3.0"
+  description: "A Doclet that allows the use of Markdown and PlantUML in JavaDoc comments."
+  homepage_url: "https://github.com/Abnaxos/pegdown-doclet"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/Abnaxos/pegdown-doclet.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "classworlds"
+  name: "classworlds"
+  version: "1.1-alpha-2"
+  declared_licenses: []
+  description: ""
+  homepage_url: "http://classworlds.codehaus.org/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "cvs"
+  vcs_url: "pserver:anonymous@cvs.codehaus.org:/scm/cvspublic/:classworlds"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.almworks.sqlite4java"
+  name: "sqlite4java"
+  version: "0.282"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Minimalistic high-performance Java wrapper for SQLite"
+  homepage_url: "http://code.google.com/p/sqlite4java"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://sqlite4java.googlecode.com/svn/trunk/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.github.kevinstern"
+  name: "software-and-algorithms"
+  version: "1.0"
+  declared_licenses:
+  - "MIT License"
+  description: "Neat algorithm implementations in Java"
+  homepage_url: "https://www.github.com/KevinStern/software-and-algorithms"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/KevinStern/software-and-algorithms.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.github.stephenc.jcip"
+  name: "jcip-annotations"
+  version: "1.0-1"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "A clean room implementation of the JCIP Annotations based entirely\
+    \ on the specification provided by the javadocs."
+  homepage_url: "http://stephenc.github.com/jcip-annotations"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/stephenc/jcip-annotations.git"
+  vcs_revision: "jcip-annotations-1.0-1"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.android.apps.common.testing.accessibility.framework"
+  name: "accessibility-test-framework"
+  version: "2.1"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "Library used to test for common accessibility issues."
+  homepage_url: "https://github.com/google/Accessibility-Test-Framework-for-Android"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:google/Accessibility-Test-Framework-for-Android.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.auto"
+  name: "auto-common"
+  version: "0.7"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Common utilities for creating annotation processors."
+  homepage_url: "https://github.com/google/auto/auto-common"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/google/auto.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jFormatString"
+  version: "3.0.0"
+  declared_licenses:
+  - "GNU Lesser Public License"
+  description: "jFormatString for Findbugs"
+  homepage_url: "http://findbugs.sourceforge.net/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "http://code.google.com/p/findbugs/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jsr305"
+  version: "3.0.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "JSR305 Annotations for Findbugs"
+  homepage_url: "http://findbugs.sourceforge.net/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "http://code.google.com/p/findbugs/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.gson"
+  name: "gson"
+  version: "2.8.0"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Gson JSON library"
+  homepage_url: "https://github.com/google/gson/gson"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/gson.git/gson"
+  vcs_revision: "gson-parent-2.8.0"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_annotation"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_annotation"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_annotation"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_annotations"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_annotations"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_annotations"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_check_api"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_check_api"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_check_api"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_core"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_core"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_core"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "javac"
+  version: "9-dev-r4023-3"
+  declared_licenses:
+  - "GNU General Public License, version 2, with the Classpath Exception"
+  description: "A repackaged copy of javac for Error Prone to depend on"
+  homepage_url: "https://github.com/google/error-prone-javac"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/google/error-prone-javac.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "18.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Guava is a suite of core and expanded libraries that include\n   \
+    \ utility classes, google's collections, io classes, and much\n    much more.\n\
+    \n    Guava has only one code dependency - javax.annotation,\n    per the JSR-305\
+    \ spec."
+  homepage_url: "http://code.google.com/p/guava-libraries/guava"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://code.google.com/p/guava-libraries/guava/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "20.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Guava is a suite of core and expanded libraries that include\n   \
+    \ utility classes, google's collections, io classes, and much\n    much more.\n\
+    \n    Guava has only one code dependency - javax.annotation,\n    per the JSR-305\
+    \ spec."
+  homepage_url: "https://github.com/google/guava/guava"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/guava.git/guava"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "22.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Guava is a suite of core and expanded libraries that include\n   \
+    \ utility classes, google's collections, io classes, and much\n    much more.\n\
+    \n    Guava has only one code dependency - javax.annotation,\n    per the JSR-305\
+    \ spec."
+  homepage_url: "https://github.com/google/guava/guava"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/guava.git/guava"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.j2objc"
+  name: "j2objc-annotations"
+  version: "1.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "A set of annotations that provide additional information to the J2ObjC\n\
+    \    translator to modify the result of translation."
+  homepage_url: "https://github.com/google/j2objc/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.sonatype.org/spice/tags/oss-parent-7/j2objc-annotations"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.protobuf"
+  name: "protobuf-java"
+  version: "2.6.1"
+  declared_licenses:
+  - "New BSD license"
+  description: "Protocol Buffers are a way of encoding structured data in an efficient\
+    \ yet\n    extensible format."
+  homepage_url: "https://developers.google.com/protocol-buffers/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/protobuf.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.googlecode.java-diff-utils"
+  name: "diffutils"
+  version: "1.3.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "The DiffUtils library for computing diffs, applying patches, generationg\
+    \ side-by-side view in Java."
+  homepage_url: "http://code.google.com/p/java-diff-utils/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://java-diff-utils.googlecode.com/svn/branches/1.3.0/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.ibm.icu"
+  name: "icu4j"
+  version: "53.1"
+  declared_licenses:
+  - "ICU License"
+  description: "International Component for Unicode for Java (ICU4J) is a mature,\
+    \ widely used Java library\n    providing Unicode and Globalization support"
+  homepage_url: "http://icu-project.org/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://source.icu-project.org/repos/icu/icu4j/trunk/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.thoughtworks.xstream"
+  name: "xstream"
+  version: "1.4.8"
+  declared_licenses:
+  - "BSD style"
+  description: "XStream is a serialization library from Java objects to XML and back."
+  homepage_url: "http://codehaus.org/xstream-parent/xstream/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.codehaus.org/xstream/tags/XSTREAM_1_4_8/xstream"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "commons-codec"
+  name: "commons-codec"
+  version: "1.3"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "The codec package contains simple encoder and decoders for\n   various\
+    \ formats such as Base64 and Hexadecimal.  In addition to these\n   widely used\
+    \ encoders and decoders, the codec package also maintains a\n   collection of\
+    \ phonetic encoding utilities."
+  homepage_url: "http://jakarta.apache.org/commons/codec/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "cvs"
+  vcs_url: "pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-commons/codec"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "commons-logging"
+  name: "commons-logging"
+  version: "1.1.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Commons Logging is a thin adapter allowing configurable bridging to\
+    \ other,\n    well known logging systems."
+  homepage_url: "http://commons.apache.org/logging"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/commons/proper/logging/tags/commons-logging-1.1.1"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "junit"
+  name: "junit"
+  version: "4.12"
+  declared_licenses:
+  - "Eclipse Public License 1.0"
+  description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
+    \ and Kent Beck."
+  homepage_url: "http://junit.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/junit-team/junit.git"
+  vcs_revision: "r4.12"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "nekohtml"
+  name: "nekohtml"
+  version: "1.9.6.2"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: ""
+  homepage_url: "http://nekohtml.sourceforge.net/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "nekohtml"
+  name: "xercesMinimal"
+  version: "1.9.6.2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.bytebuddy"
+  name: "byte-buddy-agent"
+  version: "1.6.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "The Byte Buddy Java agent allows to access the JVM's HotSwap feature."
+  homepage_url: "http://bytebuddy.net/byte-buddy-agent"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:raphw/byte-buddy.git/byte-buddy-agent"
+  vcs_revision: "byte-buddy-1.6.0"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.bytebuddy"
+  name: "byte-buddy"
+  version: "1.6.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Byte Buddy is a Java library for creating Java classes at run time.\n\
+    \        This artifact is a build of Byte Buddy with all ASM dependencies repackaged\
+    \ into its own name space."
+  homepage_url: "http://bytebuddy.net/byte-buddy"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:raphw/byte-buddy.git/byte-buddy"
+  vcs_revision: "byte-buddy-1.6.0"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.sourceforge.plantuml"
+  name: "plantuml"
+  version: "8032"
+  declared_licenses:
+  - "The GNU General Public License"
+  description: "PlantUML is a component that allows to quickly write :\n        *\
+    \ sequence diagram,\n        * use case diagram,\n        * class diagram,\n \
+    \       * activity diagram,\n        * component diagram,\n        * state diagram\n\
+    \        * object diagram"
+  homepage_url: "http://plantuml.sourceforge.net"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.code.sf.net/p/plantuml/code/tags/plantuml-8032"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.ant"
+  name: "ant-launcher"
+  version: "1.8.0"
+  declared_licenses: []
+  description: "master POM"
+  homepage_url: "http://ant.apache.org/ant-launcher/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/ant/core/trunk/ant-launcher"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.ant"
+  name: "ant"
+  version: "1.8.0"
+  declared_licenses: []
+  description: "Apache Ant"
+  homepage_url: "http://ant.apache.org/ant/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/ant/core/trunk/ant"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.httpcomponents"
+  name: "httpclient"
+  version: "4.0.3"
+  declared_licenses:
+  - "Apache License"
+  description: "HttpComponents Client (base module)"
+  homepage_url: "http://hc.apache.org/httpcomponents-client"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "https://svn.apache.org/repos/asf/httpcomponents/httpclient/trunk/httpclient"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.httpcomponents"
+  name: "httpcore"
+  version: "4.0.1"
+  declared_licenses:
+  - "Apache License"
+  description: "HttpComponents Core (Java 1.3 compatible)"
+  homepage_url: "http://hc.apache.org/httpcomponents-core/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/httpcomponents/httpcore/tags/4.0.1/httpcore"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven.wagon"
+  name: "wagon-file"
+  version: "1.0-beta-6"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Wagon that gets and puts artifacts using file system protocol"
+  homepage_url: "http://maven.apache.org/wagon/wagon-providers/wagon-file"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/wagon/tags/wagon-1.0-beta-6/wagon-providers/wagon-file"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven.wagon"
+  name: "wagon-http-lightweight"
+  version: "1.0-beta-6"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Wagon that gets and puts artifacts through http using standard Java\
+    \ library"
+  homepage_url: "http://maven.apache.org/wagon/wagon-providers/wagon-http-lightweight"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/wagon/tags/wagon-1.0-beta-6/wagon-providers/wagon-http-lightweight"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven.wagon"
+  name: "wagon-http-shared"
+  version: "1.0-beta-6"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Shared Library for the wagon-http, and wagon-http-lightweight wagon\n\
+    \    providers."
+  homepage_url: "http://maven.apache.org/wagon/wagon-providers/wagon-http-shared"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/wagon/tags/wagon-1.0-beta-6/wagon-providers/wagon-http-shared"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven.wagon"
+  name: "wagon-provider-api"
+  version: "1.0-beta-6"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Maven Wagon API that defines the contract between different Wagon\
+    \ implementations"
+  homepage_url: "http://maven.apache.org/wagon/wagon-provider-api"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/wagon/tags/wagon-1.0-beta-6/wagon-provider-api"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-ant-tasks"
+  version: "2.1.3"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Ant Tasks used for Maven integration"
+  homepage_url: "http://maven.apache.org/ant-tasks/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/ant-tasks/tags/maven-ant-tasks-2.1.3"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-artifact-manager"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Maven is a project development management and comprehension tool.\
+    \ Based on the concept of a project object model: builds, dependency management,\
+    \ documentation creation, site publication, and distribution publication are all\
+    \ controlled from the declarative file. Maven can be extended by plugins to utilise\
+    \ a number of other development tools for reporting or the build process."
+  homepage_url: "http://maven.apache.org/maven-artifact-manager"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-artifact-manager"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-artifact"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Maven is a project development management and comprehension tool.\
+    \ Based on the concept of a project object model: builds, dependency management,\
+    \ documentation creation, site publication, and distribution publication are all\
+    \ controlled from the declarative file. Maven can be extended by plugins to utilise\
+    \ a number of other development tools for reporting or the build process."
+  homepage_url: "http://maven.apache.org/maven-artifact"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-artifact"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-error-diagnostics"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Provides a manager component which will process a given Throwable\
+    \ instance through a set of diagnostic\n    sub-components, and return a String\
+    \ message with user-friendly information about the error and possibly\n    how\
+    \ to fix it."
+  homepage_url: "http://maven.apache.org/maven-error-diagnostics"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-error-diagnostics"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-model"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Maven Model"
+  homepage_url: "http://maven.apache.org/maven-model"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-model"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-plugin-registry"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Maven is a project development management and comprehension tool.\
+    \ Based on the concept of a project object model: builds, dependency management,\
+    \ documentation creation, site publication, and distribution publication are all\
+    \ controlled from the declarative file. Maven can be extended by plugins to utilise\
+    \ a number of other development tools for reporting or the build process."
+  homepage_url: "http://maven.apache.org/maven-plugin-registry"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-plugin-registry"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-profile"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Maven is a project development management and comprehension tool.\
+    \ Based on the concept of a project object model: builds, dependency management,\
+    \ documentation creation, site publication, and distribution publication are all\
+    \ controlled from the declarative file. Maven can be extended by plugins to utilise\
+    \ a number of other development tools for reporting or the build process."
+  homepage_url: "http://maven.apache.org/maven-profile"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-profile"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-project"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "This library is used to not only read Maven project object model files,\
+    \ but to assemble inheritence\n    and to retrieve remote models as required."
+  homepage_url: "http://maven.apache.org/maven-project"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-project"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-repository-metadata"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Per-directory repository metadata."
+  homepage_url: "http://maven.apache.org/maven-repository-metadata"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-repository-metadata"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.apache.maven"
+  name: "maven-settings"
+  version: "2.2.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Maven is a project development management and comprehension tool.\
+    \ Based on the concept of a project object model: builds, dependency management,\
+    \ documentation creation, site publication, and distribution publication are all\
+    \ controlled from the declarative file. Maven can be extended by plugins to utilise\
+    \ a number of other development tools for reporting or the build process."
+  homepage_url: "http://maven.apache.org/maven-settings"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-settings"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.assertj"
+  name: "assertj-core"
+  version: "3.8.0"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "Rich and fluent assertions for testing for Java"
+  homepage_url: "http://assertj.org/assertj-core"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:joel-costigliola/assertj-core.git"
+  vcs_revision: "assertj-core-3.8.0"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.bouncycastle"
+  name: "bcprov-jdk15on"
+  version: "1.58"
+  declared_licenses:
+  - "Bouncy Castle Licence"
+  description: "The Bouncy Castle Crypto package is a Java implementation of cryptographic\
+    \ algorithms. This jar contains JCE provider and lightweight API for the Bouncy\
+    \ Castle Cryptography APIs for JDK 1.5 to JDK 1.8."
+  homepage_url: "http://www.bouncycastle.org/java.html"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.checkerframework"
+  name: "dataflow"
+  version: "2.1.14"
+  declared_licenses:
+  - "GNU General Public License, version 2 (GPL2), with the classpath exception"
+  - "The MIT License"
+  description: "Dataflow is a dataflow framework based on the javac compiler."
+  homepage_url: "https://checkerframework.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.checkerframework"
+  name: "javacutil"
+  version: "2.1.14"
+  declared_licenses:
+  - "GNU General Public License, version 2 (GPL2), with the classpath exception"
+  - "The MIT License"
+  description: "Javacutil is a collection of utility classes for the javac compiler."
+  homepage_url: "https://checkerframework.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.codehaus.mojo"
+  name: "animal-sniffer-annotations"
+  version: "1.14"
+  declared_licenses:
+  - "MIT license"
+  description: "Animal Sniffer Parent project."
+  homepage_url: "http://mojo.codehaus.org/animal-sniffer/animal-sniffer-annotations"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "https://svn.codehaus.org/mojo/tags/animal-sniffer-parent-1.14/animal-sniffer-annotations"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.codehaus.plexus"
+  name: "plexus-container-default"
+  version: "1.0-alpha-9-stable-1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.codehaus.org/plexus/scm/trunk/plexus-containers/plexus-container-default/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.codehaus.plexus"
+  name: "plexus-interpolation"
+  version: "1.11"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: ""
+  homepage_url: "http://plexus.codehaus.org/plexus-components/plexus-interpolation"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.codehaus.org/plexus/plexus-components/tags/plexus-interpolation-1.11"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.codehaus.plexus"
+  name: "plexus-utils"
+  version: "1.5.15"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "A collection of various utility classes to ease working with strings,\
+    \ files, command lines, XML and more."
+  homepage_url: "http://plexus.codehaus.org/plexus-utils"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.codehaus.org/plexus/plexus-utils/tags/plexus-utils-1.5.15"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.hamcrest"
+  name: "hamcrest-core"
+  version: "1.3"
+  declared_licenses:
+  - "New BSD License"
+  description: "This is the core API of hamcrest matcher framework to be used by third-party\
+    \ framework providers. This includes the a foundation set of matcher implementations\
+    \ for common operations."
+  homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.hamcrest"
+  name: "hamcrest-library"
+  version: "1.3"
+  declared_licenses:
+  - "New BSD License"
+  description: "Hamcrest library of matcher implementations."
+  homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-library"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-library"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.mockito"
+  name: "mockito-core"
+  version: "2.5.4"
+  declared_licenses:
+  - "The MIT License"
+  description: "Mockito mock objects library core API and implementation"
+  homepage_url: "http://mockito.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.objenesis"
+  name: "objenesis"
+  version: "2.4"
+  declared_licenses:
+  - "Apache 2"
+  description: "A library for instantiating Java objects"
+  homepage_url: "http://objenesis.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/easymock/objenesis.git/objenesis"
+  vcs_revision: "2.4"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-analysis"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-analysis/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-analysis"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-commons"
+  version: "5.0.1"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-commons/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-commons"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-tree"
+  version: "5.0.1"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-tree/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-tree"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-tree/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-util"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-util/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-util"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm"
+  version: "5.0.1"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-core"
+  version: "1.1.7"
+  declared_licenses:
+  - "Apache 2"
+  description: "Elegant parsing in Java and Scala - lightweight, easy-to-use, powerful"
+  homepage_url: "http://parboiled.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:sirthias/parboiled.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-java"
+  version: "1.1.7"
+  declared_licenses:
+  - "Apache 2"
+  description: "Elegant parsing in Java and Scala - lightweight, easy-to-use, powerful"
+  homepage_url: "http://parboiled.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:sirthias/parboiled.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.pcollections"
+  name: "pcollections"
+  version: "2.1.2"
+  declared_licenses:
+  - "The MIT License"
+  description: "A Persistent Java Collections Library"
+  homepage_url: "http://pcollections.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://pcollections.googlecode.com/svn/tags/v2.1.2"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.pegdown"
+  name: "pegdown"
+  version: "1.6.0"
+  declared_licenses:
+  - "Apache 2"
+  description: "A Java 1.6+ library providing a clean and lightweight markdown processor"
+  homepage_url: "http://pegdown.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:sirthias/pegdown.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "5.1.1_r9-robolectric-1"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "A library jar that provides APIs for Applications written for the\
+    \ Google Android Platform."
+  homepage_url: "http://source.android.com/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "xmlpull"
+  name: "xmlpull"
+  version: "1.1.3.1"
+  declared_licenses:
+  - "Public Domain"
+  description: ""
+  homepage_url: "http://www.xmlpull.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "xpp3"
+  name: "xpp3_min"
+  version: "1.1.4c"
+  declared_licenses:
+  - "Indiana University Extreme! Lab Software License, vesion 1.1.1"
+  - "Public Domain"
+  description: "MXP1 is a stable XmlPull parsing engine that is based on ideas from\
+    \ XPP and in particular XPP2 but completely revised and rewritten to take the\
+    \ best advantage of latest JIT JVMs such as Hotspot in JDK 1.4+."
+  homepage_url: "http://www.extreme.indiana.edu/xgws/xsoap/xpp/mxp1/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+errors: []
