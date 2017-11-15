@@ -1,0 +1,1035 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "shadowapi"
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs_provider: "Git"
+  vcs_url: "https://github.com/robolectric/robolectric.git"
+  vcs_revision: "757dfd56499a415376ea04bfa520b317bf2e3b58"
+  vcs_path: ""
+  homepage_url: ""
+  scopes:
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies: []
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "com.google.code.findbugs"
+      name: "jsr305"
+      version: "3.0.1"
+      dependencies: []
+      errors: []
+  - name: "compileOnly"
+    delivered: true
+    dependencies:
+    - namespace: "com.google.code.findbugs"
+      name: "jsr305"
+      version: "3.0.1"
+      dependencies: []
+      errors: []
+  - name: "default"
+    delivered: true
+    dependencies: []
+  - name: "errorprone"
+    delivered: true
+    dependencies:
+    - namespace: "com.google.errorprone"
+      name: "error_prone_core"
+      version: "2.1.2"
+      dependencies:
+      - namespace: "com.github.stephenc.jcip"
+        name: "jcip-annotations"
+        version: "1.0-1"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.auto"
+        name: "auto-common"
+        version: "0.7"
+        dependencies:
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "22.0"
+          dependencies:
+          - namespace: "com.google.code.findbugs"
+            name: "jsr305"
+            version: "3.0.0"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.errorprone"
+            name: "error_prone_annotations"
+            version: "2.1.2"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.j2objc"
+            name: "j2objc-annotations"
+            version: "1.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.mojo"
+            name: "animal-sniffer-annotations"
+            version: "1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.code.findbugs"
+        name: "jFormatString"
+        version: "3.0.0"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.code.findbugs"
+        name: "jsr305"
+        version: "3.0.0"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_annotation"
+        version: "2.1.2"
+        dependencies:
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "22.0"
+          dependencies:
+          - namespace: "com.google.code.findbugs"
+            name: "jsr305"
+            version: "3.0.0"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.errorprone"
+            name: "error_prone_annotations"
+            version: "2.1.2"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.j2objc"
+            name: "j2objc-annotations"
+            version: "1.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.mojo"
+            name: "animal-sniffer-annotations"
+            version: "1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_annotations"
+        version: "2.1.2"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_check_api"
+        version: "2.1.2"
+        dependencies:
+        - namespace: "com.github.kevinstern"
+          name: "software-and-algorithms"
+          version: "1.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.code.findbugs"
+          name: "jsr305"
+          version: "3.0.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotation"
+          version: "2.1.2"
+          dependencies:
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "22.0"
+            dependencies:
+            - namespace: "com.google.code.findbugs"
+              name: "jsr305"
+              version: "3.0.0"
+              dependencies: []
+              errors: []
+            - namespace: "com.google.errorprone"
+              name: "error_prone_annotations"
+              version: "2.1.2"
+              dependencies: []
+              errors: []
+            - namespace: "com.google.j2objc"
+              name: "j2objc-annotations"
+              version: "1.1"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.mojo"
+              name: "animal-sniffer-annotations"
+              version: "1.14"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotations"
+          version: "2.1.2"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "javac"
+          version: "9-dev-r4023-3"
+          dependencies: []
+          errors: []
+        - namespace: "com.googlecode.java-diff-utils"
+          name: "diffutils"
+          version: "1.3.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.checkerframework"
+          name: "dataflow"
+          version: "2.1.14"
+          dependencies:
+          - namespace: "org.checkerframework"
+            name: "javacutil"
+            version: "2.1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "javac"
+        version: "9-dev-r4023-3"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "22.0"
+        dependencies:
+        - namespace: "com.google.code.findbugs"
+          name: "jsr305"
+          version: "3.0.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotations"
+          version: "2.1.2"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.j2objc"
+          name: "j2objc-annotations"
+          version: "1.1"
+          dependencies: []
+          errors: []
+        - namespace: "org.codehaus.mojo"
+          name: "animal-sniffer-annotations"
+          version: "1.14"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.checkerframework"
+        name: "dataflow"
+        version: "2.1.14"
+        dependencies:
+        - namespace: "org.checkerframework"
+          name: "javacutil"
+          version: "2.1.14"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.pcollections"
+        name: "pcollections"
+        version: "2.1.2"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "pegdownDoclet"
+    delivered: true
+    dependencies:
+    - namespace: "ch.raffael.pegdown-doclet"
+      name: "pegdown-doclet"
+      version: "1.3"
+      dependencies:
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "18.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.sourceforge.plantuml"
+        name: "plantuml"
+        version: "8032"
+        dependencies: []
+        errors: []
+      - namespace: "org.pegdown"
+        name: "pegdown"
+        version: "1.6.0"
+        dependencies:
+        - namespace: "org.parboiled"
+          name: "parboiled-java"
+          version: "1.1.7"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-analysis"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.3"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-util"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.parboiled"
+            name: "parboiled-core"
+            version: "1.1.7"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "runtime"
+    delivered: true
+    dependencies: []
+  - name: "runtimeClasspath"
+    delivered: true
+    dependencies: []
+  - name: "signatures"
+    delivered: true
+    dependencies: []
+  - name: "testCompile"
+    delivered: true
+    dependencies:
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompileOnly"
+    delivered: true
+    dependencies: []
+  - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testRuntimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+packages:
+- package_manager: "Gradle"
+  namespace: "ch.raffael.pegdown-doclet"
+  name: "pegdown-doclet"
+  version: "1.3"
+  declared_licenses:
+  - "GPL 3.0"
+  description: "A Doclet that allows the use of Markdown and PlantUML in JavaDoc comments."
+  homepage_url: "https://github.com/Abnaxos/pegdown-doclet"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/Abnaxos/pegdown-doclet.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.github.kevinstern"
+  name: "software-and-algorithms"
+  version: "1.0"
+  declared_licenses:
+  - "MIT License"
+  description: "Neat algorithm implementations in Java"
+  homepage_url: "https://www.github.com/KevinStern/software-and-algorithms"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/KevinStern/software-and-algorithms.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.github.stephenc.jcip"
+  name: "jcip-annotations"
+  version: "1.0-1"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "A clean room implementation of the JCIP Annotations based entirely\
+    \ on the specification provided by the javadocs."
+  homepage_url: "http://stephenc.github.com/jcip-annotations"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/stephenc/jcip-annotations.git"
+  vcs_revision: "jcip-annotations-1.0-1"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.auto"
+  name: "auto-common"
+  version: "0.7"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Common utilities for creating annotation processors."
+  homepage_url: "https://github.com/google/auto/auto-common"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/google/auto.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jFormatString"
+  version: "3.0.0"
+  declared_licenses:
+  - "GNU Lesser Public License"
+  description: "jFormatString for Findbugs"
+  homepage_url: "http://findbugs.sourceforge.net/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "http://code.google.com/p/findbugs/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jsr305"
+  version: "3.0.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "JSR305 Annotations for Findbugs"
+  homepage_url: "http://findbugs.sourceforge.net/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "http://code.google.com/p/findbugs/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jsr305"
+  version: "3.0.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "JSR305 Annotations for Findbugs"
+  homepage_url: "http://findbugs.sourceforge.net/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://code.google.com/p/jsr-305/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_annotation"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_annotation"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_annotation"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_annotations"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_annotations"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_annotations"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_check_api"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_check_api"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_check_api"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_core"
+  version: "2.1.2"
+  declared_licenses:
+  - "Apache 2.0"
+  description: "Sonatype helps open source projects to set up Maven repositories on\
+    \ https://oss.sonatype.org/"
+  homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_core"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/error-prone.git/error_prone_core"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "javac"
+  version: "9-dev-r4023-3"
+  declared_licenses:
+  - "GNU General Public License, version 2, with the Classpath Exception"
+  description: "A repackaged copy of javac for Error Prone to depend on"
+  homepage_url: "https://github.com/google/error-prone-javac"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/google/error-prone-javac.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "18.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Guava is a suite of core and expanded libraries that include\n   \
+    \ utility classes, google's collections, io classes, and much\n    much more.\n\
+    \n    Guava has only one code dependency - javax.annotation,\n    per the JSR-305\
+    \ spec."
+  homepage_url: "http://code.google.com/p/guava-libraries/guava"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://code.google.com/p/guava-libraries/guava/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "22.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Guava is a suite of core and expanded libraries that include\n   \
+    \ utility classes, google's collections, io classes, and much\n    much more.\n\
+    \n    Guava has only one code dependency - javax.annotation,\n    per the JSR-305\
+    \ spec."
+  homepage_url: "https://github.com/google/guava/guava"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/google/guava.git/guava"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.j2objc"
+  name: "j2objc-annotations"
+  version: "1.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "A set of annotations that provide additional information to the J2ObjC\n\
+    \    translator to modify the result of translation."
+  homepage_url: "https://github.com/google/j2objc/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://svn.sonatype.org/spice/tags/oss-parent-7/j2objc-annotations"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.googlecode.java-diff-utils"
+  name: "diffutils"
+  version: "1.3.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "The DiffUtils library for computing diffs, applying patches, generationg\
+    \ side-by-side view in Java."
+  homepage_url: "http://code.google.com/p/java-diff-utils/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://java-diff-utils.googlecode.com/svn/branches/1.3.0/"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "junit"
+  name: "junit"
+  version: "4.12"
+  declared_licenses:
+  - "Eclipse Public License 1.0"
+  description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
+    \ and Kent Beck."
+  homepage_url: "http://junit.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git://github.com/junit-team/junit.git"
+  vcs_revision: "r4.12"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.bytebuddy"
+  name: "byte-buddy-agent"
+  version: "1.6.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "The Byte Buddy Java agent allows to access the JVM's HotSwap feature."
+  homepage_url: "http://bytebuddy.net/byte-buddy-agent"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:raphw/byte-buddy.git/byte-buddy-agent"
+  vcs_revision: "byte-buddy-1.6.0"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.bytebuddy"
+  name: "byte-buddy"
+  version: "1.6.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Byte Buddy is a Java library for creating Java classes at run time.\n\
+    \        This artifact is a build of Byte Buddy with all ASM dependencies repackaged\
+    \ into its own name space."
+  homepage_url: "http://bytebuddy.net/byte-buddy"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:raphw/byte-buddy.git/byte-buddy"
+  vcs_revision: "byte-buddy-1.6.0"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.sourceforge.plantuml"
+  name: "plantuml"
+  version: "8032"
+  declared_licenses:
+  - "The GNU General Public License"
+  description: "PlantUML is a component that allows to quickly write :\n        *\
+    \ sequence diagram,\n        * use case diagram,\n        * class diagram,\n \
+    \       * activity diagram,\n        * component diagram,\n        * state diagram\n\
+    \        * object diagram"
+  homepage_url: "http://plantuml.sourceforge.net"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.code.sf.net/p/plantuml/code/tags/plantuml-8032"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.assertj"
+  name: "assertj-core"
+  version: "3.8.0"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "Rich and fluent assertions for testing for Java"
+  homepage_url: "http://assertj.org/assertj-core"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:joel-costigliola/assertj-core.git"
+  vcs_revision: "assertj-core-3.8.0"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.checkerframework"
+  name: "dataflow"
+  version: "2.1.14"
+  declared_licenses:
+  - "GNU General Public License, version 2 (GPL2), with the classpath exception"
+  - "The MIT License"
+  description: "Dataflow is a dataflow framework based on the javac compiler."
+  homepage_url: "https://checkerframework.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.checkerframework"
+  name: "javacutil"
+  version: "2.1.14"
+  declared_licenses:
+  - "GNU General Public License, version 2 (GPL2), with the classpath exception"
+  - "The MIT License"
+  description: "Javacutil is a collection of utility classes for the javac compiler."
+  homepage_url: "https://checkerframework.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.codehaus.mojo"
+  name: "animal-sniffer-annotations"
+  version: "1.14"
+  declared_licenses:
+  - "MIT license"
+  description: "Animal Sniffer Parent project."
+  homepage_url: "http://mojo.codehaus.org/animal-sniffer/animal-sniffer-annotations"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "https://svn.codehaus.org/mojo/tags/animal-sniffer-parent-1.14/animal-sniffer-annotations"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.hamcrest"
+  name: "hamcrest-core"
+  version: "1.3"
+  declared_licenses:
+  - "New BSD License"
+  description: "This is the core API of hamcrest matcher framework to be used by third-party\
+    \ framework providers. This includes the a foundation set of matcher implementations\
+    \ for common operations."
+  homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.mockito"
+  name: "mockito-core"
+  version: "2.5.4"
+  declared_licenses:
+  - "The MIT License"
+  description: "Mockito mock objects library core API and implementation"
+  homepage_url: "http://mockito.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.objenesis"
+  name: "objenesis"
+  version: "2.4"
+  declared_licenses:
+  - "Apache 2"
+  description: "A library for instantiating Java objects"
+  homepage_url: "http://objenesis.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "https://github.com/easymock/objenesis.git/objenesis"
+  vcs_revision: "2.4"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-analysis"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-analysis/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-analysis"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-tree"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-tree/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-util"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm-util/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-util"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm"
+  version: "5.0.3"
+  declared_licenses:
+  - "BSD"
+  description: "A very small and fast Java bytecode manipulation framework"
+  homepage_url: "http://asm.objectweb.org/asm/"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-core"
+  version: "1.1.7"
+  declared_licenses:
+  - "Apache 2"
+  description: "Elegant parsing in Java and Scala - lightweight, easy-to-use, powerful"
+  homepage_url: "http://parboiled.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:sirthias/parboiled.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-java"
+  version: "1.1.7"
+  declared_licenses:
+  - "Apache 2"
+  description: "Elegant parsing in Java and Scala - lightweight, easy-to-use, powerful"
+  homepage_url: "http://parboiled.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:sirthias/parboiled.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.pcollections"
+  name: "pcollections"
+  version: "2.1.2"
+  declared_licenses:
+  - "The MIT License"
+  description: "A Persistent Java Collections Library"
+  homepage_url: "http://pcollections.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "svn"
+  vcs_url: "http://pcollections.googlecode.com/svn/tags/v2.1.2"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.pegdown"
+  name: "pegdown"
+  version: "1.6.0"
+  declared_licenses:
+  - "Apache 2"
+  description: "A Java 1.6+ library providing a clean and lightweight markdown processor"
+  homepage_url: "http://pegdown.org"
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: "git"
+  vcs_url: "git@github.com:sirthias/pegdown.git"
+  vcs_revision: "HEAD"
+  vcs_path: ""
+errors: []
