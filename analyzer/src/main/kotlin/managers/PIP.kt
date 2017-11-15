@@ -105,7 +105,7 @@ object PIP : PackageManager(
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
         val pydepUrl = "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION"
-        var pip = if (OS.isWindows) {
+        val pip = if (OS.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
             runInVirtualEnv(virtualEnvDir, workingDir, "python", "-m", command(workingDir),
