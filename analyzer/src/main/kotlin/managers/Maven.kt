@@ -238,12 +238,10 @@ object Maven : PackageManager(
         return ""
     }
 
-    private fun parseVcsUrl(mavenProject: MavenProject): String {
-        mavenProject.scm?.connection?.let {
-            Regex("^scm:[^:]+:(.+)\$").find(it)?.groupValues?.getOrNull(1)?.let { return it }
-        }
-        return ""
-    }
+    private fun parseVcsUrl(mavenProject: MavenProject) =
+            mavenProject.scm?.connection?.let {
+                Regex("^scm:[^:]+:(.+)\$").find(it)?.groupValues?.getOrNull(1)
+            } ?: ""
 
     private fun parseVcsRevision(mavenProject: MavenProject) = mavenProject.scm?.tag ?: ""
 
