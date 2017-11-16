@@ -34,6 +34,12 @@ class MavenTest : StringSpec() {
     private val vcsRevision = vcs.getWorkingRevision(syntheticProjectDir)
     private val vcsUrl = vcs.getRemoteUrl(syntheticProjectDir)
 
+    private fun patchExpectedResult(filename: String) =
+            File(syntheticProjectDir.parentFile, filename)
+                    .readText()
+                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
+                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+
     init {
         "jgnash parent dependencies are detected correctly" {
             val projectDir = File("src/funTest/assets/projects/external/jgnash")
@@ -63,10 +69,7 @@ class MavenTest : StringSpec() {
 
         "Root project dependencies are detected correctly" {
             val pomFile = File(syntheticProjectDir, "pom.xml")
-            val expectedResult = File(syntheticProjectDir.parentFile, "project-maven-expected-output-root.yml")
-                    .readText()
-                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+            val expectedResult = patchExpectedResult("project-maven-expected-output-root.yml")
 
             val result = Maven.resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
 
@@ -77,10 +80,7 @@ class MavenTest : StringSpec() {
             val pomFileApp = File(syntheticProjectDir, "app/pom.xml")
             val pomFileLib = File(syntheticProjectDir, "lib/pom.xml")
 
-            val expectedResult = File(syntheticProjectDir.parentFile, "project-maven-expected-output-app.yml")
-                    .readText()
-                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+            val expectedResult = patchExpectedResult("project-maven-expected-output-app.yml")
 
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
@@ -92,10 +92,7 @@ class MavenTest : StringSpec() {
 
         "External dependencies are detected correctly" {
             val pomFile = File(syntheticProjectDir, "lib/pom.xml")
-            val expectedResult = File(syntheticProjectDir.parentFile, "project-maven-expected-output-lib.yml")
-                    .readText()
-                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+            val expectedResult = patchExpectedResult("project-maven-expected-output-lib.yml")
 
             val result = Maven.resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
 
