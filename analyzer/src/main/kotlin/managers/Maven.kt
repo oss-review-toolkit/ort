@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.MavenLogger
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
@@ -66,11 +67,15 @@ import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
 
-object Maven : PackageManager(
-        "https://maven.apache.org/",
-        "Java",
-        listOf("pom.xml")
-) {
+class Maven : PackageManager() {
+    companion object : PackageManagerFactory<Maven>(
+            "https://maven.apache.org/",
+            "Java",
+            listOf("pom.xml")
+    ) {
+        override fun create() = Maven()
+    }
+
     /**
      * Set of scope names for which [Scope.delivered] will be set to false by default. This can be changed later by
      * manually editing the output file.
@@ -250,7 +255,7 @@ object Maven : PackageManager(
      * the currently analyzed project are available in the local repository. Without it the resolution of transitive
      * dependencies of project dependencies would not work without installing the project in the local repository first.
      */
-    private class LocalRepositoryManagerWrapper(private val localRepositoryManager: LocalRepositoryManager)
+    private inner class LocalRepositoryManagerWrapper(private val localRepositoryManager: LocalRepositoryManager)
         : LocalRepositoryManager {
 
         override fun add(session: RepositorySystemSession, request: LocalArtifactRegistration) =

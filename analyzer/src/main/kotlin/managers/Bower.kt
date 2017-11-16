@@ -20,14 +20,19 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.PackageManagerFactory
 
 import java.io.File
 
-object Bower : PackageManager(
-        "https://bower.io/",
-        "JavaScript",
-        listOf("bower.json")
-) {
+class Bower : PackageManager() {
+    companion object : PackageManagerFactory<Bower>(
+            "https://bower.io/",
+            "JavaScript",
+            listOf("bower.json")
+    ) {
+        override fun create() = Bower()
+    }
+
     override fun command(workingDir: File): String {
         return "bower"
     }

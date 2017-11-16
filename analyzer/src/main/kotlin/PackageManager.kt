@@ -26,7 +26,6 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.util.log
 
 import java.io.File
-import java.nio.file.FileSystems
 
 import kotlin.system.measureTimeMillis
 
@@ -34,18 +33,8 @@ typealias ResolutionResult = MutableMap<File, AnalyzerResult>
 
 /**
  * A class representing a package manager that handles software dependencies.
- *
- * @property homepageUrl The URL to the package manager's homepage.
- * @property primaryLanguage The name of the programming language this package manager is primarily used with.
- * @property globsForDefinitionFiles A prioritized list of glob patterns of definition files supported by this package
- *                                   manager.
- *
  */
-abstract class PackageManager(
-        val homepageUrl: String,
-        val primaryLanguage: String,
-        private val globsForDefinitionFiles: List<String>
-) {
+abstract class PackageManager {
     companion object {
         /**
          * The prioritized list of all available package managers. This needs to be initialized lazily to ensure the
@@ -64,13 +53,6 @@ abstract class PackageManager(
                     // TODO: Bundler
             )
         }
-    }
-
-    /**
-     * The glob matchers for all definition files.
-     */
-    val matchersForDefinitionFiles = globsForDefinitionFiles.map {
-        FileSystems.getDefault().getPathMatcher("glob:**/" + it)
     }
 
     /**
