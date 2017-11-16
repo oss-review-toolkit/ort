@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
@@ -52,21 +53,25 @@ import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
 @Suppress("LargeClass", "TooManyFunctions")
-object NPM : PackageManager(
-        "https://www.npmjs.com/",
-        "JavaScript",
-        listOf("package.json")
-) {
-    val npm: String
-    val yarn: String
+class NPM : PackageManager() {
+    companion object : PackageManagerFactory<NPM>(
+            "https://www.npmjs.com/",
+            "JavaScript",
+            listOf("package.json")
+    ) {
+        override fun create() = NPM()
 
-    init {
-        if (OS.isWindows) {
-            npm = "npm.cmd"
-            yarn = "yarn.cmd"
-        } else {
-            npm = "npm"
-            yarn = "yarn"
+        val npm: String
+        val yarn: String
+
+        init {
+            if (OS.isWindows) {
+                npm = "npm.cmd"
+                yarn = "yarn.cmd"
+            } else {
+                npm = "npm"
+                yarn = "yarn"
+            }
         }
     }
 
@@ -382,8 +387,8 @@ object NPM : PackageManager(
         if (vcsProviderFromDirectory != vcsProviderFromPackage) {
             log.warn {
                 "The VCS provider '$vcsProviderFromPackage' specified in 'package.json' does not match " +
-                "'$vcsProviderFromDirectory' as detected from the project directory. Will use " +
-                "'$vcsProviderFromPackage'."
+                        "'$vcsProviderFromDirectory' as detected from the project directory. Will use " +
+                        "'$vcsProviderFromPackage'."
             }
         }
 

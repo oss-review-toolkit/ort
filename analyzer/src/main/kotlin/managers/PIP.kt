@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -45,19 +46,23 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-object PIP : PackageManager(
-        "https://pip.pypa.io/",
-        "Python",
-        // See https://packaging.python.org/discussions/install-requires-vs-requirements/ and
-        // https://caremad.io/posts/2013/07/setup-vs-requirement/.
-        listOf("requirements*.txt", "setup.py")
-) {
-    private const val PIPDEPTREE_VERSION = "0.10.1"
-    private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
+class PIP : PackageManager() {
+    companion object : PackageManagerFactory<PIP>(
+            "https://pip.pypa.io/",
+            "Python",
+            // See https://packaging.python.org/discussions/install-requires-vs-requirements/ and
+            // https://caremad.io/posts/2013/07/setup-vs-requirement/.
+            listOf("requirements*.txt", "setup.py")
+    ) {
+        override fun create() = PIP()
+
+        private const val PIPDEPTREE_VERSION = "0.10.1"
+        private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
+    }
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
     private val TRUSTED_HOSTS = listOf(
-        "pypi.python.org"
+            "pypi.python.org"
     ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
 
     override fun command(workingDir: File): String {

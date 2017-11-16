@@ -49,17 +49,15 @@ import kotlin.system.exitProcess
  * The main entry point of the application.
  */
 object Main {
-    private class PackageManagerConverter : IStringConverter<PackageManager> {
+    private class PackageManagerConverter : IStringConverter<PackageManagerFactory<PackageManager>> {
         companion object {
             // Map upper-cased package manager class names to their instances.
-            val PACKAGE_MANAGER_NAMES = PackageManager.ALL.associateBy {
-                it.javaClass.simpleName.toUpperCase()
-            }
+            val PACKAGE_MANAGER_NAMES = PackageManager.ALL.associateBy { it.name() }
         }
 
-        override fun convert(name: String): PackageManager {
+        override fun convert(name: String): PackageManagerFactory<PackageManager> {
             return PACKAGE_MANAGER_NAMES[name.toUpperCase()] ?:
-                    throw ParameterException("Package managers must be contained in ${PackageManager.ALL}.")
+                    throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGER_NAMES.keys}.")
         }
     }
 
@@ -176,10 +174,10 @@ object Main {
         }
 
         println("The following package managers are activated:")
-        println("\t" + packageManagers.joinToString(", ") { it.javaClass.simpleName })
+        println("\t" + packageManagers.joinToString(", ") { it.name() })
 
         // Map of paths managed by the respective package manager.
-        val managedProjectPaths = mutableMapOf<PackageManager, MutableList<File>>()
+        val managedProjectPaths = mutableMapOf<PackageManagerFactory<PackageManager>, MutableList<File>>()
 
         val absoluteProjectPath = inputDir.absoluteFile
         println("Scanning project path:\n\t$absoluteProjectPath")
@@ -246,7 +244,7 @@ object Main {
         // Resolve dependencies per package manager.
         managedProjectPaths.forEach { manager, paths ->
             // Print the list of dependencies.
-            val results = manager.resolveDependencies(absoluteProjectPath, paths)
+            val results = manager.create().resolveDependencies(absoluteProjectPath, paths)
             results.forEach { definitionFile, analyzerResult ->
                 writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
             }

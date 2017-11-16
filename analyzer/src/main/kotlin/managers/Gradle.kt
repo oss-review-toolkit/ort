@@ -26,6 +26,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
@@ -40,11 +41,15 @@ import org.gradle.tooling.GradleConnector
 
 import java.io.File
 
-object Gradle : PackageManager(
-        "https://gradle.org/",
-        "Java",
-        listOf("build.gradle")
-) {
+class Gradle : PackageManager() {
+    companion object : PackageManagerFactory<Gradle>(
+            "https://gradle.org/",
+            "Java",
+            listOf("build.gradle")
+    ) {
+        override fun create() = Gradle()
+    }
+
     val gradle: String
     val wrapper: String
 

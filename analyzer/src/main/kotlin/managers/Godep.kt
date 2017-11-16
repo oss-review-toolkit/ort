@@ -20,14 +20,19 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.PackageManagerFactory
 
 import java.io.File
 
-object Godep : PackageManager(
-        "https://godoc.org/github.com/tools/godep",
-        "Go",
-        listOf("Godeps/Godeps.json")
-) {
+class Godep : PackageManager() {
+    companion object : PackageManagerFactory<Godep>(
+            "https://godoc.org/github.com/tools/godep",
+            "Go",
+            listOf("Godeps/Godeps.json")
+    ) {
+        override fun create() = Godep()
+    }
+
     override fun command(workingDir: File): String {
         return "godep"
     }
