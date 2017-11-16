@@ -72,22 +72,24 @@ class NpmTest : WordSpec() {
             "resolve shrinkwrap dependencies correctly" {
                 val workingDir = File(projectDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
+                val npm = NPM.create()
 
-                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
-                NPM.command(workingDir) shouldBe NPM.npm
+                npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
             "resolve package-lock dependencies correctly" {
                 val workingDir = File(projectDir, "package-lock")
                 val packageFile = File(workingDir, "package.json")
+                val npm = NPM.create()
 
-                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
-                NPM.command(workingDir) shouldBe NPM.npm
+                npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
@@ -96,7 +98,7 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
 
                 val exception = shouldThrow<IllegalArgumentException> {
-                    NPM.resolveDependencies(projectDir, listOf(packageFile))
+                    NPM.create().resolveDependencies(projectDir, listOf(packageFile))
                 }
 
                 @Suppress("UnsafeCallOnNullableType")
@@ -108,7 +110,7 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
 
                 val exception = shouldThrow<IllegalArgumentException> {
-                    NPM.resolveDependencies(projectDir, listOf(packageFile))
+                    NPM.create().resolveDependencies(projectDir, listOf(packageFile))
                 }
 
                 @Suppress("UnsafeCallOnNullableType")
@@ -118,11 +120,12 @@ class NpmTest : WordSpec() {
             "resolve dependencies even if the node_modules directory already exists" {
                 val workingDir = File(projectDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
+                val npm = NPM.create()
 
-                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
-                NPM.command(workingDir) shouldBe NPM.npm
+                npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }
@@ -131,11 +134,12 @@ class NpmTest : WordSpec() {
             "resolve dependencies correctly" {
                 val workingDir = File(projectDir, "yarn")
                 val packageFile = File(workingDir, "package.json")
+                val npm = NPM.create()
 
-                val result = NPM.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
-                NPM.command(workingDir) shouldBe NPM.yarn
+                npm.command(workingDir) shouldBe NPM.yarn
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }
