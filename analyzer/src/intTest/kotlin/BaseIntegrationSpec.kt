@@ -13,7 +13,7 @@ import com.here.ort.model.Package
 
 abstract class BaseIntegrationSpec : StringSpec() {
 
-    abstract val pkg : Package
+    abstract val pkg: Package
     private val outputDir = createTempDir()
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -37,8 +37,24 @@ abstract class BaseIntegrationSpec : StringSpec() {
                 }
             }
 
-            analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.count() shouldBe sourceGradleProjectFiles.size
+            val expectedResult = sourceGradleProjectFiles.map {
+                val originalPath = it.absolutePath.substringBeforeLast(File.separator)
+                val toBeReplaced = downloadedDir.absolutePath
+                val replacement = analyzerResultsDir.absolutePath
+                val abcdFileDir = originalPath.replace(oldValue = toBeReplaced, newValue = replacement, ignoreCase = true)
+                abcdFileDir + File.separator + "build-gradle-dependencies.yml"
+            }.toSet()
+            val generatedResultFiles = analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.map{it.absolutePath}.toSet()
+            generatedResultFiles shouldBe expectedResult
+
+        }
+
+        "analyzer results match expected ABCD files" {
+            //TODO: add expected ABCD files to assets and test if all produced analyzer outputs match corresponding expected files
+
         }
     }
+
+
 
 }
