@@ -1,10 +1,14 @@
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.managers.Gradle
-import com.here.ort.model.Package
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
+
 import java.io.File
+
+import com.here.ort.analyzer.managers.Gradle
+import com.here.ort.model.Package
+import io.kotlintest.Spec
 import com.here.ort.downloader.Main as DownloaderMain
 import com.here.ort.analyzer.Main as AnalyzerMain
 
@@ -12,7 +16,8 @@ class RobolectricTest : StringSpec() {
 
     private val outputDir = createTempDir()
 
-    fun after() {
+    override fun interceptSpec(context: Spec, spec: () -> Unit) {
+        spec();
         outputDir.deleteRecursively()
     }
 
@@ -48,7 +53,6 @@ class RobolectricTest : StringSpec() {
             }
 
             analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.count() shouldBe sourceGradleProjectFiles.size
-            after()
         }
     }
 }
