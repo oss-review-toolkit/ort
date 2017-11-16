@@ -34,13 +34,16 @@ class GradleTest : StringSpec() {
     private val vcsRevision = vcs.getWorkingRevision(projectDir)
     private val vcsUrl = vcs.getRemoteUrl(projectDir)
 
-    init {
-        "Root project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "build.gradle")
-            val expectedResult = File(projectDir.parentFile, "project-gradle-expected-output-root.yml")
+    private fun patchExpectedResult(filename: String) =
+            File(projectDir.parentFile, filename)
                     .readText()
                     .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
                     .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+
+    init {
+        "Root project dependencies are detected correctly" {
+            val packageFile = File(projectDir, "build.gradle")
+            val expectedResult = patchExpectedResult("project-gradle-expected-output-root.yml")
 
             val result = Gradle.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -49,10 +52,7 @@ class GradleTest : StringSpec() {
 
         "Project dependencies are detected correctly" {
             val packageFile = File(projectDir, "app/build.gradle")
-            val expectedResult = File(projectDir.parentFile, "project-gradle-expected-output-app.yml")
-                    .readText()
-                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+            val expectedResult = patchExpectedResult("project-gradle-expected-output-app.yml")
 
             val result = Gradle.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -61,10 +61,7 @@ class GradleTest : StringSpec() {
 
         "External dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib/build.gradle")
-            val expectedResult = File(projectDir.parentFile, "project-gradle-expected-output-lib.yml")
-                    .readText()
-                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+            val expectedResult = patchExpectedResult("project-gradle-expected-output-lib.yml")
 
             val result = Gradle.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -73,11 +70,7 @@ class GradleTest : StringSpec() {
 
         "Unresolved dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib-without-repo/build.gradle")
-            val expectedResult =
-                    File(projectDir.parentFile, "project-gradle-expected-output-lib-without-repo.yml")
-                            .readText()
-                            .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                            .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+            val expectedResult = patchExpectedResult("project-gradle-expected-output-lib-without-repo.yml")
 
             val result = Gradle.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
