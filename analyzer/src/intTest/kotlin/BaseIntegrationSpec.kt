@@ -13,7 +13,7 @@ import com.here.ort.model.Package
 
 abstract class BaseIntegrationSpec : StringSpec() {
 
-    abstract val pkg : Package
+    abstract val pkg: Package
     private val outputDir = createTempDir()
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -37,7 +37,13 @@ abstract class BaseIntegrationSpec : StringSpec() {
                 }
             }
 
-            analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.count() shouldBe sourceGradleProjectFiles.size
+            val expectedResult = sourceGradleProjectFiles.map {
+                val analyzeOutputDir = File(analyzerResultsDir, it.absolutePath.substringBeforeLast(File.separator).substringAfterLast(File.separator))
+                File(analyzeOutputDir, "build-gradle-dependencies.yml")
+            }.toSet()
+            val generatedResultFiles = analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.toSet()
+            generatedResultFiles shouldBe expectedResult
+
         }
     }
 
