@@ -91,14 +91,14 @@ data class Project(
         val vcsRevision: String,
 
         /**
-         * The optional path inside the VCS to take into account. The actual meaning depends on the VCS provider. For
-         * example for Git only this subfolder of the repository should be cloned, or for Git Repo it is interpreted as
-         * the path to the manifest file.
+         * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS provider. For
+         * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
+         * interpreted as the path to the manifest file.
          *
          * @see [Package.vcsPath].
          */
         @JsonProperty("vcs_path")
-        val vcsPath: String?,
+        val vcsPath: String,
 
         /**
          * The URL to the project's homepage.

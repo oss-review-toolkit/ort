@@ -224,7 +224,7 @@ object Main {
                     vcsProvider = vcs?.javaClass?.simpleName ?: "",
                     vcsUrl = vcs?.getRemoteUrl(absoluteProjectPath) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(absoluteProjectPath) ?: "",
-                    vcsPath = vcs?.getPathToRoot(absoluteProjectPath),
+                    vcsPath = vcs?.getPathToRoot(absoluteProjectPath) ?: "",
                     homepageUrl = "",
                     scopes = sortedSetOf()
             )
