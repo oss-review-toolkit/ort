@@ -38,13 +38,23 @@ abstract class BaseIntegrationSpec : StringSpec() {
             }
 
             val expectedResult = sourceGradleProjectFiles.map {
-                val analyzeOutputDir = File(analyzerResultsDir, it.absolutePath.substringBeforeLast(File.separator).substringAfterLast(File.separator))
-                File(analyzeOutputDir, "build-gradle-dependencies.yml")
+                val originalPath = it.absolutePath.substringBeforeLast(File.separator)
+                val toBeReplaced = downloadedDir.absolutePath
+                val replacement = analyzerResultsDir.absolutePath
+                val abcdFileDir = originalPath.replace(oldValue = toBeReplaced, newValue = replacement, ignoreCase = true)
+                abcdFileDir + File.separator + "build-gradle-dependencies.yml"
             }.toSet()
-            val generatedResultFiles = analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.toSet()
+            val generatedResultFiles = analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.map{it.absolutePath}.toSet()
             generatedResultFiles shouldBe expectedResult
 
         }
+
+        "analyzer results match expected ABCD files" {
+            //TODO: add expected ABCD files to assets and test if all produced analyzer outputs match corresponding expected files
+
+        }
     }
+
+
 
 }
