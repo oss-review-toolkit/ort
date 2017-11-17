@@ -58,9 +58,7 @@ abstract class PackageManager {
     /**
      * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.
      */
-    override fun toString(): String {
-        return javaClass.simpleName
-    }
+    override fun toString(): String = javaClass.simpleName
 
     /**
      * Return the name of the package manager's command line application. As the preferred command might depend on the
