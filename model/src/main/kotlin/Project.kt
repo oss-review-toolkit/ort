@@ -67,7 +67,7 @@ data class Project(
         val aliases: List<String>,
 
         /**
-         * The name of the VCS provider, for example Git or SVN.
+         * The name of the VCS provider, for example Git, Hg or SVN.
          *
          * @see [Package.vcsProvider].
          */
@@ -83,7 +83,7 @@ data class Project(
         val vcsUrl: String,
 
         /**
-         * The VCS-specific revision (tag, branch, SHA1) that this [version] of the project was built from.
+         * The VCS-specific revision (tag, branch, SHA1) that this [version] of the project maps to.
          *
          * @see [Package.vcsRevision].
          */
