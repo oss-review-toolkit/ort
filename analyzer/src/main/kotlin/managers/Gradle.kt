@@ -123,6 +123,7 @@ class Gradle : PackageManager() {
     }
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>): PackageReference {
+        println("pomFile: ${dependency.pomFile}")
         if (dependency.error == null) {
             // Only look for a package when there was no error resolving the dependency.
             packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
