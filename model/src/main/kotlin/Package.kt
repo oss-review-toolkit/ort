@@ -76,50 +76,50 @@ data class Package(
          * The homepage of the package.
          */
         @JsonProperty("homepage_url")
-        val homepageUrl: String?,
+        val homepageUrl: String,
 
         /**
-         * The optional URL to the binary artifact of the package.
+         * The download URL to the binary artifact of the package.
          */
         @JsonProperty("download_url")
-        val downloadUrl: String?,
+        val downloadUrl: String,
 
         /**
-         * The optional hash value of the binary artifact of the package.
+         * The hash value of the binary artifact of the package.
          */
         val hash: String,
 
         /**
-         * The optional name of the algorithm used to calculate the hash.
+         * The name of the algorithm used to calculate the hash.
          */
         @JsonProperty("hash_algorithm")
-        val hashAlgorithm: String?,
+        val hashAlgorithm: String,
 
         /**
-         * The optional name of the VCS provider, for example Git or SVN.
+         * The name of the VCS provider, for example Git, Hg or SVN.
          */
         @JsonProperty("vcs_provider")
-        val vcsProvider: String?,
+        val vcsProvider: String,
 
         /**
-         * The optional URL to the VCS repository.
+         * The URL to the VCS repository.
          */
         @JsonProperty("vcs_url")
-        val vcsUrl: String?,
+        val vcsUrl: String,
 
         /**
-         * The optional VCS-specific revision (tag, branch, SHA1) that this [version] of the package was built from.
+         * The VCS-specific revision (tag, branch, SHA1) that this [version] of the package maps to.
          */
         @JsonProperty("vcs_revision")
-        val vcsRevision: String?,
+        val vcsRevision: String,
 
         /**
-         * The optional path inside the VCS to take into account. The actual meaning depends on the VCS provider. For
-         * example for Git only this subfolder of the repository should be cloned, or for Git Repo it is interpreted as
-         * the path to the manifest file.
+         * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS provider. For
+         * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
+         * interpreted as the path to the manifest file.
          */
         @JsonProperty("vcs_path")
-        val vcsPath: String?
+        val vcsPath: String
 ) : Comparable<Package> {
     /**
      * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].
@@ -139,7 +139,7 @@ data class Package(
      *
      * @see normalizeVcsUrl
      */
-    val normalizedVcsUrl = vcsUrl?.let { normalizeVcsUrl(it, semverType) }
+    val normalizedVcsUrl = normalizeVcsUrl(vcsUrl, semverType)
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the

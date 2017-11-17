@@ -59,10 +59,10 @@ packages:
   download_url: "https://pypi.python.org/packages/9b/9f/b36f7774ff5ea8e428fdcfc4bb332c39ee5b9362ddd3d40d9516a55221b2/isodate-0.6.0-py2.py3-none-any.whl"
   hash: "d993beffb0b78627721d9ef1dda4df87"
   hash_algorithm: "MD5"
-  vcs_provider: null
-  vcs_url: null
-  vcs_revision: null
-  vcs_path: null
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "ply"
@@ -74,10 +74,10 @@ packages:
   download_url: "https://pypi.python.org/packages/ce/3d/1f9ca69192025046f02a02ffc61bfbac2731aab06325a218370fd93e18df/ply-3.10.tar.gz"
   hash: "1d63c166ab250bab87d8dcc42dcca70e"
   hash_algorithm: "MD5"
-  vcs_provider: null
-  vcs_url: null
-  vcs_revision: null
-  vcs_path: null
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "pyparsing"
@@ -89,10 +89,10 @@ packages:
   download_url: "https://pypi.python.org/packages/6a/8a/718fd7d3458f9fab8e67186b00abdd345b639976bc7fb3ae722e1b026a50/pyparsing-2.2.0-py2.py3-none-any.whl"
   hash: "7247e7896688eff4bc8c7fc5d0cdd2b0"
   hash_algorithm: "MD5"
-  vcs_provider: null
-  vcs_url: null
-  vcs_revision: null
-  vcs_path: null
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "rdflib"
@@ -106,10 +106,10 @@ packages:
   download_url: "https://pypi.python.org/packages/3c/fe/630bacb652680f6d481b9febbb3e2c3869194a1a5fc3401a4a41195a2f8f/rdflib-4.2.2-py3-none-any.whl"
   hash: "380422af59a6f0e5cc62879f68de3397"
   hash_algorithm: "MD5"
-  vcs_provider: null
-  vcs_url: null
-  vcs_revision: null
-  vcs_path: null
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "six"
@@ -122,7 +122,7 @@ packages:
   download_url: "https://pypi.python.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl"
   hash: "866ab722be6bdfed6830f3179af65468"
   hash_algorithm: "MD5"
-  vcs_provider: null
-  vcs_url: null
-  vcs_revision: null
-  vcs_path: null
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""

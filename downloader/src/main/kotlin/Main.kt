@@ -187,14 +187,14 @@ object Main {
         val targetDir = File(outputDirectory, "${target.name}/${target.version}").apply { safeMkdirs() }
         p("Downloading source code to '${targetDir.absolutePath}'...")
 
-        if (!target.normalizedVcsUrl.isNullOrBlank()) {
+        if (!target.normalizedVcsUrl.isBlank()) {
             p("Trying to download from URL '${target.normalizedVcsUrl}'...")
 
             if (target.vcsUrl != target.normalizedVcsUrl) {
                 p("URL was normalized, original URL was '${target.vcsUrl}'.")
             }
 
-            if (target.vcsRevision.isNullOrEmpty()) {
+            if (target.vcsRevision.isBlank()) {
                 p("WARNING: No VCS revision provided, downloaded source code does likely not match revision " +
                         target.version)
             } else {
@@ -203,20 +203,16 @@ object Main {
 
             val applicableVcs = mutableListOf<VersionControlSystem>()
 
-            target.vcsProvider?.let { provider ->
-                if (provider.isNotBlank()) {
-                    p("Detecting VCS from provider name '$provider'...")
-                    applicableVcs.addAll(VersionControlSystem.fromProvider(provider))
-                }
+            if (target.vcsProvider.isNotBlank()) {
+                p("Detecting VCS from provider name '${target.vcsProvider}'...")
+                applicableVcs.addAll(VersionControlSystem.fromProvider(target.vcsProvider))
             }
 
             if (applicableVcs.isEmpty()) {
-                target.normalizedVcsUrl?.let { url ->
-                    if (url.isNotBlank()) {
-                        p("Could not find a VCS provider for '${target.vcsProvider}', trying to detect provider " +
-                                "from URL '$url'...")
-                        applicableVcs.addAll(VersionControlSystem.fromUrl(url))
-                    }
+                if (target.normalizedVcsUrl.isNotBlank()) {
+                    p("Could not find a VCS provider for '${target.vcsProvider}', trying to detect provider " +
+                            "from URL '${target.normalizedVcsUrl}'...")
+                    applicableVcs.addAll(VersionControlSystem.fromUrl(target.normalizedVcsUrl))
                 }
             }
 
@@ -230,8 +226,7 @@ object Main {
                     val vcs = applicableVcs.first()
                     p("Using VCS provider '${vcs.javaClass.simpleName}'.")
                     try {
-                        @Suppress("UnsafeCallOnNullableType")
-                        val revision = vcs.download(target.normalizedVcsUrl!!, target.vcsRevision, target.vcsPath,
+                        val revision = vcs.download(target.normalizedVcsUrl, target.vcsRevision, target.vcsPath,
                                 target.version, targetDir)
                         p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
                         return targetDir

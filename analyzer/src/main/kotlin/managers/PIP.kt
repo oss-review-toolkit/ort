@@ -323,14 +323,14 @@ object PIP : PackageManager(
                     version = packageVersion,
                     declaredLicenses = sortedSetOf(),
                     description = "",
-                    homepageUrl = null,
-                    downloadUrl = null,
+                    homepageUrl = "",
+                    downloadUrl = "",
                     hash = "",
-                    hashAlgorithm = null,
-                    vcsProvider = null,
-                    vcsUrl = null,
-                    vcsRevision = null,
-                    vcsPath = null
+                    hashAlgorithm = "",
+                    vcsProvider = "",
+                    vcsUrl = "",
+                    vcsRevision = "",
+                    vcsPath = ""
             )
             packages.add(dependencyPackage)
 
