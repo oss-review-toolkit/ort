@@ -26,6 +26,7 @@ class RobolectricTest : BaseIntegrationSpec() {
             vcsUrl = "git@github.com:robolectric/robolectric.git",
             hashAlgorithm = "",
             hash = "",
+            //TODO: add a revision to have stable analyzer results
             vcsRevision = "")
 
     init {
