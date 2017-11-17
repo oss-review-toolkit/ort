@@ -38,4 +38,5 @@ interface Dependency {
     val version: String
     val dependencies: List<Dependency>
     val error: String?
+    val pomFile: String
 }
