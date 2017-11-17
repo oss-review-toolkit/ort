@@ -406,7 +406,7 @@ object NPM : PackageManager(
                 vcsProvider = vcsProviderFromPackage,
                 vcsUrl = vcsUrlFromPackage,
                 vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
-                vcsPath = vcs?.getPathToRoot(projectDir),
+                vcsPath = vcs?.getPathToRoot(projectDir) ?: "",
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )

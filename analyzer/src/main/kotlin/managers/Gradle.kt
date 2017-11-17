@@ -101,7 +101,7 @@ object Gradle : PackageManager(
                     vcsProvider = vcs?.javaClass?.simpleName ?: "",
                     vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
-                    vcsPath = vcs?.getPathToRoot(projectDir),
+                    vcsPath = vcs?.getPathToRoot(projectDir) ?: "",
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )

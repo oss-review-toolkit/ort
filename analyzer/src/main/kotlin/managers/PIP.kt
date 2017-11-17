@@ -226,7 +226,7 @@ object PIP : PackageManager(
                 vcsProvider = vcs?.javaClass?.simpleName ?: "",
                 vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
                 vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
-                vcsPath = vcs?.getPathToRoot(projectDir),
+                vcsPath = vcs?.getPathToRoot(projectDir) ?: "",
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )
