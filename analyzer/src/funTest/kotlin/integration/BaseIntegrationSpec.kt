@@ -1,5 +1,6 @@
-package com.here.ort.analyzer
+package com.here.ort.analyzer.integration
 
+import com.here.ort.analyzer.Expensive
 import java.io.File
 
 import io.kotlintest.Spec
@@ -47,12 +48,12 @@ abstract class BaseIntegrationSpec : StringSpec() {
             val generatedResultFiles = analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.map{it.absolutePath}.toSet()
             generatedResultFiles shouldBe expectedResult
 
-        }
+        }.config(tags = setOf(Expensive))
 
         "analyzer results match expected ABCD files" {
             //TODO: add expected ABCD files to assets and test if all produced analyzer outputs match corresponding expected files
 
-        }
+        }.config(tags = setOf(Expensive))
     }
 
 
