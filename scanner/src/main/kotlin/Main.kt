@@ -91,12 +91,17 @@ object Main {
             order = 0)
     private var inputPath: File? = null
 
-    @Parameter(description = "The output directory to store the scan results and source code of packages.",
+    @Parameter(description = "The output directory to store the scan results in.",
             names = arrayOf("--output-dir", "-o"),
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
+
+    @Parameter(description = "The output directory for downloaded source code. Defaults to <output-dir>/downloads.",
+            names = arrayOf("--download-dir"),
+            order = 0)
+    private var downloadDir: File? = null
 
     @Parameter(description = "The scanner to use.",
             names = arrayOf("--scanner", "-s"),
@@ -169,6 +174,12 @@ object Main {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
         }
 
+        downloadDir?.let {
+            require(!it.exists()) {
+                "The download directory '${it.absolutePath}' must not exist yet."
+            }
+        }
+
         if (configFile != null) {
             ScanResultsCache.configure(yamlMapper.readTree(configFile))
         }
@@ -223,7 +234,7 @@ object Main {
             val result = when (input) {
                 is Package -> {
                     entry.licenses.addAll(input.declaredLicenses)
-                    scanner.scan(input, outputDir)
+                    scanner.scan(input, outputDir, downloadDir)
                 }
                 is File -> scanner.scan(input, outputDir)
                 else -> throw IllegalArgumentException("Unsupported scan input.")
