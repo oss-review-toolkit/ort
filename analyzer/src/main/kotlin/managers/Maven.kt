@@ -245,7 +245,7 @@ class Maven : PackageManager() {
 
     private fun parseVcsUrl(mavenProject: MavenProject) =
             mavenProject.scm?.connection?.let {
-                Regex("^scm:[^:]+:(.+)\$").find(it)?.groupValues?.getOrNull(1)
+                Regex("scm:[^:]+:(.+)").matchEntire(it)?.groupValues?.getOrNull(1)
             } ?: ""
 
     private fun parseVcsRevision(mavenProject: MavenProject) = mavenProject.scm?.tag ?: ""
