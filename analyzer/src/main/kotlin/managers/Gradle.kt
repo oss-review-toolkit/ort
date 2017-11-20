@@ -63,9 +63,7 @@ class Gradle : PackageManager() {
         }
     }
 
-    override fun command(workingDir: File): String {
-        return if (File(workingDir, wrapper).isFile) wrapper else gradle
-    }
+    override fun command(workingDir: File) = if (File(workingDir, wrapper).isFile) wrapper else gradle
 
     override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
         val connection = GradleConnector
