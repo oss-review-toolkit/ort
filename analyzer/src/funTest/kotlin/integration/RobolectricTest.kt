@@ -1,4 +1,4 @@
-package com.here.ort.analyzer
+package com.here.ort.analyzer.integration
 
 import java.io.File
 
