@@ -52,7 +52,7 @@ object Main {
     private class PackageManagerConverter : IStringConverter<PackageManagerFactory<PackageManager>> {
         companion object {
             // Map upper-cased package manager class names to their instances.
-            val PACKAGE_MANAGER_NAMES = PackageManager.ALL.associateBy { it.name() }
+            val PACKAGE_MANAGER_NAMES = PackageManager.ALL.associateBy { it.toString() }
         }
 
         override fun convert(name: String): PackageManagerFactory<PackageManager> {
@@ -174,7 +174,7 @@ object Main {
         }
 
         println("The following package managers are activated:")
-        println("\t" + packageManagers.joinToString(", ") { it.name() })
+        println("\t" + packageManagers.joinToString(", "))
 
         // Map of paths managed by the respective package manager.
         val managedProjectPaths = mutableMapOf<PackageManagerFactory<PackageManager>, MutableList<File>>()
