@@ -41,9 +41,10 @@ abstract class PackageManagerFactory<out T : PackageManager>(
     abstract fun create(): T
 
     /**
-     * The name of the [PackageManager] this factory creates.
+     * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.
      */
-    fun name() = javaClass.name.toUpperCase().substringBefore('$').substringAfterLast('.')
+    override fun toString() =
+            javaClass.name.toUpperCase().substringBefore('$').substringAfterLast('.')
 
     /**
      * The glob matchers for all definition files.
