@@ -42,6 +42,8 @@ object ScanCode : Scanner() {
     private val DEFAULT_OPTIONS = listOf("--copyright", "--license", "--info", "--diag", "--only-findings",
             "--strip-root")
 
+    private val TIMEOUT_REGEX = Regex("ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds.")
+
     override val resultFileExtension = "json"
 
     override fun scanPath(path: File, resultsFile: File): ScannerResult {
@@ -104,4 +106,20 @@ object ScanCode : Scanner() {
         return result
     }
 
+    internal fun hasOnlyTimeoutErrors(resultsFile: File): Boolean {
+        val errors = sortedSetOf<String>()
+
+        val json = jsonMapper.readTree(resultsFile)
+        json["files"]?.forEach { file ->
+            errors.addAll(file["scan_errors"].map { it.asText() })
+        }
+
+        errors.singleOrNull()?.let { error ->
+            TIMEOUT_REGEX.matchEntire(error)?.let { match ->
+                return match.groups["timeout"]!!.value == TIMEOUT.toString()
+            }
+        }
+
+        return false
+    }
 }
