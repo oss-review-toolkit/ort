@@ -88,11 +88,10 @@ object ScanCode : Scanner() {
 
     override fun toScannerResult(resultsFile: File): ScannerResult {
         val result = sortedSetOf<String>()
+
         val json = jsonMapper.readTree(resultsFile)
-        val files = json["files"]
-        files?.forEach { file ->
-            val licenses = file["licenses"]
-            licenses?.forEach { license ->
+        json["files"]?.forEach { file ->
+            file["licenses"]?.forEach { license ->
                 var name = license["spdx_license_key"].asText()
                 if (name.isNullOrBlank()) {
                     val key = license["key"].asText()
@@ -101,6 +100,7 @@ object ScanCode : Scanner() {
                 result.add(name)
             }
         }
+
         return result
     }
 
