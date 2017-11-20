@@ -73,6 +73,8 @@ class Maven : PackageManager() {
             "Java",
             listOf("pom.xml")
     ) {
+        val SCM_REGEX = Regex("scm:[^:]+:(.+)")
+
         override fun create() = Maven()
     }
 
@@ -245,7 +247,7 @@ class Maven : PackageManager() {
 
     private fun parseVcsUrl(mavenProject: MavenProject) =
             mavenProject.scm?.connection?.let {
-                Regex("scm:[^:]+:(.+)").matchEntire(it)?.groupValues?.getOrNull(1)
+                SCM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
             } ?: ""
 
     private fun parseVcsRevision(mavenProject: MavenProject) = mavenProject.scm?.tag ?: ""
