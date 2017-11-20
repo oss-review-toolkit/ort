@@ -63,7 +63,7 @@ abstract class Scanner {
      *
      * @throws ScanException In case the package could not be scanned.
      */
-    fun scan(pkg: Package, outputDirectory: File): ScannerResult {
+    fun scan(pkg: Package, outputDirectory: File, downloadDirectory: File?): ScannerResult {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scannerName = toString().toLowerCase()
 
@@ -79,7 +79,7 @@ abstract class Scanner {
         }
 
         val sourceDirectory = try {
-            val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
+            val downloadDirectory = (downloadDirectory ?: File(outputDirectory, "download")).apply { safeMkdirs() }
             Main.download(pkg, downloadDirectory)
         } catch (e: DownloadException) {
             if (Main.stacktrace) {
