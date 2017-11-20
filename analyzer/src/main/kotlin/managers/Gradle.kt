@@ -25,8 +25,10 @@ import DependencyTreeModel
 import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.Main
+import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
@@ -35,6 +37,19 @@ import com.here.ort.model.Project
 import com.here.ort.model.Scope
 import com.here.ort.util.OS
 import com.here.ort.util.log
+
+import org.eclipse.aether.RepositorySystemSession
+import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.metadata.Metadata
+import org.eclipse.aether.repository.LocalArtifactRegistration
+import org.eclipse.aether.repository.LocalArtifactRequest
+import org.eclipse.aether.repository.LocalArtifactResult
+import org.eclipse.aether.repository.LocalMetadataRegistration
+import org.eclipse.aether.repository.LocalMetadataRequest
+import org.eclipse.aether.repository.LocalMetadataResult
+import org.eclipse.aether.repository.LocalRepository
+import org.eclipse.aether.repository.LocalRepositoryManager
+import org.eclipse.aether.repository.RemoteRepository
 
 import org.gradle.tooling.BuildException
 import org.gradle.tooling.GradleConnector
@@ -52,6 +67,10 @@ class Gradle : PackageManager() {
 
     val gradle: String
     val wrapper: String
+
+    val maven = MavenSupport { localRepositoryManager ->
+        GradleLocalRepositoryManager(localRepositoryManager)
+    }
 
     init {
         if (OS.isWindows) {
@@ -123,11 +142,31 @@ class Gradle : PackageManager() {
     }
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>): PackageReference {
-        println("pomFile: ${dependency.pomFile}")
         if (dependency.error == null) {
             // Only look for a package when there was no error resolving the dependency.
             packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
-                // TODO: add metadata for package
+                if (dependency.pomFile.isNotBlank()) {
+                    val projectBuildingResult = maven.buildMavenProject(File(dependency.pomFile))
+                    projectBuildingResult.project.let {
+                        return@getOrPut Package(
+                                packageManager = javaClass.simpleName,
+                                namespace = it.groupId,
+                                name = it.artifactId,
+                                version = it.version,
+                                declaredLicenses = it.licenses.map { it.name }.toSortedSet(),
+                                description = it.description ?: "",
+                                homepageUrl = it.url,
+                                downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.
+                                hash = "", // TODO: Get hash from local metadata?
+                                hashAlgorithm = "",
+                                vcsProvider = maven.parseVcsProvider(it),
+                                vcsUrl = maven.parseVcsUrl(it),
+                                vcsRevision = maven.parseVcsRevision(it),
+                                vcsPath = ""
+                        )
+                    }
+                }
+
                 Package(
                         packageManager = javaClass.simpleName,
                         namespace = dependency.groupId,
@@ -149,6 +188,73 @@ class Gradle : PackageManager() {
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages) }
         return PackageReference(dependency.groupId, dependency.artifactId, dependency.version,
                 transitiveDependencies.toSortedSet(), dependency.error?.let { listOf(it) } ?: emptyList())
+    }
+
+    /**
+     * An implementation of [LocalRepositoryManager] that provides artifacts from the Gradle cache. This is required
+     * to parse POM files from the Gradle cache, because Maven needs to be able to resolve parent POMs. Once the POM
+     * has been parsed correctly all dependencies required to build the project model can be resolved by Maven using
+     * the local repository.
+     */
+    private inner class GradleLocalRepositoryManager(private val localRepositoryManager: LocalRepositoryManager)
+        : LocalRepositoryManager {
+
+        private val gradleCacheRoot = File(System.getProperty("user.dir"), ".gradle/caches/modules-2/files-2.1")
+
+        override fun add(session: RepositorySystemSession, request: LocalArtifactRegistration) =
+                localRepositoryManager.add(session, request)
+
+        override fun add(session: RepositorySystemSession, request: LocalMetadataRegistration) =
+                localRepositoryManager.add(session, request)
+
+        override fun find(session: RepositorySystemSession, request: LocalArtifactRequest): LocalArtifactResult {
+            log.debug { "Request to find local artifact: $request" }
+
+            val file = findArtifactInGradleCache(request.artifact)
+
+            if (file != null && file.isFile) {
+                return LocalArtifactResult(request).apply {
+                    this.file = file
+                    isAvailable = true
+                }
+            }
+
+            return localRepositoryManager.find(session, request)
+        }
+
+        override fun find(session: RepositorySystemSession, request: LocalMetadataRequest): LocalMetadataResult =
+                localRepositoryManager.find(session, request)
+
+        override fun getPathForLocalArtifact(artifact: Artifact): String =
+                localRepositoryManager.getPathForLocalArtifact(artifact)
+
+        override fun getPathForLocalMetadata(metadata: Metadata): String =
+                localRepositoryManager.getPathForLocalMetadata(metadata)
+
+        override fun getPathForRemoteArtifact(artifact: Artifact, repository: RemoteRepository, context: String)
+                : String = localRepositoryManager.getPathForRemoteArtifact(artifact, repository, context)
+
+        override fun getPathForRemoteMetadata(metadata: Metadata, repository: RemoteRepository, context: String)
+                : String = localRepositoryManager.getPathForRemoteMetadata(metadata, repository, context)
+
+        override fun getRepository(): LocalRepository = localRepositoryManager.repository
+
+        private fun findArtifactInGradleCache(artifact: Artifact): File? {
+            val artifactRootDir = File(gradleCacheRoot,
+                    "${artifact.groupId}/${artifact.artifactId}/${artifact.version}")
+
+            val pomFile = artifactRootDir.walkTopDown().find {
+                val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"
+                it.isFile && it.name == "${artifact.artifactId}-$classifier${artifact.version}.${artifact.extension}"
+            }
+
+            log.debug {
+                "Gradle cache result for '${artifact.identifier()}:${artifact.classifier}:${artifact.extension}': " +
+                        pomFile?.absolutePath
+            }
+
+            return pomFile
+        }
     }
 
 }
