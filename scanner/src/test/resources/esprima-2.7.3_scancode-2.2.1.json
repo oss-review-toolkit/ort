@@ -1,0 +1,3179 @@
+{
+  "scancode_notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+  "scancode_version": "2.2.1",
+  "scancode_options": {
+    "--copyright": true,
+    "--license": true,
+    "--info": true,
+    "--license-score": 0,
+    "--strip-root": true,
+    "--format": "json-pp",
+    "--diag": true,
+    "--only-findings": true
+  },
+  "files_count": 28,
+  "files": [
+    {
+      "path": "package.json",
+      "type": "file",
+      "name": "package.json",
+      "base_name": "package",
+      "extension": ".json",
+      "date": "2017-11-17",
+      "size": 3635,
+      "sha1": "0811bcab4e7a186f4d0d08d44cc5f06d721e7f6d",
+      "md5": "401a4a45443751f8a8d52d1cbc6a3303",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JSON",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-new",
+          "score": 10.0,
+          "short_name": "BSD-Modified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "text_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-new",
+          "spdx_license_key": "BSD-3-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-3-Clause",
+          "start_line": 37,
+          "end_line": 37,
+          "matched_rule": {
+            "identifier": "bsd-new_89.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-new"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        }
+      ],
+      "copyrights": []
+    },
+    {
+      "path": "esprima.js",
+      "type": "file",
+      "name": "esprima.js",
+      "base_name": "esprima",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 193594,
+      "sha1": "f7a535db519cf832c1119fecdf1ea0514f583886",
+      "md5": "d9f07de62eb11e6672af77a316b01150",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "UTF-8 Unicode text, with very long lines",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "README.md",
+      "type": "file",
+      "name": "README.md",
+      "base_name": "README",
+      "extension": ".md",
+      "date": "2017-11-17",
+      "size": 2006,
+      "sha1": "0db752599b67b64dd1bdeff77ed9f5aa5437d027",
+      "md5": "f4bf40c7b9dba465bf97cdc218cfb938",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": null,
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": false,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [],
+      "copyrights": [
+        {
+          "statements": [],
+          "holders": [],
+          "authors": [
+            "maintained by Ariya Hidayat"
+          ],
+          "start_line": 9,
+          "end_line": 11
+        }
+      ]
+    },
+    {
+      "path": "LICENSE.BSD",
+      "type": "file",
+      "name": "LICENSE.BSD",
+      "base_name": "LICENSE",
+      "extension": ".BSD",
+      "date": "2017-11-17",
+      "size": 1309,
+      "sha1": "9706f99c85a781c016a22fd23313e55257e7b3e8",
+      "md5": "3e0ad2b4a2d836d43cf3c7b46c34512c",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": null,
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": false,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 3,
+          "end_line": 21,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 1,
+          "end_line": 1
+        }
+      ]
+    },
+    {
+      "path": "bower.json",
+      "type": "file",
+      "name": "bower.json",
+      "base_name": "bower",
+      "extension": ".json",
+      "date": "2017-11-17",
+      "size": 568,
+      "sha1": "1d96c52b533a38492ce290bc6831f8702f690e8e",
+      "md5": "6c8dace6eac1d50d57b432ebdde720bf",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JSON",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-new",
+          "score": 10.0,
+          "short_name": "BSD-Modified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "text_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-new",
+          "spdx_license_key": "BSD-3-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-3-Clause",
+          "start_line": 20,
+          "end_line": 20,
+          "matched_rule": {
+            "identifier": "bsd-new_89.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-new"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        }
+      ],
+      "copyrights": []
+    },
+    {
+      "path": "bin/esvalidate.js",
+      "type": "file",
+      "name": "esvalidate.js",
+      "base_name": "esvalidate",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 6775,
+      "sha1": "e77075d2fb2cdeb4406538d9b33d00fd823a527a",
+      "md5": "65feed22b40baa15834d441f567b74ce",
+      "files_count": null,
+      "mime_type": "application/javascript",
+      "file_type": "Node.js script, ASCII text executable",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": true,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 5,
+          "end_line": 23,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "path": "bin/esparse.js",
+      "type": "file",
+      "name": "esparse.js",
+      "base_name": "esparse",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 4568,
+      "sha1": "b2f60873fd2c0feaf21eaccaf7ba052ceb12b146",
+      "md5": "d201caac46b4db927b60ab4d417945fc",
+      "files_count": null,
+      "mime_type": "application/javascript",
+      "file_type": "Node.js script, ASCII text executable",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": true,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 5,
+          "end_line": 23,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "path": "tools/generate-fixtures.js",
+      "type": "file",
+      "name": "generate-fixtures.js",
+      "base_name": "generate-fixtures",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 3091,
+      "sha1": "1c2d4960f5d156e444f9819cec0c44c09f98970f",
+      "md5": "5b342f9489b95185793c81bff1cc8590",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 3,
+          "end_line": 19,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/check-complexity.js",
+      "type": "file",
+      "name": "check-complexity.js",
+      "base_name": "check-complexity",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 2283,
+      "sha1": "ca5fa85664a953084ca9a1de1e393698257495c0",
+      "md5": "9a0f915ab13b00a976bd2dd9fb399d2d",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/regression-tests.js",
+      "type": "file",
+      "name": "regression-tests.js",
+      "base_name": "regression-tests",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 4907,
+      "sha1": "0d172bac2b6712ecdc7b1e639c3cf8104f2a6a2a",
+      "md5": "fabce8239e17fc58498bba9190780217",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/downstream.js",
+      "type": "file",
+      "name": "downstream.js",
+      "base_name": "downstream",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 3860,
+      "sha1": "14b6a02753d05f72ac57144f1ea0da52d97a0ce3",
+      "md5": "aeeffe710441eea6b5cbd782f51ee68a",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/browser-tests.js",
+      "type": "file",
+      "name": "browser-tests.js",
+      "base_name": "browser-tests",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 3747,
+      "sha1": "25306873d3e2434aade745e8a1a6914c215165f6",
+      "md5": "4ece7c064e4dacb2229da906a3417d99",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/profile.js",
+      "type": "file",
+      "name": "profile.js",
+      "base_name": "profile",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 2243,
+      "sha1": "afd495c14035961a55d725ba0127e166349f28b9",
+      "md5": "5d9350437bb0e70d9f428db14533d44d",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/unit-tests.js",
+      "type": "file",
+      "name": "unit-tests.js",
+      "base_name": "unit-tests",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 4289,
+      "sha1": "1b8f69fa87f1abedd02f6c4766f07f0ceeea7a02",
+      "md5": "d776eb72ca1fc04cc6216c9c57ce58e0",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/check-version.js",
+      "type": "file",
+      "name": "check-version.js",
+      "base_name": "check-version",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 2830,
+      "sha1": "a4410f034f97b67eccbb8c9596d58c97ad3de988",
+      "md5": "5cf120cca35521bb5b2686f23277d57c",
+      "files_count": null,
+      "mime_type": "application/javascript",
+      "file_type": "Node.js script, ASCII text executable",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": true,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 6,
+          "end_line": 24,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 4,
+          "end_line": 4
+        }
+      ]
+    },
+    {
+      "path": "test/grammar-tests.js",
+      "type": "file",
+      "name": "grammar-tests.js",
+      "base_name": "grammar-tests",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 1758,
+      "sha1": "a1663801985f4361395831ae17b3256e38810dc2",
+      "md5": "283ed73047b782ab751311b7787a023e",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/benchmarks.js",
+      "type": "file",
+      "name": "benchmarks.js",
+      "base_name": "benchmarks",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 5915,
+      "sha1": "2a06f5906e5afb1b283b6f4fd6a21e7906cdde4f",
+      "md5": "88aca1685936494b5fee41b79045ab1d",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/benchmark.js",
+      "type": "file",
+      "name": "benchmark.js",
+      "base_name": "benchmark",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 113855,
+      "sha1": "1a409fc2dcd3dd10549c47793a80c42c3a06c9f0",
+      "md5": "0733fdd644c7e45aae592eba3a068214",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 6,
+          "end_line": 6,
+          "matched_rule": {
+            "identifier": "mit_14.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright 2010-2012 Mathias Bynens",
+            "copyright Robert Kieffer"
+          ],
+          "holders": [
+            "Mathias Bynens",
+            "Robert Kieffer"
+          ],
+          "authors": [
+            "modified by John-David Dalton"
+          ],
+          "start_line": 2,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/mootools-1.4.5.js",
+      "type": "file",
+      "name": "mootools-1.4.5.js",
+      "base_name": "mootools-1.4.5",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 160495,
+      "sha1": "2cc787ebd4d29f2e24646f76f9c525336949783e",
+      "md5": "cc6d0a32fb1a4eb7327eca35e563a986",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text, with very long lines",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 21,
+          "end_line": 21,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "lgpl-2.0-plus",
+          "score": 5.0,
+          "short_name": "LGPL 2.0 or later",
+          "category": "Copyleft Limited",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:lgpl-2.0-plus",
+          "spdx_license_key": "LGPL-2.0+",
+          "spdx_url": "https://spdx.org/licenses/LGPL-2.0",
+          "start_line": 28,
+          "end_line": 28,
+          "matched_rule": {
+            "identifier": "lgpl_20.RULE",
+            "license_choice": false,
+            "licenses": [
+              "lgpl-2.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 1,
+            "matched_length": 1,
+            "match_coverage": 100.0,
+            "rule_relevance": 5
+          }
+        },
+        {
+          "key": "mit",
+          "score": 75.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 29,
+          "end_line": 29,
+          "matched_rule": {
+            "identifier": "mit_81.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "3-seq",
+            "rule_length": 15,
+            "matched_length": 9,
+            "match_coverage": 60.0,
+            "rule_relevance": 75
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 542,
+          "end_line": 542,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 723,
+          "end_line": 723,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 807,
+          "end_line": 807,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 861,
+          "end_line": 861,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 991,
+          "end_line": 991,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1202,
+          "end_line": 1202,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1457,
+          "end_line": 1457,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1584,
+          "end_line": 1584,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1701,
+          "end_line": 1701,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1881,
+          "end_line": 1881,
+          "matched_rule": {
+            "identifier": "mit_14.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 3043,
+          "end_line": 3043,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 4103,
+          "end_line": 4103,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 4322,
+          "end_line": 4322,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 4514,
+          "end_line": 4514,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 4715,
+          "end_line": 4715,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "lgpl-2.0-plus",
+          "score": 5.0,
+          "short_name": "LGPL 2.0 or later",
+          "category": "Copyleft Limited",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:lgpl-2.0-plus",
+          "spdx_license_key": "LGPL-2.0+",
+          "spdx_url": "https://spdx.org/licenses/LGPL-2.0",
+          "start_line": 4718,
+          "end_line": 4718,
+          "matched_rule": {
+            "identifier": "lgpl_20.RULE",
+            "license_choice": false,
+            "licenses": [
+              "lgpl-2.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 1,
+            "matched_length": 1,
+            "match_coverage": 100.0,
+            "rule_relevance": 5
+          }
+        },
+        {
+          "key": "lgpl-2.0-plus",
+          "score": 35.0,
+          "short_name": "LGPL 2.0 or later",
+          "category": "Copyleft Limited",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/lgpl-2.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:lgpl-2.0-plus",
+          "spdx_license_key": "LGPL-2.0+",
+          "spdx_url": "https://spdx.org/licenses/LGPL-2.0",
+          "start_line": 4718,
+          "end_line": 4718,
+          "matched_rule": {
+            "identifier": "lgpl_3.RULE",
+            "license_choice": false,
+            "licenses": [
+              "lgpl-2.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 7,
+            "matched_length": 7,
+            "match_coverage": 100.0,
+            "rule_relevance": 35
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 4999,
+          "end_line": 4999,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 5180,
+          "end_line": 5180,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 5350,
+          "end_line": 5350,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 5463,
+          "end_line": 5463,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 5542,
+          "end_line": 5542,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 5657,
+          "end_line": 5657,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 5937,
+          "end_line": 5937,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 6027,
+          "end_line": 6027,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 6110,
+          "end_line": 6110,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 6158,
+          "end_line": 6158,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 6234,
+          "end_line": 6234,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        },
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 6341,
+          "end_line": 6341,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) 2006-2012 Valerio Proietti"
+          ],
+          "holders": [
+            "Valerio Proietti"
+          ],
+          "authors": [],
+          "start_line": 23,
+          "end_line": 23
+        },
+        {
+          "statements": [
+            "Copyright (c) 2006 Dean Edwards, GNU Lesser General Public",
+            "Copyright (c) 2005-2007 Sam Stephenson"
+          ],
+          "holders": [
+            "Dean Edwards",
+            "GNU Lesser General Public",
+            "Sam Stephenson"
+          ],
+          "authors": [],
+          "start_line": 27,
+          "end_line": 29
+        },
+        {
+          "statements": [
+            "(c) 2007-2008 Steven Levithan"
+          ],
+          "holders": [
+            "Steven Levithan"
+          ],
+          "authors": [],
+          "start_line": 1881,
+          "end_line": 1883
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/angular-1.2.5.js",
+      "type": "file",
+      "name": "angular-1.2.5.js",
+      "base_name": "angular-1.2.5",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 718772,
+      "sha1": "3ea2f82d7ce6f638e9466365a328a201f2caa579",
+      "md5": "54124ef961ab9d15e7f94f2b3c68ac90",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "UTF-8 Unicode text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 10.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 4,
+          "end_line": 4,
+          "matched_rule": {
+            "identifier": "mit_34.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 2,
+            "matched_length": 2,
+            "match_coverage": 100.0,
+            "rule_relevance": 10
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "(c) 2010-2014 Google, Inc. http://angularjs.org"
+          ],
+          "holders": [
+            "Google, Inc.",
+            "http://angularjs.org"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 4
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/jquery-1.9.1.js",
+      "type": "file",
+      "name": "jquery-1.9.1.js",
+      "base_name": "jquery-1.9.1",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 268381,
+      "sha1": "9257afd2d46c3a189ec0d40a45722701d47e9ca5",
+      "md5": "08c235d357750c657ac1db7d1cf656a9",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 25.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 9,
+          "end_line": 9,
+          "matched_rule": {
+            "identifier": "mit_16.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 5,
+            "matched_length": 5,
+            "match_coverage": 100.0,
+            "rule_relevance": 25
+          }
+        },
+        {
+          "key": "mit",
+          "score": 15.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 10,
+          "end_line": 10,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "gpl-1.0-plus",
+          "score": 15.0,
+          "short_name": "GPL 1.0 or later",
+          "category": "Copyleft",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-1.0-plus",
+          "spdx_license_key": "GPL-1.0+",
+          "spdx_url": "https://spdx.org/licenses/GPL-1.0",
+          "start_line": 10,
+          "end_line": 10,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "mit",
+          "score": 25.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 3690,
+          "end_line": 3690,
+          "matched_rule": {
+            "identifier": "mit_16.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 5,
+            "matched_length": 5,
+            "match_coverage": 100.0,
+            "rule_relevance": 25
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright 2005, 2012 jQuery Foundation, Inc."
+          ],
+          "holders": [
+            "jQuery Foundation, Inc."
+          ],
+          "authors": [],
+          "start_line": 8,
+          "end_line": 10
+        },
+        {
+          "statements": [
+            "Copyright 2012 jQuery Foundation"
+          ],
+          "holders": [
+            "jQuery Foundation"
+          ],
+          "authors": [],
+          "start_line": 3688,
+          "end_line": 3691
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/yui-3.12.0.js",
+      "type": "file",
+      "name": "yui-3.12.0.js",
+      "base_name": "yui-3.12.0",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 338295,
+      "sha1": "4ff8a82b52e1e1c5f8bf0abb25c20859d3f06c62",
+      "md5": "362f210da86d5e6cdcd54397d0f1db21",
+      "files_count": null,
+      "mime_type": "text/html",
+      "file_type": "HTML document, ASCII text, with very long lines",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-new",
+          "score": 15.0,
+          "short_name": "BSD-Modified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "text_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-new",
+          "spdx_license_key": "BSD-3-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-3-Clause",
+          "start_line": 4,
+          "end_line": 4,
+          "matched_rule": {
+            "identifier": "bsd-new_145.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-new"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright 2013 Yahoo! Inc."
+          ],
+          "holders": [
+            "Yahoo! Inc."
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 3
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/underscore-1.5.2.js",
+      "type": "file",
+      "name": "underscore-1.5.2.js",
+      "base_name": "underscore-1.5.2",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 43568,
+      "sha1": "0e8faebf9505c9b1d5462adcf34e01e83d110cc8",
+      "md5": "1d4e786b5e92a3c936043bd5d0981000",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "UTF-8 Unicode text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 15.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 4,
+          "end_line": 4,
+          "matched_rule": {
+            "identifier": "mit_27.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "(c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Underscore"
+          ],
+          "holders": [
+            "Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Underscore"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 4
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/jquery.mobile-1.4.2.js",
+      "type": "file",
+      "name": "jquery.mobile-1.4.2.js",
+      "base_name": "jquery.mobile-1.4.2",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 452804,
+      "sha1": "824cadd41d399f98d17ae281737c6816846ac75d",
+      "md5": "1de61f0d63bf18fd15778e12f54836b5",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "UTF-8 Unicode text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 25.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 7,
+          "end_line": 7,
+          "matched_rule": {
+            "identifier": "mit_16.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 5,
+            "matched_length": 5,
+            "match_coverage": 100.0,
+            "rule_relevance": 25
+          }
+        },
+        {
+          "key": "mit",
+          "score": 15.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 8,
+          "end_line": 8,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "gpl-1.0-plus",
+          "score": 15.0,
+          "short_name": "GPL 1.0 or later",
+          "category": "Copyleft",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-1.0-plus",
+          "spdx_license_key": "GPL-1.0+",
+          "spdx_url": "https://spdx.org/licenses/GPL-1.0",
+          "start_line": 8,
+          "end_line": 8,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "mit",
+          "score": 25.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 232,
+          "end_line": 232,
+          "matched_rule": {
+            "identifier": "mit_16.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 5,
+            "matched_length": 5,
+            "match_coverage": 100.0,
+            "rule_relevance": 25
+          }
+        },
+        {
+          "key": "mit",
+          "score": 15.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 233,
+          "end_line": 233,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "gpl-1.0-plus",
+          "score": 15.0,
+          "short_name": "GPL 1.0 or later",
+          "category": "Copyleft",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-1.0-plus",
+          "spdx_license_key": "GPL-1.0+",
+          "spdx_url": "https://spdx.org/licenses/GPL-1.0",
+          "start_line": 233,
+          "end_line": 233,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "mit",
+          "score": 25.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 831,
+          "end_line": 831,
+          "matched_rule": {
+            "identifier": "mit_16.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 5,
+            "matched_length": 5,
+            "match_coverage": 100.0,
+            "rule_relevance": 25
+          }
+        },
+        {
+          "key": "mit",
+          "score": 15.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 832,
+          "end_line": 832,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "gpl-1.0-plus",
+          "score": 15.0,
+          "short_name": "GPL 1.0 or later",
+          "category": "Copyleft",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-1.0-plus",
+          "spdx_license_key": "GPL-1.0+",
+          "spdx_url": "https://spdx.org/licenses/GPL-1.0",
+          "start_line": 832,
+          "end_line": 832,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "mit",
+          "score": 65.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1522,
+          "end_line": 1523,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_6.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 13,
+            "matched_length": 13,
+            "match_coverage": 100.0,
+            "rule_relevance": 65
+          }
+        },
+        {
+          "key": "gpl-1.0-plus",
+          "score": 65.0,
+          "short_name": "GPL 1.0 or later",
+          "category": "Copyleft",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-1.0-plus",
+          "spdx_license_key": "GPL-1.0+",
+          "spdx_url": "https://spdx.org/licenses/GPL-1.0",
+          "start_line": 1522,
+          "end_line": 1523,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_6.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 13,
+            "matched_length": 13,
+            "match_coverage": 100.0,
+            "rule_relevance": 65
+          }
+        },
+        {
+          "key": "mit",
+          "score": 65.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1538,
+          "end_line": 1539,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_6.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 13,
+            "matched_length": 13,
+            "match_coverage": 100.0,
+            "rule_relevance": 65
+          }
+        },
+        {
+          "key": "gpl-1.0-plus",
+          "score": 65.0,
+          "short_name": "GPL 1.0 or later",
+          "category": "Copyleft",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-1.0-plus",
+          "spdx_license_key": "GPL-1.0+",
+          "spdx_url": "https://spdx.org/licenses/GPL-1.0",
+          "start_line": 1538,
+          "end_line": 1539,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_6.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 13,
+            "matched_length": 13,
+            "match_coverage": 100.0,
+            "rule_relevance": 65
+          }
+        },
+        {
+          "key": "mit",
+          "score": 20.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 1910,
+          "end_line": 1910,
+          "matched_rule": {
+            "identifier": "bsd-new_and_mit_2.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit",
+              "bsd-new"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 4,
+            "matched_length": 4,
+            "match_coverage": 100.0,
+            "rule_relevance": 20
+          }
+        },
+        {
+          "key": "bsd-new",
+          "score": 20.0,
+          "short_name": "BSD-Modified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "text_url": "http://www.opensource.org/licenses/BSD-3-Clause",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-new",
+          "spdx_license_key": "BSD-3-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-3-Clause",
+          "start_line": 1910,
+          "end_line": 1910,
+          "matched_rule": {
+            "identifier": "bsd-new_and_mit_2.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit",
+              "bsd-new"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 4,
+            "matched_length": 4,
+            "match_coverage": 100.0,
+            "rule_relevance": 20
+          }
+        },
+        {
+          "key": "mit",
+          "score": 25.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 14000,
+          "end_line": 14000,
+          "matched_rule": {
+            "identifier": "mit_16.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 5,
+            "matched_length": 5,
+            "match_coverage": 100.0,
+            "rule_relevance": 25
+          }
+        },
+        {
+          "key": "mit",
+          "score": 15.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 14001,
+          "end_line": 14001,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        },
+        {
+          "key": "gpl-1.0-plus",
+          "score": 15.0,
+          "short_name": "GPL 1.0 or later",
+          "category": "Copyleft",
+          "owner": "Free Software Foundation (FSF)",
+          "homepage_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "text_url": "http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-1.0-plus",
+          "spdx_license_key": "GPL-1.0+",
+          "spdx_url": "https://spdx.org/licenses/GPL-1.0",
+          "start_line": 14001,
+          "end_line": 14001,
+          "matched_rule": {
+            "identifier": "mit_or_gpl_5.RULE",
+            "license_choice": true,
+            "licenses": [
+              "mit",
+              "gpl-1.0-plus"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright 2010, 2014 jQuery Foundation, Inc."
+          ],
+          "holders": [
+            "jQuery Foundation, Inc."
+          ],
+          "authors": [],
+          "start_line": 6,
+          "end_line": 8
+        },
+        {
+          "statements": [
+            "Copyright 2013 jQuery Foundation"
+          ],
+          "holders": [
+            "jQuery Foundation"
+          ],
+          "authors": [],
+          "start_line": 231,
+          "end_line": 233
+        },
+        {
+          "statements": [
+            "Copyright 2013 jQuery Foundation"
+          ],
+          "holders": [
+            "jQuery Foundation"
+          ],
+          "authors": [],
+          "start_line": 830,
+          "end_line": 832
+        },
+        {
+          "statements": [
+            "Copyright (c) 2010 Cowboy Ben Alman"
+          ],
+          "holders": [
+            "Cowboy Ben Alman"
+          ],
+          "authors": [],
+          "start_line": 1521,
+          "end_line": 1523
+        },
+        {
+          "statements": [
+            "Copyright (c) 2010 Cowboy Ben Alman"
+          ],
+          "holders": [
+            "Cowboy Ben Alman"
+          ],
+          "authors": [],
+          "start_line": 1537,
+          "end_line": 1539
+        },
+        {
+          "statements": [
+            "copyright (c) 2012 Scott Jehl, Paul Irish, Nicholas Zakas."
+          ],
+          "holders": [
+            "Scott Jehl, Paul Irish, Nicholas Zakas."
+          ],
+          "authors": [],
+          "start_line": 1910,
+          "end_line": 1911
+        },
+        {
+          "statements": [
+            "Copyright 2013 jQuery Foundation"
+          ],
+          "holders": [
+            "jQuery Foundation"
+          ],
+          "authors": [],
+          "start_line": 13999,
+          "end_line": 14001
+        }
+      ]
+    },
+    {
+      "path": "test/3rdparty/backbone-1.1.0.js",
+      "type": "file",
+      "name": "backbone-1.1.0.js",
+      "base_name": "backbone-1.1.0",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 60127,
+      "sha1": "f54dd0df3ab62f1d5687d98076dffdbf690840f6",
+      "md5": "b4b736cd23ea6769bf12092d5a40a825",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "mit",
+          "score": 15.0,
+          "short_name": "MIT License",
+          "category": "Permissive",
+          "owner": "MIT",
+          "homepage_url": "http://opensource.org/licenses/mit-license.php",
+          "text_url": "http://opensource.org/licenses/mit-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:mit",
+          "spdx_license_key": "MIT",
+          "spdx_url": "https://spdx.org/licenses/MIT",
+          "start_line": 5,
+          "end_line": 5,
+          "matched_rule": {
+            "identifier": "mit_27.RULE",
+            "license_choice": false,
+            "licenses": [
+              "mit"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 3,
+            "matched_length": 3,
+            "match_coverage": 100.0,
+            "rule_relevance": 15
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "(c) 2010-2011 Jeremy Ashkenas, DocumentCloud Inc.",
+            "(c) 2011-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Backbone"
+          ],
+          "holders": [
+            "Jeremy Ashkenas, DocumentCloud Inc.",
+            "Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Backbone"
+          ],
+          "authors": [],
+          "start_line": 3,
+          "end_line": 6
+        }
+      ]
+    },
+    {
+      "path": "test/utils/evaluate-testcase.js",
+      "type": "file",
+      "name": "evaluate-testcase.js",
+      "base_name": "evaluate-testcase",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 12616,
+      "sha1": "91742d83b0feadb4595afeb4e7f4bab2e85f4a98",
+      "md5": "9e99eaacc1eb9466e0527fc806b3f9d1",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/utils/create-testcases.js",
+      "type": "file",
+      "name": "create-testcases.js",
+      "base_name": "create-testcases",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 4027,
+      "sha1": "64dd561478479f12deda240ae9fe569952328bff",
+      "md5": "2b9c59ab88f2c3a15b8c35db6b816281",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    },
+    {
+      "path": "test/utils/error-to-object.js",
+      "type": "file",
+      "name": "error-to-object.js",
+      "base_name": "error-to-object",
+      "extension": ".js",
+      "date": "2017-11-17",
+      "size": 1788,
+      "sha1": "310fc965173381a02fbe83a889f7c858c4499862",
+      "md5": "9fd3a5d418f15d7fd020283da277133e",
+      "files_count": null,
+      "mime_type": "text/plain",
+      "file_type": "ASCII text",
+      "programming_language": "JavaScript",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "scan_errors": [],
+      "licenses": [
+        {
+          "key": "bsd-simplified",
+          "score": 100.0,
+          "short_name": "BSD-Simplified",
+          "category": "Permissive",
+          "owner": "Regents of the University of California",
+          "homepage_url": "http://www.opensource.org/licenses/BSD-2-Clause",
+          "text_url": "http://opensource.org/licenses/bsd-license.php",
+          "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-simplified",
+          "spdx_license_key": "BSD-2-Clause",
+          "spdx_url": "https://spdx.org/licenses/BSD-2-Clause",
+          "start_line": 4,
+          "end_line": 22,
+          "matched_rule": {
+            "identifier": "bsd-simplified_18.RULE",
+            "license_choice": false,
+            "licenses": [
+              "bsd-simplified"
+            ],
+            "matcher": "2-aho",
+            "rule_length": 181,
+            "matched_length": 181,
+            "match_coverage": 100.0,
+            "rule_relevance": 100
+          }
+        }
+      ],
+      "copyrights": [
+        {
+          "statements": [
+            "Copyright (c) jQuery Foundation, Inc. and Contributors"
+          ],
+          "holders": [
+            "jQuery Foundation, Inc. and Contributors"
+          ],
+          "authors": [],
+          "start_line": 2,
+          "end_line": 2
+        }
+      ]
+    }
+  ]
+}
