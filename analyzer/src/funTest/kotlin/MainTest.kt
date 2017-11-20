@@ -31,6 +31,7 @@ import java.io.PrintStream
  * A test for the main entry point of the application.
  */
 class MainTest : StringSpec() {
+    private val inputDir = File("src/funTest/assets/projects/synthetic/project-npm/package-lock")
     private val outputDir = createTempDir()
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -47,7 +48,7 @@ class MainTest : StringSpec() {
 
             Main.main(arrayOf(
                     "-m", "NPM",
-                    "-i", "src/funTest/assets/projects/synthetic/project-npm/package-lock",
+                    "-i", inputDir.path,
                     "-o", File(outputDir, "package-lock").path
             ))
 
@@ -57,7 +58,9 @@ class MainTest : StringSpec() {
 
             lines.component1() shouldBe "The following package managers are activated:"
             lines.component2() shouldBe "\tNPM"
-            lines.component3().startsWith("\t") shouldBe false
+            lines.component3() shouldBe "Scanning project path:"
+            lines.component4() shouldBe "\t" + inputDir.absolutePath
+            lines.component5() shouldBe "NPM projects found in:"
         }
     }
 }
