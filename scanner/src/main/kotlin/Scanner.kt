@@ -58,12 +58,14 @@ abstract class Scanner {
      *
      * @param pkg The package to scan.
      * @param outputDirectory The base directory to store scan results in.
+     * @param downloadDirectory The directory to download source code to. Defaults to [outputDirectory]/downloads if
+     *                          null.
      *
      * @return The set of found licenses.
      *
      * @throws ScanException In case the package could not be scanned.
      */
-    fun scan(pkg: Package, outputDirectory: File): ScannerResult {
+    fun scan(pkg: Package, outputDirectory: File, downloadDirectory: File? = null): ScannerResult {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scannerName = toString().toLowerCase()
 
@@ -79,7 +81,7 @@ abstract class Scanner {
         }
 
         val sourceDirectory = try {
-            val downloadDirectory = File(outputDirectory, "download").apply { safeMkdirs() }
+            val downloadDirectory = (downloadDirectory ?: File(outputDirectory, "downloads")).apply { safeMkdirs() }
             Main.download(pkg, downloadDirectory)
         } catch (e: DownloadException) {
             if (Main.stacktrace) {

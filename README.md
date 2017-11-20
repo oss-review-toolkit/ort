@@ -160,8 +160,7 @@ The `scanner` command line tool takes the following arguments:
 Usage: scanner [options]
   Options:
   * --output-dir, -o
-      The output directory to store the scan results and source code of
-      packages.
+      The output directory to store the scan results in.
     --summary-format, -f
       The list of file formats for the summary files.
       Default: [YAML]
@@ -178,6 +177,9 @@ Usage: scanner [options]
     --input-path, -i
       The input directory or file to scan. This parameter and
       --dependencies-file are mutually exclusive.
+    --download-dir
+      The output directory for downloaded source code. Defaults to 
+      <output-dir>/downloads.
     --stacktrace
       Print out the stacktrace for all exceptions.
       Default: false
