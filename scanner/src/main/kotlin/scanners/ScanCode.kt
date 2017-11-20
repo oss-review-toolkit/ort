@@ -75,7 +75,7 @@ object ScanCode : Scanner() {
         )
 
         with(process) {
-            if (exitValue() == 0) {
+            if (exitValue() == 0 || hasOnlyTimeoutErrors(resultsFile)) {
                 println("Stored ScanCode results in '${resultsFile.absolutePath}'.")
                 return toScannerResult(resultsFile)
             } else {
