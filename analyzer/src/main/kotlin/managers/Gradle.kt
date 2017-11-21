@@ -95,7 +95,7 @@ class Gradle : PackageManager() {
                 Scope(configuration.name, true, dependencies.toSortedSet())
             }
 
-            val vcs = VersionControlSystem.fromDirectory(projectDir)
+            val vcsDir = VersionControlSystem.fromDirectory(projectDir)
             val project = Project(
                     packageManager = javaClass.simpleName,
                     namespace = "",
@@ -103,10 +103,10 @@ class Gradle : PackageManager() {
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsProvider = vcs?.toString() ?: "",
-                    vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
-                    vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
-                    vcsPath = vcs?.getPathToRoot(projectDir) ?: "",
+                    vcsProvider = vcsDir?.getProvider() ?: "",
+                    vcsUrl = vcsDir?.getRemoteUrl() ?: "",
+                    vcsRevision = vcsDir?.getRevision() ?: "",
+                    vcsPath = vcsDir?.getPathToRoot(projectDir) ?: "",
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )

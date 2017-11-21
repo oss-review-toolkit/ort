@@ -49,7 +49,12 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS for the given [vcsDirectory], or null if none is applicable.
          */
-        fun fromDirectory(vcsDirectory: File) = ALL.find { it.isApplicableDirectory(vcsDirectory) }
+        fun fromDirectory(vcsDirectory: File) =
+            ALL.map {
+                it.getWorkingDirectory(vcsDirectory)
+            }.find {
+                it.isValid()
+            }
     }
 
     /**
@@ -58,14 +63,39 @@ abstract class VersionControlSystem {
     override fun toString(): String = javaClass.simpleName
 
     /**
-     * Use this VCS to download the source code from the specified URL.
-     *
-     * @return A String identifying the revision that was downloaded.
-     *
-     * @throws DownloadException In case the download failed.
+     * A class representing a local VCS working directory.
      */
-    abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
-            : String
+    abstract inner class WorkingDirectory(val workingDir: File) {
+        /**
+         * Return a simple string representation for the VCS this working directory belongs to.
+         */
+        fun getProvider() = this@VersionControlSystem.toString()
+
+        /**
+         * Return true if the [workingDir] is managed by this VCS, false otherwise.
+         */
+        abstract fun isValid(): Boolean
+
+        /**
+         * Return the clone URL of the associated remote repository.
+         */
+        abstract fun getRemoteUrl(): String
+
+        /**
+         * Return the VCS-specific working directory revision.
+         */
+        abstract fun getRevision(): String
+
+        /**
+         * Return the relative path of [controlledPath] with respect to the VCS root.
+         */
+        abstract fun getPathToRoot(controlledPath: File): String
+    }
+
+    /**
+     * Return a working directory instance for this VCS.
+     */
+    abstract fun getWorkingDirectory(vcsDirectory: File): WorkingDirectory
 
     /**
      * Return true if the provider name matches this VCS. For example for SVN it should return true on "svn",
@@ -81,22 +111,12 @@ abstract class VersionControlSystem {
     abstract fun isApplicableUrl(vcsUrl: String): Boolean
 
     /**
-     * Return true if the specified local directory is managed by this VCS, false otherwise.
+     * Use this VCS to download the source code from the specified URL.
+     *
+     * @return A String identifying the revision that was downloaded.
+     *
+     * @throws DownloadException In case the download failed.
      */
-    abstract fun isApplicableDirectory(vcsDirectory: File): Boolean
-
-    /**
-     * Return the relative path of [workingDir] with respect to the VCS root directory.
-     */
-    abstract fun getPathToRoot(workingDir: File): String
-
-    /**
-     * Return the VCS-specific revision for the given [workingDir].
-     */
-    abstract fun getWorkingRevision(workingDir: File): String
-
-    /**
-     * Return the URL of the (remote) repository the [workingDir] was cloned from.
-     */
-    abstract fun getRemoteUrl(workingDir: File): String
+    abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
+            : String
 }

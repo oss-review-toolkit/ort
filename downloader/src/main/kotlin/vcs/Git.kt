@@ -32,26 +32,36 @@ import java.io.File
 import java.io.IOException
 
 abstract class GitBase : VersionControlSystem() {
+    override fun getWorkingDirectory(vcsDirectory: File) =
+            object : WorkingDirectory(vcsDirectory) {
+                override fun isValid(): Boolean {
+                    val isInsideWorkTree = ProcessCapture(workingDir, "git", "rev-parse", "--is-inside-work-tree")
+                    return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
+                }
 
-    override fun getPathToRoot(workingDir: File): String {
-        return runGitCommand(workingDir, "rev-parse", "--show-prefix").stdout().trimEnd('\n', '/')
-    }
+                override fun getRemoteUrl() =
+                    runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
 
-    override fun getWorkingRevision(workingDir: File): String {
-        return runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
-    }
+                override fun getRevision() =
+                    runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
 
-    override fun getRemoteUrl(workingDir: File): String {
-        return runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
-    }
+                override fun getPathToRoot(controlledPath: File): String {
+                    var revParse = runGitCommand(workingDir, "rev-parse", "--show-toplevel")
+                    val rootDir = File(revParse.stdout().trimEnd())
 
-    protected fun runGitCommand(workingDir: File, vararg args: String): ProcessCapture {
-        return ProcessCapture(workingDir, "git", *args).requireSuccess()
-    }
+                    revParse = runGitCommand(rootDir, "-C", controlledPath.absolutePath, "rev-parse", "--show-prefix")
+                    return revParse.stdout().trimEnd('\n', '/')
+                }
+            }
 
+    protected fun runGitCommand(workingDir: File, vararg args: String) =
+        ProcessCapture(workingDir, "git", *args).requireSuccess()
 }
 
 object Git : GitBase() {
+    override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)
+
+    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
 
     /**
      * Clones the Git repository using the native Git command.
@@ -69,6 +79,8 @@ object Git : GitBase() {
             runGitCommand(targetDir, "init")
             runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
 
+            val workingDir = getWorkingDirectory(targetDir)
+
             if (vcsPath != null && vcsPath.isNotEmpty()) {
                 log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
                 runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
@@ -82,7 +94,7 @@ object Git : GitBase() {
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return getWorkingRevision(targetDir)
+                return workingDir.getRevision()
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -100,7 +112,7 @@ object Git : GitBase() {
 
             try {
                 runGitCommand(targetDir, "checkout", committish)
-                return getWorkingRevision(targetDir)
+                return workingDir.getRevision()
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -124,7 +136,7 @@ object Git : GitBase() {
                     log.info { "Using '$tag'." }
                     runGitCommand(targetDir, "fetch", "origin", tag)
                     runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                    return getWorkingRevision(targetDir)
+                    return workingDir.getRevision()
                 }
 
                 log.warn { "No matching tag found for version '$version'." }
@@ -140,14 +152,4 @@ object Git : GitBase() {
             throw DownloadException("Could not clone $vcsUrl.", e)
         }
     }
-
-    override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)
-
-    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
-
-    override fun isApplicableDirectory(vcsDirectory: File): Boolean {
-        val isInsideWorkTree = ProcessCapture(vcsDirectory, "git", "rev-parse", "--is-inside-work-tree")
-        return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
-    }
-
 }

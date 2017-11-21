@@ -120,9 +120,12 @@ class Maven : PackageManager() {
 
         val vcsInfo = parseVcsInfo(mavenProject).let {
             if (it.isEmpty()) {
-                val vcs = VersionControlSystem.fromDirectory(projectDir)
-                VcsInfo(vcs?.toString() ?: "", vcs?.getRemoteUrl(projectDir) ?: "",
-                        vcs?.getWorkingRevision(projectDir) ?: "")
+                val vcsDir = VersionControlSystem.fromDirectory(projectDir)
+                VcsInfo(
+                        vcsDir?.getProvider() ?: "",
+                        vcsDir?.getRemoteUrl() ?: "",
+                        vcsDir?.getRevision() ?: ""
+                )
             } else it
         }
         val project = Project(
