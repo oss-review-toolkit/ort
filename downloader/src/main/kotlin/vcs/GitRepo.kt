@@ -30,6 +30,13 @@ import java.io.File
 import java.io.IOException
 
 object GitRepo : GitBase() {
+    override fun getWorkingDirectory(vcsDirectory: File) =
+            super.getWorkingDirectory(File(vcsDirectory, ".repo/manifests"))
+
+    override fun isApplicableProvider(vcsProvider: String) =
+            vcsProvider.toLowerCase() in listOf("gitrepo", "git-repo", "repo")
+
+    override fun isApplicableUrl(vcsUrl: String) = false
 
     /**
      * Clones the Git repositories defined in the manifest file using the Git Repo tool.
@@ -49,7 +56,8 @@ object GitRepo : GitBase() {
 
             log.debug { "Start git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
-            return getWorkingRevision(File(targetDir, ".repo/manifests"))
+
+            return getWorkingDirectory(targetDir).getRevision()
         } catch (e: IOException) {
             if (Main.stacktrace) {
                 e.printStackTrace()
@@ -59,19 +67,7 @@ object GitRepo : GitBase() {
         }
     }
 
-    override fun isApplicableProvider(vcsProvider: String) =
-            vcsProvider.toLowerCase() in listOf("gitrepo", "git-repo", "repo")
-
-    override fun isApplicableUrl(vcsUrl: String) = false
-
-    override fun isApplicableDirectory(vcsDirectory: File) = File(vcsDirectory, ".repo").isDirectory
-
-    override fun getRemoteUrl(workingDir: File): String {
-        return super.getRemoteUrl(File(workingDir, ".repo/manifests"))
-    }
-
     private fun runRepoCommand(targetDir: File, vararg args: String) {
         ProcessCapture(targetDir, "repo", *args).requireSuccess()
     }
-
 }

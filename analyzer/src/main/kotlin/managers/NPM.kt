@@ -381,9 +381,9 @@ class NPM : PackageManager() {
         val homepageUrl = json["homepage"].asTextOrEmpty()
 
         val projectDir = packageJson.parentFile
-        val vcs = VersionControlSystem.fromDirectory(projectDir)
+        val vcsDir = VersionControlSystem.fromDirectory(projectDir)
 
-        val vcsProviderFromDirectory = vcs?.toString() ?: ""
+        val vcsProviderFromDirectory = vcsDir?.getProvider() ?: ""
         if (vcsProviderFromDirectory != vcsProviderFromPackage) {
             log.warn {
                 "The VCS provider '$vcsProviderFromPackage' specified in 'package.json' does not match " +
@@ -392,7 +392,7 @@ class NPM : PackageManager() {
             }
         }
 
-        val vcsUrlFromDirectory = vcs?.getRemoteUrl(projectDir) ?: ""
+        val vcsUrlFromDirectory = vcsDir?.getRemoteUrl() ?: ""
         if (vcsUrlFromDirectory != vcsUrlFromPackage) {
             log.warn {
                 "The VCS URL '$vcsUrlFromPackage' specified in 'package.json' does not match " +
@@ -410,8 +410,8 @@ class NPM : PackageManager() {
                 aliases = emptyList(),
                 vcsProvider = vcsProviderFromPackage,
                 vcsUrl = vcsUrlFromPackage,
-                vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
-                vcsPath = vcs?.getPathToRoot(projectDir) ?: "",
+                vcsRevision = vcsDir?.getRevision() ?: "",
+                vcsPath = vcsDir?.getPathToRoot(projectDir) ?: "",
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
