@@ -8,6 +8,7 @@ cache:
   - $(HOME)\.gradle\caches\modules-2
   - $(HOME)\.gradle\caches\transforms-1
   - $(HOME)\.gradle\wrapper\dists
+  - $(HOME)\.m2\repository
 
 install:
   - git submodule update --init --recursive
