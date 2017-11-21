@@ -30,7 +30,7 @@ import java.io.File
 
 class GradleTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
-    private val vcs = VersionControlSystem.fromDirectory(projectDir).first()
+    private val vcs = VersionControlSystem.fromDirectory(projectDir)!!
     private val vcsRevision = vcs.getWorkingRevision(projectDir)
     private val vcsUrl = vcs.getRemoteUrl(projectDir)
 

@@ -120,7 +120,7 @@ class Maven : PackageManager() {
 
         val vcsInfo = parseVcsInfo(mavenProject).let {
             if (it.isEmpty()) {
-                val vcs = VersionControlSystem.fromDirectory(projectDir).firstOrNull()
+                val vcs = VersionControlSystem.fromDirectory(projectDir)
                 VcsInfo(vcs?.javaClass?.simpleName ?: "", vcs?.getRemoteUrl(projectDir) ?: "",
                         vcs?.getWorkingRevision(projectDir) ?: "")
             } else it
