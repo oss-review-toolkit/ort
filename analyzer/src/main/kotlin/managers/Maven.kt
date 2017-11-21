@@ -285,16 +285,8 @@ class Maven : PackageManager() {
         override fun find(session: RepositorySystemSession, request: LocalMetadataRequest): LocalMetadataResult =
                 localRepositoryManager.find(session, request)
 
-        override fun getPathForLocalArtifact(artifact: Artifact): String {
-            log.debug { "Request path for local artifact: $artifact" }
-
-            projectsByIdentifier[artifact.identifier()]?.let {
-                log.debug { "Found cached artifact: ${it.pomFile}" }
-                return it.pomFile.absolutePath
-            }
-
-            return localRepositoryManager.getPathForLocalArtifact(artifact)
-        }
+        override fun getPathForLocalArtifact(artifact: Artifact): String =
+                localRepositoryManager.getPathForLocalArtifact(artifact)
 
         override fun getPathForLocalMetadata(metadata: Metadata)
                 : String = localRepositoryManager.getPathForLocalMetadata(metadata)
