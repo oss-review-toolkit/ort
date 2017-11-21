@@ -35,7 +35,7 @@ import java.io.File
 
 class NpmTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
-    private val vcsDir = VersionControlSystem.fromDirectory(projectDir)!!
+    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsRevision = vcsDir.getRevision()
 
     @Suppress("CatchException")

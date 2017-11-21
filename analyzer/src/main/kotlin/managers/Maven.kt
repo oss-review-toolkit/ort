@@ -107,7 +107,7 @@ class Maven : PackageManager() {
 
         val vcsInfo = maven.parseVcsInfo(mavenProject).let {
             if (it.isEmpty()) {
-                VersionControlSystem.fromDirectory(projectDir).let {
+                VersionControlSystem.forDirectory(projectDir).let {
                     MavenSupport.VcsInfo(
                             it?.getProvider() ?: "",
                             it?.getRemoteUrl() ?: "",

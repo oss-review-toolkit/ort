@@ -381,7 +381,7 @@ class NPM : PackageManager() {
         val homepageUrl = json["homepage"].asTextOrEmpty()
 
         val projectDir = packageJson.parentFile
-        val vcsDir = VersionControlSystem.fromDirectory(projectDir)
+        val vcsDir = VersionControlSystem.forDirectory(projectDir)
 
         val vcsProviderFromDirectory = vcsDir?.getProvider() ?: ""
         if (vcsProviderFromDirectory != vcsProviderFromPackage) {
