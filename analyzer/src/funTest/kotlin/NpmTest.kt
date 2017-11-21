@@ -35,7 +35,7 @@ import java.io.File
 
 class NpmTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
-    private val vcsRevision = VersionControlSystem.fromDirectory(projectDir).first().getWorkingRevision(projectDir)
+    private val vcsRevision = VersionControlSystem.fromDirectory(projectDir)!!.getWorkingRevision(projectDir)
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {

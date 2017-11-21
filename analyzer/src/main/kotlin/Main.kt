@@ -211,7 +211,7 @@ object Main {
         if (managedProjectPaths.isEmpty()) {
             println("No package-managed projects found.")
 
-            val vcs = VersionControlSystem.fromDirectory(absoluteProjectPath).firstOrNull()
+            val vcs = VersionControlSystem.fromDirectory(absoluteProjectPath)
             val project = Project(
                     packageManager = "",
                     namespace = "",

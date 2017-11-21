@@ -39,17 +39,17 @@ abstract class VersionControlSystem {
         /**
          * Return the list of all applicable VCS for the given [vcsProvider], or null if none are applicable.
          */
-        fun fromProvider(vcsProvider: String) = ALL.filter { it.isApplicableProvider(vcsProvider) }
+        fun fromProvider(vcsProvider: String) = ALL.find { it.isApplicableProvider(vcsProvider) }
 
         /**
          * Return the list of all applicable VCS for the given [vcsUrl], or null if none are applicable.
          */
-        fun fromUrl(vcsUrl: String) = ALL.filter { it.isApplicableUrl(vcsUrl) }
+        fun fromUrl(vcsUrl: String) = ALL.find { it.isApplicableUrl(vcsUrl) }
 
         /**
          * Return the list of all applicable VCS for the given [vcsDirectory], or null if none are applicable.
          */
-        fun fromDirectory(vcsDirectory: File) = ALL.filter { it.isApplicableDirectory(vcsDirectory) }
+        fun fromDirectory(vcsDirectory: File) = ALL.find { it.isApplicableDirectory(vcsDirectory) }
     }
 
     /**
