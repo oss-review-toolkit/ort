@@ -81,8 +81,7 @@ abstract class Scanner {
         }
 
         val sourceDirectory = try {
-            val downloadDirectory = (downloadDirectory ?: File(outputDirectory, "downloads")).apply { safeMkdirs() }
-            Main.download(pkg, downloadDirectory)
+            Main.download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
         } catch (e: DownloadException) {
             if (Main.stacktrace) {
                 e.printStackTrace()
