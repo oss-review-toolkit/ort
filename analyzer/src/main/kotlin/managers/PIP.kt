@@ -228,7 +228,7 @@ class PIP : PackageManager() {
                 version = projectVersion,
                 declaredLicenses = sortedSetOf(),  // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
-                vcsProvider = vcs?.javaClass?.simpleName ?: "",
+                vcsProvider = vcs?.toString() ?: "",
                 vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
                 vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
                 vcsPath = vcs?.getPathToRoot(projectDir) ?: "",

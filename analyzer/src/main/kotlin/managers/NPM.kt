@@ -383,7 +383,7 @@ class NPM : PackageManager() {
         val projectDir = packageJson.parentFile
         val vcs = VersionControlSystem.fromDirectory(projectDir)
 
-        val vcsProviderFromDirectory = vcs?.javaClass?.simpleName ?: ""
+        val vcsProviderFromDirectory = vcs?.toString() ?: ""
         if (vcsProviderFromDirectory != vcsProviderFromPackage) {
             log.warn {
                 "The VCS provider '$vcsProviderFromPackage' specified in 'package.json' does not match " +
