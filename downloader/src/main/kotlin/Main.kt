@@ -219,7 +219,7 @@ object Main {
                 throw DownloadException("Could not find an applicable VCS provider.")
             }
 
-            p("Using VCS provider '${applicableVcs.javaClass.simpleName}'.")
+            p("Using VCS provider '$applicableVcs'.")
 
             try {
                 val revision = applicableVcs.download(target.normalizedVcsUrl, target.vcsRevision, target.vcsPath,
