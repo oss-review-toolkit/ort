@@ -1,0 +1,170 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "buildSrc"
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs_provider: "Git"
+  vcs_url: "https://github.com/robolectric/robolectric.git"
+  vcs_revision: "64b26a9fbf7f5e0c1d0cd0b26c49f5b6dbf4325e"
+  vcs_path: ""
+  homepage_url: ""
+  scopes:
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "compileOnly"
+    delivered: true
+    dependencies: []
+  - name: "default"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtime"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompile"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompileOnly"
+    delivered: true
+    dependencies: []
+  - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testRuntimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: "org.ow2.asm"
+      name: "asm-tree"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+packages:
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-tree"
+  version: "5.0.1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm"
+  version: "5.0.1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
