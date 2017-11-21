@@ -211,7 +211,7 @@ object Main {
         if (managedProjectPaths.isEmpty()) {
             println("No package-managed projects found.")
 
-            val vcs = VersionControlSystem.fromDirectory(absoluteProjectPath)
+            val vcsDir = VersionControlSystem.fromDirectory(absoluteProjectPath)
             val project = Project(
                     packageManager = "",
                     namespace = "",
@@ -219,10 +219,10 @@ object Main {
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsProvider = vcs?.toString() ?: "",
-                    vcsUrl = vcs?.getRemoteUrl(absoluteProjectPath) ?: "",
-                    vcsRevision = vcs?.getWorkingRevision(absoluteProjectPath) ?: "",
-                    vcsPath = vcs?.getPathToRoot(absoluteProjectPath) ?: "",
+                    vcsProvider = vcsDir?.getProvider() ?: "",
+                    vcsUrl = vcsDir?.getRemoteUrl() ?: "",
+                    vcsRevision = vcsDir?.getRevision() ?: "",
+                    vcsPath = vcsDir?.getPathToRoot(absoluteProjectPath) ?: "",
                     homepageUrl = "",
                     scopes = sortedSetOf()
             )

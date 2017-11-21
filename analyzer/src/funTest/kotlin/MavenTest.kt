@@ -30,9 +30,9 @@ import java.io.File
 
 class MavenTest : StringSpec() {
     private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic/maven")
-    private val vcs = VersionControlSystem.fromDirectory(syntheticProjectDir)!!
-    private val vcsRevision = vcs.getWorkingRevision(syntheticProjectDir)
-    private val vcsUrl = vcs.getRemoteUrl(syntheticProjectDir)
+    private val vcsDir = VersionControlSystem.fromDirectory(syntheticProjectDir)!!
+    private val vcsRevision = vcsDir.getRevision()
+    private val vcsUrl = vcsDir.getRemoteUrl()
 
     private fun patchExpectedResult(filename: String) =
             File(syntheticProjectDir.parentFile, filename)

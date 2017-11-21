@@ -220,7 +220,7 @@ class PIP : PackageManager() {
                 Scope("install", true, installDependencies)
         )
 
-        val vcs = VersionControlSystem.fromDirectory(projectDir)
+        val vcsDir = VersionControlSystem.fromDirectory(projectDir)
         val project = Project(
                 packageManager = javaClass.simpleName,
                 namespace = "",
@@ -228,10 +228,10 @@ class PIP : PackageManager() {
                 version = projectVersion,
                 declaredLicenses = sortedSetOf(),  // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
-                vcsProvider = vcs?.toString() ?: "",
-                vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
-                vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
-                vcsPath = vcs?.getPathToRoot(projectDir) ?: "",
+                vcsProvider = vcsDir?.getProvider() ?: "",
+                vcsUrl = vcsDir?.getRemoteUrl() ?: "",
+                vcsRevision = vcsDir?.getRevision() ?: "",
+                vcsPath = vcsDir?.getPathToRoot(projectDir) ?: "",
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )

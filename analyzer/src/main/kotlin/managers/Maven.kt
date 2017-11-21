@@ -107,11 +107,16 @@ class Maven : PackageManager() {
 
         val vcsInfo = maven.parseVcsInfo(mavenProject).let {
             if (it.isEmpty()) {
-                val vcs = VersionControlSystem.fromDirectory(projectDir)
-                MavenSupport.VcsInfo(vcs?.toString() ?: "", vcs?.getRemoteUrl(projectDir) ?: "",
-                        vcs?.getWorkingRevision(projectDir) ?: "")
+                VersionControlSystem.fromDirectory(projectDir).let {
+                    MavenSupport.VcsInfo(
+                            it?.getProvider() ?: "",
+                            it?.getRemoteUrl() ?: "",
+                            it?.getRevision() ?: ""
+                    )
+                }
             } else it
         }
+
         val project = Project(
                 packageManager = javaClass.simpleName,
                 namespace = mavenProject.groupId,
