@@ -155,7 +155,7 @@ class Gradle : PackageManager() {
                                 version = it.version,
                                 declaredLicenses = it.licenses.map { it.name }.toSortedSet(),
                                 description = it.description ?: "",
-                                homepageUrl = it.url,
+                                homepageUrl = it.url ?: "",
                                 downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.
                                 hash = "", // TODO: Get hash from local metadata?
                                 hashAlgorithm = "",
