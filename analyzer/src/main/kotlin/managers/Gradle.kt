@@ -146,45 +146,45 @@ class Gradle : PackageManager() {
             // Only look for a package when there was no error resolving the dependency.
             packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
                 if (dependency.pomFile.isNotBlank()) {
-                    val projectBuildingResult = maven.buildMavenProject(File(dependency.pomFile))
-                    projectBuildingResult.project.let {
-                        return@getOrPut Package(
+                    with(maven.buildMavenProject(File(dependency.pomFile))) {
+                        Package(
                                 packageManager = javaClass.simpleName,
-                                namespace = it.groupId,
-                                name = it.artifactId,
-                                version = it.version,
-                                declaredLicenses = it.licenses.map { it.name }.toSortedSet(),
-                                description = it.description ?: "",
-                                homepageUrl = it.url ?: "",
+                                namespace = project.groupId,
+                                name = project.artifactId,
+                                version = project.version,
+                                declaredLicenses = project.licenses.map { project.name }.toSortedSet(),
+                                description = project.description ?: "",
+                                homepageUrl = project.url ?: "",
                                 downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.
                                 hash = "", // TODO: Get hash from local metadata?
                                 hashAlgorithm = "",
-                                vcsProvider = maven.parseVcsProvider(it),
-                                vcsUrl = maven.parseVcsUrl(it),
-                                vcsRevision = maven.parseVcsRevision(it),
+                                vcsProvider = maven.parseVcsProvider(project),
+                                vcsUrl = maven.parseVcsUrl(project),
+                                vcsRevision = maven.parseVcsRevision(project),
                                 vcsPath = ""
                         )
                     }
+                } else {
+                    Package(
+                            packageManager = javaClass.simpleName,
+                            namespace = dependency.groupId,
+                            name = dependency.artifactId,
+                            version = dependency.version,
+                            declaredLicenses = sortedSetOf(),
+                            description = "",
+                            homepageUrl = "",
+                            downloadUrl = "",
+                            hash = "",
+                            hashAlgorithm = "",
+                            vcsProvider = "",
+                            vcsUrl = "",
+                            vcsRevision = "",
+                            vcsPath = ""
+                    )
                 }
-
-                Package(
-                        packageManager = javaClass.simpleName,
-                        namespace = dependency.groupId,
-                        name = dependency.artifactId,
-                        version = dependency.version,
-                        declaredLicenses = sortedSetOf(),
-                        description = "",
-                        homepageUrl = "",
-                        downloadUrl = "",
-                        hash = "",
-                        hashAlgorithm = "",
-                        vcsProvider = "",
-                        vcsUrl = "",
-                        vcsRevision = "",
-                        vcsPath = ""
-                )
             }
         }
+
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages) }
         return PackageReference(dependency.groupId, dependency.artifactId, dependency.version,
                 transitiveDependencies.toSortedSet(), dependency.error?.let { listOf(it) } ?: emptyList())
