@@ -164,7 +164,7 @@ class Maven : PackageManager() {
                 version = mavenProject.version,
                 declaredLicenses = mavenProject.licenses.map { it.name }.toSortedSet(),
                 description = mavenProject.description ?: "",
-                homepageUrl = mavenProject.url,
+                homepageUrl = mavenProject.url ?: "",
                 downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.
                 hash = "", // TODO: Get hash from local metadata?
                 hashAlgorithm = "",
