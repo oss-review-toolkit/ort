@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component-set>
+    <components>
+
+        <!--
+         | Define empty lifecycle mappings for packaging types that are unknown otherwise.
+         | The default packagings (https://maven.apache.org/ref/3.5.2/maven-core/default-bindings.html) are defined by
+         | Maven, but plugins can define their own packagings. Some POMs use those packagings without including the
+         | plugin which causes an "Unknown packaging" exception. This can be fixed by defining empty lifecycle mappings
+         | which is fine, because we are only interested in parsing the POM files, not in building the projects.
+         |-->
+
+        <!--
+         | AAR (Android archive: https://simpligility.github.io/android-maven-plugin/aar.html)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>aar</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+    </components>
+</component-set>
