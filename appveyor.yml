@@ -20,7 +20,7 @@ build_script:
 test_script:
   - gradlew check
 
-after_test:
+on_finish:
   - gradlew --stop # Fix "fileHashes.bin" being used by another process.
   - ps: |
       $url = "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)"
