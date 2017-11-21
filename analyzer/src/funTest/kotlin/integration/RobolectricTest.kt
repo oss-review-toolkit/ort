@@ -1,9 +1,12 @@
 package com.here.ort.analyzer.integration
 
-import com.here.ort.analyzer.Expensive
 import com.here.ort.model.Package
 
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.properties.forAll
+import io.kotlintest.properties.headers
+import io.kotlintest.properties.row
+import io.kotlintest.properties.table
 
 import java.io.File
 
@@ -28,16 +31,24 @@ class RobolectricTest : BaseIntegrationSpec() {
             vcsRevision = "")
 
     init {
-        "analyzer results for robolectric project build.gradle match expected" {
-            val projectDir = File("src/funTest/assets/projects/synthetic/integration/robolectric-expected-results/")
-            val expectedResult = File(projectDir, "build-gradle-dependencies.yml")
-                    .readText()
-                    .replaceFirst("vcs_revision: \"\\w\"", "vcs_revision: \"\"")
-            val analyzerResultsDir = File(outputDir, "analyzer_results");
-            val analyzerResultsForProjectFileContents = File(analyzerResultsDir, "build-gradle-dependencies.yml")
-                    .readText()
-                    .replaceFirst("vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
-            analyzerResultsForProjectFileContents shouldBe expectedResult
-        }.config(tags = setOf(Expensive))
+        "analyzer results for robolectric project build.gradle files match expected" {
+            val analyzerResultsDir = File(outputDir, "analyzer_results/")
+            val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file: File ->
+                file.extension == "yml"
+            }.map {
+                val expectedResultPath = "src/funTest/assets/projects/synthetic/integration/robolectric-expected-results/" + it.path.substringBeforeLast(File.separator).substringAfterLast("analyzer_results")
+                row(it, File(expectedResultPath, "build-gradle-dependencies.yml"))
+            }
+            val gradleBuildPathsTable2 = table(
+                    headers("analyzerResultPath", "expectedResultPath"),
+                    *testRows.toTypedArray())
+
+            forAll(gradleBuildPathsTable2) { analyzerOutputFile, expectedResultFile ->
+                val analyzerResults =analyzerOutputFile.readText().replaceFirst("vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
+                val expectedResults = expectedResultFile.readText().replaceFirst("vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
+                analyzerResults shouldBe expectedResults
+
+            }
+        }
     }
 }
