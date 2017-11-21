@@ -9,4 +9,6 @@ dependencies {
     compile project(':util')
 
     compile "com.beust:jcommander:$jcommanderVersion"
+
+    testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
