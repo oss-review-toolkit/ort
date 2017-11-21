@@ -201,43 +201,37 @@ object Main {
                 p("Downloading revision '${target.vcsRevision}'.")
             }
 
-            val applicableVcs = mutableListOf<VersionControlSystem>()
+            var applicableVcs: VersionControlSystem? = null
 
-            if (target.vcsProvider.isNotBlank()) {
-                p("Detecting VCS from provider name '${target.vcsProvider}'...")
-                applicableVcs.addAll(VersionControlSystem.fromProvider(target.vcsProvider))
+            p("Trying to detect VCS...")
+
+            if (applicableVcs == null && target.vcsProvider.isNotBlank()) {
+                p("from provider name '${target.vcsProvider}'...")
+                applicableVcs = VersionControlSystem.fromProvider(target.vcsProvider)
             }
 
-            if (applicableVcs.isEmpty()) {
-                if (target.normalizedVcsUrl.isNotBlank()) {
-                    p("Could not find a VCS provider for '${target.vcsProvider}', trying to detect provider " +
-                            "from URL '${target.normalizedVcsUrl}'...")
-                    applicableVcs.addAll(VersionControlSystem.fromUrl(target.normalizedVcsUrl))
-                }
+            if (applicableVcs == null && target.normalizedVcsUrl.isNotBlank()) {
+                p("from URL '${target.normalizedVcsUrl}'...")
+                applicableVcs = VersionControlSystem.fromUrl(target.normalizedVcsUrl)
             }
 
-            when {
-                applicableVcs.isEmpty() ->
-                    // TODO: Decide if we want to do a trial-and-error with all available VCS here.
-                    throw DownloadException("Could not find an applicable VCS provider.")
-                applicableVcs.size > 1 ->
-                    throw DownloadException("Multiple applicable VCS providers found: ${applicableVcs.joinToString()}")
-                else -> {
-                    val vcs = applicableVcs.first()
-                    p("Using VCS provider '${vcs.javaClass.simpleName}'.")
-                    try {
-                        val revision = vcs.download(target.normalizedVcsUrl, target.vcsRevision, target.vcsPath,
-                                target.version, targetDir)
-                        p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
-                        return targetDir
-                    } catch (e: DownloadException) {
-                        if (stacktrace) {
-                            e.printStackTrace()
-                        }
+            if (applicableVcs == null) {
+                throw DownloadException("Could not find an applicable VCS provider.")
+            }
 
-                        throw DownloadException("Could not download source code.", e)
-                    }
+            p("Using VCS provider '${applicableVcs.javaClass.simpleName}'.")
+
+            try {
+                val revision = applicableVcs.download(target.normalizedVcsUrl, target.vcsRevision, target.vcsPath,
+                        target.version, targetDir)
+                p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
+                return targetDir
+            } catch (e: DownloadException) {
+                if (stacktrace) {
+                    e.printStackTrace()
                 }
+
+                throw DownloadException("Could not download source code.", e)
             }
         } else {
             p("No VCS URL provided.")

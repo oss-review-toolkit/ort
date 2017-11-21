@@ -95,7 +95,7 @@ class Gradle : PackageManager() {
                 Scope(configuration.name, true, dependencies.toSortedSet())
             }
 
-            val vcs = VersionControlSystem.fromDirectory(projectDir).firstOrNull()
+            val vcs = VersionControlSystem.fromDirectory(projectDir)
             val project = Project(
                     packageManager = javaClass.simpleName,
                     namespace = "",

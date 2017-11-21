@@ -220,7 +220,7 @@ class PIP : PackageManager() {
                 Scope("install", true, installDependencies)
         )
 
-        val vcs = VersionControlSystem.fromDirectory(projectDir).firstOrNull()
+        val vcs = VersionControlSystem.fromDirectory(projectDir)
         val project = Project(
                 packageManager = javaClass.simpleName,
                 namespace = "",
