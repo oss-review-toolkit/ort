@@ -16,4 +16,8 @@ install:
   - npm install -g npm@5.5.1 yarn@1.3.2
 
 script:
-  - ./gradlew check
+  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+      ./gradlew -DincludeTags=Expensive check;
+    else
+      ./gradlew check;
+    fi
