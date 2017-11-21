@@ -1,0 +1,1573 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "junit"
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs_provider: "Git"
+  vcs_url: "https://github.com/robolectric/robolectric.git"
+  vcs_revision: "64b26a9fbf7f5e0c1d0cd0b26c49f5b6dbf4325e"
+  vcs_path: ""
+  homepage_url: ""
+  scopes:
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+    - namespace: "com.google.code.findbugs"
+      name: "jsr305"
+      version: "3.0.1"
+      dependencies: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "compileOnly"
+    delivered: true
+    dependencies:
+    - namespace: "com.google.code.findbugs"
+      name: "jsr305"
+      version: "3.0.1"
+      dependencies: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "default"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+  - name: "errorprone"
+    delivered: true
+    dependencies:
+    - namespace: "com.google.errorprone"
+      name: "error_prone_core"
+      version: "2.1.2"
+      dependencies:
+      - namespace: "com.github.stephenc.jcip"
+        name: "jcip-annotations"
+        version: "1.0-1"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.auto"
+        name: "auto-common"
+        version: "0.7"
+        dependencies:
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "22.0"
+          dependencies:
+          - namespace: "com.google.code.findbugs"
+            name: "jsr305"
+            version: "3.0.0"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.errorprone"
+            name: "error_prone_annotations"
+            version: "2.1.2"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.j2objc"
+            name: "j2objc-annotations"
+            version: "1.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.mojo"
+            name: "animal-sniffer-annotations"
+            version: "1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.code.findbugs"
+        name: "jFormatString"
+        version: "3.0.0"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.code.findbugs"
+        name: "jsr305"
+        version: "3.0.0"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_annotation"
+        version: "2.1.2"
+        dependencies:
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "22.0"
+          dependencies:
+          - namespace: "com.google.code.findbugs"
+            name: "jsr305"
+            version: "3.0.0"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.errorprone"
+            name: "error_prone_annotations"
+            version: "2.1.2"
+            dependencies: []
+            errors: []
+          - namespace: "com.google.j2objc"
+            name: "j2objc-annotations"
+            version: "1.1"
+            dependencies: []
+            errors: []
+          - namespace: "org.codehaus.mojo"
+            name: "animal-sniffer-annotations"
+            version: "1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_annotations"
+        version: "2.1.2"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "error_prone_check_api"
+        version: "2.1.2"
+        dependencies:
+        - namespace: "com.github.kevinstern"
+          name: "software-and-algorithms"
+          version: "1.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.code.findbugs"
+          name: "jsr305"
+          version: "3.0.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotation"
+          version: "2.1.2"
+          dependencies:
+          - namespace: "com.google.guava"
+            name: "guava"
+            version: "22.0"
+            dependencies:
+            - namespace: "com.google.code.findbugs"
+              name: "jsr305"
+              version: "3.0.0"
+              dependencies: []
+              errors: []
+            - namespace: "com.google.errorprone"
+              name: "error_prone_annotations"
+              version: "2.1.2"
+              dependencies: []
+              errors: []
+            - namespace: "com.google.j2objc"
+              name: "j2objc-annotations"
+              version: "1.1"
+              dependencies: []
+              errors: []
+            - namespace: "org.codehaus.mojo"
+              name: "animal-sniffer-annotations"
+              version: "1.14"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotations"
+          version: "2.1.2"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "javac"
+          version: "9-dev-r4023-3"
+          dependencies: []
+          errors: []
+        - namespace: "com.googlecode.java-diff-utils"
+          name: "diffutils"
+          version: "1.3.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.checkerframework"
+          name: "dataflow"
+          version: "2.1.14"
+          dependencies:
+          - namespace: "org.checkerframework"
+            name: "javacutil"
+            version: "2.1.14"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.errorprone"
+        name: "javac"
+        version: "9-dev-r4023-3"
+        dependencies: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "22.0"
+        dependencies:
+        - namespace: "com.google.code.findbugs"
+          name: "jsr305"
+          version: "3.0.0"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.errorprone"
+          name: "error_prone_annotations"
+          version: "2.1.2"
+          dependencies: []
+          errors: []
+        - namespace: "com.google.j2objc"
+          name: "j2objc-annotations"
+          version: "1.1"
+          dependencies: []
+          errors: []
+        - namespace: "org.codehaus.mojo"
+          name: "animal-sniffer-annotations"
+          version: "1.14"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.checkerframework"
+        name: "dataflow"
+        version: "2.1.14"
+        dependencies:
+        - namespace: "org.checkerframework"
+          name: "javacutil"
+          version: "2.1.14"
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: "org.pcollections"
+        name: "pcollections"
+        version: "2.1.2"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "pegdownDoclet"
+    delivered: true
+    dependencies:
+    - namespace: "ch.raffael.pegdown-doclet"
+      name: "pegdown-doclet"
+      version: "1.3"
+      dependencies:
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "18.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.sourceforge.plantuml"
+        name: "plantuml"
+        version: "8032"
+        dependencies: []
+        errors: []
+      - namespace: "org.pegdown"
+        name: "pegdown"
+        version: "1.6.0"
+        dependencies:
+        - namespace: "org.parboiled"
+          name: "parboiled-java"
+          version: "1.1.7"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-analysis"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.3"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-util"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.parboiled"
+            name: "parboiled-core"
+            version: "1.1.7"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "runtime"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+  - name: "runtimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+  - name: "signatures"
+    delivered: true
+    dependencies: []
+  - name: "testCompile"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+  - name: "testCompileOnly"
+    delivered: true
+    dependencies: []
+  - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+  - name: "testRuntimeClasspath"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "project :annotations"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :sandbox"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
+        dependencies: []
+        errors: []
+      - namespace: ""
+        name: "project :utils"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :annotations"
+          version: ""
+          dependencies:
+          - namespace: ""
+            name: "project :shadowapi"
+            version: ""
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "20.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm-commons"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm-tree"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - namespace: "org.ow2.asm"
+        name: "asm"
+        version: "5.0.1"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: ""
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+packages:
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :annotations"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :sandbox"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :shadowapi"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :utils"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "ch.raffael.pegdown-doclet"
+  name: "pegdown-doclet"
+  version: "1.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.github.kevinstern"
+  name: "software-and-algorithms"
+  version: "1.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.github.stephenc.jcip"
+  name: "jcip-annotations"
+  version: "1.0-1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.auto"
+  name: "auto-common"
+  version: "0.7"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jFormatString"
+  version: "3.0.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jsr305"
+  version: "3.0.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.code.findbugs"
+  name: "jsr305"
+  version: "3.0.1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_annotation"
+  version: "2.1.2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_annotations"
+  version: "2.1.2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_check_api"
+  version: "2.1.2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "error_prone_core"
+  version: "2.1.2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.errorprone"
+  name: "javac"
+  version: "9-dev-r4023-3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "18.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "20.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "22.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.j2objc"
+  name: "j2objc-annotations"
+  version: "1.1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.googlecode.java-diff-utils"
+  name: "diffutils"
+  version: "1.3.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "junit"
+  name: "junit"
+  version: "4.12"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.sourceforge.plantuml"
+  name: "plantuml"
+  version: "8032"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.checkerframework"
+  name: "dataflow"
+  version: "2.1.14"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.checkerframework"
+  name: "javacutil"
+  version: "2.1.14"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.codehaus.mojo"
+  name: "animal-sniffer-annotations"
+  version: "1.14"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.hamcrest"
+  name: "hamcrest-core"
+  version: "1.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-analysis"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-commons"
+  version: "5.0.1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-tree"
+  version: "5.0.1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-tree"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-util"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm"
+  version: "5.0.1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-core"
+  version: "1.1.7"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-java"
+  version: "1.1.7"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.pcollections"
+  name: "pcollections"
+  version: "2.1.2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.pegdown"
+  name: "pegdown"
+  version: "1.6.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
