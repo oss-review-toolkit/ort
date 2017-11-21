@@ -103,7 +103,7 @@ class Gradle : PackageManager() {
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsProvider = vcs?.javaClass?.simpleName ?: "",
+                    vcsProvider = vcs?.toString() ?: "",
                     vcsUrl = vcs?.getRemoteUrl(projectDir) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(projectDir) ?: "",
                     vcsPath = vcs?.getPathToRoot(projectDir) ?: "",

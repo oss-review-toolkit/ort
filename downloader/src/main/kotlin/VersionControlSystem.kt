@@ -53,6 +53,11 @@ abstract class VersionControlSystem {
     }
 
     /**
+     * Return a simple string representation for this VCS.
+     */
+    override fun toString(): String = javaClass.simpleName
+
+    /**
      * Use this VCS to download the source code from the specified URL.
      *
      * @return A String identifying the revision that was downloaded.

@@ -219,7 +219,7 @@ object Main {
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsProvider = vcs?.javaClass?.simpleName ?: "",
+                    vcsProvider = vcs?.toString() ?: "",
                     vcsUrl = vcs?.getRemoteUrl(absoluteProjectPath) ?: "",
                     vcsRevision = vcs?.getWorkingRevision(absoluteProjectPath) ?: "",
                     vcsPath = vcs?.getPathToRoot(absoluteProjectPath) ?: "",
