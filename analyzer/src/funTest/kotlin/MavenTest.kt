@@ -30,7 +30,7 @@ import java.io.File
 
 class MavenTest : StringSpec() {
     private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic/maven")
-    private val vcsDir = VersionControlSystem.fromDirectory(syntheticProjectDir)!!
+    private val vcsDir = VersionControlSystem.forDirectory(syntheticProjectDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
 

@@ -112,7 +112,7 @@ class Gradle : PackageManager() {
                 Scope(configuration.name, true, dependencies.toSortedSet())
             }
 
-            val vcsDir = VersionControlSystem.fromDirectory(projectDir)
+            val vcsDir = VersionControlSystem.forDirectory(projectDir)
             val project = Project(
                     packageManager = javaClass.simpleName,
                     namespace = "",

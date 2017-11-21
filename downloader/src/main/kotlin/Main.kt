@@ -207,12 +207,12 @@ object Main {
 
             if (applicableVcs == null && target.vcsProvider.isNotBlank()) {
                 p("from provider name '${target.vcsProvider}'...")
-                applicableVcs = VersionControlSystem.fromProvider(target.vcsProvider)
+                applicableVcs = VersionControlSystem.forProvider(target.vcsProvider)
             }
 
             if (applicableVcs == null && target.normalizedVcsUrl.isNotBlank()) {
                 p("from URL '${target.normalizedVcsUrl}'...")
-                applicableVcs = VersionControlSystem.fromUrl(target.normalizedVcsUrl)
+                applicableVcs = VersionControlSystem.forUrl(target.normalizedVcsUrl)
             }
 
             if (applicableVcs == null) {
