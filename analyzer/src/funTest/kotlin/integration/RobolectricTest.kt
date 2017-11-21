@@ -1,13 +1,11 @@
 package com.here.ort.analyzer.integration
 
-import java.io.File
+import com.here.ort.analyzer.Expensive
+import com.here.ort.model.Package
 
 import io.kotlintest.matchers.shouldBe
 
-import com.here.ort.analyzer.managers.Gradle
-import com.here.ort.model.Package
-import com.here.ort.downloader.Main as DownloaderMain
-import com.here.ort.analyzer.Main as AnalyzerMain
+import java.io.File
 
 
 class RobolectricTest : BaseIntegrationSpec() {
@@ -30,6 +28,16 @@ class RobolectricTest : BaseIntegrationSpec() {
             vcsRevision = "")
 
     init {
-
+        "analyzer results for robolectric project build.gradle match expected" {
+            val projectDir = File("src/funTest/assets/projects/synthetic/integration/robolectric-expected-results/")
+            val expectedResult = File(projectDir, "build-gradle-dependencies.yml")
+                    .readText()
+                    .replaceFirst("vcs_revision: \"\\w\"", "vcs_revision: \"\"")
+            val analyzerResultsDir = File(outputDir, "analyzer_results");
+            val analyzerResultsForProjectFileContents = File(analyzerResultsDir, "build-gradle-dependencies.yml")
+                    .readText()
+                    .replaceFirst("vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
+            analyzerResultsForProjectFileContents shouldBe expectedResult
+        }.config(tags = setOf(Expensive))
     }
 }
