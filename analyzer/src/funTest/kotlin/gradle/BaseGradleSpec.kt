@@ -17,7 +17,7 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-abstract class BaseIntegrationSpec : StringSpec() {
+abstract class BaseGradleSpec : StringSpec() {
 
     abstract val pkg: Package
     abstract val expectedResultsDir: String
