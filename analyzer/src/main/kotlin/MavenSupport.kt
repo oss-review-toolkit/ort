@@ -108,6 +108,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
             }
 
+    fun parseLicenses(mavenProject: MavenProject) =
+            mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
+
     fun parseVcsInfo(mavenProject: MavenProject) =
             VcsInfo(parseVcsProvider(mavenProject), parseVcsUrl(mavenProject), parseVcsRevision(mavenProject))
 
