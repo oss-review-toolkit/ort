@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 import com.here.ort.util.log
 
 import java.io.File
+import java.util.SortedSet
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
@@ -107,6 +108,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 systemProperties["java.version"] = System.getProperty("java.version")
                 validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
             }
+
+    fun parseLicenses(mavenProject: MavenProject): SortedSet<String> =
+            mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
 
     fun parseVcsInfo(mavenProject: MavenProject) =
             VcsInfo(parseVcsProvider(mavenProject), parseVcsUrl(mavenProject), parseVcsRevision(mavenProject))
