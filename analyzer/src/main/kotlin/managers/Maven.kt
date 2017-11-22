@@ -181,7 +181,7 @@ class Maven : PackageManager() {
     }
 
     /**
-     * A wrapper for the [LocalRepositoryManager] used in [repositorySystemSession] that pretends that the POM files of
+     * A wrapper for the [LocalRepositoryManager] used in [RepositorySystemSession] that pretends that the POM files of
      * the currently analyzed project are available in the local repository. Without it the resolution of transitive
      * dependencies of project dependencies would not work without installing the project in the local repository first.
      */
