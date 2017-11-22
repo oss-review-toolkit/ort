@@ -27,7 +27,9 @@ import com.here.ort.util.log
 
 import java.io.File
 import java.net.HttpURLConnection
+import java.util.concurrent.TimeUnit
 
+import okhttp3.CacheControl
 import okhttp3.Request
 
 class ArtifactoryCache(
@@ -42,6 +44,7 @@ class ArtifactoryCache(
 
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
+                .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
                 .get()
                 .url("$url/$cachePath")
                 .build()
