@@ -32,7 +32,7 @@ abstract class BaseGradleSpec : StringSpec() {
         get() = false
 
     init {
-        "analyzer produces ABCD files for all pkg build.gradle files" {
+        "analyzer produces ABCD files for all pkg .gradle files" {
             //FIXME:  Analyzer crashes on JAVA 9 with project below Gradle 4.3 (Gradle issue: https://github.com/gradle/gradle/issues/3317)
             val downloadedDir = DownloaderMain.download(pkg, outputDir)
             val analyzerResultsDir = File(outputDir, "analyzer_results");
@@ -56,7 +56,7 @@ abstract class BaseGradleSpec : StringSpec() {
 
         }.config(tags = setOf(Expensive))
 
-        "analyzer results for all build.gradle files match expected" {
+        "analyzer results for all .gradle files match expected"{
             expectedResultsDir shouldNotBe  ""
             val analyzerResultsDir = File(outputDir, "analyzer_results/")
             val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file: File ->
