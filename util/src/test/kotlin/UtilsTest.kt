@@ -28,6 +28,10 @@ import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
     "normalizeVcsUrl" should {
+        "do nothing for empty URLs" {
+            normalizeVcsUrl("") shouldBe ""
+        }
+
         "properly handle NPM shortcut URLs" {
             val packages = mapOf(
                     "npm/npm"
