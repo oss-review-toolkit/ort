@@ -152,7 +152,7 @@ class Gradle : PackageManager() {
                             namespace = project.groupId,
                             name = project.artifactId,
                             version = project.version,
-                            declaredLicenses = project.licenses.map { it.name }.toSortedSet(),
+                            declaredLicenses = maven.parseLicenses(project),
                             description = project.description ?: "",
                             homepageUrl = project.url ?: "",
                             downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.

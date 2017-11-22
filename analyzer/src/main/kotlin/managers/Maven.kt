@@ -121,7 +121,7 @@ class Maven : PackageManager() {
                 namespace = mavenProject.groupId,
                 name = mavenProject.artifactId,
                 version = mavenProject.version,
-                declaredLicenses = mavenProject.licenses.map { it.name }.toSortedSet(),
+                declaredLicenses = maven.parseLicenses(mavenProject),
                 aliases = emptyList(),
                 vcsProvider = vcsInfo.provider,
                 vcsUrl = vcsInfo.url,
@@ -164,7 +164,7 @@ class Maven : PackageManager() {
                 namespace = mavenProject.groupId,
                 name = mavenProject.artifactId,
                 version = mavenProject.version,
-                declaredLicenses = mavenProject.licenses.map { it.name }.toSortedSet(),
+                declaredLicenses = maven.parseLicenses(mavenProject),
                 description = mavenProject.description ?: "",
                 homepageUrl = mavenProject.url ?: "",
                 downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.
