@@ -124,7 +124,7 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
         }
     }
 
-    if (uri.scheme == null) {
+    if (uri.scheme == null && uri.path.isNotEmpty()) {
         // Fall back to a file if the URL is a Linux path.
         return File(url).toSafeURI().toString()
     }
