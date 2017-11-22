@@ -36,7 +36,6 @@ import com.here.ort.util.log
 import java.io.File
 
 import org.apache.maven.bridge.MavenRepositorySystem
-import org.apache.maven.model.building.ModelBuildingRequest
 import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingResult
 
@@ -148,9 +147,7 @@ class Maven : PackageManager() {
     private fun parsePackage(node: DependencyNode): Package {
         val mavenRepositorySystem = maven.container.lookup(MavenRepositorySystem::class.java, "default")
         val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
-        val projectBuildingRequest = maven.createProjectBuildingRequest(true).apply {
-            validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
-        }
+        val projectBuildingRequest = maven.createProjectBuildingRequest(true)
 
         val cachedProject = projectsByIdentifier[node.artifact.identifier()]
 
