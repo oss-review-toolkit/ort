@@ -2,24 +2,24 @@ package com.here.ort.analyzer.integration
 
 import com.here.ort.model.Package
 
-class K9MailTest : BaseIntegrationSpec() {
+class RobolectricTest : BaseGradleSpec() {
 
     override val pkg = Package(
             packageManager = "Gradle",
-            namespace = "com.fsck.k9",
-            name = "k9mail",
-            version = "",
+            namespace = "org.robolectric",
+            name = "robolectric",
+            version = "3.3.2",
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
             downloadUrl = "",
             vcsPath = "",
             vcsProvider = "Git",
-            vcsUrl = "git@github.com:k9mail/k-9.git",
+            vcsUrl = "git@github.com:robolectric/robolectric.git",
             hashAlgorithm = "",
             hash = "",
             //TODO: add a revision to have stable analyzer results
             vcsRevision = "")
 
-    override val expectedResultsDir = ""
+    override val expectedResultsDir = "src/funTest/assets/projects/synthetic/gradle-expected-results/robolectric/"
 }
