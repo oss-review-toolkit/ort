@@ -28,8 +28,6 @@ import com.here.ort.util.safeMkdirs
 import java.io.File
 import java.util.SortedSet
 
-typealias ScannerResult = SortedSet<String>
-
 abstract class Scanner {
 
     companion object {
@@ -43,6 +41,8 @@ abstract class Scanner {
             )
         }
     }
+
+    data class Result(val licenses: SortedSet<String>, val errors: SortedSet<String>)
 
     /**
      * Return the Java class name as a simply way to refer to the scanner.
@@ -65,7 +65,7 @@ abstract class Scanner {
      *
      * @throws ScanException In case the package could not be scanned.
      */
-    fun scan(pkg: Package, outputDirectory: File, downloadDirectory: File? = null): ScannerResult {
+    fun scan(pkg: Package, outputDirectory: File, downloadDirectory: File? = null): Result {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scannerName = toString().toLowerCase()
 
@@ -77,7 +77,7 @@ abstract class Scanner {
                 "${pkg.name}-${pkgRevision}_$scannerName.$resultFileExtension")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
-            return toScannerResult(resultsFile)
+            return getResult(resultsFile)
         }
 
         val sourceDirectory = try {
@@ -104,7 +104,7 @@ abstract class Scanner {
      *
      * @throws ScanException In case the package could not be scanned.
      */
-    fun scan(path: File, outputDirectory: File): ScannerResult {
+    fun scan(path: File, outputDirectory: File): Result {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scannerName = toString().toLowerCase()
         val resultsFile = File(scanResultsDirectory,
@@ -121,11 +121,11 @@ abstract class Scanner {
     /**
      * Scan the provided [path] for license information, writing results to [resultsFile].
      */
-    protected abstract fun scanPath(path: File, resultsFile: File): ScannerResult
+    protected abstract fun scanPath(path: File, resultsFile: File): Result
 
     /**
-     * Convert the scanner's native file format to a [ScannerResult].
+     * Convert the scanner's native file format to a [Result].
      */
-    protected abstract fun toScannerResult(resultsFile: File): ScannerResult
+    internal abstract fun getResult(resultsFile: File): Result
 
 }

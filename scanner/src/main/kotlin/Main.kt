@@ -239,7 +239,7 @@ object Main {
                 is File -> scanner.scan(input, outputDir)
                 else -> throw IllegalArgumentException("Unsupported scan input.")
             }
-            entry.licenses.addAll(result)
+            entry.licenses.addAll(result.licenses)
 
             println("Found licenses for '$identifier': ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {

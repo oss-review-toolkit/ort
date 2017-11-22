@@ -24,7 +24,6 @@ import ch.qos.logback.classic.Level
 
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.Scanner
-import com.here.ort.scanner.ScannerResult
 import com.here.ort.util.OS
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.getCommandVersion
@@ -46,7 +45,7 @@ object ScanCode : Scanner() {
 
     override val resultFileExtension = "json"
 
-    override fun scanPath(path: File, resultsFile: File): ScannerResult {
+    override fun scanPath(path: File, resultsFile: File): Result {
         val executable = if (OS.isWindows) "scancode.bat" else "scancode"
 
         log.info { "Detecting the ScanCode version..." }
@@ -74,10 +73,12 @@ object ScanCode : Scanner() {
                 resultsFile.absolutePath
         )
 
+        val result = getResult(resultsFile)
+
         with(process) {
-            if (exitValue() == 0 || hasOnlyTimeoutErrors(resultsFile)) {
+            if (exitValue() == 0 || hasOnlyTimeoutErrors(result)) {
                 println("Stored ScanCode results in '${resultsFile.absolutePath}'.")
-                return toScannerResult(resultsFile)
+                return result
             } else {
                 throw ScanException(failMessage)
             }
@@ -88,33 +89,31 @@ object ScanCode : Scanner() {
         // TODO: Add results of license scan to YAML model
     }
 
-    override fun toScannerResult(resultsFile: File): ScannerResult {
-        val result = sortedSetOf<String>()
+    override fun getResult(resultsFile: File): Result {
+        val licenses = sortedSetOf<String>()
+        val errors = sortedSetOf<String>()
 
-        val json = jsonMapper.readTree(resultsFile)
-        json["files"]?.forEach { file ->
-            file["licenses"]?.forEach { license ->
-                var name = license["spdx_license_key"].asText()
-                if (name.isNullOrBlank()) {
-                    val key = license["key"].asText()
-                    name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+        if (resultsFile.isFile) {
+            val json = jsonMapper.readTree(resultsFile)
+            json["files"]?.forEach { file ->
+                file["licenses"]?.forEach { license ->
+                    var name = license["spdx_license_key"].asText()
+                    if (name.isNullOrBlank()) {
+                        val key = license["key"].asText()
+                        name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+                    }
+                    licenses.add(name)
                 }
-                result.add(name)
+
+                errors.addAll(file["scan_errors"].map { it.asText() })
             }
         }
 
-        return result
+        return Result(licenses, errors)
     }
 
-    internal fun hasOnlyTimeoutErrors(resultsFile: File): Boolean {
-        val errors = sortedSetOf<String>()
-
-        val json = jsonMapper.readTree(resultsFile)
-        json["files"]?.forEach { file ->
-            errors.addAll(file["scan_errors"].map { it.asText() })
-        }
-
-        errors.singleOrNull()?.let { error ->
+    internal fun hasOnlyTimeoutErrors(result: Result): Boolean {
+        result.errors.singleOrNull()?.let { error ->
             TIMEOUT_REGEX.matchEntire(error)?.let { match ->
                 return match.groups["timeout"]!!.value == TIMEOUT.toString()
             }

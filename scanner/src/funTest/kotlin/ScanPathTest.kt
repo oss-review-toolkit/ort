@@ -32,7 +32,7 @@ class ScanPathTest : StringSpec() {
     init {
         "ScanCode recognizes our own LICENSE" {
             val result = ScanCode.scan(File("../LICENSE"), outputDir)
-            result shouldBe setOf("Apache-2.0")
+            result.licenses shouldBe setOf("Apache-2.0")
         }
     }
 }

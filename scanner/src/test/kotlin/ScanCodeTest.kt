@@ -31,13 +31,15 @@ class ScanCodeTest : WordSpec({
         "return true for scan results with only timeout errors" {
             val resultFileName = "/esprima-2.7.3_scancode-2.2.1.post59.970c46191.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
-            ScanCode.hasOnlyTimeoutErrors(resultFile) shouldBe true
+            val result = ScanCode.getResult(resultFile)
+            ScanCode.hasOnlyTimeoutErrors(result) shouldBe true
         }
 
         "return false for scan results without errors" {
             val resultFileName = "/esprima-2.7.3_scancode-2.2.1.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
-            ScanCode.hasOnlyTimeoutErrors(resultFile) shouldBe false
+            val result = ScanCode.getResult(resultFile)
+            ScanCode.hasOnlyTimeoutErrors(result) shouldBe false
         }
     }
 })
