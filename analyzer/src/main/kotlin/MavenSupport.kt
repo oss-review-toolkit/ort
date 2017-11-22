@@ -26,6 +26,7 @@ import java.io.File
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
+import org.apache.maven.model.building.ModelBuildingRequest
 import org.apache.maven.project.DefaultProjectBuildingRequest
 import org.apache.maven.project.MavenProject
 import org.apache.maven.project.ProjectBuilder
@@ -104,6 +105,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 repositorySession = repositorySystemSession
                 systemProperties["java.home"] = System.getProperty("java.home")
                 systemProperties["java.version"] = System.getProperty("java.version")
+                validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
             }
 
     fun parseVcsInfo(mavenProject: MavenProject) =
