@@ -129,14 +129,23 @@ class DependencyTreePlugin implements Plugin<Gradle> {
 
                 ComponentIdentifier id = dependencyResult.selected.id
                 if (id instanceof ModuleComponentIdentifier) {
-                    def pomFile = project.dependencies.createArtifactResolutionQuery()
+                    def result = project.dependencies.createArtifactResolutionQuery()
                             .forComponents(id)
                             .withArtifacts(MavenModule, MavenPomArtifact)
                             .execute()
                             .resolvedComponents.first()
                             .getArtifacts(MavenPomArtifact).first()
-                            .file.absolutePath
-                    return new DependencyImpl(id.group, id.module, id.version, dependencies, null, pomFile)
+                    String error = null
+                    String pomFile = null
+                    if (result instanceof ResolvedArtifactResult) {
+                        pomFile = result.file.absolutePath
+
+                    } else if (result instanceof UnresolvedArtifactResult) {
+                        error = result.failure.message
+                    } else {
+                        error = "Unknown ArtifactResult type: ${result.getClass().name}"
+                    }
+                    return new DependencyImpl(id.group, id.module, id.version, dependencies, error, pomFile)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     // TODO: Decide how to mark project dependencies in the model.
                     return new DependencyImpl("", id.displayName, "", dependencies, null, "")
