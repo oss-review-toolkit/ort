@@ -33,7 +33,5 @@ class CocoaPods : PackageManager() {
         override fun create() = CocoaPods()
     }
 
-    override fun command(workingDir: File): String {
-        return "pod"
-    }
+    override fun command(workingDir: File) = "pod"
 }

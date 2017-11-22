@@ -33,7 +33,5 @@ class SBT : PackageManager() {
         override fun create() = SBT()
     }
 
-    override fun command(workingDir: File): String {
-        return "sbt"
-    }
+    override fun command(workingDir: File) = "sbt"
 }

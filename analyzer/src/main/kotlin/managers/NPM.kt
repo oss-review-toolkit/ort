@@ -75,9 +75,7 @@ class NPM : PackageManager() {
         }
     }
 
-    override fun command(workingDir: File): String {
-        return if (File(workingDir, "yarn.lock").isFile) yarn else npm
-    }
+    override fun command(workingDir: File) = if (File(workingDir, "yarn.lock").isFile) yarn else npm
 
     override fun prepareResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to

@@ -33,7 +33,5 @@ class Godep : PackageManager() {
         override fun create() = Godep()
     }
 
-    override fun command(workingDir: File): String {
-        return "godep"
-    }
+    override fun command(workingDir: File) = "godep"
 }
