@@ -47,9 +47,7 @@ abstract class Scanner {
     /**
      * Return the Java class name as a simply way to refer to the scanner.
      */
-    override fun toString(): String {
-        return javaClass.simpleName
-    }
+    override fun toString(): String = javaClass.simpleName
 
     /**
      * Scan the provided [pkg] for license information, writing results to [outputDirectory]. If a scan result is found

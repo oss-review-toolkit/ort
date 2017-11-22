@@ -36,13 +36,9 @@ class ScanResultsCacheTest : WordSpec() {
         }
     }
 
-    private fun ArtifactoryCache.getApiToken(): String {
-        return getStringField("apiToken")
-    }
+    private fun ArtifactoryCache.getApiToken() = getStringField("apiToken")
 
-    private fun ArtifactoryCache.getUrl(): String {
-        return getStringField("url")
-    }
+    private fun ArtifactoryCache.getUrl() = getStringField("url")
 
     init {
         "ScanResultsCache.configure" should {

@@ -223,9 +223,8 @@ object Main {
         writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats))
     }
 
-    private fun findScopesForPackage(pkg: Package, project: Project): List<String> {
-        return project.scopes.filter { it.contains(pkg) }.map { it.name }
-    }
+    private fun findScopesForPackage(pkg: Package, project: Project) =
+            project.scopes.filter { it.contains(pkg) }.map { it.name }
 
     private fun scanEntry(entry: SummaryEntry, identifier: String, input: Any) {
         try {

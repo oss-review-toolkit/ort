@@ -64,9 +64,7 @@ data class PackageReference(
     /**
      * Returns whether the given package is a (transitive) dependency of this reference.
      */
-    fun dependsOn(pkg: Package): Boolean {
-        return dependsOn(pkg.identifier)
-    }
+    fun dependsOn(pkg: Package) = dependsOn(pkg.identifier)
 
     /**
      * Returns whether the package identified by [pkgId] is a (transitive) dependency of this reference.

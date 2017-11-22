@@ -33,7 +33,5 @@ class Bower : PackageManager() {
         override fun create() = Bower()
     }
 
-    override fun command(workingDir: File): String {
-        return "bower"
-    }
+    override fun command(workingDir: File) = "bower"
 }
