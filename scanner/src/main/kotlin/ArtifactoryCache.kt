@@ -50,7 +50,11 @@ class ArtifactoryCache(
             (response.code() == HttpURLConnection.HTTP_OK).also {
                 val message = if (it) {
                     response.body()?.let { target.writeBytes(it.bytes()) }
-                    "Downloaded $cachePath from Artifactory cache."
+                    if (response.cacheResponse() != null) {
+                        "Retrieved $cachePath from local cache."
+                    } else {
+                        "Downloaded $cachePath from Artifactory cache."
+                    }
                 } else {
                     "Could not get $cachePath from Artifactory cache: ${response.code()} - " +
                             response.message()
