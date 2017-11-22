@@ -20,4 +20,6 @@ class K9MailTest : BaseIntegrationSpec() {
             hash = "",
             //TODO: add a revision to have stable analyzer results
             vcsRevision = "")
+
+    override val expectedResultsDir = ""
 }
