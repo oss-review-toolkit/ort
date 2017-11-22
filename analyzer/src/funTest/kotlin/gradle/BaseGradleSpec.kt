@@ -21,6 +21,10 @@ abstract class BaseGradleSpec : StringSpec() {
 
     abstract val pkg: Package
     abstract val expectedResultsDir: String
+
+    // Map here expected results files locations if for some reason, they cannot be stored in identical directories
+    // as in src (ex. file paths get to long on Windows)
+    protected open val expectedResultsDirsMap: Map<String, File> = mapOf()
     protected val outputDir = createTempDir()
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -62,11 +66,12 @@ abstract class BaseGradleSpec : StringSpec() {
             expectedResultsDir shouldNotBe ""
             val analyzerResultsDir = File(outputDir, "analyzer_results/")
             val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file: File ->
-                file.extension == "yml"
+                file.extension == "yml" //filter yml files
             }.map {
                 val fileExpectedResultPath = expectedResultsDir + it.path.substringBeforeLast(
-                        File.separator).substringAfterLast("analyzer_results")
-                row(it, File(fileExpectedResultPath, "build-gradle-dependencies.yml"))
+                        File.separator).substringAfterLast("analyzer_results").replace("\\",
+                        "/") + "/" + it.name //keep as unix paths
+                row(it, expectedResultsDirsMap.getOrDefault(fileExpectedResultPath, File(fileExpectedResultPath)))
             }
             val gradleTable = table(headers("analyzerOutputFile", "expectedResultFile"), *testRows.toTypedArray())
 
