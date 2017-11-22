@@ -65,13 +65,10 @@ class PIP : PackageManager() {
             "pypi.python.org"
     ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
 
-    override fun command(workingDir: File): String {
-        return "pip"
-    }
+    override fun command(workingDir: File) = "pip"
 
-    private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String): ProcessCapture {
-        return runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
-    }
+    private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
+            runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 
     private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String)
             : ProcessCapture {

@@ -34,7 +34,5 @@ class Bundler : PackageManager() {
         override fun create() = Bundler()
     }
 
-    override fun command(workingDir: File): String {
-        return "bundle"
-    }
+    override fun command(workingDir: File) = "bundle"
 }
