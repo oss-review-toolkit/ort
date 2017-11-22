@@ -45,6 +45,7 @@ import org.eclipse.aether.RepositorySystem
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.repository.LocalRepositoryManager
+import java.util.SortedSet
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
@@ -107,6 +108,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 systemProperties["java.version"] = System.getProperty("java.version")
                 validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
             }
+
+    fun parseLicenses(project: MavenProject): SortedSet<String> =
+            project.licenses.map { it.name ?: it.url ?: it.comments }.filterNotNull().toSortedSet()
 
     fun parseVcsInfo(mavenProject: MavenProject) =
             VcsInfo(parseVcsProvider(mavenProject), parseVcsUrl(mavenProject), parseVcsRevision(mavenProject))
