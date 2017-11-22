@@ -8,6 +8,11 @@ import com.here.ort.downloader.Main as DownloaderMain
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.properties.forAll
+import io.kotlintest.properties.headers
+import io.kotlintest.properties.row
+import io.kotlintest.properties.table
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -15,6 +20,7 @@ import java.io.File
 abstract class BaseIntegrationSpec : StringSpec() {
 
     abstract val pkg: Package
+    abstract val expectedResultsDir: String
     protected val outputDir = createTempDir()
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -48,6 +54,27 @@ abstract class BaseIntegrationSpec : StringSpec() {
             val generatedResultFiles = analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.map{it.absolutePath}.toSet()
             generatedResultFiles shouldBe expectedResult
 
+        }.config(tags = setOf(Expensive))
+
+        "analyzer results for all build.gradle files match expected" {
+            expectedResultsDir shouldNotBe  ""
+            val analyzerResultsDir = File(outputDir, "analyzer_results/")
+            val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file: File ->
+                file.extension == "yml"
+            }.map {
+                val fileExpectedResultPath = expectedResultsDir + it.path.substringBeforeLast(File.separator).substringAfterLast("analyzer_results")
+                row(it, File(fileExpectedResultPath, "build-gradle-dependencies.yml"))
+            }
+            val gradleTable = table(
+                    headers("analyzerOutputFile", "expectedResultFile"),
+                    *testRows.toTypedArray())
+
+            forAll(gradleTable) { analyzerOutputFile, expectedResultFile ->
+                val analyzerResults =analyzerOutputFile.readText().replaceFirst("vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
+                val expectedResults = expectedResultFile.readText().replaceFirst("vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
+                analyzerResults shouldBe expectedResults
+
+            }
         }.config(tags = setOf(Expensive))
     }
 }
