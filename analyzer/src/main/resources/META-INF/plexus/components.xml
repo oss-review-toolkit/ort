@@ -47,5 +47,23 @@
             </configuration>
         </component>
 
+        <!--
+         | Eclipse Plugin (https://wiki.eclipse.org/Tycho/Packaging_Types)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>eclipse-plugin</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
     </components>
 </component-set>
