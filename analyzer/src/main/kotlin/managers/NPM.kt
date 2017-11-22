@@ -34,6 +34,7 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
 import com.here.ort.util.OS
+import com.here.ort.util.OkHttpClientHelper
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.asTextOrEmpty
 import com.here.ort.util.checkCommandVersion
@@ -44,13 +45,14 @@ import com.vdurmont.semver4j.Semver
 import com.vdurmont.semver4j.Semver.SemverType
 
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
-import java.net.URL
+import java.net.HttpURLConnection
 import java.net.URLEncoder
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
+
+import okhttp3.Request
 
 @Suppress("LargeClass", "TooManyFunctions")
 class NPM : PackageManager() {
@@ -172,9 +174,31 @@ class NPM : PackageManager() {
             } else {
                 rawName
             }
-            val url = URL("https://registry.npmjs.org/$encodedName")
+
+            val pkgRequest = Request.Builder()
+                    .get()
+                    .url("https://registry.npmjs.org/$encodedName")
+                    .build()
+
             try {
-                val packageInfo = jsonMapper.readTree(url.readText())
+                val json = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
+                    if (response.code() != HttpURLConnection.HTTP_OK) {
+                        throw IOException("Could not retrieve package info about $encodedName: " +
+                                "${response.code()} - ${response.message()}")
+                    }
+
+                    response.body()?.string().also {
+                        log.debug {
+                            if (response.cacheResponse() != null) {
+                                "Retrieved info about $encodedName from local cache."
+                            } else {
+                                "Downloaded info about $encodedName from NPM registry."
+                            }
+                        }
+                    }
+                }
+
+                val packageInfo = jsonMapper.readTree(json)
                 val infoJson = packageInfo["versions"][version]
 
                 description = infoJson["description"].asTextOrEmpty()
@@ -190,7 +214,7 @@ class NPM : PackageManager() {
                     vcsUrl = second
                 }
                 vcsRevision = infoJson["gitHead"].asTextOrEmpty()
-            } catch (e: FileNotFoundException) {
+            } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
                 }
