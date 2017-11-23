@@ -19,8 +19,17 @@
 
 package com.here.ort.analyzer.managers
 
+import ch.frankel.slf4k.*
+
+import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.util.OS
+import com.here.ort.util.ProcessCapture
+import com.here.ort.util.checkCommandVersion
+import com.here.ort.util.log
+
+import com.vdurmont.semver4j.Semver
 
 import java.io.File
 
@@ -30,8 +39,66 @@ class SBT : PackageManager() {
             "Scala",
             listOf("build.sbt", "build.scala")
     ) {
+        private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
+        private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
+
         override fun create() = SBT()
     }
 
-    override fun command(workingDir: File) = "sbt"
+    override fun command(workingDir: File) = if (OS.isWindows) "sbt.bat" else "sbt"
+
+    private fun extractLowestSbtVersion(stdout: String): String {
+        val versions = stdout.lines().mapNotNull {
+            VERSION_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { Semver(it) }
+        }
+
+        val uniqueVersions = versions.toSortedSet()
+        if (uniqueVersions.size > 1) {
+            log.info { "Different sbt versions used in the same project: $uniqueVersions" }
+        }
+
+        return uniqueVersions.first().toString()
+    }
+
+    override fun prepareResolution(definitionFiles: List<File>): List<File> {
+        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated form
+        // "make-pom" and to support declaring Maven-style repositories, see
+        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+         if (definitionFiles.isNotEmpty()) {
+             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
+             // https://stackoverflow.com/a/20337575/1127485.
+             val workingDir = definitionFiles.first().parentFile
+             checkCommandVersion(
+                     command(workingDir),
+                     Semver("0.13.0"),
+                     versionArgument = "sbtVersion",
+                     workingDir = workingDir,
+                     ignoreActualVersion = Main.ignoreVersions,
+                     transform = this::extractLowestSbtVersion,
+                     criterion = { actualVersion, otherVersion -> actualVersion >= otherVersion }
+             )
+         }
+
+        val pomFiles = sortedSetOf<File>()
+
+        definitionFiles.forEach { definitionFile ->
+            val workingDir = definitionFile.parentFile
+            val sbt = ProcessCapture(workingDir, command(workingDir), "makePom").requireSuccess()
+
+            // Get the list of POM files created by "sbt makePom". A single call might create multiple POM files in
+            // case of sub-projects.
+            val makePomFiles = sbt.stdout().lines().mapNotNull {
+                POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+            }
+
+            pomFiles.addAll(makePomFiles)
+        }
+
+        return pomFiles.toList()
+    }
+
+    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>) =
+        // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
+        // TODO: Fix Maven being listed as the package manager in the result.
+        Maven.create().resolveDependencies(projectDir, prepareResolution(definitionFiles))
 }

@@ -1,3 +1,7 @@
+[submodule "directories"]
+	path = analyzer/src/funTest/assets/projects/external/directories
+	url = https://github.com/soc/directories
+	ignore = untracked
 [submodule "jgnash"]
 	path = analyzer/src/funTest/assets/projects/external/jgnash
 	url = https://github.com/ccavanaugh/jgnash.git
