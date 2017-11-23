@@ -101,28 +101,36 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
 }
 
 /**
- * Run a command to check it for specific version.
+ * Run a [command] to check it against [version] using the specified [criterion].
  */
-fun checkCommandVersion(command: String, expectedVersion: Semver, versionArgument: String = "--version",
-                        ignoreActualVersion: Boolean = false, transform: (String) -> String = { it }) {
-    val actualVersion = getCommandVersion(command, versionArgument, expectedVersion.type, transform)
-    if (actualVersion != expectedVersion) {
-        val messagePrefix = "Unsupported $command version $actualVersion, version $expectedVersion is "
+fun checkCommandVersion(
+        command: String,
+        version: Semver,
+        versionArgument: String = "--version",
+        ignoreActualVersion: Boolean = false,
+        transform: (String) -> String = { it },
+        criterion: (Semver, Semver) -> Boolean = { actualVersion, otherVersion -> actualVersion == otherVersion }
+) {
+    val actualVersion = getCommandVersion(command, versionArgument, version.type, transform)
+    if (!criterion(actualVersion, version)) {
+        val message = "Unsupported $command version $actualVersion."
         if (ignoreActualVersion) {
-            println(messagePrefix + "expected.")
             println("Still continuing because you chose to ignore the actual version.")
         } else {
-            throw IOException(messagePrefix + "required.")
+            throw IOException(message)
         }
     }
 }
 
 /**
- * Run a command to get its version.
+ * Run a [command] to get its version.
  */
-fun getCommandVersion(command: String, versionArgument: String = "--version",
-                      semverType: Semver.SemverType = Semver.SemverType.LOOSE,
-                      transform: (String) -> String = { it }): Semver {
+fun getCommandVersion(
+        command: String,
+        versionArgument: String = "--version",
+        semverType: Semver.SemverType = Semver.SemverType.LOOSE,
+        transform: (String) -> String = { it }
+): Semver {
     val version = ProcessCapture(command, versionArgument).requireSuccess()
 
     var versionString = transform(version.stdout().trim())
