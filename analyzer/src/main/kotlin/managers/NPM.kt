@@ -41,8 +41,7 @@ import com.here.ort.util.checkCommandVersion
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
 
-import com.vdurmont.semver4j.Semver
-import com.vdurmont.semver4j.Semver.SemverType
+import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
@@ -82,8 +81,8 @@ class NPM : PackageManager() {
     override fun prepareResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
-        checkCommandVersion(npm, Semver("5.5.1", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
-        checkCommandVersion(yarn, Semver("1.3.2", SemverType.NPM), ignoreActualVersion = Main.ignoreVersions)
+        checkCommandVersion(npm, Requirement.buildNPM("5.5.1"), ignoreActualVersion = Main.ignoreVersions)
+        checkCommandVersion(yarn, Requirement.buildNPM("1.3.2"), ignoreActualVersion = Main.ignoreVersions)
     }
 
     override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
