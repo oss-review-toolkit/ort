@@ -60,7 +60,7 @@ class Gradle : PackageManager() {
     companion object : PackageManagerFactory<Gradle>(
             "https://gradle.org/",
             "Java",
-            listOf("build.gradle")
+            listOf("[a-zA-Z0-9]*.gradle")
     ) {
         override fun create() = Gradle()
     }
