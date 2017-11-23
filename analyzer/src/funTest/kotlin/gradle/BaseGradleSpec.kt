@@ -49,7 +49,7 @@ abstract class BaseGradleSpec : StringSpec() {
 
             val expectedResult = sourceGradleProjectFiles.map {
                 val abcdFileDir = it.absolutePath.substringBeforeLast(File.separator).replace(oldValue = downloadedDir.absolutePath, newValue = analyzerResultsDir.absolutePath, ignoreCase = true)
-                abcdFileDir + File.separator + "build-gradle-dependencies.yml"
+                "$abcdFileDir${File.separator}${it.name.substringBeforeLast(".gradle")}-gradle-dependencies.yml"
             }.toSet()
             val generatedResultFiles = analyzerResultsDir.walkTopDown().asIterable().filter { it.extension == "yml" }.map{it.absolutePath}.toSet()
             generatedResultFiles shouldBe expectedResult
@@ -63,7 +63,7 @@ abstract class BaseGradleSpec : StringSpec() {
                 file.extension == "yml"
             }.map {
                 val fileExpectedResultPath = expectedResultsDir + it.path.substringBeforeLast(File.separator).substringAfterLast("analyzer_results")
-                row(it, File(fileExpectedResultPath, "build-gradle-dependencies.yml"))
+                row(it, File(fileExpectedResultPath, it.name))
             }
             val gradleTable = table(
                     headers("analyzerOutputFile", "expectedResultFile"),
