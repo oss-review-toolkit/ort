@@ -847,3 +847,4 @@ packages:
   vcs_url: "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
   vcs_revision: ""
   vcs_path: ""
+errors: []
