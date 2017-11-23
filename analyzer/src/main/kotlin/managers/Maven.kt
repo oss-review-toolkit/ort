@@ -76,7 +76,7 @@ class Maven : PackageManager() {
 
     override fun command(workingDir: File) = "mvn"
 
-    override fun prepareResolution(definitionFiles: List<File>) {
+    override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = maven.createProjectBuildingRequest(false)
         val projectBuildingResults = projectBuilder.build(definitionFiles, false, projectBuildingRequest)
@@ -87,6 +87,8 @@ class Maven : PackageManager() {
 
             projectsByIdentifier[identifier] = projectBuildingResult
         }
+
+        return definitionFiles
     }
 
     override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
