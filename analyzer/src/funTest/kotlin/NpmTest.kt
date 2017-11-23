@@ -21,14 +21,11 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.util.OS
 import com.here.ort.util.yamlMapper
 
 import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldThrow
-import io.kotlintest.matchers.startWith
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
@@ -59,7 +56,16 @@ class NpmTest : WordSpec() {
         }
     }
 
-    private fun patchExpectedResult(workingDir: File): String {
+    private fun patchPathInExpectedResult(expectedResultsFilename: String) =
+            File(projectDir.parentFile, expectedResultsFilename).readText().let {
+                if (OS.isWindows) {
+                    it.replace("/", "\\\\")
+                } else {
+                    it
+                }
+            }
+
+    private fun patchVcsInExpectedResult(workingDir: File): String {
         val vcsPath = "analyzer/" + workingDir.path.replace("\\", "/")
         return File(projectDir.parentFile, "project-npm-expected-output.yml")
                 .readText()
@@ -76,7 +82,7 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val expectedResult = patchVcsInExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -88,34 +94,30 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val expectedResult = patchVcsInExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
-            "abort if no lockfile is present" {
+            "show error if no lockfile is present" {
                 val workingDir = File(projectDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    NPM.create().resolveDependencies(projectDir, listOf(packageFile))
-                }
+                val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val expectedResult = patchPathInExpectedResult("project-npm-expected-output-no-lockfile.yml")
 
-                @Suppress("UnsafeCallOnNullableType")
-                exception.message!! should startWith("No lockfile found in")
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
-            "abort if multiple lockfiles are present" {
+            "show error if multiple lockfiles are present" {
                 val workingDir = File(projectDir, "multiple-lockfiles")
                 val packageFile = File(workingDir, "package.json")
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    NPM.create().resolveDependencies(projectDir, listOf(packageFile))
-                }
+                val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val expectedResult = patchPathInExpectedResult("project-npm-expected-output-multiple-lockfiles.yml")
 
-                @Suppress("UnsafeCallOnNullableType")
-                exception.message!! should endWith("contains multiple lockfiles. It is ambiguous which one to use.")
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
             "resolve dependencies even if the node_modules directory already exists" {
@@ -124,7 +126,7 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val expectedResult = patchVcsInExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -138,7 +140,7 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val expectedResult = patchVcsInExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.yarn
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult

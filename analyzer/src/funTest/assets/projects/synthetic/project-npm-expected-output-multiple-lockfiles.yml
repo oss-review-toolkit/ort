@@ -1,0 +1,19 @@
+---
+allowDynamicVersions: false
+project:
+  package_manager: ""
+  namespace: ""
+  name: ""
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+  homepage_url: ""
+  scopes: []
+packages: []
+errors:
+- "IllegalArgumentException: src/funTest/assets/projects/synthetic/project-npm/multiple-lockfiles\
+  \ contains multiple lockfiles. It is ambiguous which one to use."
