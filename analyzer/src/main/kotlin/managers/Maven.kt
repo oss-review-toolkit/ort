@@ -21,6 +21,7 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
@@ -31,12 +32,14 @@ import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
+import com.here.ort.util.collectMessages
 import com.here.ort.util.log
 
 import java.io.File
 
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.project.ProjectBuilder
+import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingResult
 
 import org.eclipse.aether.RepositorySystemSession
@@ -137,13 +140,31 @@ class Maven : PackageManager() {
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
-        val pkg = packages.getOrPut(node.artifact.identifier()) {
-            parsePackage(node)
+        try {
+            val pkg = packages.getOrPut(node.artifact.identifier()) {
+                parsePackage(node)
+            }
+
+            val dependencies = node.children.map { parseDependency(it, packages) }.toSortedSet()
+
+            return pkg.toReference(dependencies)
+        } catch (e: ProjectBuildingException) {
+            if (Main.stacktrace) {
+                e.printStackTrace()
+            }
+
+            log.error {
+                "Could not get package information for dependency '${node.artifact.identifier()}': ${e.message}"
+            }
+
+            return PackageReference(
+                    namespace = node.artifact.groupId,
+                    name = node.artifact.artifactId,
+                    version = node.artifact.version,
+                    dependencies = sortedSetOf(),
+                    errors = e.collectMessages()
+            )
         }
-
-        val dependencies = node.children.map { parseDependency(it, packages) }.toSortedSet()
-
-        return pkg.toReference(dependencies)
     }
 
     private fun parsePackage(node: DependencyNode): Package {
