@@ -78,11 +78,13 @@ class NPM : PackageManager() {
 
     override fun command(workingDir: File) = if (File(workingDir, "yarn.lock").isFile) yarn else npm
 
-    override fun prepareResolution(definitionFiles: List<File>) {
+    override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
         checkCommandVersion(npm, Requirement.buildNPM("5.5.1"), ignoreActualVersion = Main.ignoreVersions)
         checkCommandVersion(yarn, Requirement.buildNPM("1.3.2"), ignoreActualVersion = Main.ignoreVersions)
+
+        return definitionFiles
     }
 
     override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
