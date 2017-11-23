@@ -31,6 +31,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.scanner.scanners.ScanCode
+import com.here.ort.util.collectMessages
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
 import com.here.ort.util.yamlMapper
@@ -248,11 +249,7 @@ object Main {
 
             log.error { "Could not scan '$identifier': ${e.message}" }
 
-            var cause: Throwable? = e
-            while (cause != null) {
-                entry.errors.add("${cause.javaClass.simpleName}: ${cause.message}")
-                cause = cause.cause
-            }
+            entry.errors.addAll(e.collectMessages())
         }
     }
 

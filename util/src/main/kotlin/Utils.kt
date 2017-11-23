@@ -190,3 +190,16 @@ fun File.toSafeURI(): URI {
  * Convenience function for [JsonNode] that returns an empty string if [JsonNode.asText] is called on a null object.
  */
 fun JsonNode?.asTextOrEmpty(): String = if (this != null) this.asText() else ""
+
+/**
+ * Recursively collect the exception messages of this [Exception] and all its causes.
+ */
+fun Exception.collectMessages(): List<String> {
+    val messages = mutableListOf<String>()
+    var cause: Throwable? = this
+    while (cause != null) {
+        messages.add("${cause.javaClass.simpleName}: ${cause.message}")
+        cause = cause.cause
+    }
+    return messages
+}
