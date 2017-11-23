@@ -107,11 +107,12 @@ fun checkCommandVersion(
         command: String,
         version: Semver,
         versionArgument: String = "--version",
+        workingDir: File? = null,
         ignoreActualVersion: Boolean = false,
         transform: (String) -> String = { it },
         criterion: (Semver, Semver) -> Boolean = { actualVersion, otherVersion -> actualVersion == otherVersion }
 ) {
-    val actualVersion = getCommandVersion(command, versionArgument, version.type, transform)
+    val actualVersion = getCommandVersion(command, versionArgument, workingDir, transform, version.type)
     if (!criterion(actualVersion, version)) {
         val message = "Unsupported $command version $actualVersion."
         if (ignoreActualVersion) {
@@ -128,10 +129,11 @@ fun checkCommandVersion(
 fun getCommandVersion(
         command: String,
         versionArgument: String = "--version",
-        semverType: Semver.SemverType = Semver.SemverType.LOOSE,
-        transform: (String) -> String = { it }
+        workingDir: File? = null,
+        transform: (String) -> String = { it },
+        semverType: Semver.SemverType = Semver.SemverType.LOOSE
 ): Semver {
-    val version = ProcessCapture(command, versionArgument).requireSuccess()
+    val version = ProcessCapture(workingDir, command, versionArgument).requireSuccess()
 
     var versionString = transform(version.stdout().trim())
     if (versionString.isEmpty()) {
