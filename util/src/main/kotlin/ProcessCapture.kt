@@ -107,10 +107,11 @@ fun checkCommandVersion(
         command: String,
         requirement: Requirement,
         versionArgument: String = "--version",
+        workingDir: File? = null,
         ignoreActualVersion: Boolean = false,
         transform: (String) -> String = { it }
 ) {
-    val actualVersion = getCommandVersion(command, versionArgument, transform)
+    val actualVersion = getCommandVersion(command, versionArgument, workingDir, transform)
     if (!requirement.isSatisfiedBy(actualVersion)) {
         val message = "Unsupported $command version $actualVersion does not fulfill $requirement."
         if (ignoreActualVersion) {
@@ -127,9 +128,10 @@ fun checkCommandVersion(
 fun getCommandVersion(
         command: String,
         versionArgument: String = "--version",
+        workingDir: File? = null,
         transform: (String) -> String = { it }
 ): String {
-    val version = ProcessCapture(command, versionArgument).requireSuccess()
+    val version = ProcessCapture(workingDir, command, versionArgument).requireSuccess()
 
     var versionString = transform(version.stdout().trim())
     if (versionString.isEmpty()) {
