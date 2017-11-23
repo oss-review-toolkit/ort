@@ -39,7 +39,7 @@ import com.here.ort.util.checkCommandVersion
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
 
-import com.vdurmont.semver4j.Semver
+import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.util.SortedSet
@@ -94,7 +94,7 @@ class PIP : PackageManager() {
     override fun prepareResolution(definitionFiles: List<File>) {
         // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
-        checkCommandVersion("virtualenv", Semver("15.1.0"), ignoreActualVersion = Main.ignoreVersions)
+        checkCommandVersion("virtualenv", Requirement.buildStrict("15.1.0"), ignoreActualVersion = Main.ignoreVersions)
     }
 
     override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
