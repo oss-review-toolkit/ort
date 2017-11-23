@@ -241,13 +241,20 @@ object Main {
             })
         }
 
+        var exitCode = 0
+
         // Resolve dependencies per package manager.
         managedProjectPaths.forEach { manager, paths ->
             // Print the list of dependencies.
             val results = manager.create().resolveDependencies(absoluteProjectPath, paths)
             results.forEach { definitionFile, analyzerResult ->
                 writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
+                if (analyzerResult.errors.isNotEmpty()) {
+                    exitCode = 1
+                }
             }
         }
+
+        System.exit(exitCode)
     }
 }
