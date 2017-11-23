@@ -48,4 +48,14 @@ data class AnalyzerResult(
          * The list of errors that occurred during dependency resolution. Defaults to an empty list.
          */
         val errors: List<String> = emptyList()
-)
+) {
+    /**
+     * Return true if there were any errors during the analysis.
+     */
+    fun hasErrors(): Boolean {
+        fun hasErrors(pkgReference: PackageReference): Boolean =
+                pkgReference.errors.isNotEmpty() || pkgReference.dependencies.any { hasErrors(it) }
+
+        return errors.isNotEmpty() || project.scopes.any { it.dependencies.any { hasErrors(it) } }
+    }
+}
