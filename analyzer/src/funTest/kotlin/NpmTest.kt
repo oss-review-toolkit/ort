@@ -21,14 +21,12 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.Project
 import com.here.ort.util.yamlMapper
 
 import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldThrow
-import io.kotlintest.matchers.startWith
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
@@ -94,28 +92,31 @@ class NpmTest : WordSpec() {
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
-            "abort if no lockfile is present" {
+            "show error if no lockfile is present" {
                 val workingDir = File(projectDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    NPM.create().resolveDependencies(projectDir, listOf(packageFile))
-                }
+                val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
-                @Suppress("UnsafeCallOnNullableType")
-                exception.message!! should startWith("No lockfile found in")
+                result shouldNotBe null
+                result!!.project shouldBe Project.createEmpty()
+                result.packages.size shouldBe 0
+                result.errors.size shouldBe 1
+                result.errors.first() shouldStartWith "IllegalArgumentException: No lockfile found in"
             }
 
-            "abort if multiple lockfiles are present" {
+            "show error if multiple lockfiles are present" {
                 val workingDir = File(projectDir, "multiple-lockfiles")
                 val packageFile = File(workingDir, "package.json")
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    NPM.create().resolveDependencies(projectDir, listOf(packageFile))
-                }
+                val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
-                @Suppress("UnsafeCallOnNullableType")
-                exception.message!! should endWith("contains multiple lockfiles. It is ambiguous which one to use.")
+                result shouldNotBe null
+                result!!.project shouldBe Project.createEmpty()
+                result.packages.size shouldBe 0
+                result.errors.size shouldBe 1
+                result.errors.first() shouldStartWith "IllegalArgumentException:"
+                result.errors.first() shouldEndWith "contains multiple lockfiles. It is ambiguous which one to use."
             }
 
             "resolve dependencies even if the node_modules directory already exists" {

@@ -241,7 +241,7 @@ object Main {
             })
         }
 
-        var exitCode = 0
+        val failedAnalysis = sortedSetOf<String>()
 
         // Resolve dependencies per package manager.
         managedProjectPaths.forEach { manager, paths ->
@@ -249,12 +249,18 @@ object Main {
             val results = manager.create().resolveDependencies(absoluteProjectPath, paths)
             results.forEach { definitionFile, analyzerResult ->
                 writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
-                if (analyzerResult.errors.isNotEmpty()) {
-                    exitCode = 1
+                if (analyzerResult.hasErrors()) {
+                    failedAnalysis.add(definitionFile.absolutePath)
                 }
             }
         }
 
-        System.exit(exitCode)
+        if (failedAnalysis.isNotEmpty()) {
+            log.error {
+                "Analysis for these projects did not complete successfully:\n" +
+                        failedAnalysis.joinToString(separator = "\n")
+            }
+            System.exit(1)
+        }
     }
 }
