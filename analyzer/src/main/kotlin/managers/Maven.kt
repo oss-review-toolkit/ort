@@ -127,7 +127,7 @@ class Maven : PackageManager() {
                 vcsUrl = vcsInfo.url,
                 vcsRevision = vcsInfo.revision,
                 vcsPath = "",
-                homepageUrl = mavenProject.url,
+                homepageUrl = mavenProject.url ?: "",
                 scopes = scopes.values.toSortedSet()
         )
 
