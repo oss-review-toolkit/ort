@@ -246,3 +246,4 @@ packages:
   vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
   vcs_revision: "HEAD"
   vcs_path: ""
+errors: []

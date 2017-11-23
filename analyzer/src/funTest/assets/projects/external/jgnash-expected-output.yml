@@ -59,3 +59,4 @@ packages:
   vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
   vcs_revision: "HEAD"
   vcs_path: ""
+errors: []

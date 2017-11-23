@@ -132,4 +132,24 @@ data class Project(
             vcsPath = vcsPath
     )
 
+    companion object {
+        /**
+         * Creates an instance of [Project] where all properties are empty strings or empty collections.
+         */
+        fun createEmpty() =
+                Project(
+                        packageManager = "",
+                        namespace = "",
+                        name = "",
+                        version = "",
+                        declaredLicenses = sortedSetOf(),
+                        aliases = emptyList(),
+                        vcsProvider = "",
+                        vcsUrl = "",
+                        vcsRevision = "",
+                        vcsPath = "",
+                        homepageUrl = "",
+                        scopes = sortedSetOf()
+                )
+    }
 }
