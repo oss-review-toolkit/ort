@@ -23,6 +23,8 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.managers.*
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Project
+import com.here.ort.util.collectMessages
 import com.here.ort.util.log
 
 import java.io.File
@@ -76,8 +78,19 @@ abstract class PackageManager {
             println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
 
             val elapsed = measureTimeMillis {
-                resolveDependencies(projectDir, workingDir, definitionFile)?.let {
-                    result[definitionFile] = it
+                try {
+                    resolveDependencies(projectDir, workingDir, definitionFile)?.let {
+                        result[definitionFile] = it
+                    }
+                } catch (e: Exception) {
+                    if (Main.stacktrace) {
+                        e.printStackTrace()
+                    }
+
+                    result[definitionFile] = AnalyzerResult(Main.allowDynamicVersions, Project.createEmptyProject(),
+                            sortedSetOf(), e.collectMessages())
+
+                    log.error { "Resolving dependencies in '${workingDir.name}' failed with: ${e.message}" }
                 }
             }
 

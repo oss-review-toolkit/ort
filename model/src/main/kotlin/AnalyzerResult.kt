@@ -42,5 +42,10 @@ data class AnalyzerResult(
         /**
          * The set of identified packages used by the project.
          */
-        val packages: SortedSet<Package>
+        val packages: SortedSet<Package>,
+
+        /**
+         * The list of errors that occurred during dependency resolution. Defaults to an empty list.
+         */
+        val errors: List<String> = emptyList()
 )
