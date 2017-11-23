@@ -68,11 +68,9 @@ abstract class PackageManager {
      * for each provided path.
      */
     fun resolveDependencies(projectDir: File, definitionFiles: List<File>): ResolutionResult {
-        prepareResolution(definitionFiles)
-
         val result = mutableMapOf<File, AnalyzerResult>()
 
-        definitionFiles.forEach { definitionFile ->
+        prepareResolution(definitionFiles).forEach { definitionFile ->
             val workingDir = definitionFile.parentFile
 
             println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
@@ -103,11 +101,10 @@ abstract class PackageManager {
     }
 
     /**
-     * Optional preparation step for dependency resolution, like checking for prerequisites.
+     * Optional preparation step for dependency resolution, like checking for prerequisites or mapping
+     * [definitionFiles].
      */
-    protected open fun prepareResolution(definitionFiles: List<File>) {
-        log.debug { "Resolution of ${javaClass.simpleName} dependencies does not require preparation." }
-    }
+    protected open fun prepareResolution(definitionFiles: List<File>): List<File> = definitionFiles
 
     /**
      * Resolve dependencies for a single [definitionFile], returning the [AnalyzerResult].
