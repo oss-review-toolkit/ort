@@ -46,7 +46,7 @@ abstract class PackageManager {
             listOf(
                     Gradle,
                     Maven,
-                    // TODO: SBT,
+                    SBT,
                     NPM,
                     // TODO: CocoaPods,
                     // TODO: Godep,
@@ -67,7 +67,7 @@ abstract class PackageManager {
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
-    fun resolveDependencies(projectDir: File, definitionFiles: List<File>): ResolutionResult {
+    open fun resolveDependencies(projectDir: File, definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, AnalyzerResult>()
 
         prepareResolution(definitionFiles).forEach { definitionFile ->
