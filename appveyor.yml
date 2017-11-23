@@ -14,6 +14,7 @@ install:
   - git submodule update --init --recursive
   - npm install -g npm@5.5.1 yarn@1.3.2
   - pip install virtualenv==15.1.0
+  - choco install sbt --version 1.0.2
 
 build_script:
   - gradlew assemble
