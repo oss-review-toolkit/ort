@@ -159,13 +159,13 @@ object Main {
 
         if (help) {
             jc.usage()
-            exitProcess(1)
+            exitProcess(0)
         }
 
         val absoluteOutputPath = outputDir.absoluteFile
         if (absoluteOutputPath.exists()) {
             log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
-            exitProcess(2)
+            exitProcess(1)
         }
 
         mapper = when (outputFormat) {
@@ -260,7 +260,6 @@ object Main {
                 "Analysis for these projects did not complete successfully:\n" +
                         failedAnalysis.joinToString(separator = "\n")
             }
-            System.exit(1)
         }
     }
 }
