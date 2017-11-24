@@ -106,12 +106,12 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
 fun checkCommandVersion(
         command: String,
         requirement: Requirement,
-        versionArgument: String = "--version",
+        versionArguments: String = "--version",
         workingDir: File? = null,
         ignoreActualVersion: Boolean = false,
         transform: (String) -> String = { it }
 ) {
-    val actualVersion = getCommandVersion(command, versionArgument, workingDir, transform)
+    val actualVersion = getCommandVersion(command, versionArguments, workingDir, transform)
     if (!requirement.isSatisfiedBy(actualVersion)) {
         val message = "Unsupported $command version $actualVersion does not fulfill $requirement."
         if (ignoreActualVersion) {
@@ -127,11 +127,12 @@ fun checkCommandVersion(
  */
 fun getCommandVersion(
         command: String,
-        versionArgument: String = "--version",
+        versionArguments: String = "--version",
         workingDir: File? = null,
         transform: (String) -> String = { it }
 ): String {
-    val version = ProcessCapture(workingDir, command, versionArgument).requireSuccess()
+    val commandLine = arrayOf(command).plus(versionArguments.split(' '))
+    val version = ProcessCapture(workingDir, *commandLine).requireSuccess()
 
     var versionString = transform(version.stdout().trim())
     if (versionString.isEmpty()) {
