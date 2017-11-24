@@ -72,7 +72,7 @@ class SBT : PackageManager() {
              checkCommandVersion(
                      command(workingDir),
                      Requirement.buildIvy("[0.13.0,)"),
-                     versionArgument = "sbtVersion",
+                     versionArguments = "\"-Dsbt.log.noformat=true\" sbtVersion",
                      workingDir = workingDir,
                      ignoreActualVersion = Main.ignoreVersions,
                      transform = this::extractLowestSbtVersion
