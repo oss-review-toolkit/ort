@@ -19,6 +19,9 @@
 
 package com.here.ort.scanner
 
+import com.here.ort.model.CacheConfiguration
+import com.here.ort.model.Configuration
+import com.here.ort.model.ScannerConfiguration
 import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
@@ -42,69 +45,26 @@ class ScanResultsCacheTest : WordSpec() {
 
     init {
         "ScanResultsCache.configure" should {
-            "fail if the cache type is missing" {
-                val exception = shouldThrow<IllegalArgumentException> {
-                    val config = yamlMapper.readTree("""
-                        scanner:
-                          cache:
-                    """)
-                    ScanResultsCache.configure(config)
-                }
-                exception.message shouldBe "Cache type is missing."
-            }
+            "fail if no cache is configured" {
+                val config = CacheConfiguration(null)
 
-            "fail if the cache type is unknown" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    val config = yamlMapper.readTree("""
-                        scanner:
-                          cache:
-                            type: abcd
-                    """)
                     ScanResultsCache.configure(config)
                 }
-                exception.message shouldBe "Cache type 'abcd' unknown."
-            }
-
-            "fail if the Artifactory URL is missing" {
-                val exception = shouldThrow<IllegalArgumentException> {
-                    val config = yamlMapper.readTree("""
-                        scanner:
-                          cache:
-                            type: Artifactory
-                            apiToken: someApiToken
-                    """)
-                    ScanResultsCache.configure(config)
-                }
-                exception.message shouldBe "URL for Artifactory cache is missing."
-            }
-
-            "fail if the Artifactory apiToken is missing" {
-                val exception = shouldThrow<IllegalArgumentException> {
-                    val config = yamlMapper.readTree("""
-                        scanner:
-                          cache:
-                            type: Artifactory
-                            url: someUrl
-                    """)
-                    ScanResultsCache.configure(config)
-                }
-                exception.message shouldBe "API token for Artifactory cache is missing."
+                exception.message shouldBe "No cache configuration found."
             }
 
             "configure the Artifactory cache correctly" {
-                val config = yamlMapper.readTree("""
-                        scanner:
-                          cache:
-                            type: Artifactory
-                            apiToken: someApiToken
-                            url: someUrl
-                    """)
+                val apiToken = "myApiToken"
+                val url = "https://my.artifactory.url"
+                val config = CacheConfiguration(com.here.ort.model.ArtifactoryCache(url, apiToken))
+
                 ScanResultsCache.configure(config)
 
                 ScanResultsCache.cache shouldNotBe null
                 ScanResultsCache.cache::class shouldBe ArtifactoryCache::class
-                (ScanResultsCache.cache as ArtifactoryCache).getApiToken() shouldBe "someApiToken"
-                (ScanResultsCache.cache as ArtifactoryCache).getUrl() shouldBe "someUrl"
+                (ScanResultsCache.cache as ArtifactoryCache).getApiToken() shouldBe apiToken
+                (ScanResultsCache.cache as ArtifactoryCache).getUrl() shouldBe url
             }
         }
     }

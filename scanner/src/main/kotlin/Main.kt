@@ -27,6 +27,7 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Configuration
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
@@ -201,8 +202,10 @@ object Main {
             }
         }
 
-        if (configFile != null) {
-            ScanResultsCache.configure(yamlMapper.readTree(configFile))
+        configFile?.let {
+            Configuration.parse(it).scanner?.cache?.let {
+                ScanResultsCache.configure(it)
+            }
         }
 
         println("Using scanner '$scanner'.")
