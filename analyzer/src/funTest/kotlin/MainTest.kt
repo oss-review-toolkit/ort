@@ -31,7 +31,7 @@ import java.io.PrintStream
  * A test for the main entry point of the application.
  */
 class MainTest : StringSpec() {
-    private val inputDir = File("src/funTest/assets/projects/synthetic/project-npm/package-lock")
+    private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic")
     private val outputDir = createTempDir()
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -40,7 +40,34 @@ class MainTest : StringSpec() {
     }
 
     init {
+        "Activating only Gradle works" {
+            val inputDir = File(syntheticProjectDir, "gradle")
+
+            // Redirect standard output to a stream.
+            val standardOut = System.out
+            val streamOut = ByteArrayOutputStream()
+            System.setOut(PrintStream(streamOut))
+
+            Main.main(arrayOf(
+                    "-m", "Gradle",
+                    "-i", inputDir.path,
+                    "-o", File(outputDir, "gradle").path
+            ))
+
+            // Restore standard output.
+            System.setOut(standardOut)
+            val lines = streamOut.toString().lines()
+
+            lines.component1() shouldBe "The following package managers are activated:"
+            lines.component2() shouldBe "\tGradle"
+            lines.component3() shouldBe "Scanning project path:"
+            lines.component4() shouldBe "\t" + inputDir.absolutePath
+            lines.component5() shouldBe "Gradle projects found in:"
+        }
+
         "Activating only NPM works" {
+            val inputDir = File(syntheticProjectDir, "project-npm/package-lock")
+
             // Redirect standard output to a stream.
             val standardOut = System.out
             val streamOut = ByteArrayOutputStream()

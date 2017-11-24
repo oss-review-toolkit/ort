@@ -44,7 +44,7 @@ abstract class PackageManagerFactory<out T : PackageManager>(
      * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.
      */
     override fun toString() =
-            javaClass.name.toUpperCase().substringBefore('$').substringAfterLast('.')
+            javaClass.name.substringBefore('$').substringAfterLast('.')
 
     /**
      * The glob matchers for all definition files.
