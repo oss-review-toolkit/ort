@@ -182,7 +182,7 @@ class NPM : PackageManager() {
                     .build()
 
             try {
-                val json = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
+                val jsonResponse = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
                     if (response.code() != HttpURLConnection.HTTP_OK) {
                         throw IOException("Could not retrieve package info about $encodedName: " +
                                 "${response.code()} - ${response.message()}")
@@ -199,7 +199,7 @@ class NPM : PackageManager() {
                     }
                 }
 
-                val packageInfo = jsonMapper.readTree(json)
+                val packageInfo = jsonMapper.readTree(jsonResponse)
                 val infoJson = packageInfo["versions"][version]
 
                 description = infoJson["description"].asTextOrEmpty()
