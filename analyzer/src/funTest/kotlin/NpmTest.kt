@@ -29,11 +29,11 @@ import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.matchers.startWith
-import io.kotlintest.specs.WordSpec
+import io.kotlintest.specs.FreeSpec
 
 import java.io.File
 
-class NpmTest : WordSpec() {
+class NpmTest : FreeSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsRevision = vcsDir.getRevision()
@@ -69,7 +69,7 @@ class NpmTest : WordSpec() {
     }
 
     init {
-        "NPM" should {
+        "NPM should" - {
             "resolve shrinkwrap dependencies correctly" {
                 val workingDir = File(projectDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
@@ -131,7 +131,7 @@ class NpmTest : WordSpec() {
             }
         }
 
-        "yarn" should {
+        "yarn should" - {
             "resolve dependencies correctly" {
                 val workingDir = File(projectDir, "yarn")
                 val packageFile = File(workingDir, "package.json")
