@@ -69,10 +69,17 @@ class SBT : PackageManager() {
              // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
              // https://stackoverflow.com/a/20337575/1127485.
              val workingDir = definitionFiles.first().parentFile
+
+             // See https://github.com/sbt/sbt/issues/2695.
+             var sbtLogNoformat = "\"-Dsbt.log.noformat=true\""
+             if (!OS.isWindows) {
+                 sbtLogNoformat = sbtLogNoformat.removeSurrounding("\"")
+             }
+
              checkCommandVersion(
                      command(workingDir),
                      Requirement.buildIvy("[0.13.0,)"),
-                     versionArguments = "\"-Dsbt.log.noformat=true\" sbtVersion",
+                     versionArguments = "$sbtLogNoformat sbtVersion",
                      workingDir = workingDir,
                      ignoreActualVersion = Main.ignoreVersions,
                      transform = this::extractLowestSbtVersion
