@@ -215,7 +215,7 @@ class PIP : PackageManager() {
 
                     // Use the top-level license field as well as the license classifiers as the declared licenses.
                     setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-                        it?.asText()
+                        it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
                     }
 
                     // Example license classifier:
@@ -223,7 +223,7 @@ class PIP : PackageManager() {
                     pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
                         val classifier = it.asText().split(" :: ")
                         if (classifier.first() == "License") {
-                            classifier.last()
+                            classifier.last().removeSuffix(" License")
                         } else {
                             null
                         }
