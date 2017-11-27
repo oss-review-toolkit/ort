@@ -53,7 +53,6 @@ packages:
   version: "0.6.0"
   declared_licenses:
   - "BSD"
-  - "BSD License"
   description: "An ISO 8601 date/time/duration parser and formatter"
   homepage_url: "https://github.com/gweis/isodate/"
   download_url: "https://pypi.python.org/packages/9b/9f/b36f7774ff5ea8e428fdcfc4bb332c39ee5b9362ddd3d40d9516a55221b2/isodate-0.6.0-py2.py3-none-any.whl"
@@ -83,7 +82,7 @@ packages:
   name: "pyparsing"
   version: "2.2.0"
   declared_licenses:
-  - "MIT License"
+  - "MIT"
   description: "Python parsing module"
   homepage_url: "http://pyparsing.wikispaces.com/"
   download_url: "https://pypi.python.org/packages/6a/8a/718fd7d3458f9fab8e67186b00abdd345b639976bc7fb3ae722e1b026a50/pyparsing-2.2.0-py2.py3-none-any.whl"
@@ -98,7 +97,7 @@ packages:
   name: "rdflib"
   version: "4.2.2"
   declared_licenses:
-  - "BSD License"
+  - "BSD"
   - "https://raw.github.com/RDFLib/rdflib/master/LICENSE"
   description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
     \ language for representing information."
@@ -116,7 +115,6 @@ packages:
   version: "1.11.0"
   declared_licenses:
   - "MIT"
-  - "MIT License"
   description: "Python 2 and 3 compatibility utilities"
   homepage_url: "http://pypi.python.org/pypi/six/"
   download_url: "https://pypi.python.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl"
