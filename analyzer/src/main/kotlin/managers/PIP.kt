@@ -112,7 +112,8 @@ class PIP : PackageManager() {
 
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
-        // List all packages installed locally in the virtualenv.
+        // List all packages installed locally in the virtualenv. As only the plain text pipdeptree output shows the
+        // hierarchy of dependencies, but the JSON output is easier to parse, we unfortunately need both.
         val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l")
         val pipdeptreeJson = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
 
@@ -214,7 +215,7 @@ class PIP : PackageManager() {
 
                     // Use the top-level license field as well as the license classifiers as the declared licenses.
                     setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-                        it?.asText()
+                        it?.asText()?.takeUnless { it.isBlank() || it == "UNKNOWN" }
                     }
 
                     // Example license classifier:
@@ -222,7 +223,7 @@ class PIP : PackageManager() {
                     pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
                         val classifier = it.asText().split(" :: ")
                         if (classifier.first() == "License") {
-                            classifier.last()
+                            classifier.last().removeSuffix(" License")
                         } else {
                             null
                         }
