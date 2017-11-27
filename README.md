@@ -31,6 +31,16 @@ from their respective locations at
 * `./downloader/build/install/downloader/bin/downloader`
 * `./scanner/build/install/scanner/bin/scanner`
 
+## Supported package managers
+
+Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
+
+* [Gradle](https://gradle.org/)
+* [Maven](http://maven.apache.org/)
+* [SBT](http://www.scala-sbt.org/)
+* [NPM](https://www.npmjs.com/)
+* [PIP](https://pip.pypa.io/)
+
 ## Usage
 
 ### [analyzer](./analyzer/src/main/kotlin)
@@ -72,7 +82,7 @@ Usage: analyzer [options]
       Default: false
     --package-managers, -m
       A list of package managers to activate.
-      Default: [Gradle, NPM, PIP]
+      Default: [Gradle, Maven, SBT, NPM, PIP]
     --output-format, -f
       The data format used for dependency information.
       Default: YAML
