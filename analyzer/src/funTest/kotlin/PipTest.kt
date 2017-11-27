@@ -23,19 +23,34 @@ import com.here.ort.analyzer.managers.PIP
 import com.here.ort.util.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class PipTest : StringSpec({
-    "spdx-tools-python dependencies are resolved correctly" {
-        val workingDir = File("src/funTest/assets/projects/external")
-        val projectDir = File(workingDir, "spdx-tools-python")
-        val packageFile = File(projectDir, "setup.py")
+class PipTest : WordSpec({
+    val workingDir = File("src/funTest/assets/projects/external")
 
-        val result = PIP.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
-        val expectedResult = File(workingDir, "spdx-tools-python-expected-output.yml").readText()
+    "setup.py dependencies" should {
+        "be resolved correctly for spdx-tools-python" {
+            val projectDir = File(workingDir, "spdx-tools-python")
+            val definitionFile = File(projectDir, "setup.py")
 
-        yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            val result = PIP.create().resolveDependencies(projectDir, listOf(definitionFile))[definitionFile]
+            val expectedResult = File(workingDir, "spdx-tools-python-expected-output.yml").readText()
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+    }
+
+    "requirements.txt dependencies" should {
+        "be resolved correctly for example-python-flask" {
+            val projectDir = File(workingDir, "example-python-flask")
+            val definitionFile = File(projectDir, "requirements.txt")
+
+            val result = PIP.create().resolveDependencies(projectDir, listOf(definitionFile))[definitionFile]
+            val expectedResult = File(workingDir, "example-python-flask-expected-output.yml").readText()
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
     }
 })
