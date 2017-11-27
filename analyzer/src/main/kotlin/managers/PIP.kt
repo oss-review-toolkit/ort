@@ -22,6 +22,7 @@ package com.here.ort.analyzer.managers
 import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
@@ -58,6 +59,9 @@ class PIP : PackageManager() {
 
         private const val PIPDEPTREE_VERSION = "0.10.1"
         private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
+
+        private val PIPDEPTREE_TOP_LEVEL_REGEX = Regex("(\\w+).*")
+        private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
     }
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
@@ -100,10 +104,18 @@ class PIP : PackageManager() {
     }
 
     override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
+        // For an overview, dependency resolution involves the following steps:
+        // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
+        // 2. Get meta-data about the local project via pydep (only for setup.py-based projects).
+        // 3. Get the hierarchy of dependencies via pipdeptree.
+        // 4. Get additional remote package meta-data via PyPIJSON.
+
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
-        // List all packages installed locally in the virtualenv in JSON format.
-        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
+        // List all packages installed locally in the virtualenv. As only the plain text pipdeptree output shows the
+        // hierarchy of dependencies, but the JSON output is easier to parse, we unfortunately need both.
+        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l")
+        val pipdeptreeJson = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
 
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
@@ -119,28 +131,63 @@ class PIP : PackageManager() {
         }
         pip.requireSuccess()
 
-        val pydep = if (OS.isWindows) {
-            // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-            runInVirtualEnv(virtualEnvDir, workingDir, "python",
-                    virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", ".")
-        } else {
-            runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
-        }
-        pydep.requireSuccess()
+        val (projectName, projectVersion, projectHomepage) = if (definitionFile.name == "setup.py") {
+            val pydep = if (OS.isWindows) {
+                // On Windows, the script itself is not executable, so we need to wrap the call by "python".
+                runInVirtualEnv(virtualEnvDir, workingDir, "python",
+                        virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", ".")
+            } else {
+                runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
+            }
+            pydep.requireSuccess()
 
-        // What pydep actually returns as "repo_url" is either setup.py's
-        // - "url", denoting the "home page for the package", or
-        // - "download_url", denoting the "location where the package may be downloaded".
-        // So the best we can do it so map this the project's homepage URL.
-        val (projectName, projectVersion, projectHomepage) = jsonMapper.readTree(pydep.stdout()).let {
-            listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
+            // What pydep actually returns as "repo_url" is either setup.py's
+            // - "url", denoting the "home page for the package", or
+            // - "download_url", denoting the "location where the package may be downloaded".
+            // So the best we can do is to map this the project's homepage URL.
+            jsonMapper.readTree(pydep.stdout()).let {
+                listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
+            }
+        } else {
+            // In case of a requirements.txt file without meta-data, use the parent directory name as the project name.
+            listOf(definitionFile.parentFile.name, "", "")
         }
 
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
 
-        if (pipdeptree.exitValue() == 0) {
-            val allDependencies = jsonMapper.readTree(pipdeptree.stdout())
+        if (pipdeptreeJson.exitValue() == 0) {
+            val allDependencies = jsonMapper.readTree(pipdeptreeJson.stdout()) as ArrayNode
+
+            if (definitionFile.name == "requirements.txt" && pipdeptree.exitValue() == 0) {
+                val topLevelDependencies = pipdeptree.stdout().lines().mapNotNull {
+                    PIPDEPTREE_TOP_LEVEL_REGEX.matchEntire(it)?.groupValues?.get(1).takeUnless {
+                        it in PIPDEPTREE_DEPENDENCIES
+                    }
+                }
+
+                // Put in a fake root dependency for the project itself.
+                val projectData = jsonMapper.createObjectNode()
+                projectData.putObject("package").put("package_name", projectName)
+
+                val projectDependencies = projectData.putArray("dependencies")
+                topLevelDependencies.forEach { name ->
+                    val dependency = jsonMapper.createObjectNode()
+                    dependency.put("package_name", name)
+
+                    val version = allDependencies.asSequence().map {
+                        it["package"]
+                    }.find {
+                        it["package_name"].asText() == name
+                    }?.get("installed_version")?.asText()
+                    dependency.put("installed_version", version)
+
+                    projectDependencies.add(dependency)
+                }
+
+                allDependencies.add(projectData)
+            }
+
             val packageTemplates = sortedSetOf<Package>()
             parseDependencies(projectName, allDependencies, packageTemplates, installDependencies)
 
@@ -282,7 +329,7 @@ class PIP : PackageManager() {
 
     private fun parseDependencies(rootPackageName: String, allDependencies: Iterable<JsonNode>,
                                   packages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>) {
-        // pipdeptree returns JSON like:
+        // With JSON output enabled pipdeptree does not really return a tree but a list of all dependencies:
         // [
         //     {
         //         "dependencies": [],
