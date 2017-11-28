@@ -93,8 +93,8 @@ fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.SemverType.STRICT): String {
     var url = vcsUrl.trimEnd('/')
 
-    if (url.startsWith("git@github.com:")) {
-        url = url.replace("git@github.com:", "https://github.com/")
+    url = url.replace(Regex("(.+://)?git@github\\.com[:/](.+)")) {
+        "ssh://git@github.com/${it.groupValues[2]}"
     }
 
     // A hierarchical URI looks like
@@ -129,7 +129,7 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
         return File(url).toSafeURI().toString()
     }
 
-    if (uri.host != null && uri.host.endsWith("github.com")) {
+    if (uri.scheme != "ssh" && uri.host != null && uri.host.endsWith("github.com")) {
         // Ensure the path ends in ".git".
         val path = if (uri.path.endsWith(".git")) uri.path else uri.path + ".git"
 
@@ -139,8 +139,7 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
         return "https://" + host + path
     }
 
-    // Return the URL unmodified.
-    return uri.toString()
+    return url
 }
 
 /**

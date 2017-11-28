@@ -49,16 +49,27 @@ class UtilsTest : WordSpec({
             }
         }
 
-        "convert non-https to anonymous https for GitHub URLs" {
+        "properly handle anonymous Git / HTTPS URL schemes" {
             val packages = mapOf(
                     "git://github.com/cheeriojs/cheerio.git"
                             to "https://github.com/cheeriojs/cheerio.git",
                     "git+https://github.com/fb55/boolbase.git"
                             to "https://github.com/fb55/boolbase.git",
-                    "git+ssh://git@github.com/logicalparadox/idris.git"
-                            to "https://github.com/logicalparadox/idris.git",
                     "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
                             to "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
+            }
+        }
+
+        "properly handle authenticated SSH URL schemes" {
+            val packages = mapOf(
+                    "git+ssh://git@github.com/logicalparadox/idris.git"
+                            to "ssh://git@github.com/logicalparadox/idris.git",
+                    "git@github.com:heremaps/oss-review-toolkit.git"
+                            to "ssh://git@github.com/heremaps/oss-review-toolkit.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
