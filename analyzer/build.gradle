@@ -32,7 +32,6 @@ dependencies {
     funTestCompile sourceSets.test.output
     funTestCompile configurations.testCompile
     funTestRuntime configurations.testRuntime
-
     funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
 

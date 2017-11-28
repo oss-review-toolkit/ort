@@ -1,0 +1,476 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "parent"
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs_provider: "Git"
+  vcs_url: "https://github.com/robolectric/robolectric.git"
+  vcs_revision: ""
+  vcs_path: ""
+  homepage_url: ""
+  scopes:
+  - name: "pegdownDoclet"
+    delivered: true
+    dependencies:
+    - namespace: "ch.raffael.pegdown-doclet"
+      name: "pegdown-doclet"
+      version: "1.3"
+      dependencies:
+      - namespace: "com.google.guava"
+        name: "guava"
+        version: "18.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.sourceforge.plantuml"
+        name: "plantuml"
+        version: "8032"
+        dependencies: []
+        errors: []
+      - namespace: "org.pegdown"
+        name: "pegdown"
+        version: "1.6.0"
+        dependencies:
+        - namespace: "org.parboiled"
+          name: "parboiled-java"
+          version: "1.1.7"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-analysis"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.3"
+              dependencies: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm-util"
+            version: "5.0.3"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm-tree"
+              version: "5.0.3"
+              dependencies:
+              - namespace: "org.ow2.asm"
+                name: "asm"
+                version: "5.0.3"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - namespace: "org.ow2.asm"
+            name: "asm"
+            version: "5.0.3"
+            dependencies: []
+            errors: []
+          - namespace: "org.parboiled"
+            name: "parboiled-core"
+            version: "1.1.7"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "sdk16"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "4.1.2_r1-robolectric-r1"
+      dependencies: []
+      errors: []
+  - name: "sdk17"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "4.2.2_r1.2-robolectric-r1"
+      dependencies: []
+      errors: []
+  - name: "sdk18"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "4.3_r2-robolectric-r1"
+      dependencies: []
+      errors: []
+  - name: "sdk19"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "4.4_r1-robolectric-r2"
+      dependencies: []
+      errors: []
+  - name: "sdk21"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "5.0.2_r3-robolectric-r0"
+      dependencies: []
+      errors: []
+  - name: "sdk22"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "5.1.1_r9-robolectric-r2"
+      dependencies: []
+      errors: []
+  - name: "sdk23"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "6.0.1_r3-robolectric-r1"
+      dependencies: []
+      errors: []
+  - name: "sdk24"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "7.0.0_r1-robolectric-r1"
+      dependencies: []
+      errors: []
+  - name: "sdk25"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "7.1.0_r7-robolectric-r1"
+      dependencies: []
+      errors: []
+  - name: "sdk26"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "8.0.0_r4-robolectric-r1"
+      dependencies: []
+      errors: []
+  - name: "sdk27"
+    delivered: true
+    dependencies:
+    - namespace: "org.robolectric"
+      name: "android-all"
+      version: "8.1.0-robolectric-r4402310"
+      dependencies: []
+      errors: []
+packages:
+- package_manager: "Gradle"
+  namespace: "ch.raffael.pegdown-doclet"
+  name: "pegdown-doclet"
+  version: "1.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "com.google.guava"
+  name: "guava"
+  version: "18.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "net.sourceforge.plantuml"
+  name: "plantuml"
+  version: "8032"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-analysis"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-tree"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm-util"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.ow2.asm"
+  name: "asm"
+  version: "5.0.3"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-core"
+  version: "1.1.7"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.parboiled"
+  name: "parboiled-java"
+  version: "1.1.7"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.pegdown"
+  name: "pegdown"
+  version: "1.6.0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "4.1.2_r1-robolectric-r1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "4.2.2_r1.2-robolectric-r1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "4.3_r2-robolectric-r1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "4.4_r1-robolectric-r2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "5.0.2_r3-robolectric-r0"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "5.1.1_r9-robolectric-r2"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "6.0.1_r3-robolectric-r1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "7.0.0_r1-robolectric-r1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "7.1.0_r7-robolectric-r1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "8.0.0_r4-robolectric-r1"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
+- package_manager: "Gradle"
+  namespace: "org.robolectric"
+  name: "android-all"
+  version: "8.1.0-robolectric-r4402310"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  download_url: ""
+  hash: ""
+  hash_algorithm: ""
+  vcs_provider: ""
+  vcs_url: ""
+  vcs_revision: ""
+  vcs_path: ""
