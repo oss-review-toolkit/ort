@@ -35,6 +35,10 @@ abstract class GitBase : VersionControlSystem() {
     override fun getWorkingDirectory(vcsDirectory: File) =
             object : WorkingDirectory(vcsDirectory) {
                 override fun isValid(): Boolean {
+                    if (!workingDir.isDirectory) {
+                        return false
+                    }
+
                     val isInsideWorkTree = ProcessCapture(workingDir, "git", "rev-parse", "--is-inside-work-tree")
                     return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
                 }
