@@ -82,63 +82,63 @@ object Main {
 
     @Parameter(description = "The dependencies analysis file to use. Source code will be downloaded automatically if " +
             "needed. This parameter and --input-path are mutually exclusive.",
-            names = arrayOf("--dependencies-file", "-d"),
+            names = ["--dependencies-file", "-d"],
             order = 0)
     private var dependenciesFile: File? = null
 
     @Parameter(description = "The input directory or file to scan. This parameter and --dependencies-file are " +
             "mutually exclusive.",
-            names = arrayOf("--input-path", "-i"),
+            names = ["--input-path", "-i"],
             order = 0)
     private var inputPath: File? = null
 
     @Parameter(description = "The output directory to store the scan results in.",
-            names = arrayOf("--output-dir", "-o"),
+            names = ["--output-dir", "-o"],
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
     @Parameter(description = "The output directory for downloaded source code. Defaults to <output-dir>/downloads.",
-            names = arrayOf("--download-dir"),
+            names = ["--download-dir"],
             order = 0)
     private var downloadDir: File? = null
 
     @Parameter(description = "The scanner to use.",
-            names = arrayOf("--scanner", "-s"),
+            names = ["--scanner", "-s"],
             converter = ScannerConverter::class,
             order = 0)
     private var scanner: Scanner = ScanCode
 
     @Parameter(description = "The path to the configuration file.",
-            names = arrayOf("--config", "-c"),
+            names = ["--config", "-c"],
             order = 0)
     @Suppress("LateinitUsage")
     private var configFile: File? = null
 
     @Parameter(description = "The list of file formats for the summary files.",
-            names = arrayOf("--summary-format", "-f"),
+            names = ["--summary-format", "-f"],
             converter = OutputFormatConverter::class,
             order = 0)
     private var summaryFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Enable info logging.",
-            names = arrayOf("--info"),
+            names = ["--info"],
             order = 0)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
-            names = arrayOf("--debug"),
+            names = ["--debug"],
             order = 0)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
-            names = arrayOf("--stacktrace"),
+            names = ["--stacktrace"],
             order = 0)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
-            names = arrayOf("--help", "-h"),
+            names = ["--help", "-h"],
             help = true,
             order = 100)
     private var help = false

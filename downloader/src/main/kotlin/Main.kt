@@ -70,42 +70,42 @@ object Main {
     }
 
     @Parameter(description = "The dependencies analysis file to use.",
-            names = arrayOf("--dependencies-file", "-d"),
+            names = ["--dependencies-file", "-d"],
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
     private lateinit var dependenciesFile: File
 
     @Parameter(description = "The output directory to download the source code to.",
-            names = arrayOf("--output-dir", "-o"),
+            names = ["--output-dir", "-o"],
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
     @Parameter(description = "The data entities from the dependencies analysis file to download.",
-            names = arrayOf("--entities", "-e"),
+            names = ["--entities", "-e"],
             converter = DataEntityConverter::class,
             order = 0)
     private var entities = DataEntity.ALL
 
     @Parameter(description = "Enable info logging.",
-            names = arrayOf("--info"),
+            names = ["--info"],
             order = 0)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
-            names = arrayOf("--debug"),
+            names = ["--debug"],
             order = 0)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
-            names = arrayOf("--stacktrace"),
+            names = ["--stacktrace"],
             order = 0)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
-            names = arrayOf("--help", "-h"),
+            names = ["--help", "-h"],
             help = true,
             order = 100)
     private var help = false

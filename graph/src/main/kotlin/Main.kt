@@ -45,29 +45,29 @@ import kotlin.system.exitProcess
 object Main {
 
     @Parameter(description = "The dependencies analysis file to use.",
-            names = arrayOf("--dependencies-file", "-d"),
+            names = ["--dependencies-file", "-d"],
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
     private lateinit var dependenciesFile: File
 
     @Parameter(description = "Enable info logging.",
-            names = arrayOf("--info"),
+            names = ["--info"],
             order = 0)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
-            names = arrayOf("--debug"),
+            names = ["--debug"],
             order = 0)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
-            names = arrayOf("--stacktrace"),
+            names = ["--stacktrace"],
             order = 0)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
-            names = arrayOf("--help", "-h"),
+            names = ["--help", "-h"],
             help = true,
             order = 100)
     private var help = false

@@ -62,27 +62,27 @@ object Main {
     }
 
     @Parameter(description = "A list of package managers to activate.",
-            names = arrayOf("--package-managers", "-m"),
+            names = ["--package-managers", "-m"],
             converter = PackageManagerConverter::class,
             order = 0)
     private var packageManagers = PackageManager.ALL
 
     @Parameter(description = "The project directory to scan.",
-            names = arrayOf("--input-dir", "-i"),
+            names = ["--input-dir", "-i"],
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
     private lateinit var inputDir: File
 
     @Parameter(description = "The directory to write dependency information to.",
-            names = arrayOf("--output-dir", "-o"),
+            names = ["--output-dir", "-o"],
             required = true,
             order = 0)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
     @Parameter(description = "The data format used for dependency information.",
-            names = arrayOf("--output-format", "-f"),
+            names = ["--output-format", "-f"],
             order = 0)
     private var outputFormat = OutputFormat.YAML
 
@@ -90,34 +90,34 @@ object Main {
     private lateinit var mapper: ObjectMapper
 
     @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
-            names = arrayOf("--ignore-versions"),
+            names = ["--ignore-versions"],
             order = 0)
     var ignoreVersions = false
 
     @Parameter(description = "Allow dynamic versions of dependencies. This can result in unstable results when " +
             "dependencies use version ranges. This option only affects package managers that support lock files, " +
             "like NPM.",
-            names = arrayOf("--allow-dynamic-versions"),
+            names = ["--allow-dynamic-versions"],
             order = 0)
     var allowDynamicVersions = false
 
     @Parameter(description = "Enable info logging.",
-            names = arrayOf("--info"),
+            names = ["--info"],
             order = 0)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
-            names = arrayOf("--debug"),
+            names = ["--debug"],
             order = 0)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
-            names = arrayOf("--stacktrace"),
+            names = ["--stacktrace"],
             order = 0)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
-            names = arrayOf("--help", "-h"),
+            names = ["--help", "-h"],
             help = true,
             order = 100)
     private var help = false
