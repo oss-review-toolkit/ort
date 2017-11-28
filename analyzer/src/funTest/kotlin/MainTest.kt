@@ -56,13 +56,13 @@ class MainTest : StringSpec() {
 
             // Restore standard output.
             System.setOut(standardOut)
-            val lines = streamOut.toString().lines()
+            val lines = streamOut.toString().lineSequence().iterator()
 
-            lines.component1() shouldBe "The following package managers are activated:"
-            lines.component2() shouldBe "\tGradle"
-            lines.component3() shouldBe "Scanning project path:"
-            lines.component4() shouldBe "\t" + inputDir.absolutePath
-            lines.component5() shouldBe "Gradle projects found in:"
+            lines.next() shouldBe "The following package managers are activated:"
+            lines.next() shouldBe "\tGradle"
+            lines.next() shouldBe "Scanning project path:"
+            lines.next() shouldBe "\t" + inputDir.absolutePath
+            lines.next() shouldBe "Gradle projects found in:"
         }
 
         "Activating only NPM works" {
@@ -81,13 +81,13 @@ class MainTest : StringSpec() {
 
             // Restore standard output.
             System.setOut(standardOut)
-            val lines = streamOut.toString().lines()
+            val lines = streamOut.toString().lineSequence().iterator()
 
-            lines.component1() shouldBe "The following package managers are activated:"
-            lines.component2() shouldBe "\tNPM"
-            lines.component3() shouldBe "Scanning project path:"
-            lines.component4() shouldBe "\t" + inputDir.absolutePath
-            lines.component5() shouldBe "NPM projects found in:"
+            lines.next() shouldBe "The following package managers are activated:"
+            lines.next() shouldBe "\tNPM"
+            lines.next() shouldBe "Scanning project path:"
+            lines.next() shouldBe "\t" + inputDir.absolutePath
+            lines.next() shouldBe "NPM projects found in:"
         }
     }
 }
