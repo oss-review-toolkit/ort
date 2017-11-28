@@ -159,7 +159,7 @@ class NPM : PackageManager() {
             var homepageUrl: String
             var downloadUrl: String
             var hash: String
-            var hashAlgorithm = ""
+            val hashAlgorithm = ""
             val vcsPath = ""
             var vcsProvider = ""
             var vcsUrl = ""
