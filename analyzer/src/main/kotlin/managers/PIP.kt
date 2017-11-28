@@ -82,7 +82,7 @@ class PIP : PackageManager() {
         if (OS.isWindows && command.extension.isEmpty()) {
             // On Windows specifying the extension is optional, so try them in order.
             val extensions = System.getenv("PATHEXT").split(File.pathSeparator)
-            val commandWin = extensions.map { File(command.path + it.toLowerCase()) }.find { it.isFile }
+            val commandWin = extensions.asSequence().map { File(command.path + it.toLowerCase()) }.find { it.isFile }
             if (commandWin != null) {
                 command = commandWin
             }

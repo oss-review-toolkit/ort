@@ -50,7 +50,7 @@ abstract class VersionControlSystem {
          * Return the applicable VCS for the given [vcsDirectory], or null if none is applicable.
          */
         fun forDirectory(vcsDirectory: File) =
-            ALL.map {
+            ALL.asSequence().map {
                 it.getWorkingDirectory(vcsDirectory)
             }.find {
                 it.isValid()
