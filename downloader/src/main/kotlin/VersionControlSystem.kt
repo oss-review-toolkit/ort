@@ -32,7 +32,8 @@ abstract class VersionControlSystem {
         val ALL by lazy {
             listOf(
                     Git,
-                    GitRepo
+                    GitRepo,
+                    Mercurial
             )
         }
 
