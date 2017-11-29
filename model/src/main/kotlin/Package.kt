@@ -79,21 +79,10 @@ data class Package(
         val homepageUrl: String,
 
         /**
-         * The download URL to the binary artifact of the package.
+         * The remote artifact where the binary package can be downloaded.
          */
-        @JsonProperty("download_url")
-        val downloadUrl: String,
-
-        /**
-         * The hash value of the binary artifact of the package.
-         */
-        val hash: String,
-
-        /**
-         * The name of the algorithm used to calculate the hash.
-         */
-        @JsonProperty("hash_algorithm")
-        val hashAlgorithm: String,
+        @JsonProperty("binary_download")
+        val binaryDownload: RemoteArtifact,
 
         /**
          * The name of the VCS provider, for example Git, Hg or SVN.

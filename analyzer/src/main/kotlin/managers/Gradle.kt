@@ -34,6 +34,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.util.OS
 import com.here.ort.util.log
@@ -155,9 +156,11 @@ class Gradle : PackageManager() {
                             declaredLicenses = maven.parseLicenses(project),
                             description = project.description ?: "",
                             homepageUrl = project.url ?: "",
-                            downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.
-                            hash = "", // TODO: Get hash from local metadata?
-                            hashAlgorithm = "",
+                            binaryDownload = RemoteArtifact(
+                                    url = "", // TODO: Try to get URL for downloaded dependencies.
+                                    hash = "", // TODO: Get hash from local metadata?
+                                    hashAlgorithm = ""
+                            ),
                             vcsProvider = maven.parseVcsProvider(project),
                             vcsUrl = maven.parseVcsUrl(project),
                             vcsRevision = maven.parseVcsRevision(project),
@@ -172,9 +175,11 @@ class Gradle : PackageManager() {
                             declaredLicenses = sortedSetOf(),
                             description = "",
                             homepageUrl = "",
-                            downloadUrl = "",
-                            hash = "",
-                            hashAlgorithm = "",
+                            binaryDownload = RemoteArtifact(
+                                    url = "",
+                                    hash = "",
+                                    hashAlgorithm = ""
+                            ),
                             vcsProvider = "",
                             vcsUrl = "",
                             vcsRevision = "",

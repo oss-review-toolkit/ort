@@ -123,9 +123,11 @@ data class Project(
             declaredLicenses = declaredLicenses,
             description = "",
             homepageUrl = homepageUrl,
-            downloadUrl = "",
-            hash = "",
-            hashAlgorithm = "",
+            binaryDownload = RemoteArtifact(
+                    url = "",
+                    hash = "",
+                    hashAlgorithm = ""
+            ),
             vcsProvider = vcsProvider,
             vcsUrl = vcsUrl,
             vcsRevision = vcsRevision,

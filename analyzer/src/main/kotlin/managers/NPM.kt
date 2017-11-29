@@ -32,6 +32,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.util.OS
 import com.here.ort.util.OkHttpClientHelper
@@ -243,9 +244,11 @@ class NPM : PackageManager() {
                     declaredLicenses = declaredLicenses,
                     description = description,
                     homepageUrl = homepageUrl,
-                    downloadUrl = downloadUrl,
-                    hash = hash,
-                    hashAlgorithm = hashAlgorithm,
+                    binaryDownload = RemoteArtifact(
+                            url = downloadUrl,
+                            hash = hash,
+                            hashAlgorithm = hashAlgorithm
+                    ),
                     vcsProvider = vcsProvider,
                     vcsUrl = vcsUrl,
                     vcsRevision = vcsRevision,

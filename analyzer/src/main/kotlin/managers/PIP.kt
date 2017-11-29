@@ -32,6 +32,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.util.OkHttpClientHelper
 import com.here.ort.util.OS
@@ -238,9 +239,11 @@ class PIP : PackageManager() {
                             declaredLicenses = declaredLicenses,
                             description = pkgInfo["summary"]?.asText() ?: pkg.description,
                             homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
-                            downloadUrl = pkgRelease["url"]?.asText() ?: pkg.downloadUrl,
-                            hash = pkgRelease["md5_digest"]?.asText() ?: pkg.hash,
-                            hashAlgorithm = "MD5",
+                            binaryDownload = RemoteArtifact(
+                                    url = pkgRelease["url"]?.asText() ?: pkg.binaryDownload.url,
+                                    hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryDownload.hash,
+                                    hashAlgorithm = "MD5"
+                            ),
                             vcsProvider = pkg.vcsProvider,
                             vcsUrl = pkg.vcsUrl,
                             vcsRevision = pkg.vcsRevision,
@@ -375,9 +378,11 @@ class PIP : PackageManager() {
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
-                    downloadUrl = "",
-                    hash = "",
-                    hashAlgorithm = "",
+                    binaryDownload = RemoteArtifact(
+                            url = "",
+                            hash = "",
+                            hashAlgorithm = ""
+                    ),
                     vcsProvider = "",
                     vcsUrl = "",
                     vcsRevision = "",
