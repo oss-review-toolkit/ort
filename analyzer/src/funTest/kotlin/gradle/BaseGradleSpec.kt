@@ -37,7 +37,6 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 abstract class BaseGradleSpec : StringSpec() {
-
     abstract val pkg: Package
     abstract val expectedResultsDir: String
 
@@ -60,7 +59,10 @@ abstract class BaseGradleSpec : StringSpec() {
             //        (Gradle issue: https://github.com/gradle/gradle/issues/3317)
             val downloadedDir = DownloaderMain.download(pkg, outputDir)
             val analyzerResultsDir = File(outputDir, "analyzer_results");
-            AnalyzerMain.main(arrayOf("-i", downloadedDir.absolutePath, "-o", analyzerResultsDir.absolutePath))
+            AnalyzerMain.main(arrayOf(
+                    "-i", downloadedDir.absolutePath,
+                    "-o", analyzerResultsDir.absolutePath)
+            )
 
             val sourceGradleProjectFiles = downloadedDir.walkTopDown().filter { file ->
                 Gradle.matchersForDefinitionFiles.any { glob ->
@@ -70,19 +72,22 @@ abstract class BaseGradleSpec : StringSpec() {
 
             val expectedResult = sourceGradleProjectFiles.map {
                 val abcdFileDir = it.absolutePath.substringBeforeLast(File.separator).replace(
-                        oldValue = downloadedDir.absolutePath, newValue = analyzerResultsDir.absolutePath,
+                        oldValue = downloadedDir.absolutePath,
+                        newValue = analyzerResultsDir.absolutePath,
                         ignoreCase = true)
                 "$abcdFileDir${File.separator}${it.nameWithoutExtension}-gradle-dependencies.yml"
             }.toSet()
+
             val generatedResultFiles = analyzerResultsDir.walkTopDown().filter { it.extension == "yml" }.map {
                 it.absolutePath
             }.toSet()
-            generatedResultFiles shouldBe expectedResult
 
+            generatedResultFiles shouldBe expectedResult
         }.config(tags = setOf(Expensive))
 
-        "analyzer results for all .gradle files match expected"{
+        "analyzer results for all .gradle files match expected" {
             expectedResultsDir shouldNotBe ""
+
             val analyzerResultsDir = File(outputDir, "analyzer_results/")
             val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file ->
                 file.extension == "yml"
@@ -92,6 +97,7 @@ abstract class BaseGradleSpec : StringSpec() {
                         "/") + "/" + it.name //keep as unix paths
                 row(it, expectedResultsDirsMap.getOrDefault(fileExpectedResultPath, File(fileExpectedResultPath)))
             }
+
             val gradleTable = table(headers("analyzerOutputFile", "expectedResultFile"), *testRows.toTypedArray())
 
             forAll(gradleTable) { analyzerOutputFile, expectedResultFile ->
@@ -100,7 +106,6 @@ abstract class BaseGradleSpec : StringSpec() {
                 val expectedResults = expectedResultFile.readText().replaceFirst(
                         "vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
                 analyzerResults shouldBe expectedResults
-
             }
         }.config(tags = setOf(Expensive))
     }
