@@ -244,6 +244,11 @@ class PIP : PackageManager() {
                                     hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
                                     hashAlgorithm = "MD5"
                             ),
+                            sourceArtifact = RemoteArtifact(
+                                    url = "",
+                                    hash = "",
+                                    hashAlgorithm = ""
+                            ),
                             vcsProvider = pkg.vcsProvider,
                             vcsUrl = pkg.vcsUrl,
                             vcsRevision = pkg.vcsRevision,
@@ -379,6 +384,7 @@ class PIP : PackageManager() {
                     description = "",
                     homepageUrl = "",
                     binaryArtifact = RemoteArtifact.createEmpty(),
+                    sourceArtifact = RemoteArtifact.createEmpty(),
                     vcsProvider = "",
                     vcsUrl = "",
                     vcsRevision = "",

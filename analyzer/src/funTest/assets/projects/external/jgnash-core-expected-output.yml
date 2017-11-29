@@ -213,6 +213,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -227,6 +231,10 @@ packages:
     \      including resolving of field and method types."
   homepage_url: "http://github.com/cowtowncoder/java-classmate"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -249,6 +257,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/virtuald/curvesapi.git"
   vcs_revision: "HEAD"
@@ -262,6 +274,10 @@ packages:
   description: "H2 Database Engine"
   homepage_url: "http://www.h2database.com"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -282,6 +298,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:swaldman/c3p0.git"
   vcs_revision: "HEAD"
@@ -296,6 +316,10 @@ packages:
   description: "mchange-commons-java"
   homepage_url: "https://github.com/swaldman/mchange-commons-java"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -315,6 +339,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/x-stream/xstream.git/xstream-hibernate"
   vcs_revision: "v-1.4.x"
@@ -328,6 +356,10 @@ packages:
   description: "XStream is a serialization library from Java objects to XML and back."
   homepage_url: "http://x-stream.github.io/xstream"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -350,6 +382,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
   vcs_revision: "HEAD"
@@ -362,6 +398,10 @@ packages:
   description: "dom4j: the flexible XML framework for Java"
   homepage_url: "http://dom4j.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -383,6 +423,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/netty/netty.git/netty-buffer"
   vcs_revision: "netty-4.1.9.Final"
@@ -398,6 +442,10 @@ packages:
     \ and\n    clients."
   homepage_url: "http://netty.io/netty-codec/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -419,6 +467,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/netty/netty.git/netty-common"
   vcs_revision: "netty-4.1.9.Final"
@@ -434,6 +486,10 @@ packages:
     \ and\n    clients."
   homepage_url: "http://netty.io/netty-resolver/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -455,6 +511,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/netty/netty.git/netty-transport"
   vcs_revision: "netty-4.1.9.Final"
@@ -467,6 +527,10 @@ packages:
   description: "jGnash Resources"
   homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-resources/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -487,6 +551,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/junit-team/junit.git"
   vcs_revision: "r4.12"
@@ -500,6 +568,10 @@ packages:
   description: "Apache Log4j 1.2"
   homepage_url: "http://logging.apache.org/log4j/1.2/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -522,6 +594,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -537,6 +613,10 @@ packages:
     \ as to justify existence in java.lang."
   homepage_url: "http://commons.apache.org/proper/commons-lang/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -556,6 +636,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -569,6 +653,10 @@ packages:
   description: "Apache POI - Java API To Access Microsoft Format Files"
   homepage_url: "http://poi.apache.org/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -588,6 +676,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -601,6 +693,10 @@ packages:
   description: "XmlBeans main jar"
   homepage_url: "http://xmlbeans.apache.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -621,6 +717,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
   vcs_revision: "HEAD"
@@ -634,6 +734,10 @@ packages:
   description: "Common reflection code used in support of annotation processing"
   homepage_url: "http://hibernate.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -655,6 +759,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "http://github.com/hibernate/hibernate-jpa-api.git"
   vcs_revision: "HEAD"
@@ -668,6 +776,10 @@ packages:
   description: "Integration for c3p0 Connection pooling into Hibernate O/RM"
   homepage_url: "http://hibernate.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -687,6 +799,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "http://github.com/hibernate/hibernate-orm.git"
   vcs_revision: "HEAD"
@@ -700,6 +816,10 @@ packages:
   description: "HSQLDB - Lightweight 100% Java SQL Database Engine"
   homepage_url: "http://hsqldb.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -722,6 +842,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:jboss-javassist/javassist.git"
   vcs_revision: "HEAD"
@@ -735,6 +859,10 @@ packages:
   description: "The JBoss Logging Framework"
   homepage_url: "http://www.jboss.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -755,6 +883,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:jboss/jboss-transaction-api_spec.git"
   vcs_revision: "jboss-transaction-api_1.2_spec-1.0.1.Final"
@@ -768,6 +900,10 @@ packages:
   description: "Parent POM for JBoss projects. Provides default project build configuration."
   homepage_url: "http://www.jboss.org/jandex"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -787,6 +923,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -800,6 +940,10 @@ packages:
   description: "SLF4J LOG4J-12 Binding"
   homepage_url: "http://www.slf4j.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""

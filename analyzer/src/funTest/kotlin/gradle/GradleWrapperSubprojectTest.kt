@@ -34,6 +34,7 @@ class GradleWrapperSubprojectTest : BaseGradleSpec() {
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.createEmpty(),
+            sourceArtifact = RemoteArtifact.createEmpty(),
             vcsProvider = "Git",
             vcsUrl = "https://github.com/gradle/gradle.git",
             vcsRevision = "e4f4804807ef7c2829da51877861ff06e07e006d",

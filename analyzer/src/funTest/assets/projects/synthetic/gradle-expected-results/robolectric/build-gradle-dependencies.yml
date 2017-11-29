@@ -104,6 +104,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/Abnaxos/pegdown-doclet.git"
   vcs_revision: "HEAD"
@@ -120,6 +124,10 @@ packages:
     \ spec."
   homepage_url: "http://code.google.com/p/guava-libraries/guava"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -142,6 +150,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.code.sf.net/p/plantuml/code/tags/plantuml-8032"
   vcs_revision: "HEAD"
@@ -155,6 +167,10 @@ packages:
   description: "A very small and fast Java bytecode manipulation framework"
   homepage_url: "http://asm.objectweb.org/asm-analysis/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -174,6 +190,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
   vcs_revision: "HEAD"
@@ -187,6 +207,10 @@ packages:
   description: "A very small and fast Java bytecode manipulation framework"
   homepage_url: "http://asm.objectweb.org/asm-util/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -206,6 +230,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
   vcs_revision: "HEAD"
@@ -219,6 +247,10 @@ packages:
   description: "Elegant parsing in Java and Scala - lightweight, easy-to-use, powerful"
   homepage_url: "http://parboiled.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -238,6 +270,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:sirthias/parboiled.git"
   vcs_revision: "HEAD"
@@ -251,6 +287,10 @@ packages:
   description: "A Java 1.6+ library providing a clean and lightweight markdown processor"
   homepage_url: "http://pegdown.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
