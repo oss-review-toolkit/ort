@@ -32,10 +32,10 @@ class GradleLoggingSubprojectTest : BaseGradleSpec() {
             description = "",
             homepageUrl = "",
             downloadUrl = "",
+            hash = "",
+            hashAlgorithm = "",
             vcsProvider = "Git",
             vcsUrl = "git@github.com:gradle/gradle.git",
-            hashAlgorithm = "",
-            hash = "",
             vcsRevision = "e4f4804807ef7c2829da51877861ff06e07e006d",
             vcsPath = "subprojects/logging/"
     )

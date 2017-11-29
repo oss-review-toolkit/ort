@@ -32,13 +32,13 @@ class GradleWrapperSubprojectTest : BaseGradleSpec() {
             description = "",
             homepageUrl = "",
             downloadUrl = "",
+            hash = "",
+            hashAlgorithm = "",
             vcsProvider = "Git",
             vcsUrl = "https://github.com/gradle/gradle.git",
-            hashAlgorithm = "",
-            hash = "",
             vcsRevision = "e4f4804807ef7c2829da51877861ff06e07e006d",
             vcsPath = "subprojects/wrapper/"
-            )
+    )
 
     override val expectedResultsDir = "src/funTest/assets/projects/external/gradle-submodules"
 
