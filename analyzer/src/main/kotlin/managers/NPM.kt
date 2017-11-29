@@ -387,6 +387,26 @@ class NPM : PackageManager() {
         }
     }
 
+    private fun vcsInfoFallback(name: String, infoFromPackage: String, infoFromDirectory: String) =
+        when {
+            infoFromPackage.isEmpty() -> {
+                log.info {
+                    "The VCS $name specified in 'package.json' is empty. Will use '$infoFromDirectory' as " +
+                            "as detected from the project directory."
+                }
+                infoFromDirectory
+            }
+            infoFromPackage != infoFromDirectory -> {
+                log.warn {
+                    "The VCS $name '$infoFromPackage' specified in 'package.json' does not match " +
+                            "'$infoFromDirectory' as detected from the project directory. Will use " +
+                            "'$infoFromPackage'."
+                }
+                infoFromPackage
+            }
+            else -> infoFromPackage
+        }
+
     private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>): AnalyzerResult {
         log.debug { "Parsing project info from ${packageJson.absolutePath}." }
 
@@ -410,29 +430,17 @@ class NPM : PackageManager() {
             it?.asText()
         }
 
-        val (vcsProviderFromPackage, vcsUrlFromPackage) = parseRepository(json)
         val homepageUrl = json["homepage"].asTextOrEmpty()
 
         val projectDir = packageJson.parentFile
+
+        val (vcsProviderFromPackage, vcsUrlFromPackage) = parseRepository(json)
         val vcsDir = VersionControlSystem.forDirectory(projectDir)
-
         val vcsProviderFromDirectory = vcsDir?.getProvider() ?: ""
-        if (vcsProviderFromDirectory != vcsProviderFromPackage) {
-            log.warn {
-                "The VCS provider '$vcsProviderFromPackage' specified in 'package.json' does not match " +
-                        "'$vcsProviderFromDirectory' as detected from the project directory. Will use " +
-                        "'$vcsProviderFromPackage'."
-            }
-        }
-
         val vcsUrlFromDirectory = vcsDir?.getRemoteUrl() ?: ""
-        if (vcsUrlFromDirectory != vcsUrlFromPackage) {
-            log.warn {
-                "The VCS URL '$vcsUrlFromPackage' specified in 'package.json' does not match " +
-                        "'$vcsUrlFromDirectory' as detected from the project directory. Will use " +
-                        "'$vcsUrlFromPackage'."
-            }
-        }
+
+        val vcsProvider = vcsInfoFallback("provider", vcsProviderFromPackage, vcsProviderFromDirectory)
+        val vcsUrl = vcsInfoFallback("url", vcsUrlFromPackage, vcsUrlFromDirectory)
 
         val project = Project(
                 packageManager = javaClass.simpleName,
@@ -441,8 +449,8 @@ class NPM : PackageManager() {
                 version = version,
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
-                vcsProvider = vcsProviderFromPackage,
-                vcsUrl = vcsUrlFromPackage,
+                vcsProvider = vcsProvider,
+                vcsUrl = vcsUrl,
                 vcsRevision = vcsDir?.getRevision() ?: "",
                 vcsPath = vcsDir?.getPathToRoot(projectDir) ?: "",
                 homepageUrl = homepageUrl,
