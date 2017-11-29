@@ -128,11 +128,11 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val repositoryConnectorProvider = container.lookup(RepositoryConnectorProvider::class.java, "default")
         val transporterProvider = container.lookup(TransporterProvider::class.java, "default")
 
-        // Create artifact descriptor to get list of repositories from the related POM file.
+        // Create an artifact descriptor to get the list of repositories from the related POM file.
         val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
         val artifactDescriptorResult = repoSystem
                 .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
-        log.debug { "Found potential repositories for $artifact: ${artifactDescriptorResult.repositories}" }
+        log.debug { "Found potential repositories for '$artifact': ${artifactDescriptorResult.repositories}" }
 
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
@@ -140,7 +140,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             val repositoryLayout = repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
 
             val remoteLocation = repositoryLayout.getLocation(artifact, false)
-            log.debug { "Remote location for $artifact: $remoteLocation" }
+            log.debug { "Remote location for '$artifact': $remoteLocation" }
 
             val snapshot = artifact.isSnapshot
             val policy = remoteRepositoryManager.getPolicy(repositorySystemSession, repository, !snapshot, snapshot)
@@ -168,7 +168,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             val downloadUrl = "${repository.url}/$remoteLocation"
 
             if (artifactDownload.exception == null) {
-                log.debug { "Found $artifact in $repository." }
+                log.debug { "Found '$artifact' in $repository." }
 
                 // TODO: Could store multiple checksums in model instead of only the first.
                 val checksums = repositoryLayout.getChecksums(artifact, false, remoteLocation)
@@ -189,9 +189,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                         e.printStackTrace()
                     }
 
-                    log.warn { "Could not get checksum for $artifact: ${e.message}" }
+                    log.warn { "Could not get checksum for '$artifact': ${e.message}" }
 
-                    ""
+                    "" // Fall back to an empty checksum string.
                 }
 
                 tmpFile.delete()
@@ -202,13 +202,13 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     artifactDownload.exception.printStackTrace()
                 }
 
-                log.debug { "Could not find $artifact in $repository." }
+                log.debug { "Could not find '$artifact' in $repository." }
             }
         }
 
-        log.info { "Could not receive data about remote artifact $artifact." }
+        log.info { "Could not receive data about remote artifact '$artifact'." }
 
-        return RemoteArtifact("", "", "")
+        return RemoteArtifact.createEmpty()
     }
 
     fun parseLicenses(mavenProject: MavenProject) =
