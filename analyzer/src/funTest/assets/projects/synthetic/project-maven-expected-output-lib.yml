@@ -45,9 +45,9 @@ packages:
     \ Kent Beck. It is used by the developer who implements unit tests in Java."
   homepage_url: "http://junit.org"
   binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://repo.maven.apache.org/maven2/junit/junit/3.8.1/junit-3.8.1.jar"
+    hash: "99129f16442844f6a4a11ae22fbbee40b14d774f"
+    hash_algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/junit/junit/3.8.1/junit-3.8.1-sources.jar"
     hash: "0525753763e53f6f76da052b316d0f2e3bfa4d73"
@@ -67,9 +67,9 @@ packages:
     \ as to justify existence in java.lang."
   homepage_url: "http://commons.apache.org/proper/commons-lang/"
   binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
+    hash: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
+    hash_algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
     hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
@@ -88,9 +88,9 @@ packages:
     \ strings."
   homepage_url: "http://commons.apache.org/proper/commons-text/"
   binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
+    hash: "c336bf600f44b88af356c8a85eef4af822b06a4d"
+    hash_algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
     hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"

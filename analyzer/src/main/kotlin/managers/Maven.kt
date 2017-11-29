@@ -31,7 +31,6 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.util.collectMessages
 import com.here.ort.util.log
@@ -184,6 +183,8 @@ class Maven : PackageManager() {
                     projectBuilder.build(artifact, projectBuildingRequest).project
                 }
 
+        val binaryRemoteArtifact = maven.requestRemoteArtifact(node.artifact, node.repositories)
+
         val sourceArtifact = node.artifact.let {
             DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)
         }
@@ -198,7 +199,7 @@ class Maven : PackageManager() {
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 description = mavenProject.description ?: "",
                 homepageUrl = mavenProject.url ?: "",
-                binaryArtifact = RemoteArtifact.createEmpty(),
+                binaryArtifact = binaryRemoteArtifact,
                 sourceArtifact = sourceRemoteArtifact,
                 vcsProvider = maven.parseVcsProvider(mavenProject),
                 vcsUrl = maven.parseVcsUrl(mavenProject),
