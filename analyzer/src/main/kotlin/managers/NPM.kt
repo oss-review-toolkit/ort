@@ -209,12 +209,14 @@ class NPM : PackageManager() {
                 val dist = infoJson["dist"]
                 downloadUrl = dist["tarball"].asText()
                 hash = dist["shasum"].asText()
-                // TODO: add detection of hash algorithm
 
+                // TODO: add detection of hash algorithm
                 with(parseRepository(infoJson)) {
                     vcsProvider = first
                     vcsUrl = second
                 }
+
+                // See https://github.com/npm/read-package-json/issues/7 for some background info.
                 vcsRevision = infoJson["gitHead"].asTextOrEmpty()
             } catch (e: IOException) {
                 if (Main.stacktrace) {
@@ -222,11 +224,11 @@ class NPM : PackageManager() {
                 }
 
                 // Fallback to getting detailed info from the package.json file. Some info will likely be missing.
-
                 description = json["description"].asTextOrEmpty()
                 homepageUrl = json["homepage"].asTextOrEmpty()
                 downloadUrl = json["_resolved"].asTextOrEmpty()
                 hash = json["_integrity"].asTextOrEmpty()
+
                 // TODO: add detection of hash algorithm
 
                 with(parseRepository(json)) {
