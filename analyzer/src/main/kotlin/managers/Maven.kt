@@ -45,6 +45,7 @@ import org.apache.maven.project.ProjectBuildingResult
 
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.graph.DependencyNode
 import org.eclipse.aether.metadata.Metadata
 import org.eclipse.aether.repository.LocalArtifactRegistration
@@ -183,6 +184,12 @@ class Maven : PackageManager() {
                     projectBuilder.build(artifact, projectBuildingRequest).project
                 }
 
+        val sourceArtifact = node.artifact.let {
+            DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)
+        }
+
+        val sourceRemoteArtifact = maven.requestRemoteArtifact(sourceArtifact, node.repositories)
+
         return Package(
                 packageManager = javaClass.simpleName,
                 namespace = mavenProject.groupId,
@@ -192,7 +199,7 @@ class Maven : PackageManager() {
                 description = mavenProject.description ?: "",
                 homepageUrl = mavenProject.url ?: "",
                 binaryArtifact = RemoteArtifact.createEmpty(),
-                sourceArtifact = RemoteArtifact.createEmpty(),
+                sourceArtifact = sourceRemoteArtifact,
                 vcsProvider = maven.parseVcsProvider(mavenProject),
                 vcsUrl = maven.parseVcsUrl(mavenProject),
                 vcsRevision = maven.parseVcsRevision(mavenProject),
