@@ -62,8 +62,8 @@ abstract class BaseGradleSpec : StringSpec() {
             val analyzerResultsDir = File(outputDir, "analyzer_results");
             AnalyzerMain.main(arrayOf("-i", downloadedDir.absolutePath, "-o", analyzerResultsDir.absolutePath))
 
-            val sourceGradleProjectFiles = downloadedDir.walkTopDown().filter { file: File ->
-                Gradle.matchersForDefinitionFiles.any() { glob ->
+            val sourceGradleProjectFiles = downloadedDir.walkTopDown().filter { file ->
+                Gradle.matchersForDefinitionFiles.any { glob ->
                     glob.matches(file.toPath())
                 }
             }
