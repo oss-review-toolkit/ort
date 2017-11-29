@@ -40,7 +40,6 @@ class RobolectricTest : BaseGradleSpec() {
             vcsPath = ""
     )
 
-
     override val expectedResultsDir = "src/funTest/assets/projects/synthetic/gradle-expected-results/robolectric/"
 
 }
