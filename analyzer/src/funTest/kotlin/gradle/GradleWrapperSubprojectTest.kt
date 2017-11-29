@@ -43,7 +43,7 @@ class GradleWrapperSubprojectTest : BaseGradleSpec() {
     override val expectedResultsDir = "src/funTest/assets/projects/external/gradle-submodules"
 
     override val expectedResultsDirsMap = mapOf(
-            "${expectedResultsDir}/subprojects/wrapper/wrapper-gradle-dependencies.yml"
+            "$expectedResultsDir/subprojects/wrapper/wrapper-gradle-dependencies.yml"
                     to File("src/funTest/assets/projects/external/gradle-submodules/wrapper" +
                                     "/expected-wrapper-gradle-dependencies.yml")
     )
