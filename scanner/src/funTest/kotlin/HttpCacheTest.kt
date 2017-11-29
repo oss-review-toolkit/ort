@@ -20,6 +20,7 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.Package
+import com.here.ort.model.RemoteArtifact
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
@@ -82,9 +83,7 @@ class HttpCacheTest : StringSpec() {
                     declaredLicenses = sortedSetOf("license"),
                     description = "description",
                     homepageUrl = "homepageUrl",
-                    downloadUrl = "downloadUrl",
-                    hash = "hash",
-                    hashAlgorithm = "hashAlgorithm",
+                    binaryArtifact = RemoteArtifact.createEmpty(),
                     vcsProvider = "vcsProvider",
                     vcsUrl = "vcsUrl",
                     vcsRevision = "vcsRevision",

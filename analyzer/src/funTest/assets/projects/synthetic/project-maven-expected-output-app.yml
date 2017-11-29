@@ -39,9 +39,10 @@ packages:
   declared_licenses: []
   description: ""
   homepage_url: "http://maven.apache.org"
-  download_url: ""
-  hash: ""
-  hash_algorithm: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -56,9 +57,10 @@ packages:
     \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
     \ as to justify existence in java.lang."
   homepage_url: "http://commons.apache.org/proper/commons-lang/"
-  download_url: ""
-  hash: ""
-  hash_algorithm: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
   vcs_revision: "LANG_3_5"
@@ -72,9 +74,10 @@ packages:
   description: "Apache Commons Text is a library focused on algorithms working on\
     \ strings."
   homepage_url: "http://commons.apache.org/proper/commons-text/"
-  download_url: ""
-  hash: ""
-  hash_algorithm: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
   vcs_revision: "HEAD"

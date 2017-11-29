@@ -20,6 +20,7 @@
 package com.here.ort.analyzer.integration
 
 import com.here.ort.model.Package
+import com.here.ort.model.RemoteArtifact
 
 class RobolectricTest : BaseGradleSpec() {
 
@@ -31,9 +32,7 @@ class RobolectricTest : BaseGradleSpec() {
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
-            downloadUrl = "",
-            hash = "",
-            hashAlgorithm = "",
+            binaryArtifact = RemoteArtifact.createEmpty(),
             vcsProvider = "Git",
             vcsUrl = "https://github.com/robolectric/robolectric.git",
             vcsRevision = "757dfd56499a415376ea04bfa520b317bf2e3b58",

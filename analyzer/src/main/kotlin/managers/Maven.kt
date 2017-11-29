@@ -31,6 +31,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.util.collectMessages
 import com.here.ort.util.log
@@ -190,9 +191,7 @@ class Maven : PackageManager() {
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 description = mavenProject.description ?: "",
                 homepageUrl = mavenProject.url ?: "",
-                downloadUrl = "", // TODO: Try to get URL for downloaded dependencies.
-                hash = "", // TODO: Get hash from local metadata?
-                hashAlgorithm = "",
+                binaryArtifact = RemoteArtifact.createEmpty(),
                 vcsProvider = maven.parseVcsProvider(mavenProject),
                 vcsUrl = maven.parseVcsUrl(mavenProject),
                 vcsRevision = maven.parseVcsRevision(mavenProject),
