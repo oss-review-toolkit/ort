@@ -161,6 +161,11 @@ class Gradle : PackageManager() {
                                     hash = "", // TODO: Get hash from local metadata?
                                     hashAlgorithm = ""
                             ),
+                            sourcePackageDownload = RemoteArtifact(
+                                    url = "",
+                                    hash = "",
+                                    hashAlgorithm = ""
+                            ),
                             vcsProvider = maven.parseVcsProvider(project),
                             vcsUrl = maven.parseVcsUrl(project),
                             vcsRevision = maven.parseVcsRevision(project),
@@ -176,6 +181,11 @@ class Gradle : PackageManager() {
                             description = "",
                             homepageUrl = "",
                             binaryDownload = RemoteArtifact(
+                                    url = "",
+                                    hash = "",
+                                    hashAlgorithm = ""
+                            ),
+                            sourcePackageDownload = RemoteArtifact(
                                     url = "",
                                     hash = "",
                                     hashAlgorithm = ""

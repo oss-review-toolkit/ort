@@ -249,6 +249,11 @@ class NPM : PackageManager() {
                             hash = hash,
                             hashAlgorithm = hashAlgorithm
                     ),
+                    sourcePackageDownload = RemoteArtifact(
+                            url = "",
+                            hash = "",
+                            hashAlgorithm = ""
+                    ),
                     vcsProvider = vcsProvider,
                     vcsUrl = vcsUrl,
                     vcsRevision = vcsRevision,

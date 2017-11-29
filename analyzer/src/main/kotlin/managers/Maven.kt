@@ -196,6 +196,11 @@ class Maven : PackageManager() {
                         hash = "", // TODO: Get hash from local metadata?
                         hashAlgorithm = ""
                 ),
+                sourcePackageDownload = RemoteArtifact(
+                        url = "",
+                        hash = "",
+                        hashAlgorithm = ""
+                ),
                 vcsProvider = maven.parseVcsProvider(mavenProject),
                 vcsUrl = maven.parseVcsUrl(mavenProject),
                 vcsRevision = maven.parseVcsRevision(mavenProject),
