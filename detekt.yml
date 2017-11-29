@@ -30,4 +30,10 @@ style:
   UnusedImports:
     active: true
   WildcardImport:
-    active: false
+    active: true
+    excludeImports: '
+      ch.frankel.slf4k.*,
+      com.here.ort.analyzer.managers.*,
+      com.here.ort.downloader.vcs.*,
+      com.here.ort.scanner.scanners.*
+      '
