@@ -20,6 +20,7 @@
 package com.here.ort.analyzer.integration
 
 import com.here.ort.model.Package
+import com.here.ort.model.RemoteArtifact
 
 class K9MailTest : BaseGradleSpec() {
 
@@ -31,9 +32,7 @@ class K9MailTest : BaseGradleSpec() {
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
-            downloadUrl = "",
-            hash = "",
-            hashAlgorithm = "",
+            binaryArtifact = RemoteArtifact.createEmpty(),
             vcsProvider = "Git",
             vcsUrl = "https://github.com/k9mail/k-9.git",
             vcsRevision = "934bbbe88299b1d468315917924123e4a8b89883",

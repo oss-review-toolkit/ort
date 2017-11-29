@@ -20,6 +20,8 @@
 package com.here.ort.analyzer.integration
 
 import com.here.ort.model.Package
+import com.here.ort.model.RemoteArtifact
+
 import java.io.File
 
 class GradleLoggingSubprojectTest : BaseGradleSpec() {
@@ -31,9 +33,7 @@ class GradleLoggingSubprojectTest : BaseGradleSpec() {
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
-            downloadUrl = "",
-            hash = "",
-            hashAlgorithm = "",
+            binaryArtifact = RemoteArtifact.createEmpty(),
             vcsProvider = "Git",
             vcsUrl = "https://github.com/gradle/gradle.git",
             vcsRevision = "e4f4804807ef7c2829da51877861ff06e07e006d",

@@ -36,9 +36,10 @@ packages:
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
     \ and Kent Beck."
   homepage_url: "http://junit.org"
-  download_url: ""
-  hash: ""
-  hash_algorithm: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/junit-team/junit.git"
   vcs_revision: "r4.12"
@@ -52,9 +53,10 @@ packages:
   description: "A self-contained hamcrest jar containing all of the sub-modules in\
     \ a single artifact."
   homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-all"
-  download_url: ""
-  hash: ""
-  hash_algorithm: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
   vcs_revision: "HEAD"
