@@ -18,6 +18,10 @@ install:
   - npm install -g npm@5.5.1 yarn@1.3.2
 
 script:
+  - if git grep -L "Copyright" -- "*.kt"; then
+      echo "Please add Copyright statements to the above files.";
+      exit 1;
+    fi
   - if [ "$TRAVIS_EVENT_TYPE" != "cron" ]; then
       ./gradlew -DexcludeTags=Expensive check;
     else
