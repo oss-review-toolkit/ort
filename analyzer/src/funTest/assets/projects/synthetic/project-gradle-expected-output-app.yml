@@ -196,6 +196,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -214,6 +218,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
   vcs_revision: "LANG_3_5"
@@ -228,6 +236,10 @@ packages:
     \ strings."
   homepage_url: "http://commons.apache.org/proper/commons-text/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""

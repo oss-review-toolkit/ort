@@ -33,6 +33,7 @@ class K9MailTest : BaseGradleSpec() {
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.createEmpty(),
+            sourceArtifact = RemoteArtifact.createEmpty(),
             vcsProvider = "Git",
             vcsUrl = "https://github.com/k9mail/k-9.git",
             vcsRevision = "934bbbe88299b1d468315917924123e4a8b89883",

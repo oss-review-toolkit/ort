@@ -84,6 +84,7 @@ class HttpCacheTest : StringSpec() {
                     description = "description",
                     homepageUrl = "homepageUrl",
                     binaryArtifact = RemoteArtifact.createEmpty(),
+                    sourceArtifact = RemoteArtifact.createEmpty(),
                     vcsProvider = "vcsProvider",
                     vcsUrl = "vcsUrl",
                     vcsRevision = "vcsRevision",

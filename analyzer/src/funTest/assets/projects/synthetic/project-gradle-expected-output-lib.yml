@@ -193,6 +193,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/junit-team/junit.git"
   vcs_revision: "r4.12"
@@ -208,6 +212,10 @@ packages:
     \ as to justify existence in java.lang."
   homepage_url: "http://commons.apache.org/proper/commons-lang/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -228,6 +236,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
   vcs_revision: "HEAD"
@@ -243,6 +255,10 @@ packages:
     \ for common operations."
   homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""

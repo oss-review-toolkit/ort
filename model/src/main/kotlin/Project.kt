@@ -124,6 +124,7 @@ data class Project(
             description = "",
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.createEmpty(),
+            sourceArtifact = RemoteArtifact.createEmpty(),
             vcsProvider = vcsProvider,
             vcsUrl = vcsUrl,
             vcsRevision = vcsRevision,

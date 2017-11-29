@@ -192,6 +192,7 @@ class Maven : PackageManager() {
                 description = mavenProject.description ?: "",
                 homepageUrl = mavenProject.url ?: "",
                 binaryArtifact = RemoteArtifact.createEmpty(),
+                sourceArtifact = RemoteArtifact.createEmpty(),
                 vcsProvider = maven.parseVcsProvider(mavenProject),
                 vcsUrl = maven.parseVcsUrl(mavenProject),
                 vcsRevision = maven.parseVcsRevision(mavenProject),

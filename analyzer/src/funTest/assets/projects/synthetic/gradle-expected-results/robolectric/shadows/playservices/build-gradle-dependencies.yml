@@ -4092,6 +4092,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -4104,6 +4108,10 @@ packages:
   description: ""
   homepage_url: ""
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4122,6 +4130,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -4134,6 +4146,10 @@ packages:
   description: ""
   homepage_url: ""
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4152,6 +4168,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -4164,6 +4184,10 @@ packages:
   description: ""
   homepage_url: ""
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4182,6 +4206,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -4197,6 +4225,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: ""
@@ -4209,6 +4241,10 @@ packages:
   description: ""
   homepage_url: ""
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4228,6 +4264,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -4244,6 +4284,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/Abnaxos/pegdown-doclet.git"
   vcs_revision: "HEAD"
@@ -4256,6 +4300,10 @@ packages:
   description: ""
   homepage_url: "http://classworlds.codehaus.org/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4275,6 +4323,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://sqlite4java.googlecode.com/svn/trunk/"
   vcs_revision: "HEAD"
@@ -4288,6 +4340,10 @@ packages:
   description: "Neat algorithm implementations in Java"
   homepage_url: "https://www.github.com/KevinStern/software-and-algorithms"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4308,6 +4364,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/stephenc/jcip-annotations.git"
   vcs_revision: "jcip-annotations-1.0-1"
@@ -4321,6 +4381,10 @@ packages:
   description: "Library used to test for common accessibility issues."
   homepage_url: "https://github.com/google/Accessibility-Test-Framework-for-Android"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4340,6 +4404,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/google/auto.git"
   vcs_revision: "HEAD"
@@ -4353,6 +4421,10 @@ packages:
   description: "jFormatString for Findbugs"
   homepage_url: "http://findbugs.sourceforge.net/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4372,6 +4444,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "http://code.google.com/p/findbugs/"
   vcs_revision: "HEAD"
@@ -4385,6 +4461,10 @@ packages:
   description: "Gson JSON library"
   homepage_url: "https://github.com/google/gson/gson"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4405,6 +4485,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/google/error-prone.git/error_prone_annotation"
   vcs_revision: "HEAD"
@@ -4419,6 +4503,10 @@ packages:
     \ https://oss.sonatype.org/"
   homepage_url: "http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_annotations"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4439,6 +4527,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/google/error-prone.git/error_prone_check_api"
   vcs_revision: "HEAD"
@@ -4456,6 +4548,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/google/error-prone.git/error_prone_core"
   vcs_revision: "HEAD"
@@ -4469,6 +4565,10 @@ packages:
   description: "A repackaged copy of javac for Error Prone to depend on"
   homepage_url: "https://github.com/google/error-prone-javac"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4491,6 +4591,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://code.google.com/p/guava-libraries/guava/"
   vcs_revision: "HEAD"
@@ -4507,6 +4611,10 @@ packages:
     \ spec."
   homepage_url: "https://github.com/google/guava/guava"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4529,6 +4637,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/google/guava.git/guava"
   vcs_revision: "HEAD"
@@ -4543,6 +4655,10 @@ packages:
     \    translator to modify the result of translation."
   homepage_url: "https://github.com/google/j2objc/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4563,6 +4679,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "https://github.com/google/protobuf.git"
   vcs_revision: "HEAD"
@@ -4577,6 +4697,10 @@ packages:
     \ side-by-side view in Java."
   homepage_url: "http://code.google.com/p/java-diff-utils/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4597,6 +4721,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://source.icu-project.org/repos/icu/icu4j/trunk/"
   vcs_revision: "HEAD"
@@ -4610,6 +4738,10 @@ packages:
   description: "XStream is a serialization library from Java objects to XML and back."
   homepage_url: "http://codehaus.org/xstream-parent/xstream/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4630,6 +4762,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git://github.com/junit-team/junit.git"
   vcs_revision: "r4.12"
@@ -4646,6 +4782,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -4658,6 +4798,10 @@ packages:
   description: ""
   homepage_url: ""
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4677,6 +4821,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:raphw/byte-buddy.git/byte-buddy-agent"
   vcs_revision: "byte-buddy-1.6.0"
@@ -4692,6 +4840,10 @@ packages:
     \ into its own name space."
   homepage_url: "http://bytebuddy.net/byte-buddy"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4714,6 +4866,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.code.sf.net/p/plantuml/code/tags/plantuml-8032"
   vcs_revision: "HEAD"
@@ -4726,6 +4882,10 @@ packages:
   description: "master POM"
   homepage_url: "http://ant.apache.org/ant-launcher/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4744,6 +4904,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/ant/core/trunk/ant"
   vcs_revision: "HEAD"
@@ -4757,6 +4921,10 @@ packages:
   description: "Wagon that gets and puts artifacts using file system protocol"
   homepage_url: "http://maven.apache.org/wagon/wagon-providers/wagon-file"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4777,6 +4945,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/wagon/tags/wagon-1.0-beta-6/wagon-providers/wagon-http-lightweight"
   vcs_revision: "HEAD"
@@ -4791,6 +4963,10 @@ packages:
     \    providers."
   homepage_url: "http://maven.apache.org/wagon/wagon-providers/wagon-http-shared"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4811,6 +4987,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/wagon/tags/wagon-1.0-beta-6/wagon-provider-api"
   vcs_revision: "HEAD"
@@ -4824,6 +5004,10 @@ packages:
   description: "Ant Tasks used for Maven integration"
   homepage_url: "http://maven.apache.org/ant-tasks/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4847,6 +5031,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-artifact-manager"
   vcs_revision: "HEAD"
@@ -4864,6 +5052,10 @@ packages:
     \ a number of other development tools for reporting or the build process."
   homepage_url: "http://maven.apache.org/maven-artifact"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4886,6 +5078,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-error-diagnostics"
   vcs_revision: "HEAD"
@@ -4899,6 +5095,10 @@ packages:
   description: "Maven Model"
   homepage_url: "http://maven.apache.org/maven-model"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4922,6 +5122,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-plugin-registry"
   vcs_revision: "HEAD"
@@ -4942,6 +5146,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-profile"
   vcs_revision: "HEAD"
@@ -4959,6 +5167,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-project"
   vcs_revision: "HEAD"
@@ -4972,6 +5184,10 @@ packages:
   description: "Per-directory repository metadata."
   homepage_url: "http://maven.apache.org/maven-repository-metadata"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -4995,6 +5211,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.apache.org/repos/asf/maven/maven-2/tags/maven-2.2.1/maven-settings"
   vcs_revision: "HEAD"
@@ -5008,6 +5228,10 @@ packages:
   description: "Rich and fluent assertions for testing for Java"
   homepage_url: "http://assertj.org/assertj-core"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5029,6 +5253,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -5043,6 +5271,10 @@ packages:
   description: "Dataflow is a dataflow framework based on the javac compiler."
   homepage_url: "https://checkerframework.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5063,6 +5295,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -5079,6 +5315,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "https://svn.codehaus.org/mojo/tags/animal-sniffer-parent-1.14/animal-sniffer-annotations"
   vcs_revision: "HEAD"
@@ -5091,6 +5331,10 @@ packages:
   description: ""
   homepage_url: ""
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5110,6 +5354,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://svn.codehaus.org/plexus/plexus-components/tags/plexus-interpolation-1.11"
   vcs_revision: "HEAD"
@@ -5124,6 +5372,10 @@ packages:
     \ files, command lines, XML and more."
   homepage_url: "http://plexus.codehaus.org/plexus-utils"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5145,6 +5397,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
   vcs_revision: "HEAD"
@@ -5158,6 +5414,10 @@ packages:
   description: "Hamcrest library of matcher implementations."
   homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-library"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5177,6 +5437,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -5190,6 +5454,10 @@ packages:
   description: "A library for instantiating Java objects"
   homepage_url: "http://objenesis.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5209,6 +5477,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-analysis"
   vcs_revision: "HEAD"
@@ -5222,6 +5494,10 @@ packages:
   description: "A very small and fast Java bytecode manipulation framework"
   homepage_url: "http://asm.objectweb.org/asm-commons/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5241,6 +5517,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
   vcs_revision: "HEAD"
@@ -5254,6 +5534,10 @@ packages:
   description: "A very small and fast Java bytecode manipulation framework"
   homepage_url: "http://asm.objectweb.org/asm-tree/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5273,6 +5557,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-util"
   vcs_revision: "HEAD"
@@ -5286,6 +5574,10 @@ packages:
   description: "A very small and fast Java bytecode manipulation framework"
   homepage_url: "http://asm.objectweb.org/asm/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5305,6 +5597,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
   vcs_revision: "HEAD"
@@ -5318,6 +5614,10 @@ packages:
   description: "Elegant parsing in Java and Scala - lightweight, easy-to-use, powerful"
   homepage_url: "http://parboiled.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5337,6 +5637,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "git"
   vcs_url: "git@github.com:sirthias/parboiled.git"
   vcs_revision: "HEAD"
@@ -5353,6 +5657,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: "svn"
   vcs_url: "http://pcollections.googlecode.com/svn/tags/v2.1.2"
   vcs_revision: "HEAD"
@@ -5366,6 +5674,10 @@ packages:
   description: "A Java 1.6+ library providing a clean and lightweight markdown processor"
   homepage_url: "http://pegdown.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5386,6 +5698,10 @@ packages:
     url: ""
     hash: ""
     hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
   vcs_provider: ""
   vcs_url: ""
   vcs_revision: "HEAD"
@@ -5399,6 +5715,10 @@ packages:
   description: ""
   homepage_url: "http://www.xmlpull.org"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
@@ -5418,6 +5738,10 @@ packages:
     \ best advantage of latest JIT JVMs such as Hotspot in JDK 1.4+."
   homepage_url: "http://www.extreme.indiana.edu/xgws/xsoap/xpp/mxp1/"
   binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
     url: ""
     hash: ""
     hash_algorithm: ""
