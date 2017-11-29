@@ -309,7 +309,7 @@ class NPM : PackageManager() {
                 }
             }
         } else {
-            log.warn { "Could not find scope $scope in ${packageJson.absolutePath}" }
+            log.debug { "Could not find scope $scope in ${packageJson.absolutePath}" }
         }
 
         return dependencies
