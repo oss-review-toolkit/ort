@@ -317,16 +317,14 @@ class NPM : PackageManager() {
     }
 
     private fun parseRepository(node: JsonNode): Pair<String, String> {
-        var type = ""
-        var url = ""
-        if (node["repository"] != null) {
-            if (node["repository"].textValue() != null)
-                url = node["repository"].asText()
-            else {
-                type = node["repository"]["type"].asTextOrEmpty()
-                url = node["repository"]["url"].asTextOrEmpty()
-            }
+        val repository = node["repository"] ?: return Pair("", "")
+
+        val url = repository.let {
+            it.textValue() ?: it["url"].asTextOrEmpty()
         }
+
+        val type = repository["type"].asTextOrEmpty()
+
         return Pair(type, url)
     }
 
