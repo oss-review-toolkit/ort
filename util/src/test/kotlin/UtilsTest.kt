@@ -146,7 +146,8 @@ class UtilsTest : WordSpec({
         }
 
         "properly split GitHub blob URLs" {
-            val actual = splitVcsPathFromUrl("https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js")
+            val actual = splitVcsPathFromUrl(
+                    "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js")
             val expected = Pair("https://github.com/crypto-browserify/crypto-browserify.git", "test/create-hmac.js")
             actual shouldBe expected
         }

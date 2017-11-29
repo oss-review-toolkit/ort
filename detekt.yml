@@ -24,6 +24,9 @@ performance:
 style:
   ForbiddenComment:
     active: false
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
   UnusedImports:
     active: true
   WildcardImport:
