@@ -391,9 +391,19 @@ class NPM : PackageManager() {
         log.debug { "Parsing project info from ${packageJson.absolutePath}." }
 
         val json = jsonMapper.readTree(packageJson)
-        val rawName = json["name"].asText()
+
+        val rawName = json["name"].asTextOrEmpty()
         val (namespace, name) = splitNamespaceAndName(rawName)
-        val version = json["version"].asText()
+
+        if (name.isEmpty()) {
+            log.warn { "'$packageJson' does not define a name." }
+        }
+
+        val version = json["version"].asTextOrEmpty()
+
+        if (version.isEmpty()) {
+            log.warn { "'$packageJson' does not define a version." }
+        }
 
         val declaredLicenses = sortedSetOf<String>()
         setOf(json["license"]).mapNotNullTo(declaredLicenses) {
