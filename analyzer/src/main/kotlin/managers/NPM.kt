@@ -251,6 +251,7 @@ class NPM : PackageManager() {
                             hash = hash,
                             hashAlgorithm = hashAlgorithm
                     ),
+                    sourceArtifact = RemoteArtifact.createEmpty(),
                     vcsProvider = vcsProvider,
                     vcsUrl = vcsUrl,
                     vcsRevision = vcsRevision,

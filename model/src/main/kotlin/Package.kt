@@ -85,6 +85,12 @@ data class Package(
         val binaryArtifact: RemoteArtifact,
 
         /**
+         * The remote artifact where the source package can be downloaded.
+         */
+        @JsonProperty("source_artifact")
+        val sourceArtifact: RemoteArtifact,
+
+        /**
          * The name of the VCS provider, for example Git, Hg or SVN.
          */
         @JsonProperty("vcs_provider")

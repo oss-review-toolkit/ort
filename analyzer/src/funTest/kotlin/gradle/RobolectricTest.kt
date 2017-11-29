@@ -33,6 +33,7 @@ class RobolectricTest : BaseGradleSpec() {
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.createEmpty(),
+            sourceArtifact = RemoteArtifact.createEmpty(),
             vcsProvider = "Git",
             vcsUrl = "https://github.com/robolectric/robolectric.git",
             vcsRevision = "757dfd56499a415376ea04bfa520b317bf2e3b58",
