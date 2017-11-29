@@ -111,7 +111,7 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
     if (semverType == Semver.SemverType.NPM) {
         // https://docs.npmjs.com/files/package.json#repository
         val path = uri.schemeSpecificPart
-        if (path != null) {
+        if (!path.isNullOrEmpty()) {
             if (uri.authority == null && uri.query == null && uri.fragment == null) {
                 // Handle shortcut URLs.
                 when (uri.scheme) {

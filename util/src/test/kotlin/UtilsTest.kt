@@ -30,6 +30,7 @@ class UtilsTest : WordSpec({
     "normalizeVcsUrl" should {
         "do nothing for empty URLs" {
             normalizeVcsUrl("") shouldBe ""
+            normalizeVcsUrl("", Semver.SemverType.NPM) shouldBe ""
         }
 
         "properly handle NPM shortcut URLs" {
