@@ -43,7 +43,7 @@ abstract class BaseGradleSpec : StringSpec() {
 
     // Map here expected results files locations if for some reason, they cannot be stored in identical directories
     // as in src (ex. file paths get to long on Windows)
-    protected open val expectedResultsDirsMap: Map<String, File> = mapOf()
+    protected open val expectedResultsDirsMap = mapOf<String, File>()
     protected val outputDir = createTempDir()
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -72,7 +72,7 @@ abstract class BaseGradleSpec : StringSpec() {
                 val abcdFileDir = it.absolutePath.substringBeforeLast(File.separator).replace(
                         oldValue = downloadedDir.absolutePath, newValue = analyzerResultsDir.absolutePath,
                         ignoreCase = true)
-                "$abcdFileDir${File.separator}${it.name.substringBeforeLast(".gradle")}-gradle-dependencies.yml"
+                "$abcdFileDir${File.separator}${it.nameWithoutExtension}-gradle-dependencies.yml"
             }.toSet()
             val generatedResultFiles = analyzerResultsDir.walkTopDown().filter { it.extension == "yml" }.map {
                 it.absolutePath
@@ -84,8 +84,8 @@ abstract class BaseGradleSpec : StringSpec() {
         "analyzer results for all .gradle files match expected"{
             expectedResultsDir shouldNotBe ""
             val analyzerResultsDir = File(outputDir, "analyzer_results/")
-            val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file: File ->
-                file.extension == "yml" //filter yml files
+            val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file ->
+                file.extension == "yml"
             }.map {
                 val fileExpectedResultPath = expectedResultsDir + it.path.substringBeforeLast(
                         File.separator).substringAfterLast("analyzer_results").replace("\\",
