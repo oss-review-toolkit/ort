@@ -187,7 +187,7 @@ object Main {
         val targetDir = File(outputDirectory, "${target.name}/${target.version}").apply { safeMkdirs() }
         p("Downloading source code to '${targetDir.absolutePath}'...")
 
-        if (!target.normalizedVcsUrl.isBlank()) {
+        if (target.normalizedVcsUrl.isNotBlank()) {
             p("Trying to download from URL '${target.normalizedVcsUrl}'...")
 
             if (target.vcsUrl != target.normalizedVcsUrl) {
@@ -210,7 +210,7 @@ object Main {
                 applicableVcs = VersionControlSystem.forProvider(target.vcsProvider)
             }
 
-            if (applicableVcs == null && target.normalizedVcsUrl.isNotBlank()) {
+            if (applicableVcs == null) {
                 p("from URL '${target.normalizedVcsUrl}'...")
                 applicableVcs = VersionControlSystem.forUrl(target.normalizedVcsUrl)
             }
