@@ -205,7 +205,7 @@ object Main {
 
             p("Trying to detect VCS...")
 
-            if (applicableVcs == null && target.vcsProvider.isNotBlank()) {
+            if (target.vcsProvider.isNotBlank()) {
                 p("from provider name '${target.vcsProvider}'...")
                 applicableVcs = VersionControlSystem.forProvider(target.vcsProvider)
             }
