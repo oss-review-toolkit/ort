@@ -32,9 +32,6 @@ import java.io.File
 import java.io.IOException
 
 object Mercurial : VersionControlSystem() {
-    private val VERSION_REGEX = Regex("Mercurial .*\\(version (?<version>[\\d.]+)\\)")
-    private val VERSION_SPARSE_MIN = Semver("4.3", Semver.SemverType.LOOSE)
-
     private const val EXTENSION_LARGE_FILES = "largefiles = "
     private const val EXTENSION_SPARSE = "sparse = "
 
@@ -79,12 +76,7 @@ object Mercurial : VersionControlSystem() {
             revisionCmdArgs.add(vcsRevision)
         }
 
-        val mercurialVersionString = getCommandVersion("hg") {
-            VERSION_REGEX.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: "0.0.0"
-        }
-        val mercurialVersion = Semver(mercurialVersionString, Semver.SemverType.LOOSE)
-
-        if (!vcsPath.isNullOrEmpty() && !mercurialVersion.isLowerThan(VERSION_SPARSE_MIN)) {
+        if (!vcsPath.isNullOrEmpty() && isAtLeastVersion("4.3")) {
             // Starting with version 4.3 Mercurial has experimental built-in support for sparse checkouts, see
             // https://www.mercurial-scm.org/wiki/WhatsNew#Mercurial_4.3_.2F_4.3.1_.282017-08-10.29
             extensionsList.add(EXTENSION_SPARSE)
@@ -157,6 +149,18 @@ object Mercurial : VersionControlSystem() {
         }
 
         return Mercurial.getWorkingDirectory(targetDir).getRevision()
+    }
+
+    fun isAtLeastVersion(version: String): Boolean {
+        val mercurialVersionRegex = Regex("Mercurial .*\\(version (?<version>[\\d.]+)\\)")
+
+        val mercurialVersionString = getCommandVersion("hg") {
+            mercurialVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: "0.0.0"
+        }
+
+        val mercurialVersion = Semver(mercurialVersionString, Semver.SemverType.LOOSE)
+
+        return !mercurialVersion.isLowerThan(Semver(version, Semver.SemverType.LOOSE))
     }
 
     private fun runMercurialCommand(workingDir: File, vararg args: String) =
