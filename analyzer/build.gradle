@@ -41,6 +41,7 @@ task funTest(type: Test) {
     group = 'Verification'
     classpath = sourceSets.funTest.runtimeClasspath
     testClassesDirs = sourceSets.funTest.output.classesDirs
+    systemProperties = System.properties
 
     testLogging {
         events 'started', 'passed', 'skipped', 'failed'
