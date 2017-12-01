@@ -32,6 +32,10 @@ task funTest(type: Test) {
     group = 'Verification'
     classpath = sourceSets.funTest.runtimeClasspath
     testClassesDirs = sourceSets.funTest.output.classesDirs
+    systemProperties = [
+            includeTags: System.getProperty("includeTags"),
+            excludeTags: System.getProperty("excludeTags")
+    ]
 
     // Add the Git submodule for ScanCode to PATH so functional tests can find the scanner.
     def scanCodePath = "$projectDir/src/funTest/assets/scanners/scancode-toolkit"
