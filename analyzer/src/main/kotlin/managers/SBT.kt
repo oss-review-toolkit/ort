@@ -65,29 +65,29 @@ class SBT : PackageManager() {
         // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated form
         // "make-pom" and to support declaring Maven-style repositories, see
         // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-         if (definitionFiles.isNotEmpty()) {
-             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
-             // https://stackoverflow.com/a/20337575/1127485.
-             val workingDir = definitionFiles.first().parentFile
+        if (definitionFiles.isNotEmpty()) {
+            // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
+            // https://stackoverflow.com/a/20337575/1127485.
+            val workingDir = definitionFiles.first().parentFile
 
-             // See https://github.com/sbt/sbt/issues/2695.
-             val sbtLogNoformat = "-Dsbt.log.noformat=true".let {
-                 if (OS.isWindows) {
-                     "\"$it\""
-                 } else {
-                     it
-                 }
-             }
+            // See https://github.com/sbt/sbt/issues/2695.
+            val sbtLogNoformat = "-Dsbt.log.noformat=true".let {
+                if (OS.isWindows) {
+                    "\"$it\""
+                } else {
+                    it
+                }
+            }
 
-             checkCommandVersion(
-                     command(workingDir),
-                     Requirement.buildIvy("[0.13.0,)"),
-                     versionArguments = "$sbtLogNoformat sbtVersion",
-                     workingDir = workingDir,
-                     ignoreActualVersion = Main.ignoreVersions,
-                     transform = this::extractLowestSbtVersion
-             )
-         }
+            checkCommandVersion(
+                    command(workingDir),
+                    Requirement.buildIvy("[0.13.0,)"),
+                    versionArguments = "$sbtLogNoformat sbtVersion",
+                    workingDir = workingDir,
+                    ignoreActualVersion = Main.ignoreVersions,
+                    transform = this::extractLowestSbtVersion
+            )
+        }
 
         val pomFiles = sortedSetOf<File>()
 
@@ -108,7 +108,7 @@ class SBT : PackageManager() {
     }
 
     override fun resolveDependencies(projectDir: File, definitionFiles: List<File>) =
-        // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-        // TODO: Fix Maven being listed as the package manager in the result.
-        Maven.create().resolveDependencies(projectDir, prepareResolution(definitionFiles))
+            // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
+            // TODO: Fix Maven being listed as the package manager in the result.
+            Maven.create().resolveDependencies(projectDir, prepareResolution(definitionFiles))
 }
