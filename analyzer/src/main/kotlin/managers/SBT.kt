@@ -43,6 +43,15 @@ class SBT : PackageManager() {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
+        // See https://github.com/sbt/sbt/issues/2695.
+        private val SBT_LOG_NO_FORMAT = "-Dsbt.log.noformat=true".let {
+            if (OS.isWindows) {
+                "\"$it\""
+            } else {
+                it
+            }
+        }
+
         override fun create() = SBT()
     }
 
@@ -70,19 +79,10 @@ class SBT : PackageManager() {
             // https://stackoverflow.com/a/20337575/1127485.
             val workingDir = definitionFiles.first().parentFile
 
-            // See https://github.com/sbt/sbt/issues/2695.
-            val sbtLogNoformat = "-Dsbt.log.noformat=true".let {
-                if (OS.isWindows) {
-                    "\"$it\""
-                } else {
-                    it
-                }
-            }
-
             checkCommandVersion(
                     command(workingDir),
                     Requirement.buildIvy("[0.13.0,)"),
-                    versionArguments = "$sbtLogNoformat sbtVersion",
+                    versionArguments = "$SBT_LOG_NO_FORMAT sbtVersion",
                     workingDir = workingDir,
                     ignoreActualVersion = Main.ignoreVersions,
                     transform = this::extractLowestSbtVersion
@@ -93,7 +93,7 @@ class SBT : PackageManager() {
 
         definitionFiles.forEach { definitionFile ->
             val workingDir = definitionFile.parentFile
-            val sbt = ProcessCapture(workingDir, command(workingDir), "makePom").requireSuccess()
+            val sbt = ProcessCapture(workingDir, command(workingDir), SBT_LOG_NO_FORMAT, "makePom").requireSuccess()
 
             // Get the list of POM files created by "sbt makePom". A single call might create multiple POM files in
             // case of sub-projects.
