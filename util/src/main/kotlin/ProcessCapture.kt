@@ -139,7 +139,7 @@ fun getCommandVersion(
     var versionString = transform(version.stdout().trim())
     if (versionString.isEmpty()) {
         // Fall back to trying to read the version from stderr.
-        versionString = version.stderr().trim()
+        versionString = transform(version.stderr().trim())
     }
 
     return versionString
