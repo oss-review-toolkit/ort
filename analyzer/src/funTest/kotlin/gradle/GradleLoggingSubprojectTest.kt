@@ -21,6 +21,7 @@ package com.here.ort.analyzer.integration
 
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
+import com.here.ort.model.VcsInfo
 
 import java.io.File
 
@@ -35,10 +36,12 @@ class GradleLoggingSubprojectTest : BaseGradleSpec() {
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcsProvider = "Git",
-            vcsUrl = "https://github.com/gradle/gradle.git",
-            vcsRevision = "e4f4804807ef7c2829da51877861ff06e07e006d",
-            vcsPath = "subprojects/logging/"
+            vcs = VcsInfo(
+                    "Git",
+                    "https://github.com/gradle/gradle.git",
+                    "e4f4804807ef7c2829da51877861ff06e07e006d",
+                    "subprojects/logging/"
+            )
     )
 
     override val expectedResultsDir = "src/funTest/assets/projects/external/gradle-submodules"

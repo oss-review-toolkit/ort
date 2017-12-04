@@ -112,9 +112,9 @@ abstract class BaseGradleSpec : StringSpec() {
 
             forAll(gradleTable) { analyzerOutputFile, expectedResultFile ->
                 val analyzerResults = analyzerOutputFile.readText().replaceFirst(
-                        "vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
+                        "revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
                 val expectedResults = expectedResultFile.readText().replaceFirst(
-                        "vcs_revision:\\s*\"[^#\"]+\"".toRegex(), "vcs_revision: \"\"")
+                        "revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
                 analyzerResults shouldBe expectedResults
             }
         }.config(tags = setOf(Expensive))

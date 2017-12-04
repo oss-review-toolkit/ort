@@ -191,24 +191,24 @@ object Main {
         if (target.normalizedVcsUrl.isNotBlank()) {
             p("Trying to download from URL '${target.normalizedVcsUrl}'...")
 
-            if (target.vcsUrl != target.normalizedVcsUrl) {
-                p("URL was normalized, original URL was '${target.vcsUrl}'.")
+            if (target.vcs.url != target.normalizedVcsUrl) {
+                p("URL was normalized, original URL was '${target.vcs.url}'.")
             }
 
-            if (target.vcsRevision.isBlank()) {
+            if (target.vcs.revision.isBlank()) {
                 p("WARNING: No VCS revision provided, downloaded source code does likely not match revision " +
                         target.version)
             } else {
-                p("Downloading revision '${target.vcsRevision}'.")
+                p("Downloading revision '${target.vcs.revision}'.")
             }
 
             var applicableVcs: VersionControlSystem? = null
 
             p("Trying to detect VCS...")
 
-            if (target.vcsProvider.isNotBlank()) {
-                p("from provider name '${target.vcsProvider}'...")
-                applicableVcs = VersionControlSystem.forProvider(target.vcsProvider)
+            if (target.vcs.provider.isNotBlank()) {
+                p("from provider name '${target.vcs.provider}'...")
+                applicableVcs = VersionControlSystem.forProvider(target.vcs.provider)
             }
 
             if (applicableVcs == null) {
@@ -223,7 +223,7 @@ object Main {
             p("Using VCS provider '$applicableVcs'.")
 
             try {
-                val revision = applicableVcs.download(target.normalizedVcsUrl, target.vcsRevision, target.vcsPath,
+                val revision = applicableVcs.download(target.normalizedVcsUrl, target.vcs.revision, target.vcs.path,
                         target.version, targetDir)
                 p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
                 return targetDir

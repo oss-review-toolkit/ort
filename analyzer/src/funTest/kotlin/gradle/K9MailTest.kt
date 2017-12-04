@@ -21,6 +21,7 @@ package com.here.ort.analyzer.integration
 
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
+import com.here.ort.model.VcsInfo
 
 class K9MailTest : BaseGradleSpec() {
 
@@ -34,10 +35,12 @@ class K9MailTest : BaseGradleSpec() {
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcsProvider = "Git",
-            vcsUrl = "https://github.com/k9mail/k-9.git",
-            vcsRevision = "934bbbe88299b1d468315917924123e4a8b89883",
-            vcsPath = ""
+            vcs = VcsInfo(
+                    "Git",
+                    "https://github.com/k9mail/k-9.git",
+                    "934bbbe88299b1d468315917924123e4a8b89883",
+                    ""
+            )
     )
 
     override val expectedResultsDir = ""

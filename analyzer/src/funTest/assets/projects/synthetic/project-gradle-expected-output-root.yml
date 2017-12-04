@@ -7,10 +7,11 @@ project:
   version: ""
   declared_licenses: []
   aliases: []
-  vcs_provider: "Git"
-  vcs_url: ""
-  vcs_revision: ""
-  vcs_path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+  vcs:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes: []
 packages: []

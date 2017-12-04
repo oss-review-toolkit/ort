@@ -7,10 +7,11 @@ project:
   version: "2.30.0"
   declared_licenses: []
   aliases: []
-  vcs_provider: "git"
-  vcs_url: "git://github.com:ccavanaugh/jgnash.git"
-  vcs_revision: "HEAD"
-  vcs_path: ""
+  vcs:
+    provider: "git"
+    url: "git://github.com:ccavanaugh/jgnash.git"
+    revision: "HEAD"
+    path: ""
   homepage_url: "http://sourceforge.net/projects/jgnash/"
   scopes:
   - name: "test"
@@ -44,10 +45,11 @@ packages:
     url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
     hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
     hash_algorithm: "SHA-1"
-  vcs_provider: "git"
-  vcs_url: "git://github.com/junit-team/junit.git"
-  vcs_revision: "r4.12"
-  vcs_path: ""
+  vcs:
+    provider: "git"
+    url: "git://github.com/junit-team/junit.git"
+    revision: "r4.12"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.hamcrest"
   name: "hamcrest-all"
@@ -65,8 +67,9 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3-sources.jar"
     hash: "47e033b7ab18c5dbd5fe29fc1bd5a40afe028818"
     hash_algorithm: "SHA-1"
-  vcs_provider: "git"
-  vcs_url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
-  vcs_revision: "HEAD"
-  vcs_path: ""
+  vcs:
+    provider: "git"
+    url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
+    revision: "HEAD"
+    path: ""
 errors: []

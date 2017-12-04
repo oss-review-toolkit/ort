@@ -34,6 +34,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
+import com.here.ort.model.VcsInfo
 import com.here.ort.util.OkHttpClientHelper
 import com.here.ort.util.OS
 import com.here.ort.util.ProcessCapture
@@ -245,10 +246,7 @@ class PIP : PackageManager() {
                                     hashAlgorithm = "MD5"
                             ),
                             sourceArtifact = RemoteArtifact.EMPTY,
-                            vcsProvider = pkg.vcsProvider,
-                            vcsUrl = pkg.vcsUrl,
-                            vcsRevision = pkg.vcsRevision,
-                            vcsPath = pkg.vcsPath
+                            vcs = pkg.vcs
                     )
                 } catch (e: Exception) {
                     if (Main.stacktrace) {
@@ -278,10 +276,7 @@ class PIP : PackageManager() {
                 version = projectVersion,
                 declaredLicenses = sortedSetOf(),  // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
-                vcsProvider = vcsDir?.getProvider() ?: "",
-                vcsUrl = vcsDir?.getRemoteUrl() ?: "",
-                vcsRevision = vcsDir?.getRevision() ?: "",
-                vcsPath = vcsDir?.getPathToRoot(projectDir) ?: "",
+                vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )
@@ -381,10 +376,7 @@ class PIP : PackageManager() {
                     homepageUrl = "",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcsProvider = "",
-                    vcsUrl = "",
-                    vcsRevision = "",
-                    vcsPath = ""
+                    vcs = VcsInfo.EMPTY
             )
             packages.add(dependencyPackage)
 

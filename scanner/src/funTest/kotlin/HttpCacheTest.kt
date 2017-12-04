@@ -21,6 +21,7 @@ package com.here.ort.scanner
 
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
+import com.here.ort.model.VcsInfo
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
@@ -85,10 +86,7 @@ class HttpCacheTest : StringSpec() {
                     homepageUrl = "homepageUrl",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcsProvider = "vcsProvider",
-                    vcsUrl = "vcsUrl",
-                    vcsRevision = "vcsRevision",
-                    vcsPath = "vcsPath"
+                    vcs = VcsInfo.EMPTY
             )
 
             val resultFile = createTempFile()

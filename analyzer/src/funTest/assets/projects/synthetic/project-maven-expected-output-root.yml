@@ -7,10 +7,11 @@ project:
   version: "1.0-SNAPSHOT"
   declared_licenses: []
   aliases: []
-  vcs_provider: "Git"
-  vcs_url: ""
-  vcs_revision: ""
-  vcs_path: ""
+  vcs:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes: []
 packages: []

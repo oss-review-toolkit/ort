@@ -7,10 +7,11 @@ project:
   version: ""
   declared_licenses: []
   aliases: []
-  vcs_provider: "Git"
-  vcs_url: "https://github.com/gradle/gradle.git"
-  vcs_revision: "fdafeac26dbb661805dc3cbb5d54411fe72c5e86"
-  vcs_path: ""
+  vcs:
+    provider: "Git"
+    url: "https://github.com/gradle/gradle.git"
+    revision: "fdafeac26dbb661805dc3cbb5d54411fe72c5e86"
+    path: ""
   homepage_url: ""
   scopes: []
 packages: []
