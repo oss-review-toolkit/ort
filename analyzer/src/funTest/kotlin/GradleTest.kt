@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.util.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -33,6 +34,15 @@ class GradleTest : StringSpec() {
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
+
+    private val unresolvableConfigurations = listOf(
+            "apiElements",
+            "implementation",
+            "runtimeElements",
+            "runtimeOnly",
+            "testImplementation",
+            "testRuntimeOnly"
+    ).map { "Configuration '$it' cannot be resolved." }
 
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename)
@@ -47,6 +57,8 @@ class GradleTest : StringSpec() {
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
+            result shouldNotBe null
+            result!!.errors.joinToString("\n") shouldBe emptyList<String>().joinToString("\n")
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -56,6 +68,8 @@ class GradleTest : StringSpec() {
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
+            result shouldNotBe null
+            result!!.errors.joinToString("\n") shouldBe unresolvableConfigurations.joinToString("\n")
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -65,6 +79,8 @@ class GradleTest : StringSpec() {
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
+            result shouldNotBe null
+            result!!.errors.joinToString("\n") shouldBe unresolvableConfigurations.joinToString("\n")
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -74,6 +90,8 @@ class GradleTest : StringSpec() {
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
+            result shouldNotBe null
+            result!!.errors.joinToString("\n") shouldBe unresolvableConfigurations.joinToString("\n")
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
