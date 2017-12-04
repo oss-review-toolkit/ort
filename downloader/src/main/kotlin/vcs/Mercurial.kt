@@ -35,6 +35,14 @@ object Mercurial : VersionControlSystem() {
     private const val EXTENSION_LARGE_FILES = "largefiles = "
     private const val EXTENSION_SPARSE = "sparse = "
 
+    override fun getVersion(): String {
+        val mercurialVersionRegex = Regex("Mercurial .*\\(version (?<version>[\\d.]+)\\)")
+
+        return getCommandVersion("hg") {
+            mercurialVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""
+        }
+    }
+
     override fun getWorkingDirectory(vcsDirectory: File) =
             object : WorkingDirectory(vcsDirectory) {
                 override fun isValid(): Boolean {
@@ -66,6 +74,8 @@ object Mercurial : VersionControlSystem() {
 
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
             : String {
+        log.info { "Using $this version ${getVersion()}." }
+
         val revisionCmdArgs = mutableListOf<String>()
 
         // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
@@ -152,14 +162,7 @@ object Mercurial : VersionControlSystem() {
     }
 
     fun isAtLeastVersion(version: String): Boolean {
-        val mercurialVersionRegex = Regex("Mercurial .*\\(version (?<version>[\\d.]+)\\)")
-
-        val mercurialVersionString = getCommandVersion("hg") {
-            mercurialVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: "0.0.0"
-        }
-
-        val mercurialVersion = Semver(mercurialVersionString, Semver.SemverType.LOOSE)
-
+        val mercurialVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
         return !mercurialVersion.isLowerThan(Semver(version, Semver.SemverType.LOOSE))
     }
 

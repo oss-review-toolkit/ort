@@ -99,6 +99,11 @@ abstract class VersionControlSystem {
     }
 
     /**
+     * Return the VCS command's version string, or an empty string if the version cannot be determined.
+     */
+    abstract fun getVersion(): String
+
+    /**
      * Return a working directory instance for this VCS.
      */
     abstract fun getWorkingDirectory(vcsDirectory: File): WorkingDirectory
