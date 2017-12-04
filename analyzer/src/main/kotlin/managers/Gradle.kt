@@ -129,7 +129,8 @@ class Gradle : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
-            return AnalyzerResult(true, project, packages.values.toSortedSet())
+            return AnalyzerResult(true, project, packages.values.toSortedSet(),
+                    dependencyTreeModel.errors)
         } catch (e: BuildException) {
             if (Main.stacktrace) {
                 e.printStackTrace()
