@@ -7,10 +7,11 @@ project:
   version: "1.0-SNAPSHOT"
   declared_licenses: []
   aliases: []
-  vcs_provider: "Git"
-  vcs_url: ""
-  vcs_revision: ""
-  vcs_path: ""
+  vcs:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes:
   - name: "compile"
@@ -52,10 +53,11 @@ packages:
     url: "https://repo.maven.apache.org/maven2/junit/junit/3.8.1/junit-3.8.1-sources.jar"
     hash: "0525753763e53f6f76da052b316d0f2e3bfa4d73"
     hash_algorithm: "SHA-1"
-  vcs_provider: ""
-  vcs_url: ""
-  vcs_revision: "HEAD"
-  vcs_path: ""
+  vcs:
+    provider: ""
+    url: ""
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.apache.commons"
   name: "commons-lang3"
@@ -74,10 +76,11 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
     hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
     hash_algorithm: "SHA-1"
-  vcs_provider: "git"
-  vcs_url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
-  vcs_revision: "LANG_3_5"
-  vcs_path: ""
+  vcs:
+    provider: "git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+    revision: "LANG_3_5"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.apache.commons"
   name: "commons-text"
@@ -95,8 +98,9 @@ packages:
     url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
     hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
     hash_algorithm: "SHA-1"
-  vcs_provider: "git"
-  vcs_url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-  vcs_revision: "HEAD"
-  vcs_path: ""
+  vcs:
+    provider: "git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+    revision: "HEAD"
+    path: ""
 errors: []

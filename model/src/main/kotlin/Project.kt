@@ -67,38 +67,9 @@ data class Project(
         val aliases: List<String>,
 
         /**
-         * The name of the VCS provider, for example Git, Hg or SVN.
-         *
-         * @see [Package.vcsProvider].
+         * VCS-related information about the [Project].
          */
-        @JsonProperty("vcs_provider")
-        val vcsProvider: String,
-
-        /**
-         * The URL to the VCS repository.
-         *
-         * @see [Package.vcsUrl].
-         */
-        @JsonProperty("vcs_url")
-        val vcsUrl: String,
-
-        /**
-         * The VCS-specific revision (tag, branch, SHA1) that this [version] of the project maps to.
-         *
-         * @see [Package.vcsRevision].
-         */
-        @JsonProperty("vcs_revision")
-        val vcsRevision: String,
-
-        /**
-         * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS provider. For
-         * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
-         * interpreted as the path to the manifest file.
-         *
-         * @see [Package.vcsPath].
-         */
-        @JsonProperty("vcs_path")
-        val vcsPath: String,
+        val vcs: VcsInfo,
 
         /**
          * The URL to the project's homepage.
@@ -125,10 +96,7 @@ data class Project(
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcsProvider = vcsProvider,
-            vcsUrl = vcsUrl,
-            vcsRevision = vcsRevision,
-            vcsPath = vcsPath
+            vcs = vcs
     )
 
     companion object {
@@ -143,10 +111,7 @@ data class Project(
                 version = "",
                 declaredLicenses = sortedSetOf(),
                 aliases = emptyList(),
-                vcsProvider = "",
-                vcsUrl = "",
-                vcsRevision = "",
-                vcsPath = "",
+                vcs = VcsInfo.EMPTY,
                 homepageUrl = "",
                 scopes = sortedSetOf()
         )

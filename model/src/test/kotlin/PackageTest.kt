@@ -38,10 +38,7 @@ class PackageTest : WordSpec({
                     homepageUrl = "",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcsProvider = "",
-                    vcsUrl = "https://github.com/fb55/nth-check",
-                    vcsRevision = "",
-                    vcsPath = ""
+                    vcs = VcsInfo("", "https://github.com/fb55/nth-check", "", "")
             )
             val expectedUrl = "https://github.com/fb55/nth-check.git"
 
@@ -59,10 +56,7 @@ class PackageTest : WordSpec({
                     homepageUrl = "",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcsProvider = "",
-                    vcsUrl = "npm/npm",
-                    vcsRevision = "",
-                    vcsPath = ""
+                    vcs = VcsInfo("", "npm/npm", "", "")
             )
             val expectedUrl = "https://github.com/npm/npm.git"
 

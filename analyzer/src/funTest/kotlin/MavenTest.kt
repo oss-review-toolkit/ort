@@ -31,14 +31,14 @@ import java.io.File
 class MavenTest : StringSpec() {
     private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic/maven")
     private val vcsDir = VersionControlSystem.forDirectory(syntheticProjectDir)!!
-    private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
+    private val vcsRevision = vcsDir.getRevision()
 
     private fun patchExpectedResult(filename: String) =
             File(syntheticProjectDir.parentFile, filename)
                     .readText()
-                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+                    .replaceFirst("url: \"\"", "url: \"$vcsUrl\"")
+                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
 
     init {
         "jgnash parent dependencies are detected correctly" {

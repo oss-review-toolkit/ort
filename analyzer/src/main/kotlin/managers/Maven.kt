@@ -32,6 +32,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
+import com.here.ort.model.VcsInfo
 import com.here.ort.util.collectMessages
 import com.here.ort.util.log
 
@@ -108,17 +109,12 @@ class Maven : PackageManager() {
             scope.dependencies.add(parseDependency(node, packages))
         }
 
-        val vcsInfo = maven.parseVcsInfo(mavenProject).let {
-            if (it.isEmpty()) {
-                VersionControlSystem.forDirectory(projectDir).let {
-                    MavenSupport.VcsInfo(
-                            it?.getProvider() ?: "",
-                            it?.getRemoteUrl() ?: "",
-                            it?.getRevision() ?: ""
-                    )
-                }
-            } else it
-        }
+        // Try to get VCS information from the POM's SCM tag, or otherwise from the working directory.
+        val vcs = maven.parseVcsInfo(mavenProject).takeUnless {
+            it == VcsInfo.EMPTY
+        } ?: VersionControlSystem.forDirectory(projectDir)?.let {
+            it.getInfo(projectDir)
+        } ?: VcsInfo.EMPTY
 
         val project = Project(
                 packageManager = javaClass.simpleName,
@@ -127,10 +123,7 @@ class Maven : PackageManager() {
                 version = mavenProject.version,
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 aliases = emptyList(),
-                vcsProvider = vcsInfo.provider,
-                vcsUrl = vcsInfo.url,
-                vcsRevision = vcsInfo.revision,
-                vcsPath = "",
+                vcs = vcs,
                 homepageUrl = mavenProject.url ?: "",
                 scopes = scopes.values.toSortedSet()
         )

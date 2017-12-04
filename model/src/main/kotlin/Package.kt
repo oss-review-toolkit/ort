@@ -91,30 +91,9 @@ data class Package(
         val sourceArtifact: RemoteArtifact,
 
         /**
-         * The name of the VCS provider, for example Git, Hg or SVN.
+         * VCS-related information about the [Package].
          */
-        @JsonProperty("vcs_provider")
-        val vcsProvider: String,
-
-        /**
-         * The URL to the VCS repository.
-         */
-        @JsonProperty("vcs_url")
-        val vcsUrl: String,
-
-        /**
-         * The VCS-specific revision (tag, branch, SHA1) that this [version] of the package maps to.
-         */
-        @JsonProperty("vcs_revision")
-        val vcsRevision: String,
-
-        /**
-         * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS provider. For
-         * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
-         * interpreted as the path to the manifest file.
-         */
-        @JsonProperty("vcs_path")
-        val vcsPath: String
+        val vcs: VcsInfo
 ) : Comparable<Package> {
     /**
      * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].
@@ -134,7 +113,7 @@ data class Package(
      *
      * @see normalizeVcsUrl
      */
-    val normalizedVcsUrl = normalizeVcsUrl(vcsUrl, semverType)
+    val normalizedVcsUrl = normalizeVcsUrl(vcs.url, semverType)
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the

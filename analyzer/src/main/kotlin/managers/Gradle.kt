@@ -36,6 +36,7 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
+import com.here.ort.model.VcsInfo
 import com.here.ort.util.OS
 import com.here.ort.util.log
 
@@ -131,10 +132,7 @@ class Gradle : PackageManager() {
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsProvider = vcsDir?.getProvider() ?: "",
-                    vcsUrl = vcsDir?.getRemoteUrl() ?: "",
-                    vcsRevision = vcsDir?.getRevision() ?: "",
-                    vcsPath = vcsDir?.getPathToRoot(projectDir) ?: "",
+                    vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )
@@ -174,10 +172,7 @@ class Gradle : PackageManager() {
                             homepageUrl = "",
                             binaryArtifact = RemoteArtifact.EMPTY,
                             sourceArtifact = RemoteArtifact.EMPTY,
-                            vcsProvider = "",
-                            vcsUrl = "",
-                            vcsRevision = "",
-                            vcsPath = ""
+                            vcs = VcsInfo.EMPTY
                     )
                 }
             }

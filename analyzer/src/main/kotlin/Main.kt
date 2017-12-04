@@ -32,6 +32,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Project
+import com.here.ort.model.VcsInfo
 import com.here.ort.util.jsonMapper
 import com.here.ort.util.log
 import com.here.ort.util.yamlMapper
@@ -219,10 +220,7 @@ object Main {
                     version = "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcsProvider = vcsDir?.getProvider() ?: "",
-                    vcsUrl = vcsDir?.getRemoteUrl() ?: "",
-                    vcsRevision = vcsDir?.getRevision() ?: "",
-                    vcsPath = vcsDir?.getPathToRoot(absoluteProjectPath) ?: "",
+                    vcs = vcsDir?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY,
                     homepageUrl = "",
                     scopes = sortedSetOf()
             )

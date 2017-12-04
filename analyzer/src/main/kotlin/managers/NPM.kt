@@ -34,6 +34,7 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
+import com.here.ort.model.VcsInfo
 import com.here.ort.util.OS
 import com.here.ort.util.OkHttpClientHelper
 import com.here.ort.util.ProcessCapture
@@ -160,12 +161,9 @@ class NPM : PackageManager() {
             var description: String
             var homepageUrl: String
             var downloadUrl: String
+
             var hash: String
             val hashAlgorithm = ""
-            val vcsPath = ""
-            var vcsProvider = ""
-            var vcsUrl = ""
-            var vcsRevision = ""
 
             val identifier = "$rawName@$version"
 
@@ -183,7 +181,7 @@ class NPM : PackageManager() {
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-            try {
+            val vcs = try {
                 val jsonResponse = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
                     if (response.code() != HttpURLConnection.HTTP_OK) {
                         throw IOException("Could not retrieve package info about $encodedName: " +
@@ -209,16 +207,11 @@ class NPM : PackageManager() {
 
                 val dist = infoJson["dist"]
                 downloadUrl = dist["tarball"].asText()
+
                 hash = dist["shasum"].asText()
-
                 // TODO: add detection of hash algorithm
-                with(parseRepository(infoJson)) {
-                    vcsProvider = first
-                    vcsUrl = second
-                }
 
-                // See https://github.com/npm/read-package-json/issues/7 for some background info.
-                vcsRevision = infoJson["gitHead"].asTextOrEmpty()
+                parseVcsInfo(infoJson)
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -228,14 +221,11 @@ class NPM : PackageManager() {
                 description = json["description"].asTextOrEmpty()
                 homepageUrl = json["homepage"].asTextOrEmpty()
                 downloadUrl = json["_resolved"].asTextOrEmpty()
-                hash = json["_integrity"].asTextOrEmpty()
 
+                hash = json["_integrity"].asTextOrEmpty()
                 // TODO: add detection of hash algorithm
 
-                with(parseRepository(json)) {
-                    vcsProvider = first
-                    vcsUrl = second
-                }
+                parseVcsInfo(json)
             }
 
             val module = Package(
@@ -252,10 +242,7 @@ class NPM : PackageManager() {
                             hashAlgorithm = hashAlgorithm
                     ),
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcsProvider = vcsProvider,
-                    vcsUrl = vcsUrl,
-                    vcsRevision = vcsRevision,
-                    vcsPath = vcsPath
+                    vcs = vcs
             )
 
             require(module.name.isNotEmpty()) {
@@ -322,16 +309,15 @@ class NPM : PackageManager() {
         return dependencies
     }
 
-    private fun parseRepository(node: JsonNode): Pair<String, String> {
-        val repository = node["repository"] ?: return Pair("", "")
+    private fun parseVcsInfo(node: JsonNode): VcsInfo {
+        // See https://github.com/npm/read-package-json/issues/7 for some background info.
+        val head = node["gitHead"].asTextOrEmpty()
 
-        val url = repository.let {
-            it.textValue() ?: it["url"].asTextOrEmpty()
-        }
-
-        val type = repository["type"].asTextOrEmpty()
-
-        return Pair(type, url)
+        return node["repository"]?.let { repo ->
+            val type = repo["type"].asTextOrEmpty()
+            val url = repo.textValue() ?: repo["url"].asTextOrEmpty()
+            VcsInfo(type, url, head, "")
+        } ?: VcsInfo("", "", head, "")
     }
 
     private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>,
@@ -392,26 +378,6 @@ class NPM : PackageManager() {
         }
     }
 
-    private fun vcsInfoFallback(name: String, infoFromPackage: String, infoFromDirectory: String) =
-        when {
-            infoFromPackage.isBlank() -> {
-                log.info {
-                    "The VCS $name specified in 'package.json' is blank. Will use '$infoFromDirectory' as " +
-                            "as detected from the project directory."
-                }
-                infoFromDirectory
-            }
-            infoFromPackage != infoFromDirectory -> {
-                log.warn {
-                    "The VCS $name '$infoFromPackage' specified in 'package.json' does not match " +
-                            "'$infoFromDirectory' as detected from the project directory. Will use " +
-                            "'$infoFromPackage'."
-                }
-                infoFromPackage
-            }
-            else -> infoFromPackage
-        }
-
     private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>)
             : AnalyzerResult {
         log.debug { "Parsing project info from ${packageJson.absolutePath}." }
@@ -438,13 +404,12 @@ class NPM : PackageManager() {
 
         val projectDir = packageJson.parentFile
 
-        val (vcsProviderFromPackage, vcsUrlFromPackage) = parseRepository(json)
-        val vcsDir = VersionControlSystem.forDirectory(projectDir)
-        val vcsProviderFromDirectory = vcsDir?.getProvider() ?: ""
-        val vcsUrlFromDirectory = vcsDir?.getRemoteUrl() ?: ""
-
-        val vcsProvider = vcsInfoFallback("provider", vcsProviderFromPackage, vcsProviderFromDirectory)
-        val vcsUrl = vcsInfoFallback("url", vcsUrlFromPackage, vcsUrlFromDirectory)
+        // Try to get VCS information from the package.json's repository field, or otherwise from the working directory.
+        val vcs = parseVcsInfo(json).takeUnless {
+            it == VcsInfo.EMPTY
+        } ?: VersionControlSystem.forDirectory(projectDir)?.let {
+            it.getInfo(projectDir)
+        } ?: VcsInfo.EMPTY
 
         val project = Project(
                 packageManager = javaClass.simpleName,
@@ -453,10 +418,7 @@ class NPM : PackageManager() {
                 version = version,
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
-                vcsProvider = vcsProvider,
-                vcsUrl = vcsUrl,
-                vcsRevision = vcsDir?.getRevision() ?: "",
-                vcsPath = vcsDir?.getPathToRoot(projectDir) ?: "",
+                vcs = vcs,
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )

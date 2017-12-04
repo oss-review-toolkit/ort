@@ -34,8 +34,8 @@ import java.io.File
 class GradleTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
+    private val vcsRevision = vcsDir.getRevision()
 
     private val unresolvableConfigurations = listOf(
             "apiElements",
@@ -49,8 +49,8 @@ class GradleTest : StringSpec() {
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename)
                     .readText()
-                    .replaceFirst("vcs_url: \"\"", "vcs_url: \"$vcsUrl\"")
-                    .replaceFirst("vcs_revision: \"\"", "vcs_revision: \"$vcsRevision\"")
+                    .replaceFirst("url: \"\"", "url: \"$vcsUrl\"")
+                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
 
     init {
         "Root project dependencies are detected correctly" {

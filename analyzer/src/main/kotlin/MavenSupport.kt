@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
+import com.here.ort.model.VcsInfo
 import com.here.ort.util.log
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -65,7 +66,7 @@ fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
 class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> LocalRepositoryManager) {
     companion object {
-        val SCM_REGEX = Regex("scm:[^:]+:(.+)")
+        val SCM_REGEX = Regex("scm:(?<provider>[^:]+):(?<url>.+)")
     }
 
     val container = createContainer()
@@ -255,10 +256,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 homepageUrl = mavenProject.url ?: "",
                 binaryArtifact = binaryRemoteArtifact,
                 sourceArtifact = sourceRemoteArtifact,
-                vcsProvider = parseVcsProvider(mavenProject),
-                vcsUrl = parseVcsUrl(mavenProject),
-                vcsRevision = parseVcsRevision(mavenProject),
-                vcsPath = ""
+                vcs = parseVcsInfo(mavenProject)
         )
     }
 
@@ -266,27 +264,16 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
     fun parseLicenses(mavenProject: MavenProject) =
             mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
 
-    fun parseVcsInfo(mavenProject: MavenProject) =
-            VcsInfo(parseVcsProvider(mavenProject), parseVcsUrl(mavenProject), parseVcsRevision(mavenProject))
+    fun parseVcsInfo(mavenProject: MavenProject): VcsInfo {
+        return mavenProject.scm?.let { scm ->
+            val connection = scm.connection ?: ""
+            val tag = scm.tag ?: ""
 
-    fun parseVcsProvider(mavenProject: MavenProject): String {
-        mavenProject.scm?.connection?.split(":")?.let {
-            if (it.size > 1 && it[0] == "scm") {
-                return it[1]
-            }
-        }
-        return ""
+            val (provider, url) = SCM_REGEX.matchEntire(connection)?.groups?.let { match ->
+                Pair(match.get("provider")!!.value, match.get("url")!!.value)
+            } ?: Pair("", "")
+
+            VcsInfo(provider, url, tag, "")
+        } ?: VcsInfo.EMPTY
     }
-
-    fun parseVcsUrl(mavenProject: MavenProject) =
-            mavenProject.scm?.connection?.let {
-                SCM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
-            } ?: ""
-
-    fun parseVcsRevision(mavenProject: MavenProject) = mavenProject.scm?.tag ?: ""
-
-    data class VcsInfo(val provider: String, val url: String, val revision: String) {
-        fun isEmpty() = provider.isEmpty() && url.isEmpty() && revision.isEmpty()
-    }
-
 }

@@ -21,6 +21,7 @@ package com.here.ort.analyzer.integration
 
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
+import com.here.ort.model.VcsInfo
 
 class RobolectricTest : BaseGradleSpec() {
 
@@ -34,10 +35,12 @@ class RobolectricTest : BaseGradleSpec() {
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcsProvider = "Git",
-            vcsUrl = "https://github.com/robolectric/robolectric.git",
-            vcsRevision = "757dfd56499a415376ea04bfa520b317bf2e3b58",
-            vcsPath = ""
+            vcs = VcsInfo(
+                    "Git",
+                    "https://github.com/robolectric/robolectric.git",
+                    "757dfd56499a415376ea04bfa520b317bf2e3b58",
+                    ""
+            )
     )
 
     override val expectedResultsDir = "src/funTest/assets/projects/synthetic/gradle-expected-results/robolectric/"

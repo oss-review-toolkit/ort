@@ -20,6 +20,7 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.*
+import com.here.ort.model.VcsInfo
 
 import java.io.File
 
@@ -71,6 +72,11 @@ abstract class VersionControlSystem {
          * Return a simple string representation for the VCS this working directory belongs to.
          */
         fun getProvider() = this@VersionControlSystem.toString()
+
+        /**
+         * Conveniently return all VCS information for a given [path].
+         */
+        fun getInfo(path: File) = VcsInfo(getProvider(), getRemoteUrl(), getRevision(), getPathToRoot(path))
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.
