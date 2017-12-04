@@ -25,6 +25,7 @@ import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -44,6 +45,11 @@ class MercurialTest : StringSpec() {
     }
 
     init {
+        "Detected Mercurial version is not empty" {
+            val version = Mercurial.getVersion()
+            version shouldNotBe ""
+        }.config(tags = setOf(Expensive))
+
         "Mercurial can download entire repo" {
             Mercurial.download(REPO_URL, null, null, "", outputDir)
             Mercurial.getWorkingDirectory(outputDir).getProvider() shouldBe "Mercurial"

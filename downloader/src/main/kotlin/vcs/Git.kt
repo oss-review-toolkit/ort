@@ -26,12 +26,21 @@ import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.util.log
 import com.here.ort.util.ProcessCapture
+import com.here.ort.util.getCommandVersion
 import com.here.ort.util.safeMkdirs
 
 import java.io.File
 import java.io.IOException
 
 abstract class GitBase : VersionControlSystem() {
+    override fun getVersion(): String {
+        val gitVersionRegex = Regex("git version (?<version>[\\d.a-z]+)")
+
+        return getCommandVersion("git") {
+            gitVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""
+        }
+    }
+
     override fun getWorkingDirectory(vcsDirectory: File) =
             object : WorkingDirectory(vcsDirectory) {
                 override fun isValid(): Boolean {
@@ -83,6 +92,8 @@ object Git : GitBase() {
     @Suppress("ComplexMethod")
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
             : String {
+        log.info { "Using $this version ${getVersion()}." }
+
         try {
             // Do not use "git clone" to have more control over what is being fetched.
             runGitCommand(targetDir, "init")
