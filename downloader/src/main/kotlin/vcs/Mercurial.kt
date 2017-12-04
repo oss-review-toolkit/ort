@@ -71,7 +71,7 @@ object Mercurial : VersionControlSystem() {
         // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
         val extensionsList = mutableListOf(EXTENSION_LARGE_FILES)
 
-        if (vcsRevision != null) {
+        if (vcsRevision != null && vcsRevision.isNotBlank()) {
             revisionCmdArgs.add("-r")
             revisionCmdArgs.add(vcsRevision)
         }
