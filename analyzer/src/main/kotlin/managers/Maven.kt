@@ -37,14 +37,12 @@ import com.here.ort.util.log
 
 import java.io.File
 
-import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingResult
 
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
-import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.graph.DependencyNode
 import org.eclipse.aether.metadata.Metadata
 import org.eclipse.aether.repository.LocalArtifactRegistration
@@ -143,7 +141,8 @@ class Maven : PackageManager() {
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
         try {
             val pkg = packages.getOrPut(node.artifact.identifier()) {
-                parsePackage(node)
+                maven.parsePackage(node.artifact, node.repositories, javaClass.simpleName,
+                        projectsByIdentifier.mapValues { it.value.project })
             }
 
             val dependencies = node.children.map { parseDependency(it, packages) }.toSortedSet()
@@ -166,46 +165,6 @@ class Maven : PackageManager() {
                     errors = e.collectMessages()
             )
         }
-    }
-
-    private fun parsePackage(node: DependencyNode): Package {
-        val mavenRepositorySystem = maven.container.lookup(MavenRepositorySystem::class.java, "default")
-        val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
-        val projectBuildingRequest = maven.createProjectBuildingRequest(true)
-
-        val cachedProject = projectsByIdentifier[node.artifact.identifier()]
-
-        val mavenProject = cachedProject?.project ?:
-                node.artifact.let {
-                    val artifact = mavenRepositorySystem
-                            .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
-
-                    projectBuilder.build(artifact, projectBuildingRequest).project
-                }
-
-        val binaryRemoteArtifact = maven.requestRemoteArtifact(node.artifact, node.repositories)
-
-        val sourceArtifact = node.artifact.let {
-            DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)
-        }
-
-        val sourceRemoteArtifact = maven.requestRemoteArtifact(sourceArtifact, node.repositories)
-
-        return Package(
-                packageManager = javaClass.simpleName,
-                namespace = mavenProject.groupId,
-                name = mavenProject.artifactId,
-                version = mavenProject.version,
-                declaredLicenses = maven.parseLicenses(mavenProject),
-                description = mavenProject.description ?: "",
-                homepageUrl = mavenProject.url ?: "",
-                binaryArtifact = binaryRemoteArtifact,
-                sourceArtifact = sourceRemoteArtifact,
-                vcsProvider = maven.parseVcsProvider(mavenProject),
-                vcsUrl = maven.parseVcsUrl(mavenProject),
-                vcsRevision = maven.parseVcsRevision(mavenProject),
-                vcsPath = ""
-        )
     }
 
     /**

@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.util.log
 
@@ -45,6 +46,7 @@ import org.eclipse.aether.DefaultRepositorySystemSession
 import org.eclipse.aether.RepositorySystem
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.impl.RemoteRepositoryManager
 import org.eclipse.aether.impl.RepositoryConnectorProvider
 import org.eclipse.aether.repository.LocalRepositoryManager
@@ -210,6 +212,56 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         return RemoteArtifact.EMPTY
     }
+
+    /**
+     * Create an instance of [Package] from the information found in a POM file.
+     *
+     * @param artifact The artifact for which the [Package] will be created.
+     * @param repositories A list of remote repositories to search for [artifact].
+     * @param packageManager The name of the [PackageManager] to put in the respective field of the created [Package].
+     * @param cachedProjects Instances of [MavenProject] which have already been created, mapped by their identifier. If
+     *                       a project is found in this map no remote repositories will be queried.
+     */
+    fun parsePackage(artifact: Artifact, repositories: List<RemoteRepository>, packageManager: String,
+                     cachedProjects: Map<String, MavenProject> = emptyMap()): Package {
+        val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
+        val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
+        val projectBuildingRequest = createProjectBuildingRequest(true)
+
+        val cachedProject = cachedProjects[artifact.identifier()]
+
+        val mavenProject = cachedProject ?: artifact.let {
+            val pomArtifact = mavenRepositorySystem
+                    .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
+
+            projectBuilder.build(pomArtifact, projectBuildingRequest).project
+        }
+
+        val binaryRemoteArtifact = requestRemoteArtifact(artifact, repositories)
+
+        val sourceArtifact = artifact.let {
+            DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)
+        }
+
+        val sourceRemoteArtifact = requestRemoteArtifact(sourceArtifact, repositories)
+
+        return Package(
+                packageManager = packageManager,
+                namespace = mavenProject.groupId,
+                name = mavenProject.artifactId,
+                version = mavenProject.version,
+                declaredLicenses = parseLicenses(mavenProject),
+                description = mavenProject.description ?: "",
+                homepageUrl = mavenProject.url ?: "",
+                binaryArtifact = binaryRemoteArtifact,
+                sourceArtifact = sourceRemoteArtifact,
+                vcsProvider = parseVcsProvider(mavenProject),
+                vcsUrl = parseVcsUrl(mavenProject),
+                vcsRevision = parseVcsRevision(mavenProject),
+                vcsPath = ""
+        )
+    }
+
 
     fun parseLicenses(mavenProject: MavenProject) =
             mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
