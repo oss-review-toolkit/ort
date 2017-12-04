@@ -136,13 +136,14 @@ fun getCommandVersion(
     val commandLine = arrayOf(command).plus(versionArguments.split(' '))
     val version = ProcessCapture(workingDir, *commandLine).requireSuccess()
 
-    var versionString = transform(version.stdout().trim())
-    if (versionString.isEmpty()) {
-        // Fall back to trying to read the version from stderr.
-        versionString = transform(version.stderr().trim())
+    // Some tools, like pipdeptree, actually report the version to stderr.
+    val versionString = sequenceOf(version.stdout(), version.stderr()).map {
+        transform(it.trim())
+    }.find {
+        it.isNotBlank()
     }
 
-    return versionString
+    return versionString ?: ""
 }
 
 /**
