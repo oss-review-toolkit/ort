@@ -105,10 +105,19 @@ class Gradle : PackageManager() {
                 log.warn { "Init script file '${initScriptFile.absolutePath}' could not be deleted." }
             }
 
+            val repositories = dependencyTreeModel.repositories.map {
+                // TODO: Also handle authentication and snapshot policy.
+                RemoteRepository.Builder(it, null, it).build()
+            }
+
+            log.debug {
+                "The Gradle project '${dependencyTreeModel.name}' uses the following Maven repositories: $repositories"
+            }
+
             val packages = mutableMapOf<String, Package>()
             val scopes = dependencyTreeModel.configurations.map { configuration ->
                 val dependencies = configuration.dependencies.map { dependency ->
-                    parseDependency(dependency, packages)
+                    parseDependency(dependency, packages, repositories)
                 }
 
                 Scope(configuration.name, true, dependencies.toSortedSet())
@@ -144,27 +153,16 @@ class Gradle : PackageManager() {
         }
     }
 
-    private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>): PackageReference {
+    private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
+                                repositories: List<RemoteRepository>): PackageReference {
         if (dependency.error == null) {
             // Only look for a package when there was no error resolving the dependency.
             packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
                 if (dependency.pomFile.isNotBlank()) {
-                    val project = maven.buildMavenProject(File(dependency.pomFile)).project
-                    Package(
-                            packageManager = javaClass.simpleName,
-                            namespace = project.groupId,
-                            name = project.artifactId,
-                            version = project.version,
-                            declaredLicenses = maven.parseLicenses(project),
-                            description = project.description ?: "",
-                            homepageUrl = project.url ?: "",
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcsProvider = maven.parseVcsProvider(project),
-                            vcsUrl = maven.parseVcsUrl(project),
-                            vcsRevision = maven.parseVcsRevision(project),
-                            vcsPath = ""
-                    )
+                    // TODO: Provide extension and classifier.
+                    val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, "jar",
+                            dependency.version)
+                    maven.parsePackage(artifact, repositories, javaClass.simpleName)
                 } else {
                     Package(
                             packageManager = javaClass.simpleName,
@@ -185,7 +183,7 @@ class Gradle : PackageManager() {
             }
         }
 
-        val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages) }
+        val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
         return PackageReference(dependency.groupId, dependency.artifactId, dependency.version,
                 transitiveDependencies.toSortedSet(), dependency.error?.let { listOf(it) } ?: emptyList())
     }
