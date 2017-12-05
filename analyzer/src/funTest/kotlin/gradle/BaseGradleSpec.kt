@@ -64,9 +64,19 @@ abstract class BaseGradleSpec : StringSpec() {
                     "-o", analyzerResultsDir.absolutePath)
             )
 
-            val sourceGradleProjectFiles = downloadedDir.walkTopDown().filter { file ->
-                Gradle.matchersForDefinitionFiles.any { glob ->
-                    glob.matches(file.toPath())
+            val sourceGradleProjectFiles = mutableListOf<File>()
+
+            downloadedDir.walkTopDown().filter {
+                it.isDirectory
+            }.forEach { dir ->
+                val matches = Gradle.matchersForDefinitionFiles.mapNotNull { glob ->
+                    dir.listFiles().find { file ->
+                        glob.matches(file.toPath())
+                    }
+                }
+
+                if (matches.isNotEmpty()) {
+                    sourceGradleProjectFiles.add(matches.first())
                 }
             }
 
