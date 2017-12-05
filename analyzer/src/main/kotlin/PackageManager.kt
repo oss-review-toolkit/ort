@@ -85,7 +85,7 @@ abstract class PackageManager {
                         e.printStackTrace()
                     }
 
-                    result[definitionFile] = AnalyzerResult(Main.allowDynamicVersions, Project.createEmpty(),
+                    result[definitionFile] = AnalyzerResult(Main.allowDynamicVersions, Project.EMPTY,
                             sortedSetOf(), e.collectMessages())
 
                     log.error { "Resolving dependencies in '${workingDir.name}' failed with: ${e.message}" }

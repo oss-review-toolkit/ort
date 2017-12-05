@@ -123,8 +123,8 @@ data class Project(
             declaredLicenses = declaredLicenses,
             description = "",
             homepageUrl = homepageUrl,
-            binaryArtifact = RemoteArtifact.createEmpty(),
-            sourceArtifact = RemoteArtifact.createEmpty(),
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
             vcsProvider = vcsProvider,
             vcsUrl = vcsUrl,
             vcsRevision = vcsRevision,
@@ -133,22 +133,22 @@ data class Project(
 
     companion object {
         /**
-         * Creates an instance of [Project] where all properties are empty strings or empty collections.
+         * A constant for a [Project] where all properties are empty strings or empty collections.
          */
-        fun createEmpty() =
-                Project(
-                        packageManager = "",
-                        namespace = "",
-                        name = "",
-                        version = "",
-                        declaredLicenses = sortedSetOf(),
-                        aliases = emptyList(),
-                        vcsProvider = "",
-                        vcsUrl = "",
-                        vcsRevision = "",
-                        vcsPath = "",
-                        homepageUrl = "",
-                        scopes = sortedSetOf()
-                )
+        @JvmField
+        val EMPTY = Project(
+                packageManager = "",
+                namespace = "",
+                name = "",
+                version = "",
+                declaredLicenses = sortedSetOf(),
+                aliases = emptyList(),
+                vcsProvider = "",
+                vcsUrl = "",
+                vcsRevision = "",
+                vcsPath = "",
+                homepageUrl = "",
+                scopes = sortedSetOf()
+        )
     }
 }
