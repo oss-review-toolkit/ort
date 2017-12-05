@@ -43,6 +43,7 @@ interface DependencyTreeModel {
 class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
     String name
     List<Configuration> configurations
+    List<String> repositories
     List<String> errors
 }
 
@@ -118,7 +119,9 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                 }
             }.findAll { it != null }
 
-            return new DependencyTreeModelImpl(project.name, configurations, errors)
+            List<String> repositories = project.repositories.collect { it.url.toString() }
+
+            return new DependencyTreeModelImpl(project.name, configurations, repositories, errors)
         }
 
         Dependency parseDependency(DependencyResult dependencyResult, Project project) {
