@@ -41,6 +41,7 @@ import com.here.ort.util.log
 
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.metadata.Metadata
 import org.eclipse.aether.repository.LocalArtifactRegistration
 import org.eclipse.aether.repository.LocalArtifactRequest
