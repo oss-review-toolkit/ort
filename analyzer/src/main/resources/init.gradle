@@ -113,7 +113,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
 
                     new ConfigurationImpl(configuration.name, dependencies)
                 } else {
-                    errors.add("Configuration '${configuration.name}' cannot be resolved.")
+                    errors.add("Configuration '${configuration.name}' cannot be resolved.".toString())
                     null
                 }
             }.findAll { it != null }
@@ -142,7 +142,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     } else if (result instanceof UnresolvedArtifactResult) {
                         error = result.failure.message
                     } else {
-                        error = "Unknown ArtifactResult type: ${result.getClass().name}"
+                        error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }
                     return new DependencyImpl(id.group, id.module, id.version, dependencies, error, pomFile)
                 } else if (id instanceof ProjectComponentIdentifier) {
@@ -150,14 +150,14 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     return new DependencyImpl("", id.displayName, "", dependencies, null, "")
                 } else {
                     return new DependencyImpl("", id.displayName, "", dependencies,
-                            "Unknown id type: ${id.getClass().simpleName}", "")
+                            "Unknown id type: ${id.getClass().simpleName}".toString(), "")
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
-                return new DependencyImpl("", "${dependencyResult.attempted.displayName}", "", [],
-                        "Unresolved: ${dependencyResult.failure.message}", "")
+                return new DependencyImpl("", dependencyResult.attempted.displayName, "", [],
+                        "Unresolved: ${dependencyResult.failure.message}".toString(), "")
             } else {
                 return new DependencyImpl("", dependencyResult.requested.displayName, "", [],
-                        "Unknown result type: ${dependencyResult.getClass().simpleName}", "")
+                        "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), "")
             }
         }
     }
