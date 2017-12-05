@@ -24,6 +24,7 @@
 interface DependencyTreeModel {
     val name: String
     val configurations: List<Configuration>
+    val repositories: List<String>
     val errors: List<String>
 }
 
