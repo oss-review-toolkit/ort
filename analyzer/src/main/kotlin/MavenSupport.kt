@@ -208,7 +208,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         log.info { "Could not receive data about remote artifact '$artifact'." }
 
-        return RemoteArtifact.createEmpty()
+        return RemoteArtifact.EMPTY
     }
 
     fun parseLicenses(mavenProject: MavenProject) =

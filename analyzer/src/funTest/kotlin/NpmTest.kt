@@ -102,7 +102,7 @@ class NpmTest : FreeSpec() {
                 val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
-                result!!.project shouldBe Project.createEmpty()
+                result!!.project shouldBe Project.EMPTY
                 result.packages.size shouldBe 0
                 result.errors.size shouldBe 1
                 result.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
@@ -115,7 +115,7 @@ class NpmTest : FreeSpec() {
                 val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
-                result!!.project shouldBe Project.createEmpty()
+                result!!.project shouldBe Project.EMPTY
                 result.packages.size shouldBe 0
                 result.errors.size shouldBe 1
                 result.errors.first() should startWith("IllegalArgumentException:")

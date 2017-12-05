@@ -43,13 +43,13 @@ data class RemoteArtifact(
 ) {
     companion object {
         /**
-         * Creates an instance of [RemoteArtifact] where all properties are empty strings.
+         * A constant for a [RemoteArtifact] where all properties are empty strings.
          */
-        fun createEmpty() =
-                RemoteArtifact(
-                        url = "",
-                        hash = "",
-                        hashAlgorithm = ""
-                )
+        @JvmField
+        val EMPTY = RemoteArtifact(
+                url = "",
+                hash = "",
+                hashAlgorithm = ""
+        )
     }
 }
