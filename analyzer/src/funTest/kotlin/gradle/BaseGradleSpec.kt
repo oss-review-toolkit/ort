@@ -58,7 +58,7 @@ abstract class BaseGradleSpec : StringSpec() {
             //FIXME:  Analyzer crashes on JAVA 9 with project below Gradle 4.3
             //        (Gradle issue: https://github.com/gradle/gradle/issues/3317)
             val downloadedDir = DownloaderMain.download(pkg, outputDir)
-            val analyzerResultsDir = File(outputDir, "analyzer_results");
+            val analyzerResultsDir = File(outputDir, "analyzer_results")
             AnalyzerMain.main(arrayOf(
                     "-i", downloadedDir.absolutePath,
                     "-o", analyzerResultsDir.absolutePath)
