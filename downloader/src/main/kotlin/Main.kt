@@ -51,7 +51,8 @@ object Main {
             /**
              * The list of all available data entities.
              */
-            @JvmField val ALL = DataEntity.values().asList()
+            @JvmField
+            val ALL = DataEntity.values().asList()
         }
     }
 
