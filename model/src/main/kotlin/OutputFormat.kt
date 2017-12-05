@@ -37,6 +37,7 @@ enum class OutputFormat(val fileEnding: String) {
         /**
          * The list of all available output formats.
          */
-        @JvmField val ALL = OutputFormat.values().asList()
+        @JvmField
+        val ALL = OutputFormat.values().asList()
     }
 }
