@@ -76,11 +76,11 @@ abstract class BaseGradleSpec : StringSpec() {
                         newValue = analyzerResultsDir.absolutePath,
                         ignoreCase = true)
                 "$abcdFileDir${File.separator}${it.nameWithoutExtension}-gradle-dependencies.yml"
-            }.toSet()
+            }
 
             val generatedResultFiles = analyzerResultsDir.walkTopDown().filter { it.extension == "yml" }.map {
                 it.absolutePath
-            }.toSet()
+            }
 
             generatedResultFiles.joinToString("\n") shouldBe expectedResult.joinToString("\n")
         }.config(tags = setOf(Expensive))
