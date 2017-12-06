@@ -71,7 +71,12 @@ abstract class VersionControlSystem {
                 return VcsInfo("", vcsUrl, "", "")
             }
 
+            var provider = ""
+
             if (uri.host.endsWith("github.com")) {
+                // GitHub only provides Git repositories.
+                provider = "git"
+
                 val splitObject = vcsUrl.split("/blob/", "/tree/", limit = 2)
                 if (splitObject.size == 2) {
                     val url = splitObject.first() + ".git"
@@ -80,12 +85,12 @@ abstract class VersionControlSystem {
                     val revision = if (splitRevision.size == 2) splitRevision.first() else ""
                     val path = splitRevision.last().substringBeforeLast(".git")
 
-                    return VcsInfo("", url, revision, path)
+                    return VcsInfo(provider, url, revision, path)
                 }
             }
 
             // Fall back to returning just the original URL.
-            return VcsInfo("", vcsUrl, "", "")
+            return VcsInfo(provider, vcsUrl, "", "")
         }
     }
 
