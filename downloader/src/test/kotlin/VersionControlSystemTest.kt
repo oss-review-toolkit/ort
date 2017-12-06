@@ -77,6 +77,19 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
 
+        "not fail for a GitHub user called blob or a project called tree" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://github.com/blob/tree.git"
+            )
+            val expected = VcsInfo(
+                    "git",
+                    "https://github.com/blob/tree.git",
+                    "",
+                    ""
+            )
+            actual shouldBe expected
+        }
+
         "properly split GitHub tree URLs" {
             val actual = VersionControlSystem.splitUrl(
                     "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"

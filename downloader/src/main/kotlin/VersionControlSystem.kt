@@ -25,6 +25,7 @@ import com.here.ort.model.VcsInfo
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
+import java.nio.file.Paths
 
 abstract class VersionControlSystem {
     companion object {
@@ -71,26 +72,38 @@ abstract class VersionControlSystem {
                 return VcsInfo("", vcsUrl, "", "")
             }
 
-            var provider = ""
-
             if (uri.host.endsWith("github.com")) {
-                // GitHub only provides Git repositories.
-                provider = "git"
+                var url = uri.scheme + "://" + uri.authority
 
-                val splitObject = vcsUrl.split("/blob/", "/tree/", limit = 2)
-                if (splitObject.size == 2) {
-                    val url = splitObject.first() + ".git"
-
-                    val splitRevision = splitObject.last().split("/", limit = 2)
-                    val revision = if (splitRevision.size == 2) splitRevision.first() else ""
-                    val path = splitRevision.last().substringBeforeLast(".git")
-
-                    return VcsInfo(provider, url, revision, path)
+                // Append the first two path components that denote the user and project to the base URL.
+                val pathIterator = Paths.get(uri.path).iterator()
+                if (pathIterator.hasNext()) {
+                    url += "/${pathIterator.next()}"
                 }
+                if (pathIterator.hasNext()) {
+                    url += "/${pathIterator.next()}"
+
+                    // GitHub only hosts Git repositories.
+                    if (!url.endsWith(".git")) {
+                        url += ".git"
+                    }
+                }
+
+                var revision = ""
+                var path = ""
+
+                if (pathIterator.hasNext() && pathIterator.next().toString() in listOf("blob", "tree")) {
+                    if (pathIterator.hasNext()) {
+                        revision = pathIterator.next().toString()
+                        path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                    }
+                }
+
+                return VcsInfo("git", url, revision, path)
             }
 
             // Fall back to returning just the original URL.
-            return VcsInfo(provider, vcsUrl, "", "")
+            return VcsInfo("", vcsUrl, "", "")
         }
     }
 
