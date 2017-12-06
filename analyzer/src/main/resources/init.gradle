@@ -143,7 +143,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     if (result instanceof ResolvedArtifactResult) {
                         pomFile = result.file.absolutePath
                     } else if (result instanceof UnresolvedArtifactResult) {
-                        error = result.failure.message
+                        error = collectCauses(result.failure).toString()
                     } else {
                         error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }
@@ -157,11 +157,21 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
                 return new DependencyImpl("", dependencyResult.attempted.displayName, "", [],
-                        "Unresolved: ${dependencyResult.failure.message}".toString(), "")
+                        "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), "")
             } else {
                 return new DependencyImpl("", dependencyResult.requested.displayName, "", [],
                         "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), "")
             }
+        }
+
+        private String collectCauses(Throwable throwable) {
+            def result = "${throwable.getClass().simpleName}: ${throwable.message}"
+            def cause = throwable.cause
+            while (cause != null) {
+                result += "\nCaused by: ${cause.getClass().simpleName}: ${cause.message}"
+                cause = cause.cause
+            }
+            return result
         }
     }
 
