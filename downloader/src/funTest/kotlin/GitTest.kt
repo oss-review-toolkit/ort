@@ -29,6 +29,6 @@ class GitTest : StringSpec() {
         "Detected Git version is not empty" {
             val version = Git.getVersion()
             version shouldNotBe ""
-        }.config(tags = setOf(Expensive))
+        }
     }
 }
