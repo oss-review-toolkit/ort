@@ -84,7 +84,7 @@ class VersionControlSystemTest : WordSpec({
             val expected = VcsInfo(
                     "",
                     "https://github.com/babel/babel.git",
-                    "",
+                    "master",
                     "packages/babel-code-frame"
             )
             actual shouldBe expected
@@ -97,7 +97,7 @@ class VersionControlSystemTest : WordSpec({
             val expected = VcsInfo(
                     "",
                     "https://github.com/crypto-browserify/crypto-browserify.git",
-                    "",
+                    "6aebafa",
                     "test/create-hmac.js"
             )
             actual shouldBe expected
