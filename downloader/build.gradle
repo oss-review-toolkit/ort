@@ -24,6 +24,9 @@ dependencies {
     funTestRuntime configurations.testRuntime
 
     funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+
 }
 
 task funTest(type: Test) {
