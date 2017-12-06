@@ -69,7 +69,7 @@ class VersionControlSystemTest : WordSpec({
                     "https://github.com/heremaps/oss-review-toolkit.git"
             )
             val expected = VcsInfo(
-                    "",
+                    "git",
                     "https://github.com/heremaps/oss-review-toolkit.git",
                     "",
                     ""
@@ -82,7 +82,7 @@ class VersionControlSystemTest : WordSpec({
                     "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"
             )
             val expected = VcsInfo(
-                    "",
+                    "git",
                     "https://github.com/babel/babel.git",
                     "master",
                     "packages/babel-code-frame"
@@ -95,7 +95,7 @@ class VersionControlSystemTest : WordSpec({
                     "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js"
             )
             val expected = VcsInfo(
-                    "",
+                    "git",
                     "https://github.com/crypto-browserify/crypto-browserify.git",
                     "6aebafa",
                     "test/create-hmac.js"
