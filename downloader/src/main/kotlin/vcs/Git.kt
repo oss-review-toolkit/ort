@@ -79,7 +79,7 @@ abstract class GitBase : VersionControlSystem() {
 object Git : GitBase() {
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)
 
-    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.endsWith(".git")
+    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).exitValue() == 0
 
     /**
      * Clones the Git repository using the native Git command.
