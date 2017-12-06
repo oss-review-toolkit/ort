@@ -132,25 +132,4 @@ class UtilsTest : WordSpec({
             }
         }
     }
-
-    "splitVcsPathFromUrl" should {
-        "not modify GitHub URLs without a path" {
-            val actual = splitVcsPathFromUrl("https://github.com/heremaps/oss-review-toolkit.git")
-            val expected = Pair("https://github.com/heremaps/oss-review-toolkit.git", "")
-            actual shouldBe expected
-        }
-
-        "properly split GitHub tree URLs" {
-            val actual = splitVcsPathFromUrl("https://github.com/babel/babel/tree/master/packages/babel-code-frame.git")
-            val expected = Pair("https://github.com/babel/babel.git", "packages/babel-code-frame")
-            actual shouldBe expected
-        }
-
-        "properly split GitHub blob URLs" {
-            val actual = splitVcsPathFromUrl(
-                    "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js")
-            val expected = Pair("https://github.com/crypto-browserify/crypto-browserify.git", "test/create-hmac.js")
-            actual shouldBe expected
-        }
-    }
 })
