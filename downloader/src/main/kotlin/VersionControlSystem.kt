@@ -72,14 +72,15 @@ abstract class VersionControlSystem {
             }
 
             if (uri.host.endsWith("github.com")) {
-                val split = vcsUrl.split("/blob/", "/tree/")
-                if (split.size == 2) {
-                    val url = split.first() + ".git"
+                val splitObject = vcsUrl.split("/blob/", "/tree/", limit = 2)
+                if (splitObject.size == 2) {
+                    val url = splitObject.first() + ".git"
 
-                    // Remove the blob / tree committish (e.g. a branch name) and any ".git" suffix.
-                    val path = split.last().substringAfter("/").substringBeforeLast(".git")
+                    val splitRevision = splitObject.last().split("/", limit = 2)
+                    val revision = if (splitRevision.size == 2) splitRevision.first() else ""
+                    val path = splitRevision.last().substringBeforeLast(".git")
 
-                    return VcsInfo("", url, "", path)
+                    return VcsInfo("", url, revision, path)
                 }
             }
 
