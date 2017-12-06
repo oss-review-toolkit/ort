@@ -155,7 +155,12 @@ fun normalizePackageName(name: String) : String =  name.replace("[^\\w\\-_\\s]".
  * Split a [vcsUrl] into a pair of strings denoting the base repository URL and the path within the repository.
  */
 fun splitVcsPathFromUrl(vcsUrl: String): Pair<String, String> {
-    val uri = URI(vcsUrl)
+    val uri = try {
+        URI(vcsUrl)
+    } catch (e: URISyntaxException) {
+        // Fall back to returning just the original URL.
+        return Pair(vcsUrl, "")
+    }
 
     if (uri.host.endsWith("github.com")) {
         val split = vcsUrl.split("/blob/", "/tree/")
