@@ -100,7 +100,7 @@ abstract class VersionControlSystem {
                     }
                 }
 
-                return VcsInfo("git", url, revision, path)
+                return VcsInfo("Git", url, revision, path)
             }
 
             // Fall back to returning just the original URL.
