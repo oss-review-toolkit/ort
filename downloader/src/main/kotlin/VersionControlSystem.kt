@@ -23,6 +23,8 @@ import com.here.ort.downloader.vcs.*
 import com.here.ort.model.VcsInfo
 
 import java.io.File
+import java.net.URI
+import java.net.URISyntaxException
 
 abstract class VersionControlSystem {
     companion object {
@@ -57,6 +59,33 @@ abstract class VersionControlSystem {
             }.find {
                 it.isValid()
             }
+
+        /**
+         * Decompose a [vcsUrl] into any contained VCS information.
+         */
+        fun splitUrl(vcsUrl: String): VcsInfo {
+            val uri = try {
+                URI(vcsUrl)
+            } catch (e: URISyntaxException) {
+                // Fall back to returning just the original URL.
+                return VcsInfo("", vcsUrl, "", "")
+            }
+
+            if (uri.host.endsWith("github.com")) {
+                val split = vcsUrl.split("/blob/", "/tree/")
+                if (split.size == 2) {
+                    val url = split.first() + ".git"
+
+                    // Remove the blob / tree committish (e.g. a branch name) and any ".git" suffix.
+                    val path = split.last().substringAfter("/").substringBeforeLast(".git")
+
+                    return VcsInfo("", url, "", path)
+                }
+            }
+
+            // Fall back to returning just the original URL.
+            return VcsInfo("", vcsUrl, "", "")
+        }
     }
 
     /**

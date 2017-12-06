@@ -19,6 +19,8 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.model.VcsInfo
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -58,6 +60,47 @@ class VersionControlSystemTest : WordSpec({
             relVcsDir.getPathToRoot(relProjDir) shouldBe "downloader/src/test"
             relVcsDir.getPathToRoot(File("..")) shouldBe "downloader/src"
             relVcsDir.getPathToRoot(File("kotlin")) shouldBe "downloader/src/test/kotlin"
+        }
+    }
+
+    "splitUrl" should {
+        "not modify GitHub URLs without a path" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://github.com/heremaps/oss-review-toolkit.git"
+            )
+            val expected = VcsInfo(
+                    "",
+                    "https://github.com/heremaps/oss-review-toolkit.git",
+                    "",
+                    ""
+            )
+            actual shouldBe expected
+        }
+
+        "properly split GitHub tree URLs" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"
+            )
+            val expected = VcsInfo(
+                    "",
+                    "https://github.com/babel/babel.git",
+                    "",
+                    "packages/babel-code-frame"
+            )
+            actual shouldBe expected
+        }
+
+        "properly split GitHub blob URLs" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js"
+            )
+            val expected = VcsInfo(
+                    "",
+                    "https://github.com/crypto-browserify/crypto-browserify.git",
+                    "",
+                    "test/create-hmac.js"
+            )
+            actual shouldBe expected
         }
     }
 })
