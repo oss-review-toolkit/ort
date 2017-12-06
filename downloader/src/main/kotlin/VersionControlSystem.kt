@@ -72,38 +72,67 @@ abstract class VersionControlSystem {
                 return VcsInfo("", vcsUrl, "", "")
             }
 
-            if (uri.host.endsWith("github.com")) {
-                var url = uri.scheme + "://" + uri.authority
+            return when {
+                uri.host.endsWith("github.com") -> {
+                    var url = uri.scheme + "://" + uri.authority
 
-                // Append the first two path components that denote the user and project to the base URL.
-                val pathIterator = Paths.get(uri.path).iterator()
-                if (pathIterator.hasNext()) {
-                    url += "/${pathIterator.next()}"
+                    // Append the first two path components that denote the user and project to the base URL.
+                    val pathIterator = Paths.get(uri.path).iterator()
+                    if (pathIterator.hasNext()) {
+                        url += "/${pathIterator.next()}"
+                    }
+                    if (pathIterator.hasNext()) {
+                        url += "/${pathIterator.next()}"
+
+                        // GitHub only hosts Git repositories.
+                        if (!url.endsWith(".git")) {
+                            url += ".git"
+                        }
+                    }
+
+                    var revision = ""
+                    var path = ""
+
+                    if (pathIterator.hasNext() && pathIterator.next().toString() in listOf("blob", "tree")) {
+                        if (pathIterator.hasNext()) {
+                            revision = pathIterator.next().toString()
+                            path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                        }
+                    }
+
+                    VcsInfo("Git", url, revision, path)
                 }
-                if (pathIterator.hasNext()) {
-                    url += "/${pathIterator.next()}"
+                uri.host.endsWith("bitbucket.org") -> {
+                    var url = uri.scheme + "://" + uri.authority
 
-                    // GitHub only hosts Git repositories.
-                    if (!url.endsWith(".git")) {
+                    // Append the first two path components that denote the user and project to the base URL.
+                    val pathIterator = Paths.get(uri.path).iterator()
+                    if (pathIterator.hasNext()) {
+                        url += "/${pathIterator.next()}"
+                    }
+                    if (pathIterator.hasNext()) {
+                        url += "/${pathIterator.next()}"
+                    }
+
+                    var revision = ""
+                    var path = ""
+
+                    if (pathIterator.hasNext() && pathIterator.next().toString() == "src") {
+                        if (pathIterator.hasNext()) {
+                            revision = pathIterator.next().toString()
+                            path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                        }
+                    }
+
+                    val provider = forUrl(url)?.toString() ?: ""
+                    if (provider == "Git") {
                         url += ".git"
                     }
+
+                    VcsInfo(provider, url, revision, path)
                 }
-
-                var revision = ""
-                var path = ""
-
-                if (pathIterator.hasNext() && pathIterator.next().toString() in listOf("blob", "tree")) {
-                    if (pathIterator.hasNext()) {
-                        revision = pathIterator.next().toString()
-                        path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
-                    }
-                }
-
-                return VcsInfo("Git", url, revision, path)
+                else -> VcsInfo("", vcsUrl, "", "")
             }
-
-            // Fall back to returning just the original URL.
-            return VcsInfo("", vcsUrl, "", "")
         }
     }
 

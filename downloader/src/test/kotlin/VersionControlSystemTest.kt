@@ -115,5 +115,44 @@ class VersionControlSystemTest : WordSpec({
             )
             actual shouldBe expected
         }
+
+        "not modify Bitbucket URLs without a path" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://bitbucket.org/paniq/masagin"
+            )
+            val expected = VcsInfo(
+                    "Mercurial",
+                    "https://bitbucket.org/paniq/masagin",
+                    "",
+                    ""
+            )
+            actual shouldBe expected
+        }
+
+        "properly split Bitbucket tree URLs" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/src/java/com/yevster/example/?at=master"
+            )
+            val expected = VcsInfo(
+                    "Git",
+                    "https://bitbucket.org/yevster/spdxtraxample.git",
+                    "287aebc",
+                    "src/java/com/yevster/example/"
+            )
+            actual shouldBe expected
+        }
+
+        "properly split Bitbucket blob URLs" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/README.md?at=master"
+            )
+            val expected = VcsInfo(
+                    "Git",
+                    "https://bitbucket.org/yevster/spdxtraxample.git",
+                    "287aebc",
+                    "README.md"
+            )
+            actual shouldBe expected
+        }
     }
 })
