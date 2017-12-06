@@ -50,6 +50,13 @@ class MercurialTest : StringSpec() {
             version shouldNotBe ""
         }
 
+        "Mercurial correctly detects URLs to remote repositories" {
+            Mercurial.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
+
+            // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
+            Mercurial.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
+        }
+
         "Mercurial can download entire repo" {
             Mercurial.download(REPO_URL, null, null, "", outputDir)
             Mercurial.getWorkingDirectory(outputDir).getProvider() shouldBe "Mercurial"
