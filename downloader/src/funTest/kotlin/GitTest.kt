@@ -19,8 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.downloader.Expensive
-
+import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
@@ -29,6 +28,13 @@ class GitTest : StringSpec() {
         "Detected Git version is not empty" {
             val version = Git.getVersion()
             version shouldNotBe ""
+        }
+
+        "Git correctly detects URLs to remote repositories" {
+            // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
+            Git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe true
+
+            Git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
         }
     }
 }
