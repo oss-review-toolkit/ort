@@ -15,6 +15,7 @@ dependencies {
     compile project(':util')
 
     compile "com.beust:jcommander:$jcommanderVersion"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
 
     testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 
