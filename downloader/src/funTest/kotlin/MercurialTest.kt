@@ -48,7 +48,7 @@ class MercurialTest : StringSpec() {
         "Detected Mercurial version is not empty" {
             val version = Mercurial.getVersion()
             version shouldNotBe ""
-        }.config(tags = setOf(Expensive))
+        }
 
         "Mercurial can download entire repo" {
             Mercurial.download(REPO_URL, null, null, "", outputDir)
