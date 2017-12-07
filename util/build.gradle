@@ -3,6 +3,7 @@ dependencies {
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
 
+    compile "com.jakewharton:disklrucache:$disklrucacheVersion"
     compile "com.squareup.okhttp3:okhttp:$okhttpVersion"
     compile "com.vdurmont:semver4j:$semverVersion"
 
