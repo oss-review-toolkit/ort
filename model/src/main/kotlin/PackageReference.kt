@@ -21,13 +21,15 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+import com.here.ort.util.fileSystemEncode
+
 import java.util.SortedSet
 
 /**
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
  * references that are dependencies of the package.
  */
-@JsonIgnoreProperties("identifier")
+@JsonIgnoreProperties("normalizedName", "identifier")
 data class PackageReference(
         /**
          * The namespace of the package, for example the group id in Maven or the scope in NPM.
@@ -56,10 +58,15 @@ data class PackageReference(
         val errors: List<String> = emptyList()
 ) : Comparable<PackageReference> {
     /**
+     * The normalized package name, can be used to create directories.
+     */
+    val normalizedName = name.fileSystemEncode()
+
+    /**
      * The minimum human readable information to identify the package referred to. As references are specific to the
      * package manager, it is not explicitly included.
      */
-    val identifier = "$namespace:$name:$version"
+    val identifier = "$namespace:$normalizedName:$version"
 
     /**
      * Returns whether the given package is a (transitive) dependency of this reference.

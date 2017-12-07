@@ -38,7 +38,7 @@ import java.util.SortedSet
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
-@JsonIgnoreProperties("identifier", "normalizedVcsUrl", "semverType", "normalizedName")
+@JsonIgnoreProperties("normalizedName", "identifier", "semverType", "normalizedVcsUrl")
 data class Package(
         /**
          * The name of the package manager that was used to discover this package, for example Maven or NPM.
@@ -97,9 +97,14 @@ data class Package(
         val vcs: VcsInfo
 ) : Comparable<Package> {
     /**
+     * The normalized package name, can be used to create directories.
+     */
+    val normalizedName = name.fileSystemEncode()
+
+    /**
      * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].
      */
-    val identifier = "$packageManager:$namespace:$name:$version"
+    val identifier = "$packageManager:$namespace:$normalizedName:$version"
 
     /**
      * The [Semver.SemverType] used for the [version] of this package.
@@ -115,11 +120,6 @@ data class Package(
      * @see normalizeVcsUrl
      */
     val normalizedVcsUrl = normalizeVcsUrl(vcs.url, semverType)
-
-    /**
-     * The normalized package name, can be used to create directories.
-     */
-    val normalizedName = name.fileSystemEncode()
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
