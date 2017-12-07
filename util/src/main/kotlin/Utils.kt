@@ -147,9 +147,8 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
  * different operating systems, or that make the path hard to read (like spaces).
  * @param name package name
  */
-fun normalizePackageName(name: String) : String =  name.replace("[^\\w\\-_\\s]".toRegex(), "").trim()
-        .replace("\\s".toRegex(), "_")
-
+fun normalizePackageName(name: String): String =
+        name.replace("[^\\w\\-_\\s]".toRegex(), "").trim().replace("\\s".toRegex(), "_")
 
 /**
  * Create all missing intermediate directories without failing if any already exists.
