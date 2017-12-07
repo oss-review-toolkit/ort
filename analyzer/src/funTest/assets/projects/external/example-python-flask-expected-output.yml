@@ -33,7 +33,7 @@ project:
         errors: []
       - namespace: ""
         name: "Werkzeug"
-        version: "0.12.2"
+        version: "0.13"
         dependencies: []
         errors: []
       - namespace: ""
@@ -120,14 +120,14 @@ packages:
 - package_manager: "PIP"
   namespace: ""
   name: "Werkzeug"
-  version: "0.12.2"
+  version: "0.13"
   declared_licenses:
   - "BSD"
-  description: "The Swiss Army knife of Python web development"
-  homepage_url: "http://werkzeug.pocoo.org/"
+  description: "The comprehensive WSGI web application library."
+  homepage_url: "https://www.palletsprojects.org/p/werkzeug/"
   binary_artifact:
-    url: "https://pypi.python.org/packages/97/02/306e0d57fdbf467ec1c763bc1757ec6ba20b1332e0ea7e49111533d71d1c/Werkzeug-0.12.2-py2.py3-none-any.whl"
-    hash: "f2f1955f470f6eae8563c9e4e1ad1bba"
+    url: "https://pypi.python.org/packages/e7/dc/e41d4d6adf0cd3f02b0bdf02fcddee77a2ef02c0b1d5eaa517308333d673/Werkzeug-0.13-py2.py3-none-any.whl"
+    hash: "7263e4dbc0197d6e4bafa8ba1b63316f"
     hash_algorithm: "MD5"
   source_artifact:
     url: ""
