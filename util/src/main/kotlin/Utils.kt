@@ -154,6 +154,20 @@ fun normalizePackageName(name: String): String =
                 .replace("\\s".toRegex(), "_")      // Replace spaces with underscores.
 
 /**
+ * Return the string encoded for safe use as a file name.
+ */
+fun String.fileSystemEncode() =
+        // URLEncoder does not encode "." and "*", so do that manually.
+        java.net.URLEncoder.encode(this, "UTF-8").replace("*", "%2A").replace(".", "%2E")
+
+/**
+ * Return the decoded string for a safe file name.
+ */
+fun String.fileSystemDecode(): String =
+        // URLDecoder does decode "." and "*".
+        java.net.URLDecoder.decode(this, "UTF-8")
+
+/**
  * Create all missing intermediate directories without failing if any already exists.
  *
  * @throws IOException if any missing directory could not be created.
