@@ -30,6 +30,11 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 private const val REPO_URL = "https://svn.code.sf.net/p/pythonqt/code"
+private const val REPO_REV = "460"
+private const val REPO_SUBDIR = "extensions"
+private const val REPO_SUBDIR_OMITTED = "examples"
+private const val REPO_VERSION = "1.0"
+private const val REPO_VERSION_REV = "33"
 
 class SubversionTest : StringSpec() {
     private lateinit var outputDir: File
@@ -50,26 +55,21 @@ class SubversionTest : StringSpec() {
         }
 
         "Subversion can download single revision" {
-            val revision = "460"
-            val downloadedRev = Subversion.download(REPO_URL, revision, null, "", outputDir)
-            downloadedRev shouldBe revision
+            val downloadedRev = Subversion.download(REPO_URL, REPO_REV, null, "", outputDir)
+            downloadedRev shouldBe REPO_REV
         }.config(tags = setOf(Expensive))
 
         "Subversion can download sub path" {
-            val subdir = "extensions"
-            val notCheckoutSubDir = "examples"
-            Subversion.download(REPO_URL, null, subdir, "", outputDir)
+            Subversion.download(REPO_URL, null, REPO_SUBDIR, "", outputDir)
 
             val outputDirList = Subversion.getWorkingDirectory(outputDir).workingDir.list()
-            outputDirList.indexOf(subdir) should beGreaterThan(-1)
-            outputDirList.indexOf(notCheckoutSubDir) shouldBe -1
+            outputDirList.indexOf(REPO_SUBDIR) should beGreaterThan(-1)
+            outputDirList.indexOf(REPO_SUBDIR_OMITTED) shouldBe -1
         }.config(tags = setOf(Expensive))
 
         "Subversion can download version" {
-            val version = "1.0"
-            val revisionForVersion = "33"
-            val downloadedRev = Subversion.download(REPO_URL, null, null, version, outputDir)
-            downloadedRev shouldBe revisionForVersion
+            val downloadedRev = Subversion.download(REPO_URL, null, null, REPO_VERSION, outputDir)
+            downloadedRev shouldBe REPO_VERSION_REV
         }.config(tags = setOf(Expensive))
 
         "Subversion can download entire repo" {
