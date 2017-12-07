@@ -24,9 +24,32 @@ import com.vdurmont.semver4j.Semver
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
+import java.io.File
 import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
+    "String.urlencode" should {
+        val str = "project: fünky\$name*>nul."
+
+        "encode '*'" {
+            "*".fileSystemEncode() shouldBe "%2A"
+        }
+
+        "encode '.'" {
+            ".".fileSystemEncode() shouldBe "%2E"
+        }
+
+        "create a valid file name" {
+            val fileFromStr = File(createTempDir(), str.fileSystemEncode()).apply { writeText("dummy") }
+            fileFromStr.isFile shouldBe true
+            fileFromStr.delete() shouldBe true
+        }
+
+        "be reversible by String.urldecode" {
+            str.fileSystemEncode().fileSystemDecode() shouldBe str
+        }
+    }
+
     "normalizeVcsUrl" should {
         "do nothing for empty URLs" {
             normalizeVcsUrl("") shouldBe ""
