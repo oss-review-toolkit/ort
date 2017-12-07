@@ -145,10 +145,13 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
 /**
  * Normalize the given package [name] by replacing characters that are usually not supported by file systems of
  * different operating systems, or that make the path hard to read (like spaces).
- * @param name package name
+ *
+ * @param name The package name to normalize.
  */
 fun normalizePackageName(name: String): String =
-        name.replace("[^\\w\\-_\\s]".toRegex(), "").trim().replace("\\s".toRegex(), "_")
+        name.replace("[^\\w\\-_\\s]".toRegex(), "") // Remove most non-word chars but keep spaces.
+                .trim()                             // Remove leading and trailing spaces.
+                .replace("\\s".toRegex(), "_")      // Replace spaces with underscores.
 
 /**
  * Create all missing intermediate directories without failing if any already exists.
