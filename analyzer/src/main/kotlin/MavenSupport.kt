@@ -24,7 +24,10 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.util.DiskCache
+import com.here.ort.util.getUserConfigDirectory
 import com.here.ort.util.log
+import com.here.ort.util.yamlMapper
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
@@ -66,7 +69,12 @@ fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
 class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> LocalRepositoryManager) {
     companion object {
+        private const val GIGABYTE = 1073741824L
+
         val SCM_REGEX = Regex("scm:(?<provider>[^:]+):(?<url>.+)")
+
+        private val remoteArtifactCache = DiskCache(File(getUserConfigDirectory(), "analyzer/remote_artifacts"),
+                GIGABYTE, 6 * 60 * 60)
     }
 
     val container = createContainer()
@@ -125,6 +133,16 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
 
     fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
+        val cacheKey = artifact.toString()
+                .replace(".", "-")
+                .replace(":", "_")
+                .toLowerCase()
+
+        remoteArtifactCache.read(cacheKey)?.let {
+            log.debug { "Reading remote artifact for $artifact from disk cache." }
+            return yamlMapper.readValue(it, RemoteArtifact::class.java)
+        }
+
         val repoSystem = container.lookup(RepositorySystem::class.java, "default")
         val remoteRepositoryManager = container.lookup(RemoteRepositoryManager::class.java, "default")
         val repositoryLayoutProvider = container.lookup(RepositoryLayoutProvider::class.java, "default")
@@ -201,7 +219,10 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 }
 
                 val downloadUrl = "${repository.url}/$remoteLocation"
-                return RemoteArtifact(downloadUrl, actualChecksum, checksum.algorithm)
+                return RemoteArtifact(downloadUrl, actualChecksum, checksum.algorithm).also {
+                    log.debug { "Writing remote artifact for $artifact to disk cache." }
+                    remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
+                }
             } else {
                 if (Main.stacktrace) {
                     artifactDownload.exception.printStackTrace()
@@ -213,7 +234,10 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         log.info { "Could not receive data about remote artifact '$artifact'." }
 
-        return RemoteArtifact.EMPTY
+        return RemoteArtifact.EMPTY.also {
+            log.debug { "Writing empty remote artifact for $artifact to disk cache." }
+            remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
+        }
     }
 
     /**
