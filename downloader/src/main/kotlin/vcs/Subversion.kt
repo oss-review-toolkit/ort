@@ -82,6 +82,8 @@ object Subversion : VersionControlSystem() {
 
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String,
                           targetDir: File): String {
+        log.info { "Using $this version ${getVersion()}." }
+
         runSvnCommand(targetDir, "co", vcsUrl, "--depth", "empty", ".")
 
         val revision = if (vcsRevision != null && vcsRevision.isNotBlank()) {
