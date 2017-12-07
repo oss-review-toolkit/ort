@@ -37,7 +37,8 @@ abstract class VersionControlSystem {
             listOf(
                     Git,
                     GitRepo,
-                    Mercurial
+                    Mercurial,
+                    Subversion
             )
         }
 
