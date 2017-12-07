@@ -51,6 +51,7 @@ class SubversionTest : StringSpec() {
     init {
         "Detected Subversion version is not empty" {
             val version = Subversion.getVersion()
+            println("Subversion version $version detected.")
             version shouldNotBe ""
         }
 

@@ -47,6 +47,7 @@ class MercurialTest : StringSpec() {
     init {
         "Detected Mercurial version is not empty" {
             val version = Mercurial.getVersion()
+            println("Mercurial version $version detected.")
             version shouldNotBe ""
         }
 

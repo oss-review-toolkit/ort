@@ -27,6 +27,7 @@ class GitTest : StringSpec() {
     init {
         "Detected Git version is not empty" {
             val version = Git.getVersion()
+            println("Git version $version detected.")
             version shouldNotBe ""
         }
 
