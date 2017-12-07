@@ -22,7 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import com.here.ort.util.normalizePackageName
+import com.here.ort.util.fileSystemEncode
 import com.here.ort.util.normalizeVcsUrl
 
 import com.vdurmont.semver4j.Semver
@@ -118,10 +118,8 @@ data class Package(
 
     /**
      * The normalized package name, can be used to create directories.
-     *
-     * @see normalizePackageName
      */
-    val normalizedName = normalizePackageName(name)
+    val normalizedName = name.fileSystemEncode()
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
