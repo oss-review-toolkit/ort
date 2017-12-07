@@ -31,6 +31,11 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 private const val REPO_URL = "https://bitbucket.org/creaceed/mercurial-xcode-plugin"
+private const val REPO_REV = "02098fc8bdac"
+private const val REPO_SUBDIR = "Classes"
+private const val REPO_SUBDIR_OMITTED = "Resources"
+private const val REPO_VERSION = "1.1"
+private const val REPO_VERSION_REV = "562fed42b4f3"
 
 class MercurialTest : StringSpec() {
     private lateinit var outputDir: File
@@ -64,26 +69,21 @@ class MercurialTest : StringSpec() {
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download single revision" {
-            val revision = "02098fc8bdac"
-            val downloadedRev = Mercurial.download(REPO_URL, revision, null, "", outputDir)
-            downloadedRev shouldBe revision
+            val downloadedRev = Mercurial.download(REPO_URL, REPO_REV, null, "", outputDir)
+            downloadedRev shouldBe REPO_REV
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download sub path" {
-            val subdir = "Classes"
-            val notCheckoutSubDir = "Resources"
-            Mercurial.download(REPO_URL, null, subdir, "", outputDir)
+            Mercurial.download(REPO_URL, null, REPO_SUBDIR, "", outputDir)
 
             val outputDirList = Mercurial.getWorkingDirectory(outputDir).workingDir.list()
-            outputDirList.indexOf(subdir) should beGreaterThan(-1)
-            outputDirList.indexOf(notCheckoutSubDir) shouldBe -1
+            outputDirList.indexOf(REPO_SUBDIR) should beGreaterThan(-1)
+            outputDirList.indexOf(REPO_SUBDIR_OMITTED) shouldBe -1
         }.config(tags = setOf(Expensive), enabled = Mercurial.isAtLeastVersion("4.3"))
 
         "Mercurial can download version" {
-            val version = "1.1"
-            val revisionForVersion = "562fed42b4f3"
-            val downloadedRev = Mercurial.download(REPO_URL, null, null, version, outputDir)
-            downloadedRev shouldBe revisionForVersion
+            val downloadedRev = Mercurial.download(REPO_URL, null, null, REPO_VERSION, outputDir)
+            downloadedRev shouldBe REPO_VERSION_REV
         }.config(tags = setOf(Expensive))
     }
 }
