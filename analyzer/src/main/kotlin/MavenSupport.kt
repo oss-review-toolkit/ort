@@ -168,8 +168,6 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     .newRepositoryConnector(repositorySystemSession, repository)
             repositoryConnector.get(listOf(artifactDownload), null)
 
-            val downloadUrl = "${repository.url}/$remoteLocation"
-
             if (artifactDownload.exception == null) {
                 log.debug { "Found '$artifact' in $repository." }
 
@@ -194,11 +192,15 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
                     log.warn { "Could not get checksum for '$artifact': ${e.message}" }
 
-                    "" // Fall back to an empty checksum string.
+                    // Fall back to an empty checksum string.
+                    ""
                 }
 
-                tmpFile.delete()
+                if (!tmpFile.delete()) {
+                    log.warn { "Unable to delete temporary file '$tmpFile'." }
+                }
 
+                val downloadUrl = "${repository.url}/$remoteLocation"
                 return RemoteArtifact(downloadUrl, actualChecksum, checksum.algorithm)
             } else {
                 if (Main.stacktrace) {
