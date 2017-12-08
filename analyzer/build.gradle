@@ -29,6 +29,8 @@ dependencies {
 
     compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
 
+    testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+
     funTestCompile sourceSets.main.output
     funTestCompile sourceSets.test.output
     funTestCompile configurations.testCompile

@@ -48,6 +48,8 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.URI
+import java.net.URISyntaxException
 import java.net.URLEncoder
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -74,6 +76,33 @@ class NPM : PackageManager() {
             } else {
                 npm = "npm"
                 yarn = "yarn"
+            }
+        }
+
+        fun expandShortcutURL(url: String): String {
+            // A hierarchical URI looks like
+            //     [scheme:][//authority][path][?query][#fragment]
+            // where a server-based "authority" has the syntax
+            //     [user-info@]host[:port]
+            val uri = try {
+                URI(url)
+            } catch (e: URISyntaxException) {
+                // Fall back to returning the original URL.
+                return url
+            }
+
+            val path = uri.schemeSpecificPart
+            return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query, uri.fragment).all { it == null }) {
+                // See https://docs.npmjs.com/files/package.json#repository.
+                when (uri.scheme) {
+                    null -> "https://github.com/$path.git"
+                    "gist" -> "https://gist.github.com/$path"
+                    "bitbucket" -> "https://bitbucket.org/$path.git"
+                    "gitlab" -> "https://gitlab.com/$path.git"
+                    else -> url
+                }
+            } else {
+                url
             }
         }
     }
@@ -316,7 +345,7 @@ class NPM : PackageManager() {
         return node["repository"]?.let { repo ->
             val type = repo["type"].asTextOrEmpty()
             val url = repo.textValue() ?: repo["url"].asTextOrEmpty()
-            VcsInfo(type, url, head, "")
+            VcsInfo(type, expandShortcutURL(url), head, "")
         } ?: VcsInfo("", "", head, "")
     }
 
