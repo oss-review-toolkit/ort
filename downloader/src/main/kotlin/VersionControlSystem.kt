@@ -66,6 +66,10 @@ abstract class VersionControlSystem {
          * Decompose a [vcsUrl] into any contained VCS information.
          */
         fun splitUrl(vcsUrl: String): VcsInfo {
+            // A hierarchical URI looks like
+            //     [scheme:][//authority][path][?query][#fragment]
+            // where a server-based "authority" has the syntax
+            //     [user-info@]host[:port]
             val uri = try {
                 URI(vcsUrl)
             } catch (e: URISyntaxException) {
