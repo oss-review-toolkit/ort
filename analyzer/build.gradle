@@ -27,7 +27,8 @@ dependencies {
     compile "org.apache.maven.resolver:maven-resolver-transport-file:$mavenResolverVersion"
     compile "org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion"
 
-    compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
+    // The tooling API does not necessarily get upgraded with new versions of Gradle.
+    compile "org.gradle:gradle-tooling-api:${gradleToolingApiVersion}"
 
     funTestCompile sourceSets.main.output
     funTestCompile sourceSets.test.output
