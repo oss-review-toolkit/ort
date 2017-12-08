@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingDirectoryWithRevision
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.yamlMapper
 
@@ -34,7 +35,8 @@ import java.io.File
 
 class GradleTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    @Suppress("UnsafeCast")
+    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!! as WorkingDirectoryWithRevision
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 

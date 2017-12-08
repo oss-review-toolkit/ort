@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Maven
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingDirectoryWithRevision
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.yamlMapper
 
@@ -31,7 +32,8 @@ import java.io.File
 
 class MavenTest : StringSpec() {
     private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic/maven")
-    private val vcsDir = VersionControlSystem.forDirectory(syntheticProjectDir)!!
+    @Suppress("UnsafeCast")
+    private val vcsDir = VersionControlSystem.forDirectory(syntheticProjectDir)!! as WorkingDirectoryWithRevision
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
