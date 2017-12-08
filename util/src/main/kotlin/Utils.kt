@@ -24,8 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 import java.net.URI
@@ -88,9 +86,8 @@ fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
  * URLs which are converted to full URLs so that they can be used in a common way.
  *
  * @param vcsUrl The URL to normalize.
- * @param semverType Required to convert package manager specific shortcuts.
  */
-fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.SemverType.STRICT): String {
+fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trimEnd('/')
 
     url = url.replace(Regex("(.+://)?git@github\\.com[:/](.+)")) {
@@ -106,22 +103,6 @@ fun normalizeVcsUrl(vcsUrl: String, semverType: Semver.SemverType = Semver.Semve
     } catch (e: URISyntaxException) {
         // Fall back to a file if the URL is a Windows path.
         return File(url).toSafeURI().toString()
-    }
-
-    if (semverType == Semver.SemverType.NPM) {
-        // https://docs.npmjs.com/files/package.json#repository
-        val path = uri.schemeSpecificPart
-        if (!path.isNullOrEmpty()) {
-            if (uri.authority == null && uri.query == null && uri.fragment == null) {
-                // Handle shortcut URLs.
-                when (uri.scheme) {
-                    null -> return "https://github.com/$path.git"
-                    "gist" -> return "https://gist.github.com/$path"
-                    "bitbucket" -> return "https://bitbucket.org/$path.git"
-                    "gitlab" -> return "https://gitlab.com/$path.git"
-                }
-            }
-        }
     }
 
     if (uri.scheme == null && uri.path.isNotEmpty()) {

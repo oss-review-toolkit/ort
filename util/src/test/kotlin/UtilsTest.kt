@@ -19,8 +19,6 @@
 
 package com.here.ort.util
 
-import com.vdurmont.semver4j.Semver
-
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -53,24 +51,6 @@ class UtilsTest : WordSpec({
     "normalizeVcsUrl" should {
         "do nothing for empty URLs" {
             normalizeVcsUrl("") shouldBe ""
-            normalizeVcsUrl("", Semver.SemverType.NPM) shouldBe ""
-        }
-
-        "properly handle NPM shortcut URLs" {
-            val packages = mapOf(
-                    "npm/npm"
-                            to "https://github.com/npm/npm.git",
-                    "gist:11081aaa281"
-                            to "https://gist.github.com/11081aaa281",
-                    "bitbucket:example/repo"
-                            to "https://bitbucket.org/example/repo.git",
-                    "gitlab:another/repo"
-                            to "https://gitlab.com/another/repo.git"
-            )
-
-            packages.forEach { actualUrl, expectedUrl ->
-                normalizeVcsUrl(actualUrl, Semver.SemverType.NPM) shouldBe expectedUrl
-            }
         }
 
         "properly handle anonymous Git / HTTPS URL schemes" {

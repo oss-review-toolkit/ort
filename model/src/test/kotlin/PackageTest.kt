@@ -44,23 +44,5 @@ class PackageTest : WordSpec({
 
             pkg.normalizedVcsUrl shouldBe expectedUrl
         }
-
-        "should understand NPM shortcuts for NPM packages" {
-            val pkg = Package(
-                    packageManager = "NPM",
-                    namespace = "",
-                    name = "",
-                    version = "1.0.0",
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo("", "npm/npm", "", "")
-            )
-            val expectedUrl = "https://github.com/npm/npm.git"
-
-            pkg.normalizedVcsUrl shouldBe expectedUrl
-        }
     }
 })

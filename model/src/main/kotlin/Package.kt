@@ -25,8 +25,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.here.ort.util.fileSystemEncode
 import com.here.ort.util.normalizeVcsUrl
 
-import com.vdurmont.semver4j.Semver
-
 import java.util.SortedSet
 
 /**
@@ -38,7 +36,7 @@ import java.util.SortedSet
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
-@JsonIgnoreProperties("normalizedName", "identifier", "semverType", "normalizedVcsUrl")
+@JsonIgnoreProperties("normalizedName", "identifier", "normalizedVcsUrl")
 data class Package(
         /**
          * The name of the package manager that was used to discover this package, for example Maven or NPM.
@@ -107,19 +105,11 @@ data class Package(
     val identifier = "$packageManager:$namespace:$normalizedName:$version"
 
     /**
-     * The [Semver.SemverType] used for the [version] of this package.
-     */
-    val semverType = when (packageManager) {
-        "NPM" -> Semver.SemverType.NPM
-        else -> Semver.SemverType.STRICT
-    }
-
-    /**
      * The normalized VCS URL.
      *
      * @see normalizeVcsUrl
      */
-    val normalizedVcsUrl = normalizeVcsUrl(vcs.url, semverType)
+    val normalizedVcsUrl = normalizeVcsUrl(vcs.url)
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
