@@ -38,7 +38,8 @@ abstract class VersionControlSystem<WD : WorkingDirectory> {
                     Git,
                     GitRepo,
                     Mercurial,
-                    Subversion
+                    Subversion,
+                    Cvs
             )
         }
 
