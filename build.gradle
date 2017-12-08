@@ -39,12 +39,27 @@ subprojects {
         }
     }
 
+    sourceSets {
+        funTest {
+            kotlin.srcDirs 'src/funTest/kotlin'
+        }
+    }
+
     repositories {
         jcenter()
     }
 
     dependencies {
         compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2.0'
+
+        testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+
+        funTestCompile sourceSets.main.output
+        funTestCompile sourceSets.test.output
+        funTestCompile configurations.testCompile
+        funTestRuntime configurations.testRuntime
+
+        funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
     }
 
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
@@ -82,5 +97,41 @@ subprojects {
         toolVersion = '0.7.9'
     }
 
+    task funTest(type: Test) {
+        description = 'Runs the functional tests.'
+        group = 'Verification'
+
+        classpath = sourceSets.funTest.runtimeClasspath
+        testClassesDirs = sourceSets.funTest.output.classesDirs
+
+        systemProperties = [
+                includeTags: System.getProperty("includeTags"),
+                excludeTags: System.getProperty("excludeTags")
+        ]
+
+        // Add the Git submodule for ScanCode to PATH so functional tests can find the scanner.
+        def scanCodePath = new File("$rootDir/scanner/src/funTest/assets/scanners/scancode-toolkit")
+        environment('PATH', scanCodePath.path + File.pathSeparator + System.getenv('PATH'))
+
+        testLogging {
+            events 'started', 'passed', 'skipped', 'failed'
+            exceptionFormat 'full'
+        }
+    }
+
+    task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
+        description = 'Generates the code coverage report for the functional tests.'
+        group = 'Reporting'
+
+        executionData funTest
+        sourceSets sourceSets.main
+
+        reports {
+            // Enable XML in addition to HTML for CI integration.
+            xml.enabled true
+        }
+    }
+
     check.dependsOn detektCheck
+    check.dependsOn funTest
 }

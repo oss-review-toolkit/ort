@@ -4,60 +4,10 @@ apply plugin: 'application'
 applicationName = 'scanner'
 mainClassName = 'com.here.ort.scanner.Main'
 
-sourceSets {
-    funTest {
-        kotlin.srcDirs 'src/funTest/kotlin'
-    }
-}
-
 dependencies {
     compile project(':downloader')
     compile project(':model')
     compile project(':util')
 
     compile "com.beust:jcommander:$jcommanderVersion"
-
-    testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
-
-    funTestCompile sourceSets.main.output
-    funTestCompile sourceSets.test.output
-    funTestCompile configurations.testCompile
-    funTestRuntime configurations.testRuntime
-
-    funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
-
-task funTest(type: Test) {
-    description = 'Runs the functional tests.'
-    group = 'Verification'
-    classpath = sourceSets.funTest.runtimeClasspath
-    testClassesDirs = sourceSets.funTest.output.classesDirs
-    systemProperties = [
-            includeTags: System.getProperty("includeTags"),
-            excludeTags: System.getProperty("excludeTags")
-    ]
-
-    // Add the Git submodule for ScanCode to PATH so functional tests can find the scanner.
-    def scanCodePath = new File("$rootDir/scanner/src/funTest/assets/scanners/scancode-toolkit")
-    environment('PATH', scanCodePath.path + File.pathSeparator + System.getenv('PATH'))
-
-    testLogging {
-        events 'started', 'passed', 'skipped', 'failed'
-        exceptionFormat 'full'
-    }
-}
-
-task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
-    description = 'Generates the code coverage report for the functional tests.'
-    group = 'Reporting'
-
-    executionData funTest
-    sourceSets sourceSets.main
-
-    reports {
-        // Enable XML in addition to HTML for CI integration.
-        xml.enabled true
-    }
-}
-
-check.dependsOn funTest

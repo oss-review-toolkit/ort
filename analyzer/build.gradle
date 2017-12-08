@@ -4,12 +4,6 @@ apply plugin: 'application'
 applicationName = 'analyzer'
 mainClassName = 'com.here.ort.analyzer.Main'
 
-sourceSets {
-    funTest {
-        kotlin.srcDirs 'src/funTest/kotlin'
-    }
-}
-
 dependencies {
     compile project(':downloader')
     compile project(':model')
@@ -29,44 +23,4 @@ dependencies {
 
     // The tooling API does not necessarily get upgraded with new versions of Gradle.
     compile "org.gradle:gradle-tooling-api:${gradleToolingApiVersion}"
-
-    testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
-
-    funTestCompile sourceSets.main.output
-    funTestCompile sourceSets.test.output
-    funTestCompile configurations.testCompile
-    funTestRuntime configurations.testRuntime
-
-    funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
-
-task funTest(type: Test) {
-    description = 'Runs the functional tests.'
-    group = 'Verification'
-    classpath = sourceSets.funTest.runtimeClasspath
-    testClassesDirs = sourceSets.funTest.output.classesDirs
-    systemProperties = [
-            includeTags: System.getProperty("includeTags"),
-            excludeTags: System.getProperty("excludeTags")
-    ]
-
-    testLogging {
-        events 'started', 'passed', 'skipped', 'failed'
-        exceptionFormat 'full'
-    }
-}
-
-task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
-    description = 'Generates the code coverage report for the functional tests.'
-    group = 'Reporting'
-
-    executionData funTest
-    sourceSets sourceSets.main
-
-    reports {
-        // Enable XML in addition to HTML for CI integration.
-        xml.enabled true
-    }
-}
-
-check.dependsOn funTest
