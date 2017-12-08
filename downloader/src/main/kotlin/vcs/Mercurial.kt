@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingDirectoryWithRevision
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.getCommandVersion
 import com.here.ort.util.log
@@ -31,7 +32,7 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.io.IOException
 
-object Mercurial : VersionControlSystem() {
+object Mercurial : VersionControlSystem<WorkingDirectoryWithRevision>() {
     private const val EXTENSION_LARGE_FILES = "largefiles = "
     private const val EXTENSION_SPARSE = "sparse = "
 
@@ -44,7 +45,7 @@ object Mercurial : VersionControlSystem() {
     }
 
     override fun getWorkingDirectory(vcsDirectory: File) =
-            object : WorkingDirectory(vcsDirectory) {
+            object : WorkingDirectoryWithRevision(vcsDirectory, this@Mercurial.toString()) {
                 override fun isValid(): Boolean {
                     val repositoryRoot = runMercurialCommand(workingDir, "root").stdout().trim()
                     return workingDir.path.startsWith(repositoryRoot)
@@ -73,7 +74,7 @@ object Mercurial : VersionControlSystem() {
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
-            : String {
+            : String? {
         log.info { "Using $this version ${getVersion()}." }
 
         val revisionCmdArgs = mutableListOf<String>()

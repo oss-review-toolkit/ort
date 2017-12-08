@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingDirectoryWithRevision
 import com.here.ort.util.log
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.getCommandVersion
@@ -32,7 +33,7 @@ import com.here.ort.util.safeMkdirs
 import java.io.File
 import java.io.IOException
 
-abstract class GitBase : VersionControlSystem() {
+abstract class GitBase : VersionControlSystem<WorkingDirectoryWithRevision>() {
     override fun getVersion(): String {
         val gitVersionRegex = Regex("git version (?<version>[\\d.a-z]+)")
 
@@ -42,7 +43,7 @@ abstract class GitBase : VersionControlSystem() {
     }
 
     override fun getWorkingDirectory(vcsDirectory: File) =
-            object : WorkingDirectory(vcsDirectory) {
+            object : WorkingDirectoryWithRevision(vcsDirectory, this@GitBase.toString()) {
                 override fun isValid(): Boolean {
                     if (!workingDir.isDirectory) {
                         return false
@@ -91,7 +92,7 @@ object Git : GitBase() {
      */
     @Suppress("ComplexMethod")
     override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
-            : String {
+            : String? {
         log.info { "Using $this version ${getVersion()}." }
 
         try {

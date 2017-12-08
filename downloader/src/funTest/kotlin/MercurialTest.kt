@@ -65,7 +65,7 @@ class MercurialTest : StringSpec() {
 
         "Mercurial can download entire repo" {
             Mercurial.download(REPO_URL, null, null, "", outputDir)
-            Mercurial.getWorkingDirectory(outputDir).getProvider() shouldBe "Mercurial"
+            Mercurial.getWorkingDirectory(outputDir).provider shouldBe "Mercurial"
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download single revision" {

@@ -114,7 +114,7 @@ class DownloaderTest : StringSpec() {
         }.config(tags = setOf(Expensive))
     }
 
-    private fun getWorkingDir(vcs: VersionControlSystem, pkg: Package)
+    private fun getWorkingDir(vcs: VersionControlSystem<WorkingDirectoryWithRevision>, pkg: Package)
             = vcs.getWorkingDirectory(File(outputDir, "${pkg.normalizedName}/${pkg.version}"))
 
 }

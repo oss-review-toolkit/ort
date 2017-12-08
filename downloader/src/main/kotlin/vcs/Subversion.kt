@@ -28,6 +28,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingDirectoryWithRevision
 import com.here.ort.util.ProcessCapture
 import com.here.ort.util.getCommandVersion
 import com.here.ort.util.log
@@ -46,7 +47,7 @@ data class SubversionLogEntry(
         val author: String) {
 }
 
-object Subversion : VersionControlSystem() {
+object Subversion : VersionControlSystem<WorkingDirectoryWithRevision>() {
     override fun getVersion(): String {
         val subversionVersionRegex = Regex("svn, version (?<version>[\\d.]+) \\(r\\d+\\)")
 
@@ -56,7 +57,7 @@ object Subversion : VersionControlSystem() {
     }
 
     override fun getWorkingDirectory(vcsDirectory: File) =
-            object : WorkingDirectory(vcsDirectory) {
+            object : WorkingDirectoryWithRevision(vcsDirectory, this@Subversion.toString()) {
                 val infoCommandResult = ProcessCapture("svn", "info", workingDir.absolutePath)
 
                 override fun isValid() = infoCommandResult.exitValue() == 0;
