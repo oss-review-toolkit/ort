@@ -13,6 +13,4 @@ dependencies {
 
     // Use logback-classic as the logger for slf4k as it allows to change the log level at runtime.
     compile 'ch.qos.logback:logback-classic:1.2.3'
-
-    testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 }
