@@ -202,7 +202,7 @@ object Main {
                 p("Downloading revision '${target.vcsProcessed.revision}'.")
             }
 
-            var applicableVcs: VersionControlSystem? = null
+            var applicableVcs: VersionControlSystem<out WorkingDirectory>? = null
 
             p("Trying to detect VCS...")
 

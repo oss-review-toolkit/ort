@@ -82,7 +82,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             downloadDir shouldNotBe null
             workingDir shouldNotBe null
             workingDir!!.isValid() shouldBe true
-            workingDir.getProvider() shouldBe pkg.vcs.provider
+            workingDir.provider shouldBe pkg.vcs.provider
         }.config(tags = setOf(Expensive))
 
         "All package manager definition files are found" {
