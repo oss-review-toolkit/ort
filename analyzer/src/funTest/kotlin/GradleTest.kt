@@ -55,7 +55,7 @@ class GradleTest : StringSpec() {
     init {
         "Root project dependencies are detected correctly" {
             val packageFile = File(projectDir, "build.gradle")
-            val expectedResult = patchExpectedResult("project-gradle-expected-output-root.yml")
+            val expectedResult = patchExpectedResult("gradle-expected-output-root.yml")
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -66,7 +66,7 @@ class GradleTest : StringSpec() {
 
         "Project dependencies are detected correctly" {
             val packageFile = File(projectDir, "app/build.gradle")
-            val expectedResult = patchExpectedResult("project-gradle-expected-output-app.yml")
+            val expectedResult = patchExpectedResult("gradle-expected-output-app.yml")
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -77,7 +77,7 @@ class GradleTest : StringSpec() {
 
         "External dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib/build.gradle")
-            val expectedResult = patchExpectedResult("project-gradle-expected-output-lib.yml")
+            val expectedResult = patchExpectedResult("gradle-expected-output-lib.yml")
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
@@ -88,7 +88,7 @@ class GradleTest : StringSpec() {
 
         "Unresolved dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib-without-repo/build.gradle")
-            val expectedResult = patchExpectedResult("project-gradle-expected-output-lib-without-repo.yml")
+            val expectedResult = patchExpectedResult("gradle-expected-output-lib-without-repo.yml")
 
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 

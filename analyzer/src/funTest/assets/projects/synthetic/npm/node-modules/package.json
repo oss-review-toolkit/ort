@@ -1,7 +1,7 @@
 {
-  "name": "project-npm-package-lock",
+  "name": "npm-node-modules",
   "version": "2.0.0",
-  "description": "NPM test project with package-lock.json.",
+  "description": "NPM test project with existing node_modules directory.",
   "main": "bundle.js",
   "config": {
     "devHost": "localhost",

@@ -66,7 +66,7 @@ class MainTest : StringSpec() {
         }
 
         "Activating only NPM works" {
-            val inputDir = File(syntheticProjectDir, "project-npm/package-lock")
+            val inputDir = File(syntheticProjectDir, "npm/package-lock")
 
             // Redirect standard output to a stream.
             val standardOut = System.out

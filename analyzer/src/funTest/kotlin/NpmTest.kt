@@ -34,7 +34,7 @@ import io.kotlintest.specs.FreeSpec
 import java.io.File
 
 class NpmTest : FreeSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/project-npm")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/npm")
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
@@ -58,9 +58,9 @@ class NpmTest : FreeSpec() {
     }
 
     private fun patchExpectedResult(workingDir: File) =
-        File(projectDir.parentFile, "project-npm-expected-output.yml")
+        File(projectDir.parentFile, "npm-expected-output.yml")
                 .readText()
-                .replaceFirst("project-npm", "project-npm-${workingDir.name}")
+                .replaceFirst("npm-project", "npm-${workingDir.name}")
 
     init {
         "NPM should" - {
