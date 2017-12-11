@@ -17,6 +17,9 @@ cache:
 
 install:
   - npm install -g npm@5.5.1 yarn@1.3.2
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sudo apt-get install --yes cvs libtool;
+    fi
 
 script:
   - if git grep -L "Copyright" -- "*.kt"; then
