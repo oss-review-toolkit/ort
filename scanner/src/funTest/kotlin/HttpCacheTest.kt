@@ -86,7 +86,8 @@ class HttpCacheTest : StringSpec() {
                     homepageUrl = "homepageUrl",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY
+                    vcs = VcsInfo.EMPTY,
+                    vcsOriginal = VcsInfo.EMPTY
             )
 
             val resultFile = createTempFile()

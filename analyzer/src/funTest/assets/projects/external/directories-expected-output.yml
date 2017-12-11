@@ -13,6 +13,11 @@ project:
     url: "git@github.com:soc/directories.git"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git@github.com:soc/directories.git"
+    revision: "HEAD"
+    path: ""
   homepage_url: "https://github.com/soc/directories"
   scopes:
   - name: "compile"
@@ -51,6 +56,11 @@ packages:
     url: "git://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git://github.com/junit-team/junit.git"
+    revision: "r4.12"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.hamcrest"
   name: "hamcrest-core"
@@ -70,6 +80,11 @@ packages:
     hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
     revision: "HEAD"

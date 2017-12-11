@@ -12,6 +12,11 @@ project:
     url: "https://github.com/deis/example-python-flask.git"
     revision: "0773991e36a4c69b121cdb05146d6140347d4065"
     path: ""
+  vcs_original:
+    provider: "Git"
+    url: "https://github.com/deis/example-python-flask.git"
+    revision: "0773991e36a4c69b121cdb05146d6140347d4065"
+    path: ""
   homepage_url: ""
   scopes:
   - name: "install"
@@ -74,6 +79,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "Jinja2"
@@ -92,6 +102,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_original:
     provider: ""
     url: ""
     revision: ""
@@ -117,6 +132,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "Werkzeug"
@@ -134,6 +154,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_original:
     provider: ""
     url: ""
     revision: ""
@@ -159,6 +184,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "gunicorn"
@@ -176,6 +206,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_original:
     provider: ""
     url: ""
     revision: ""
@@ -198,6 +233,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_original:
     provider: ""
     url: ""
     revision: ""
