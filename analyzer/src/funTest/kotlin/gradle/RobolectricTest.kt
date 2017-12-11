@@ -29,7 +29,7 @@ class RobolectricTest : BaseGradleSpec() {
             packageManager = "Gradle",
             namespace = "org.robolectric",
             name = "robolectric",
-            version = "3.3.2",
+            version = "3.5",
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
@@ -38,7 +38,7 @@ class RobolectricTest : BaseGradleSpec() {
             vcs = VcsInfo(
                     "Git",
                     "https://github.com/robolectric/robolectric.git",
-                    "757dfd56499a415376ea04bfa520b317bf2e3b58",
+                    "robolectric-3.5",
                     ""
             )
     )
