@@ -271,7 +271,8 @@ class NPM : PackageManager() {
                             hashAlgorithm = hashAlgorithm
                     ),
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcs
+                    vcs = vcs,
+                    vcsProcessed = VersionControlSystem.accumulateInfo(vcs)
             )
 
             require(module.name.isNotEmpty()) {
@@ -434,11 +435,11 @@ class NPM : PackageManager() {
         val projectDir = packageJson.parentFile
 
         // Try to get VCS information from the package.json's repository field, or otherwise from the working directory.
-        val vcs = parseVcsInfo(json).takeUnless {
-            it == VcsInfo.EMPTY
-        } ?: VersionControlSystem.forDirectory(projectDir)?.let {
-            it.getInfo(projectDir)
-        } ?: VcsInfo.EMPTY
+        val packageVcsInfo = parseVcsInfo(json)
+        val vcs = VersionControlSystem.accumulateInfo(
+                packageVcsInfo,
+                VersionControlSystem.forDirectory(projectDir)?.getInfo(projectDir)
+        )
 
         val project = Project(
                 packageManager = javaClass.simpleName,
@@ -447,7 +448,8 @@ class NPM : PackageManager() {
                 version = version,
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
-                vcs = vcs,
+                vcs = packageVcsInfo,
+                vcsProcessed = vcs,
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
