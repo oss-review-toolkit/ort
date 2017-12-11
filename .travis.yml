@@ -13,6 +13,7 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.ivy2
     - $HOME/.m2/repository/
+    - $HOME/.ort/analyzer/remote_artifacts
 
 install:
   - npm install -g npm@5.5.1 yarn@1.3.2
