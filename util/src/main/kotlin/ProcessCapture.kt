@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 
 import com.vdurmont.semver4j.Requirement
+import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
@@ -113,7 +114,7 @@ fun checkCommandVersion(
         ignoreActualVersion: Boolean = false,
         transform: (String) -> String = { it }
 ) {
-    val actualVersion = getCommandVersion(command, versionArguments, workingDir, transform)
+    val actualVersion = Semver(getCommandVersion(command, versionArguments, workingDir, transform), Semver.SemverType.LOOSE)
     if (!requirement.isSatisfiedBy(actualVersion)) {
         val message = "Unsupported $command version $actualVersion does not fulfill $requirement."
         if (ignoreActualVersion) {
