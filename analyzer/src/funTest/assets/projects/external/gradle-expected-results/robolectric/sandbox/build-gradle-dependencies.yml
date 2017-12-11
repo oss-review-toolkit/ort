@@ -3,7 +3,7 @@ allowDynamicVersions: true
 project:
   package_manager: "Gradle"
   namespace: ""
-  name: "junit"
+  name: "sandbox"
   version: ""
   declared_licenses: []
   aliases: []
@@ -36,7 +36,12 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
       version: ""
       dependencies:
       - namespace: ""
@@ -49,55 +54,30 @@ project:
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
-        version: ""
-        dependencies:
-        - namespace: ""
-          name: "project :annotations"
-          version: ""
-          dependencies:
-          - namespace: ""
-            name: "project :shadowapi"
-            version: ""
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
       - namespace: "org.ow2.asm"
-        name: "asm-commons"
+        name: "asm-tree"
         version: "5.0.1"
         dependencies:
         - namespace: "org.ow2.asm"
-          name: "asm-tree"
+          name: "asm"
           version: "5.0.1"
-          dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
-            dependencies: []
-            errors: []
+          dependencies: []
           errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
-        dependencies: []
-        errors: []
       errors: []
-    - namespace: ""
-      name: "project :shadowapi"
-      version: ""
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
       dependencies: []
       errors: []
   - name: "compileClasspath"
@@ -114,7 +94,12 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
       version: ""
       dependencies:
       - namespace: ""
@@ -127,71 +112,36 @@ project:
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
-        version: ""
-        dependencies:
-        - namespace: ""
-          name: "project :annotations"
-          version: ""
-          dependencies:
-          - namespace: ""
-            name: "project :shadowapi"
-            version: ""
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm-commons"
-        version: "5.0.1"
-        dependencies:
-        - namespace: "org.ow2.asm"
-          name: "asm-tree"
-          version: "5.0.1"
-          dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
-        dependencies: []
-        errors: []
-      errors: []
-    - namespace: ""
-      name: "project :shadowapi"
-      version: ""
-      dependencies: []
       errors: []
     - namespace: "com.google.code.findbugs"
       name: "jsr305"
       version: "3.0.1"
       dependencies: []
       errors: []
-    - namespace: "junit"
-      name: "junit"
-      version: "4.12"
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
       dependencies:
-      - namespace: "org.hamcrest"
-        name: "hamcrest-core"
-        version: "1.3"
-        dependencies: []
+      - namespace: "org.ow2.asm"
+        name: "asm-tree"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
         errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
+      dependencies: []
       errors: []
   - name: "compileOnly"
     delivered: true
@@ -200,16 +150,6 @@ project:
       name: "jsr305"
       version: "3.0.1"
       dependencies: []
-      errors: []
-    - namespace: "junit"
-      name: "junit"
-      version: "4.12"
-      dependencies:
-      - namespace: "org.hamcrest"
-        name: "hamcrest-core"
-        version: "1.3"
-        dependencies: []
-        errors: []
       errors: []
   - name: "default"
     delivered: true
@@ -225,7 +165,12 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
       version: ""
       dependencies:
       - namespace: ""
@@ -238,55 +183,30 @@ project:
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
-        version: ""
-        dependencies:
-        - namespace: ""
-          name: "project :annotations"
-          version: ""
-          dependencies:
-          - namespace: ""
-            name: "project :shadowapi"
-            version: ""
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
       - namespace: "org.ow2.asm"
-        name: "asm-commons"
+        name: "asm-tree"
         version: "5.0.1"
         dependencies:
         - namespace: "org.ow2.asm"
-          name: "asm-tree"
+          name: "asm"
           version: "5.0.1"
-          dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
-            dependencies: []
-            errors: []
+          dependencies: []
           errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
-        dependencies: []
-        errors: []
       errors: []
-    - namespace: ""
-      name: "project :shadowapi"
-      version: ""
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
       dependencies: []
       errors: []
   - name: "errorprone"
@@ -584,7 +504,12 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
       version: ""
       dependencies:
       - namespace: ""
@@ -597,55 +522,30 @@ project:
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
-        version: ""
-        dependencies:
-        - namespace: ""
-          name: "project :annotations"
-          version: ""
-          dependencies:
-          - namespace: ""
-            name: "project :shadowapi"
-            version: ""
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
       - namespace: "org.ow2.asm"
-        name: "asm-commons"
+        name: "asm-tree"
         version: "5.0.1"
         dependencies:
         - namespace: "org.ow2.asm"
-          name: "asm-tree"
+          name: "asm"
           version: "5.0.1"
-          dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
-            dependencies: []
-            errors: []
+          dependencies: []
           errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
-        dependencies: []
-        errors: []
       errors: []
-    - namespace: ""
-      name: "project :shadowapi"
-      version: ""
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
       dependencies: []
       errors: []
   - name: "runtimeClasspath"
@@ -662,7 +562,12 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :shadowapi"
+      version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
       version: ""
       dependencies:
       - namespace: ""
@@ -675,55 +580,30 @@ project:
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
-        version: ""
-        dependencies:
-        - namespace: ""
-          name: "project :annotations"
-          version: ""
-          dependencies:
-          - namespace: ""
-            name: "project :shadowapi"
-            version: ""
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
       - namespace: "org.ow2.asm"
-        name: "asm-commons"
+        name: "asm-tree"
         version: "5.0.1"
         dependencies:
         - namespace: "org.ow2.asm"
-          name: "asm-tree"
+          name: "asm"
           version: "5.0.1"
-          dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
-            dependencies: []
-            errors: []
+          dependencies: []
           errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
-        dependencies: []
-        errors: []
       errors: []
-    - namespace: ""
-      name: "project :shadowapi"
-      version: ""
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
       dependencies: []
       errors: []
   - name: "signatures"
@@ -743,7 +623,7 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :junit"
       version: ""
       dependencies:
       - namespace: ""
@@ -757,12 +637,7 @@ project:
           errors: []
         errors: []
       - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
+        name: "project :sandbox"
         version: ""
         dependencies:
         - namespace: ""
@@ -775,36 +650,176 @@ project:
             dependencies: []
             errors: []
           errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm-commons"
-        version: "5.0.1"
-        dependencies:
-        - namespace: "org.ow2.asm"
-          name: "asm-tree"
-          version: "5.0.1"
+        - namespace: ""
+          name: "project :junit"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
           dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "junit"
+          name: "junit"
+          version: "4.12"
+          dependencies:
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
             dependencies: []
             errors: []
           errors: []
+        - namespace: "org.assertj"
+          name: "assertj-core"
+          version: "3.8.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.mockito"
+          name: "mockito-core"
+          version: "2.5.4"
+          dependencies:
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy-agent"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.objenesis"
+            name: "objenesis"
+            version: "2.4"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
         dependencies: []
         errors: []
       errors: []
     - namespace: ""
       name: "project :shadowapi"
       version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm-tree"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
       dependencies: []
       errors: []
   - name: "testCompileClasspath"
@@ -821,7 +836,7 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :junit"
       version: ""
       dependencies:
       - namespace: ""
@@ -835,12 +850,7 @@ project:
           errors: []
         errors: []
       - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
+        name: "project :sandbox"
         version: ""
         dependencies:
         - namespace: ""
@@ -853,36 +863,176 @@ project:
             dependencies: []
             errors: []
           errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm-commons"
-        version: "5.0.1"
-        dependencies:
-        - namespace: "org.ow2.asm"
-          name: "asm-tree"
-          version: "5.0.1"
+        - namespace: ""
+          name: "project :junit"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
           dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "junit"
+          name: "junit"
+          version: "4.12"
+          dependencies:
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
             dependencies: []
             errors: []
           errors: []
+        - namespace: "org.assertj"
+          name: "assertj-core"
+          version: "3.8.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.mockito"
+          name: "mockito-core"
+          version: "2.5.4"
+          dependencies:
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy-agent"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.objenesis"
+            name: "objenesis"
+            version: "2.4"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
         dependencies: []
         errors: []
       errors: []
     - namespace: ""
       name: "project :shadowapi"
       version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm-tree"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
       dependencies: []
       errors: []
   - name: "testCompileOnly"
@@ -902,7 +1052,7 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :junit"
       version: ""
       dependencies:
       - namespace: ""
@@ -916,12 +1066,7 @@ project:
           errors: []
         errors: []
       - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
+        name: "project :sandbox"
         version: ""
         dependencies:
         - namespace: ""
@@ -934,36 +1079,176 @@ project:
             dependencies: []
             errors: []
           errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm-commons"
-        version: "5.0.1"
-        dependencies:
-        - namespace: "org.ow2.asm"
-          name: "asm-tree"
-          version: "5.0.1"
+        - namespace: ""
+          name: "project :junit"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
           dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "junit"
+          name: "junit"
+          version: "4.12"
+          dependencies:
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
             dependencies: []
             errors: []
           errors: []
+        - namespace: "org.assertj"
+          name: "assertj-core"
+          version: "3.8.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.mockito"
+          name: "mockito-core"
+          version: "2.5.4"
+          dependencies:
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy-agent"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.objenesis"
+            name: "objenesis"
+            version: "2.4"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
         dependencies: []
         errors: []
       errors: []
     - namespace: ""
       name: "project :shadowapi"
       version: ""
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "project :utils"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm-tree"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
       dependencies: []
       errors: []
   - name: "testRuntimeClasspath"
@@ -980,7 +1265,7 @@ project:
         errors: []
       errors: []
     - namespace: ""
-      name: "project :sandbox"
+      name: "project :junit"
       version: ""
       dependencies:
       - namespace: ""
@@ -994,12 +1279,7 @@ project:
           errors: []
         errors: []
       - namespace: ""
-        name: "project :shadowapi"
-        version: ""
-        dependencies: []
-        errors: []
-      - namespace: ""
-        name: "project :utils"
+        name: "project :sandbox"
         version: ""
         dependencies:
         - namespace: ""
@@ -1012,30 +1292,95 @@ project:
             dependencies: []
             errors: []
           errors: []
-        errors: []
-      - namespace: "com.google.guava"
-        name: "guava"
-        version: "20.0"
-        dependencies: []
-        errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm-commons"
-        version: "5.0.1"
-        dependencies:
-        - namespace: "org.ow2.asm"
-          name: "asm-tree"
-          version: "5.0.1"
+        - namespace: ""
+          name: "project :junit"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        - namespace: ""
+          name: "project :utils"
+          version: ""
           dependencies:
-          - namespace: "org.ow2.asm"
-            name: "asm"
-            version: "5.0.1"
+          - namespace: ""
+            name: "project :annotations"
+            version: ""
+            dependencies:
+            - namespace: ""
+              name: "project :shadowapi"
+              version: ""
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "com.google.guava"
+          name: "guava"
+          version: "20.0"
+          dependencies: []
+          errors: []
+        - namespace: "junit"
+          name: "junit"
+          version: "4.12"
+          dependencies:
+          - namespace: "org.hamcrest"
+            name: "hamcrest-core"
+            version: "1.3"
             dependencies: []
             errors: []
           errors: []
+        - namespace: "org.assertj"
+          name: "assertj-core"
+          version: "3.8.0"
+          dependencies: []
+          errors: []
+        - namespace: "org.mockito"
+          name: "mockito-core"
+          version: "2.5.4"
+          dependencies:
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy-agent"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "net.bytebuddy"
+            name: "byte-buddy"
+            version: "1.6.0"
+            dependencies: []
+            errors: []
+          - namespace: "org.objenesis"
+            name: "objenesis"
+            version: "2.4"
+            dependencies: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm-commons"
+          version: "5.0.1"
+          dependencies:
+          - namespace: "org.ow2.asm"
+            name: "asm-tree"
+            version: "5.0.1"
+            dependencies:
+            - namespace: "org.ow2.asm"
+              name: "asm"
+              version: "5.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
         errors: []
-      - namespace: "org.ow2.asm"
-        name: "asm"
-        version: "5.0.1"
+      - namespace: ""
+        name: "project :shadowapi"
+        version: ""
         dependencies: []
         errors: []
       errors: []
@@ -1044,10 +1389,110 @@ project:
       version: ""
       dependencies: []
       errors: []
+    - namespace: ""
+      name: "project :utils"
+      version: ""
+      dependencies:
+      - namespace: ""
+        name: "project :annotations"
+        version: ""
+        dependencies:
+        - namespace: ""
+          name: "project :shadowapi"
+          version: ""
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "com.google.guava"
+      name: "guava"
+      version: "20.0"
+      dependencies: []
+      errors: []
+    - namespace: "junit"
+      name: "junit"
+      version: "4.12"
+      dependencies:
+      - namespace: "org.hamcrest"
+        name: "hamcrest-core"
+        version: "1.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.assertj"
+      name: "assertj-core"
+      version: "3.8.0"
+      dependencies: []
+      errors: []
+    - namespace: "org.mockito"
+      name: "mockito-core"
+      version: "2.5.4"
+      dependencies:
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy-agent"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "net.bytebuddy"
+        name: "byte-buddy"
+        version: "1.6.0"
+        dependencies: []
+        errors: []
+      - namespace: "org.objenesis"
+        name: "objenesis"
+        version: "2.4"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm-commons"
+      version: "5.0.1"
+      dependencies:
+      - namespace: "org.ow2.asm"
+        name: "asm-tree"
+        version: "5.0.1"
+        dependencies:
+        - namespace: "org.ow2.asm"
+          name: "asm"
+          version: "5.0.1"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - namespace: "org.ow2.asm"
+      name: "asm"
+      version: "5.0.1"
+      dependencies: []
+      errors: []
 packages:
 - package_manager: "Gradle"
   namespace: ""
   name: "project :annotations"
+  version: ""
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+- package_manager: "Gradle"
+  namespace: ""
+  name: "project :junit"
   version: ""
   declared_licenses: []
   description: ""
@@ -1631,6 +2076,60 @@ packages:
     revision: "r4.12"
     path: ""
 - package_manager: "Gradle"
+  namespace: "net.bytebuddy"
+  name: "byte-buddy-agent"
+  version: "1.6.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "The Byte Buddy Java agent allows to access the JVM's HotSwap feature."
+  homepage_url: "http://bytebuddy.net/byte-buddy-agent"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-agent/1.6.0/byte-buddy-agent-1.6.0.jar"
+    hash: "521c3d7816516e57f4dab9e87cf574bfb64dec9b"
+    hash_algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy-agent/1.6.0/byte-buddy-agent-1.6.0-sources.jar"
+    hash: "e9d11dfc59048efac0916bdddaf4b5fd9cc12f9b"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "git@github.com:raphw/byte-buddy.git/byte-buddy-agent"
+    revision: "byte-buddy-1.6.0"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/raphw/byte-buddy.git/byte-buddy-agent"
+    revision: "byte-buddy-1.6.0"
+    path: ""
+- package_manager: "Gradle"
+  namespace: "net.bytebuddy"
+  name: "byte-buddy"
+  version: "1.6.0"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Byte Buddy is a Java library for creating Java classes at run time.\n\
+    \        This artifact is a build of Byte Buddy with all ASM dependencies repackaged\
+    \ into its own name space."
+  homepage_url: "http://bytebuddy.net/byte-buddy"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy/1.6.0/byte-buddy-1.6.0.jar"
+    hash: "28ba3295d99d4427d85ad40590cc92493f1ec367"
+    hash_algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy/1.6.0/byte-buddy-1.6.0-sources.jar"
+    hash: "4e8a61556de83029f62a43162ccddc78e21454f3"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "git@github.com:raphw/byte-buddy.git/byte-buddy"
+    revision: "byte-buddy-1.6.0"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/raphw/byte-buddy.git/byte-buddy"
+    revision: "byte-buddy-1.6.0"
+    path: ""
+- package_manager: "Gradle"
   namespace: "net.sourceforge.plantuml"
   name: "plantuml"
   version: "8032"
@@ -1658,6 +2157,32 @@ packages:
     provider: "svn"
     url: "svn://svn.code.sf.net/p/plantuml/code/tags/plantuml-8032"
     revision: "HEAD"
+    path: ""
+- package_manager: "Gradle"
+  namespace: "org.assertj"
+  name: "assertj-core"
+  version: "3.8.0"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  description: "Rich and fluent assertions for testing for Java"
+  homepage_url: "http://assertj.org/assertj-core"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/assertj/assertj-core/3.8.0/assertj-core-3.8.0.jar"
+    hash: "b209d90ff2e279bee3e02547ee7b11349c52d0e3"
+    hash_algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/assertj/assertj-core/3.8.0/assertj-core-3.8.0-sources.jar"
+    hash: "85dab3e124fb391b10196df9bfdb43640deabb09"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "git@github.com:joel-costigliola/assertj-core.git"
+    revision: "assertj-core-3.8.0"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/joel-costigliola/assertj-core.git"
+    revision: "assertj-core-3.8.0"
     path: ""
 - package_manager: "Gradle"
   namespace: "org.checkerframework"
@@ -1766,6 +2291,58 @@ packages:
     provider: "git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git/hamcrest-core"
     revision: "HEAD"
+    path: ""
+- package_manager: "Gradle"
+  namespace: "org.mockito"
+  name: "mockito-core"
+  version: "2.5.4"
+  declared_licenses:
+  - "The MIT License"
+  description: "Mockito mock objects library core API and implementation"
+  homepage_url: "http://mockito.org"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/mockito/mockito-core/2.5.4/mockito-core-2.5.4.jar"
+    hash: "e83308188f084f643871105424d782c91559fa6d"
+    hash_algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/mockito/mockito-core/2.5.4/mockito-core-2.5.4-sources.jar"
+    hash: "f6b5f4e95bd25bf7ba97ac697a0dd97ff2cbd508"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: ""
+    url: ""
+    revision: "HEAD"
+    path: ""
+  vcs_processed:
+    provider: ""
+    url: ""
+    revision: "HEAD"
+    path: ""
+- package_manager: "Gradle"
+  namespace: "org.objenesis"
+  name: "objenesis"
+  version: "2.4"
+  declared_licenses:
+  - "Apache 2"
+  description: "A library for instantiating Java objects"
+  homepage_url: "http://objenesis.org"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/objenesis/objenesis/2.4/objenesis-2.4.jar"
+    hash: "2916b6c96b50c5b3ec4452ed99401db745aabb27"
+    hash_algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/objenesis/objenesis/2.4/objenesis-2.4-sources.jar"
+    hash: "19b316d8da7da3ae2539ee4ee2cf73a1e127fa73"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "https://github.com/easymock/objenesis.git/objenesis"
+    revision: "2.4"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/easymock/objenesis.git/objenesis.git"
+    revision: "2.4"
     path: ""
 - package_manager: "Gradle"
   namespace: "org.ow2.asm"

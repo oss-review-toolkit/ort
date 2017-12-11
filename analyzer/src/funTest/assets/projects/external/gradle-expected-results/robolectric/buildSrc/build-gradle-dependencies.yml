@@ -7,10 +7,16 @@ project:
   version: ""
   declared_licenses: []
   aliases: []
-  vcs_provider: "Git"
-  vcs_url: "https://github.com/robolectric/robolectric.git"
-  vcs_revision: "757dfd56499a415376ea04bfa520b317bf2e3b58"
-  vcs_path: ""
+  vcs:
+    provider: "Git"
+    url: "https://github.com/robolectric/robolectric.git"
+    revision: "757dfd56499a415376ea04bfa520b317bf2e3b58"
+    path: ""
+  vcs_processed:
+    provider: "Git"
+    url: "https://github.com/robolectric/robolectric.git"
+    revision: "757dfd56499a415376ea04bfa520b317bf2e3b58"
+    path: ""
   homepage_url: ""
   scopes:
   - name: "archives"
@@ -149,17 +155,23 @@ packages:
   description: "A very small and fast Java bytecode manipulation framework"
   homepage_url: "http://asm.objectweb.org/asm-tree/"
   binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/5.0.1/asm-tree-5.0.1.jar"
+    hash: "1b1e6e9d869acd704056d0a4223071a511c619e6"
+    hash_algorithm: "SHA-1"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs_provider: "svn"
-  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
-  vcs_revision: "HEAD"
-  vcs_path: ""
+    url: "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/5.0.1/asm-tree-5.0.1-sources.jar"
+    hash: "78ebb2694324283f3120aa3ed52465b22fab8a4a"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "svn"
+    url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
+    revision: "HEAD"
+    path: ""
+  vcs_processed:
+    provider: "svn"
+    url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm-tree"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Gradle"
   namespace: "org.ow2.asm"
   name: "asm"
@@ -169,15 +181,27 @@ packages:
   description: "A very small and fast Java bytecode manipulation framework"
   homepage_url: "http://asm.objectweb.org/asm/"
   binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/5.0.1/asm-5.0.1.jar"
+    hash: "2fd56467a018aafe6ec6a73ccba520be4a7e1565"
+    hash_algorithm: "SHA-1"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs_provider: "svn"
-  vcs_url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
-  vcs_revision: "HEAD"
-  vcs_path: ""
-errors: []
+    url: "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/5.0.1/asm-5.0.1-sources.jar"
+    hash: "78ebb2694324283f3120aa3ed52465b22fab8a4a"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "svn"
+    url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
+    revision: "HEAD"
+    path: ""
+  vcs_processed:
+    provider: "svn"
+    url: "svn://svn.forge.objectweb.org/svnroot/asm/trunk/asm"
+    revision: "HEAD"
+    path: ""
+errors:
+- "Configuration 'apiElements' cannot be resolved."
+- "Configuration 'implementation' cannot be resolved."
+- "Configuration 'runtimeElements' cannot be resolved."
+- "Configuration 'runtimeOnly' cannot be resolved."
+- "Configuration 'testImplementation' cannot be resolved."
+- "Configuration 'testRuntimeOnly' cannot be resolved."
