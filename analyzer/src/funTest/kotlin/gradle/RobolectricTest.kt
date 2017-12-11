@@ -43,6 +43,6 @@ class RobolectricTest : BaseGradleSpec() {
             )
     )
 
-    override val expectedResultsDir = "src/funTest/assets/projects/synthetic/gradle-expected-results/robolectric/"
+    override val expectedResultsDir = "src/funTest/assets/projects/external/gradle-expected-results/robolectric/"
 
 }
