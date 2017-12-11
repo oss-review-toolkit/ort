@@ -12,6 +12,11 @@ project:
     url: "https://github.com/gradle/gradle.git"
     revision: "fdafeac26dbb661805dc3cbb5d54411fe72c5e86"
     path: ""
+  vcs_original:
+    provider: "Git"
+    url: "https://github.com/gradle/gradle.git"
+    revision: "fdafeac26dbb661805dc3cbb5d54411fe72c5e86"
+    path: ""
   homepage_url: ""
   scopes: []
 packages: []

@@ -12,6 +12,11 @@ project:
     url: ""
     revision: ""
     path: "analyzer/src/funTest/assets/projects/synthetic/maven"
+  vcs_original:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes: []
 packages: []

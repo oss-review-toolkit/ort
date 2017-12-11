@@ -12,6 +12,11 @@ project:
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-core"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git://github.com:ccavanaugh/jgnash.git/jgnash-core"
+    revision: "HEAD"
+    path: ""
   homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-core/"
   scopes:
   - name: "compile"
@@ -223,6 +228,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "Maven"
   namespace: "com.fasterxml"
   name: "classmate"
@@ -241,6 +251,11 @@ packages:
     hash: "818530d5e3e8f862d0aeefb4c2df8e07a1d9ad83"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "git@github.com:cowtowncoder/java-classmate.git"
+    revision: "classmate-1.3.0"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git@github.com:cowtowncoder/java-classmate.git"
     revision: "classmate-1.3.0"
@@ -269,6 +284,11 @@ packages:
     url: "git://github.com/virtuald/curvesapi.git"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git://github.com/virtuald/curvesapi.git"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "com.h2database"
   name: "h2"
@@ -286,6 +306,11 @@ packages:
     hash: "60aba689ca3459012da9115f68c4dcfcceee51b2"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "https://github.com/h2database/h2database"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "https://github.com/h2database/h2database"
     revision: "HEAD"
@@ -312,6 +337,11 @@ packages:
     url: "git@github.com:swaldman/c3p0.git"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git@github.com:swaldman/c3p0.git"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "com.mchange"
   name: "mchange-commons-java"
@@ -330,6 +360,11 @@ packages:
     hash: "33a53955501fa830ecfc98d6ae611c6dc451946c"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "git@github.com:swaldman/mchange-commons-java.git"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git@github.com:swaldman/mchange-commons-java.git"
     revision: "HEAD"
@@ -355,6 +390,11 @@ packages:
     url: "https://github.com/x-stream/xstream.git/xstream-hibernate"
     revision: "v-1.4.x"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "https://github.com/x-stream/xstream.git/xstream-hibernate"
+    revision: "v-1.4.x"
+    path: ""
 - package_manager: "Maven"
   namespace: "com.thoughtworks.xstream"
   name: "xstream"
@@ -372,6 +412,11 @@ packages:
     hash: "a9eb7942e1c58d99d53226b13cc21b4b88cb5cab"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "https://github.com/x-stream/xstream.git/xstream"
+    revision: "v-1.4.x"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "https://github.com/x-stream/xstream.git/xstream"
     revision: "v-1.4.x"
@@ -400,6 +445,11 @@ packages:
     url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "svn"
+    url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "dom4j"
   name: "dom4j"
@@ -416,6 +466,11 @@ packages:
     hash: "a8e7149359255f43e0e5e3b1837948f9ed5861fb"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "cvs"
+    url: "pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "cvs"
     url: "pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
     revision: "HEAD"
@@ -443,6 +498,11 @@ packages:
     url: "git://github.com/netty/netty.git/netty-buffer"
     revision: "netty-4.1.9.Final"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git://github.com/netty/netty.git/netty-buffer"
+    revision: "netty-4.1.9.Final"
+    path: ""
 - package_manager: "Maven"
   namespace: "io.netty"
   name: "netty-codec"
@@ -462,6 +522,11 @@ packages:
     hash: "086dc41eab00c51f56d384b3ea4772f3d7704e4a"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "git://github.com/netty/netty.git/netty-codec"
+    revision: "netty-4.1.9.Final"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git://github.com/netty/netty.git/netty-codec"
     revision: "netty-4.1.9.Final"
@@ -489,6 +554,11 @@ packages:
     url: "git://github.com/netty/netty.git/netty-common"
     revision: "netty-4.1.9.Final"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git://github.com/netty/netty.git/netty-common"
+    revision: "netty-4.1.9.Final"
+    path: ""
 - package_manager: "Maven"
   namespace: "io.netty"
   name: "netty-resolver"
@@ -508,6 +578,11 @@ packages:
     hash: "2618cb7663514bfb77d2dd9bc8df2ba93ce141e7"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "git://github.com/netty/netty.git/netty-resolver"
+    revision: "netty-4.1.9.Final"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git://github.com/netty/netty.git/netty-resolver"
     revision: "netty-4.1.9.Final"
@@ -535,6 +610,11 @@ packages:
     url: "git://github.com/netty/netty.git/netty-transport"
     revision: "netty-4.1.9.Final"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git://github.com/netty/netty.git/netty-transport"
+    revision: "netty-4.1.9.Final"
+    path: ""
 - package_manager: "Maven"
   namespace: "jgnash"
   name: "jgnash-resources"
@@ -551,6 +631,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: "git"
+    url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
     revision: "HEAD"
@@ -577,6 +662,11 @@ packages:
     url: "git://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git://github.com/junit-team/junit.git"
+    revision: "r4.12"
+    path: ""
 - package_manager: "Maven"
   namespace: "log4j"
   name: "log4j"
@@ -594,6 +684,11 @@ packages:
     hash: "677abe279b68c5e7490d6d50c6951376238d7d3e"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "svn"
+    url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
     revision: "HEAD"
@@ -622,6 +717,11 @@ packages:
     url: ""
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.apache.commons"
   name: "commons-lang3"
@@ -641,6 +741,11 @@ packages:
     hash: "d2a489573c0ed2c4942b3660decad5d65087b406"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "svn"
+    url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
     revision: "HEAD"
@@ -666,6 +771,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "Maven"
   namespace: "org.apache.poi"
   name: "poi-ooxml"
@@ -683,6 +793,11 @@ packages:
     hash: "736eeb639587c8efa620d5f10fd6fee53ad1996f"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_original:
     provider: ""
     url: ""
     revision: ""
@@ -708,6 +823,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "Maven"
   namespace: "org.apache.xmlbeans"
   name: "xmlbeans"
@@ -725,6 +845,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: "svn"
+    url: "https://svn.apache.org/repos/asf/xmlbeans/"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "svn"
     url: "https://svn.apache.org/repos/asf/xmlbeans/"
     revision: "HEAD"
@@ -751,6 +876,11 @@ packages:
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.hibernate.common"
   name: "hibernate-commons-annotations"
@@ -768,6 +898,11 @@ packages:
     hash: "203038e420aaa3fa6df8bad4fda19ca1e2824005"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "http://github.com/hibernate/hibernate-commons-annotations.git"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "http://github.com/hibernate/hibernate-commons-annotations.git"
     revision: "HEAD"
@@ -795,6 +930,11 @@ packages:
     url: "http://github.com/hibernate/hibernate-jpa-api.git"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "http://github.com/hibernate/hibernate-jpa-api.git"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.hibernate"
   name: "hibernate-c3p0"
@@ -812,6 +952,11 @@ packages:
     hash: "eec7c630bc036b28e082949d5f9463bd9abc57b7"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "http://github.com/hibernate/hibernate-orm.git"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "http://github.com/hibernate/hibernate-orm.git"
     revision: "HEAD"
@@ -837,6 +982,11 @@ packages:
     url: "http://github.com/hibernate/hibernate-orm.git"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "http://github.com/hibernate/hibernate-orm.git"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.hsqldb"
   name: "hsqldb"
@@ -854,6 +1004,11 @@ packages:
     hash: "a9174917777d96078daaa3b519088fe9ebc7b40e"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "svn"
+    url: "http://svn.code.sf.net/p/hsqldb/svn/base/"
+    revision: "2.4.0"
+    path: ""
+  vcs_original:
     provider: "svn"
     url: "http://svn.code.sf.net/p/hsqldb/svn/base/"
     revision: "2.4.0"
@@ -882,6 +1037,11 @@ packages:
     url: "git@github.com:jboss-javassist/javassist.git"
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git@github.com:jboss-javassist/javassist.git"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.jboss.logging"
   name: "jboss-logging"
@@ -899,6 +1059,11 @@ packages:
     hash: "3625e6818158ddb4754fa2ec51299e5f57e596b4"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "git://github.com/jboss-logging/jboss-logging.git"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git://github.com/jboss-logging/jboss-logging.git"
     revision: "HEAD"
@@ -925,6 +1090,11 @@ packages:
     url: "git@github.com:jboss/jboss-transaction-api_spec.git"
     revision: "jboss-transaction-api_1.2_spec-1.0.1.Final"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "git@github.com:jboss/jboss-transaction-api_spec.git"
+    revision: "jboss-transaction-api_1.2_spec-1.0.1.Final"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.jboss"
   name: "jandex"
@@ -942,6 +1112,11 @@ packages:
     hash: "edc4552ad816df11579a8e02e19f778c77a915b5"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "git@github.com:jboss/jboss-parent-pom.git/jandex"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "git@github.com:jboss/jboss-parent-pom.git/jandex"
     revision: "HEAD"
@@ -967,6 +1142,11 @@ packages:
     url: ""
     revision: "HEAD"
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: "HEAD"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.slf4j"
   name: "slf4j-log4j12"
@@ -984,6 +1164,11 @@ packages:
     hash: "16b1333786ea93d16bff6fb0f5e3b82716d1b008"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: ""
+    url: ""
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: ""
     url: ""
     revision: "HEAD"

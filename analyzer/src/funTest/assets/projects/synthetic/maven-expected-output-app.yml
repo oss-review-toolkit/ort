@@ -12,6 +12,11 @@ project:
     url: ""
     revision: ""
     path: "analyzer/src/funTest/assets/projects/synthetic/maven"
+  vcs_original:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes:
   - name: "compile"
@@ -53,6 +58,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_original:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "Maven"
   namespace: "org.apache.commons"
   name: "commons-lang3"
@@ -76,6 +86,11 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
+  vcs_original:
+    provider: "git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+    revision: "LANG_3_5"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.apache.commons"
   name: "commons-text"
@@ -94,6 +109,11 @@ packages:
     hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+    revision: "HEAD"
+    path: ""
+  vcs_original:
     provider: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: "HEAD"

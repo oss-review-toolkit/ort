@@ -188,11 +188,11 @@ object Main {
         val targetDir = File(outputDirectory, "${target.normalizedName}/${target.version}").apply { safeMkdirs() }
         p("Downloading source code to '${targetDir.absolutePath}'...")
 
-        if (target.normalizedVcsUrl.isNotBlank()) {
-            p("Trying to download from URL '${target.normalizedVcsUrl}'...")
+        if (target.vcs.url.isNotBlank()) {
+            p("Trying to download from URL '${target.vcs.url}'...")
 
-            if (target.vcs.url != target.normalizedVcsUrl) {
-                p("URL was normalized, original URL was '${target.vcs.url}'.")
+            if (target.vcs.url != target.vcsOriginal.url) {
+                p("URL was normalized, original URL was '${target.vcsOriginal.url}'.")
             }
 
             if (target.vcs.revision.isBlank()) {
@@ -212,8 +212,8 @@ object Main {
             }
 
             if (applicableVcs == null) {
-                p("from URL '${target.normalizedVcsUrl}'...")
-                applicableVcs = VersionControlSystem.forUrl(target.normalizedVcsUrl)
+                p("from URL '${target.vcs.url}'...")
+                applicableVcs = VersionControlSystem.forUrl(target.vcs.url)
             }
 
             if (applicableVcs == null) {
@@ -223,7 +223,7 @@ object Main {
             p("Using VCS provider '$applicableVcs'.")
 
             try {
-                val revision = applicableVcs.download(target.normalizedVcsUrl, target.vcs.revision, target.vcs.path,
+                val revision = applicableVcs.download(target.vcs.url, target.vcs.revision, target.vcs.path,
                         target.version, targetDir)
                 p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
                 return targetDir

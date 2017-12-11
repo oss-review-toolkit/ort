@@ -67,9 +67,15 @@ data class Project(
         val aliases: List<String>,
 
         /**
-         * VCS-related information about the [Project].
+         * Processed VCS-related information about the [Project] that has e.g. common mistakes corrected.
          */
         val vcs: VcsInfo,
+
+        /**
+         * Original VCS-related information as defined in the [Project]'s meta-data.
+         */
+        @JsonProperty("vcs_original")
+        val vcsOriginal: VcsInfo = vcs,
 
         /**
          * The URL to the project's homepage.
@@ -95,7 +101,8 @@ data class Project(
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = vcs
+            vcs = vcs,
+            vcsOriginal = vcsOriginal
     )
 
     companion object {
@@ -111,6 +118,7 @@ data class Project(
                 declaredLicenses = sortedSetOf(),
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
+                vcsOriginal = VcsInfo.EMPTY,
                 homepageUrl = "",
                 scopes = sortedSetOf()
         )

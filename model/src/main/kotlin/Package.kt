@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import com.here.ort.util.fileSystemEncode
-import com.here.ort.util.normalizeVcsUrl
 
 import java.util.SortedSet
 
@@ -90,9 +89,15 @@ data class Package(
         val sourceArtifact: RemoteArtifact,
 
         /**
-         * VCS-related information about the [Package].
+         * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
          */
-        val vcs: VcsInfo
+        val vcs: VcsInfo,
+
+        /**
+         * Original VCS-related information as defined in the [Package]'s meta-data.
+         */
+        @JsonProperty("vcs_original")
+        val vcsOriginal: VcsInfo = vcs
 ) : Comparable<Package> {
     /**
      * The normalized package name, can be used to create directories.
@@ -103,13 +108,6 @@ data class Package(
      * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].
      */
     val identifier = "$packageManager:$namespace:$normalizedName:$version"
-
-    /**
-     * The normalized VCS URL.
-     *
-     * @see normalizeVcsUrl
-     */
-    val normalizedVcsUrl = normalizeVcsUrl(vcs.url)
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
