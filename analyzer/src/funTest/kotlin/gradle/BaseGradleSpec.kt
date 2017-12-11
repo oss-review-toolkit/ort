@@ -111,10 +111,16 @@ abstract class BaseGradleSpec : StringSpec() {
             val gradleTable = table(headers("analyzerOutputFile", "expectedResultFile"), *testRows.toTypedArray())
 
             forAll(gradleTable) { analyzerOutputFile, expectedResultFile ->
-                val analyzerResults = analyzerOutputFile.readText().replaceFirst(
-                        "revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
-                val expectedResults = expectedResultFile.readText().replaceFirst(
-                        "revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
+                val analyzerResults = analyzerOutputFile.readText()
+                        // vcs:
+                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
+                        // vcs_processed:
+                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
+                val expectedResults = expectedResultFile.readText()
+                        // vcs:
+                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
+                        // vcs_processed:
+                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
                 analyzerResults shouldBe expectedResults
             }
         }.config(tags = setOf(Expensive))

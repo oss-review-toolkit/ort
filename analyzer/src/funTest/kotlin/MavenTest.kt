@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Maven
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.util.normalizeVcsUrl
 import com.here.ort.util.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
@@ -37,7 +38,11 @@ class MavenTest : StringSpec() {
     private fun patchExpectedResult(filename: String) =
             File(syntheticProjectDir.parentFile, filename)
                     .readText()
+                    // vcs:
                     .replaceFirst("url: \"\"", "url: \"$vcsUrl\"")
+                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
+                    // vcs_processed:
+                    .replaceFirst("url: \"\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
                     .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
 
     init {

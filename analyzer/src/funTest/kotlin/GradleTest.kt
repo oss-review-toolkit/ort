@@ -21,10 +21,11 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.util.normalizeVcsUrl
 import com.here.ort.util.yamlMapper
+
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.should
-
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
@@ -49,7 +50,11 @@ class GradleTest : StringSpec() {
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename)
                     .readText()
+                    // vcs:
                     .replaceFirst("url: \"\"", "url: \"$vcsUrl\"")
+                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
+                    // vcs_processed:
+                    .replaceFirst("url: \"\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
                     .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
 
     init {

@@ -13,6 +13,11 @@ project:
     url: "https://github.com/heremaps/oss-review-toolkit.git"
     revision: ""
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    revision: ""
+    path: ""
   homepage_url: ""
   scopes:
   - name: "dependencies"
@@ -323,6 +328,11 @@ packages:
     url: "git+https://github.com/kriskowal/asap.git"
     revision: "e7f3d29eed4967ecfcaddbfc9542e2ee12b76227"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/kriskowal/asap.git"
+    revision: "e7f3d29eed4967ecfcaddbfc9542e2ee12b76227"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "boolbase"
@@ -342,6 +352,11 @@ packages:
   vcs:
     provider: "git"
     url: "https://github.com/fb55/boolbase"
+    revision: ""
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/fb55/boolbase.git"
     revision: ""
     path: ""
 - package_manager: "NPM"
@@ -366,6 +381,11 @@ packages:
     url: "git://github.com/cheeriojs/cheerio.git"
     revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/cheeriojs/cheerio.git"
+    revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "coffee-script"
@@ -385,6 +405,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/jashkenas/coffeescript.git"
+    revision: "f0e9837dca51244ef994ff535768d3a606912020"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/jashkenas/coffeescript.git"
     revision: "f0e9837dca51244ef994ff535768d3a606912020"
     path: ""
 - package_manager: "NPM"
@@ -408,6 +433,11 @@ packages:
     url: "git://github.com/isaacs/core-util-is.git"
     revision: "a177da234df5638b363ddc15fa324619a38577c8"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/isaacs/core-util-is.git"
+    revision: "a177da234df5638b363ddc15fa324619a38577c8"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "cson-parser"
@@ -427,6 +457,11 @@ packages:
   vcs:
     provider: "git"
     url: "git+ssh://git@github.com/groupon/cson-parser.git"
+    revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/groupon/cson-parser.git"
     revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
     path: ""
 - package_manager: "NPM"
@@ -451,6 +486,11 @@ packages:
     url: "git+https://github.com/bevry/cson.git"
     revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/bevry/cson.git"
+    revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "css-select"
@@ -470,6 +510,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/fb55/css-select.git"
+    revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/fb55/css-select.git"
     revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
     path: ""
 - package_manager: "NPM"
@@ -493,6 +538,11 @@ packages:
     url: "git+https://github.com/fb55/css-what.git"
     revision: "fd6b9f62146efec8e17ee80ddaebdfb6ede21d7b"
     path: ""
+  vcs_processed:
+    provider: ""
+    url: "https://github.com/fb55/css-what.git"
+    revision: "fd6b9f62146efec8e17ee80ddaebdfb6ede21d7b"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "dom-serializer"
@@ -512,6 +562,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/cheeriojs/dom-renderer.git"
+    revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/cheeriojs/dom-renderer.git"
     revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
     path: ""
 - package_manager: "NPM"
@@ -534,6 +589,11 @@ packages:
     url: "git://github.com/FB55/domelementtype.git"
     revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/FB55/domelementtype.git"
+    revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "domelementtype"
@@ -552,6 +612,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/FB55/domelementtype.git"
+    revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/FB55/domelementtype.git"
     revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
     path: ""
 - package_manager: "NPM"
@@ -575,6 +640,11 @@ packages:
     url: "git://github.com/fb55/DomHandler.git"
     revision: "9b17cc6cc9387a87dde6eb8ddbae11c753e7d23d"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/fb55/DomHandler.git"
+    revision: "9b17cc6cc9387a87dde6eb8ddbae11c753e7d23d"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "domutils"
@@ -593,6 +663,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/FB55/domutils.git"
+    revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/FB55/domutils.git"
     revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
     path: ""
 - package_manager: "NPM"
@@ -618,6 +693,11 @@ packages:
     url: "git+ssh://git@github.com/bevry/eachr.git"
     revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/bevry/eachr.git"
+    revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "editions"
@@ -638,6 +718,11 @@ packages:
   vcs:
     provider: "git"
     url: "git+https://github.com/bevry/editions.git"
+    revision: "272530079d941652a2679cf2152e83ed2f3f2129"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/bevry/editions.git"
     revision: "272530079d941652a2679cf2152e83ed2f3f2129"
     path: ""
 - package_manager: "NPM"
@@ -661,6 +746,11 @@ packages:
     url: "git://github.com/fb55/node-entities.git"
     revision: ""
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/fb55/node-entities.git"
+    revision: ""
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "extract-opts"
@@ -680,6 +770,11 @@ packages:
   vcs:
     provider: "git"
     url: "git+ssh://git@github.com/bevry/extract-opts.git"
+    revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/bevry/extract-opts.git"
     revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
     path: ""
 - package_manager: "NPM"
@@ -703,6 +798,11 @@ packages:
     url: "git+https://github.com/isaacs/node-graceful-fs.git"
     revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/isaacs/node-graceful-fs.git"
+    revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "htmlparser2"
@@ -722,6 +822,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/fb55/htmlparser2.git"
+    revision: "e1f12f626f65cf4a082f89bdde89081b54187818"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/fb55/htmlparser2.git"
     revision: "e1f12f626f65cf4a082f89bdde89081b54187818"
     path: ""
 - package_manager: "NPM"
@@ -746,6 +851,11 @@ packages:
     url: "git://github.com/isaacs/inherits.git"
     revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/isaacs/inherits.git"
+    revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "isarray"
@@ -765,6 +875,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/juliangruber/isarray.git"
+    revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/juliangruber/isarray.git"
     revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
     path: ""
 - package_manager: "NPM"
@@ -788,6 +903,11 @@ packages:
     url: "git+https://github.com/lodash/lodash.git"
     revision: ""
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/lodash/lodash.git"
+    revision: ""
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "long"
@@ -809,6 +929,11 @@ packages:
     url: "git+https://github.com/dcodeIO/long.js.git"
     revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/dcodeIO/long.js.git"
+    revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "nth-check"
@@ -828,6 +953,11 @@ packages:
   vcs:
     provider: "git"
     url: "https://github.com/fb55/nth-check"
+    revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/fb55/nth-check.git"
     revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
     path: ""
 - package_manager: "NPM"
@@ -852,6 +982,11 @@ packages:
     url: "git://github.com/inikulin/parse5.git"
     revision: "969ed22f53db38c101449e05a1b804ea456d4e04"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/inikulin/parse5.git"
+    revision: "969ed22f53db38c101449e05a1b804ea456d4e04"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "process-nextick-args"
@@ -869,6 +1004,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: "git"
+    url: "https://github.com/calvinmetcalf/process-nextick-args.git"
+    revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
+    path: ""
+  vcs_processed:
     provider: "git"
     url: "https://github.com/calvinmetcalf/process-nextick-args.git"
     revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
@@ -894,6 +1034,11 @@ packages:
     url: "git+https://github.com/then/promise.git"
     revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/then/promise.git"
+    revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "readable-stream"
@@ -913,6 +1058,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/nodejs/readable-stream.git"
+    revision: "cd59995050105b946884ee20e3bcadc252feda8c"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/nodejs/readable-stream.git"
     revision: "cd59995050105b946884ee20e3bcadc252feda8c"
     path: ""
 - package_manager: "NPM"
@@ -936,6 +1086,11 @@ packages:
     url: "git+ssh://git@github.com/bevry/requirefresh.git"
     revision: "f0c589db055ba21ebb30da442742cd19e64e3efa"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/bevry/requirefresh.git"
+    revision: "f0c589db055ba21ebb30da442742cd19e64e3efa"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "safe-buffer"
@@ -955,6 +1110,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/feross/safe-buffer.git"
+    revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/feross/safe-buffer.git"
     revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
     path: ""
 - package_manager: "NPM"
@@ -979,6 +1139,11 @@ packages:
     url: "git+ssh://git@github.com/bevry/safefs.git"
     revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/bevry/safefs.git"
+    revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "string_decoder"
@@ -998,6 +1163,11 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/rvagg/string_decoder.git"
+    revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/rvagg/string_decoder.git"
     revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
     path: ""
 - package_manager: "NPM"
@@ -1022,6 +1192,11 @@ packages:
     url: "git+ssh://git@github.com/bevry/typechecker.git"
     revision: "ab3925bc0270f8df65f5c05ae1ba09e648aaff8e"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/bevry/typechecker.git"
+    revision: "ab3925bc0270f8df65f5c05ae1ba09e648aaff8e"
+    path: ""
 - package_manager: "NPM"
   namespace: ""
   name: "util-deprecate"
@@ -1043,6 +1218,11 @@ packages:
     url: "git://github.com/TooTallNate/util-deprecate.git"
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/TooTallNate/util-deprecate.git"
+    revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
+    path: ""
 - package_manager: "NPM"
   namespace: "@types"
   name: "node"
@@ -1062,6 +1242,11 @@ packages:
   vcs:
     provider: "git"
     url: "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
     revision: ""
     path: ""
 errors: []
