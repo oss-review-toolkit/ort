@@ -70,7 +70,7 @@ class MavenTest : StringSpec() {
 
         "Root project dependencies are detected correctly" {
             val pomFile = File(syntheticProjectDir, "pom.xml")
-            val expectedResult = patchExpectedResult("project-maven-expected-output-root.yml")
+            val expectedResult = patchExpectedResult("maven-expected-output-root.yml")
 
             val result = Maven.create().resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
 
@@ -81,7 +81,7 @@ class MavenTest : StringSpec() {
             val pomFileApp = File(syntheticProjectDir, "app/pom.xml")
             val pomFileLib = File(syntheticProjectDir, "lib/pom.xml")
 
-            val expectedResult = patchExpectedResult("project-maven-expected-output-app.yml")
+            val expectedResult = patchExpectedResult("maven-expected-output-app.yml")
 
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
@@ -94,7 +94,7 @@ class MavenTest : StringSpec() {
 
         "External dependencies are detected correctly" {
             val pomFile = File(syntheticProjectDir, "lib/pom.xml")
-            val expectedResult = patchExpectedResult("project-maven-expected-output-lib.yml")
+            val expectedResult = patchExpectedResult("maven-expected-output-lib.yml")
 
             val result = Maven.create().resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
 

@@ -1,4 +1,4 @@
-# project-npm
+# npm
 
 This repository contains multiple NPM projects for testing. Each directory contains the same package.json plus the
 additional files described below.

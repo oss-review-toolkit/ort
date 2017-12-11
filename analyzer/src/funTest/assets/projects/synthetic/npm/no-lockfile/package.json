@@ -1,7 +1,7 @@
 {
-  "name": "project-npm-multiple-lockfiles",
+  "name": "npm-no-lockfile",
   "version": "2.0.0",
-  "description": "NPM test project with multiple lockfiles.",
+  "description": "NPM test project without any lockfiles.",
   "main": "bundle.js",
   "config": {
     "devHost": "localhost",

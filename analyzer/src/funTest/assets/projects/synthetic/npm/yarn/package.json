@@ -1,5 +1,5 @@
 {
-  "name": "project-npm-yarn",
+  "name": "npm-yarn",
   "version": "2.0.0",
   "description": "NPM test project with yarn.lock.",
   "main": "bundle.js",

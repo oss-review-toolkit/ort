@@ -3,7 +3,7 @@ allowDynamicVersions: false
 project:
   package_manager: "NPM"
   namespace: ""
-  name: "project-npm"
+  name: "npm-project"
   version: "2.0.0"
   declared_licenses:
   - "Apache-2.0"
