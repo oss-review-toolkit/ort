@@ -37,6 +37,10 @@ class UtilsTest : WordSpec({
             ".".fileSystemEncode() shouldBe "%2E"
         }
 
+        "encode ':'" {
+            ":".fileSystemEncode() shouldBe "%3A"
+        }
+
         "create a valid file name" {
             val fileFromStr = File(createTempDir(), str.fileSystemEncode()).apply { writeText("dummy") }
             fileFromStr.isFile shouldBe true
