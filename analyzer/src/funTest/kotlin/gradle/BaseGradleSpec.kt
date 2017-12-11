@@ -93,7 +93,7 @@ abstract class BaseGradleSpec : StringSpec() {
                 it.absolutePath
             }
 
-            generatedResultFiles.joinToString("\n") shouldBe expectedResult.joinToString("\n")
+            generatedResultFiles.sorted().joinToString("\n") shouldBe expectedResult.sorted().joinToString("\n")
         }.config(tags = setOf(Expensive))
 
         "analyzer results for all .gradle files match expected" {
