@@ -26,6 +26,8 @@ import com.jakewharton.disklrucache.DiskLruCache
 import java.io.File
 import java.io.IOException
 
+import kotlin.math.pow
+
 /**
  * Wrapper around [DiskLruCache] that adds a workaround for the 64 character key length limit.
  */
@@ -60,6 +62,11 @@ class DiskCache(
          * Length of the suffix appended to long keys.
          */
         const val KEY_SUFFIX_LENGTH = 6
+
+        /**
+         * The upper limit of the key index suffix.
+         */
+        val KEY_INDEX_LIMIT = 10.0.pow(KEY_SUFFIX_LENGTH - 1).toInt()
     }
 
     private val diskLruCache = DiskLruCache.open(directory, 0, VALUE_COUNT, maxSize)
@@ -78,8 +85,8 @@ class DiskCache(
             this
         } else {
             // String is too long to be unique, append it with a serial number.
-            val key = substring(0..minOf(MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH - 1, length - 1))
-            for (index in 0..99999) {
+            val key = chunkedSequence(MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH).first()
+            for (index in 0 until KEY_INDEX_LIMIT) {
                 val tryKey = "$key-" + "$index".padStart(KEY_SUFFIX_LENGTH - 1, '0')
                 val entry = diskLruCache.get(tryKey)
                 if (entry == null || entry.getString(INDEX_FULL_KEY) == this) {
