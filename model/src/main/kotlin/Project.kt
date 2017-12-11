@@ -82,7 +82,6 @@ data class Project(
          */
         val scopes: SortedSet<Scope>
 ) {
-
     /**
      * Return a [Package] representation of this [Project].
      */
