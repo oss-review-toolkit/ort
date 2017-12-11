@@ -29,10 +29,6 @@ import com.here.ort.utils.Expensive
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
-import io.kotlintest.properties.forAll
-import io.kotlintest.properties.headers
-import io.kotlintest.properties.row
-import io.kotlintest.properties.table
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -100,29 +96,18 @@ abstract class BaseGradleSpec : StringSpec() {
             expectedResultsDir shouldNotBe ""
 
             val analyzerResultsDir = File(outputDir, "analyzer_results/")
-            val testRows = analyzerResultsDir.walkTopDown().asIterable().filter { file ->
-                file.extension == "yml"
-            }.map {
-                val fileExpectedResultPath = expectedResultsDir + it.path.substringBeforeLast(
-                        File.separator).substringAfterLast("analyzer_results").replace("\\",
-                        "/") + "/" + it.name //keep as unix paths
-                row(it, expectedResultsDirsMap.getOrDefault(fileExpectedResultPath, File(fileExpectedResultPath)))
-            }
 
-            val gradleTable = table(headers("analyzerOutputFile", "expectedResultFile"), *testRows.toTypedArray())
+            analyzerResultsDir.walkTopDown().filter { it.extension == "yml" }.forEach { actualResultsFile ->
+                val expectedResultsPath = expectedResultsDir +
+                        actualResultsFile.path
+                                .substringBeforeLast(File.separator)
+                                .substringAfterLast("analyzer_results")
+                                .replace("\\", "/") +
+                        "/" + actualResultsFile.name
+                val expectedResultsFile = expectedResultsDirsMap
+                        .getOrDefault(expectedResultsPath, File(expectedResultsPath))
 
-            forAll(gradleTable) { analyzerOutputFile, expectedResultFile ->
-                val analyzerResults = analyzerOutputFile.readText()
-                        // vcs:
-                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
-                        // vcs_processed:
-                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
-                val expectedResults = expectedResultFile.readText()
-                        // vcs:
-                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
-                        // vcs_processed:
-                        .replaceFirst("revision: \"[^\"]+\"".toRegex(), "revision: \"\"")
-                analyzerResults shouldBe expectedResults
+                actualResultsFile.readText() shouldBe expectedResultsFile.readText()
             }
         }.config(tags = setOf(Expensive))
     }
