@@ -110,7 +110,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
             List<Configuration> configurations = project.configurations.collect { configuration ->
                 if (configuration.isCanBeResolved()) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
-                    List<Dependency> dependencies = result.getRoot().getDependencies().collect { parseDependency(it, project) }
+                    List<Dependency> dependencies = result.getRoot().getDependencies().collect { parseDependency(it, project, []) }
 
                     new ConfigurationImpl(configuration.name, dependencies)
                 } else {
@@ -124,10 +124,15 @@ class DependencyTreePlugin implements Plugin<Gradle> {
             return new DependencyTreeModelImpl(project.name, configurations, repositories, errors)
         }
 
-        Dependency parseDependency(DependencyResult dependencyResult, Project project) {
+        Dependency parseDependency(DependencyResult dependencyResult, Project project, List<String> parents) {
             if (dependencyResult instanceof ResolvedDependencyResult) {
-                List<Dependency> dependencies = dependencyResult.selected.dependencies.collect { dependency ->
-                    parseDependency(dependency, project)
+                List<Dependency> dependencies = dependencyResult.selected.dependencies.findResults { dependency ->
+                    // Do not follow circular dependencies, these can exist for project dependencies.
+                    if (!(dependencyResult.requested.displayName in parents)) {
+                        parseDependency(dependency, project, [*parents, dependencyResult.requested.displayName])
+                    } else {
+                        null
+                    }
                 }
 
                 ComponentIdentifier id = dependencyResult.selected.id
