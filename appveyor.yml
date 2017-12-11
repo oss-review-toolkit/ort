@@ -10,6 +10,7 @@ cache:
   - $(HOME)\.gradle\wrapper\dists
   - $(HOME)\.ivy2
   - $(HOME)\.m2\repository
+  - $(HOME)\.ort\analyzer\remote_artifacts
 
 install:
   - git submodule update --init --recursive
