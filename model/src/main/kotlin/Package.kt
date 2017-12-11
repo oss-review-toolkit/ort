@@ -90,9 +90,15 @@ data class Package(
         val sourceArtifact: RemoteArtifact,
 
         /**
-         * VCS-related information about the [Package].
+         * Original VCS-related information as defined in the [Package]'s meta-data.
          */
-        val vcs: VcsInfo
+        val vcs: VcsInfo,
+
+        /**
+         * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
+         */
+        @JsonProperty("vcs_processed")
+        val vcsProcessed: VcsInfo = VcsInfo(vcs.provider, normalizeVcsUrl(vcs.url), vcs.revision, vcs.path)
 ) : Comparable<Package> {
     /**
      * The normalized package name, can be used to create directories.
@@ -103,13 +109,6 @@ data class Package(
      * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].
      */
     val identifier = "$packageManager:$namespace:$normalizedName:$version"
-
-    /**
-     * The normalized VCS URL.
-     *
-     * @see normalizeVcsUrl
-     */
-    val normalizedVcsUrl = normalizeVcsUrl(vcs.url)
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the

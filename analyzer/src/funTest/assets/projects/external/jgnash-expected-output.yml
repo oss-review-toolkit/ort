@@ -12,6 +12,11 @@ project:
     url: "git://github.com:ccavanaugh/jgnash.git"
     revision: "HEAD"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "git://github.com:ccavanaugh/jgnash.git"
+    revision: "HEAD"
+    path: ""
   homepage_url: "http://sourceforge.net/projects/jgnash/"
   scopes:
   - name: "test"
@@ -50,6 +55,11 @@ packages:
     url: "git://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/junit-team/junit.git"
+    revision: "r4.12"
+    path: ""
 - package_manager: "Maven"
   namespace: "org.hamcrest"
   name: "hamcrest-all"
@@ -70,6 +80,11 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
+    revision: "HEAD"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/hamcrest/JavaHamcrest.git/hamcrest-all"
     revision: "HEAD"
     path: ""
 errors: []

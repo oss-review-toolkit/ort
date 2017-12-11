@@ -12,6 +12,11 @@ project:
     url: ""
     revision: ""
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+  vcs_processed:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes:
   - name: "archives"
@@ -203,6 +208,11 @@ packages:
     url: "git://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/junit-team/junit.git"
+    revision: "r4.12"
+    path: ""
 - package_manager: "Gradle"
   namespace: "org.apache.commons"
   name: "commons-lang3"
@@ -222,6 +232,11 @@ packages:
     hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
     hash_algorithm: "SHA-1"
   vcs:
+    provider: "git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+    revision: "LANG_3_5"
+    path: ""
+  vcs_processed:
     provider: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
@@ -248,6 +263,11 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: "HEAD"
     path: ""
+  vcs_processed:
+    provider: "git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+    revision: "HEAD"
+    path: ""
 - package_manager: "Gradle"
   namespace: "org.hamcrest"
   name: "hamcrest-core"
@@ -269,6 +289,11 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
+    revision: "HEAD"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "ssh://git@github.com/hamcrest/JavaHamcrest.git/hamcrest-core"
     revision: "HEAD"
     path: ""
 errors:

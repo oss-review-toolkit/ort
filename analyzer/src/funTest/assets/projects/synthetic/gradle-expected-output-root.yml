@@ -12,6 +12,11 @@ project:
     url: ""
     revision: ""
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+  vcs_processed:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes: []
 packages: []

@@ -12,6 +12,11 @@ project:
     url: "https://github.com/spdx/tools-python.git"
     revision: "a48022e65a8897d0e4f2e93d8e53695d2c13ea23"
     path: ""
+  vcs_processed:
+    provider: "Git"
+    url: "https://github.com/spdx/tools-python.git"
+    revision: "a48022e65a8897d0e4f2e93d8e53695d2c13ea23"
+    path: ""
   homepage_url: "https://github.com/spdx/tools-python"
   scopes:
   - name: "install"
@@ -69,6 +74,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_processed:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "ply"
@@ -90,6 +100,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_processed:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "pyparsing"
@@ -107,6 +122,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
     provider: ""
     url: ""
     revision: ""
@@ -134,6 +154,11 @@ packages:
     url: ""
     revision: ""
     path: ""
+  vcs_processed:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
 - package_manager: "PIP"
   namespace: ""
   name: "six"
@@ -151,6 +176,11 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
+    provider: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
     provider: ""
     url: ""
     revision: ""

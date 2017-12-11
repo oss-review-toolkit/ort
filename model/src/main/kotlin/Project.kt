@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import com.here.ort.util.normalizeVcsUrl
+
 import java.util.SortedSet
 
 /**
@@ -67,9 +69,15 @@ data class Project(
         val aliases: List<String>,
 
         /**
-         * VCS-related information about the [Project].
+         * Original VCS-related information as defined in the [Project]'s meta-data.
          */
         val vcs: VcsInfo,
+
+        /**
+         * Processed VCS-related information about the [Project] that has e.g. common mistakes corrected.
+         */
+        @JsonProperty("vcs_processed")
+        val vcsProcessed: VcsInfo = VcsInfo(vcs.provider, normalizeVcsUrl(vcs.url), vcs.revision, vcs.path),
 
         /**
          * The URL to the project's homepage.
@@ -95,7 +103,8 @@ data class Project(
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = vcs
+            vcs = vcs,
+            vcsProcessed = vcsProcessed
     )
 
     companion object {
