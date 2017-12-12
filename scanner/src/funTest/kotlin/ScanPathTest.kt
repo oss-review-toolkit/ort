@@ -20,8 +20,9 @@
 package com.here.ort.scanner
 
 import com.here.ort.scanner.scanners.ScanCode
-import io.kotlintest.matchers.shouldBe
+import com.here.ort.utils.Expensive
 
+import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -33,6 +34,6 @@ class ScanPathTest : StringSpec() {
         "ScanCode recognizes our own LICENSE" {
             val result = ScanCode.scan(File("../LICENSE"), outputDir)
             result.licenses shouldBe setOf("Apache-2.0")
-        }
+        }.config(tags = setOf(Expensive))
     }
 }
