@@ -150,6 +150,20 @@ abstract class VersionControlSystem {
         fun accumulateInfo(packageInfo: VcsInfo, directoryInfo: VcsInfo? = null): VcsInfo {
             val splitInfo = splitUrl(normalizeVcsUrl(packageInfo.url))
 
+            // packageInfo = {VcsInfo@5378} "VcsInfo(provider=, url=git+https://github.com/fb55/css-what.git,
+            //     revision=fd6b9f62146efec8e17ee80ddaebdfb6ede21d7b, path=)"
+            // provider = ""
+            // url = "git+https://github.com/fb55/css-what.git"
+            // revision = "fd6b9f62146efec8e17ee80ddaebdfb6ede21d7b"
+            // path = ""
+            // directoryInfo = null
+            // splitInfo = {VcsInfo@5379} "VcsInfo(provider=Git, url=https://github.com/fb55/css-what.git, revision=,
+            //     path=)"
+            // provider = "Git"
+            // url = "https://github.com/fb55/css-what.git"
+            // revision = ""
+            // path = ""
+
             var currentInfo = packageInfo
             listOf(splitInfo, directoryInfo ?: VcsInfo.EMPTY).forEach { otherInfo ->
                 // Check whether there is reason to give otherInfo precedence.
