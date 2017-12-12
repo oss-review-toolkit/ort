@@ -19,7 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.downloader.Expensive
+import com.here.ort.utils.Expensive
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beGreaterThan

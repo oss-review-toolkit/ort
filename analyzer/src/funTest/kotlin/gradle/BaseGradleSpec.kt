@@ -19,11 +19,12 @@
 
 package com.here.ort.analyzer.integration
 
-import com.here.ort.analyzer.Expensive
+
 import com.here.ort.analyzer.managers.Gradle
-import com.here.ort.model.Package
 import com.here.ort.analyzer.Main as AnalyzerMain
 import com.here.ort.downloader.Main as DownloaderMain
+import com.here.ort.model.Package
+import com.here.ort.utils.Expensive
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe

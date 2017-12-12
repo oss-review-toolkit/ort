@@ -60,6 +60,7 @@ subprojects {
         funTestRuntime configurations.testRuntime
 
         funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+        funTestCompile project(':utils-test')
     }
 
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.

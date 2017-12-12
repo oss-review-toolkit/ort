@@ -19,14 +19,15 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.downloader.Expensive
+import com.here.ort.utils.Expensive
+
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
-
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
+
 import java.io.File
 
 private const val REPO_URL = "https://svn.code.sf.net/p/pythonqt/code"

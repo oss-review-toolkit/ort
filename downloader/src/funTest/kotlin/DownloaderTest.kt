@@ -24,6 +24,7 @@ import com.here.ort.downloader.vcs.Mercurial
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.Expensive
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.beGreaterThan
