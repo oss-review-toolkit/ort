@@ -17,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.utils
 
 import io.kotlintest.Tag
 
-object Expensive: Tag()
+object Expensive : Tag()
