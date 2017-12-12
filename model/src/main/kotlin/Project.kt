@@ -21,7 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import com.here.ort.util.normalizeVcsUrl
+import com.here.ort.utils.normalizeVcsUrl
 
 import java.util.SortedSet
 

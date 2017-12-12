@@ -6,7 +6,7 @@ mainClassName = 'com.here.ort.downloader.Main'
 
 dependencies {
     compile project(':model')
-    compile project(':util')
+    compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"

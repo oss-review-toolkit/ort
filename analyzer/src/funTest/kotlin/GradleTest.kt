@@ -21,8 +21,8 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.util.normalizeVcsUrl
-import com.here.ort.util.yamlMapper
+import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.should

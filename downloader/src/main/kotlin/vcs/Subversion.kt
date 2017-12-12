@@ -28,9 +28,9 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.util.ProcessCapture
-import com.here.ort.util.getCommandVersion
-import com.here.ort.util.log
+import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getCommandVersion
+import com.here.ort.utils.log
 
 import java.io.File
 import java.io.IOException

@@ -21,7 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.model.Project
-import com.here.ort.util.yamlMapper
+import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.endWith

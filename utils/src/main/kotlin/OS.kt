@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.util
+package com.here.ort.utils
 
 /**
  * Operating-System-specific utility functions.

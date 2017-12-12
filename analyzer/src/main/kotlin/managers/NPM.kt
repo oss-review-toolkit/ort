@@ -35,13 +35,13 @@ import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
-import com.here.ort.util.OS
-import com.here.ort.util.OkHttpClientHelper
-import com.here.ort.util.ProcessCapture
-import com.here.ort.util.asTextOrEmpty
-import com.here.ort.util.checkCommandVersion
-import com.here.ort.util.jsonMapper
-import com.here.ort.util.log
+import com.here.ort.utils.OS
+import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.checkCommandVersion
+import com.here.ort.utils.jsonMapper
+import com.here.ort.utils.log
 
 import com.vdurmont.semver4j.Requirement
 

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.util
+package com.here.ort.utils
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec

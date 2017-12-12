@@ -21,7 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import com.here.ort.util.fileSystemEncode
+import com.here.ort.utils.fileSystemEncode
 
 import java.util.SortedSet
 

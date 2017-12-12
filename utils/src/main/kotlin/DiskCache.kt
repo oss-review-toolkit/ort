@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.util
+package com.here.ort.utils
 
 import ch.frankel.slf4k.*
 

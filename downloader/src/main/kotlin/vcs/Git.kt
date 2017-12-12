@@ -24,10 +24,10 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.util.log
-import com.here.ort.util.ProcessCapture
-import com.here.ort.util.getCommandVersion
-import com.here.ort.util.safeMkdirs
+import com.here.ort.utils.log
+import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getCommandVersion
+import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 import java.io.IOException

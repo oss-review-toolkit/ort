@@ -23,7 +23,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
 import com.here.ort.scanner.scanners.*
-import com.here.ort.util.safeMkdirs
+import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 import java.util.SortedSet

@@ -24,11 +24,11 @@ import ch.qos.logback.classic.Level
 
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.Scanner
-import com.here.ort.util.OS
-import com.here.ort.util.ProcessCapture
-import com.here.ort.util.getCommandVersion
-import com.here.ort.util.jsonMapper
-import com.here.ort.util.log
+import com.here.ort.utils.OS
+import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getCommandVersion
+import com.here.ort.utils.jsonMapper
+import com.here.ort.utils.log
 
 import java.io.File
 

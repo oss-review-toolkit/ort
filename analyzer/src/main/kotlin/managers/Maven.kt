@@ -33,8 +33,8 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
-import com.here.ort.util.collectMessages
-import com.here.ort.util.log
+import com.here.ort.utils.collectMessages
+import com.here.ort.utils.log
 
 import java.io.File
 

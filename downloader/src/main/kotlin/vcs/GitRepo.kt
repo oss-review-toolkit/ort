@@ -23,8 +23,8 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
-import com.here.ort.util.ProcessCapture
-import com.here.ort.util.log
+import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.log
 
 import java.io.File
 import java.io.IOException

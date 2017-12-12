@@ -37,8 +37,8 @@ import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
-import com.here.ort.util.OS
-import com.here.ort.util.log
+import com.here.ort.utils.OS
+import com.here.ort.utils.log
 
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
