@@ -23,6 +23,7 @@ script:
       echo "Please add Copyright statements to the above files.";
       exit 1;
     fi
+  - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" != "cron" ]; then
       ./gradlew -DexcludeTags=Expensive check | tee log.txt;
     else
