@@ -31,6 +31,23 @@ from their respective locations at
 * `./downloader/build/install/downloader/bin/downloader`
 * `./scanner/build/install/scanner/bin/scanner`
 
+## Installation (Docker)
+
+Until a supported DockerHub image is provided you need to build the image yourself, on the command line execute
+
+```
+docker build -t oss-review-toolkit .
+```
+
+You can then run the individual start scripts from the image by mounting your deliverable in the container, for example
+
+```
+docker run --mount type=bind,source="/home/developer/deliverable",target=/deliverable oss-review-toolkit analyzer -i /deliverable -o /tmp/deliverable
+```
+
+In this example, we mount `/home/developer/deliverable` from the host machine into `/deliverable` in the container, and
+then run `analyzer` on `/deliverable` and put the output in `/tmp/deliverable`.
+
 ## Supported package managers
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
