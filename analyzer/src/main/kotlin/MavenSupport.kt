@@ -251,6 +251,10 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = createProjectBuildingRequest(true)
 
+        projectBuildingRequest.remoteRepositories = repositories.map {
+            mavenRepositorySystem.createRepository(it.url, it.id, true, null, true, null, null)
+        }
+
         val cachedProject = cachedProjects[artifact.identifier()]
 
         val mavenProject = cachedProject ?: artifact.let {
