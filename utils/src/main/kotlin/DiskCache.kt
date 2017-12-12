@@ -99,24 +99,26 @@ class DiskCache(
     }
 
     fun read(key: String): String? {
+        val diskKey = key.asKey()
         try {
-            diskLruCache.get(key.asKey())?.use { entry ->
+            diskLruCache.get(diskKey)?.use { entry ->
                 val time = entry.getString(INDEX_TIMESTAMP).toLong()
                 if (time + timeToLive < timeInSeconds()) {
-                    diskLruCache.remove(key)
+                    diskLruCache.remove(diskKey)
                 } else {
                     return entry.getString(INDEX_DATA)
                 }
             }
         } catch (e: IOException) {
-            log.error { "Could not read cache entry for key '$key': ${e.message}" }
+            log.error { "Could not read cache entry for key '$diskKey': ${e.message}" }
         }
         return null
     }
 
     fun write(key: String, data: String): Boolean {
+        val diskKey = key.asKey()
         try {
-            diskLruCache.edit(key.asKey()).apply {
+            diskLruCache.edit(diskKey).apply {
                 set(INDEX_FULL_KEY, key)
                 set(INDEX_TIMESTAMP, timeInSeconds().toString())
                 set(INDEX_DATA, data)
@@ -124,7 +126,7 @@ class DiskCache(
                 return true
             }
         } catch (e: IOException) {
-            log.error { "Could not write to disk cache for key '$key': ${e.message}" }
+            log.error { "Could not write to disk cache for key '$diskKey': ${e.message}" }
         }
         return false
     }
