@@ -21,7 +21,7 @@ package com.here.ort.analyzer
 
 import ch.qos.logback.classic.Level
 
-import com.here.ort.util.log
+import com.here.ort.utils.log
 
 import org.codehaus.plexus.logging.AbstractLogger
 import org.codehaus.plexus.logging.Logger

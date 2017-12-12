@@ -22,8 +22,8 @@ package com.here.ort.scanner
 import ch.frankel.slf4k.info
 
 import com.here.ort.model.Package
-import com.here.ort.util.OkHttpClientHelper
-import com.here.ort.util.log
+import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.log
 
 import java.io.File
 import java.net.HttpURLConnection

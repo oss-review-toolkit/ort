@@ -7,7 +7,7 @@ mainClassName = 'com.here.ort.scanner.Main'
 dependencies {
     compile project(':downloader')
     compile project(':model')
-    compile project(':util')
+    compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
 }

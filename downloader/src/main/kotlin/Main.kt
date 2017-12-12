@@ -29,10 +29,10 @@ import com.beust.jcommander.ParameterException
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.AnalyzerResult
-import com.here.ort.util.jsonMapper
-import com.here.ort.util.log
-import com.here.ort.util.safeMkdirs
-import com.here.ort.util.yamlMapper
+import com.here.ort.utils.jsonMapper
+import com.here.ort.utils.log
+import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.yamlMapper
 
 import java.io.File
 

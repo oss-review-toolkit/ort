@@ -25,9 +25,9 @@ import com.beust.jcommander.Parameter
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.PackageReference
 import com.here.ort.model.AnalyzerResult
-import com.here.ort.util.jsonMapper
-import com.here.ort.util.log
-import com.here.ort.util.yamlMapper
+import com.here.ort.utils.jsonMapper
+import com.here.ort.utils.log
+import com.here.ort.utils.yamlMapper
 
 import org.graphstream.graph.Edge
 import org.graphstream.graph.implementations.SingleGraph

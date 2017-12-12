@@ -24,10 +24,10 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
-import com.here.ort.util.DiskCache
-import com.here.ort.util.getUserConfigDirectory
-import com.here.ort.util.log
-import com.here.ort.util.yamlMapper
+import com.here.ort.utils.DiskCache
+import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.log
+import com.here.ort.utils.yamlMapper
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem

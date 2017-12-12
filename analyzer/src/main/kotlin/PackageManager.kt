@@ -24,8 +24,8 @@ import ch.frankel.slf4k.*
 import com.here.ort.analyzer.managers.*
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Project
-import com.here.ort.util.collectMessages
-import com.here.ort.util.log
+import com.here.ort.utils.collectMessages
+import com.here.ort.utils.log
 
 import java.io.File
 import java.nio.file.FileVisitResult

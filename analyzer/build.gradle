@@ -7,7 +7,7 @@ mainClassName = 'com.here.ort.analyzer.Main'
 dependencies {
     compile project(':downloader')
     compile project(':model')
-    compile project(':util')
+    compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
     compile "com.vdurmont:semver4j:$semverVersion"

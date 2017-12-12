@@ -24,10 +24,10 @@ import ch.frankel.slf4k.*
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.util.OS
-import com.here.ort.util.ProcessCapture
-import com.here.ort.util.checkCommandVersion
-import com.here.ort.util.log
+import com.here.ort.utils.OS
+import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.checkCommandVersion
+import com.here.ort.utils.log
 
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver

@@ -23,9 +23,9 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.util.ProcessCapture
-import com.here.ort.util.getCommandVersion
-import com.here.ort.util.log
+import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getCommandVersion
+import com.here.ort.utils.log
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
