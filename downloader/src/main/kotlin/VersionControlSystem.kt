@@ -21,6 +21,7 @@ package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.*
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.normalizeVcsUrl
 
 import java.io.File
 import java.net.URI
@@ -138,6 +139,41 @@ abstract class VersionControlSystem {
                 }
                 else -> VcsInfo("", vcsUrl, "", "")
             }
+        }
+
+        /**
+         * Accumulate VCS information from different sources. The [packageInfo]'s URL is normalized and split, creating
+         * a second implicit source of VCS information. Information from a VCS working directory may be optionally
+         * passed as [directoryInfo]. VCS information is taken on an all-or-nothing basis, i.e. it can only be
+         * overridden as a whole, properties from different sources are never mixed.
+         */
+        fun accumulateInfo(packageInfo: VcsInfo, directoryInfo: VcsInfo? = null): VcsInfo {
+            val splitInfo = splitUrl(normalizeVcsUrl(packageInfo.url))
+
+            var currentInfo = packageInfo
+            listOf(splitInfo, directoryInfo ?: VcsInfo.EMPTY).forEach { otherInfo ->
+                // Check whether there is reason to give otherInfo precedence.
+                var preferOther = false
+
+                if (otherInfo.provider.isNotBlank() && currentInfo.provider.isBlank()) {
+                    preferOther = true
+                }
+
+                if (otherInfo.revision.isNotBlank() && currentInfo.revision.isBlank()) {
+                    preferOther = true
+                }
+
+                if (otherInfo.path.isNotBlank() && currentInfo.path.isBlank()) {
+                    preferOther = true
+                }
+
+                if (preferOther) {
+                    currentInfo = otherInfo
+                }
+            }
+
+            // Again normalize the final URL in the end.
+            return currentInfo.copy(url = normalizeVcsUrl(currentInfo.url))
         }
     }
 
