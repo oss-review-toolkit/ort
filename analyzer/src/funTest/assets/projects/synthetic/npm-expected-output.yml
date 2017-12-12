@@ -14,10 +14,10 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/heremaps/oss-review-toolkit.git"
-    revision: ""
-    path: ""
+    provider: "Git"
+    url: "<REPLACE>"
+    revision: "<REPLACE>"
+    path: "<REPLACE>"
   homepage_url: ""
   scopes:
   - name: "dependencies"
