@@ -1,0 +1,23 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "5.304"
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs:
+    provider: "Git"
+    url: "https://github.com/k9mail/k-9.git"
+    revision: "934bbbe88299b1d468315917924123e4a8b89883"
+    path: ""
+  vcs_processed:
+    provider: "Git"
+    url: "https://github.com/k9mail/k-9.git"
+    revision: "934bbbe88299b1d468315917924123e4a8b89883"
+    path: ""
+  homepage_url: ""
+  scopes: []
+packages: []
+errors: []

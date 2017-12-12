@@ -43,6 +43,6 @@ class K9MailTest : BaseGradleSpec() {
             )
     )
 
-    override val expectedResultsDir = ""
+    override val expectedResultsDir = "src/funTest/assets/projects/external/gradle-expected-results/k9-mail/"
 
 }
