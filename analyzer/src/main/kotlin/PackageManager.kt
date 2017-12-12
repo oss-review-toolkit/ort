@@ -28,9 +28,15 @@ import com.here.ort.util.collectMessages
 import com.here.ort.util.log
 
 import java.io.File
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 
 import kotlin.system.measureTimeMillis
 
+typealias ManagedProjectFiles = Map<PackageManagerFactory<PackageManager>, List<File>>
 typealias ResolutionResult = MutableMap<File, AnalyzerResult>
 
 /**
@@ -54,6 +60,43 @@ abstract class PackageManager {
                     PIP
                     // TODO: Bundler
             )
+        }
+
+        /**
+         * Recursively search for files managed by a package manager.
+         *
+         * @param directory The root directory to search for managed files.
+         * @param packageManagers A list of package managers to use, defaults to [ALL].
+         */
+        fun findManagedFiles(directory: File, packageManagers: List<PackageManagerFactory<PackageManager>> = ALL)
+                : ManagedProjectFiles {
+            require(directory.isDirectory) {
+                "The provided path is not a directory: ${directory.absolutePath}"
+            }
+
+            val result = mutableMapOf<PackageManagerFactory<PackageManager>, MutableList<File>>()
+
+            Files.walkFileTree(directory.toPath(), object : SimpleFileVisitor<Path>() {
+                override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
+                    val filesInDir = dir.toFile().listFiles()
+
+                    packageManagers.forEach { manager ->
+                        val matches = manager.matchersForDefinitionFiles.mapNotNull { glob ->
+                            filesInDir.find { file ->
+                                glob.matches(file.toPath())
+                            }
+                        }
+
+                        if (matches.isNotEmpty()) {
+                            result.getOrPut(manager) { mutableListOf() }.add(matches.first())
+                        }
+                    }
+
+                    return FileVisitResult.CONTINUE
+                }
+            })
+
+            return result
         }
     }
 

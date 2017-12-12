@@ -38,11 +38,6 @@ import com.here.ort.util.log
 import com.here.ort.util.yamlMapper
 
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.FileVisitResult
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
 
 import kotlin.system.exitProcess
 
@@ -143,7 +138,6 @@ object Main {
      *
      * @param args The list of application arguments.
      */
-    @Suppress("ComplexMethod")
     @JvmStatic
     fun main(args: Array<String>) {
         val jc = JCommander(this)
@@ -177,39 +171,19 @@ object Main {
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
 
-        // Map of paths managed by the respective package manager.
-        val managedProjectPaths = mutableMapOf<PackageManagerFactory<PackageManager>, MutableList<File>>()
-
         val absoluteProjectPath = inputDir.absoluteFile
         println("Scanning project path:\n\t$absoluteProjectPath")
 
-        if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
-            // If only one package manager is activated, treat given paths to files as definition files for that
-            // package manager despite their name.
-            managedProjectPaths.getOrPut(packageManagers.first()) { mutableListOf() }.add(absoluteProjectPath)
+        // Map of files managed by the respective package manager.
+        val managedProjectFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+            // If only one package manager is activated, treat the given path as definition file for that package
+            // manager despite its name.
+            mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
         } else {
-            Files.walkFileTree(absoluteProjectPath.toPath(), object : SimpleFileVisitor<Path>() {
-                override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
-                    val filesInDir = dir.toFile().listFiles()
-
-                    packageManagers.forEach { manager ->
-                        val matches = manager.matchersForDefinitionFiles.mapNotNull { glob ->
-                            filesInDir.find { file ->
-                                glob.matches(file.toPath())
-                            }
-                        }
-
-                        if (matches.isNotEmpty()) {
-                            managedProjectPaths.getOrPut(manager) { mutableListOf() }.add(matches.first())
-                        }
-                    }
-
-                    return FileVisitResult.CONTINUE
-                }
-            })
+            PackageManager.findManagedFiles(absoluteProjectPath, packageManagers)
         }
 
-        if (managedProjectPaths.isEmpty()) {
+        if (managedProjectFiles.isEmpty()) {
             println("No package-managed projects found.")
 
             val vcsDir = VersionControlSystem.forDirectory(absoluteProjectPath)
@@ -232,9 +206,9 @@ object Main {
         }
 
         // Print a summary of all projects found per package manager.
-        managedProjectPaths.forEach { manager, paths ->
+        managedProjectFiles.forEach { manager, files ->
             println("$manager projects found in:")
-            println(paths.joinToString("\n") {
+            println(files.joinToString("\n") {
                 "\t${it.toRelativeString(absoluteProjectPath)}"
             })
         }
@@ -242,9 +216,9 @@ object Main {
         val failedAnalysis = sortedSetOf<String>()
 
         // Resolve dependencies per package manager.
-        managedProjectPaths.forEach { manager, paths ->
+        managedProjectFiles.forEach { manager, files ->
             // Print the list of dependencies.
-            val results = manager.create().resolveDependencies(absoluteProjectPath, paths)
+            val results = manager.create().resolveDependencies(absoluteProjectPath, files)
             results.forEach { definitionFile, analyzerResult ->
                 writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
                 if (analyzerResult.hasErrors()) {
