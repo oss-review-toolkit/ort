@@ -98,12 +98,10 @@ abstract class BaseGradleSpec : StringSpec() {
             val analyzerResultsDir = File(outputDir, "analyzer_results/")
 
             analyzerResultsDir.walkTopDown().filter { it.extension == "yml" }.forEach { actualResultsFile ->
+
                 val expectedResultsPath = expectedResultsDir +
-                        actualResultsFile.path
-                                .substringBeforeLast(File.separator)
-                                .substringAfterLast("analyzer_results")
-                                .replace("\\", "/") +
-                        "/" + actualResultsFile.name
+                        actualResultsFile.relativeTo(analyzerResultsDir).path.replace("\\", "/")
+
                 val expectedResultsFile = expectedResultsDirsMap
                         .getOrDefault(expectedResultsPath, File(expectedResultsPath))
 

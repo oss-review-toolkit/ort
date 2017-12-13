@@ -1,0 +1,251 @@
+---
+allowDynamicVersions: true
+project:
+  package_manager: "Gradle"
+  namespace: ""
+  name: "openpgp-api"
+  version: ""
+  declared_licenses: []
+  aliases: []
+  vcs:
+    provider: "Git"
+    url: "https://github.com/k9mail/k-9.git"
+    revision: "934bbbe88299b1d468315917924123e4a8b89883"
+    path: ""
+  vcs_processed:
+    provider: "Git"
+    url: "https://github.com/k9mail/k-9.git"
+    revision: "934bbbe88299b1d468315917924123e4a8b89883"
+    path: ""
+  homepage_url: ""
+  scopes:
+  - name: "_debugAndroidTestAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "_debugAndroidTestApk"
+    delivered: true
+    dependencies: []
+  - name: "_debugAndroidTestCompile"
+    delivered: true
+    dependencies: []
+  - name: "_debugAndroidTestJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "_debugAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "_debugCompile"
+    delivered: true
+    dependencies: []
+  - name: "_debugJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "_debugPublish"
+    delivered: true
+    dependencies: []
+  - name: "_debugUnitTestAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "_debugUnitTestApk"
+    delivered: true
+    dependencies: []
+  - name: "_debugUnitTestCompile"
+    delivered: true
+    dependencies: []
+  - name: "_debugUnitTestJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "_releaseAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "_releaseCompile"
+    delivered: true
+    dependencies: []
+  - name: "_releaseJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "_releasePublish"
+    delivered: true
+    dependencies: []
+  - name: "_releaseUnitTestAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "_releaseUnitTestApk"
+    delivered: true
+    dependencies: []
+  - name: "_releaseUnitTestCompile"
+    delivered: true
+    dependencies: []
+  - name: "_releaseUnitTestJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "androidJacocoAgent"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "org.jacoco:org.jacoco.agent:0.7.5.201505241946"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Could not find org.jacoco:org.jacoco.agent:0.7.5.201505241946.\n\
+        Searched in the following locations:\n    file:/home/martin/opt/adt-bundle-linux/sdk/extras/m2repository/org/jacoco/org.jacoco.agent/0.7.5.201505241946/org.jacoco.agent-0.7.5.201505241946.pom\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/m2repository/org/jacoco/org.jacoco.agent/0.7.5.201505241946/org.jacoco.agent-0.7.5.201505241946.jar\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/google/m2repository/org/jacoco/org.jacoco.agent/0.7.5.201505241946/org.jacoco.agent-0.7.5.201505241946.pom\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/google/m2repository/org/jacoco/org.jacoco.agent/0.7.5.201505241946/org.jacoco.agent-0.7.5.201505241946.jar\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/android/m2repository/org/jacoco/org.jacoco.agent/0.7.5.201505241946/org.jacoco.agent-0.7.5.201505241946.pom\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/android/m2repository/org/jacoco/org.jacoco.agent/0.7.5.201505241946/org.jacoco.agent-0.7.5.201505241946.jar"
+  - name: "androidJacocoAnt"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "org.jacoco:org.jacoco.ant:0.7.5.201505241946"
+      version: ""
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Could not find org.jacoco:org.jacoco.ant:0.7.5.201505241946.\n\
+        Searched in the following locations:\n    file:/home/martin/opt/adt-bundle-linux/sdk/extras/m2repository/org/jacoco/org.jacoco.ant/0.7.5.201505241946/org.jacoco.ant-0.7.5.201505241946.pom\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/m2repository/org/jacoco/org.jacoco.ant/0.7.5.201505241946/org.jacoco.ant-0.7.5.201505241946.jar\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/google/m2repository/org/jacoco/org.jacoco.ant/0.7.5.201505241946/org.jacoco.ant-0.7.5.201505241946.pom\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/google/m2repository/org/jacoco/org.jacoco.ant/0.7.5.201505241946/org.jacoco.ant-0.7.5.201505241946.jar\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/android/m2repository/org/jacoco/org.jacoco.ant/0.7.5.201505241946/org.jacoco.ant-0.7.5.201505241946.pom\n\
+        \    file:/home/martin/opt/adt-bundle-linux/sdk/extras/android/m2repository/org/jacoco/org.jacoco.ant/0.7.5.201505241946/org.jacoco.ant-0.7.5.201505241946.jar"
+  - name: "androidTestAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "androidTestCompile"
+    delivered: true
+    dependencies: []
+  - name: "androidTestJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "androidTestProvided"
+    delivered: true
+    dependencies: []
+  - name: "androidTestPublish"
+    delivered: true
+    dependencies: []
+  - name: "androidTestWearApp"
+    delivered: true
+    dependencies: []
+  - name: "annotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies: []
+  - name: "debugAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "debugCompile"
+    delivered: true
+    dependencies: []
+  - name: "debugJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "debugProvided"
+    delivered: true
+    dependencies: []
+  - name: "debugPublish"
+    delivered: true
+    dependencies: []
+  - name: "debugWearApp"
+    delivered: true
+    dependencies: []
+  - name: "default"
+    delivered: true
+    dependencies: []
+  - name: "default-mapping"
+    delivered: true
+    dependencies: []
+  - name: "default-metadata"
+    delivered: true
+    dependencies: []
+  - name: "jackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "provided"
+    delivered: true
+    dependencies: []
+  - name: "publish"
+    delivered: true
+    dependencies: []
+  - name: "releaseAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "releaseCompile"
+    delivered: true
+    dependencies: []
+  - name: "releaseJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "releaseProvided"
+    delivered: true
+    dependencies: []
+  - name: "releasePublish"
+    delivered: true
+    dependencies: []
+  - name: "releaseWearApp"
+    delivered: true
+    dependencies: []
+  - name: "testAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "testCompile"
+    delivered: true
+    dependencies: []
+  - name: "testDebugAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "testDebugCompile"
+    delivered: true
+    dependencies: []
+  - name: "testDebugJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "testDebugProvided"
+    delivered: true
+    dependencies: []
+  - name: "testDebugPublish"
+    delivered: true
+    dependencies: []
+  - name: "testDebugWearApp"
+    delivered: true
+    dependencies: []
+  - name: "testJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "testProvided"
+    delivered: true
+    dependencies: []
+  - name: "testPublish"
+    delivered: true
+    dependencies: []
+  - name: "testReleaseAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "testReleaseCompile"
+    delivered: true
+    dependencies: []
+  - name: "testReleaseJackPlugin"
+    delivered: true
+    dependencies: []
+  - name: "testReleaseProvided"
+    delivered: true
+    dependencies: []
+  - name: "testReleasePublish"
+    delivered: true
+    dependencies: []
+  - name: "testReleaseWearApp"
+    delivered: true
+    dependencies: []
+  - name: "testWearApp"
+    delivered: true
+    dependencies: []
+  - name: "wearApp"
+    delivered: true
+    dependencies: []
+packages: []
+errors: []

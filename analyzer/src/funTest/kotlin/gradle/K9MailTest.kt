@@ -29,7 +29,7 @@ class K9MailTest : BaseGradleSpec() {
             packageManager = "Gradle",
             namespace = "com.fsck.k9",
             name = "k9mail",
-            version = "",
+            version = "5.304",
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
@@ -38,11 +38,11 @@ class K9MailTest : BaseGradleSpec() {
             vcs = VcsInfo(
                     "Git",
                     "https://github.com/k9mail/k-9.git",
-                    "934bbbe88299b1d468315917924123e4a8b89883",
+                    "5.304",
                     ""
             )
     )
 
-    override val expectedResultsDir = ""
+    override val expectedResultsDir = "src/funTest/assets/projects/external/gradle-expected-results/k9-mail/"
 
 }
