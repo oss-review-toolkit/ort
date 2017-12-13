@@ -133,7 +133,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
             }
 
-    fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
+    private fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
         remoteArtifactCache.read(artifact.toString())?.let {
             log.debug { "Reading remote artifact for $artifact from disk cache." }
             return yamlMapper.readValue(it, RemoteArtifact::class.java)
