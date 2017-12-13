@@ -134,12 +134,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
 
     fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
-        val cacheKey = artifact.toString()
-                .replace(".", "-")
-                .replace(":", "_")
-                .toLowerCase()
-
-        remoteArtifactCache.read(cacheKey)?.let {
+        remoteArtifactCache.read(artifact.toString())?.let {
             log.debug { "Reading remote artifact for $artifact from disk cache." }
             return yamlMapper.readValue(it, RemoteArtifact::class.java)
         }
@@ -222,7 +217,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 val downloadUrl = "${repository.url}/$remoteLocation"
                 return RemoteArtifact(downloadUrl, actualChecksum, checksum.algorithm).also {
                     log.debug { "Writing remote artifact for $artifact to disk cache." }
-                    remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
+                    remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }
             } else {
                 if (Main.stacktrace) {
@@ -237,7 +232,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         return RemoteArtifact.EMPTY.also {
             log.debug { "Writing empty remote artifact for $artifact to disk cache." }
-            remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
+            remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
         }
     }
 
