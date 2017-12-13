@@ -108,7 +108,7 @@ class Gradle : PackageManager() {
 
             val repositories = dependencyTreeModel.repositories.map {
                 // TODO: Also handle authentication and snapshot policy.
-                RemoteRepository.Builder(it, null, it).build()
+                RemoteRepository.Builder(it, "default", it).build()
             }
 
             log.debug {
