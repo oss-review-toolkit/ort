@@ -158,7 +158,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
-        artifactDescriptorResult.repositories.forEach { repository ->
+        val allRepositories = artifactDescriptorResult.repositories + repositories
+
+        allRepositories.forEach { repository ->
             val repositoryLayout = repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
 
             val remoteLocation = repositoryLayout.getLocation(artifact, false)
@@ -290,7 +292,6 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 vcs = parseVcsInfo(mavenProject)
         )
     }
-
 
     fun parseLicenses(mavenProject: MavenProject) =
             mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
