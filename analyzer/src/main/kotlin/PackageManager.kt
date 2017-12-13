@@ -63,7 +63,8 @@ abstract class PackageManager {
                     GoDep,
                     // TODO: Bower,
                     PIP,
-                    Bundler
+                    Bundler,
+                    PhpComposer
             )
         }
 
