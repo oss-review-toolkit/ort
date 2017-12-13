@@ -1,0 +1,247 @@
+---
+allowDynamicVersions: true
+project:
+  id:
+    package_manager: "PhpComposer"
+    namespace: "ort"
+    name: "ort/composer-test-project"
+    version: ""
+  declared_licenses:
+  - "Apache -2.0"
+  - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+  aliases: []
+  vcs:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/php-composer"
+  vcs_processed:
+    provider: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/php-composer"
+  homepage_url: "https://github.com/heremaps/oss-review-toolkit"
+  scopes:
+  - name: "requires"
+    delivered: true
+    dependencies:
+    - namespace: "mailgun"
+      name: "mailgun/mailgun-php"
+      version: ""
+      dependencies:
+      - namespace: "php-http"
+        name: "php-http/client-common"
+        version: "^1.1"
+        dependencies: []
+        errors: []
+      - namespace: "php-http"
+        name: "php-http/discovery"
+        version: "^1.0"
+        dependencies: []
+        errors: []
+      - namespace: "php-http"
+        name: "php-http/httplug"
+        version: "^1.0"
+        dependencies: []
+        errors: []
+      - namespace: "php-http"
+        name: "php-http/message"
+        version: "^1.0"
+        dependencies: []
+        errors: []
+      - namespace: "php-http"
+        name: "php-http/multipart-stream-builder"
+        version: "^1.0"
+        dependencies: []
+        errors: []
+      - namespace: "php"
+        name: "php"
+        version: "^5.5|^7.0"
+        dependencies: []
+        errors: []
+      - namespace: "webmozart"
+        name: "webmozart/assert"
+        version: "^1.2"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "monolog"
+      name: "monolog/monolog"
+      version: ""
+      dependencies:
+      - namespace: "php"
+        name: "php"
+        version: ">=5.3.0"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "requires (dev)"
+    delivered: true
+    dependencies:
+    - namespace: "guzzlehttp"
+      name: "guzzlehttp/psr7"
+      version: ""
+      dependencies:
+      - namespace: "phpunit"
+        name: "phpunit/phpunit"
+        version: "~4.0"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "php-http"
+      name: "php-http/guzzle6-adapter"
+      version: ""
+      dependencies:
+      - namespace: "ext-curl"
+        name: "ext-curl"
+        version: "*"
+        dependencies: []
+        errors: []
+      - namespace: "php-http"
+        name: "php-http/adapter-integration-tests"
+        version: "^0.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - namespace: "phpunit"
+      name: "phpunit/phpunit"
+      version: ""
+      dependencies: []
+      errors: []
+packages:
+- id:
+    package_manager: "PhpComposer"
+    namespace: "guzzlehttp"
+    name: "guzzlehttp/psr7"
+    version: ""
+  declared_licenses:
+  - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+  description: "PSR-7 message implementation that also provides common utility methods"
+  homepage_url: "https://github.com/guzzle/psr7.git"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/guzzle/psr7/zipball/04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
+    hash: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "https://github.com/guzzle/psr7.git"
+    revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/guzzle/psr7.git"
+    revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
+    path: ""
+- id:
+    package_manager: "PhpComposer"
+    namespace: "mailgun"
+    name: "mailgun/mailgun-php"
+    version: ""
+  declared_licenses:
+  - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+  description: "The Mailgun SDK provides methods for all API functions."
+  homepage_url: "https://github.com/mailgun/mailgun-php.git"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/mailgun/mailgun-php/zipball/20783215042b181b0dec92c9e01947b93cb5d085"
+    hash: "20783215042b181b0dec92c9e01947b93cb5d085"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "https://github.com/mailgun/mailgun-php.git"
+    revision: "20783215042b181b0dec92c9e01947b93cb5d085"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/mailgun/mailgun-php.git"
+    revision: "20783215042b181b0dec92c9e01947b93cb5d085"
+    path: ""
+- id:
+    package_manager: "PhpComposer"
+    namespace: "monolog"
+    name: "monolog/monolog"
+    version: ""
+  declared_licenses:
+  - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+  description: "Logging for PHP 5.3"
+  homepage_url: "http://github.com/Seldaek/monolog"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/Seldaek/monolog/zipball/b704c49a3051536f67f2d39f13568f74615b9922"
+    hash: "b704c49a3051536f67f2d39f13568f74615b9922"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "https://github.com/Seldaek/monolog.git"
+    revision: "b704c49a3051536f67f2d39f13568f74615b9922"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/Seldaek/monolog.git"
+    revision: "b704c49a3051536f67f2d39f13568f74615b9922"
+    path: ""
+- id:
+    package_manager: "PhpComposer"
+    namespace: "php-http"
+    name: "php-http/guzzle6-adapter"
+    version: ""
+  declared_licenses:
+  - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+  description: "Guzzle 6 HTTP Adapter"
+  homepage_url: "http://httplug.io"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/php-http/guzzle6-adapter/zipball/e884cf6dae5235fffd2a07f761e0066b9ebef170"
+    hash: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "https://github.com/php-http/guzzle6-adapter.git"
+    revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/php-http/guzzle6-adapter.git"
+    revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
+    path: ""
+- id:
+    package_manager: "PhpComposer"
+    namespace: "phpunit"
+    name: "phpunit/phpunit"
+    version: ""
+  declared_licenses:
+  - "BSD 3-clause \"New\" or \"Revised\" License (BSD-3-Clause) (OSI approved) https://spdx.org/licenses/BSD-3-Clause.html#licenseText"
+  description: "The PHP Unit Testing framework."
+  homepage_url: "https://phpunit.de/"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/283111a903eb9225aedb95e846bef876e006a688"
+    hash: "283111a903eb9225aedb95e846bef876e006a688"
+    hash_algorithm: "SHA-1"
+  vcs:
+    provider: "git"
+    url: "https://github.com/sebastianbergmann/phpunit.git"
+    revision: "283111a903eb9225aedb95e846bef876e006a688"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://github.com/sebastianbergmann/phpunit.git"
+    revision: "283111a903eb9225aedb95e846bef876e006a688"
+    path: ""
+errors: []
