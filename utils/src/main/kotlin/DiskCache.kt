@@ -123,8 +123,8 @@ class DiskCache(
                 set(INDEX_TIMESTAMP, timeInSeconds().toString())
                 set(INDEX_DATA, data)
                 commit()
-                return true
             }
+            return true
         } catch (e: IOException) {
             log.error { "Could not write to disk cache for key '$diskKey': ${e.message}" }
         }
