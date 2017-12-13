@@ -55,6 +55,7 @@ class PackageManagerTest : WordSpec({
             result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
             result[NPM] shouldBe null
             result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
+            result[PhpComposer] shouldBe null
         }
 
         "find no files if no package managers are active" {
