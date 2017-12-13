@@ -48,6 +48,7 @@ class PackageManagerTest : WordSpec({
             result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
             result[GoDep] shouldBe listOf(File(projectDir, "Gopkg.toml"))
             result[Bundler] shouldBe listOf(File(projectDir, "Gemfile"))
+            result[PhpComposer] shouldBe listOf(File(projectDir, "composer.json"))
         }
 
         "find only files for active package managers" {
@@ -59,6 +60,7 @@ class PackageManagerTest : WordSpec({
             result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
             result[NPM] shouldBe null
             result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
+            result[PhpComposer] shouldBe null
         }
 
         "find no files if no package managers are active" {

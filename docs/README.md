@@ -69,6 +69,7 @@ Currently, the following package managers / build systems can be detected and qu
 * [Gradle](https://gradle.org/)
 * [Maven](http://maven.apache.org/)
 * [NPM](https://www.npmjs.com/) / [Yarn](https://yarnpkg.com/)
+* [PHP Composer](https://getcomposer.org/)
 * [PIP](https://pip.pypa.io/)
 * [SBT](http://www.scala-sbt.org/)
 
