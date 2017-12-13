@@ -80,22 +80,26 @@ class DiskCache(
      * shorten it and append the serial number.
      */
     private fun String.asKey(): String {
-        return if (length <= MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH) {
+        // DiskLruCache keys must match regex [a-z0-9_-]{1,64}.
+        val mappedKey = toLowerCase().replace('.', '-').replace("[^a-z0-9_-]".toRegex(), "_")
+
+        if (mappedKey.length <= MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH) {
             // String is short enough to be unique, use it as is.
-            this
-        } else {
-            // String is too long to be unique, append it with a serial number.
-            val key = chunkedSequence(MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH).first()
-            for (index in 0 until KEY_INDEX_LIMIT) {
-                val tryKey = "$key-" + "$index".padStart(KEY_SUFFIX_LENGTH - 1, '0')
-                val entry = diskLruCache.get(tryKey)
-                if (entry == null || entry.getString(INDEX_FULL_KEY) == this) {
-                    return tryKey
-                }
-            }
-            throw IOException(
-                    "Cannot generate key for '$this' because all possible keys starting with '$key' are taken.")
+            return mappedKey
         }
+
+        // String is too long to be unique, append it with a serial number.
+        val shortenedKey = mappedKey.chunkedSequence(MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH).first()
+        for (index in 0 until KEY_INDEX_LIMIT) {
+            val tryKey = "$shortenedKey-" + "$index".padStart(KEY_SUFFIX_LENGTH - 1, '0')
+            val entry = diskLruCache.get(tryKey)
+            if (entry == null || entry.getString(INDEX_FULL_KEY) == this) {
+                return tryKey
+            }
+        }
+
+        throw IOException(
+                "Cannot generate key for '$this' because all possible keys starting with '$shortenedKey' are taken.")
     }
 
     fun read(key: String): String? {
