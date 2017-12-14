@@ -29,7 +29,9 @@ RUN apt update && apt install -y --no-install-recommends \
  && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
  && chmod a+x /usr/local/bin/repo \
  # Clean up the apt cache to reduce the image size.
- && rm -rf /var/lib/apt/lists
+ && apt -y autoremove \
+ && apt -y clean \
+ && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install the OSS Review Toolkit
 ENV APPDIR=/opt/oss-review-toolkit
