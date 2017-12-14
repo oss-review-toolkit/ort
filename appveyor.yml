@@ -33,7 +33,3 @@ on_finish:
       foreach ($file in (Resolve-Path $pattern)) {
         (New-Object 'System.Net.WebClient').UploadFile($url, $file)
       }
-
-artifacts:
-  - path: '**\build\reports\**\*'
-    name: Build report
