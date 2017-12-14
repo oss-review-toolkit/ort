@@ -9,16 +9,21 @@ RUN ["/bin/bash", "-c", "set -o pipefail \
 
 # Install required packages.
 RUN apt update && apt install -y --no-install-recommends \
+    # Platform tools
     apt-utils \
     build-essential \
+    # Package managers
     python-pip \
     nodejs \
     yarn \
+    # Version Control Systems
     cvs \
     git \
     mercurial \
     subversion \
+ # Install package manager specifics.
  && pip install virtualenv \
+ # Clean up the apt cache to reduce the image size.
  && rm -rf /var/lib/apt/lists
 
 # Install the OSS Review Toolkit
