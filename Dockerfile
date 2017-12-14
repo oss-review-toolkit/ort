@@ -56,3 +56,5 @@ ENV PATH="${APPDIR}/analyzer/build/install/analyzer/bin:${APPDIR}/graph/build/in
 # Change to non-root
 RUN groupadd -r toolkit && useradd --no-log-init -r -g toolkit toolkit
 USER toolkit
+
+CMD ["/bin/bash"]
