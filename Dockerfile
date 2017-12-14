@@ -17,14 +17,15 @@ RUN apt update && apt install -y --no-install-recommends \
     python-setuptools \
     python-wheel \
     nodejs \
-    yarn \
+    yarn=1.3.2-1 \
     # Version Control Systems
     cvs \
     git \
     mercurial \
     subversion \
  # Install package manager specifics.
- && pip install virtualenv \
+ && npm install -g npm@5.5.1 \
+ && pip install virtualenv==15.1.0 \
  # Install git-repo.
  && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
  && chmod a+x /usr/local/bin/repo \
