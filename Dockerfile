@@ -44,16 +44,16 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Install the OSS Review Toolkit
+# Copy the OSS Review Toolkit sources to the container and build it in there.
 ENV APPDIR=/opt/oss-review-toolkit
 COPY . "${APPDIR}"
 WORKDIR "${APPDIR}"
 RUN ./gradlew installDist
 
-# Add the tools to the path
+# Add the tools to the PATH environment.
 ENV PATH="${APPDIR}/analyzer/build/install/analyzer/bin:${APPDIR}/graph/build/install/graph/bin:${APPDIR}/downloader/build/install/downloader/bin:${APPDIR}/scanner/build/install/scanner/bin:${PATH}"
 
-# Change to non-root
+# Change to a newly created non-root user.
 RUN groupadd -r toolkit && useradd --no-log-init -r -g toolkit toolkit
 USER toolkit
 
