@@ -25,6 +25,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.DiskCache
+import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.yamlMapper
@@ -222,15 +223,13 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }
             } else {
-                if (Main.stacktrace) {
-                    artifactDownload.exception.printStackTrace()
+                log.debug {
+                    "Could not find '$artifact' in '$repository': ${artifactDownload.exception.collectMessages()}"
                 }
-
-                log.debug { "Could not find '$artifact' in $repository." }
             }
         }
 
-        log.info { "Could not receive data about remote artifact '$artifact'." }
+        log.warn { "Unable to find '$artifact' in any of $allRepositories." }
 
         return RemoteArtifact.EMPTY.also {
             log.debug { "Writing empty remote artifact for $artifact to disk cache." }
