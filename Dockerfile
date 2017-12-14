@@ -25,7 +25,7 @@ RUN apt update && apt install -y --no-install-recommends \
     subversion \
  # Install package manager specifics.
  && npm install -g npm@5.5.1 \
- && pip install virtualenv==15.1.0 \
+ && pip install virtualenv==15.1.0 pipdeptree==0.10.1 \
  # Install git-repo.
  && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
  && chmod a+x /usr/local/bin/repo \
