@@ -14,6 +14,8 @@ RUN apt update && apt install -y --no-install-recommends \
     build-essential \
     # Package managers
     python-pip \
+    python-setuptools \
+    python-wheel \
     nodejs \
     yarn \
     # Version Control Systems
