@@ -25,6 +25,9 @@ RUN apt update && apt install -y --no-install-recommends \
     subversion \
  # Install package manager specifics.
  && pip install virtualenv \
+ # Install git-repo.
+ && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
+ && chmod a+x /usr/local/bin/repo \
  # Clean up the apt cache to reduce the image size.
  && rm -rf /var/lib/apt/lists
 
