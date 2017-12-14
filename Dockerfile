@@ -5,6 +5,8 @@ RUN ["/bin/bash", "-c", "set -o pipefail \
  && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
  && echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | tee /etc/apt/sources.list.d/yarn.list \
+ && echo \"deb https://dl.bintray.com/sbt/debian /\" | tee -a /etc/apt/sources.list.d/sbt.list \
+ && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823 \
 "]
 
 # Install required packages.
@@ -17,6 +19,7 @@ RUN apt update && apt install -y --no-install-recommends \
     python-setuptools \
     python-wheel \
     nodejs \
+    sbt \
     yarn=1.3.2-1 \
     # Version Control Systems
     cvs \
