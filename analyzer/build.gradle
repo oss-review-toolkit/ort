@@ -4,6 +4,12 @@ apply plugin: 'application'
 applicationName = 'analyzer'
 mainClassName = 'com.here.ort.analyzer.Main'
 
+repositories {
+    maven {
+        url 'https://repo.gradle.org/gradle/libs-releases-local/'
+    }
+}
+
 dependencies {
     compile project(':downloader')
     compile project(':model')
@@ -21,6 +27,5 @@ dependencies {
     compile "org.apache.maven.resolver:maven-resolver-transport-file:$mavenResolverVersion"
     compile "org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion"
 
-    // The tooling API does not necessarily get upgraded with new versions of Gradle.
-    compile "org.gradle:gradle-tooling-api:${gradleToolingApiVersion}"
+    compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
 }
