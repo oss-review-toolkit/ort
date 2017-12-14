@@ -51,7 +51,7 @@ WORKDIR "${APPDIR}"
 RUN ./gradlew installDist
 
 # Add the tools to the PATH environment.
-ENV PATH="${APPDIR}/analyzer/build/install/analyzer/bin:${APPDIR}/graph/build/install/graph/bin:${APPDIR}/downloader/build/install/downloader/bin:${APPDIR}/scanner/build/install/scanner/bin:${PATH}"
+ENV PATH="${APPDIR}/analyzer/build/install/analyzer/bin:${APPDIR}/graph/build/install/graph/bin:${APPDIR}/downloader/build/install/downloader/bin:${APPDIR}/scanner/build/install/scanner/bin:${APPDIR}/scanner/src/funTest/assets/scanners/scancode-toolkit:${PATH}"
 
 # Change to a newly created non-root user.
 RUN groupadd -r toolkit && useradd --no-log-init -r -g toolkit toolkit
