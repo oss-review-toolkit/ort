@@ -222,15 +222,13 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }
             } else {
-                if (Main.stacktrace) {
-                    artifactDownload.exception.printStackTrace()
+                artifactDownload.exception.message?.let {
+                    log.debug { it }
                 }
-
-                log.debug { "Could not find '$artifact' in $repository." }
             }
         }
 
-        log.info { "Could not receive data about remote artifact '$artifact'." }
+        log.warn { "Unable to find '$artifact' in any of $allRepositories." }
 
         return RemoteArtifact.EMPTY.also {
             log.debug { "Writing empty remote artifact for $artifact to disk cache." }
