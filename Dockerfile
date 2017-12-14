@@ -1,7 +1,12 @@
 FROM openjdk:8
 
-# Install dependencies for NPM scanning
-RUN ["/bin/bash", "-c", "set -o pipefail && curl -sL https://deb.nodesource.com/setup_8.x | bash - && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | tee /etc/apt/sources.list.d/yarn.list"]
+# Define additional package sources.
+RUN ["/bin/bash", "-c", "set -o pipefail \
+ && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+ && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+ && echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | tee /etc/apt/sources.list.d/yarn.list \
+"]
+
 RUN apt update \
   && apt install -y \
     apt-utils \
