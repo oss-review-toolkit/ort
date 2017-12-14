@@ -14,6 +14,7 @@ RUN apt update && apt install -y --no-install-recommends \
     # Platform tools
     apt-utils \
     build-essential \
+    locales \
     # Package managers
     python-pip \
     python-setuptools \
@@ -35,7 +36,13 @@ RUN apt update && apt install -y --no-install-recommends \
  # Clean up the apt cache to reduce the image size.
  && apt -y autoremove \
  && apt -y clean \
- && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+ && rm -rf /var/lib/apt/lists /var/cache/apt/archives \
+ # Generate a locale.
+ && locale-gen en_US.UTF-8
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 # Install the OSS Review Toolkit
 ENV APPDIR=/opt/oss-review-toolkit
