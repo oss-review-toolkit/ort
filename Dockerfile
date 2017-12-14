@@ -7,8 +7,8 @@ RUN ["/bin/bash", "-c", "set -o pipefail \
  && echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | tee /etc/apt/sources.list.d/yarn.list \
 "]
 
-RUN apt update \
-  && apt install -y \
+# Install required packages.
+RUN apt update && apt install -y --no-install-recommends \
     apt-utils \
     build-essential \
     python-pip \
@@ -18,8 +18,8 @@ RUN apt update \
     git \
     mercurial \
     subversion \
-  && pip install virtualenv \
-  && rm -rf /var/lib/apt/lists
+ && pip install virtualenv \
+ && rm -rf /var/lib/apt/lists
 
 # Install the OSS Review Toolkit
 ENV APPDIR=/opt/oss-review-toolkit
