@@ -229,7 +229,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
         }
 
-        log.warn { "Unable to find '$artifact' in any of $allRepositories." }
+        log.warn { "Unable to find '$artifact' in any of ${allRepositories.map { it.url }}." }
 
         return RemoteArtifact.EMPTY.also {
             log.debug { "Writing empty remote artifact for $artifact to disk cache." }
