@@ -37,14 +37,13 @@ RUN apt update && apt install -y --no-install-recommends \
  && apt -y clean \
  && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Copy the OSS Review Toolkit sources to the container and build it in there.
+# Copy the OSS Review Toolkit binaries to the container.
 ENV APPDIR=/opt/oss-review-toolkit
-COPY . "${APPDIR}"
+ADD ./*/build/distributions/*.tar "${APPDIR}/"
 WORKDIR "${APPDIR}"
-RUN ./gradlew installDist
 
 # Add the tools to the PATH environment.
-ENV PATH="${APPDIR}/analyzer/build/install/analyzer/bin:${APPDIR}/graph/build/install/graph/bin:${APPDIR}/downloader/build/install/downloader/bin:${APPDIR}/scanner/build/install/scanner/bin:${APPDIR}/scanner/src/funTest/assets/scanners/scancode-toolkit:${PATH}"
+ENV PATH="${APPDIR}/analyzer/bin:${APPDIR}/downloader/bin:${APPDIR}/graph/bin:${APPDIR}/scanner/bin:${PATH}"
 
 # Change to a newly created non-root user.
 RUN groupadd -r toolkit && useradd --no-log-init -r -g toolkit toolkit
