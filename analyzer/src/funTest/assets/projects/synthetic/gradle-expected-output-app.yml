@@ -271,10 +271,4 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: "HEAD"
     path: ""
-errors:
-- "Configuration 'apiElements' cannot be resolved."
-- "Configuration 'implementation' cannot be resolved."
-- "Configuration 'runtimeElements' cannot be resolved."
-- "Configuration 'runtimeOnly' cannot be resolved."
-- "Configuration 'testImplementation' cannot be resolved."
-- "Configuration 'testRuntimeOnly' cannot be resolved."
+errors: []

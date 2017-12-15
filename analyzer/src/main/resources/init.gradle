@@ -114,7 +114,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
 
                     new ConfigurationImpl(configuration.name, dependencies)
                 } else {
-                    errors.add("Configuration '${configuration.name}' cannot be resolved.".toString())
+                    project.logger.info("Configuration '${configuration.name}' cannot be resolved.")
                     null
                 }
             }

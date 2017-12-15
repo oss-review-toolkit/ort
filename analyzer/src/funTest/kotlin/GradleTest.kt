@@ -38,15 +38,6 @@ class GradleTest : StringSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
-    private val unresolvableConfigurations = listOf(
-            "apiElements",
-            "implementation",
-            "runtimeElements",
-            "runtimeOnly",
-            "testImplementation",
-            "testRuntimeOnly"
-    ).map { "Configuration '$it' cannot be resolved." }
-
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename)
                     .readText()
@@ -76,7 +67,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors.joinToString("\n") shouldBe unresolvableConfigurations.joinToString("\n")
+            result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -87,7 +78,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors.joinToString("\n") shouldBe unresolvableConfigurations.joinToString("\n")
+            result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -98,7 +89,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors.joinToString("\n") shouldBe unresolvableConfigurations.joinToString("\n")
+            result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
