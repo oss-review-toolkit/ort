@@ -46,7 +46,7 @@ WORKDIR "${APPDIR}"
 ENV PATH="${APPDIR}/analyzer/bin:${APPDIR}/downloader/bin:${APPDIR}/graph/bin:${APPDIR}/scanner/bin:${PATH}"
 
 # Change to a newly created non-root user.
-RUN groupadd -r toolkit && useradd --no-log-init -r -g toolkit toolkit
+RUN groupadd -r toolkit && useradd -g toolkit -l -r toolkit
 USER toolkit
 
 CMD ["/bin/bash"]
