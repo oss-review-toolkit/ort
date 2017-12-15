@@ -35,7 +35,9 @@ RUN apt update && apt install -y --no-install-recommends \
  # Clean up the apt cache to reduce the image size.
  && apt -y autoremove \
  && apt -y clean \
- && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+ && rm -rf /var/lib/apt/lists /var/cache/apt/archives \
+ # Create a new non-root user.
+ && groupadd -r toolkit && useradd -g toolkit -l -m -r toolkit
 
 # Copy the OSS Review Toolkit binaries to the container.
 ENV APPDIR=/opt/oss-review-toolkit
@@ -45,8 +47,7 @@ WORKDIR "${APPDIR}"
 # Add the tools to the PATH environment.
 ENV PATH="${APPDIR}/analyzer/bin:${APPDIR}/downloader/bin:${APPDIR}/graph/bin:${APPDIR}/scanner/bin:${PATH}"
 
-# Change to a newly created non-root user.
-RUN groupadd -r toolkit && useradd -g toolkit -l -m -r toolkit
+# Change to the newly created user.
 USER toolkit
 
 CMD ["/bin/bash"]
