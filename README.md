@@ -17,14 +17,17 @@ designed as libraries (for programmatic use) with minimal command line interface
 
 ## Installation
 
-After cloning the Git repository, on the command line do execute
+To get setup with the OSS Review Toolkit, simply:
+
+1. Ensure the Java JDK (not the JRE as you need the `javac` compiler) is installed and the JAVA_HOME environment variable set.
+2. Clone this repository.
+3. Change into the repo directory on your machine and run
 
 ```
 ./gradlew installDist
 ```
 
-to build the tools and install the start scripts for distribution. The individual start scripts can then be run directly
-from their respective locations at
+to setup the build environment (e.g., get Gradle etc.) and build/install the start scripts for ORT. The individual start scripts can then be run directly from their respective locations as follows:
 
 * `./analyzer/build/install/analyzer/bin/analyzer`
 * `./graph/build/install/graph/bin/graph`
