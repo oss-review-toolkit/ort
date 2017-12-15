@@ -26,12 +26,21 @@ RUN apt update && apt install -y --no-install-recommends \
     git \
     mercurial \
     subversion \
+    # ScanCode dependencies.
+    bzip2 \
+    libxml2-dev \
+    libxslt1-dev \
+    python-dev \
+    xz-utils \
+    zlib1g \
  # Install package manager specifics.
  && npm install -g npm@5.5.1 \
  && pip install virtualenv==15.1.0 pipdeptree==0.10.1 \
  # Install git-repo.
  && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
  && chmod a+x /usr/local/bin/repo \
+ # Install ScanCode.
+ && pip install scancode-toolkit==2.2.1 \
  # Clean up the apt cache to reduce the image size.
  && apt -y autoremove \
  && apt -y clean \
