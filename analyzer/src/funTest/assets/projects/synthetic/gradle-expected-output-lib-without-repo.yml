@@ -147,10 +147,4 @@ project:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
 packages: []
-errors:
-- "Configuration 'apiElements' cannot be resolved."
-- "Configuration 'implementation' cannot be resolved."
-- "Configuration 'runtimeElements' cannot be resolved."
-- "Configuration 'runtimeOnly' cannot be resolved."
-- "Configuration 'testImplementation' cannot be resolved."
-- "Configuration 'testRuntimeOnly' cannot be resolved."
+errors: []
