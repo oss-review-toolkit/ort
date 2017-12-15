@@ -107,8 +107,8 @@ class DependencyTreePlugin implements Plugin<Gradle> {
 
             List<String> errors = []
 
-            List<Configuration> configurations = project.configurations.collect { configuration ->
-                if (configuration.isCanBeResolved()) {
+            List<Configuration> configurations = project.configurations.findResults { configuration ->
+                if (configuration.canBeResolved) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
                     List<Dependency> dependencies = result.getRoot().getDependencies().collect { parseDependency(it, project, []) }
 
@@ -117,7 +117,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     errors.add("Configuration '${configuration.name}' cannot be resolved.".toString())
                     null
                 }
-            }.findAll { it != null }
+            }
 
             List<String> repositories = project.repositories.collect { it.url.toString() }
 
