@@ -153,9 +153,9 @@ object Git : GitBase() {
     }
 
     private fun getCommittish(vcsRevision: String?, packageVersion: String, targetDir: File): String {
-        if (vcsRevision != null && vcsRevision.isNotEmpty())
+        if (vcsRevision != null && vcsRevision.isNotEmpty()) {
             return vcsRevision
-
+        }
         // If we don't have a revision, see if the package version matches a tag
         if (packageVersion.isBlank()) {
             log.warn { "No source revision and no package version. Using HEAD." }
