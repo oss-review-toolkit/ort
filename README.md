@@ -17,15 +17,11 @@ designed as libraries (for programmatic use) with minimal command line interface
 
 ## Installation
 
-To get setup with the OSS Review Toolkit, simply:
+To get started with the OSS Review Toolkit, simply:
 
-1. Ensure the Java JDK (not the JRE as you need the `javac` compiler) is installed and the JAVA_HOME environment variable set.
+1. Ensure the JDK for Java 8 or later (not the JRE as you need the `javac` compiler) is installed and the JAVA_HOME environment variable set.
 2. Clone this repository.
-3. Change into the repo directory on your machine and run
-
-```
-./gradlew installDist
-```
+3. Change into the repo directory on your machine and run `./gradlew installDist`
 
 to setup the build environment (e.g., get Gradle etc.) and build/install the start scripts for ORT. The individual start scripts can then be run directly from their respective locations as follows:
 
