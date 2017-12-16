@@ -40,6 +40,18 @@ class ScanResultsCacheTest : WordSpec() {
 
     private fun ArtifactoryCache.getUrl() = getStringField("url")
 
+
+    private fun ClearlyDefinedCache.getStringField(name: String): String {
+        javaClass.getDeclaredField(name).let {
+            it.isAccessible = true
+            return it.get(this) as String
+        }
+    }
+
+    private fun ClearlyDefinedCache.getApiToken() = getStringField("apiToken")
+
+    private fun ClearlyDefinedCache.getUrl() = getStringField("url")
+
     init {
         "ScanResultsCache.configure" should {
             "fail if the cache type is missing" {
@@ -105,6 +117,22 @@ class ScanResultsCacheTest : WordSpec() {
                 ScanResultsCache.cache::class shouldBe ArtifactoryCache::class
                 (ScanResultsCache.cache as ArtifactoryCache).getApiToken() shouldBe "someApiToken"
                 (ScanResultsCache.cache as ArtifactoryCache).getUrl() shouldBe "someUrl"
+            }
+
+            "configure the ClearlyDefined service correctly" {
+                val config = yamlMapper.readTree("""
+                        scanner:
+                          cache:
+                            type: ClearlyDefined
+                            apiToken: someApiToken
+                            url: someUrl
+                    """)
+                ScanResultsCache.configure(config)
+
+                ScanResultsCache.cache shouldNotBe null
+                ScanResultsCache.cache::class shouldBe ClearlyDefinedCache::class
+                (ScanResultsCache.cache as ClearlyDefinedCache).getApiToken() shouldBe "someApiToken"
+                (ScanResultsCache.cache as ClearlyDefinedCache).getUrl() shouldBe "someUrl"
             }
         }
     }
