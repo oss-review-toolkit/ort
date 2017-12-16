@@ -10,20 +10,21 @@
 [4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
 
 The OSS Review Toolkit (ORT for short) is a suite of tools to assist with reviewing Open Source Software dependencies in
-your software deliverables. At a high level, it works by analyzing your deliverable's source code for dependencies, downloading
-the source code for the dependencies, and scanning all source code for license information. The different tools in the suite are
-designed as libraries (for programmatic use) with minimal command line interface (for scripted use,
-[doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
+your software deliverables. At a high level, it works by analyzing your deliverable's source code for dependencies,
+downloading the source code for the dependencies, and scanning all source code for license information. The different
+tools in the suite are designed as libraries (for programmatic use) with minimal command line interface (for scripted
+use, [doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
 
 ## Installation
 
 To get started with the OSS Review Toolkit, simply:
 
-1. Ensure the JDK for Java 8 or later (not the JRE as you need the `javac` compiler) is installed and the JAVA_HOME environment variable set.
+1. Ensure the JDK for Java 8 or later (not the JRE as you need the `javac` compiler) is installed and the `JAVA_HOME`
+environment variable set.
 2. Clone this repository.
-3. Change into the repo directory on your machine and run `./gradlew installDist`
-
-to setup the build environment (e.g., get Gradle etc.) and build/install the start scripts for ORT. The individual start scripts can then be run directly from their respective locations as follows:
+3. Change into the repo directory on your machine and run `./gradlew installDist` to setup the build environment (e.g.
+get Gradle etc.) and build/install the start scripts for ORT. The individual start scripts can then be run directly from
+their respective locations as follows:
 
 * `./analyzer/build/install/analyzer/bin/analyzer`
 * `./graph/build/install/graph/bin/graph`
@@ -118,9 +119,9 @@ Usage: graph [options]
 
 ### [downloader](./downloader/src/main/kotlin)
 
-Taking a single ABCD-syle dependencies file as the input (`-d`), the Downloader retrieves the source code of all contained
-packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs and using
-the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
+Taking a single ABCD-syle dependencies file as the input (`-d`), the Downloader retrieves the source code of all
+contained packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs
+and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
 The `downloader` command line tool takes the following arguments:
 
