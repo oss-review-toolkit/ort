@@ -373,8 +373,8 @@ class NPM : PackageManager() {
             }
 
             val newDependencyBranch = dependencyBranch + identifier
-            val packageInfo = packages[identifier] ?:
-                    throw IOException("Could not find package info for $identifier")
+            val packageInfo = packages[identifier]
+                    ?: throw IOException("Could not find package info for $identifier")
             val dependencies = sortedSetOf<PackageReference>()
 
             if (packageJson["dependencies"] != null) {
