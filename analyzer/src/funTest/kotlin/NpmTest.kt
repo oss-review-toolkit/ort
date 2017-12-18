@@ -58,9 +58,9 @@ class NpmTest : FreeSpec() {
     }
 
     private fun patchExpectedResult(workingDir: File) =
-        File(projectDir.parentFile, "npm-expected-output.yml")
-                .readText()
-                .replaceFirst("npm-project", "npm-${workingDir.name}")
+            File(projectDir.parentFile, "npm-expected-output.yml")
+                    .readText()
+                    .replaceFirst("npm-project", "npm-${workingDir.name}")
 
     init {
         "NPM should" - {

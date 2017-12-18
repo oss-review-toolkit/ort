@@ -53,13 +53,13 @@ abstract class GitBase : VersionControlSystem() {
                 }
 
                 override fun getRemoteUrl() =
-                    runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
+                        runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
 
                 override fun getRevision() =
-                    runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
+                        runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
 
                 override fun getRootPath(path: File) =
-                    runGitCommand(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
+                        runGitCommand(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
 
                 override fun getPathToRoot(path: File): String {
                     val absolutePath = if (path.isAbsolute || path == workingDir) {
@@ -73,7 +73,7 @@ abstract class GitBase : VersionControlSystem() {
             }
 
     protected fun runGitCommand(workingDir: File, vararg args: String) =
-        ProcessCapture(workingDir, "git", *args).requireSuccess()
+            ProcessCapture(workingDir, "git", *args).requireSuccess()
 }
 
 object Git : GitBase() {

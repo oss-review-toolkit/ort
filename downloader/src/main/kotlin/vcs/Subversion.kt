@@ -102,8 +102,9 @@ object Subversion : VersionControlSystem() {
                                         "$vcsUrl/tags/$tagName",
                                         "--xml").stdout().trim()
                 val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
-                val logEntries: List<SubversionLogEntry> = xmlMapper.readValue(xml,
-                    xmlMapper.typeFactory.constructCollectionType(List::class.java, SubversionLogEntry::class.java))
+                val valueType = xmlMapper.typeFactory
+                        .constructCollectionType(List::class.java, SubversionLogEntry::class.java)
+                val logEntries: List<SubversionLogEntry> = xmlMapper.readValue(xml, valueType)
                 logEntries.firstOrNull()?.revision ?: ""
             } catch (e: IOException) {
                 if (Main.stacktrace) {
