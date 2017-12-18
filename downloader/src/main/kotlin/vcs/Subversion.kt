@@ -59,7 +59,7 @@ object Subversion : VersionControlSystem() {
             object : WorkingDirectory(vcsDirectory) {
                 val infoCommandResult = ProcessCapture("svn", "info", workingDir.absolutePath)
 
-                override fun isValid() = infoCommandResult.exitValue() == 0;
+                override fun isValid() = infoCommandResult.exitValue() == 0
 
                 override fun getRemoteUrl() = infoCommandResult.stdout().lineSequence()
                         .first { it.startsWith("URL:") }.removePrefix("URL:").trim()
