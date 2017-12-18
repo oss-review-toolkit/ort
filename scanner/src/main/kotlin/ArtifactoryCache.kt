@@ -102,5 +102,4 @@ class ArtifactoryCache(
                     resultsFile.name
 
     private fun String?.valueOrUnderscore() = if (this == null || this.isEmpty()) "_" else this
-
 }

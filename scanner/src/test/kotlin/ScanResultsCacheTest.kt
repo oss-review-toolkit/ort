@@ -108,5 +108,4 @@ class ScanResultsCacheTest : WordSpec() {
             }
         }
     }
-
 }

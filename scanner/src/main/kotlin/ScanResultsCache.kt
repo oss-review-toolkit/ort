@@ -91,5 +91,4 @@ interface ScanResultsCache {
 
         override fun write(pkg: Package, source: File) = cache.write(pkg, source)
     }
-
 }

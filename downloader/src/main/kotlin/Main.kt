@@ -167,7 +167,6 @@ object Main {
                 log.error { "Could not download '${pkg.identifier}': ${e.message}" }
             }
         }
-
     }
 
     /**
@@ -242,5 +241,4 @@ object Main {
             throw DownloadException("No source code package URL provided.")
         }
     }
-
 }
