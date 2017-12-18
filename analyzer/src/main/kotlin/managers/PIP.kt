@@ -274,7 +274,7 @@ class PIP : PackageManager() {
                 namespace = "",
                 name = projectName,
                 version = projectVersion,
-                declaredLicenses = sortedSetOf(),  // TODO: Get the licenses for local projects.
+                declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
                 vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
                 homepageUrl = projectHomepage,

@@ -39,7 +39,7 @@ class DirectoryTest : StringSpec() {
 
     init {
         "Creates directories for Gradle submodules" {
-            val pkg =  Package(
+            val pkg = Package(
                     packageManager = "Gradle",
                     namespace = "",
                     name = "project :model",
