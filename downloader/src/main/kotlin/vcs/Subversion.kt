@@ -68,8 +68,8 @@ object Subversion : VersionControlSystem() {
 
                 override fun getRootPath(path: File) = getLineValue("Working Copy Root Path:")
 
-                override fun getPathToRoot(path: File): String
-                        = getLineValue("Path:").substringAfter(File.separatorChar)
+                override fun getPathToRoot(path: File) =
+                        getLineValue("Path:").substringAfter(File.separatorChar)
 
                 private fun getLineValue(linePrefix: String) =
                         infoCommandResult.requireSuccess().stdout().lineSequence().first { it.startsWith(linePrefix) }
@@ -133,6 +133,6 @@ object Subversion : VersionControlSystem() {
         return Subversion.getWorkingDirectory(targetDir).getRevision()
     }
 
-    private fun runSvnCommand(workingDir: File, vararg args: String)
-            = ProcessCapture(workingDir, "svn", *args).requireSuccess()
+    private fun runSvnCommand(workingDir: File, vararg args: String) =
+            ProcessCapture(workingDir, "svn", *args).requireSuccess()
 }
