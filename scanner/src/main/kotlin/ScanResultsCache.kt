@@ -69,11 +69,11 @@ interface ScanResultsCache {
 
             when (type.toLowerCase()) {
                 "artifactory" -> {
-                    val apiToken = cacheNode["apiToken"]?.asText() ?:
-                            throw IllegalArgumentException("API token for Artifactory cache is missing.")
+                    val apiToken = cacheNode["apiToken"]?.asText()
+                            ?: throw IllegalArgumentException("API token for Artifactory cache is missing.")
 
-                    val url = cacheNode["url"]?.asText() ?:
-                            throw IllegalArgumentException("URL for Artifactory cache is missing.")
+                    val url = cacheNode["url"]?.asText()
+                            ?: throw IllegalArgumentException("URL for Artifactory cache is missing.")
 
                     cache = ArtifactoryCache(url, apiToken)
                     log.info { "Using Artifactory cache '$url'." }

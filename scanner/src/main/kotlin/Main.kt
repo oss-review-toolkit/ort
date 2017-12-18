@@ -75,8 +75,8 @@ object Main {
     private class ScannerConverter : IStringConverter<Scanner> {
         override fun convert(scannerName: String): Scanner {
             // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-            return Scanner.ALL.find { it.javaClass.simpleName.toUpperCase() == scannerName.toUpperCase() } ?:
-                    throw ParameterException("The scanner must be one of ${Scanner.ALL}.")
+            return Scanner.ALL.find { it.javaClass.simpleName.toUpperCase() == scannerName.toUpperCase() }
+                    ?: throw ParameterException("The scanner must be one of ${Scanner.ALL}.")
         }
     }
 
