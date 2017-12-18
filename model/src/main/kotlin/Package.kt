@@ -114,8 +114,8 @@ data class Package(
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
      * dependencies still need to be filled out.
      */
-    fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf())
-            = PackageReference(namespace, name, version, dependencies)
+    fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf()) =
+            PackageReference(namespace, name, version, dependencies)
 
     /**
      * A comparison function to sort packages by their identifier.
