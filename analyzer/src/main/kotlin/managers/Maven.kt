@@ -208,5 +208,4 @@ class Maven : PackageManager() {
 
         override fun getRepository(): LocalRepository = localRepositoryManager.repository
     }
-
 }

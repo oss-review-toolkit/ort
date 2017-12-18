@@ -52,5 +52,4 @@ abstract class PackageManagerFactory<out T : PackageManager>(
     val matchersForDefinitionFiles = globsForDefinitionFiles.map {
         FileSystems.getDefault().getPathMatcher("glob:**/" + it)
     }
-
 }

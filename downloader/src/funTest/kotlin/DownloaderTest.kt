@@ -68,7 +68,6 @@ class DownloaderTest : StringSpec() {
             workingDirectory.getRevision() shouldBe revision
             outputDirList.indexOf(submoduleName) should beGreaterThan(-1)
             outputDirList.indexOf("downloader") shouldBe -1
-
         }.config(tags = setOf(Expensive))
 
         "Downloads whole package from git" {
@@ -89,7 +88,6 @@ class DownloaderTest : StringSpec() {
             val workingDirectory = getWorkingDir(Git, pkg)
 
             workingDirectory.isValid() shouldBe true
-
         }.config(tags = setOf(Expensive))
 
         "Downloads revision for package version from mercurial" {
@@ -117,5 +115,4 @@ class DownloaderTest : StringSpec() {
 
     private fun getWorkingDir(vcs: VersionControlSystem, pkg: Package)
             = vcs.getWorkingDirectory(File(outputDir, "${pkg.normalizedName}/${pkg.version}"))
-
 }

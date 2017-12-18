@@ -60,6 +60,5 @@ class DirectoryTest : StringSpec() {
             outputDir.list().size shouldBe 1
             outputDir.list().first() shouldBe pkg.normalizedName
         }
-
     }
 }

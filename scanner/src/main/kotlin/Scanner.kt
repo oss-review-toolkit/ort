@@ -125,5 +125,4 @@ abstract class Scanner {
      * Convert the scanner's native file format to a [Result].
      */
     internal abstract fun getResult(resultsFile: File): Result
-
 }

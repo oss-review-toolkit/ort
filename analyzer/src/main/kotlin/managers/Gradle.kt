@@ -249,5 +249,4 @@ class Gradle : PackageManager() {
             return pomFile
         }
     }
-
 }

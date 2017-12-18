@@ -114,5 +114,4 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             }
         }.config(tags = setOf(Expensive))
     }
-
 }
