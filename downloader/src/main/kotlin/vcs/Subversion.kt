@@ -43,8 +43,7 @@ data class SubversionLogEntry(
         @JacksonXmlProperty
         val date: String,
         @JacksonXmlProperty
-        val author: String) {
-}
+        val author: String)
 
 object Subversion : VersionControlSystem() {
     override fun getVersion(): String {
