@@ -27,6 +27,10 @@ style:
   MaxLineLength:
     active: true
     maxLineLength: 120
+  NewLineAtEndOfFile:
+    active: true
+  SpacingBetweenPackageAndImports:
+    active: true
   UnusedImports:
     active: true
   WildcardImport:
