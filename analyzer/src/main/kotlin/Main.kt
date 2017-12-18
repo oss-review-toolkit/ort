@@ -52,8 +52,8 @@ object Main {
         }
 
         override fun convert(name: String): PackageManagerFactory<PackageManager> {
-            return PACKAGE_MANAGER_NAMES[name.toUpperCase()] ?:
-                    throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGER_NAMES.keys}.")
+            return PACKAGE_MANAGER_NAMES[name.toUpperCase()]
+                    ?: throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGER_NAMES.keys}.")
         }
     }
 
