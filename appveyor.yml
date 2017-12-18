@@ -23,7 +23,7 @@ build_script:
   - gradlew assemble
 
 test_script:
-  - gradlew -DexcludeTags=Expensive check
+  - gradlew -DexcludeTags=Expensive --stacktrace check
 
 on_finish:
   - gradlew --stop # Fix "fileHashes.bin" being used by another process.
