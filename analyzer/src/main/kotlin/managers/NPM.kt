@@ -487,5 +487,4 @@ class NPM : PackageManager() {
         val namespace = rawName.removeSuffix(name).removeSuffix("/")
         return Pair(namespace, name)
     }
-
 }

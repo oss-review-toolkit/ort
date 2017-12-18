@@ -102,5 +102,4 @@ class OssReviewToolkitIntegrationTest : AbstractIntegrationSpec() {
     override val definitionFilesForTest by lazy {
         mapOf(Gradle as PackageManagerFactory<PackageManager> to listOf(File(downloadDir, "analyzer/build.gradle")))
     }
-
 }

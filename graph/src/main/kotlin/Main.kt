@@ -137,7 +137,6 @@ object Main {
         val viewer = graph.display(false)
         val layout = SpringBox()
         viewer.enableAutoLayout(layout)
-
     }
 
     private fun addDependency(parent: SingleNode, dependency: PackageReference) {
@@ -150,5 +149,4 @@ object Main {
             addDependency(dependencyNode, it)
         }
     }
-
 }

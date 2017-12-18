@@ -54,5 +54,4 @@ class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), log
     override fun info(message: String?, throwable: Throwable?) = log.info(message, throwable)
 
     override fun warn(message: String?, throwable: Throwable?) = log.warn(message, throwable)
-
 }

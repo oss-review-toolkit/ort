@@ -69,5 +69,4 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
     override val definitionFilesForTest by lazy {
         mapOf(Gradle as PackageManagerFactory<PackageManager> to listOf(File(downloadDir, "buildSrc/build.gradle")))
     }
-
 }
