@@ -40,13 +40,15 @@ RUN apt update && apt install -y --no-install-recommends \
  && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
  && chmod a+x /usr/local/bin/repo \
  # Install ScanCode.
- && pip install scancode-toolkit==2.2.1 \
+ && curl -sL https://github.com/nexB/scancode-toolkit/releases/download/v2.2.1/scancode-toolkit-2.2.1.tar.bz2 | tar -C /opt -jx \
  # Clean up the apt cache to reduce the image size.
  && apt -y autoremove \
  && apt -y clean \
  && rm -rf /var/lib/apt/lists /var/cache/apt/archives \
  # Create a new non-root user.
- && groupadd -r toolkit && useradd -g toolkit -l -m -r toolkit
+ && groupadd -r toolkit && useradd -g toolkit -l -m -r toolkit \
+ && /opt/scancode-toolkit-2.2.1/scancode --version \
+ && chown -R toolkit:toolkit /opt/scancode-toolkit-2.2.1
 
 # Copy the OSS Review Toolkit binaries to the container.
 ENV APPDIR=/opt/oss-review-toolkit
@@ -54,7 +56,7 @@ ADD ./*/build/distributions/*.tar "${APPDIR}/"
 WORKDIR "${APPDIR}"
 
 # Add the tools to the PATH environment.
-ENV PATH="${APPDIR}/analyzer/bin:${APPDIR}/downloader/bin:${APPDIR}/graph/bin:${APPDIR}/scanner/bin:${PATH}"
+ENV PATH="${APPDIR}/analyzer/bin:${APPDIR}/downloader/bin:${APPDIR}/graph/bin:${APPDIR}/scanner/bin:/opt/scancode-toolkit-2.2.1/bin:${PATH}"
 
 # Change to the newly created user.
 USER toolkit
