@@ -44,6 +44,9 @@ typealias ResolutionResult = MutableMap<File, AnalyzerResult>
  */
 abstract class PackageManager {
     companion object {
+        @JvmStatic
+        val HTTP_CACHE_PATH = "analyzer/cache/http"
+
         /**
          * The prioritized list of all available package managers. This needs to be initialized lazily to ensure the
          * referred objects, which derive from this class, exist.
