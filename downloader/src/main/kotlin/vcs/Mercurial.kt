@@ -56,16 +56,6 @@ object Mercurial : VersionControlSystem() {
                 override fun getRevision() = runMercurialCommand(workingDir, "id", "-i").stdout().trimEnd()
 
                 override fun getRootPath() = runMercurialCommand(workingDir, "root").stdout().trimEnd()
-
-                override fun getPathToRoot(path: File): String {
-                    val absolutePath = if (path.isAbsolute || path == workingDir) {
-                        path
-                    } else {
-                        workingDir.resolve(path)
-                    }
-
-                    return absolutePath.relativeTo(File(getRootPath())).path
-                }
             }
 
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("mercurial", "hg")

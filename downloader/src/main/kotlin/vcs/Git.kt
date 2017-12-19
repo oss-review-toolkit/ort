@@ -60,16 +60,6 @@ abstract class GitBase : VersionControlSystem() {
 
                 override fun getRootPath() =
                         runGitCommand(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
-
-                override fun getPathToRoot(path: File): String {
-                    val absolutePath = if (path.isAbsolute || path == workingDir) {
-                        path
-                    } else {
-                        workingDir.resolve(path)
-                    }
-
-                    return runGitCommand(absolutePath, "rev-parse", "--show-prefix").stdout().trimEnd('\n', '/')
-                }
             }
 
     protected fun runGitCommand(workingDir: File, vararg args: String) =

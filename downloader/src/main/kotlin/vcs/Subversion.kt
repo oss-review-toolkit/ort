@@ -67,9 +67,6 @@ object Subversion : VersionControlSystem() {
 
                 override fun getRootPath() = getLineValue("Working Copy Root Path:")
 
-                override fun getPathToRoot(path: File) =
-                        getLineValue("Path:").substringAfter(File.separatorChar)
-
                 private fun getLineValue(linePrefix: String) =
                         infoCommandResult.requireSuccess().stdout().lineSequence().first { it.startsWith(linePrefix) }
                                 .removePrefix(linePrefix).trim()
