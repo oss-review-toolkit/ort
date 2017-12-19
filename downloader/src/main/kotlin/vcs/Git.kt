@@ -41,8 +41,8 @@ abstract class GitBase : VersionControlSystem() {
         }
     }
 
-    override fun getWorkingDirectory(vcsDirectory: File) =
-            object : WorkingDirectory(vcsDirectory) {
+    override fun getWorkingTree(vcsDirectory: File) =
+            object : WorkingTree(vcsDirectory) {
                 override fun isValid(): Boolean {
                     if (!workingDir.isDirectory) {
                         return false
@@ -99,7 +99,7 @@ object Git : GitBase() {
             runGitCommand(targetDir, "init")
             runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
 
-            val workingDir = getWorkingDirectory(targetDir)
+            val workingTree = getWorkingTree(targetDir)
 
             if (vcsPath != null && vcsPath.isNotEmpty()) {
                 log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
@@ -114,7 +114,7 @@ object Git : GitBase() {
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return workingDir.getRevision()
+                return workingTree.getRevision()
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -132,7 +132,7 @@ object Git : GitBase() {
 
             try {
                 runGitCommand(targetDir, "checkout", committish)
-                return workingDir.getRevision()
+                return workingTree.getRevision()
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -156,7 +156,7 @@ object Git : GitBase() {
                     log.info { "Using '$tag'." }
                     runGitCommand(targetDir, "fetch", "origin", tag)
                     runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                    return workingDir.getRevision()
+                    return workingTree.getRevision()
                 }
 
                 log.warn { "No matching tag found for version '$version'." }

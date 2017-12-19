@@ -109,7 +109,7 @@ class Maven : PackageManager() {
             scope.dependencies.add(parseDependency(node, packages))
         }
 
-        // Try to get VCS information from the POM's SCM tag, or otherwise from the working directory.
+        // Try to get VCS information from the POM's SCM tag, or otherwise from the VCS working tree.
         val vcs = maven.parseVcsInfo(mavenProject).takeUnless {
             it == VcsInfo.EMPTY
         } ?: VersionControlSystem.forDirectory(projectDir)?.let {

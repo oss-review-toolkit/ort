@@ -77,12 +77,12 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     init {
         "Source code can be downloaded" {
             downloadDir = Main.download(pkg, outputDir)
-            val workingDir = VersionControlSystem.forDirectory(downloadDir)
+            val workingTree = VersionControlSystem.forDirectory(downloadDir)
 
             downloadDir shouldNotBe null
-            workingDir shouldNotBe null
-            workingDir!!.isValid() shouldBe true
-            workingDir.getProvider() shouldBe pkg.vcs.provider
+            workingTree shouldNotBe null
+            workingTree!!.isValid() shouldBe true
+            workingTree.getProvider() shouldBe pkg.vcs.provider
         }.config(tags = setOf(Expensive))
 
         "All package manager definition files are found" {

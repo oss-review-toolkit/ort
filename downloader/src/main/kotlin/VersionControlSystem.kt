@@ -57,7 +57,7 @@ abstract class VersionControlSystem {
          */
         fun forDirectory(vcsDirectory: File) =
                 ALL.asSequence().map {
-                    it.getWorkingDirectory(vcsDirectory)
+                    it.getWorkingTree(vcsDirectory)
                 }.find {
                     it.isValid()
                 }
@@ -147,12 +147,12 @@ abstract class VersionControlSystem {
     override fun toString(): String = javaClass.simpleName
 
     /**
-     * A class representing a local VCS working directory. The passed [workingDir] does not necessarily need to be the
-     * root directory. The root directory can be determined by calling [getRootPath].
+     * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
+     * root directory of the tree. The root directory can be determined by calling [getRootPath].
      */
-    abstract inner class WorkingDirectory(val workingDir: File) {
+    abstract inner class WorkingTree(val workingDir: File) {
         /**
-         * Return a simple string representation for the VCS this working directory belongs to.
+         * Return a simple string representation for the VCS this working tree belongs to.
          */
         fun getProvider() = this@VersionControlSystem.toString()
 
@@ -172,12 +172,12 @@ abstract class VersionControlSystem {
         abstract fun getRemoteUrl(): String
 
         /**
-         * Return the VCS-specific working directory revision.
+         * Return the VCS-specific working tree revision.
          */
         abstract fun getRevision(): String
 
         /**
-         * Return the root of this working directory.
+         * Return the root directory of this working tree.
          */
         abstract fun getRootPath(): String
 
@@ -193,9 +193,9 @@ abstract class VersionControlSystem {
     abstract fun getVersion(): String
 
     /**
-     * Return a working directory instance for this VCS.
+     * Return a working tree instance for this VCS.
      */
-    abstract fun getWorkingDirectory(vcsDirectory: File): WorkingDirectory
+    abstract fun getWorkingTree(vcsDirectory: File): WorkingTree
 
     /**
      * Return true if the provider name matches this VCS. For example for SVN it should return true on "svn",

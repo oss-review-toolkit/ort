@@ -54,8 +54,8 @@ object Subversion : VersionControlSystem() {
         }
     }
 
-    override fun getWorkingDirectory(vcsDirectory: File) =
-            object : WorkingDirectory(vcsDirectory) {
+    override fun getWorkingTree(vcsDirectory: File) =
+            object : WorkingTree(vcsDirectory) {
                 val infoCommandResult = ProcessCapture("svn", "info", workingDir.absolutePath)
 
                 override fun isValid() = infoCommandResult.exitValue() == 0
@@ -130,7 +130,7 @@ object Subversion : VersionControlSystem() {
             runSvnCommand(targetDir, "up", "--set-depth", "infinity", vcsPath?.apply { } ?: "")
         }
 
-        return Subversion.getWorkingDirectory(targetDir).getRevision()
+        return Subversion.getWorkingTree(targetDir).getRevision()
     }
 
     private fun runSvnCommand(workingDir: File, vararg args: String) =

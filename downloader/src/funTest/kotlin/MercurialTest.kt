@@ -65,7 +65,7 @@ class MercurialTest : StringSpec() {
 
         "Mercurial can download entire repo" {
             Mercurial.download(REPO_URL, null, null, "", outputDir)
-            Mercurial.getWorkingDirectory(outputDir).getProvider() shouldBe "Mercurial"
+            Mercurial.getWorkingTree(outputDir).getProvider() shouldBe "Mercurial"
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download single revision" {
@@ -76,7 +76,7 @@ class MercurialTest : StringSpec() {
         "Mercurial can download sub path" {
             Mercurial.download(REPO_URL, null, REPO_SUBDIR, "", outputDir)
 
-            val outputDirList = Mercurial.getWorkingDirectory(outputDir).workingDir.list()
+            val outputDirList = Mercurial.getWorkingTree(outputDir).workingDir.list()
             outputDirList.indexOf(REPO_SUBDIR) should beGreaterThan(-1)
             outputDirList.indexOf(REPO_SUBDIR_OMITTED) shouldBe -1
         }.config(tags = setOf(Expensive), enabled = Mercurial.isAtLeastVersion("4.3"))
