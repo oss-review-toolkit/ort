@@ -433,7 +433,7 @@ class NPM : PackageManager() {
 
         val projectDir = packageJson.parentFile
 
-        // Try to get VCS information from the package.json's repository field, or otherwise from the working directory.
+        // Try to get VCS information from the package.json's repository field, or otherwise from the VCS working tree.
         val vcs = parseVcsInfo(json).takeUnless {
             it == VcsInfo.EMPTY
         } ?: VersionControlSystem.forDirectory(projectDir)?.let {

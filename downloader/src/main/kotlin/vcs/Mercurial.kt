@@ -43,8 +43,8 @@ object Mercurial : VersionControlSystem() {
         }
     }
 
-    override fun getWorkingDirectory(vcsDirectory: File) =
-            object : WorkingDirectory(vcsDirectory) {
+    override fun getWorkingTree(vcsDirectory: File) =
+            object : WorkingTree(vcsDirectory) {
                 override fun isValid(): Boolean {
                     val repositoryRoot = runMercurialCommand(workingDir, "root").stdout().trim()
                     return workingDir.path.startsWith(repositoryRoot)
@@ -158,7 +158,7 @@ object Mercurial : VersionControlSystem() {
             }
         }
 
-        return Mercurial.getWorkingDirectory(targetDir).getRevision()
+        return Mercurial.getWorkingTree(targetDir).getRevision()
     }
 
     fun isAtLeastVersion(version: String): Boolean {

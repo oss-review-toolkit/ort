@@ -64,7 +64,7 @@ class SubversionTest : StringSpec() {
         "Subversion can download sub path" {
             Subversion.download(REPO_URL, null, REPO_SUBDIR, "", outputDir)
 
-            val outputDirList = Subversion.getWorkingDirectory(outputDir).workingDir.list()
+            val outputDirList = Subversion.getWorkingTree(outputDir).workingDir.list()
             outputDirList.indexOf(REPO_SUBDIR) should beGreaterThan(-1)
             outputDirList.indexOf(REPO_SUBDIR_OMITTED) shouldBe -1
         }.config(tags = setOf(Expensive))
@@ -76,7 +76,7 @@ class SubversionTest : StringSpec() {
 
         "Subversion can download entire repo" {
             Subversion.download(REPO_URL, null, null, "", outputDir)
-            val outputDirList = Subversion.getWorkingDirectory(outputDir).workingDir.list()
+            val outputDirList = Subversion.getWorkingTree(outputDir).workingDir.list()
             outputDirList.indexOf("trunk") should beGreaterThan(-1)
             outputDirList.indexOf("tags") should beGreaterThan(-1)
             outputDirList.indexOf("branches") should beGreaterThan(-1)

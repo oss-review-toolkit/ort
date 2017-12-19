@@ -30,8 +30,8 @@ import java.io.File
 import java.io.IOException
 
 object GitRepo : GitBase() {
-    override fun getWorkingDirectory(vcsDirectory: File) =
-            super.getWorkingDirectory(File(vcsDirectory, ".repo/manifests"))
+    override fun getWorkingTree(vcsDirectory: File) =
+            super.getWorkingTree(File(vcsDirectory, ".repo/manifests"))
 
     override fun isApplicableProvider(vcsProvider: String) =
             vcsProvider.toLowerCase() in listOf("gitrepo", "git-repo", "repo")
@@ -57,7 +57,7 @@ object GitRepo : GitBase() {
             log.debug { "Start git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
 
-            return getWorkingDirectory(targetDir).getRevision()
+            return getWorkingTree(targetDir).getRevision()
         } catch (e: IOException) {
             if (Main.stacktrace) {
                 e.printStackTrace()

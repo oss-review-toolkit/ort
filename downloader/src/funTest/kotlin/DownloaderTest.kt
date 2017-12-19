@@ -61,11 +61,11 @@ class DownloaderTest : StringSpec() {
             )
             Main.download(pkg, outputDir)
 
-            val workingDirectory = getWorkingDir(Git, pkg)
-            val outputDirList = workingDirectory.workingDir.list()
+            val workingTree = getWorkingTree(Git, pkg)
+            val outputDirList = workingTree.workingDir.list()
 
-            workingDirectory.isValid() shouldBe true
-            workingDirectory.getRevision() shouldBe revision
+            workingTree.isValid() shouldBe true
+            workingTree.getRevision() shouldBe revision
             outputDirList.indexOf(submoduleName) should beGreaterThan(-1)
             outputDirList.indexOf("downloader") shouldBe -1
         }.config(tags = setOf(Expensive))
@@ -85,9 +85,9 @@ class DownloaderTest : StringSpec() {
             )
             Main.download(pkg, outputDir)
 
-            val workingDirectory = getWorkingDir(Git, pkg)
+            val workingTree = getWorkingTree(Git, pkg)
 
-            workingDirectory.isValid() shouldBe true
+            workingTree.isValid() shouldBe true
         }.config(tags = setOf(Expensive))
 
         "Downloads revision for package version from mercurial" {
@@ -107,12 +107,12 @@ class DownloaderTest : StringSpec() {
             )
             Main.download(pkg, outputDir)
 
-            val workingDir = getWorkingDir(Mercurial, pkg)
+            val workingTree = getWorkingTree(Mercurial, pkg)
 
-            workingDir.getRevision() shouldBe revisionForVersion
+            workingTree.getRevision() shouldBe revisionForVersion
         }.config(tags = setOf(Expensive))
     }
 
-    private fun getWorkingDir(vcs: VersionControlSystem, pkg: Package) =
-            vcs.getWorkingDirectory(File(outputDir, "${pkg.normalizedName}/${pkg.version}"))
+    private fun getWorkingTree(vcs: VersionControlSystem, pkg: Package) =
+            vcs.getWorkingTree(File(outputDir, "${pkg.normalizedName}/${pkg.version}"))
 }
