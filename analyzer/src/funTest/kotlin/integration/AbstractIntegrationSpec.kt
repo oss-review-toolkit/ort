@@ -106,7 +106,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->
-                    result.project.vcs.provider shouldBe pkg.vcs.provider
+                    result.project.vcs.provider.toLowerCase() shouldBe pkg.vcs.provider.toLowerCase()
                     result.project.vcs.url shouldBe pkg.vcs.url
                     result.project.scopes shouldNot beEmpty()
                     result.packages shouldNot beEmpty()
