@@ -147,7 +147,8 @@ abstract class VersionControlSystem {
     override fun toString(): String = javaClass.simpleName
 
     /**
-     * A class representing a local VCS working directory.
+     * A class representing a local VCS working directory. The passed [workingDir] does not necessarily need to be the
+     * root directory. The root directory can be determined by calling [getRootPath].
      */
     abstract inner class WorkingDirectory(val workingDir: File) {
         /**
@@ -176,9 +177,9 @@ abstract class VersionControlSystem {
         abstract fun getRevision(): String
 
         /**
-         * Return the VCS root for the given [path].
+         * Return the root of this working directory.
          */
-        abstract fun getRootPath(path: File): String
+        abstract fun getRootPath(): String
 
         /**
          * Return the relative path to [path] with respect to the VCS root.
