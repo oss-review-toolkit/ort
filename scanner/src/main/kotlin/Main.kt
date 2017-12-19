@@ -203,9 +203,7 @@ object Main {
         }
 
         configFile?.let {
-            Configuration.parse(it).scanner?.cache?.let {
-                ScanResultsCache.configure(it)
-            }
+            Configuration.parse(it)
         }
 
         println("Using scanner '$scanner'.")

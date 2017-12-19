@@ -21,15 +21,15 @@ package com.here.ort.scanner
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.CacheConfiguration
+import com.here.ort.model.Configuration
 import com.here.ort.model.Package
 import com.here.ort.utils.log
 
 import java.io.File
 
 data class CacheStatistics(
-        var numReads: Int = 0,
-        var numHits: Int = 0
+    var numReads: Int = 0,
+    var numHits: Int = 0
 )
 
 interface ScanResultsCache {
@@ -52,25 +52,37 @@ interface ScanResultsCache {
 
     companion object : ScanResultsCache {
 
-        var cache = object : ScanResultsCache {
-            override fun read(pkg: Package, target: File) = false
-            override fun write(pkg: Package, source: File) = false
+        val cache by lazy {
+            createCacheFromConfiguration()
         }
-            private set
 
-        var stats = CacheStatistics()
-
-        fun configure(config: CacheConfiguration) {
-            when {
-                config.artifactory != null -> {
-                    config.artifactory?.let {
-                        cache = ArtifactoryCache(it.url, it.apiToken)
-                        log.info { "Using Artifactory cache '${it.url}'." }
-                    }
+        internal fun createCacheFromConfiguration(): ScanResultsCache {
+            return Configuration.value.scanner?.cache.let { cache ->
+                val noopCache = object : ScanResultsCache {
+                    override fun read(pkg: Package, target: File) = false
+                    override fun write(pkg: Package, source: File) = false
                 }
-                else -> throw IllegalArgumentException("No cache configuration found.")
+
+                if (cache != null) {
+                    when {
+                        cache.artifactory != null -> {
+                            cache.artifactory!!.let {
+                                log.info { "Using Artifactory cache '${it.url}'." }
+                                ArtifactoryCache(it.url, it.apiToken)
+                            }
+                        }
+                        else -> {
+                            log.debug { "No scan results cache configuration found." }
+                            noopCache
+                        }
+                    }
+                } else {
+                    noopCache
+                }
             }
         }
+
+        var stats = CacheStatistics()
 
         override fun read(pkg: Package, target: File) = cache.read(pkg, target).also {
             ++stats.numReads

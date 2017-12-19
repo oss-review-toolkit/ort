@@ -19,18 +19,17 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.model.CacheConfiguration
 import com.here.ort.model.Configuration
-import com.here.ort.model.ScannerConfiguration
-import com.here.ort.utils.yamlMapper
 
+import io.kotlintest.matchers.include
+import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
-import io.kotlintest.matchers.shouldThrow
-import io.kotlintest.specs.WordSpec
+import io.kotlintest.specs.StringSpec
+import kotlin.reflect.jvm.jvmName
 
 @Suppress("UnsafeCallOnNullableType", "UnsafeCast")
-class ScanResultsCacheTest : WordSpec() {
+class ScanResultsCacheTest : StringSpec() {
 
     private fun ArtifactoryCache.getStringField(name: String): String {
         javaClass.getDeclaredField(name).let {
@@ -44,28 +43,32 @@ class ScanResultsCacheTest : WordSpec() {
     private fun ArtifactoryCache.getUrl() = getStringField("url")
 
     init {
-        "ScanResultsCache.configure" should {
-            "fail if no cache is configured" {
-                val config = CacheConfiguration(null)
+        "Use noop cache if no cache is configured" {
+            Configuration.parse("""
+                        scanner:
+                          cache:
+                        """.trimIndent())
+            val cache = ScanResultsCache.createCacheFromConfiguration()
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    ScanResultsCache.configure(config)
-                }
-                exception.message shouldBe "No cache configuration found."
-            }
+            cache::class shouldNotBe ArtifactoryCache::class
+            cache::class.jvmName should include("noopCache")
+        }
 
-            "configure the Artifactory cache correctly" {
-                val apiToken = "myApiToken"
-                val url = "https://my.artifactory.url"
-                val config = CacheConfiguration(com.here.ort.model.ArtifactoryCache(url, apiToken))
+        "Configure the Artifactory cache correctly" {
+            val apiToken = "myApiToken"
+            val url = "https://my.artifactory.url"
+            Configuration.parse("""
+                        scanner:
+                          cache:
+                            artifactory:
+                              apiToken: $apiToken
+                              url: $url
+                        """.trimIndent())
+            val cache = ScanResultsCache.createCacheFromConfiguration()
 
-                ScanResultsCache.configure(config)
-
-                ScanResultsCache.cache shouldNotBe null
-                ScanResultsCache.cache::class shouldBe ArtifactoryCache::class
-                (ScanResultsCache.cache as ArtifactoryCache).getApiToken() shouldBe apiToken
-                (ScanResultsCache.cache as ArtifactoryCache).getUrl() shouldBe url
-            }
+            cache::class shouldBe ArtifactoryCache::class
+            (cache as ArtifactoryCache).getApiToken() shouldBe apiToken
+            cache.getUrl() shouldBe url
         }
     }
 }
