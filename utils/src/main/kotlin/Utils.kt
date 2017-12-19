@@ -65,9 +65,9 @@ object OkHttpClientHelper {
     /**
      * Execute a request using the client for the specified cache directory.
      */
-    fun execute(cacheSubDirectory: String, request: Request): Response {
-        val client = clients.getOrPut(cacheSubDirectory) {
-            val cacheDirectory = File(getUserConfigDirectory(), "cache/$cacheSubDirectory")
+    fun execute(cacheDirectory: String, request: Request): Response {
+        val client = clients.getOrPut(cacheDirectory) {
+            val cacheDirectory = File(getUserConfigDirectory(), cacheDirectory)
             val cache = Cache(cacheDirectory, 10 * 1024 * 1024)
             OkHttpClient.Builder().cache(cache).build()
         }

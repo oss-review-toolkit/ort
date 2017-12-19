@@ -200,7 +200,7 @@ class PIP : PackageManager() {
                         .url("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json")
                         .build()
 
-                val pkgJson = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
+                val pkgJson = OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     response.body()?.string()
                 }
 
