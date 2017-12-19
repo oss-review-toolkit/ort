@@ -56,20 +56,17 @@ object Subversion : VersionControlSystem() {
 
     override fun getWorkingTree(vcsDirectory: File) =
             object : WorkingTree(vcsDirectory) {
-                val infoCommandResult = ProcessCapture("svn", "info", workingDir.absolutePath)
+                private val svnInfo = ProcessCapture("svn", "info", workingDir.absolutePath)
+                private val svnInfoMap = svnInfo.stdout().lines()
+                        .associateBy({ it.substringBefore(": ") }, { it.substringAfter(": ") })
 
-                override fun isValid() = infoCommandResult.exitValue() == 0
+                override fun isValid() = svnInfo.exitValue() == 0
 
-                override fun getRemoteUrl() = infoCommandResult.stdout().lineSequence()
-                        .first { it.startsWith("URL:") }.removePrefix("URL:").trim()
+                override fun getRemoteUrl() = svnInfoMap.getOrDefault("URL", "")
 
-                override fun getRevision() = getLineValue("Revision: ")
+                override fun getRevision() = svnInfoMap.getOrDefault("Revision", "")
 
-                override fun getRootPath() = getLineValue("Working Copy Root Path:")
-
-                private fun getLineValue(linePrefix: String) =
-                        infoCommandResult.requireSuccess().stdout().lineSequence().first { it.startsWith(linePrefix) }
-                                .removePrefix(linePrefix).trim()
+                override fun getRootPath() = svnInfoMap.getOrDefault("Working Copy Root Path", "")
             }
 
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("subversion", "svn")
