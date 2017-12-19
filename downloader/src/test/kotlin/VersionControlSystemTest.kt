@@ -41,9 +41,9 @@ class VersionControlSystemTest : WordSpec({
         }
 
         "work if given relative paths" {
-            absVcsDir.getPathToRoot(File(".")) shouldBe "downloader/src/test"
-            absVcsDir.getPathToRoot(File("..")) shouldBe "downloader/src"
-            absVcsDir.getPathToRoot(File("kotlin")) shouldBe "downloader/src/test/kotlin"
+            absVcsDir.getPathToRoot(File(".")) shouldBe "downloader"
+            absVcsDir.getPathToRoot(File("..")) shouldBe ""
+            absVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
         }
     }
 
@@ -58,8 +58,8 @@ class VersionControlSystemTest : WordSpec({
 
         "work if given relative paths" {
             relVcsDir.getPathToRoot(relProjDir) shouldBe "downloader/src/test"
-            relVcsDir.getPathToRoot(File("..")) shouldBe "downloader/src"
-            relVcsDir.getPathToRoot(File("kotlin")) shouldBe "downloader/src/test/kotlin"
+            relVcsDir.getPathToRoot(File("..")) shouldBe ""
+            relVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
         }
     }
 
