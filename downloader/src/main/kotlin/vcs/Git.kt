@@ -58,7 +58,7 @@ abstract class GitBase : VersionControlSystem() {
                 override fun getRevision() =
                         runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
 
-                override fun getRootPath(path: File) =
+                override fun getRootPath() =
                         runGitCommand(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
 
                 override fun getPathToRoot(path: File): String {

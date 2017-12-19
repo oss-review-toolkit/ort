@@ -65,7 +65,7 @@ object Subversion : VersionControlSystem() {
 
                 override fun getRevision() = getLineValue("Revision: ")
 
-                override fun getRootPath(path: File) = getLineValue("Working Copy Root Path:")
+                override fun getRootPath() = getLineValue("Working Copy Root Path:")
 
                 override fun getPathToRoot(path: File) =
                         getLineValue("Path:").substringAfter(File.separatorChar)
