@@ -110,6 +110,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     result.project.vcs.url shouldBe pkg.vcs.url
                     result.project.scopes shouldNot beEmpty()
                     result.packages shouldNot beEmpty()
+                    result.hasErrors() shouldBe false
                 }
             }
         }.config(tags = setOf(Expensive))
