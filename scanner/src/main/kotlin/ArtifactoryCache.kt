@@ -36,6 +36,10 @@ class ArtifactoryCache(
         private val url: String,
         private val apiToken: String
 ) : ScanResultsCache {
+    companion object {
+        @JvmStatic
+        val HTTP_CACHE_PATH = "scanner/cache/http"
+    }
 
     override fun read(pkg: Package, target: File): Boolean {
         val cachePath = cachePath(pkg, target)
@@ -49,7 +53,7 @@ class ArtifactoryCache(
                 .url("$url/$cachePath")
                 .build()
 
-        return OkHttpClientHelper.execute("scanner", request).use { response ->
+        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
             (response.code() == HttpURLConnection.HTTP_OK).also {
                 val message = if (it) {
                     response.body()?.let { target.writeBytes(it.bytes()) }
@@ -79,7 +83,7 @@ class ArtifactoryCache(
                 .url("$url/$cachePath")
                 .build()
 
-        return OkHttpClientHelper.execute("scanner", request).use { response ->
+        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
             (response.code() == HttpURLConnection.HTTP_CREATED).also {
                 log.info {
                     if (it) {

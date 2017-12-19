@@ -211,7 +211,7 @@ class NPM : PackageManager() {
                     .build()
 
             val vcs = try {
-                val jsonResponse = OkHttpClientHelper.execute("analyzer", pkgRequest).use { response ->
+                val jsonResponse = OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     if (response.code() != HttpURLConnection.HTTP_OK) {
                         throw IOException("Could not retrieve package info about $encodedName: " +
                                 "${response.code()} - ${response.message()}")
