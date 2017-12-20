@@ -21,6 +21,9 @@ package com.here.ort.downloader.vcs
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonRootName
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 import com.here.ort.downloader.Main
@@ -32,6 +35,38 @@ import com.here.ort.utils.xmlMapper
 
 import java.io.File
 import java.io.IOException
+
+data class SubversionInfoRepository(
+        val root: String,
+        val uuid: String)
+
+data class SubversionInfoWorkingCopy(
+        @JsonProperty("wcroot-abspath")
+        val absolutePath: String,
+        val schedule: String,
+        val depth: String)
+
+data class SubversionInfoCommit(
+        @JacksonXmlProperty(isAttribute = true)
+        val revision: String,
+        val author: String,
+        val date: String)
+
+@JsonRootName("entry")
+data class SubversionInfoEntry(
+        @JacksonXmlProperty(isAttribute = true)
+        val kind: String,
+        @JacksonXmlProperty(isAttribute = true)
+        val path: String,
+        @JacksonXmlProperty(isAttribute = true)
+        val revision: String,
+        val url: String,
+        @JsonProperty("relative-url")
+        val relativeUrl: String,
+        val repository: SubversionInfoRepository,
+        @JsonProperty("wc-info")
+        val workingCopy: SubversionInfoWorkingCopy,
+        val commit: SubversionInfoCommit)
 
 data class SubversionLogEntry(
         @JacksonXmlProperty(isAttribute = true)
@@ -51,17 +86,18 @@ object Subversion : VersionControlSystem() {
 
     override fun getWorkingTree(vcsDirectory: File) =
             object : WorkingTree(vcsDirectory) {
-                private val svnInfo = ProcessCapture("svn", "info", workingDir.absolutePath)
-                private val svnInfoMap = svnInfo.stdout().lines()
-                        .associateBy({ it.substringBefore(": ") }, { it.substringAfter(": ") })
+                private val svnInfo = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
+                private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
+                        .with(DeserializationFeature.UNWRAP_ROOT_VALUE)
+                private val svnInfoEntry: SubversionInfoEntry = svnInfoReader.readValue(svnInfo.stdout())
 
                 override fun isValid() = svnInfo.exitValue() == 0
 
-                override fun getRemoteUrl() = svnInfoMap.getOrDefault("URL", "")
+                override fun getRemoteUrl() = svnInfoEntry.repository.root
 
-                override fun getRevision() = svnInfoMap.getOrDefault("Revision", "")
+                override fun getRevision() = svnInfoEntry.commit.revision
 
-                override fun getRootPath() = svnInfoMap.getOrDefault("Working Copy Root Path", "")
+                override fun getRootPath() = svnInfoEntry.workingCopy.absolutePath
             }
 
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("subversion", "svn")
