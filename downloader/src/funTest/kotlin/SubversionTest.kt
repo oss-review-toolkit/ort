@@ -25,7 +25,6 @@ import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -50,12 +49,6 @@ class SubversionTest : StringSpec() {
     }
 
     init {
-        "Detected Subversion version is not empty" {
-            val version = Subversion.getVersion()
-            println("Subversion version $version detected.")
-            version shouldNotBe ""
-        }
-
         "Subversion can download single revision" {
             val downloadedRev = Subversion.download(REPO_URL, REPO_REV, null, "", outputDir)
             downloadedRev shouldBe REPO_REV

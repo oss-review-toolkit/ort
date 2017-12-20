@@ -23,6 +23,7 @@ import com.here.ort.downloader.vcs.Subversion
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -60,7 +61,13 @@ class SubversionTest : StringSpec() {
     }
 
     init {
-        "information for the root directory is determined correctly" {
+        "Detected Subversion version is not empty" {
+            val version = Subversion.getVersion()
+            println("Subversion version $version detected.")
+            version shouldNotBe ""
+        }
+
+        "Detected working tree information is correct" {
             val workingTree = Subversion.getWorkingTree(zipContentDir)
 
             workingTree.getProvider() shouldBe "Subversion"
