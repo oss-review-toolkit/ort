@@ -36,12 +36,9 @@ import java.io.IOException
 data class SubversionLogEntry(
         @JacksonXmlProperty(isAttribute = true)
         val revision: String,
-        @JacksonXmlProperty
-        val msg: String,
-        @JacksonXmlProperty
+        val author: String,
         val date: String,
-        @JacksonXmlProperty
-        val author: String)
+        val msg: String)
 
 object Subversion : VersionControlSystem() {
     override fun getVersion(): String {
