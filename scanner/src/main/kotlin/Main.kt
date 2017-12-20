@@ -58,6 +58,8 @@ class SummaryEntry(
  * The main entry point of the application.
  */
 object Main {
+    const val TOOL_NAME = "scanner"
+
     private class OutputFormatConverter : IStringConverter<OutputFormat> {
         override fun convert(name: String): OutputFormat {
             try {
@@ -152,7 +154,7 @@ object Main {
     fun main(args: Array<String>) {
         val jc = JCommander(this)
         jc.parse(*args)
-        jc.programName = "scanner"
+        jc.programName = TOOL_NAME
 
         if (info) {
             log.level = ch.qos.logback.classic.Level.INFO

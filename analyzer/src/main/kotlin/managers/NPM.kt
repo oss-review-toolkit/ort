@@ -126,7 +126,7 @@ class NPM : PackageManager() {
             // Temporarily move away any existing "node_modules" directory within the same filesystem to ensure
             // the move can be performed atomically.
             if (modulesDir.isDirectory) {
-                val tempDir = createTempDir("analyzer", ".tmp", workingDir)
+                val tempDir = createTempDir(Main.TOOL_NAME, ".tmp", workingDir)
                 tempModulesDir = File(tempDir, "node_modules")
                 log.warn { "'$modulesDir' already exists, temporarily moving it to '$tempModulesDir'." }
                 Files.move(modulesDir.toPath(), tempModulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
