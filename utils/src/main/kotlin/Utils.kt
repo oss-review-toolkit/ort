@@ -21,6 +21,7 @@ package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -41,6 +42,7 @@ import okhttp3.Response
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
 
 val jsonMapper = ObjectMapper().registerKotlinModule()
+val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
 val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
 /**
