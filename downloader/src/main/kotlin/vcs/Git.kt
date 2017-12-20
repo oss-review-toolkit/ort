@@ -108,7 +108,7 @@ object Git : GitBase() {
                 File(gitInfoDir, "sparse-checkout").writeText(vcsPath)
             }
 
-            val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "HEAD"
+            val committish = getCommittish(vcsRevision, version, targetDir)
 
             // Do safe network bandwidth, first try to only fetch exactly the committish we want.
             try {
@@ -141,27 +141,6 @@ object Git : GitBase() {
                 log.warn { "Could not checkout '$committish': ${e.message}" }
             }
 
-            // If checking out the provided committish did not work and we have a version, try finding a tag
-            // belonging to the version to checkout.
-            if (version.isNotBlank()) {
-                log.info { "Trying to guess tag for version '$version'." }
-
-                val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
-                        .stdout()
-                        .lineSequence()
-                        .map { it.split("\t").last() }
-                        .find { it.endsWith(version) || it.endsWith(version.replace('.', '_')) }
-
-                if (tag != null) {
-                    log.info { "Using '$tag'." }
-                    runGitCommand(targetDir, "fetch", "origin", tag)
-                    runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                    return workingDir.getRevision()
-                }
-
-                log.warn { "No matching tag found for version '$version'." }
-            }
-
             throw IOException("Unable to determine a committish to checkout.")
         } catch (e: IOException) {
             if (Main.stacktrace) {
@@ -171,5 +150,29 @@ object Git : GitBase() {
             log.error { "Could not clone $vcsUrl: ${e.message}" }
             throw DownloadException("Could not clone $vcsUrl.", e)
         }
+    }
+
+    private fun getCommittish(vcsRevision: String?, packageVersion: String, targetDir: File): String {
+        if (vcsRevision != null && vcsRevision.isNotEmpty()) {
+            return vcsRevision
+        }
+        // If we don't have a revision, see if the package version matches a tag
+        if (packageVersion.isBlank()) {
+            log.warn { "No source revision and no package version. Using HEAD." }
+            return "HEAD"
+        }
+
+        log.info { "Trying to guess tag for version '$packageVersion'." }
+        val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
+                .stdout()
+                .lineSequence()
+                .map { it.split("\t").last() }
+                .find { it.endsWith(packageVersion) || it.endsWith(packageVersion.replace('.', '_')) }
+        if (tag == null) {
+            log.warn { "No matching tag found for package version '$packageVersion'. Using HEAD." }
+            return "HEAD"
+        }
+        log.info{ "Found matching tag for package version '$packageVersion'. Using $tag." }
+        return tag
     }
 }
