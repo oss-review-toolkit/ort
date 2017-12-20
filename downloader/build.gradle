@@ -9,5 +9,4 @@ dependencies {
     compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
 }
