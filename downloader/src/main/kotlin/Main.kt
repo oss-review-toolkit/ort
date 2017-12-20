@@ -42,6 +42,7 @@ import kotlin.system.exitProcess
  * The main entry point of the application.
  */
 object Main {
+    val TOOL_NAME = "downloader"
 
     enum class DataEntity {
         PACKAGES,
@@ -120,7 +121,7 @@ object Main {
     fun main(args: Array<String>) {
         val jc = JCommander(this)
         jc.parse(*args)
-        jc.programName = "downloader"
+        jc.programName = TOOL_NAME
 
         if (info) {
             log.level = ch.qos.logback.classic.Level.INFO
