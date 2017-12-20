@@ -21,16 +21,14 @@ package com.here.ort.downloader.vcs
 
 import ch.frankel.slf4k.*
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
+import com.here.ort.utils.xmlMapper
 
 import java.io.File
 import java.io.IOException
@@ -95,7 +93,6 @@ object Subversion : VersionControlSystem() {
                                         "log",
                                         "$vcsUrl/tags/$tagName",
                                         "--xml").stdout().trim()
-                val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
                 val valueType = xmlMapper.typeFactory
                         .constructCollectionType(List::class.java, SubversionLogEntry::class.java)
                 val logEntries: List<SubversionLogEntry> = xmlMapper.readValue(xml, valueType)
