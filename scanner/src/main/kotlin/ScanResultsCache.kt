@@ -78,6 +78,16 @@ interface ScanResultsCache {
                     cache = ArtifactoryCache(url, apiToken)
                     log.info { "Using Artifactory cache '$url'." }
                 }
+                "clearlydefined" -> {
+                    val apiToken = cacheNode["apiToken"]?.asText() ?:
+                            throw IllegalArgumentException("API token for ClearlyDefined service is missing.")
+
+                    val url = cacheNode["url"]?.asText() ?:
+                            throw IllegalArgumentException("URL for ClearlyDefined service is missing.")
+
+                    cache = ClearlyDefinedCache(url, apiToken)
+                    log.info { "Using ClearlyDefined service '$url'." }
+                }
                 else -> throw IllegalArgumentException("Cache type '$type' unknown.")
             }
         }
