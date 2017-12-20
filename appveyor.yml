@@ -10,7 +10,9 @@ cache:
   - $(HOME)\.gradle\wrapper\dists
   - $(HOME)\.ivy2
   - $(HOME)\.m2\repository
-  - $(HOME)\.ort\analyzer\remote_artifacts
+  - $(HOME)\.ort\analyzer\cache\remote_artifacts
+  - $(HOME)\.ort\analyzer\cache\http
+  - $(HOME)\.ort\scanner\cache\http
 
 install:
   - git submodule update --init --recursive
