@@ -106,9 +106,9 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->
-                    VersionControlSystem.forProvider(result.project.vcs.provider) shouldBe
+                    VersionControlSystem.forProvider(result.project.vcsProcessed.provider) shouldBe
                             VersionControlSystem.forProvider(pkg.vcs.provider)
-                    result.project.vcs.url shouldBe pkg.vcs.url
+                    result.project.vcsProcessed.url shouldBe pkg.vcs.url
                     result.project.scopes shouldNot beEmpty()
                     result.packages shouldNot beEmpty()
                     result.hasErrors() shouldBe false
