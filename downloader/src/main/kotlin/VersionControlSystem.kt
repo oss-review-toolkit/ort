@@ -27,7 +27,7 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.nio.file.Paths
 
-abstract class VersionControlSystem {
+abstract class VersionControlSystem<out WT : WorkingTree> {
     companion object {
         /**
          * The prioritized list of all available version control systems. This needs to be initialized lazily to ensure
@@ -146,58 +146,7 @@ abstract class VersionControlSystem {
      */
     override fun toString(): String = javaClass.simpleName
 
-    /**
-     * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
-     * root directory of the tree. The root directory can be determined by calling [getRootPath].
-     */
-    abstract inner class WorkingTree(val workingDir: File) {
-        /**
-         * Return a simple string representation for the VCS this working tree belongs to.
-         */
-        fun getProvider() = this@VersionControlSystem.toString()
-
-        /**
-         * Conveniently return all VCS information for a given [path].
-         */
-        fun getInfo(path: File) = VcsInfo(getProvider(), getRemoteUrl(), getRevision(), getPathToRoot(path))
-
-        /**
-         * Return true if the [workingDir] is managed by this VCS, false otherwise.
-         */
-        abstract fun isValid(): Boolean
-
-        /**
-         * Return the clone URL of the associated remote repository.
-         */
-        abstract fun getRemoteUrl(): String
-
-        /**
-         * Return the VCS-specific working tree revision.
-         */
-        abstract fun getRevision(): String
-
-        /**
-         * Return the root directory of this working tree.
-         */
-        abstract fun getRootPath(): String
-
-        /**
-         * Return the list of tags available in the remote repository.
-         */
-        abstract fun listRemoteTags(): List<String>
-
-        /**
-         * Return the relative path to [path] with respect to the VCS root.
-         */
-        fun getPathToRoot(path: File): String {
-            val relativePath = path.absoluteFile.relativeTo(File(getRootPath())).toString()
-
-            // Use Unix paths even on Windows for consistent output.
-            return relativePath.replace(File.separatorChar, '/')
-        }
-    }
-
-    /**
+    /*
      * Return the VCS command's version string, or an empty string if the version cannot be determined.
      */
     abstract fun getVersion(): String
@@ -205,7 +154,7 @@ abstract class VersionControlSystem {
     /**
      * Return a working tree instance for this VCS.
      */
-    abstract fun getWorkingTree(vcsDirectory: File): WorkingTree
+    abstract fun getWorkingTree(vcsDirectory: File): WT
 
     /**
      * Return true if the provider name matches this VCS. For example for SVN it should return true on "svn",
@@ -228,4 +177,66 @@ abstract class VersionControlSystem {
      * @throws DownloadException In case the download failed.
      */
     abstract fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree
+}
+
+/**
+ * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
+ * root directory of the tree. The root directory can be determined by calling [getRootPath].
+ */
+abstract class WorkingTree(val workingDir: File, val provider: String) {
+    /**
+     * Conveniently return all VCS information for a given [path].
+     */
+    abstract fun getInfo(path: File): VcsInfo
+
+    /**
+     * Return true if the [workingDir] is managed by this VCS, false otherwise.
+     */
+    abstract fun isValid(): Boolean
+
+    /**
+     * Return the clone URL of the associated remote repository.
+     */
+    abstract fun getRemoteUrl(): String
+
+    /**
+     * Return the root directory of this working tree.
+     */
+    abstract fun getRootPath(): String
+
+    /**
+     * Return the relative path to [path] with respect to the VCS root.
+     */
+    fun getPathToRoot(path: File): String {
+        val relativePath = path.absoluteFile.relativeTo(File(getRootPath())).toString()
+
+        // Use Unix paths even on Windows for consistent output.
+        return relativePath.replace(File.separatorChar, '/')
+    }
+    /**
+     * Return the list of tags available in the remote repository.
+     */
+    abstract fun listRemoteTags(): List<String>
+}
+
+abstract class WorkingTreeWithRevision(workingDir: File, provider: String)
+    : WorkingTree(workingDir, provider) {
+
+    /**
+     * Return the VCS-specific working tree revision.
+     */
+    abstract fun getRevision(): String
+
+    override fun getInfo(path: File): VcsInfo = VcsInfo(provider, getRemoteUrl(), getRevision(), getPathToRoot(path))
+}
+
+abstract class WorkingTreeWithFileRevisions(workingDir: File, provider: String)
+    : WorkingTree(workingDir, provider) {
+
+    /**
+     * Return the VCS-specific file revision.
+     */
+    abstract fun getRevision(file: File): String
+
+    override fun getInfo(path: File): VcsInfo = VcsInfo(provider, getRemoteUrl(), "", getPathToRoot(path))
 }

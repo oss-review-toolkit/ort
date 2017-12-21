@@ -211,7 +211,7 @@ object Main {
                 p("Downloading revision '${target.vcsProcessed.revision}'.")
             }
 
-            var applicableVcs: VersionControlSystem? = null
+            var applicableVcs: VersionControlSystem<WorkingTree>? = null
 
             p("Trying to detect VCS...")
 
@@ -233,8 +233,12 @@ object Main {
 
             try {
                 val workingTree = applicableVcs.download(target.vcsProcessed, target.version, targetDir)
-                val revision = workingTree.getRevision()
-                p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
+                if (workingTree is WorkingTreeWithRevision) {
+                    val revision = workingTree.getRevision()
+                    p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
+                } else {
+                    p("Finished downloading source code to '${targetDir.absolutePath}'.")
+                }
                 return targetDir
             } catch (e: DownloadException) {
                 if (stacktrace) {

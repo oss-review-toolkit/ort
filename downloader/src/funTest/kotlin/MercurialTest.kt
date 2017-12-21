@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.downloader.WorkingTreeWithRevision
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.Expensive
 
@@ -55,11 +56,12 @@ class MercurialTest : StringSpec() {
     init {
         "Mercurial can download entire repo" {
             Mercurial.download(VcsInfo("Mercurial", REPO_URL, "", ""), "", outputDir)
-            Mercurial.getWorkingTree(outputDir).getProvider() shouldBe "Mercurial"
+            Mercurial.getWorkingTree(outputDir).provider shouldBe "Mercurial"
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download single revision" {
             val workingTree = Mercurial.download(VcsInfo("Mercurial", REPO_URL, REPO_REV, ""), "", outputDir)
+                    as WorkingTreeWithRevision
             workingTree.getRevision() shouldBe REPO_REV
         }.config(tags = setOf(Expensive))
 
@@ -73,6 +75,7 @@ class MercurialTest : StringSpec() {
 
         "Mercurial can download version" {
             val workingTree = Mercurial.download(VcsInfo("Mercurial", REPO_URL, "", ""), REPO_VERSION, outputDir)
+                    as WorkingTreeWithRevision
             workingTree.getRevision() shouldBe REPO_VERSION_REV
         }.config(tags = setOf(Expensive))
     }

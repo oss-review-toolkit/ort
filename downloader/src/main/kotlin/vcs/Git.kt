@@ -24,6 +24,8 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingTree
+import com.here.ort.downloader.WorkingTreeWithRevision
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OS
 import com.here.ort.utils.log
@@ -34,7 +36,7 @@ import com.here.ort.utils.safeMkdirs
 import java.io.File
 import java.io.IOException
 
-abstract class GitBase : VersionControlSystem() {
+abstract class GitBase : VersionControlSystem<WorkingTreeWithRevision>() {
     override fun getVersion(): String {
         val gitVersionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
@@ -44,7 +46,7 @@ abstract class GitBase : VersionControlSystem() {
     }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory) {
+            object : WorkingTreeWithRevision(vcsDirectory, this@GitBase.toString()) {
                 override fun isValid(): Boolean {
                     if (!workingDir.isDirectory) {
                         return false

@@ -29,6 +29,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingTreeWithRevision
+
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
@@ -95,7 +97,7 @@ data class SubversionLogEntry(
         val date: String,
         val msg: String)
 
-object Subversion : VersionControlSystem() {
+object Subversion : VersionControlSystem<WorkingTreeWithRevision>() {
     override fun getVersion(): String {
         val subversionVersionRegex = Regex("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
@@ -105,7 +107,7 @@ object Subversion : VersionControlSystem() {
     }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory) {
+            object : WorkingTreeWithRevision(vcsDirectory, this@Subversion.toString()) {
                 private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
                         .with(DeserializationFeature.UNWRAP_ROOT_VALUE)
 
@@ -146,7 +148,7 @@ object Subversion : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTreeWithRevision {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
