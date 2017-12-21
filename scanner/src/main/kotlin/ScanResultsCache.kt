@@ -39,23 +39,25 @@ interface ScanResultsCache {
      * Read a scan results file from the cache.
      *
      * @param pkg The package the scan results belong to.
+     * @param scannerName The name of the scanning tool that generated the results.
      * @param target The local file to store the scan results in.
      */
-    fun read(pkg: Package, target: File): Boolean
+    fun read(pkg: Package, scannerName: String, target: File): Boolean
 
     /**
      * Write a scan results file to the cache.
      *
      * @param pkg The package the scan results belong to.
+     * @param scannerName The name of the scanning tool that generated the results.
      * @param source The local file containing the scan results.
      */
-    fun write(pkg: Package, source: File): Boolean
+    fun write(pkg: Package, scannerName: String, source: File): Boolean
 
     companion object : ScanResultsCache {
 
         var cache = object : ScanResultsCache {
-            override fun read(pkg: Package, target: File) = false
-            override fun write(pkg: Package, source: File) = false
+            override fun read(pkg: Package, scannerName: String, target: File) = false
+            override fun write(pkg: Package, scannerName: String, source: File) = false
         }
             private set
 
@@ -78,17 +80,27 @@ interface ScanResultsCache {
                     cache = ArtifactoryCache(url, apiToken)
                     log.info { "Using Artifactory cache '$url'." }
                 }
+                "clearlydefined" -> {
+                    val apiToken = cacheNode["apiToken"]?.asText() ?:
+                            throw IllegalArgumentException("API token for ClearlyDefined service is missing.")
+
+                    val url = cacheNode["url"]?.asText() ?:
+                            throw IllegalArgumentException("URL for ClearlyDefined service is missing.")
+
+                    cache = ClearlyDefinedCache(url, apiToken)
+                    log.info { "Using ClearlyDefined service '$url'." }
+                }
                 else -> throw IllegalArgumentException("Cache type '$type' unknown.")
             }
         }
 
-        override fun read(pkg: Package, target: File) = cache.read(pkg, target).also {
+        override fun read(pkg: Package, scannerName: String, target: File) = cache.read(pkg, scannerName, target).also {
             ++stats.numReads
             if (it) {
                 ++stats.numHits
             }
         }
 
-        override fun write(pkg: Package, source: File) = cache.write(pkg, source)
+        override fun write(pkg: Package, scannerName: String, source: File) = cache.write(pkg, scannerName, source)
     }
 }

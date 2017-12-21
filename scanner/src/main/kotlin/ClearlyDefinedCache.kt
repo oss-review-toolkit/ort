@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 HERE Europe B.V.
+ * Copyright (c) Microsoft Corporation. All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,38 +32,34 @@ import java.util.concurrent.TimeUnit
 import okhttp3.CacheControl
 import okhttp3.Request
 
-class ArtifactoryCache(
+class ClearlyDefinedCache(
         private val url: String,
         private val apiToken: String
 ) : ScanResultsCache {
-    companion object {
-        @JvmStatic
-        val HTTP_CACHE_PATH = "scanner/cache/http"
-    }
 
     override fun read(pkg: Package, scannerName: String, target: File): Boolean {
-        val cachePath = cachePath(pkg, target)
+        val cachePath = cachePath(pkg, scannerName, target)
 
-        log.info { "Trying to read scan results from Artifactory cache: $cachePath" }
+        log.info { "Trying to read scan results from ClearlyDefined service: $cachePath" }
 
         val request = Request.Builder()
-                .header("X-JFrog-Art-Api", apiToken)
+                .header("Authorization", apiToken)
                 .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
                 .get()
                 .url("$url/$cachePath")
                 .build()
 
-        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+        return OkHttpClientHelper.execute("scanner", request).use { response ->
             (response.code() == HttpURLConnection.HTTP_OK).also {
                 val message = if (it) {
                     response.body()?.let { target.writeBytes(it.bytes()) }
                     if (response.cacheResponse() != null) {
                         "Retrieved $cachePath from local cache."
                     } else {
-                        "Downloaded $cachePath from Artifactory cache."
+                        "Downloaded $cachePath from ClearlyDefined service."
                     }
                 } else {
-                    "Could not get $cachePath from Artifactory cache: ${response.code()} - " +
+                    "Could not get $cachePath from ClearlyDefined service: ${response.code()} - " +
                             response.message()
                 }
 
@@ -73,23 +69,23 @@ class ArtifactoryCache(
     }
 
     override fun write(pkg: Package, scannerName: String, source: File): Boolean {
-        val cachePath = cachePath(pkg, source)
+        val cachePath = cachePath(pkg, scannerName, source)
 
-        log.info { "Writing scan results to Artifactory cache: $cachePath" }
+        log.info { "Writing scan results to ClearlyDefined service: $cachePath" }
 
         val request = Request.Builder()
-                .header("X-JFrog-Art-Api", apiToken)
+                .header("Authorization", apiToken)
                 .put(OkHttpClientHelper.createRequestBody(source))
                 .url("$url/$cachePath")
                 .build()
 
-        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+        return OkHttpClientHelper.execute("scanner", request).use { response ->
             (response.code() == HttpURLConnection.HTTP_CREATED).also {
                 log.info {
                     if (it) {
-                        "Uploaded $cachePath to Artifactory cache."
+                        "Uploaded $cachePath to ClearlyDefined service."
                     } else {
-                        "Could not upload $cachePath to artifactory cache: ${response.code()} - " +
+                        "Could not upload $cachePath to ClearlyDefined service: ${response.code()} - " +
                                 response.message()
                     }
                 }
@@ -97,13 +93,28 @@ class ArtifactoryCache(
         }
     }
 
-    private fun cachePath(pkg: Package, resultsFile: File) =
-            "scan-results/" +
-                    "${pkg.packageManager.valueOrUnderscore()}/" +
-                    "${pkg.namespace.valueOrUnderscore()}/" +
-                    "${pkg.name.valueOrUnderscore()}/" +
-                    "${pkg.version.valueOrUnderscore()}/" +
-                    resultsFile.name
+    private fun cachePath(pkg: Package, scannerName: String, resultsFile: File): String {
+        val provider = getProvider(pkg.packageManager)
+        val qualifiedPackageName = (if (!pkg.namespace.isEmpty()) pkg.namespace + "/" else "") + pkg.name
+        val qualifiedScannerName = if (scannerName.contains("--")) scannerName else "$scannerName--0"
+        return "harvest/" +
+                "${pkg.packageManager.valueOrUnderscore()}/" +
+                "${provider.valueOrUnderscore()}/" +
+                "${qualifiedPackageName}/" +
+                "${pkg.version.valueOrUnderscore()}/" +
+                "$qualifiedScannerName/" +
+                "output.${resultsFile.extension}"
+    }
+
+    private fun getProvider(manager: String): String? {
+        val map = hashMapOf(
+            "npm" to "npmjs",
+            "git" to "github",
+            "maven" to "maven-central",
+            "nuget" to "nuget"
+        )
+        return map.get(manager)
+    }
 
     private fun String?.valueOrUnderscore() = if (this == null || this.isEmpty()) "_" else this
 }

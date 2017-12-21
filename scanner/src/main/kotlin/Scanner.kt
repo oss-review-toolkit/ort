@@ -37,7 +37,9 @@ abstract class Scanner {
          */
         val ALL by lazy {
             listOf(
-                    ScanCode
+                    ScanCode,
+                    CdVcs,
+                    CdPackageNpm
             )
         }
     }
@@ -56,8 +58,7 @@ abstract class Scanner {
      *
      * @param pkg The package to scan.
      * @param outputDirectory The base directory to store scan results in.
-     * @param downloadDirectory The directory to download source code to. Defaults to [outputDirectory]/downloads if
-     *                          null.
+     * @param downloadDirectory The directory to download source code to. Defaults to [outputDirectory]/downloads if null.
      *
      * @return The set of found licenses.
      *
@@ -65,7 +66,7 @@ abstract class Scanner {
      */
     fun scan(pkg: Package, outputDirectory: File, downloadDirectory: File? = null): Result {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scannerName = toString().toLowerCase()
+        val scannerName = getName()
 
         // TODO: Consider implementing this logic in the Package class itself when creating the identifier.
         // Also, think about what to use if we have neither a version nor a hash.
@@ -74,7 +75,7 @@ abstract class Scanner {
         val resultsFile = File(scanResultsDirectory,
                 "${pkg.name}-${pkgRevision}_$scannerName.$resultFileExtension")
 
-        if (ScanResultsCache.read(pkg, resultsFile)) {
+        if (ScanResultsCache.read(pkg, scannerName, resultsFile)) {
             return getResult(resultsFile)
         }
 
@@ -88,9 +89,19 @@ abstract class Scanner {
             throw ScanException("Package '${pkg.identifier}' could not be scanned.", e)
         }
 
-        return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, resultsFile) }
+        return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, scannerName, resultsFile) }
     }
 
+    /**
+    * Get the name of this scanner when scanning the given package. 
+    *
+    * @return The name of this scanner
+    */
+    open fun getName(): String {
+        // TODO add some version information here if desired
+        return toString().toLowerCase()
+    }    
+    
     /**
      * Scan the provided [path] for license information, writing results to [outputDirectory]. Note that no caching will
      * be used in this mode.
@@ -102,27 +113,32 @@ abstract class Scanner {
      *
      * @throws ScanException In case the package could not be scanned.
      */
-    fun scan(path: File, outputDirectory: File): Result {
-        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scannerName = toString().toLowerCase()
-        val resultsFile = File(scanResultsDirectory,
-                "${path.nameWithoutExtension}_$scannerName.$resultFileExtension")
+   fun scan(path: File, outputDirectory: File): Result {
+       val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
+       val scannerName = getName()
+       val resultsFile = File(scanResultsDirectory,
+               "${path.nameWithoutExtension}_$scannerName.$resultFileExtension")
 
-        return scanPath(path, resultsFile)
-    }
+       return scanPath(path, resultsFile)
+   }
 
     /**
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
-    protected abstract val resultFileExtension: String
+    abstract val resultFileExtension: String
 
     /**
      * Scan the provided [path] for license information, writing results to [resultsFile].
      */
-    protected abstract fun scanPath(path: File, resultsFile: File): Result
+    abstract fun scanPath(path: File, resultsFile: File): Result
 
     /**
      * Convert the scanner's native file format to a [Result].
      */
-    internal abstract fun getResult(resultsFile: File): Result
+    abstract fun getResult(resultsFile: File): Result
+
+    /**
+    * Return whether or not this scanner applies to the given package
+    */
+    abstract fun canScan(pkg: Package): Boolean
 }

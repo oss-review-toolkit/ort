@@ -94,13 +94,13 @@ class HttpCacheTest : StringSpec() {
 
             // Put the file contents into the cache.
             resultFile.writeText(resultContent)
-            cache.write(pkg, resultFile) shouldBe true
+            cache.write(pkg, "test", resultFile) shouldBe true
 
             // Delete the original result file to ensure it gets re-created.
             resultFile.delete() shouldBe true
 
             // Get the file contents from the cache.
-            cache.read(pkg, resultFile) shouldBe true
+            cache.read(pkg, "test", resultFile) shouldBe true
             resultFile.readText() shouldEqual resultContent
 
             // Clean up.
