@@ -37,8 +37,8 @@ class ClearlyDefinedCache(
         private val apiToken: String
 ) : ScanResultsCache {
 
-    override fun read(pkg: Package, target: File): Boolean {
-        val cachePath = cachePath(pkg, target)
+    override fun read(pkg: Package, scannerName: String, target: File): Boolean {
+        val cachePath = cachePath(pkg, scannerName, target)
 
         log.info { "Trying to read scan results from ClearlyDefined service: $cachePath" }
 
@@ -68,8 +68,8 @@ class ClearlyDefinedCache(
         }
     }
 
-    override fun write(pkg: Package, source: File): Boolean {
-        val cachePath = cachePath(pkg, source)
+    override fun write(pkg: Package, scannerName: String, source: File): Boolean {
+        val cachePath = cachePath(pkg, scannerName, source)
 
         log.info { "Writing scan results to ClearlyDefined service: $cachePath" }
 
@@ -93,22 +93,25 @@ class ClearlyDefinedCache(
         }
     }
 
-    private fun cachePath(pkg: Package, resultsFile: File): String {
+    private fun cachePath(pkg: Package, scannerName: String, resultsFile: File): String {
         val provider = getProvider(pkg.packageManager)
-        val qualifiedName = (if (!pkg.namespace.isEmpty()) pkg.namespace + "/" else "") + pkg.name
+        val qualifiedPackageName = (if (!pkg.namespace.isEmpty()) pkg.namespace + "/" else "") + pkg.name
+        val qualifiedScannerName = if (scannerName.contains("--")) scannerName else "$scannerName--0"
         return "harvest/" +
                 "${pkg.packageManager.valueOrUnderscore()}/" +
                 "${provider.valueOrUnderscore()}/" +
-                "${qualifiedName}/" +
+                "${qualifiedPackageName}/" +
                 "${pkg.version.valueOrUnderscore()}/" +
-                resultsFile.name
+                "$qualifiedScannerName/" +
+                "output.${resultsFile.extension}"
     }
 
     private fun getProvider(manager: String): String? {
         val map = hashMapOf(
-            "npm" to "npmjs.org",
-            "git" to "github.com",
-            "maven" to "central.maven.org"
+            "npm" to "npmjs",
+            "git" to "github",
+            "maven" to "maven-central",
+            "nuget" to "nuget"
         )
         return map.get(manager)
     }

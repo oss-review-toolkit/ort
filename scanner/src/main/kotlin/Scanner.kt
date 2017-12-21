@@ -65,7 +65,7 @@ abstract class Scanner {
      */
     fun scan(pkg: Package, outputDirectory: File, downloadDirectory: File? = null): Result {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scannerName = toString().toLowerCase()
+        val scannerName = getScannerName()
 
         // TODO: Consider implementing this logic in the Package class itself when creating the identifier.
         // Also, think about what to use if we have neither a version nor a hash.
@@ -74,7 +74,7 @@ abstract class Scanner {
         val resultsFile = File(scanResultsDirectory,
                 "${pkg.name}-${pkgRevision}_$scannerName.$resultFileExtension")
 
-        if (ScanResultsCache.read(pkg, resultsFile)) {
+        if (ScanResultsCache.read(pkg, scannerName, resultsFile)) {
             return getResult(resultsFile)
         }
 
@@ -88,9 +88,14 @@ abstract class Scanner {
             throw ScanException("Package '${pkg.identifier}' could not be scanned.", e)
         }
 
-        return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, resultsFile) }
+        return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, scannerName, resultsFile) }
     }
 
+    protected fun getScannerName(): String {
+        // TODO add some version information here if desired
+        return toString().toLowerCase()
+    }    
+    
     /**
      * Scan the provided [path] for license information, writing results to [outputDirectory]. Note that no caching will
      * be used in this mode.

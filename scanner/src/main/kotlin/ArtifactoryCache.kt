@@ -37,7 +37,7 @@ class ArtifactoryCache(
         private val apiToken: String
 ) : ScanResultsCache {
 
-    override fun read(pkg: Package, target: File): Boolean {
+    override fun read(pkg: Package, scannerName: String, target: File): Boolean {
         val cachePath = cachePath(pkg, target)
 
         log.info { "Trying to read scan results from Artifactory cache: $cachePath" }
@@ -68,7 +68,7 @@ class ArtifactoryCache(
         }
     }
 
-    override fun write(pkg: Package, source: File): Boolean {
+    override fun write(pkg: Package, scannerName: String, source: File): Boolean {
         val cachePath = cachePath(pkg, source)
 
         log.info { "Writing scan results to Artifactory cache: $cachePath" }
