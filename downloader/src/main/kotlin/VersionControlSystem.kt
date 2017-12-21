@@ -38,7 +38,8 @@ abstract class VersionControlSystem<out WT : WorkingTree> {
                     Git,
                     GitRepo,
                     Mercurial,
-                    Subversion
+                    Subversion,
+                    Cvs
             )
         }
 
