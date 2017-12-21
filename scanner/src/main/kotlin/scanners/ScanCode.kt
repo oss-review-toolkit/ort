@@ -22,6 +22,7 @@ package com.here.ort.scanner.scanners
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
+import com.here.ort.model.Package
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.Scanner
 import com.here.ort.utils.OS
@@ -44,6 +45,10 @@ object ScanCode : Scanner() {
     private val TIMEOUT_REGEX = Regex("ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds.")
 
     override val resultFileExtension = "json"
+
+    override fun canScan(pkg: Package): Boolean {
+        return true
+    }
 
     override fun scanPath(path: File, resultsFile: File): Result {
         val executable = if (OS.isWindows) "scancode.bat" else "scancode"

@@ -29,6 +29,7 @@ import com.beust.jcommander.ParameterException
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -225,6 +226,9 @@ object Main {
                 val revision = applicableVcs.download(target.vcsProcessed.url, target.vcsProcessed.revision,
                         target.vcsProcessed.path, target.version, targetDir)
                 p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
+
+                val result = VcsInfo(target.vcsProcessed.provider, target.vcsProcessed.url, revision, target.vcsProcessed.path)
+                writeResultFile(targetDir, result)
                 return targetDir
             } catch (e: DownloadException) {
                 if (stacktrace) {
@@ -240,5 +244,11 @@ object Main {
             // TODO: Implement downloading of source package.
             throw DownloadException("No source code package URL provided.")
         }
+    }
+
+    private fun writeResultFile(targetDir: File, result: VcsInfo) {
+        val outputFile = File(targetDir.absolutePath + "-vscinfo.json") 
+        println("Writing VCS download results to $outputFile")
+        jsonMapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
     }
 }
