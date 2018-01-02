@@ -37,7 +37,7 @@ class ArtifactoryCache(
         private val apiToken: String
 ) : ScanResultsCache {
     companion object {
-        const val HTTP_CACHE_PATH = "scanner/cache/http"
+        const val HTTP_CACHE_PATH = "${Main.TOOL_NAME}/cache/http"
     }
 
     override fun read(pkg: Package, target: File): Boolean {
