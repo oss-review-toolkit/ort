@@ -38,7 +38,7 @@ project:
         errors: []
       - namespace: ""
         name: "Werkzeug"
-        version: "0.13"
+        version: "0.14.1"
         dependencies: []
         errors: []
       - namespace: ""
@@ -140,14 +140,14 @@ packages:
 - package_manager: "PIP"
   namespace: ""
   name: "Werkzeug"
-  version: "0.13"
+  version: "0.14.1"
   declared_licenses:
   - "BSD"
   description: "The comprehensive WSGI web application library."
   homepage_url: "https://www.palletsprojects.org/p/werkzeug/"
   binary_artifact:
-    url: "https://pypi.python.org/packages/e7/dc/e41d4d6adf0cd3f02b0bdf02fcddee77a2ef02c0b1d5eaa517308333d673/Werkzeug-0.13-py2.py3-none-any.whl"
-    hash: "7263e4dbc0197d6e4bafa8ba1b63316f"
+    url: "https://pypi.python.org/packages/20/c4/12e3e56473e52375aa29c4764e70d1b8f3efa6682bef8d0aae04fe335243/Werkzeug-0.14.1-py2.py3-none-any.whl"
+    hash: "11f469d64429cc75f995cf6be5662133"
     hash_algorithm: "MD5"
   source_artifact:
     url: ""
