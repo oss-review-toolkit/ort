@@ -60,6 +60,14 @@ abstract class GitBase : VersionControlSystem() {
 
                 override fun getRootPath() =
                         runGitCommand(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
+
+                override fun listRemoteTags(): List<String> {
+                    val tags = runGitCommand(workingDir, "ls-remote", "--refs", "origin", "refs/tags/*")
+                            .stdout().trimEnd()
+                    return tags.lines().map {
+                        it.split('\t').last().removePrefix("refs/tags/")
+                    }
+                }
             }
 
     protected fun runGitCommand(workingDir: File, vararg args: String) =
