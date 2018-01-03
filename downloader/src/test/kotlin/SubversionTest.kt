@@ -38,7 +38,7 @@ class SubversionTest : StringSpec() {
     override val oneInstancePerTest = false
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        val zipFile = Paths.get("src/test/assets/scannotation-1.0.3-svn.zip")
+        val zipFile = Paths.get("src/test/assets/docutils-2018-01-03-svn-trunk.zip")
 
         zipContentDir = createTempDir()
 
@@ -77,10 +77,10 @@ class SubversionTest : StringSpec() {
 
             workingTree.getProvider() shouldBe "Subversion"
             workingTree.isValid() shouldBe true
-            workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/scannotation/code"
-            workingTree.getRevision() shouldBe "12"
+            workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code"
+            workingTree.getRevision() shouldBe "8207"
             workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
-            workingTree.getPathToRoot(File(zipContentDir, "src")) shouldBe "src"
+            workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
         }
     }
 }
