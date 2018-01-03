@@ -139,7 +139,7 @@ object Git : GitBase() {
                 val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
                         .stdout()
                         .lineSequence()
-                        .map { it.split("\t").last() }
+                        .map { it.split('\t').last() }
                         .find { it.endsWith(version) || it.endsWith(version.replace('.', '_')) }
 
                 if (tag != null) {
