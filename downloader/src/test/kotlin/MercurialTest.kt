@@ -61,6 +61,19 @@ class MercurialTest : StringSpec() {
     }
 
     init {
+        "Detected Mercurial version is not empty" {
+            val version = Mercurial.getVersion()
+            println("Mercurial version $version detected.")
+            version shouldNotBe ""
+        }
+
+        "Mercurial correctly detects URLs to remote repositories" {
+            Mercurial.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
+
+            // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
+            Mercurial.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
+        }
+
         "Mercurial correctly lists remote tags" {
             val expectedTags = listOf("1.0.2", "1.0.1", "1.0")
 

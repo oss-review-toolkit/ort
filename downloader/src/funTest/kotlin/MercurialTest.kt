@@ -25,7 +25,6 @@ import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -50,19 +49,6 @@ class MercurialTest : StringSpec() {
     }
 
     init {
-        "Detected Mercurial version is not empty" {
-            val version = Mercurial.getVersion()
-            println("Mercurial version $version detected.")
-            version shouldNotBe ""
-        }
-
-        "Mercurial correctly detects URLs to remote repositories" {
-            Mercurial.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
-
-            // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
-            Mercurial.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
-        }
-
         "Mercurial can download entire repo" {
             Mercurial.download(REPO_URL, null, null, "", outputDir)
             Mercurial.getWorkingTree(outputDir).getProvider() shouldBe "Mercurial"
