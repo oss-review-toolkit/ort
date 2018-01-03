@@ -72,5 +72,12 @@ class GitTest : StringSpec() {
             workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
+
+        "Git correctly lists remote tags" {
+            val expectedTags = listOf("0.10.0", "0.10.1", "0.5.0", "0.6.0", "0.7.0", "0.8.0", "0.9.0")
+
+            val workingTree = Git.getWorkingTree(zipContentDir)
+            workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
+        }
     }
 }
