@@ -72,7 +72,7 @@ class GitTest : StringSpec() {
             Git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
         }
 
-        "Detected working tree information is correct" {
+        "Detected Git working tree information is correct" {
             val workingTree = Git.getWorkingTree(zipContentDir)
 
             workingTree.getProvider() shouldBe "Git"

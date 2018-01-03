@@ -72,7 +72,7 @@ class SubversionTest : StringSpec() {
             Subversion.isApplicableUrl("https://bitbucket.org/facebook/lz4revlog") shouldBe false
         }
 
-        "Detected working tree information is correct" {
+        "Detected Subversion working tree information is correct" {
             val workingTree = Subversion.getWorkingTree(zipContentDir)
 
             workingTree.getProvider() shouldBe "Subversion"
