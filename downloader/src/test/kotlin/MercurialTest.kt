@@ -74,7 +74,7 @@ class MercurialTest : StringSpec() {
             Mercurial.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
         }
 
-        "Detected working tree information is correct" {
+        "Detected Mercurial working tree information is correct" {
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
 
             workingTree.getProvider() shouldBe "Mercurial"
