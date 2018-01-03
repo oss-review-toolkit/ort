@@ -19,11 +19,45 @@
 
 package com.here.ort.downloader.vcs
 
+import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
+import java.io.File
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+
 class GitTest : StringSpec() {
+    private lateinit var zipContentDir: File
+
+    override val oneInstancePerTest = false
+
+    override fun interceptSpec(context: Spec, spec: () -> Unit) {
+        val zipFile = Paths.get("src/test/assets/pipdeptree-2018-01-03-git.zip")
+
+        zipContentDir = createTempDir()
+
+        println("Extracting '$zipFile' to '$zipContentDir'...")
+
+        FileSystems.newFileSystem(zipFile, null).use { zip ->
+            zip.rootDirectories.forEach { root ->
+                Files.walk(root).forEach { file ->
+                    Files.copy(file, Paths.get(zipContentDir.toString(), file.toString()),
+                            StandardCopyOption.REPLACE_EXISTING)
+                }
+            }
+        }
+
+        try {
+            spec()
+        } finally {
+            zipContentDir.deleteRecursively()
+        }
+    }
+
     init {
         "Detected Git version is not empty" {
             val version = Git.getVersion()
@@ -36,6 +70,17 @@ class GitTest : StringSpec() {
             Git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe true
 
             Git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
+        }
+
+        "Detected working tree information is correct" {
+            val workingTree = Git.getWorkingTree(zipContentDir)
+
+            workingTree.getProvider() shouldBe "Git"
+            workingTree.isValid() shouldBe true
+            workingTree.getRemoteUrl() shouldBe "https://github.com/naiquevin/pipdeptree.git"
+            workingTree.getRevision() shouldBe "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c"
+            workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
+            workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
     }
 }
