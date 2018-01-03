@@ -162,7 +162,7 @@ object Mercurial : VersionControlSystem() {
 
     fun isAtLeastVersion(version: String): Boolean {
         val mercurialVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
-        return !mercurialVersion.isLowerThan(Semver(version, Semver.SemverType.LOOSE))
+        return mercurialVersion.isGreaterThanOrEqualTo(Semver(version, Semver.SemverType.LOOSE))
     }
 
     private fun runMercurialCommand(workingDir: File, vararg args: String) =
