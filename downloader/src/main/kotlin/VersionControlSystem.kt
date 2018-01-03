@@ -182,6 +182,11 @@ abstract class VersionControlSystem {
         abstract fun getRootPath(): String
 
         /**
+         * Return the list of tags available in the remote repository.
+         */
+        abstract fun listRemoteTags(): List<String>
+
+        /**
          * Return the relative path to [path] with respect to the VCS root.
          */
         fun getPathToRoot(path: File): String {

@@ -49,7 +49,7 @@ data class SubversionInfoWorkingCopy(
 data class SubversionInfoCommit(
         @JacksonXmlProperty(isAttribute = true)
         val revision: String,
-        val author: String,
+        val author: String?,
         val date: String)
 
 @JsonRootName("entry")
@@ -66,6 +66,20 @@ data class SubversionInfoEntry(
         val repository: SubversionInfoRepository,
         @JsonProperty("wc-info")
         val workingCopy: SubversionInfoWorkingCopy,
+        val commit: SubversionInfoCommit)
+
+@JsonRootName("entry")
+data class SubversionTagsEntry(
+        @JacksonXmlProperty(isAttribute = true)
+        val kind: String,
+        @JacksonXmlProperty(isAttribute = true)
+        val path: String,
+        @JacksonXmlProperty(isAttribute = true)
+        val revision: String,
+        val url: String,
+        @JsonProperty("relative-url")
+        val relativeUrl: String,
+        val repository: SubversionInfoRepository,
         val commit: SubversionInfoCommit)
 
 data class SubversionLogEntry(
@@ -98,6 +112,16 @@ object Subversion : VersionControlSystem() {
                 override fun getRevision() = svnInfoEntry.commit.revision
 
                 override fun getRootPath() = svnInfoEntry.workingCopy.absolutePath
+
+                override fun listRemoteTags(): List<String> {
+                    val svnInfoTags = runSvnCommand(workingDir, "info", "--xml", "--depth=immediates", "^/tags")
+                    val valueType = xmlMapper.typeFactory
+                            .constructCollectionType(List::class.java, SubversionTagsEntry::class.java)
+                    val tagsEntries: List<SubversionTagsEntry> = xmlMapper.readValue(svnInfoTags.stdout(), valueType)
+
+                    // As the "immediates" depth includes the "tags" parent, drop it.
+                    return tagsEntries.drop(1).map { it.path }.sorted()
+                }
             }
 
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("subversion", "svn")
