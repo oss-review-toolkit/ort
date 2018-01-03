@@ -221,6 +221,6 @@ The most important root project Gradle tasks are listed in the table below.
 
 ## License
 
-Copyright (c) 2017 HERE Europe B.V.
+Copyright (c) 2017-2018 HERE Europe B.V.
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
