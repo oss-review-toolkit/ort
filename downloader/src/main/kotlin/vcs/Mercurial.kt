@@ -56,6 +56,7 @@ object Mercurial : VersionControlSystem() {
                 override fun getRevision() = runMercurialCommand(workingDir, "id", "-i").stdout().trimEnd()
 
                 override fun getRootPath() = runMercurialCommand(workingDir, "root").stdout().trimEnd()
+                        .replace(File.separatorChar, '/')
 
                 override fun listRemoteTags(): List<String> {
                     val tags = runMercurialCommand(workingDir, "tags").stdout().trimEnd()
