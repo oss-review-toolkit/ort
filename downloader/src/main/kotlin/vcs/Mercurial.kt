@@ -116,7 +116,7 @@ object Mercurial : VersionControlSystem() {
             val tagRevision = runMercurialCommand(targetDir, "log", "--template={node}\\t{tags}\\n")
                     .stdout()
                     .lineSequence()
-                    .map { it.split("\t") }
+                    .map { it.split('\t') }
                     .find { it.last().endsWith(version) || it.last().endsWith(version.replace('.', '_')) }?.first()
 
             if (tagRevision != null) {
