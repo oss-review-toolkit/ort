@@ -56,6 +56,14 @@ object Mercurial : VersionControlSystem() {
                 override fun getRevision() = runMercurialCommand(workingDir, "id", "-i").stdout().trimEnd()
 
                 override fun getRootPath() = runMercurialCommand(workingDir, "root").stdout().trimEnd()
+
+                override fun listRemoteTags(): List<String> {
+                    val tags = runMercurialCommand(workingDir, "tags").stdout().trimEnd()
+                    return tags.lines().mapNotNull {
+                        val name = it.split(' ').first()
+                        if (name == "tip") null else name
+                    }
+                }
             }
 
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("mercurial", "hg")
