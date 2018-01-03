@@ -74,6 +74,17 @@ class MercurialTest : StringSpec() {
             Mercurial.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
         }
 
+        "Detected working tree information is correct" {
+            val workingTree = Mercurial.getWorkingTree(zipContentDir)
+
+            workingTree.getProvider() shouldBe "Mercurial"
+            workingTree.isValid() shouldBe true
+            workingTree.getRemoteUrl() shouldBe "https://bitbucket.org/facebook/lz4revlog"
+            workingTree.getRevision() shouldBe "422ca71c3513"
+            workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
+            workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
+        }
+
         "Mercurial correctly lists remote tags" {
             val expectedTags = listOf("1.0.2", "1.0.1", "1.0")
 
