@@ -30,6 +30,7 @@ import io.kotlintest.Spec
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -111,6 +112,59 @@ class DownloaderTest : StringSpec() {
 
             workingTree.getRevision() shouldBe revisionForVersion
         }.config(tags = setOf(Expensive))
+
+        "Downloads and unpacks JAR source package" {
+            val pkg = Package(
+                    packageManager = "Gradle",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12",
+                    declaredLicenses = sortedSetOf(),
+                    description = "",
+                    homepageUrl = "",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                            url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
+                            hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
+                            hashAlgorithm = "SHA-1"
+                    ),
+                    vcs = VcsInfo.EMPTY
+            )
+
+            Main.download(pkg, outputDir)
+
+            val licenseFile = File(outputDir, "LICENSE-junit.txt")
+            licenseFile.exists() shouldBe true
+            licenseFile.length() shouldBe 11376L
+
+            outputDir.walkTopDown().count() shouldBe 235
+        }
+
+        "Download of JAR source package fails when hash is incorrect" {
+            val pkg = Package(
+                    packageManager = "Gradle",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12",
+                    declaredLicenses = sortedSetOf(),
+                    description = "",
+                    homepageUrl = "",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                            url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
+                            hash = "0123456789abcdef0123456789abcdef01234567",
+                            hashAlgorithm = "SHA-1"
+                    ),
+                    vcs = VcsInfo.EMPTY
+            )
+
+            val exception = shouldThrow<DownloadException> {
+                Main.download(pkg, outputDir)
+            }
+
+            exception.message shouldBe "Calculated SHA-1 hash 'a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa' differs " +
+                    "from expected hash '0123456789abcdef0123456789abcdef01234567'."
+        }
     }
 
     private fun getWorkingTree(vcs: VersionControlSystem, pkg: Package) =
