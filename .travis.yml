@@ -39,3 +39,8 @@ script:
       echo "Some tests seemingly have been aborted.";
       exit 1;
     fi
+
+addons:
+  artifacts:
+    paths:
+      - $(find . -type f -path "*/build/reports/tests/*" | tr "\n" ":")
