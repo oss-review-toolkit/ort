@@ -19,16 +19,14 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.downloader.unpack
+
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 
 class GitTest : StringSpec() {
     private lateinit var zipContentDir: File
@@ -36,20 +34,12 @@ class GitTest : StringSpec() {
     override val oneInstancePerTest = false
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        val zipFile = Paths.get("src/test/assets/pipdeptree-2018-01-03-git.zip")
+        val zipFile = File("src/test/assets/pipdeptree-2018-01-03-git.zip")
 
         zipContentDir = createTempDir()
 
         println("Extracting '$zipFile' to '$zipContentDir'...")
-
-        FileSystems.newFileSystem(zipFile, null).use { zip ->
-            zip.rootDirectories.forEach { root ->
-                Files.walk(root).forEach { file ->
-                    Files.copy(file, Paths.get(zipContentDir.toString(), file.toString()),
-                            StandardCopyOption.REPLACE_EXISTING)
-                }
-            }
-        }
+        zipFile.unpack(zipContentDir)
 
         try {
             spec()
