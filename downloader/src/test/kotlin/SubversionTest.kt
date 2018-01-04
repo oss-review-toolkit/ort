@@ -27,10 +27,6 @@ import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 
 class SubversionTest : StringSpec() {
     private lateinit var zipContentDir: File
@@ -38,20 +34,12 @@ class SubversionTest : StringSpec() {
     override val oneInstancePerTest = false
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        val zipFile = Paths.get("src/test/assets/docutils-2018-01-03-svn-trunk.zip")
+        val zipFile = File("src/test/assets/docutils-2018-01-03-svn-trunk.zip")
 
         zipContentDir = createTempDir()
 
         println("Extracting '$zipFile' to '$zipContentDir'...")
-
-        FileSystems.newFileSystem(zipFile, null).use { zip ->
-            zip.rootDirectories.forEach { root ->
-                Files.walk(root).forEach { file ->
-                    Files.copy(file, Paths.get(zipContentDir.toString(), file.toString()),
-                            StandardCopyOption.REPLACE_EXISTING)
-                }
-            }
-        }
+        zipFile.unpack(zipContentDir)
 
         try {
             spec()
