@@ -9,4 +9,5 @@ dependencies {
     compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
+    compile "org.apache.commons:commons-compress:$commonsCompressVersion"
 }
