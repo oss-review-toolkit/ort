@@ -31,8 +31,8 @@ private val ZIP_EXTENSIONS = listOf("jar", "war", "zip")
 
 fun File.unpack(targetDirectory: File) {
     when {
-        TAR_GZ_EXTENSIONS.any { this.name.endsWith(it) } -> unpackTarGz(targetDirectory)
-        ZIP_EXTENSIONS.any { this.name.endsWith(it) } -> unpackZip(targetDirectory)
+        TAR_GZ_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackTarGz(targetDirectory)
+        ZIP_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackZip(targetDirectory)
         else -> throw IOException("Unknown archive type for file '$absolutePath'.")
     }
 }

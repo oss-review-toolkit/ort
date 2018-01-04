@@ -35,8 +35,14 @@ import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.yamlMapper
 
 import java.io.File
+import java.io.IOException
 
 import kotlin.system.exitProcess
+
+import okhttp3.OkHttpClient
+import okhttp3.Request
+
+import org.apache.commons.codec.digest.DigestUtils
 
 /**
  * The main entry point of the application.
@@ -237,9 +243,55 @@ object Main {
         } else {
             p("No VCS URL provided.")
             // TODO: This should also be tried if the VCS checkout does not work.
+
             p("Trying to download source package ...")
-            // TODO: Implement downloading of source package.
-            throw DownloadException("No source code package URL provided.")
+            return downloadSourcePackage(target, outputDirectory)
+        }
+    }
+
+    private fun downloadSourcePackage(target: Package, outputDirectory: File): File {
+        if (target.sourceArtifact.url.isBlank()) {
+            throw DownloadException("No source artifact URL provided.")
+        }
+
+        val client = OkHttpClient()
+        val request = Request.Builder().url(target.sourceArtifact.url).build()
+
+        val response = client.newCall(request).execute()
+        if (!response.isSuccessful || response.body() == null) {
+            throw DownloadException("Failed to download source artifact: $response")
+        }
+
+        val tempFile = createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/"))
+
+        tempFile.outputStream().use { stream ->
+            stream.write(response.body()!!.bytes())
+        }
+
+        verifyChecksum(tempFile, target.sourceArtifact.hash, target.sourceArtifact.hashAlgorithm)
+
+        try {
+            tempFile.unpack(outputDirectory)
+        } catch (e: IOException) {
+            log.error { "Could not unpack source artifact '${tempFile.absolutePath}': ${e.message}" }
+            throw DownloadException(e)
+        }
+
+        return outputDirectory
+    }
+
+    private fun verifyChecksum(file: File, hash: String, hashAlgorithm: String) {
+        val digest = when (hashAlgorithm.toLowerCase()) {
+            "md5" -> file.inputStream().use { DigestUtils.md5Hex(it) }
+            "sha-1" -> file.inputStream().use { DigestUtils.sha1Hex(it) }
+            else -> {
+                log.error { "Unknown hash algorithm: $hashAlgorithm" }
+                ""
+            }
+        }
+
+        if (digest != hash) {
+            throw DownloadException("Calculated $hashAlgorithm hash '$digest' differs from expected hash '$hash'.")
         }
     }
 }
