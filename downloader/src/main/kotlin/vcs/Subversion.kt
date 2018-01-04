@@ -95,7 +95,7 @@ data class SubversionLogEntry(
 
 object Subversion : VersionControlSystem() {
     override fun getVersion(): String {
-        val subversionVersionRegex = Regex("svn, version (?<version>[\\d.]+) \\(r\\d+\\)")
+        val subversionVersionRegex = Regex("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
         return getCommandVersion("svn") {
             subversionVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""
