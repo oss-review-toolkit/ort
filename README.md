@@ -31,6 +31,9 @@ their respective locations as follows:
 * `./downloader/build/install/downloader/bin/downloader`
 * `./scanner/build/install/scanner/bin/scanner`
 
+Make sure that the locale of your system is set to `en_US.UTF-8`, using other locales might lead to issues with parsing
+the output of external tools.
+
 ## Supported package managers
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
