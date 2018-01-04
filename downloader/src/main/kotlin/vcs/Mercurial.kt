@@ -36,7 +36,7 @@ object Mercurial : VersionControlSystem() {
     private const val EXTENSION_SPARSE = "sparse = "
 
     override fun getVersion(): String {
-        val mercurialVersionRegex = Regex("Mercurial .*\\(version (?<version>[\\d.]+)\\)")
+        val mercurialVersionRegex = Regex("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
         return getCommandVersion("hg") {
             mercurialVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""

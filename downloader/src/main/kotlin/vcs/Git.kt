@@ -34,7 +34,7 @@ import java.io.IOException
 
 abstract class GitBase : VersionControlSystem() {
     override fun getVersion(): String {
-        val gitVersionRegex = Regex("git version (?<version>[\\d.a-z-]+)(\\s.+)?")
+        val gitVersionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
         return getCommandVersion("git") {
             gitVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""
