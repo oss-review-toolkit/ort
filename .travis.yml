@@ -44,4 +44,7 @@ script:
 addons:
   artifacts:
     paths:
-      - $(find . -type f -path "*/build/reports/tests/*" | tr "\n" ":")
+      - ./analyzer/build/reports/tests
+      - ./downloader/build/reports/tests
+      - ./scanner/build/reports/tests
+      - ./utils/build/reports/tests
