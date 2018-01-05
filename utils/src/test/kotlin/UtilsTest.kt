@@ -42,9 +42,10 @@ class UtilsTest : WordSpec({
         }
 
         "create a valid file name" {
-            val fileFromStr = File(createTempDir(), str.fileSystemEncode()).apply { writeText("dummy") }
+            val tempDir = createTempDir()
+            val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
             fileFromStr.isFile shouldBe true
-            fileFromStr.delete() shouldBe true
+            tempDir.deleteRecursively() shouldBe true
         }
 
         "be reversible by String.urldecode" {

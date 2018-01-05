@@ -65,7 +65,7 @@ class HttpCacheTest : StringSpec() {
             server.createContext("/", MyHttpHandler())
             server.start()
 
-            test()
+            super.interceptTestCase(context, test)
         } finally {
             // Ensure the server is properly stopped even in case of exceptions.
             server.stop(0)

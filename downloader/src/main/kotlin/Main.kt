@@ -275,6 +275,10 @@ object Main {
         } catch (e: IOException) {
             log.error { "Could not unpack source artifact '${tempFile.absolutePath}': ${e.message}" }
             throw DownloadException(e)
+        } finally {
+            if (!tempFile.delete()) {
+                log.warn { "Unable to delete temporary file '$tempFile'." }
+            }
         }
 
         return outputDirectory

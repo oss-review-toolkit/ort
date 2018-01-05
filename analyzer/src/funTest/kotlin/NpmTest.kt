@@ -39,7 +39,7 @@ class NpmTest : FreeSpec() {
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         try {
-            test()
+            super.interceptTestCase(context, test)
         } catch (exception: Exception) {
             // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
             // from failing tests.
