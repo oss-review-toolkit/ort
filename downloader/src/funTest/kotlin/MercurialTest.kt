@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.Expensive
 
 import io.kotlintest.TestCaseContext
@@ -53,17 +54,17 @@ class MercurialTest : StringSpec() {
 
     init {
         "Mercurial can download entire repo" {
-            Mercurial.download(REPO_URL, null, null, "", outputDir)
+            Mercurial.download(VcsInfo("Mercurial", REPO_URL, "", ""), "", outputDir)
             Mercurial.getWorkingTree(outputDir).getProvider() shouldBe "Mercurial"
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download single revision" {
-            val downloadedRev = Mercurial.download(REPO_URL, REPO_REV, null, "", outputDir)
+            val downloadedRev = Mercurial.download(VcsInfo("Mercurial", REPO_URL, REPO_REV, ""), "", outputDir)
             downloadedRev shouldBe REPO_REV
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download sub path" {
-            Mercurial.download(REPO_URL, null, REPO_SUBDIR, "", outputDir)
+            Mercurial.download(VcsInfo("Mercurial", REPO_URL, "", REPO_SUBDIR), "", outputDir)
 
             val outputDirList = Mercurial.getWorkingTree(outputDir).workingDir.list()
             outputDirList.indexOf(REPO_SUBDIR) should beGreaterThan(-1)
@@ -71,7 +72,7 @@ class MercurialTest : StringSpec() {
         }.config(tags = setOf(Expensive), enabled = Mercurial.isAtLeastVersion("4.3"))
 
         "Mercurial can download version" {
-            val downloadedRev = Mercurial.download(REPO_URL, null, null, REPO_VERSION, outputDir)
+            val downloadedRev = Mercurial.download(VcsInfo("Mercurial", REPO_URL, "", ""), REPO_VERSION, outputDir)
             downloadedRev shouldBe REPO_VERSION_REV
         }.config(tags = setOf(Expensive))
     }

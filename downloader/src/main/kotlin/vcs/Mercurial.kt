@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
@@ -71,8 +72,7 @@ object Mercurial : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
-            : String {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
         log.info { "Using $this version ${getVersion()}." }
 
         val revisionCmdArgs = mutableListOf<String>()
@@ -80,12 +80,12 @@ object Mercurial : VersionControlSystem() {
         // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
         val extensionsList = mutableListOf(EXTENSION_LARGE_FILES)
 
-        if (vcsRevision != null && vcsRevision.isNotBlank()) {
+        if (vcs.revision.isNotBlank()) {
             revisionCmdArgs.add("-r")
-            revisionCmdArgs.add(vcsRevision)
+            revisionCmdArgs.add(vcs.revision)
         }
 
-        if (!vcsPath.isNullOrEmpty() && isAtLeastVersion("4.3")) {
+        if (vcs.path.isNotBlank() && isAtLeastVersion("4.3")) {
             // Starting with version 4.3 Mercurial has experimental built-in support for sparse checkouts, see
             // https://www.mercurial-scm.org/wiki/WhatsNew#Mercurial_4.3_.2F_4.3.1_.282017-08-10.29
             extensionsList.add(EXTENSION_SPARSE)
@@ -94,24 +94,24 @@ object Mercurial : VersionControlSystem() {
         runMercurialCommand(targetDir, "init")
         File(targetDir, ".hg/hgrc").writeText("""
             [paths]
-            default = $vcsUrl
+            default = ${vcs.url}
             [extensions]
 
             """.trimIndent() + extensionsList.joinToString(separator = "\n"))
 
         // If this is a sparse checkout include given path.
         if (extensionsList.contains(EXTENSION_SPARSE)) {
-            log.info { "Sparse checkout of '$vcsPath'." }
+            log.info { "Sparse checkout of '${vcs.path}'." }
 
             try {
-                runMercurialCommand(targetDir, "debugsparse", "-I", "$vcsPath/**")
+                runMercurialCommand(targetDir, "debugsparse", "-I", "${vcs.path}/**")
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
                 }
 
                 log.warn {
-                    "Could not set sparse checkout of '$vcsPath': ${e.message}\n" +
+                    "Could not set sparse checkout of '${vcs.path}': ${e.message}\n" +
                             "Falling back to fetching everything."
                 }
             }
@@ -145,9 +145,9 @@ object Mercurial : VersionControlSystem() {
                 e.printStackTrace()
             }
 
-            if (revisionCmdArgs.contains("-r") && revisionCmdArgs.contains(vcsRevision)) {
+            if (revisionCmdArgs.contains("-r") && revisionCmdArgs.contains(vcs.revision)) {
                 log.warn {
-                    "Could not fetch only '$vcsRevision': ${e.message}\n" +
+                    "Could not fetch only '${vcs.revision}': ${e.message}\n" +
                             "Falling back to fetching everything."
                 }
 

@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
@@ -88,25 +89,24 @@ object Git : GitBase() {
      * @throws DownloadException In case the download failed.
      */
     @Suppress("ComplexMethod")
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
-            : String {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
             // Do not use "git clone" to have more control over what is being fetched.
             runGitCommand(targetDir, "init")
-            runGitCommand(targetDir, "remote", "add", "origin", vcsUrl)
+            runGitCommand(targetDir, "remote", "add", "origin", vcs.url)
 
             val workingTree = getWorkingTree(targetDir)
 
-            if (vcsPath != null && vcsPath.isNotEmpty()) {
-                log.info { "Configuring Git to do sparse checkout of path '$vcsPath'." }
+            if (vcs.path.isNotBlank()) {
+                log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
                 runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
                 val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-                File(gitInfoDir, "sparse-checkout").writeText(vcsPath)
+                File(gitInfoDir, "sparse-checkout").writeText(vcs.path)
             }
 
-            val committish = if (vcsRevision != null && vcsRevision.isNotEmpty()) vcsRevision else "HEAD"
+            val committish = if (vcs.revision.isNotBlank()) vcs.revision else "HEAD"
 
             // Do safe network bandwidth, first try to only fetch exactly the committish we want.
             try {
@@ -166,8 +166,8 @@ object Git : GitBase() {
                 e.printStackTrace()
             }
 
-            log.error { "Could not clone $vcsUrl: ${e.message}" }
-            throw DownloadException("Could not clone $vcsUrl.", e)
+            log.error { "Could not clone ${vcs.url}: ${e.message}" }
+            throw DownloadException("Could not clone ${vcs.url}.", e)
         }
     }
 }

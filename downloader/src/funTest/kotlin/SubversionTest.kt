@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.Expensive
 
 import io.kotlintest.TestCaseContext
@@ -53,12 +54,12 @@ class SubversionTest : StringSpec() {
 
     init {
         "Subversion can download single revision" {
-            val downloadedRev = Subversion.download(REPO_URL, REPO_REV, null, "", outputDir)
+            val downloadedRev = Subversion.download(VcsInfo("Subversion", REPO_URL, REPO_REV, ""), "", outputDir)
             downloadedRev shouldBe REPO_REV
         }.config(tags = setOf(Expensive))
 
         "Subversion can download sub path" {
-            Subversion.download(REPO_URL, null, REPO_SUBDIR, "", outputDir)
+            Subversion.download(VcsInfo("Subversion", REPO_URL, "", REPO_SUBDIR), "", outputDir)
 
             val outputDirList = Subversion.getWorkingTree(outputDir).workingDir.list()
             outputDirList.indexOf(REPO_SUBDIR) should beGreaterThan(-1)
@@ -66,12 +67,12 @@ class SubversionTest : StringSpec() {
         }.config(tags = setOf(Expensive))
 
         "Subversion can download version" {
-            val downloadedRev = Subversion.download(REPO_URL, null, null, REPO_VERSION, outputDir)
+            val downloadedRev = Subversion.download(VcsInfo("Subversion", REPO_URL, "", ""), REPO_VERSION, outputDir)
             downloadedRev shouldBe REPO_VERSION_REV
         }.config(tags = setOf(Expensive))
 
         "Subversion can download entire repo" {
-            Subversion.download(REPO_URL, null, null, "", outputDir)
+            Subversion.download(VcsInfo("Subversion", REPO_URL, "", ""), "", outputDir)
             val outputDirList = Subversion.getWorkingTree(outputDir).workingDir.list()
             outputDirList.indexOf("trunk") should beGreaterThan(-1)
             outputDirList.indexOf("tags") should beGreaterThan(-1)

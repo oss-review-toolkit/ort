@@ -230,8 +230,7 @@ object Main {
             p("Using VCS provider '$applicableVcs'.")
 
             try {
-                val revision = applicableVcs.download(target.vcsProcessed.url, target.vcsProcessed.revision,
-                        target.vcsProcessed.path, target.version, targetDir)
+                val revision = applicableVcs.download(target.vcsProcessed, target.version, targetDir)
                 p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
                 return targetDir
             } catch (e: DownloadException) {
