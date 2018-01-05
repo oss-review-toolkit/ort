@@ -28,6 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
@@ -132,18 +133,17 @@ object Subversion : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "ls", vcsUrl).exitValue() == 0
 
-    override fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String,
-                          targetDir: File): String {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
         log.info { "Using $this version ${getVersion()}." }
 
-        runSvnCommand(targetDir, "co", vcsUrl, "--depth", "empty", ".")
+        runSvnCommand(targetDir, "co", vcs.url, "--depth", "empty", ".")
 
-        val revision = if (vcsRevision != null && vcsRevision.isNotBlank()) {
-            vcsRevision
+        val revision = if (vcs.revision.isNotBlank()) {
+            vcs.revision
         } else if (version.isNotBlank()) {
             try {
                 log.info { "Trying to determine revision for version: $version" }
-                val tagsList = runSvnCommand(targetDir, "list", "$vcsUrl/tags").stdout().trim().lineSequence()
+                val tagsList = runSvnCommand(targetDir, "list", "${vcs.url}/tags").stdout().trim().lineSequence()
                 val tagName = tagsList.firstOrNull {
                     val trimmedTag = it.trimEnd('/')
                     trimmedTag.endsWith(version)
@@ -152,7 +152,7 @@ object Subversion : VersionControlSystem() {
 
                 val xml = runSvnCommand(targetDir,
                                         "log",
-                                        "$vcsUrl/tags/$tagName",
+                                        "${vcs.url}/tags/$tagName",
                                         "--xml").stdout().trim()
                 val valueType = xmlMapper.typeFactory
                         .constructCollectionType(List::class.java, SubversionLogEntry::class.java)
@@ -170,16 +170,16 @@ object Subversion : VersionControlSystem() {
             ""
         }
 
-        if (vcsPath != null && vcsPath.isNotBlank()) {
+        if (vcs.path.isNotBlank()) {
             // In case of sparse checkout, destination directory needs to exists,
             // `svn update` will fail otherwise (if dest dir is deeper than one level).
-            targetDir.resolve(vcsPath).mkdirs()
+            targetDir.resolve(vcs.path).mkdirs()
         }
 
         if (revision.isNotBlank()) {
-            runSvnCommand(targetDir, "up", "-r", revision, "--set-depth", "infinity", vcsPath ?: "")
+            runSvnCommand(targetDir, "up", "-r", revision, "--set-depth", "infinity", vcs.path)
         } else {
-            runSvnCommand(targetDir, "up", "--set-depth", "infinity", vcsPath?.apply { } ?: "")
+            runSvnCommand(targetDir, "up", "--set-depth", "infinity", vcs.path)
         }
 
         return Subversion.getWorkingTree(targetDir).getRevision()

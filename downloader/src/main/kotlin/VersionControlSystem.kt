@@ -221,12 +221,11 @@ abstract class VersionControlSystem {
     abstract fun isApplicableUrl(vcsUrl: String): Boolean
 
     /**
-     * Use this VCS to download the source code from the specified URL.
+     * Download the source code as specified by the VCS information.
      *
      * @return A String identifying the revision that was downloaded.
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(vcsUrl: String, vcsRevision: String?, vcsPath: String?, version: String, targetDir: File)
-            : String
+    abstract fun download(vcs: VcsInfo, version: String, targetDir: File): String
 }
