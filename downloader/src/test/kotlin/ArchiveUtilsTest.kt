@@ -19,49 +19,54 @@
 
 package com.here.ort.downloader
 
+import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
 class ArchiveUtilsTest : StringSpec() {
+    private lateinit var outputDir: File
+
+    // Required to make lateinit of outputDir work.
+    override val oneInstancePerTest = false
+
+    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+        outputDir = createTempDir()
+        try {
+            super.interceptTestCase(context, test)
+        } finally {
+            outputDir.deleteRecursively()
+        }
+    }
+
     init {
         "Tar GZ archive can be unpacked" {
             val archive = File("src/test/assets/test.tar.gz")
-            val outputDirectory = createTempDir()
 
-            try {
-                archive.unpack(outputDirectory)
+            archive.unpack(outputDir)
 
-                val fileA = File(outputDirectory, "a")
-                val fileB = File(outputDirectory, "dir/b")
+            val fileA = File(outputDir, "a")
+            val fileB = File(outputDir, "dir/b")
 
-                fileA.exists() shouldBe true
-                fileA.readText() shouldBe "a\n"
-                fileB.exists() shouldBe true
-                fileB.readText() shouldBe "b\n"
-            } finally {
-                outputDirectory.deleteRecursively()
-            }
+            fileA.exists() shouldBe true
+            fileA.readText() shouldBe "a\n"
+            fileB.exists() shouldBe true
+            fileB.readText() shouldBe "b\n"
         }
 
         "Zip archive can be unpacked" {
             val archive = File("src/test/assets/test.zip")
-            val outputDirectory = createTempDir()
 
-            try {
-                archive.unpack(outputDirectory)
+            archive.unpack(outputDir)
 
-                val fileA = File(outputDirectory, "a")
-                val fileB = File(outputDirectory, "dir/b")
+            val fileA = File(outputDir, "a")
+            val fileB = File(outputDir, "dir/b")
 
-                fileA.exists() shouldBe true
-                fileA.readText() shouldBe "a\n"
-                fileB.exists() shouldBe true
-                fileB.readText() shouldBe "b\n"
-            } finally {
-                outputDirectory.deleteRecursively()
-            }
+            fileA.exists() shouldBe true
+            fileA.readText() shouldBe "a\n"
+            fileB.exists() shouldBe true
+            fileB.readText() shouldBe "b\n"
         }
     }
 }

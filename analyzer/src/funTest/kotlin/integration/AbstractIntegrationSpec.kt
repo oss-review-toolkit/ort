@@ -26,7 +26,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.utils.Expensive
 
-import io.kotlintest.Spec
+import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNot
@@ -61,7 +61,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     /**
      * A temporary directory used as working directory for the test suite.
      */
-    private val outputDir = createTempDir()
+    private lateinit var outputDir: File
 
     /**
      * The instance needs to be shared between tests because otherwise the source code of [pkg] would have to be
@@ -69,9 +69,13 @@ abstract class AbstractIntegrationSpec : StringSpec() {
      */
     override val oneInstancePerTest = false
 
-    override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        spec()
-        outputDir.deleteRecursively()
+    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+        outputDir = createTempDir()
+        try {
+            super.interceptTestCase(context, test)
+        } finally {
+            outputDir.deleteRecursively()
+        }
     }
 
     init {

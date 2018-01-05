@@ -31,6 +31,7 @@ import java.io.File
 class GitTest : StringSpec() {
     private lateinit var zipContentDir: File
 
+    // Required to make lateinit of outputDir work.
     override val oneInstancePerTest = false
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
@@ -42,7 +43,7 @@ class GitTest : StringSpec() {
         zipFile.unpack(zipContentDir)
 
         try {
-            spec()
+            super.interceptSpec(context, spec)
         } finally {
             zipContentDir.deleteRecursively()
         }

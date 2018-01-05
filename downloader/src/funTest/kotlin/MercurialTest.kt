@@ -44,8 +44,11 @@ class MercurialTest : StringSpec() {
 
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         outputDir = createTempDir()
-        super.interceptTestCase(context, test)
-        outputDir.deleteRecursively()
+        try {
+            super.interceptTestCase(context, test)
+        } finally {
+            outputDir.deleteRecursively()
+        }
     }
 
     init {

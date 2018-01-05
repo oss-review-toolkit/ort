@@ -26,7 +26,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.Expensive
 
-import io.kotlintest.Spec
+import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beGreaterThan
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
@@ -36,12 +36,18 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class DownloaderTest : StringSpec() {
+    private lateinit var outputDir: File
 
-    private val outputDir = createTempDir()
+    // Required to make lateinit of outputDir work.
+    override val oneInstancePerTest = false
 
-    override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        spec()
-        outputDir.deleteRecursively()
+    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+        outputDir = createTempDir()
+        try {
+            super.interceptTestCase(context, test)
+        } finally {
+            outputDir.deleteRecursively()
+        }
     }
 
     init {

@@ -194,15 +194,15 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 log.debug { "Checksums: $checksums" }
 
                 val checksum = checksums.first()
-                val tmpFile = File.createTempFile("checksum", checksum.algorithm)
+                val tempFile = File.createTempFile("checksum", checksum.algorithm)
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
                 val actualChecksum = try {
-                    transporter.get(GetTask(checksum.location).setDataFile(tmpFile))
+                    transporter.get(GetTask(checksum.location).setDataFile(tempFile))
 
                     // Sometimes the checksum file contains a path after the actual checksum, so strip everything after
                     // the first space.
-                    tmpFile.readText().substringBefore(" ")
+                    tempFile.readText().substringBefore(" ")
                 } catch (e: Exception) {
                     if (Main.stacktrace) {
                         e.printStackTrace()
@@ -214,8 +214,8 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     ""
                 }
 
-                if (!tmpFile.delete()) {
-                    log.warn { "Unable to delete temporary file '$tmpFile'." }
+                if (!tempFile.delete()) {
+                    log.warn { "Unable to delete temporary file '$tempFile'." }
                 }
 
                 val downloadUrl = "${repository.url}/$remoteLocation"
