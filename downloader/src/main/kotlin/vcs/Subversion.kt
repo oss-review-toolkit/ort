@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonRootName
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
+import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.VcsInfo
@@ -136,53 +137,65 @@ object Subversion : VersionControlSystem() {
     override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
         log.info { "Using $this version ${getVersion()}." }
 
-        runSvnCommand(targetDir, "co", vcs.url, "--depth", "empty", ".")
+        try {
+            runSvnCommand(targetDir, "co", vcs.url, "--depth", "empty", ".")
 
-        val revision = if (vcs.revision.isNotBlank()) {
-            vcs.revision
-        } else if (version.isNotBlank()) {
-            try {
-                log.info { "Trying to determine revision for version: $version" }
-                val tagsList = runSvnCommand(targetDir, "list", "${vcs.url}/tags").stdout().trim().lineSequence()
-                val tagName = tagsList.firstOrNull {
-                    val trimmedTag = it.trimEnd('/')
-                    trimmedTag.endsWith(version)
-                            || trimmedTag.endsWith(version.replace('.', '_'))
+            val revision = if (vcs.revision.isNotBlank()) {
+                vcs.revision
+            } else if (version.isNotBlank()) {
+                try {
+                    log.info { "Trying to determine revision for version: $version" }
+                    val tagsList = runSvnCommand(targetDir, "list", "${vcs.url}/tags")
+                            .stdout().trim().lineSequence()
+                    val tagName = tagsList.firstOrNull {
+                        val trimmedTag = it.trimEnd('/')
+                        trimmedTag.endsWith(version)
+                                || trimmedTag.endsWith(version.replace('.', '_'))
+                    }
+
+                    val xml = runSvnCommand(targetDir,
+                            "log",
+                            "${vcs.url}/tags/$tagName",
+                            "--xml").stdout().trim()
+                    val valueType = xmlMapper.typeFactory
+                            .constructCollectionType(List::class.java, SubversionLogEntry::class.java)
+                    val logEntries: List<SubversionLogEntry> = xmlMapper.readValue(xml, valueType)
+                    logEntries.firstOrNull()?.revision ?: ""
+                } catch (e: IOException) {
+                    if (Main.stacktrace) {
+                        e.printStackTrace()
+                    }
+
+                    log.warn {
+                        "Could not determine revision for version: $version. Falling back to fetching everything."
+                    }
+                    ""
                 }
-
-                val xml = runSvnCommand(targetDir,
-                                        "log",
-                                        "${vcs.url}/tags/$tagName",
-                                        "--xml").stdout().trim()
-                val valueType = xmlMapper.typeFactory
-                        .constructCollectionType(List::class.java, SubversionLogEntry::class.java)
-                val logEntries: List<SubversionLogEntry> = xmlMapper.readValue(xml, valueType)
-                logEntries.firstOrNull()?.revision ?: ""
-            } catch (e: IOException) {
-                if (Main.stacktrace) {
-                    e.printStackTrace()
-                }
-
-                log.warn { "Could not determine revision for version: $version. Falling back to fetching everything." }
+            } else {
                 ""
             }
-        } else {
-            ""
-        }
 
-        if (vcs.path.isNotBlank()) {
-            // In case of sparse checkout, destination directory needs to exists,
-            // `svn update` will fail otherwise (if dest dir is deeper than one level).
-            targetDir.resolve(vcs.path).mkdirs()
-        }
+            if (vcs.path.isNotBlank()) {
+                // In case of sparse checkout, destination directory needs to exists,
+                // `svn update` will fail otherwise (if dest dir is deeper than one level).
+                targetDir.resolve(vcs.path).mkdirs()
+            }
 
-        if (revision.isNotBlank()) {
-            runSvnCommand(targetDir, "up", "-r", revision, "--set-depth", "infinity", vcs.path)
-        } else {
-            runSvnCommand(targetDir, "up", "--set-depth", "infinity", vcs.path)
-        }
+            if (revision.isNotBlank()) {
+                runSvnCommand(targetDir, "up", "-r", revision, "--set-depth", "infinity", vcs.path)
+            } else {
+                runSvnCommand(targetDir, "up", "--set-depth", "infinity", vcs.path)
+            }
 
-        return Subversion.getWorkingTree(targetDir).getRevision()
+            return Subversion.getWorkingTree(targetDir).getRevision()
+        } catch (e: IOException) {
+            if (Main.stacktrace) {
+                e.printStackTrace()
+            }
+
+            log.error { "Could not checkout ${vcs.url}: ${e.message}" }
+            throw DownloadException("Could not checkout ${vcs.url}.", e)
+        }
     }
 
     private fun runSvnCommand(workingDir: File, vararg args: String) =
