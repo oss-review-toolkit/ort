@@ -241,20 +241,26 @@ class NPM : PackageManager() {
                 // TODO: add detection of hash algorithm
 
                 parseVcsInfo(infoJson)
-            } catch (e: IOException) {
-                if (Main.stacktrace) {
-                    e.printStackTrace()
+            } catch (e: Exception) {
+                when (e) {
+                    is IOException, is NullPointerException -> {
+                        if (Main.stacktrace) {
+                            e.printStackTrace()
+                        }
+
+                        // Fallback to getting detailed info from the package.json file. Some info will likely be
+                        // missing.
+                        description = json["description"].asTextOrEmpty()
+                        homepageUrl = json["homepage"].asTextOrEmpty()
+                        downloadUrl = json["_resolved"].asTextOrEmpty()
+
+                        hash = json["_integrity"].asTextOrEmpty()
+                        // TODO: add detection of hash algorithm
+
+                        parseVcsInfo(json)
+                    }
+                    else -> throw e
                 }
-
-                // Fallback to getting detailed info from the package.json file. Some info will likely be missing.
-                description = json["description"].asTextOrEmpty()
-                homepageUrl = json["homepage"].asTextOrEmpty()
-                downloadUrl = json["_resolved"].asTextOrEmpty()
-
-                hash = json["_integrity"].asTextOrEmpty()
-                // TODO: add detection of hash algorithm
-
-                parseVcsInfo(json)
             }
 
             val module = Package(
