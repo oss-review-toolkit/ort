@@ -80,5 +80,12 @@ class MercurialTest : StringSpec() {
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
         }
+
+        "Guessing the Mercurial revision for a version works" {
+            val workingTree = Mercurial.getWorkingTree(zipContentDir)
+            workingTree.guessRevisionNameForVersion("1.0") shouldBe "1.0"
+            workingTree.guessRevisionNameForVersion("2.0") shouldBe ""
+            workingTree.guessRevisionNameForVersion("") shouldBe ""
+        }
     }
 }
