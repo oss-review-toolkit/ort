@@ -80,5 +80,12 @@ class GitTest : StringSpec() {
             val workingTree = Git.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
         }
+
+        "Guessing the Git revision for a version works" {
+            val workingTree = Git.getWorkingTree(zipContentDir)
+            workingTree.guessRevisionNameForVersion("0.10.0") shouldBe "0.10.0"
+            workingTree.guessRevisionNameForVersion("1") shouldBe ""
+            workingTree.guessRevisionNameForVersion("") shouldBe ""
+        }
     }
 }

@@ -187,6 +187,30 @@ abstract class VersionControlSystem {
         abstract fun listRemoteTags(): List<String>
 
         /**
+         * Search (symbolic) names of VCS revisions for matches with the given version.
+         */
+        internal fun guessRevisionNameForVersion(version: String): String {
+            if (version.isBlank()) {
+                return ""
+            }
+
+            val variants = setOf(
+                    version,
+                    version.replace('.', '-'),
+                    version.replace('.', '_')
+            )
+
+            // For now, only consider tag names.
+            val candidates = listRemoteTags().filter { name ->
+                variants.any { version ->
+                    name.endsWith(version) && name.removeSuffix(version).lastOrNull() != '.'
+                }
+            }
+
+            return candidates.firstOrNull() ?: ""
+        }
+
+        /**
          * Return the relative path to [path] with respect to the VCS root.
          */
         fun getPathToRoot(path: File): String {
