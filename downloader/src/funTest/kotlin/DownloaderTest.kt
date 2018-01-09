@@ -66,9 +66,9 @@ class DownloaderTest : StringSpec() {
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo("Git", "https://github.com/heremaps/oss-review-toolkit.git", revision, submoduleName)
             )
-            Main.download(pkg, outputDir)
 
-            val workingTree = getWorkingTree(Git, pkg)
+            val downloadDir = Main.download(pkg, outputDir)
+            val workingTree = Git.getWorkingTree(downloadDir)
             val outputDirList = workingTree.workingDir.list()
 
             workingTree.isValid() shouldBe true
@@ -90,9 +90,9 @@ class DownloaderTest : StringSpec() {
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo("Git", "https://github.com/heremaps/oss-review-toolkit.git", "", "")
             )
-            Main.download(pkg, outputDir)
 
-            val workingTree = getWorkingTree(Git, pkg)
+            val downloadDir = Main.download(pkg, outputDir)
+            val workingTree = Git.getWorkingTree(downloadDir)
 
             workingTree.isValid() shouldBe true
         }.config(tags = setOf(Expensive))
@@ -112,9 +112,9 @@ class DownloaderTest : StringSpec() {
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo("Mercurial", "https://bitbucket.org/creaceed/mercurial-xcode-plugin", "", "")
             )
-            Main.download(pkg, outputDir)
 
-            val workingTree = getWorkingTree(Mercurial, pkg)
+            val downloadDir = Main.download(pkg, outputDir)
+            val workingTree = Mercurial.getWorkingTree(downloadDir)
 
             workingTree.getRevision() shouldBe revisionForVersion
         }.config(tags = setOf(Expensive))
@@ -137,13 +137,13 @@ class DownloaderTest : StringSpec() {
                     vcs = VcsInfo.EMPTY
             )
 
-            Main.download(pkg, outputDir)
+            val downloadDir = Main.download(pkg, outputDir)
 
-            val licenseFile = File(outputDir, "LICENSE-junit.txt")
+            val licenseFile = File(downloadDir, "LICENSE-junit.txt")
             licenseFile.exists() shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            outputDir.walkTopDown().count() shouldBe 235
+            downloadDir.walkTopDown().count() shouldBe 234
         }
 
         "Download of JAR source package fails when hash is incorrect" {
@@ -172,7 +172,4 @@ class DownloaderTest : StringSpec() {
                     "from expected hash '0123456789abcdef0123456789abcdef01234567'."
         }
     }
-
-    private fun getWorkingTree(vcs: VersionControlSystem, pkg: Package) =
-            vcs.getWorkingTree(File(outputDir, "${pkg.normalizedName}/${pkg.version}"))
 }
