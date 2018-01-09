@@ -26,11 +26,11 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.utils.Expensive
 
-import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNot
 import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.Spec
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -59,31 +59,24 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     protected lateinit var downloadDir: File
 
     /**
-     * A temporary directory used as working directory for the test suite.
-     */
-    private lateinit var outputDir: File
-
-    /**
      * The instance needs to be shared between tests because otherwise the source code of [pkg] would have to be
      * downloaded once per test.
      */
     override val oneInstancePerTest = false
 
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
-        outputDir = createTempDir()
+    override fun interceptSpec(context: Spec, spec: () -> Unit) {
+        val outputDir = createTempDir()
+        downloadDir = Main.download(pkg, outputDir)
         try {
-            super.interceptTestCase(context, test)
+            super.interceptSpec(context, spec)
         } finally {
             outputDir.deleteRecursively()
         }
     }
 
     init {
-        "Source code can be downloaded" {
-            downloadDir = Main.download(pkg, outputDir)
+        "Source code was downloaded successfully" {
             val workingTree = VersionControlSystem.forDirectory(downloadDir)
-
-            downloadDir shouldNotBe null
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
             workingTree.getProvider() shouldBe pkg.vcs.provider
