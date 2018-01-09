@@ -247,7 +247,7 @@ object Main {
             // TODO: This should also be tried if the VCS checkout does not work.
 
             p("Trying to download source package ...")
-            return downloadSourcePackage(target, outputDirectory)
+            return downloadSourcePackage(target, targetDir)
         }
     }
 
