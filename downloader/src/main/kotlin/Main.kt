@@ -184,7 +184,9 @@ object Main {
      * @param target The description of the package to download.
      * @param outputDirectory The parent directory to download the source code to.
      *
-     * @return The directory containing the source code, or null if the source code could not be downloaded.
+     * @return The directory the source code was downloaded to.
+     *
+     * @throws DownloadException In case the download failed.
      */
     @Suppress("ComplexMethod")
     fun download(target: Package, outputDirectory: File): File {
