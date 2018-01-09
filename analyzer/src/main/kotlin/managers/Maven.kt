@@ -82,13 +82,32 @@ class Maven : PackageManager() {
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = maven.createProjectBuildingRequest(false)
-        val projectBuildingResults = projectBuilder.build(definitionFiles, false, projectBuildingRequest)
+        val projectBuildingResults = try {
+            projectBuilder.build(definitionFiles, false, projectBuildingRequest)
+        } catch (e: ProjectBuildingException) {
+            if (Main.stacktrace) {
+                e.printStackTrace()
+            }
+
+            log.warn {
+                "There have been issues building the Maven project models, this could lead to errors during " +
+                        "dependency analysis: ${e.message}"
+            }
+            e.results
+        }
 
         projectBuildingResults.forEach { projectBuildingResult ->
-            val project = projectBuildingResult.project
-            val identifier = "${project.groupId}:${project.artifactId}:${project.version}"
+            if (projectBuildingResult.project == null) {
+                log.warn {
+                    "Project for POM file '${projectBuildingResult.pomFile.absolutePath}' could not be built:\n" +
+                            projectBuildingResult.problems.joinToString(separator = "\n")
+                }
+            } else {
+                val project = projectBuildingResult.project
+                val identifier = "${project.groupId}:${project.artifactId}:${project.version}"
 
-            projectsByIdentifier[identifier] = projectBuildingResult
+                projectsByIdentifier[identifier] = projectBuildingResult
+            }
         }
 
         return definitionFiles
