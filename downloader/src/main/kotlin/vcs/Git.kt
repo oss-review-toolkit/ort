@@ -25,6 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.OS
 import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
@@ -96,6 +97,10 @@ object Git : GitBase() {
             // Do not use "git clone" to have more control over what is being fetched.
             runGitCommand(targetDir, "init")
             runGitCommand(targetDir, "remote", "add", "origin", vcs.url)
+
+            if (OS.isWindows) {
+                runGitCommand(targetDir, "config", "core.longpaths", "true")
+            }
 
             val workingTree = getWorkingTree(targetDir)
 
