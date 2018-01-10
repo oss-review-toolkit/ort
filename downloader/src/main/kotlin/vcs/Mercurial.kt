@@ -76,7 +76,7 @@ object Mercurial : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         val revisionCmdArgs = mutableListOf<String>()
@@ -161,7 +161,7 @@ object Mercurial : VersionControlSystem() {
             }
         }
 
-        return Mercurial.getWorkingTree(targetDir).getRevision()
+        return Mercurial.getWorkingTree(targetDir)
     }
 
     fun isAtLeastVersion(version: String): Boolean {

@@ -46,7 +46,7 @@ object GitRepo : GitBase() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
         val revision = if (vcs.revision.isNotBlank()) vcs.revision else "master"
         val manifestPath = if (vcs.path.isNotBlank()) vcs.path else "manifest.xml"
 
@@ -57,7 +57,7 @@ object GitRepo : GitBase() {
             log.debug { "Start git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
 
-            return getWorkingTree(targetDir).getRevision()
+            return getWorkingTree(targetDir)
         } catch (e: IOException) {
             if (Main.stacktrace) {
                 e.printStackTrace()

@@ -232,7 +232,8 @@ object Main {
             p("Using VCS provider '$applicableVcs'.")
 
             try {
-                val revision = applicableVcs.download(target.vcsProcessed, target.version, targetDir)
+                val workingTree = applicableVcs.download(target.vcsProcessed, target.version, targetDir)
+                val revision = workingTree.getRevision()
                 p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
                 return targetDir
             } catch (e: DownloadException) {

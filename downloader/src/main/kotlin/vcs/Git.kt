@@ -90,7 +90,7 @@ object Git : GitBase() {
      * @throws DownloadException In case the download failed.
      */
     @Suppress("ComplexMethod")
-    override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
@@ -117,7 +117,7 @@ object Git : GitBase() {
             try {
                 runGitCommand(targetDir, "fetch", "origin", committish)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return workingTree.getRevision()
+                return workingTree
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -135,7 +135,7 @@ object Git : GitBase() {
 
             try {
                 runGitCommand(targetDir, "checkout", committish)
-                return workingTree.getRevision()
+                return workingTree
             } catch (e: IOException) {
                 if (Main.stacktrace) {
                     e.printStackTrace()
@@ -159,7 +159,7 @@ object Git : GitBase() {
                     log.info { "Using '$tag'." }
                     runGitCommand(targetDir, "fetch", "origin", tag)
                     runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                    return workingTree.getRevision()
+                    return workingTree
                 }
 
                 log.warn { "No matching tag found for version '$version'." }
