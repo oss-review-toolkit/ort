@@ -81,15 +81,6 @@ object Git : GitBase() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).exitValue() == 0
 
-    /**
-     * Clones the Git repository using the native Git command.
-     *
-     * @param vcsPath If this parameter is not null or empty, the working tree is deleted and the path is selectively
-     *                checked out using 'git checkout HEAD -- vcsPath'.
-     *
-     * @throws DownloadException In case the download failed.
-     */
-    @Suppress("ComplexMethod")
     override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
@@ -102,8 +93,6 @@ object Git : GitBase() {
                 runGitCommand(targetDir, "config", "core.longpaths", "true")
             }
 
-            val workingTree = getWorkingTree(targetDir)
-
             if (vcs.path.isNotBlank()) {
                 log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
                 runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
@@ -111,11 +100,24 @@ object Git : GitBase() {
                 File(gitInfoDir, "sparse-checkout").writeText(vcs.path)
             }
 
-            val committish = if (vcs.revision.isNotBlank()) vcs.revision else "HEAD"
+            val workingTree = getWorkingTree(targetDir)
 
-            // Do safe network bandwidth, first try to only fetch exactly the committish we want.
+            val revision = if (vcs.revision.isNotBlank()) {
+                vcs.revision
+            } else {
+                log.info { "Trying to guess $this revision for version '$version'." }
+                workingTree.guessRevisionNameForVersion(version).also { revision ->
+                    if (revision.isBlank()) {
+                        throw IOException("Unable to determine a revision to checkout.")
+                    }
+
+                    log.info { "Found $this revision '$revision' for version '$version'." }
+                }
+            }
+
+            // To safe network bandwidth, first try to only fetch exactly the revision we want.
             try {
-                runGitCommand(targetDir, "fetch", "origin", committish)
+                runGitCommand(targetDir, "fetch", "origin", revision)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
                 return workingTree
             } catch (e: IOException) {
@@ -124,55 +126,23 @@ object Git : GitBase() {
                 }
 
                 log.warn {
-                    "Could not fetch only '$committish': ${e.message}\n" +
+                    "Could not fetch only '$revision': ${e.message}\n" +
                             "Falling back to fetching everything."
                 }
             }
 
             // Fall back to fetching everything.
-            log.info { "Fetching origin and trying to checkout '$committish'." }
+            log.info { "Fetching origin and trying to checkout '$revision'." }
             runGitCommand(targetDir, "fetch", "origin")
+            runGitCommand(targetDir, "checkout", revision)
 
-            try {
-                runGitCommand(targetDir, "checkout", committish)
-                return workingTree
-            } catch (e: IOException) {
-                if (Main.stacktrace) {
-                    e.printStackTrace()
-                }
-
-                log.warn { "Could not checkout '$committish': ${e.message}" }
-            }
-
-            // If checking out the provided committish did not work and we have a version, try finding a tag
-            // belonging to the version to checkout.
-            if (version.isNotBlank()) {
-                log.info { "Trying to guess tag for version '$version'." }
-
-                val tag = runGitCommand(targetDir, "ls-remote", "--tags", "origin")
-                        .stdout()
-                        .lineSequence()
-                        .map { it.split('\t').last() }
-                        .find { it.endsWith(version) || it.endsWith(version.replace('.', '_')) }
-
-                if (tag != null) {
-                    log.info { "Using '$tag'." }
-                    runGitCommand(targetDir, "fetch", "origin", tag)
-                    runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                    return workingTree
-                }
-
-                log.warn { "No matching tag found for version '$version'." }
-            }
-
-            throw IOException("Unable to determine a committish to checkout.")
+            return workingTree
         } catch (e: IOException) {
             if (Main.stacktrace) {
                 e.printStackTrace()
             }
 
-            log.error { "Could not clone ${vcs.url}: ${e.message}" }
-            throw DownloadException("Could not clone ${vcs.url}.", e)
+            throw DownloadException("Could not checkout ${vcs.url}.", e)
         }
     }
 }
