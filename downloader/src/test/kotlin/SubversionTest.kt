@@ -64,7 +64,7 @@ class SubversionTest : StringSpec() {
         "Detected Subversion working tree information is correct" {
             val workingTree = Subversion.getWorkingTree(zipContentDir)
 
-            workingTree.getProvider() shouldBe "Subversion"
+            workingTree.provider shouldBe "Subversion"
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code"
             workingTree.getRevision() shouldBe "8207"

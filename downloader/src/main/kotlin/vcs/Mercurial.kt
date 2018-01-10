@@ -23,16 +23,20 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingTree
+import com.here.ort.downloader.WorkingTreeWithRevision
+
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
+
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
 
-object Mercurial : VersionControlSystem() {
+object Mercurial : VersionControlSystem<WorkingTreeWithRevision>() {
     private const val EXTENSION_LARGE_FILES = "largefiles = "
     private const val EXTENSION_SPARSE = "sparse = "
 
@@ -45,7 +49,7 @@ object Mercurial : VersionControlSystem() {
     }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory) {
+            object : WorkingTreeWithRevision(vcsDirectory, this@Mercurial.toString()) {
                 override fun isValid(): Boolean {
                     if (!workingDir.isDirectory) {
                         return false

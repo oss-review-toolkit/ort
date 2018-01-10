@@ -172,4 +172,6 @@ class DownloaderTest : StringSpec() {
                     "from expected hash '0123456789abcdef0123456789abcdef01234567'."
         }
     }
+    private fun getWorkingTree(vcs: VersionControlSystem<WorkingTreeWithRevision>, pkg: Package) =
+            vcs.getWorkingTree(File(outputDir, "${pkg.normalizedName}/${pkg.version}"))
 }
