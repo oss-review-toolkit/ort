@@ -58,7 +58,8 @@ object Mercurial : VersionControlSystem() {
                 override fun getRemoteUrl() =
                         runMercurialCommand(workingDir, "paths", "default").stdout().trimEnd()
 
-                override fun getRevision() = runMercurialCommand(workingDir, "id", "-i").stdout().trimEnd()
+                override fun getRevision() =
+                        runMercurialCommand(workingDir, "--debug", "id", "-i").stdout().trimEnd()
 
                 override fun getRootPath() = runMercurialCommand(workingDir, "root").stdout().trimEnd()
                         .replace(File.separatorChar, '/')
