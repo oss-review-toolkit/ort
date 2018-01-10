@@ -75,7 +75,7 @@ class MercurialTest : StringSpec() {
         }
 
         "Mercurial correctly lists remote tags" {
-            val expectedTags = listOf("1.0.2", "1.0.1", "1.0")
+            val expectedTags = listOf("1.0", "1.0.1", "1.0.2")
 
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")

@@ -64,11 +64,14 @@ object Mercurial : VersionControlSystem() {
                         .replace(File.separatorChar, '/')
 
                 override fun listRemoteTags(): List<String> {
-                    val tags = runMercurialCommand(workingDir, "tags").stdout().trimEnd()
-                    return tags.lines().mapNotNull {
-                        val name = it.split(' ').first()
-                        if (name == "tip") null else name
-                    }
+                    // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
+                    // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
+                    runMercurialCommand(workingDir, "pull", "-r", "default")
+                    val tags = runMercurialCommand(workingDir, "cat", "-r", "default", ".hgtags")
+                            .stdout().trimEnd()
+                    return tags.lines().map {
+                        it.split(' ').last()
+                    }.sorted()
                 }
             }
 
