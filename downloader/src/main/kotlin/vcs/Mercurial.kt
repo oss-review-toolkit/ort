@@ -47,6 +47,10 @@ object Mercurial : VersionControlSystem() {
     override fun getWorkingTree(vcsDirectory: File) =
             object : WorkingTree(vcsDirectory) {
                 override fun isValid(): Boolean {
+                    if (!workingDir.isDirectory) {
+                        return false
+                    }
+
                     val repositoryRoot = runMercurialCommand(workingDir, "root").stdout().trimEnd()
                     return workingDir.path.startsWith(repositoryRoot)
                 }
