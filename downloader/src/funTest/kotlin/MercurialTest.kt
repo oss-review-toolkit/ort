@@ -59,8 +59,8 @@ class MercurialTest : StringSpec() {
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download single revision" {
-            val downloadedRev = Mercurial.download(VcsInfo("Mercurial", REPO_URL, REPO_REV, ""), "", outputDir)
-            downloadedRev shouldBe REPO_REV
+            val workingTree = Mercurial.download(VcsInfo("Mercurial", REPO_URL, REPO_REV, ""), "", outputDir)
+            workingTree.getRevision() shouldBe REPO_REV
         }.config(tags = setOf(Expensive))
 
         "Mercurial can download sub path" {
@@ -72,8 +72,8 @@ class MercurialTest : StringSpec() {
         }.config(tags = setOf(Expensive), enabled = Mercurial.isAtLeastVersion("4.3"))
 
         "Mercurial can download version" {
-            val downloadedRev = Mercurial.download(VcsInfo("Mercurial", REPO_URL, "", ""), REPO_VERSION, outputDir)
-            downloadedRev shouldBe REPO_VERSION_REV
+            val workingTree = Mercurial.download(VcsInfo("Mercurial", REPO_URL, "", ""), REPO_VERSION, outputDir)
+            workingTree.getRevision() shouldBe REPO_VERSION_REV
         }.config(tags = setOf(Expensive))
     }
 }

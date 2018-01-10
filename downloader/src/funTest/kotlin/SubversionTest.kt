@@ -54,8 +54,8 @@ class SubversionTest : StringSpec() {
 
     init {
         "Subversion can download single revision" {
-            val downloadedRev = Subversion.download(VcsInfo("Subversion", REPO_URL, REPO_REV, ""), "", outputDir)
-            downloadedRev shouldBe REPO_REV
+            val workingTree = Subversion.download(VcsInfo("Subversion", REPO_URL, REPO_REV, ""), "", outputDir)
+            workingTree.getRevision() shouldBe REPO_REV
         }.config(tags = setOf(Expensive))
 
         "Subversion can download sub path" {
@@ -67,8 +67,8 @@ class SubversionTest : StringSpec() {
         }.config(tags = setOf(Expensive))
 
         "Subversion can download version" {
-            val downloadedRev = Subversion.download(VcsInfo("Subversion", REPO_URL, "", ""), REPO_VERSION, outputDir)
-            downloadedRev shouldBe REPO_VERSION_REV
+            val workingTree = Subversion.download(VcsInfo("Subversion", REPO_URL, "", ""), REPO_VERSION, outputDir)
+            workingTree.getRevision() shouldBe REPO_VERSION_REV
         }.config(tags = setOf(Expensive))
 
         "Subversion can download entire repo" {

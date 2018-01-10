@@ -146,7 +146,7 @@ object Subversion : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
@@ -199,7 +199,7 @@ object Subversion : VersionControlSystem() {
                 runSvnCommand(targetDir, "update", "--set-depth", "infinity", vcs.path)
             }
 
-            return Subversion.getWorkingTree(targetDir).getRevision()
+            return Subversion.getWorkingTree(targetDir)
         } catch (e: IOException) {
             if (Main.stacktrace) {
                 e.printStackTrace()

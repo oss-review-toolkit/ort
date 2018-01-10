@@ -223,9 +223,9 @@ abstract class VersionControlSystem {
     /**
      * Download the source code as specified by the VCS information.
      *
-     * @return A String identifying the revision that was downloaded.
+     * @return An object describing the downloaded working tree.
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(vcs: VcsInfo, version: String, targetDir: File): String
+    abstract fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree
 }
