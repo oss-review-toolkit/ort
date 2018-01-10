@@ -132,13 +132,13 @@ object Subversion : VersionControlSystem() {
 
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("subversion", "svn")
 
-    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "ls", vcsUrl).exitValue() == 0
+    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
 
     override fun download(vcs: VcsInfo, version: String, targetDir: File): String {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
-            runSvnCommand(targetDir, "co", vcs.url, "--depth", "empty", ".")
+            runSvnCommand(targetDir, "checkout", vcs.url, "--depth", "empty", ".")
 
             val revision = if (vcs.revision.isNotBlank()) {
                 vcs.revision
@@ -182,9 +182,9 @@ object Subversion : VersionControlSystem() {
             }
 
             if (revision.isNotBlank()) {
-                runSvnCommand(targetDir, "up", "-r", revision, "--set-depth", "infinity", vcs.path)
+                runSvnCommand(targetDir, "update", "-r", revision, "--set-depth", "infinity", vcs.path)
             } else {
-                runSvnCommand(targetDir, "up", "--set-depth", "infinity", vcs.path)
+                runSvnCommand(targetDir, "update", "--set-depth", "infinity", vcs.path)
             }
 
             return Subversion.getWorkingTree(targetDir).getRevision()
