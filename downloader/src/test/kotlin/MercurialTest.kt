@@ -69,7 +69,7 @@ class MercurialTest : StringSpec() {
             workingTree.getProvider() shouldBe "Mercurial"
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://bitbucket.org/facebook/lz4revlog"
-            workingTree.getRevision() shouldBe "422ca71c3513"
+            workingTree.getRevision() shouldBe "422ca71c35132f1f55d20a13355708aec7669b50"
             workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
