@@ -106,18 +106,22 @@ object Subversion : VersionControlSystem() {
 
     override fun getWorkingTree(vcsDirectory: File) =
             object : WorkingTree(vcsDirectory) {
-                private val svnInfo = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
                 private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
                         .with(DeserializationFeature.UNWRAP_ROOT_VALUE)
-                private val svnInfoEntry: SubversionInfoEntry = svnInfoReader.readValue(svnInfo.stdout())
 
-                override fun isValid() = svnInfo.exitValue() == 0
+                override fun isValid(): Boolean {
+                    if (!workingDir.isDirectory) {
+                        return false
+                    }
 
-                override fun getRemoteUrl() = svnInfoEntry.repository.root
+                    return runSvnInfoCommand() != null
+                }
 
-                override fun getRevision() = svnInfoEntry.commit.revision
+                override fun getRemoteUrl() = runSvnInfoCommand()?.repository?.root ?: ""
 
-                override fun getRootPath() = svnInfoEntry.workingCopy.absolutePath
+                override fun getRevision() = runSvnInfoCommand()?.commit?.revision ?: ""
+
+                override fun getRootPath() = runSvnInfoCommand()?.workingCopy?.absolutePath ?: ""
 
                 override fun listRemoteTags(): List<String> {
                     val svnInfoTags = runSvnCommand(workingDir, "info", "--xml", "--depth=immediates", "^/tags")
@@ -127,6 +131,14 @@ object Subversion : VersionControlSystem() {
 
                     // As the "immediates" depth includes the "tags" parent, drop it.
                     return tagsEntries.drop(1).map { it.path }.sorted()
+                }
+
+                private fun runSvnInfoCommand(): SubversionInfoEntry? {
+                    val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
+                    if (info.exitValue() != 0) {
+                        return null
+                    }
+                    return svnInfoReader.readValue(info.stdout())
                 }
             }
 
