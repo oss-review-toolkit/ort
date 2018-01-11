@@ -35,6 +35,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.yamlMapper
 
 import java.io.File
@@ -123,16 +124,13 @@ object Main {
     private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: AnalyzerResult) {
         // Mirror the directory structure from the project in the output.
         val currentDir = if (currentPath.isFile) currentPath.parentFile else currentPath
-        val outputDir = File(outputRoot, currentDir.toRelativeString(projectRoot))
-        if (outputDir.mkdirs()) {
-            val outputFile = File(outputDir, currentPath.name.replace('.', '-') +
-                    "-dependencies." + outputFormat.fileEnding)
-            println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
-            mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
-            println("done.")
-        } else {
-            log.error { "Unable to create output directory '$outputDir'." }
-        }
+        val outputDir = File(outputRoot, currentDir.toRelativeString(projectRoot)).apply { safeMkdirs() }
+        val outputFile = File(outputDir, currentPath.name.replace('.', '-') +
+                "-dependencies." + outputFormat.fileEnding)
+
+        println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
+        mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
+        println("done.")
     }
 
     /**
