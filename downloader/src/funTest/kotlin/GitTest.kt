@@ -84,7 +84,7 @@ class GitTest : StringSpec() {
                     .onEnter { it.name != ".git" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
-                    .sorted()
+                    .sortedBy { it.path }
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -111,7 +111,7 @@ class GitTest : StringSpec() {
                     .onEnter { it.name != ".git" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
-                    .sorted()
+                    .sortedBy { it.path }
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
