@@ -98,7 +98,7 @@ class MercurialTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(Expensive))
+        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(Expensive))
 
         "Mercurial can download based on a version" {
             val vcs = VcsInfo("Mercurial", REPO_URL, "", "")
@@ -135,6 +135,6 @@ class MercurialTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(Expensive))
+        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(Expensive))
     }
 }
