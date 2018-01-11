@@ -57,15 +57,15 @@ class GitTest : StringSpec() {
                     ".git",
                     ".gitignore",
                     "CHANGELOG.md",
-                    "lib",
                     "LICENSE",
-                    "package.json",
                     "README.md",
+                    "lib",
+                    "package.json",
                     "specs"
             )
 
             val workingTree = Git.download(vcs, "", outputDir)
-            val actualFiles = workingTree.workingDir.list()
+            val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -84,6 +84,7 @@ class GitTest : StringSpec() {
                     .onEnter { it.name != ".git" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
+                    .sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -110,6 +111,7 @@ class GitTest : StringSpec() {
                     .onEnter { it.name != ".git" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
+                    .sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION

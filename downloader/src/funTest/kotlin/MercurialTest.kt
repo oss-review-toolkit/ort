@@ -66,7 +66,7 @@ class MercurialTest : StringSpec() {
             )
 
             val workingTree = Mercurial.download(vcs, "", outputDir)
-            val actualFiles = workingTree.workingDir.list()
+            val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -80,10 +80,10 @@ class MercurialTest : StringSpec() {
                     File(".hgsubstate"),
                     File(REPO_PATH, "MercurialPlugin.h"),
                     File(REPO_PATH, "MercurialPlugin.m"),
-                    File("Script", "git.py"), // As a submodule, "Script" is always included.
+                    File("Script", "README"), // As a submodule, "Script" is always included.
+                    File("Script", "git.py"),
                     File("Script", "gpl-2.0.txt"),
                     File("Script", "install_bridge.sh"),
-                    File("Script", "README"),
                     File("Script", "sniff.py"),
                     File("Script", "uninstall_bridge.sh")
             )
@@ -93,6 +93,7 @@ class MercurialTest : StringSpec() {
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
+                    .sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -113,13 +114,13 @@ class MercurialTest : StringSpec() {
             val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
                     File(".hgsubstate"),
+                    File(REPO_PATH_FOR_VERSION, "Info.plist"),
                     File(REPO_PATH_FOR_VERSION, "icon.icns"),
                     File(REPO_PATH_FOR_VERSION, "icon_blank.icns"),
-                    File(REPO_PATH_FOR_VERSION, "Info.plist"),
-                    File("Script", "git.py"), // As a submodule, "Script" is always included.
+                    File("Script", "README"), // As a submodule, "Script" is always included.
+                    File("Script", "git.py"),
                     File("Script", "gpl-2.0.txt"),
                     File("Script", "install_bridge.sh"),
-                    File("Script", "README"),
                     File("Script", "sniff.py"),
                     File("Script", "uninstall_bridge.sh")
             )
@@ -129,6 +130,7 @@ class MercurialTest : StringSpec() {
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
+                    .sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION

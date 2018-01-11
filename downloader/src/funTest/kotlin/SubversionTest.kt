@@ -62,7 +62,7 @@ class SubversionTest : StringSpec() {
             )
 
             val workingTree = Subversion.download(vcs, "", outputDir)
-            val actualFiles = workingTree.workingDir.list()
+            val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -72,9 +72,9 @@ class SubversionTest : StringSpec() {
         "Subversion can download only a single path" {
             val vcs = VcsInfo("Subversion", REPO_URL, REPO_REV, REPO_PATH)
             val expectedFiles = listOf(
+                    "SendMessage.sln",
                     "default.build",
                     "default.build.user.tmpl",
-                    "SendMessage.sln",
                     "sktoolslib", // This is an external.
                     "src",
                     "tools",
@@ -83,7 +83,7 @@ class SubversionTest : StringSpec() {
             )
 
             val workingTree = Subversion.download(vcs, "", outputDir)
-            val actualFiles = workingTree.workingDir.list()
+            val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -102,14 +102,14 @@ class SubversionTest : StringSpec() {
         "Subversion can download only a single path based on a version" {
             val vcs = VcsInfo("Subversion", REPO_URL, "", REPO_PATH_FOR_VERSION)
             val expectedFiles = listOf(
+                    "SendMessage.ico",
                     "searchw.cur",
                     "searchw.ico",
-                    "SendMessage.ico",
                     "windowmessages.xml"
             )
 
             val workingTree = Subversion.download(vcs, REPO_VERSION, outputDir)
-            val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list()
+            val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list().sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
