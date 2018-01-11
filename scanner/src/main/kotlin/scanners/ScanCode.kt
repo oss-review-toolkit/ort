@@ -33,9 +33,7 @@ import com.here.ort.utils.log
 import java.io.File
 
 object ScanCode : Scanner() {
-
     private const val OUTPUT_FORMAT = "json-pp"
-    private const val PROCESSES = 6
     private const val TIMEOUT = 300
 
     private val DEFAULT_OPTIONS = listOf("--copyright", "--license", "--info", "--diag", "--only-findings",
@@ -67,7 +65,7 @@ object ScanCode : Scanner() {
                 executable,
                 *options.toTypedArray(),
                 "--timeout", TIMEOUT.toString(),
-                "-n", PROCESSES.toString(),
+                "-n", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString(),
                 "-f", OUTPUT_FORMAT,
                 path.absolutePath,
                 resultsFile.absolutePath
