@@ -161,7 +161,7 @@ class PIP : PackageManager() {
         if (pipdeptreeJson.exitValue() == 0) {
             val allDependencies = jsonMapper.readTree(pipdeptreeJson.stdout()) as ArrayNode
 
-            if (definitionFile.name == "requirements.txt" && pipdeptree.exitValue() == 0) {
+            if (definitionFile.name != "setup.py" && pipdeptree.exitValue() == 0) {
                 val topLevelDependencies = pipdeptree.stdout().lines().mapNotNull {
                     PIPDEPTREE_TOP_LEVEL_REGEX.matchEntire(it)?.groupValues?.get(1).takeUnless {
                         it in PIPDEPTREE_DEPENDENCIES
