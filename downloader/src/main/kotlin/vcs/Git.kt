@@ -133,7 +133,7 @@ object Git : GitBase() {
 
             // Fall back to fetching everything.
             log.info { "Fetching origin and trying to checkout '$revision'." }
-            runGitCommand(targetDir, "fetch", "origin")
+            runGitCommand(targetDir, "fetch", "--tags", "origin")
             runGitCommand(targetDir, "checkout", revision)
 
             return workingTree
