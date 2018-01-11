@@ -28,7 +28,7 @@ import java.nio.file.FileSystems
  * @property homepageUrl The URL to the package manager's homepage.
  * @property primaryLanguage The name of the programming language this package manager is primarily used with.
  * @param globsForDefinitionFiles A prioritized list of glob patterns of definition files supported by this package
- *                                manager.
+ *                                manager. Only all matches of the first glob having any matches is considered.
  */
 abstract class PackageManagerFactory<out T : PackageManager>(
         val homepageUrl: String,
