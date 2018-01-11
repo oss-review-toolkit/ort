@@ -144,7 +144,7 @@ class DownloaderTest : StringSpec() {
             licenseFile.length() shouldBe 11376L
 
             downloadDir.walkTopDown().count() shouldBe 234
-        }
+        }.config(tags = setOf(Expensive))
 
         "Download of JAR source package fails when hash is incorrect" {
             val pkg = Package(
@@ -170,6 +170,6 @@ class DownloaderTest : StringSpec() {
 
             exception.message shouldBe "Calculated SHA-1 hash 'a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa' differs " +
                     "from expected hash '0123456789abcdef0123456789abcdef01234567'."
-        }
+        }.config(tags = setOf(Expensive))
     }
 }
