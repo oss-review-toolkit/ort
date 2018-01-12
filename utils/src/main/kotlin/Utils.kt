@@ -140,6 +140,12 @@ fun String.fileSystemDecode(): String =
         java.net.URLDecoder.decode(this, "UTF-8")
 
 /**
+ * Delete files recursively without failing if e.g. individual files in symlinked directories could not be deleted due
+ * to permission issues if in the end the named directory does not exist anymore.
+ */
+fun File.safeDeleteRecursively() = this.deleteRecursively() || !this.exists()
+
+/**
  * Create all missing intermediate directories without failing if any already exists.
  *
  * @throws IOException if any missing directory could not be created.

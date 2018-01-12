@@ -45,7 +45,7 @@ class UtilsTest : WordSpec({
             val tempDir = createTempDir()
             val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
             fileFromStr.isFile shouldBe true
-            tempDir.deleteRecursively() shouldBe true
+            tempDir.safeDeleteRecursively() shouldBe true
         }
 
         "be reversible by String.urldecode" {
