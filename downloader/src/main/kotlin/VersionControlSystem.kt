@@ -22,6 +22,8 @@ package com.here.ort.downloader
 import com.here.ort.downloader.vcs.*
 import com.here.ort.model.VcsInfo
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
@@ -227,6 +229,14 @@ abstract class VersionControlSystem {
      * Return the VCS command's version string, or an empty string if the version cannot be determined.
      */
     abstract fun getVersion(): String
+
+    /**
+     * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.
+     */
+    fun isAtLeastVersion(expectedVersion: String): Boolean {
+        val actualVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
+        return actualVersion.isGreaterThanOrEqualTo(Semver(expectedVersion, Semver.SemverType.LOOSE))
+    }
 
     /**
      * Return a working tree instance for this VCS.

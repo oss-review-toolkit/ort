@@ -28,7 +28,6 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
-import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
@@ -138,11 +137,6 @@ object Mercurial : VersionControlSystem() {
 
             throw DownloadException("$this failed to download from URL '${vcs.url}'.", e)
         }
-    }
-
-    fun isAtLeastVersion(version: String): Boolean {
-        val mercurialVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
-        return mercurialVersion.isGreaterThanOrEqualTo(Semver(version, Semver.SemverType.LOOSE))
     }
 
     private fun runMercurialCommand(workingDir: File, vararg args: String) =
