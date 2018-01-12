@@ -45,6 +45,8 @@ import com.here.ort.utils.log
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
+import java.io.IOException
+import java.net.HttpURLConnection
 import java.util.SortedSet
 
 import okhttp3.Request
@@ -200,63 +202,75 @@ class PIP : PackageManager() {
                         .url("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json")
                         .build()
 
-                val pkgJson = OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
-                    response.body()?.string()
-                }
+                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+                    val body = response.body()?.string()?.trim()
 
-                @Suppress("CatchException")
-                try {
-                    val pkgData = jsonMapper.readTree(pkgJson)
-                    val pkgInfo = pkgData["info"]
-
-                    // TODO: Support multiple package types of the same package version. Arbitrarily choose the
-                    // first for now.
-                    val pkgRelease = pkgData["releases"][pkg.version][0]
-
-                    val declaredLicenses = sortedSetOf<String>()
-
-                    // Use the top-level license field as well as the license classifiers as the declared licenses.
-                    setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-                        it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
-                    }
-
-                    // Example license classifier:
-                    // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-                    pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-                        val classifier = it.asText().split(" :: ")
-                        if (classifier.first() == "License") {
-                            classifier.last().removeSuffix(" License")
-                        } else {
-                            null
+                    if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrBlank()) {
+                        log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.identifier}'." }
+                        if (body != null) {
+                            log.warn { "Response was '$body'." }
                         }
+
+                        // Fall back to returning the original package data.
+                        return@use pkg
                     }
 
-                    // Amend package information with more details.
-                    Package(
-                            packageManager = pkg.packageManager,
-                            namespace = pkg.namespace,
-                            name = pkg.name,
-                            version = pkg.version,
-                            declaredLicenses = declaredLicenses,
-                            description = pkgInfo["summary"]?.asText() ?: pkg.description,
-                            homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
-                            binaryArtifact = RemoteArtifact(
-                                    url = pkgRelease["url"]?.asText() ?: pkg.binaryArtifact.url,
-                                    hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
-                                    hashAlgorithm = "MD5"
-                            ),
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = pkg.vcs
-                    )
-                } catch (e: Exception) {
-                    if (Main.stacktrace) {
-                        e.printStackTrace()
+                    val pkgData = try {
+                        jsonMapper.readTree(body)!!
+                    } catch (e: IOException) {
+                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
+
+                        // Fall back to returning the original package data.
+                        return@use pkg
                     }
 
-                    log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
+                    try {
+                        val pkgInfo = pkgData["info"]
+                        // TODO: Support multiple package types of the same package version. Arbitrarily choose the
+                        // first for now.
+                        val pkgRelease = pkgData["releases"][pkg.version][0]
 
-                    // Fall back to returning the original package data.
-                    pkg
+                        val declaredLicenses = sortedSetOf<String>()
+
+                        // Use the top-level license field as well as the license classifiers as the declared licenses.
+                        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
+                            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+                        }
+
+                        // Example license classifier:
+                        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+                        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
+                            val classifier = it.asText().split(" :: ")
+                            if (classifier.first() == "License") {
+                                classifier.last().removeSuffix(" License")
+                            } else {
+                                null
+                            }
+                        }
+
+                        // Amend package information with more details.
+                        Package(
+                                packageManager = pkg.packageManager,
+                                namespace = pkg.namespace,
+                                name = pkg.name,
+                                version = pkg.version,
+                                declaredLicenses = declaredLicenses,
+                                description = pkgInfo["summary"]?.asText() ?: pkg.description,
+                                homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
+                                binaryArtifact = RemoteArtifact(
+                                        url = pkgRelease["url"]?.asText() ?: pkg.binaryArtifact.url,
+                                        hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
+                                        hashAlgorithm = "MD5"
+                                ),
+                                sourceArtifact = RemoteArtifact.EMPTY,
+                                vcs = pkg.vcs
+                        )
+                    } catch (e: NullPointerException) {
+                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
+
+                        // Fall back to returning the original package data.
+                        pkg
+                    }
                 }
             }
         } else {
