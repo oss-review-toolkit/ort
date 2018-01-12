@@ -62,7 +62,7 @@ class PIP : PackageManager() {
         private const val PIPDEPTREE_VERSION = "0.10.1"
         private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
 
-        private val PIPDEPTREE_TOP_LEVEL_REGEX = Regex("(\\w+).*")
+        private val PIPDEPTREE_TOP_LEVEL_REGEX = Regex("([\\w-]+).*")
         private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
     }
 
