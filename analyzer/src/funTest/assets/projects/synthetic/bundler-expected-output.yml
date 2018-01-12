@@ -1,0 +1,297 @@
+---
+allowDynamicVersions: true
+project:
+  id: "Bundler::bundler:"
+  declared_licenses: []
+  aliases: []
+  vcs:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/bundler"
+  vcs_processed:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/bundler"
+  homepage_url: ""
+  scopes:
+  - name: "default"
+    delivered: true
+    dependencies:
+    - id: "Bundler::nokogiri:1.8.2"
+      dependencies:
+      - id: "Bundler::mini_portile2:2.3.0"
+        dependencies: []
+        errors: []
+      errors: []
+    - id: "Bundler::rack:1.6.10"
+      dependencies: []
+      errors: []
+  - name: "test"
+    delivered: true
+    dependencies:
+    - id: "Bundler::rspec:3.7.0"
+      dependencies:
+      - id: "Bundler::rspec-core:3.7.1"
+        dependencies:
+        - id: "Bundler::rspec-support:3.7.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Bundler::rspec-expectations:3.7.0"
+        dependencies:
+        - id: "Bundler::diff-lcs:1.3"
+          dependencies: []
+          errors: []
+        - id: "Bundler::rspec-support:3.7.1"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Bundler::rspec-mocks:3.7.0"
+        dependencies:
+        - id: "Bundler::diff-lcs:1.3"
+          dependencies: []
+          errors: []
+        - id: "Bundler::rspec-support:3.7.1"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+packages:
+- id: "Bundler::diff-lcs:1.3"
+  declared_licenses:
+  - "Artistic-2.0"
+  - "GPL-2.0+"
+  - "MIT"
+  description: "Diff::LCS computes the difference between two Enumerable sequences\
+    \ using the\nMcIlroy-Hunt longest common subsequence (LCS) algorithm. It includes\
+    \ utilities\nto create a simple HTML diff output format and a standard diff-like\
+    \ tool.\n\nThis is release 1.3, providing a tentative fix to a long-standing issue\
+    \ related\nto incorrect detection of a patch direction. Also modernizes the gem\n\
+    infrastructure, testing infrastructure, and provides a warning-free experience\n\
+    to Ruby 2.4 users."
+  homepage_url: "https://github.com/halostatue/diff-lcs"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/halostatue/diff-lcs.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/halostatue/diff-lcs.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+- id: "Bundler::mini_portile2:2.3.0"
+  declared_licenses:
+  - "MIT"
+  description: "Simplistic port-like solution for developers. It provides a standard\
+    \ and simplified way to compile against dependency libraries without messing up\
+    \ your system."
+  homepage_url: "http://github.com/flavorjones/mini_portile"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://github.com/flavorjones/mini_portile.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/flavorjones/mini_portile.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+- id: "Bundler::nokogiri:1.8.2"
+  declared_licenses:
+  - "MIT"
+  description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
+    \ many features is the ability to search documents via XPath\nor CSS3 selectors."
+  homepage_url: "http://nokogiri.org"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Bundler::rack:1.6.10"
+  declared_licenses:
+  - "MIT"
+  description: "Rack provides a minimal, modular and adaptable interface for developing\n\
+    web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
+    \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
+    \ and software in between (the so-called\nmiddleware) into a single method call.\n\
+    \nAlso see http://rack.github.io/.\n"
+  homepage_url: "http://rack.github.io/"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Bundler::rspec-core:3.7.1"
+  declared_licenses:
+  - "MIT"
+  description: "BDD for Ruby. RSpec runner and example groups."
+  homepage_url: "https://github.com/rspec/rspec-core"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-core.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-core.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+- id: "Bundler::rspec-expectations:3.7.0"
+  declared_licenses:
+  - "MIT"
+  description: "rspec-expectations provides a simple, readable API to express expected\
+    \ outcomes of a code example."
+  homepage_url: "https://github.com/rspec/rspec-expectations"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-expectations.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-expectations.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+- id: "Bundler::rspec-mocks:3.7.0"
+  declared_licenses:
+  - "MIT"
+  description: "RSpec's 'test double' framework, with support for stubbing and mocking"
+  homepage_url: "https://github.com/rspec/rspec-mocks"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-mocks.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-mocks.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+- id: "Bundler::rspec-support:3.7.1"
+  declared_licenses:
+  - "MIT"
+  description: "Support utilities for RSpec gems"
+  homepage_url: "https://github.com/rspec/rspec-support"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-support.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-support.git"
+    revision: ""
+    resolvedRevision: ""
+    path: ""
+- id: "Bundler::rspec:3.7.0"
+  declared_licenses:
+  - "MIT"
+  description: "BDD for Ruby"
+  homepage_url: "http://github.com/rspec"
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+errors: []
