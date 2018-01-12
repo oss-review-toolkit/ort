@@ -41,6 +41,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.safeDeleteRecursively
 
 import com.vdurmont.semver4j.Requirement
 
@@ -296,7 +297,7 @@ class PIP : PackageManager() {
         )
 
         // Remove the virtualenv by simply deleting the directory.
-        if (!virtualEnvDir.deleteRecursively()) {
+        if (!virtualEnvDir.safeDeleteRecursively()) {
             log.warn { "Unable to delete temporary directory '$virtualEnvDir'." }
         }
 

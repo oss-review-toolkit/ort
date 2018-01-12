@@ -42,6 +42,7 @@ import com.here.ort.utils.asTextOrEmpty
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.safeDeleteRecursively
 
 import com.vdurmont.semver4j.Requirement
 
@@ -150,7 +151,7 @@ class NPM : PackageManager() {
                     packages.values.toSortedSet())
         } finally {
             // Delete node_modules folder to not pollute the scan.
-            if (!modulesDir.deleteRecursively()) {
+            if (!modulesDir.safeDeleteRecursively()) {
                 throw IOException("Unable to delete the '$modulesDir' directory.")
             }
 
