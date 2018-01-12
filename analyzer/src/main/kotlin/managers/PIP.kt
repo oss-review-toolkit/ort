@@ -307,7 +307,7 @@ class PIP : PackageManager() {
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
         println("Creating a virtualenv for the '${workingDir.name}' project directory...")
-        val virtualEnvDir = createTempDir(workingDir.name, "virtualenv")
+        val virtualEnvDir = createTempDir(workingDir.name.padEnd(3, '_'), "virtualenv")
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
 
         var pip: ProcessCapture
