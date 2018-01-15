@@ -32,6 +32,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.yamlMapper
 
@@ -188,7 +189,6 @@ object Main {
      *
      * @throws DownloadException In case the download failed.
      */
-    @Suppress("ComplexMethod")
     fun download(target: Package, outputDirectory: File): File {
         // TODO: return also SHA1 which was finally cloned
         val p = fun(string: String) = println("${target.identifier}: $string")
@@ -198,58 +198,64 @@ object Main {
         p("Downloading source code to '${targetDir.absolutePath}'...")
 
         if (target.vcsProcessed.url.isNotBlank()) {
-            p("Trying to download from URL '${target.vcsProcessed.url}'...")
-
-            if (target.vcsProcessed.url != target.vcs.url) {
-                p("URL was normalized, original URL was '${target.vcs.url}'.")
-            }
-
-            if (target.vcsProcessed.revision.isBlank()) {
-                p("WARNING: No VCS revision provided, downloaded source code does likely not match revision " +
-                        target.version)
-            } else {
-                p("Downloading revision '${target.vcsProcessed.revision}'.")
-            }
-
-            var applicableVcs: VersionControlSystem? = null
-
-            p("Trying to detect VCS...")
-
-            if (target.vcsProcessed.provider.isNotBlank()) {
-                p("from provider name '${target.vcsProcessed.provider}'...")
-                applicableVcs = VersionControlSystem.forProvider(target.vcsProcessed.provider)
-            }
-
-            if (applicableVcs == null) {
-                p("from URL '${target.vcsProcessed.url}'...")
-                applicableVcs = VersionControlSystem.forUrl(target.vcsProcessed.url)
-            }
-
-            if (applicableVcs == null) {
-                throw DownloadException("Could not find an applicable VCS provider.")
-            }
-
-            p("Using VCS provider '$applicableVcs'.")
-
             try {
-                val workingTree = applicableVcs.download(target.vcsProcessed, target.version, targetDir)
-                val revision = workingTree.getRevision()
-                p("Finished downloading source code revision '$revision' to '${targetDir.absolutePath}'.")
-                return targetDir
+                return downloadFromVcs(target, targetDir)
             } catch (e: DownloadException) {
                 if (stacktrace) {
                     e.printStackTrace()
                 }
 
-                throw DownloadException("Could not download source code.", e)
+                // Clean up any files left from the failed VCS download (i.e. a ".git" directory)
+                targetDir.safeDeleteRecursively()
+                targetDir.safeMkdirs()
+                p("Download from VCS failed.")
             }
-        } else {
-            p("No VCS URL provided.")
-            // TODO: This should also be tried if the VCS checkout does not work.
-
-            p("Trying to download source package ...")
-            return downloadSourcePackage(target, targetDir)
         }
+
+        p("Trying to download source package ...")
+        return downloadSourcePackage(target, targetDir)
+    }
+
+    private fun downloadFromVcs(target: Package, outputDirectory: File): File {
+        val p = fun(string: String) = println("${target.identifier}: $string")
+
+        p("Trying to download from URL '${target.vcsProcessed.url}'...")
+
+        if (target.vcsProcessed.url != target.vcs.url) {
+            p("URL was normalized, original URL was '${target.vcs.url}'.")
+        }
+
+        if (target.vcsProcessed.revision.isBlank()) {
+            p("WARNING: No VCS revision provided, downloaded source code does likely not match revision " +
+                    target.version)
+        } else {
+            p("Downloading revision '${target.vcsProcessed.revision}'.")
+        }
+
+        var applicableVcs: VersionControlSystem? = null
+
+        p("Trying to detect VCS...")
+
+        if (target.vcsProcessed.provider.isNotBlank()) {
+            p("from provider name '${target.vcsProcessed.provider}'...")
+            applicableVcs = VersionControlSystem.forProvider(target.vcsProcessed.provider)
+        }
+
+        if (applicableVcs == null) {
+            p("from URL '${target.vcsProcessed.url}'...")
+            applicableVcs = VersionControlSystem.forUrl(target.vcsProcessed.url)
+        }
+
+        if (applicableVcs == null) {
+            throw DownloadException("Could not find an applicable VCS provider.")
+        }
+
+        p("Using VCS provider '$applicableVcs'.")
+
+        val workingTree = applicableVcs.download(target.vcsProcessed, target.version, outputDirectory)
+        val revision = workingTree.getRevision()
+        p("Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'.")
+        return outputDirectory
     }
 
     private fun downloadSourcePackage(target: Package, outputDirectory: File): File {
