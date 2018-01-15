@@ -1,0 +1,17 @@
+{
+  "name": "npm-project-that-depends-on-babel",
+  "version": "1.0.0",
+  "description": "A dummy NPM project that depends on Babel",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sebastian Schuberth",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heremaps/oss-review-toolkit.git"
+  },
+  "dependencies": {
+    "babel-cli": "6.26.0"
+  }
+}
