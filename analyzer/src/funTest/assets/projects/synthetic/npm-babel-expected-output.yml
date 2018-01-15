@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: false
 project:
-  package_manager: "NPM"
-  namespace: ""
-  name: "npm-project-that-depends-on-babel"
-  version: "1.0.0"
+  id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "npm-project-that-depends-on-babel"
+    version: "1.0.0"
   declared_licenses:
   - "Apache-2.0"
   aliases: []
@@ -2712,10 +2713,11 @@ project:
     delivered: false
     dependencies: []
 packages:
-- package_manager: "NPM"
-  namespace: ""
-  name: "ansi-regex"
-  version: "2.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "ansi-regex"
+    version: "2.1.1"
   declared_licenses:
   - "MIT"
   description: "Regular expression for matching ANSI escape codes"
@@ -2738,10 +2740,11 @@ packages:
     url: "https://github.com/chalk/ansi-regex.git"
     revision: "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "ansi-styles"
-  version: "2.2.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "ansi-styles"
+    version: "2.2.1"
   declared_licenses:
   - "MIT"
   description: "ANSI escape codes for styling strings in the terminal"
@@ -2764,10 +2767,11 @@ packages:
     url: "https://github.com/chalk/ansi-styles.git"
     revision: "95c59b23be760108b6530ca1c89477c21b258032"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "anymatch"
-  version: "1.3.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "anymatch"
+    version: "1.3.2"
   declared_licenses:
   - "ISC"
   description: "Matches strings against configurable strings, globs, regular expressions,\
@@ -2791,10 +2795,11 @@ packages:
     url: "https://github.com/es128/anymatch.git"
     revision: "a16f5bd07f1e36c4eef08c1291c6c119d1663639"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "arr-diff"
-  version: "2.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "arr-diff"
+    version: "2.0.0"
   declared_licenses:
   - "MIT"
   description: "Returns an array with only the unique values from the first array,\
@@ -2818,10 +2823,11 @@ packages:
     url: "https://github.com/jonschlinkert/arr-diff.git"
     revision: "b89f54eb88ca51afd0e0ea6be9a4a63e5ccecf27"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "arr-flatten"
-  version: "1.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "arr-flatten"
+    version: "1.1.0"
   declared_licenses:
   - "MIT"
   description: "Recursively flatten an array or arrays."
@@ -2844,10 +2850,11 @@ packages:
     url: "https://github.com/jonschlinkert/arr-flatten.git"
     revision: "76a1ae28b03fdb1cbe5d49fa521bc4807b9f94d3"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "array-unique"
-  version: "0.2.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "array-unique"
+    version: "0.2.1"
   declared_licenses:
   - ""
   description: "Return an array free of duplicate values. Fastest ES5 implementation."
@@ -2870,10 +2877,11 @@ packages:
     url: "https://github.com/jonschlinkert/array-unique.git"
     revision: "36fde8e586fb7cf880b8b3aa6515df889e64ed85"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "async-each"
-  version: "1.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "async-each"
+    version: "1.0.1"
   declared_licenses:
   - "MIT"
   description: "No-bullshit, ultra-simple, 35-lines-of-code async parallel forEach\
@@ -2897,10 +2905,11 @@ packages:
     url: "https://github.com/paulmillr/async-each.git"
     revision: "f2342d85633d0dc1034a49387ca01c08c1189823"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-cli"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-cli"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "Babel command line."
@@ -2923,10 +2932,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-cli"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-code-frame"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-code-frame"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "Generate errors that contain a code frame that point to source locations."
@@ -2949,10 +2959,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-code-frame"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-core"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-core"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "Babel compiler core."
@@ -2975,10 +2986,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-core"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-generator"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-generator"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "Turns an AST into code."
@@ -3001,10 +3013,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-generator"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-helpers"
-  version: "6.24.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-helpers"
+    version: "6.24.1"
   declared_licenses:
   - "MIT"
   description: "Collection of helper functions used by Babel transforms."
@@ -3027,10 +3040,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-helpers"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-messages"
-  version: "6.23.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-messages"
+    version: "6.23.0"
   declared_licenses:
   - "MIT"
   description: "Collection of debug messages used by Babel."
@@ -3053,10 +3067,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-messages"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-polyfill"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-polyfill"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "Provides polyfills necessary for a full ES2015+ environment"
@@ -3079,10 +3094,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-polyfill"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-register"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-register"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "babel require hook"
@@ -3105,10 +3121,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-register"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-runtime"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-runtime"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "babel selfContained runtime"
@@ -3131,10 +3148,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-runtime"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-template"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-template"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "Generate an AST from a string template."
@@ -3157,10 +3175,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-template"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-traverse"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-traverse"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "The Babel Traverse module maintains the overall tree state, and is\
@@ -3184,10 +3203,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-traverse"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babel-types"
-  version: "6.26.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babel-types"
+    version: "6.26.0"
   declared_licenses:
   - "MIT"
   description: "Babel Types is a Lodash-esque utility library for AST nodes"
@@ -3210,10 +3230,11 @@ packages:
     url: "https://github.com/babel/babel.git"
     revision: "master"
     path: "packages/babel-types"
-- package_manager: "NPM"
-  namespace: ""
-  name: "babylon"
-  version: "6.18.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "babylon"
+    version: "6.18.0"
   declared_licenses:
   - "MIT"
   description: "A JavaScript parser"
@@ -3236,10 +3257,11 @@ packages:
     url: "https://github.com/babel/babylon.git"
     revision: "da66d3f65b0d305c0bb042873d57f26f0c0b0538"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "balanced-match"
-  version: "1.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "balanced-match"
+    version: "1.0.0"
   declared_licenses:
   - "MIT"
   description: "Match balanced character pairs, like \"{\" and \"}\""
@@ -3262,10 +3284,11 @@ packages:
     url: "https://github.com/juliangruber/balanced-match.git"
     revision: "d701a549a7653a874eebce7eca25d3577dc868ac"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "binary-extensions"
-  version: "1.11.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "binary-extensions"
+    version: "1.11.0"
   declared_licenses:
   - "MIT"
   description: "List of binary file extensions"
@@ -3288,10 +3311,11 @@ packages:
     url: "https://github.com/sindresorhus/binary-extensions.git"
     revision: "a2370df9507ac5c618c32334ea259370b34ad3be"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "brace-expansion"
-  version: "1.1.8"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "brace-expansion"
+    version: "1.1.8"
   declared_licenses:
   - "MIT"
   description: "Brace expansion as known from sh/bash"
@@ -3314,10 +3338,11 @@ packages:
     url: "https://github.com/juliangruber/brace-expansion.git"
     revision: "8f59e68bd5c915a0d624e8e39354e1ccf672edf6"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "braces"
-  version: "1.8.5"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "braces"
+    version: "1.8.5"
   declared_licenses:
   - "MIT"
   description: "Fastest brace expansion for node.js, with the most complete support\
@@ -3341,10 +3366,11 @@ packages:
     url: "https://github.com/jonschlinkert/braces.git"
     revision: "24874614ebeda1c5405180f1f6c9f374bcf384ce"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "chalk"
-  version: "1.1.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "chalk"
+    version: "1.1.3"
   declared_licenses:
   - "MIT"
   description: "Terminal string styling done right. Much color."
@@ -3367,10 +3393,11 @@ packages:
     url: "https://github.com/chalk/chalk.git"
     revision: "0d8d8c204eb87a4038219131ad4d8369c9f59d24"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "chokidar"
-  version: "1.7.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "chokidar"
+    version: "1.7.0"
   declared_licenses:
   - "MIT"
   description: "A neat wrapper around node.js fs.watch / fs.watchFile / fsevents."
@@ -3393,10 +3420,11 @@ packages:
     url: "https://github.com/paulmillr/chokidar.git"
     revision: "3b1071a6dd82397842f4f7dc63b72c703bd06275"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "commander"
-  version: "2.12.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "commander"
+    version: "2.12.2"
   declared_licenses:
   - "MIT"
   description: "the complete solution for node.js command-line programs"
@@ -3419,10 +3447,11 @@ packages:
     url: "https://github.com/tj/commander.js.git"
     revision: "6864c953d781d4f665afecbdace84d9d80e45060"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "concat-map"
-  version: "0.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "concat-map"
+    version: "0.0.1"
   declared_licenses:
   - "MIT"
   description: "concatenative mapdashery"
@@ -3445,10 +3474,11 @@ packages:
     url: "https://github.com/substack/node-concat-map.git"
     revision: ""
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "convert-source-map"
-  version: "1.5.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "convert-source-map"
+    version: "1.5.1"
   declared_licenses:
   - "MIT"
   description: "Converts a source-map from/to  different formats and allows adding/changing\
@@ -3472,10 +3502,11 @@ packages:
     url: "https://github.com/thlorenz/convert-source-map.git"
     revision: "0771098071f3b7c48ec6604291cad28b3b679d02"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "core-js"
-  version: "2.5.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "core-js"
+    version: "2.5.2"
   declared_licenses:
   - "MIT"
   description: "Standard library"
@@ -3498,10 +3529,11 @@ packages:
     url: "https://github.com/zloirock/core-js.git"
     revision: "a03fd191eaea071fa56eb6a1a806470272deb9d7"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "core-util-is"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "core-util-is"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "The `util.is*` functions introduced in Node v0.12."
@@ -3524,10 +3556,11 @@ packages:
     url: "https://github.com/isaacs/core-util-is.git"
     revision: "a177da234df5638b363ddc15fa324619a38577c8"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "debug"
-  version: "2.6.9"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "debug"
+    version: "2.6.9"
   declared_licenses:
   - "MIT"
   description: "small debugging utility"
@@ -3550,10 +3583,11 @@ packages:
     url: "https://github.com/visionmedia/debug.git"
     revision: "13abeae468fea297d0dccc50bc55590809241083"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "detect-indent"
-  version: "4.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "detect-indent"
+    version: "4.0.0"
   declared_licenses:
   - "MIT"
   description: "Detect the indentation of code"
@@ -3576,10 +3610,11 @@ packages:
     url: "https://github.com/sindresorhus/detect-indent.git"
     revision: "dbbc78fcb37907116eb120a8324070a1df0e8d86"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "escape-string-regexp"
-  version: "1.0.5"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "escape-string-regexp"
+    version: "1.0.5"
   declared_licenses:
   - "MIT"
   description: "Escape RegExp special characters"
@@ -3602,10 +3637,11 @@ packages:
     url: "https://github.com/sindresorhus/escape-string-regexp.git"
     revision: "db124a3e1aae9d692c4899e42a5c6c3e329eaa20"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "esutils"
-  version: "2.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "esutils"
+    version: "2.0.2"
   declared_licenses: []
   description: "utility box for ECMAScript language tools"
   homepage_url: "https://github.com/estools/esutils"
@@ -3627,10 +3663,11 @@ packages:
     url: "https://github.com/estools/esutils.git"
     revision: "3ffd1c403f3f29db9e8a9574b1895682e57b6a7f"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "expand-brackets"
-  version: "0.1.5"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "expand-brackets"
+    version: "0.1.5"
   declared_licenses:
   - "MIT"
   description: "Expand POSIX bracket expressions (character classes) in glob patterns."
@@ -3653,10 +3690,11 @@ packages:
     url: "https://github.com/jonschlinkert/expand-brackets.git"
     revision: "1b07fda8ee8b6426d95e6539785b74c57e9ee542"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "expand-range"
-  version: "1.8.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "expand-range"
+    version: "1.8.2"
   declared_licenses:
   - "MIT"
   description: "Fast, bash-like range expansion. Expand a range of numbers or letters,\
@@ -3680,10 +3718,11 @@ packages:
     url: "https://github.com/jonschlinkert/expand-range.git"
     revision: "4c873af0870df8382bafc66a93d5c89e3aad3d4d"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "extglob"
-  version: "0.3.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "extglob"
+    version: "0.3.2"
   declared_licenses:
   - "MIT"
   description: "Convert extended globs to regex-compatible strings. Add (almost) the\
@@ -3707,10 +3746,11 @@ packages:
     url: "https://github.com/jonschlinkert/extglob.git"
     revision: "8c3f38bbd9e0afaf31a87e411c0d15532434ef41"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "filename-regex"
-  version: "2.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "filename-regex"
+    version: "2.0.1"
   declared_licenses:
   - "MIT"
   description: "Regular expression for matching file names, with or without extension."
@@ -3733,10 +3773,11 @@ packages:
     url: "https://github.com/regexhq/filename-regex.git"
     revision: "821fec482acdb1ce3f23a804ce8a86724d02b4e6"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "fill-range"
-  version: "2.2.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "fill-range"
+    version: "2.2.3"
   declared_licenses:
   - "MIT"
   description: "Fill in a range of numbers or letters, optionally passing an increment\
@@ -3760,10 +3801,11 @@ packages:
     url: "https://github.com/jonschlinkert/fill-range.git"
     revision: "6cb50d5c679d9e6d9e8ad97bb2efd63a8c8da610"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "for-in"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "for-in"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "Iterate over the own and inherited enumerable properties of an object,\
@@ -3788,10 +3830,11 @@ packages:
     url: "https://github.com/jonschlinkert/for-in.git"
     revision: "5f97ad4f6556e938d9b71614259ddd8044a081e3"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "for-own"
-  version: "0.1.5"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "for-own"
+    version: "0.1.5"
   declared_licenses:
   - "MIT"
   description: "Iterate over the own enumerable properties of an object, and return\
@@ -3816,10 +3859,38 @@ packages:
     url: "https://github.com/jonschlinkert/for-own.git"
     revision: "e64ee3492f218c812011ec3feff4194e9272d2a1"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "fs.realpath"
-  version: "1.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "fs-readdir-recursive"
+    version: "1.1.0"
+  declared_licenses:
+  - "MIT"
+  description: "Recursively read a directory"
+  homepage_url: "https://github.com/fs-utils/fs-readdir-recursive#readme"
+  binary_artifact:
+    url: "https://registry.npmjs.org/fs-readdir-recursive/-/fs-readdir-recursive-1.1.0.tgz"
+    hash: "e32fc030a2ccee44a6b5371308da54be0b397d27"
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    provider: "git"
+    url: "git+https://github.com/fs-utils/fs-readdir-recursive.git"
+    revision: "f810b44477696081ebef9c0d5eafb24005c8e82b"
+    path: ""
+  vcs_processed:
+    provider: "Git"
+    url: "https://github.com/fs-utils/fs-readdir-recursive.git"
+    revision: "f810b44477696081ebef9c0d5eafb24005c8e82b"
+    path: ""
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "fs.realpath"
+    version: "1.0.0"
   declared_licenses:
   - "ISC"
   description: "Use node's fs.realpath, but fall back to the JS implementation if\
@@ -3843,36 +3914,11 @@ packages:
     url: "https://github.com/isaacs/fs.realpath.git"
     revision: "03e7c884431fe185dfebbc9b771aeca339c1807a"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "fs-readdir-recursive"
-  version: "1.1.0"
-  declared_licenses:
-  - "MIT"
-  description: "Recursively read a directory"
-  homepage_url: "https://github.com/fs-utils/fs-readdir-recursive#readme"
-  binary_artifact:
-    url: "https://registry.npmjs.org/fs-readdir-recursive/-/fs-readdir-recursive-1.1.0.tgz"
-    hash: "e32fc030a2ccee44a6b5371308da54be0b397d27"
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    provider: "git"
-    url: "git+https://github.com/fs-utils/fs-readdir-recursive.git"
-    revision: "f810b44477696081ebef9c0d5eafb24005c8e82b"
-    path: ""
-  vcs_processed:
-    provider: "Git"
-    url: "https://github.com/fs-utils/fs-readdir-recursive.git"
-    revision: "f810b44477696081ebef9c0d5eafb24005c8e82b"
-    path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "glob-base"
-  version: "0.3.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "glob-base"
+    version: "0.3.0"
   declared_licenses:
   - ""
   description: "Returns an object with the (non-glob) base path and the actual pattern."
@@ -3895,10 +3941,11 @@ packages:
     url: "https://github.com/jonschlinkert/glob-base.git"
     revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "glob-parent"
-  version: "2.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "glob-parent"
+    version: "2.0.0"
   declared_licenses:
   - "ISC"
   description: "Strips glob magic from a string to provide the parent path"
@@ -3921,10 +3968,11 @@ packages:
     url: "https://github.com/es128/glob-parent.git"
     revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "glob"
-  version: "7.1.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "glob"
+    version: "7.1.2"
   declared_licenses:
   - "ISC"
   description: "a little globber"
@@ -3947,10 +3995,11 @@ packages:
     url: "https://github.com/isaacs/node-glob.git"
     revision: "8fa8d561e08c9eed1d286c6a35be2cd8123b2fb7"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "globals"
-  version: "9.18.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "globals"
+    version: "9.18.0"
   declared_licenses:
   - "MIT"
   description: "Global identifiers from different JavaScript environments"
@@ -3973,10 +4022,11 @@ packages:
     url: "https://github.com/sindresorhus/globals.git"
     revision: "09ba8754235e5953507b8d0543d65098bc7bb78d"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "graceful-fs"
-  version: "4.1.11"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "graceful-fs"
+    version: "4.1.11"
   declared_licenses:
   - "ISC"
   description: "A drop-in replacement for fs, making various improvements."
@@ -3999,10 +4049,11 @@ packages:
     url: "https://github.com/isaacs/node-graceful-fs.git"
     revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "has-ansi"
-  version: "2.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "has-ansi"
+    version: "2.0.0"
   declared_licenses:
   - "MIT"
   description: "Check if a string has ANSI escape codes"
@@ -4025,10 +4076,11 @@ packages:
     url: "https://github.com/sindresorhus/has-ansi.git"
     revision: "0722275e1bef139fcd09137da6e5550c3cd368b9"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "home-or-tmp"
-  version: "2.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "home-or-tmp"
+    version: "2.0.0"
   declared_licenses:
   - "MIT"
   description: "Get the user home directory with fallback to the system temp directory"
@@ -4051,10 +4103,11 @@ packages:
     url: "https://github.com/sindresorhus/home-or-tmp.git"
     revision: "dd1411a0b2531a4e2c592ae733fd45dd0f9c7163"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "inflight"
-  version: "1.0.6"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "inflight"
+    version: "1.0.6"
   declared_licenses:
   - "ISC"
   description: "Add callbacks to requests in flight to avoid async duplication"
@@ -4077,10 +4130,11 @@ packages:
     url: "https://github.com/npm/inflight.git"
     revision: "a547881738c8f57b27795e584071d67cf6ac1a57"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "inherits"
-  version: "2.0.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "inherits"
+    version: "2.0.3"
   declared_licenses:
   - "ISC"
   description: "Browser-friendly inheritance fully compatible with standard node.js\
@@ -4104,10 +4158,11 @@ packages:
     url: "https://github.com/isaacs/inherits.git"
     revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "invariant"
-  version: "2.2.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "invariant"
+    version: "2.2.2"
   declared_licenses:
   - "BSD-3-Clause"
   description: "invariant"
@@ -4130,10 +4185,11 @@ packages:
     url: "https://github.com/zertosh/invariant.git"
     revision: "49ae54d5a09c99a447e7dafa46bd3aa8f6923d98"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-binary-path"
-  version: "1.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-binary-path"
+    version: "1.0.1"
   declared_licenses:
   - "MIT"
   description: "Check if a filepath is a binary file"
@@ -4156,10 +4212,11 @@ packages:
     url: "https://github.com/sindresorhus/is-binary-path.git"
     revision: "ed26bd7be5e29dad159c2771cb99dd48913f9de0"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-buffer"
-  version: "1.1.6"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-buffer"
+    version: "1.1.6"
   declared_licenses:
   - "MIT"
   description: "Determine if an object is a Buffer"
@@ -4182,10 +4239,11 @@ packages:
     url: "https://github.com/feross/is-buffer.git"
     revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-dotfile"
-  version: "1.0.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-dotfile"
+    version: "1.0.3"
   declared_licenses:
   - "MIT"
   description: "Return true if a file path is (or has) a dotfile. Returns false if\
@@ -4209,10 +4267,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-dotfile.git"
     revision: "1548d0045c182dfb0ac7b747e2d484dcd382b09d"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-equal-shallow"
-  version: "0.1.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-equal-shallow"
+    version: "0.1.3"
   declared_licenses:
   - "MIT"
   description: "Does a shallow comparison of two objects, returning false if the keys\
@@ -4236,10 +4295,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-equal-shallow.git"
     revision: "dceb47dd9c9c21066958116e3b54b3c8c251ee4a"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-extendable"
-  version: "0.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-extendable"
+    version: "0.1.1"
   declared_licenses:
   - "MIT"
   description: "Returns true if a value is any of the object types: array, regexp,\
@@ -4264,10 +4324,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-extendable.git"
     revision: "c36a0732e6a76931c6f66c5931d1f3e54fa44380"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-extglob"
-  version: "1.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-extglob"
+    version: "1.0.0"
   declared_licenses:
   - "MIT"
   description: "Returns true if a string has an extglob."
@@ -4290,10 +4351,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-extglob.git"
     revision: ""
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-finite"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-finite"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "ES2015 Number.isFinite() ponyfill"
@@ -4316,10 +4378,11 @@ packages:
     url: "https://github.com/sindresorhus/is-finite.git"
     revision: "43f8bb814834d8573d11ba4a631d19006d0c8897"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-glob"
-  version: "2.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-glob"
+    version: "2.0.1"
   declared_licenses:
   - "MIT"
   description: "Returns `true` if the given string looks like a glob pattern or an\
@@ -4345,10 +4408,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-glob.git"
     revision: "d7db1b2dd559b3d5a73f89dbe72d9e9f4d6587d7"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-number"
-  version: "2.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-number"
+    version: "2.1.0"
   declared_licenses:
   - "MIT"
   description: "Returns true if the value is a number. comprehensive tests."
@@ -4371,10 +4435,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-number.git"
     revision: "d06c6e2cc048d3cad016cb8dfb055bb14d86fffa"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-number"
-  version: "3.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-number"
+    version: "3.0.0"
   declared_licenses:
   - "MIT"
   description: "Returns true if the value is a number. comprehensive tests."
@@ -4397,10 +4462,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-number.git"
     revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-posix-bracket"
-  version: "0.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-posix-bracket"
+    version: "0.1.1"
   declared_licenses:
   - "MIT"
   description: "Returns true if the given string is a POSIX bracket expression (POSIX\
@@ -4424,10 +4490,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-posix-bracket.git"
     revision: "43972556cfdbb681a15072da75c97952c4e4deba"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "is-primitive"
-  version: "2.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "is-primitive"
+    version: "2.0.0"
   declared_licenses:
   - ""
   description: "Returns `true` if the value is a primitive. "
@@ -4450,10 +4517,11 @@ packages:
     url: "https://github.com/jonschlinkert/is-primitive.git"
     revision: "c512b7c95fb049aa9b1f039ddc0670611b66cce2"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "isarray"
-  version: "1.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "isarray"
+    version: "1.0.0"
   declared_licenses:
   - "MIT"
   description: "Array#isArray for older browsers"
@@ -4476,10 +4544,11 @@ packages:
     url: "https://github.com/juliangruber/isarray.git"
     revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "isobject"
-  version: "2.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "isobject"
+    version: "2.1.0"
   declared_licenses:
   - "MIT"
   description: "Returns true if the value is an object and not an array or null."
@@ -4502,10 +4571,11 @@ packages:
     url: "https://github.com/jonschlinkert/isobject.git"
     revision: "d693ec8d31b02b42a19b2d806407a4ecb2f9fb73"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "js-tokens"
-  version: "3.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "js-tokens"
+    version: "3.0.2"
   declared_licenses:
   - "MIT"
   description: "A regex that tokenizes JavaScript."
@@ -4528,10 +4598,11 @@ packages:
     url: "https://github.com/lydell/js-tokens.git"
     revision: "8315904c840b14d28de1b0a4968194555f61bea3"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "jsesc"
-  version: "1.3.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "jsesc"
+    version: "1.3.0"
   declared_licenses:
   - "MIT"
   description: "A JavaScript library for escaping JavaScript strings while generating\
@@ -4555,10 +4626,11 @@ packages:
     url: "https://github.com/mathiasbynens/jsesc.git"
     revision: "2c43a8a223e297155b2b2ccca344df4d6ee4233c"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "json5"
-  version: "0.5.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "json5"
+    version: "0.5.1"
   declared_licenses:
   - "MIT"
   description: "JSON for the ES5 era."
@@ -4581,10 +4653,11 @@ packages:
     url: "https://github.com/aseemk/json5.git"
     revision: "6be6a70e250e6fbbf42db75cd1f6a1aadeeeeb07"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "kind-of"
-  version: "3.2.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "kind-of"
+    version: "3.2.2"
   declared_licenses:
   - "MIT"
   description: "Get the native type of a value."
@@ -4607,10 +4680,11 @@ packages:
     url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "kind-of"
-  version: "4.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "kind-of"
+    version: "4.0.0"
   declared_licenses:
   - "MIT"
   description: "Get the native type of a value."
@@ -4633,10 +4707,11 @@ packages:
     url: "https://github.com/jonschlinkert/kind-of.git"
     revision: "30bee16e8dffa67417ba35d31bd9bc31517a2d83"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "lodash"
-  version: "4.17.4"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "lodash"
+    version: "4.17.4"
   declared_licenses:
   - "MIT"
   description: "Lodash modular utilities."
@@ -4659,10 +4734,11 @@ packages:
     url: "https://github.com/lodash/lodash.git"
     revision: ""
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "loose-envify"
-  version: "1.3.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "loose-envify"
+    version: "1.3.1"
   declared_licenses:
   - "MIT"
   description: "Fast (and loose) selective `process.env` replacer using js-tokens\
@@ -4686,10 +4762,11 @@ packages:
     url: "https://github.com/zertosh/loose-envify.git"
     revision: "7b2d41e61a7ddba5335154b4aba327f6e850f7fd"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "micromatch"
-  version: "2.3.11"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "micromatch"
+    version: "2.3.11"
   declared_licenses:
   - "MIT"
   description: "Glob matching for javascript/node.js. A drop-in replacement and faster\
@@ -4713,10 +4790,11 @@ packages:
     url: "https://github.com/jonschlinkert/micromatch.git"
     revision: "f194c187d04677b03047bb7d8d25643725f7a577"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "minimatch"
-  version: "3.0.4"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "minimatch"
+    version: "3.0.4"
   declared_licenses:
   - "ISC"
   description: "a glob matcher in javascript"
@@ -4739,10 +4817,11 @@ packages:
     url: "https://github.com/isaacs/minimatch.git"
     revision: "e46989a323d5f0aa4781eff5e2e6e7aafa223321"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "minimist"
-  version: "0.0.8"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "minimist"
+    version: "0.0.8"
   declared_licenses:
   - "MIT"
   description: "parse argument options"
@@ -4765,10 +4844,11 @@ packages:
     url: "https://github.com/substack/minimist.git"
     revision: ""
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "mkdirp"
-  version: "0.5.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "mkdirp"
+    version: "0.5.1"
   declared_licenses:
   - "MIT"
   description: "Recursively mkdir, like `mkdir -p`"
@@ -4791,10 +4871,11 @@ packages:
     url: "https://github.com/substack/node-mkdirp.git"
     revision: "d4eff0f06093aed4f387e88e9fc301cb76beedc7"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "ms"
-  version: "2.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "ms"
+    version: "2.0.0"
   declared_licenses:
   - "MIT"
   description: "Tiny milisecond conversion utility"
@@ -4817,10 +4898,11 @@ packages:
     url: "https://github.com/zeit/ms.git"
     revision: "9b88d1568a52ec9bb67ecc8d2aa224fa38fd41f4"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "normalize-path"
-  version: "2.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "normalize-path"
+    version: "2.1.1"
   declared_licenses:
   - "MIT"
   description: "Normalize file path slashes to be unix-like forward slashes. Also\
@@ -4845,10 +4927,11 @@ packages:
     url: "https://github.com/jonschlinkert/normalize-path.git"
     revision: "da1a45e7a514910ce39875b5327b1d0fa9be3d3e"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "number-is-nan"
-  version: "1.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "number-is-nan"
+    version: "1.0.1"
   declared_licenses:
   - "MIT"
   description: "ES2015 Number.isNaN() ponyfill"
@@ -4871,10 +4954,38 @@ packages:
     url: "https://github.com/sindresorhus/number-is-nan.git"
     revision: "ed9cdac3f428cc929b61bb230da42c87477af4b9"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "object.omit"
-  version: "2.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "object-assign"
+    version: "4.1.1"
+  declared_licenses:
+  - "MIT"
+  description: "ES2015 `Object.assign()` ponyfill"
+  homepage_url: "https://github.com/sindresorhus/object-assign#readme"
+  binary_artifact:
+    url: "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
+    hash: "2109adc7965887cfc05cbbd442cac8bfbb360863"
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    provider: "git"
+    url: "git+https://github.com/sindresorhus/object-assign.git"
+    revision: "a89774b252c91612203876984bbd6addbe3b5a0e"
+    path: ""
+  vcs_processed:
+    provider: "Git"
+    url: "https://github.com/sindresorhus/object-assign.git"
+    revision: "a89774b252c91612203876984bbd6addbe3b5a0e"
+    path: ""
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "object.omit"
+    version: "2.0.1"
   declared_licenses:
   - "MIT"
   description: "Return a copy of an object excluding the given key, or array of keys.\
@@ -4898,36 +5009,11 @@ packages:
     url: "https://github.com/jonschlinkert/object.omit.git"
     revision: "6634673e6e88c65796f1df4bcb787dede6dc7ffc"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "object-assign"
-  version: "4.1.1"
-  declared_licenses:
-  - "MIT"
-  description: "ES2015 `Object.assign()` ponyfill"
-  homepage_url: "https://github.com/sindresorhus/object-assign#readme"
-  binary_artifact:
-    url: "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
-    hash: "2109adc7965887cfc05cbbd442cac8bfbb360863"
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    provider: "git"
-    url: "git+https://github.com/sindresorhus/object-assign.git"
-    revision: "a89774b252c91612203876984bbd6addbe3b5a0e"
-    path: ""
-  vcs_processed:
-    provider: "Git"
-    url: "https://github.com/sindresorhus/object-assign.git"
-    revision: "a89774b252c91612203876984bbd6addbe3b5a0e"
-    path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "once"
-  version: "1.4.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "once"
+    version: "1.4.0"
   declared_licenses:
   - "ISC"
   description: "Run a function exactly one time"
@@ -4950,10 +5036,11 @@ packages:
     url: "https://github.com/isaacs/once.git"
     revision: "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "os-homedir"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "os-homedir"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "Node.js 4 `os.homedir()` ponyfill"
@@ -4976,10 +5063,11 @@ packages:
     url: "https://github.com/sindresorhus/os-homedir.git"
     revision: "b1b0ae70a5965fef7005ff6509a5dd1a78c95e36"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "os-tmpdir"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "os-tmpdir"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "Node.js os.tmpdir() ponyfill"
@@ -5002,10 +5090,11 @@ packages:
     url: "https://github.com/sindresorhus/os-tmpdir.git"
     revision: "1abf9cf5611b4be7377060ea67054b45cbf6813c"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "output-file-sync"
-  version: "1.1.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "output-file-sync"
+    version: "1.1.2"
   declared_licenses:
   - "MIT"
   description: "Synchronously write a file and create its ancestor directories if\
@@ -5029,10 +5118,11 @@ packages:
     url: "https://github.com/shinnn/output-file-sync.git"
     revision: "42d4b6792bbaee919805b2cb9afc95233addb239"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "parse-glob"
-  version: "3.0.4"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "parse-glob"
+    version: "3.0.4"
   declared_licenses:
   - "MIT"
   description: "Parse a glob pattern into an object of tokens."
@@ -5055,10 +5145,11 @@ packages:
     url: "https://github.com/jonschlinkert/parse-glob.git"
     revision: "9bfccb63acdeb3b1ed62035b3adef0e5081d8fc6"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "path-is-absolute"
-  version: "1.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "path-is-absolute"
+    version: "1.0.1"
   declared_licenses:
   - "MIT"
   description: "Node.js 0.12 path.isAbsolute() ponyfill"
@@ -5081,10 +5172,11 @@ packages:
     url: "https://github.com/sindresorhus/path-is-absolute.git"
     revision: "edc91d348b21dac2ab65ea2fbec2868e2eff5eb6"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "preserve"
-  version: "0.2.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "preserve"
+    version: "0.2.0"
   declared_licenses:
   - ""
   description: "Temporarily substitute tokens in the given `string` with placeholders,\
@@ -5108,10 +5200,11 @@ packages:
     url: "https://github.com/jonschlinkert/preserve.git"
     revision: "1bf405d35e4aea06a2ee83db2d34dc54abc0a1f9"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "private"
-  version: "0.1.8"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "private"
+    version: "0.1.8"
   declared_licenses:
   - "MIT"
   description: "Utility for associating truly private state with any JavaScript object"
@@ -5134,10 +5227,11 @@ packages:
     url: "https://github.com/benjamn/private.git"
     revision: "8fde2c4c9f760c0ae17f3ff375c02d6498472fbc"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "process-nextick-args"
-  version: "1.0.7"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "process-nextick-args"
+    version: "1.0.7"
   declared_licenses:
   - "MIT"
   description: "process.nextTick but always with args"
@@ -5160,10 +5254,11 @@ packages:
     url: "https://github.com/calvinmetcalf/process-nextick-args.git"
     revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "randomatic"
-  version: "1.1.7"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "randomatic"
+    version: "1.1.7"
   declared_licenses:
   - "MIT"
   description: "Generate randomized strings of a specified length, fast. Only the\
@@ -5188,10 +5283,11 @@ packages:
     url: "https://github.com/jonschlinkert/randomatic.git"
     revision: "d91c5f90e785db08a9b9e518926b444671092f26"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "readable-stream"
-  version: "2.3.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "readable-stream"
+    version: "2.3.3"
   declared_licenses:
   - "MIT"
   description: "Streams3, a user-land copy of the stream library from Node.js"
@@ -5214,10 +5310,11 @@ packages:
     url: "https://github.com/nodejs/readable-stream.git"
     revision: "cd59995050105b946884ee20e3bcadc252feda8c"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "readdirp"
-  version: "2.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "readdirp"
+    version: "2.1.0"
   declared_licenses:
   - "MIT"
   description: "Recursive version of fs.readdir with streaming api."
@@ -5240,10 +5337,11 @@ packages:
     url: "https://github.com/thlorenz/readdirp.git"
     revision: "5a3751f86a1c2bbbb8e3a42685d4191992631e6c"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "regenerator-runtime"
-  version: "0.10.5"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "regenerator-runtime"
+    version: "0.10.5"
   declared_licenses:
   - "MIT"
   description: "Runtime for Regenerator-compiled generator and async functions."
@@ -5266,10 +5364,11 @@ packages:
     url: "https://github.com/facebook/regenerator.git"
     revision: "master"
     path: "packages/regenerator-runtime"
-- package_manager: "NPM"
-  namespace: ""
-  name: "regenerator-runtime"
-  version: "0.11.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "regenerator-runtime"
+    version: "0.11.1"
   declared_licenses:
   - "MIT"
   description: "Runtime for Regenerator-compiled generator and async functions."
@@ -5292,10 +5391,11 @@ packages:
     url: "https://github.com/facebook/regenerator.git"
     revision: "master"
     path: "packages/regenerator-runtime"
-- package_manager: "NPM"
-  namespace: ""
-  name: "regex-cache"
-  version: "0.4.4"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "regex-cache"
+    version: "0.4.4"
   declared_licenses:
   - "MIT"
   description: "Memoize the results of a call to the RegExp constructor, avoiding\
@@ -5320,10 +5420,11 @@ packages:
     url: "https://github.com/jonschlinkert/regex-cache.git"
     revision: "e5ced08e45d2cc2d286a9e7b5a574963f6577712"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "remove-trailing-separator"
-  version: "1.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "remove-trailing-separator"
+    version: "1.1.0"
   declared_licenses:
   - "ISC"
   description: "Removes separators from the end of the string."
@@ -5346,10 +5447,11 @@ packages:
     url: "https://github.com/darsain/remove-trailing-separator.git"
     revision: "f4e8acca09106efeef5a5164f1ad2192fe97fd69"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "repeat-element"
-  version: "1.1.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "repeat-element"
+    version: "1.1.2"
   declared_licenses:
   - ""
   description: "Create an array by repeating the given value n times."
@@ -5372,10 +5474,11 @@ packages:
     url: "https://github.com/jonschlinkert/repeat-element.git"
     revision: "7a6b21d58eafcc44fc8de133c70a8398ee9fdd8d"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "repeat-string"
-  version: "1.6.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "repeat-string"
+    version: "1.6.1"
   declared_licenses:
   - "MIT"
   description: "Repeat the given string n times. Fastest implementation for repeating\
@@ -5399,10 +5502,11 @@ packages:
     url: "https://github.com/jonschlinkert/repeat-string.git"
     revision: "1a95c5d99a02999ccd2cf4663959a18bd2def7b8"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "repeating"
-  version: "2.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "repeating"
+    version: "2.0.1"
   declared_licenses:
   - "MIT"
   description: "Repeat a string - fast"
@@ -5425,10 +5529,11 @@ packages:
     url: "https://github.com/sindresorhus/repeating.git"
     revision: "be02bcaf9a674b3c155477b3bf282136bcf44770"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "safe-buffer"
-  version: "5.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "safe-buffer"
+    version: "5.1.1"
   declared_licenses:
   - "MIT"
   description: "Safer Node.js Buffer API"
@@ -5451,10 +5556,11 @@ packages:
     url: "https://github.com/feross/safe-buffer.git"
     revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "set-immediate-shim"
-  version: "1.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "set-immediate-shim"
+    version: "1.0.1"
   declared_licenses:
   - "MIT"
   description: "Simple setImmediate shim"
@@ -5477,10 +5583,11 @@ packages:
     url: "https://github.com/sindresorhus/set-immediate-shim.git"
     revision: "4c50df7ade5a368e106fee82351ee0a378c990f7"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "slash"
-  version: "1.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "slash"
+    version: "1.0.0"
   declared_licenses:
   - "MIT"
   description: "Convert Windows backslash paths to slash paths"
@@ -5503,10 +5610,11 @@ packages:
     url: "https://github.com/sindresorhus/slash.git"
     revision: "c801dd4568ad9380b534067eabe88942394f82ff"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "source-map-support"
-  version: "0.4.18"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "source-map-support"
+    version: "0.4.18"
   declared_licenses:
   - "MIT"
   description: "Fixes stack traces for files with source maps"
@@ -5529,10 +5637,11 @@ packages:
     url: "https://github.com/evanw/node-source-map-support.git"
     revision: "b9b5a5576272916237a253393220770c858685d6"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "source-map"
-  version: "0.5.7"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "source-map"
+    version: "0.5.7"
   declared_licenses:
   - "BSD-3-Clause"
   description: "Generates and consumes source maps"
@@ -5555,10 +5664,11 @@ packages:
     url: "ssh://git@github.com/mozilla/source-map.git"
     revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "string_decoder"
-  version: "1.0.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "string_decoder"
+    version: "1.0.3"
   declared_licenses:
   - "MIT"
   description: "The string_decoder module from Node core"
@@ -5581,10 +5691,11 @@ packages:
     url: "https://github.com/rvagg/string_decoder.git"
     revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "strip-ansi"
-  version: "3.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "strip-ansi"
+    version: "3.0.1"
   declared_licenses:
   - "MIT"
   description: "Strip ANSI escape codes"
@@ -5607,10 +5718,11 @@ packages:
     url: "https://github.com/chalk/strip-ansi.git"
     revision: "8270705c704956da865623e564eba4875c3ea17f"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "supports-color"
-  version: "2.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "supports-color"
+    version: "2.0.0"
   declared_licenses:
   - "MIT"
   description: "Detect whether a terminal supports color"
@@ -5633,10 +5745,11 @@ packages:
     url: "https://github.com/chalk/supports-color.git"
     revision: "8400d98ade32b2adffd50902c06d9e725a5c6588"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "to-fast-properties"
-  version: "1.0.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "to-fast-properties"
+    version: "1.0.3"
   declared_licenses:
   - "MIT"
   description: "Force V8 to use fast properties for an object"
@@ -5659,10 +5772,11 @@ packages:
     url: "https://github.com/sindresorhus/to-fast-properties.git"
     revision: "76e30a0b6040781a705cb351fb2e4a1d879f1adb"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "trim-right"
-  version: "1.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "trim-right"
+    version: "1.0.1"
   declared_licenses:
   - "MIT"
   description: "Similar to String#trim() but removes only whitespace on the right"
@@ -5685,10 +5799,11 @@ packages:
     url: "https://github.com/sindresorhus/trim-right.git"
     revision: "105fb46669afb0deb49d14bd688b276297e59dff"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "user-home"
-  version: "1.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "user-home"
+    version: "1.1.1"
   declared_licenses:
   - "MIT"
   description: "Get the path to the user home directory"
@@ -5711,10 +5826,11 @@ packages:
     url: "https://github.com/sindresorhus/user-home.git"
     revision: "cf6ba885d3e6bf625fb3c15ad0334fa623968481"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "util-deprecate"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "util-deprecate"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "The Node.js `util.deprecate()` function with browser support"
@@ -5737,10 +5853,11 @@ packages:
     url: "https://github.com/TooTallNate/util-deprecate.git"
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "v8flags"
-  version: "2.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "v8flags"
+    version: "2.1.1"
   declared_licenses: []
   description: "Get available v8 flags."
   homepage_url: "https://github.com/tkellen/node-v8flags"
@@ -5762,10 +5879,11 @@ packages:
     url: "https://github.com/tkellen/node-v8flags.git"
     revision: "4c628146efa7eda11df0e10c73b3d8687873569e"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "wrappy"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "wrappy"
+    version: "1.0.2"
   declared_licenses:
   - "ISC"
   description: "Callback wrapping utility"

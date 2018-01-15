@@ -28,6 +28,7 @@ import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -136,10 +137,12 @@ class Maven : PackageManager() {
         } ?: VcsInfo.EMPTY
 
         val project = Project(
-                packageManager = javaClass.simpleName,
-                namespace = mavenProject.groupId,
-                name = mavenProject.artifactId,
-                version = mavenProject.version,
+                id = Identifier(
+                        packageManager = javaClass.simpleName,
+                        namespace = mavenProject.groupId,
+                        name = mavenProject.artifactId,
+                        version = mavenProject.version
+                ),
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 aliases = emptyList(),
                 vcs = vcs,

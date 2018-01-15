@@ -31,6 +31,7 @@ import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -126,10 +127,12 @@ class Gradle : PackageManager() {
 
             val vcsDir = VersionControlSystem.forDirectory(projectDir)
             val project = Project(
-                    packageManager = javaClass.simpleName,
-                    namespace = "",
-                    name = dependencyTreeModel.name,
-                    version = "",
+                    id = Identifier(
+                            packageManager = javaClass.simpleName,
+                            namespace = "",
+                            name = dependencyTreeModel.name,
+                            version = ""
+                    ),
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
                     vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
@@ -163,10 +166,12 @@ class Gradle : PackageManager() {
                     maven.parsePackage(artifact, repositories, javaClass.simpleName)
                 } else {
                     Package(
-                            packageManager = javaClass.simpleName,
-                            namespace = dependency.groupId,
-                            name = dependency.artifactId,
-                            version = dependency.version,
+                            id = Identifier(
+                                    packageManager = javaClass.simpleName,
+                                    namespace = dependency.groupId,
+                                    name = dependency.artifactId,
+                                    version = dependency.version
+                            ),
                             declaredLicenses = sortedSetOf(),
                             description = "",
                             homepageUrl = "",

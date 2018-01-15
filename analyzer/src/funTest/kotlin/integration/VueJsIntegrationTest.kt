@@ -22,6 +22,7 @@ package com.here.ort.analyzer.integration
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.NPM
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -31,10 +32,12 @@ import java.io.File
 class VueJsIntegrationTest : AbstractIntegrationSpec() {
 
     override val pkg: Package = Package(
-            packageManager = "NPM",
-            namespace = "",
-            name = "Vue.js",
-            version = "",
+            id = Identifier(
+                    packageManager = "NPM",
+                    namespace = "",
+                    name = "Vue.js",
+                    version = ""
+            ),
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",

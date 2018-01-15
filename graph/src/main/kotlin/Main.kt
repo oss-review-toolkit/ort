@@ -114,15 +114,15 @@ object Main {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer")
 
         val project = analyzerResult.project
-        val graph = SingleGraph(project.name).apply {
+        val graph = SingleGraph(project.id.name).apply {
             isStrict = true
             setAutoCreate(true)
             addAttribute("ui.antialias")
             addAttribute("ui.quality")
         }
 
-        val rootNode = graph.addNode<SingleNode>(project.name)
-        rootNode.addAttribute("ui.label", project.name)
+        val rootNode = graph.addNode<SingleNode>(project.id.name)
+        rootNode.addAttribute("ui.label", project.id.name)
 
         project.scopes.forEach { (name, _, dependencies) ->
             println("Adding scope $name.")

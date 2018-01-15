@@ -98,10 +98,10 @@ class ArtifactoryCache(
 
     private fun cachePath(pkg: Package, resultsFile: File) =
             "scan-results/" +
-                    "${pkg.packageManager.valueOrUnderscore()}/" +
-                    "${pkg.namespace.valueOrUnderscore()}/" +
-                    "${pkg.name.valueOrUnderscore()}/" +
-                    "${pkg.version.valueOrUnderscore()}/" +
+                    "${pkg.id.packageManager.valueOrUnderscore()}/" +
+                    "${pkg.id.namespace.valueOrUnderscore()}/" +
+                    "${pkg.id.name.valueOrUnderscore()}/" +
+                    "${pkg.id.version.valueOrUnderscore()}/" +
                     resultsFile.name
 
     private fun String?.valueOrUnderscore() = if (this == null || this.isEmpty()) "_" else this

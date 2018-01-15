@@ -23,6 +23,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.analyzer.managers.Maven
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -32,10 +33,12 @@ import java.io.File
 class GradleIntegrationTest : AbstractIntegrationSpec() {
 
     override val pkg: Package = Package(
-            packageManager = "Gradle",
-            namespace = "org.gradle",
-            name = "Gradle",
-            version = "4.4.0",
+            id = Identifier(
+                    packageManager = "Gradle",
+                    namespace = "org.gradle",
+                    name = "Gradle",
+                    version = "4.4.0"
+            ),
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
