@@ -69,10 +69,10 @@ class VersionControlSystemTest : WordSpec({
                     "https://github.com/heremaps/oss-review-toolkit.git"
             )
             val expected = VcsInfo(
-                    "Git",
-                    "https://github.com/heremaps/oss-review-toolkit.git",
-                    "",
-                    ""
+                    provider = "Git",
+                    url = "https://github.com/heremaps/oss-review-toolkit.git",
+                    revision = "",
+                    path = ""
             )
             actual shouldBe expected
         }
@@ -82,10 +82,10 @@ class VersionControlSystemTest : WordSpec({
                     "https://github.com/blob/tree.git"
             )
             val expected = VcsInfo(
-                    "Git",
-                    "https://github.com/blob/tree.git",
-                    "",
-                    ""
+                    provider = "Git",
+                    url = "https://github.com/blob/tree.git",
+                    revision = "",
+                    path = ""
             )
             actual shouldBe expected
         }
@@ -95,10 +95,10 @@ class VersionControlSystemTest : WordSpec({
                     "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"
             )
             val expected = VcsInfo(
-                    "Git",
-                    "https://github.com/babel/babel.git",
-                    "master",
-                    "packages/babel-code-frame"
+                    provider = "Git",
+                    url = "https://github.com/babel/babel.git",
+                    revision = "master",
+                    path = "packages/babel-code-frame"
             )
             actual shouldBe expected
         }
@@ -108,10 +108,10 @@ class VersionControlSystemTest : WordSpec({
                     "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js"
             )
             val expected = VcsInfo(
-                    "Git",
-                    "https://github.com/crypto-browserify/crypto-browserify.git",
-                    "6aebafa",
-                    "test/create-hmac.js"
+                    provider = "Git",
+                    url = "https://github.com/crypto-browserify/crypto-browserify.git",
+                    revision = "6aebafa",
+                    path = "test/create-hmac.js"
             )
             actual shouldBe expected
         }
@@ -121,10 +121,10 @@ class VersionControlSystemTest : WordSpec({
                     "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded"
             )
             val expected = VcsInfo(
-                    "Git",
-                    "ssh://git@github.com/EsotericSoftware/kryo.git",
-                    "",
-                    "kryo-shaded"
+                    provider = "Git",
+                    url = "ssh://git@github.com/EsotericSoftware/kryo.git",
+                    revision = "",
+                    path = "kryo-shaded"
             )
             actual shouldBe expected
         }
@@ -134,10 +134,10 @@ class VersionControlSystemTest : WordSpec({
                     "https://bitbucket.org/paniq/masagin"
             )
             val expected = VcsInfo(
-                    "Mercurial",
-                    "https://bitbucket.org/paniq/masagin",
-                    "",
-                    ""
+                    provider = "Mercurial",
+                    url = "https://bitbucket.org/paniq/masagin",
+                    revision = "",
+                    path = ""
             )
             actual shouldBe expected
         }
@@ -147,10 +147,10 @@ class VersionControlSystemTest : WordSpec({
                     "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/src/java/com/yevster/example/?at=master"
             )
             val expected = VcsInfo(
-                    "Git",
-                    "https://bitbucket.org/yevster/spdxtraxample.git",
-                    "287aebc",
-                    "src/java/com/yevster/example/"
+                    provider = "Git",
+                    url = "https://bitbucket.org/yevster/spdxtraxample.git",
+                    revision = "287aebc",
+                    path = "src/java/com/yevster/example/"
             )
             actual shouldBe expected
         }
@@ -160,10 +160,10 @@ class VersionControlSystemTest : WordSpec({
                     "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/README.md?at=master"
             )
             val expected = VcsInfo(
-                    "Git",
-                    "https://bitbucket.org/yevster/spdxtraxample.git",
-                    "287aebc",
-                    "README.md"
+                    provider = "Git",
+                    url = "https://bitbucket.org/yevster/spdxtraxample.git",
+                    revision = "287aebc",
+                    path = "README.md"
             )
             actual shouldBe expected
         }
