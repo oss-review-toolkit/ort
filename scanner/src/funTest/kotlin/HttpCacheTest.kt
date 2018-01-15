@@ -19,6 +19,7 @@
 
 package com.here.ort.scanner
 
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -77,10 +78,12 @@ class HttpCacheTest : StringSpec() {
             val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
 
             val pkg = Package(
-                    packageManager = "packageManager",
-                    namespace = "namespace",
-                    name = "name",
-                    version = "version",
+                    id = Identifier(
+                            packageManager = "packageManager",
+                            namespace = "namespace",
+                            name = "name",
+                            version = "version"
+                    ),
                     declaredLicenses = sortedSetOf("license"),
                     description = "description",
                     homepageUrl = "homepageUrl",

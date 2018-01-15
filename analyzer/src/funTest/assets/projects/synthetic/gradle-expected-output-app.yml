@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: true
 project:
-  package_manager: "Gradle"
-  namespace: ""
-  name: "app"
-  version: ""
+  id:
+    package_manager: "Gradle"
+    namespace: ""
+    name: "app"
+    version: ""
   declared_licenses: []
   aliases: []
   vcs:
@@ -191,10 +192,11 @@ project:
         errors: []
       errors: []
 packages:
-- package_manager: "Gradle"
-  namespace: ""
-  name: "project :lib"
-  version: ""
+- id:
+    package_manager: "Gradle"
+    namespace: ""
+    name: "project :lib"
+    version: ""
   declared_licenses: []
   description: ""
   homepage_url: ""
@@ -216,10 +218,11 @@ packages:
     url: ""
     revision: ""
     path: ""
-- package_manager: "Gradle"
-  namespace: "org.apache.commons"
-  name: "commons-lang3"
-  version: "3.5"
+- id:
+    package_manager: "Gradle"
+    namespace: "org.apache.commons"
+    name: "commons-lang3"
+    version: "3.5"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
@@ -244,10 +247,11 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
-- package_manager: "Gradle"
-  namespace: "org.apache.commons"
-  name: "commons-text"
-  version: "1.1"
+- id:
+    package_manager: "Gradle"
+    namespace: "org.apache.commons"
+    name: "commons-text"
+    version: "1.1"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Text is a library focused on algorithms working on\

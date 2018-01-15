@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: true
 project:
-  package_manager: "Maven"
-  namespace: "com.here.ort.maven"
-  name: "maven-lib"
-  version: "1.0-SNAPSHOT"
+  id:
+    package_manager: "Maven"
+    namespace: "com.here.ort.maven"
+    name: "maven-lib"
+    version: "1.0-SNAPSHOT"
   declared_licenses: []
   aliases: []
   vcs:
@@ -41,10 +42,11 @@ project:
       dependencies: []
       errors: []
 packages:
-- package_manager: "Maven"
-  namespace: "junit"
-  name: "junit"
-  version: "3.8.1"
+- id:
+    package_manager: "Maven"
+    namespace: "junit"
+    name: "junit"
+    version: "3.8.1"
   declared_licenses:
   - "Common Public License Version 1.0"
   description: "JUnit is a regression testing framework written by Erich Gamma and\
@@ -68,10 +70,11 @@ packages:
     url: ""
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.apache.commons"
-  name: "commons-lang3"
-  version: "3.5"
+- id:
+    package_manager: "Maven"
+    namespace: "org.apache.commons"
+    name: "commons-lang3"
+    version: "3.5"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
@@ -96,10 +99,11 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.apache.commons"
-  name: "commons-text"
-  version: "1.1"
+- id:
+    package_manager: "Maven"
+    namespace: "org.apache.commons"
+    name: "commons-text"
+    version: "1.1"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Text is a library focused on algorithms working on\

@@ -32,29 +32,9 @@ import java.util.SortedSet
  */
 data class Project(
         /**
-         * The name of the package manager that was used to discover this project, for example Maven or NPM.
-         *
-         * @see [Package.packageManager].
+         * The unique identifier of this project.
          */
-        @JsonProperty("package_manager")
-        val packageManager: String,
-
-        /**
-         * The namespace of the package, for example the group id in Maven or the scope in NPM.
-         *
-         * @see [Package.namespace].
-         */
-        val namespace: String,
-
-        /**
-         * The name of the project.
-         */
-        val name: String,
-
-        /**
-         * The version of the project.
-         */
-        val version: String,
+        val id: Identifier,
 
         /**
          * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
@@ -94,10 +74,7 @@ data class Project(
      * Return a [Package] representation of this [Project].
      */
     fun toPackage() = Package(
-            packageManager = packageManager,
-            namespace = namespace,
-            name = name,
-            version = version,
+            id = id,
             declaredLicenses = declaredLicenses,
             description = "",
             homepageUrl = homepageUrl,
@@ -113,10 +90,7 @@ data class Project(
          */
         @JvmField
         val EMPTY = Project(
-                packageManager = "",
-                namespace = "",
-                name = "",
-                version = "",
+                id = Identifier.EMPTY,
                 declaredLicenses = sortedSetOf(),
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,

@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: false
 project:
-  package_manager: "NPM"
-  namespace: ""
-  name: "npm-project"
-  version: "2.0.0"
+  id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "npm-project"
+    version: "2.0.0"
   declared_licenses:
   - "Apache-2.0"
   aliases: []
@@ -307,10 +308,11 @@ project:
         errors: []
       errors: []
 packages:
-- package_manager: "NPM"
-  namespace: ""
-  name: "asap"
-  version: "2.0.5"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "asap"
+    version: "2.0.5"
   declared_licenses:
   - "MIT"
   description: "High-priority task queue for Node.js and browsers"
@@ -333,10 +335,11 @@ packages:
     url: "https://github.com/kriskowal/asap.git"
     revision: "e7f3d29eed4967ecfcaddbfc9542e2ee12b76227"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "boolbase"
-  version: "1.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "boolbase"
+    version: "1.0.0"
   declared_licenses:
   - "ISC"
   description: "two functions: One that returns true, one that returns false"
@@ -359,10 +362,11 @@ packages:
     url: "https://github.com/fb55/boolbase.git"
     revision: ""
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "cheerio"
-  version: "1.0.0-rc.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "cheerio"
+    version: "1.0.0-rc.1"
   declared_licenses:
   - "MIT"
   description: "Tiny, fast, and elegant implementation of core jQuery designed specifically\
@@ -386,10 +390,11 @@ packages:
     url: "https://github.com/cheeriojs/cheerio.git"
     revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "coffee-script"
-  version: "1.12.6"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "coffee-script"
+    version: "1.12.6"
   declared_licenses:
   - "MIT"
   description: "Unfancy JavaScript"
@@ -412,10 +417,11 @@ packages:
     url: "https://github.com/jashkenas/coffeescript.git"
     revision: "f0e9837dca51244ef994ff535768d3a606912020"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "core-util-is"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "core-util-is"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "The `util.is*` functions introduced in Node v0.12."
@@ -438,10 +444,11 @@ packages:
     url: "https://github.com/isaacs/core-util-is.git"
     revision: "a177da234df5638b363ddc15fa324619a38577c8"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "cson-parser"
-  version: "1.3.5"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "cson-parser"
+    version: "1.3.5"
   declared_licenses:
   - "BSD-3-Clause"
   description: "Safe parsing of CSON files"
@@ -464,10 +471,11 @@ packages:
     url: "ssh://git@github.com/groupon/cson-parser.git"
     revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "cson"
-  version: "4.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "cson"
+    version: "4.1.0"
   declared_licenses:
   - "MIT"
   description: "CoffeeScript-Object-Notation Parser. Same as JSON but for CoffeeScript\
@@ -491,10 +499,11 @@ packages:
     url: "https://github.com/bevry/cson.git"
     revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "css-select"
-  version: "1.2.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "css-select"
+    version: "1.2.0"
   declared_licenses:
   - "BSD-like"
   description: "a CSS selector compiler/engine"
@@ -517,10 +526,11 @@ packages:
     url: "https://github.com/fb55/css-select.git"
     revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "css-what"
-  version: "2.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "css-what"
+    version: "2.1.0"
   declared_licenses:
   - "BSD-like"
   description: "a CSS selector parser"
@@ -543,10 +553,11 @@ packages:
     url: "https://github.com/fb55/css-what.git"
     revision: "fd6b9f62146efec8e17ee80ddaebdfb6ede21d7b"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "dom-serializer"
-  version: "0.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "dom-serializer"
+    version: "0.1.0"
   declared_licenses:
   - "MIT"
   description: "render dom nodes to string"
@@ -569,10 +580,11 @@ packages:
     url: "https://github.com/cheeriojs/dom-renderer.git"
     revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "domelementtype"
-  version: "1.1.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "domelementtype"
+    version: "1.1.3"
   declared_licenses: []
   description: "all the types of nodes in htmlparser2's dom"
   homepage_url: "https://github.com/FB55/domelementtype"
@@ -594,10 +606,11 @@ packages:
     url: "https://github.com/FB55/domelementtype.git"
     revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "domelementtype"
-  version: "1.3.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "domelementtype"
+    version: "1.3.0"
   declared_licenses: []
   description: "all the types of nodes in htmlparser2's dom"
   homepage_url: "https://github.com/FB55/domelementtype"
@@ -619,10 +632,11 @@ packages:
     url: "https://github.com/FB55/domelementtype.git"
     revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "domhandler"
-  version: "2.4.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "domhandler"
+    version: "2.4.1"
   declared_licenses:
   - "BSD-2-Clause"
   description: "handler for htmlparser2 that turns pages into a dom"
@@ -645,10 +659,11 @@ packages:
     url: "https://github.com/fb55/DomHandler.git"
     revision: "9b17cc6cc9387a87dde6eb8ddbae11c753e7d23d"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "domutils"
-  version: "1.5.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "domutils"
+    version: "1.5.1"
   declared_licenses: []
   description: "utilities for working with htmlparser2's dom"
   homepage_url: "https://github.com/FB55/domutils"
@@ -670,10 +685,11 @@ packages:
     url: "https://github.com/FB55/domutils.git"
     revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "eachr"
-  version: "3.2.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "eachr"
+    version: "3.2.0"
   declared_licenses:
   - "MIT"
   description: "Give eachr an item to iterate (array, object or map) and an iterator,\
@@ -698,10 +714,11 @@ packages:
     url: "ssh://git@github.com/bevry/eachr.git"
     revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "editions"
-  version: "1.3.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "editions"
+    version: "1.3.3"
   declared_licenses:
   - "MIT"
   description: "Publish multiple editions for your JavaScript packages consistently\
@@ -725,10 +742,11 @@ packages:
     url: "https://github.com/bevry/editions.git"
     revision: "272530079d941652a2679cf2152e83ed2f3f2129"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "entities"
-  version: "1.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "entities"
+    version: "1.1.1"
   declared_licenses:
   - "BSD-like"
   description: "Encode & decode XML/HTML entities with ease"
@@ -751,10 +769,11 @@ packages:
     url: "https://github.com/fb55/node-entities.git"
     revision: ""
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "extract-opts"
-  version: "3.3.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "extract-opts"
+    version: "3.3.1"
   declared_licenses:
   - "MIT"
   description: "Extract the options and callback from a function's arguments easily"
@@ -777,10 +796,11 @@ packages:
     url: "ssh://git@github.com/bevry/extract-opts.git"
     revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "graceful-fs"
-  version: "4.1.11"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "graceful-fs"
+    version: "4.1.11"
   declared_licenses:
   - "ISC"
   description: "A drop-in replacement for fs, making various improvements."
@@ -803,10 +823,11 @@ packages:
     url: "https://github.com/isaacs/node-graceful-fs.git"
     revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "htmlparser2"
-  version: "3.9.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "htmlparser2"
+    version: "3.9.2"
   declared_licenses:
   - "MIT"
   description: "Fast & forgiving HTML/XML/RSS parser"
@@ -829,10 +850,11 @@ packages:
     url: "https://github.com/fb55/htmlparser2.git"
     revision: "e1f12f626f65cf4a082f89bdde89081b54187818"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "inherits"
-  version: "2.0.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "inherits"
+    version: "2.0.3"
   declared_licenses:
   - "ISC"
   description: "Browser-friendly inheritance fully compatible with standard node.js\
@@ -856,10 +878,11 @@ packages:
     url: "https://github.com/isaacs/inherits.git"
     revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "isarray"
-  version: "1.0.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "isarray"
+    version: "1.0.0"
   declared_licenses:
   - "MIT"
   description: "Array#isArray for older browsers"
@@ -882,10 +905,11 @@ packages:
     url: "https://github.com/juliangruber/isarray.git"
     revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "lodash"
-  version: "4.17.4"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "lodash"
+    version: "4.17.4"
   declared_licenses:
   - "MIT"
   description: "Lodash modular utilities."
@@ -908,10 +932,11 @@ packages:
     url: "https://github.com/lodash/lodash.git"
     revision: ""
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "long"
-  version: "3.2.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "long"
+    version: "3.2.0"
   declared_licenses:
   - "Apache-2.0"
   description: "A Long class for representing a 64-bit two's-complement integer value."
@@ -934,10 +959,11 @@ packages:
     url: "https://github.com/dcodeIO/long.js.git"
     revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "nth-check"
-  version: "1.0.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "nth-check"
+    version: "1.0.1"
   declared_licenses:
   - "BSD"
   description: "performant nth-check parser & compiler"
@@ -960,10 +986,11 @@ packages:
     url: "https://github.com/fb55/nth-check.git"
     revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "parse5"
-  version: "3.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "parse5"
+    version: "3.0.2"
   declared_licenses:
   - "MIT"
   description: "HTML parsing/serialization toolset for Node.js. WHATWG HTML Living\
@@ -987,10 +1014,11 @@ packages:
     url: "https://github.com/inikulin/parse5.git"
     revision: "969ed22f53db38c101449e05a1b804ea456d4e04"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "process-nextick-args"
-  version: "1.0.7"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "process-nextick-args"
+    version: "1.0.7"
   declared_licenses:
   - "MIT"
   description: "process.nextTick but always with args"
@@ -1013,10 +1041,11 @@ packages:
     url: "https://github.com/calvinmetcalf/process-nextick-args.git"
     revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "promise"
-  version: "7.3.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "promise"
+    version: "7.3.1"
   declared_licenses:
   - "MIT"
   description: "Bare bones Promises/A+ implementation"
@@ -1039,10 +1068,11 @@ packages:
     url: "https://github.com/then/promise.git"
     revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "readable-stream"
-  version: "2.3.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "readable-stream"
+    version: "2.3.3"
   declared_licenses:
   - "MIT"
   description: "Streams3, a user-land copy of the stream library from Node.js"
@@ -1065,10 +1095,11 @@ packages:
     url: "https://github.com/nodejs/readable-stream.git"
     revision: "cd59995050105b946884ee20e3bcadc252feda8c"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "requirefresh"
-  version: "2.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "requirefresh"
+    version: "2.1.0"
   declared_licenses:
   - "MIT"
   description: "Require a file without adding it into the require cache"
@@ -1091,10 +1122,11 @@ packages:
     url: "ssh://git@github.com/bevry/requirefresh.git"
     revision: "f0c589db055ba21ebb30da442742cd19e64e3efa"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "safe-buffer"
-  version: "5.1.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "safe-buffer"
+    version: "5.1.1"
   declared_licenses:
   - "MIT"
   description: "Safer Node.js Buffer API"
@@ -1117,10 +1149,11 @@ packages:
     url: "https://github.com/feross/safe-buffer.git"
     revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "safefs"
-  version: "4.1.0"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "safefs"
+    version: "4.1.0"
   declared_licenses:
   - "MIT"
   description: "Stop getting EMFILE errors! Open only as many files as the operating\
@@ -1144,10 +1177,11 @@ packages:
     url: "ssh://git@github.com/bevry/safefs.git"
     revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "string_decoder"
-  version: "1.0.3"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "string_decoder"
+    version: "1.0.3"
   declared_licenses:
   - "MIT"
   description: "The string_decoder module from Node core"
@@ -1170,10 +1204,11 @@ packages:
     url: "https://github.com/rvagg/string_decoder.git"
     revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "typechecker"
-  version: "4.4.1"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "typechecker"
+    version: "4.4.1"
   declared_licenses:
   - "MIT"
   description: "Utilities to get and check variable types (isString, isPlainObject,\
@@ -1197,10 +1232,11 @@ packages:
     url: "ssh://git@github.com/bevry/typechecker.git"
     revision: "ab3925bc0270f8df65f5c05ae1ba09e648aaff8e"
     path: ""
-- package_manager: "NPM"
-  namespace: ""
-  name: "util-deprecate"
-  version: "1.0.2"
+- id:
+    package_manager: "NPM"
+    namespace: ""
+    name: "util-deprecate"
+    version: "1.0.2"
   declared_licenses:
   - "MIT"
   description: "The Node.js `util.deprecate()` function with browser support"
@@ -1223,10 +1259,11 @@ packages:
     url: "https://github.com/TooTallNate/util-deprecate.git"
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
     path: ""
-- package_manager: "NPM"
-  namespace: "@types"
-  name: "node"
-  version: "6.0.79"
+- id:
+    package_manager: "NPM"
+    namespace: "@types"
+    name: "node"
+    version: "6.0.79"
   declared_licenses:
   - "MIT"
   description: "TypeScript definitions for Node.js"

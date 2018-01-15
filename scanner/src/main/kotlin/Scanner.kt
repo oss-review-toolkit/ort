@@ -69,10 +69,10 @@ abstract class Scanner {
 
         // TODO: Consider implementing this logic in the Package class itself when creating the identifier.
         // Also, think about what to use if we have neither a version nor a hash.
-        val pkgRevision = pkg.version.let { if (it.isBlank()) pkg.vcs.revision.take(7) else it }
+        val pkgRevision = pkg.id.version.let { if (it.isBlank()) pkg.vcs.revision.take(7) else it }
 
         val resultsFile = File(scanResultsDirectory,
-                "${pkg.name}-${pkgRevision}_$scannerName.$resultFileExtension")
+                "${pkg.id.name}-${pkgRevision}_$scannerName.$resultFileExtension")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
             return getResult(resultsFile)
@@ -85,7 +85,7 @@ abstract class Scanner {
                 e.printStackTrace()
             }
 
-            throw ScanException("Package '${pkg.identifier}' could not be scanned.", e)
+            throw ScanException("Package '${pkg.id}' could not be scanned.", e)
         }
 
         return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, resultsFile) }

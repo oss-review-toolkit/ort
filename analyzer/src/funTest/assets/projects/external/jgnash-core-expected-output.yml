@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: true
 project:
-  package_manager: "Maven"
-  namespace: "jgnash"
-  name: "jgnash-core"
-  version: "2.30.0"
+  id:
+    package_manager: "Maven"
+    namespace: "jgnash"
+    name: "jgnash-core"
+    version: "2.30.0"
   declared_licenses: []
   aliases: []
   vcs:
@@ -206,10 +207,11 @@ project:
       dependencies: []
       errors: []
 packages:
-- package_manager: "Maven"
-  namespace: "antlr"
-  name: "antlr"
-  version: "2.7.7"
+- id:
+    package_manager: "Maven"
+    namespace: "antlr"
+    name: "antlr"
+    version: "2.7.7"
   declared_licenses:
   - "BSD License"
   description: "A framework for constructing recognizers, compilers,\n    and translators\
@@ -233,10 +235,11 @@ packages:
     url: ""
     revision: ""
     path: ""
-- package_manager: "Maven"
-  namespace: "com.fasterxml"
-  name: "classmate"
-  version: "1.3.0"
+- id:
+    package_manager: "Maven"
+    namespace: "com.fasterxml"
+    name: "classmate"
+    version: "1.3.0"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "Library for introspecting types with full generic information\n  \
@@ -260,10 +263,11 @@ packages:
     url: "ssh://git@github.com/cowtowncoder/java-classmate.git"
     revision: "classmate-1.3.0"
     path: ""
-- package_manager: "Maven"
-  namespace: "com.github.virtuald"
-  name: "curvesapi"
-  version: "1.03"
+- id:
+    package_manager: "Maven"
+    namespace: "com.github.virtuald"
+    name: "curvesapi"
+    version: "1.03"
   declared_licenses:
   - "BSD License"
   description: "Implementation of various mathematical curves that define themselves\
@@ -289,10 +293,11 @@ packages:
     url: "https://github.com/virtuald/curvesapi.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "com.h2database"
-  name: "h2"
-  version: "1.4.194"
+- id:
+    package_manager: "Maven"
+    namespace: "com.h2database"
+    name: "h2"
+    version: "1.4.194"
   declared_licenses:
   - "MPL 2.0 or EPL 1.0"
   description: "H2 Database Engine"
@@ -315,10 +320,11 @@ packages:
     url: "https://github.com/h2database/h2database.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "com.mchange"
-  name: "c3p0"
-  version: "0.9.5.2"
+- id:
+    package_manager: "Maven"
+    namespace: "com.mchange"
+    name: "c3p0"
+    version: "0.9.5.2"
   declared_licenses:
   - "Eclipse Public License, Version 1.0"
   - "GNU Lesser General Public License, Version 2.1"
@@ -342,10 +348,11 @@ packages:
     url: "ssh://git@github.com/swaldman/c3p0.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "com.mchange"
-  name: "mchange-commons-java"
-  version: "0.2.11"
+- id:
+    package_manager: "Maven"
+    namespace: "com.mchange"
+    name: "mchange-commons-java"
+    version: "0.2.11"
   declared_licenses:
   - "Eclipse Public License, Version 1.0"
   - "GNU Lesser General Public License, Version 2.1"
@@ -369,10 +376,11 @@ packages:
     url: "ssh://git@github.com/swaldman/mchange-commons-java.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "com.thoughtworks.xstream"
-  name: "xstream-hibernate"
-  version: "1.4.9"
+- id:
+    package_manager: "Maven"
+    namespace: "com.thoughtworks.xstream"
+    name: "xstream-hibernate"
+    version: "1.4.9"
   declared_licenses:
   - "BSD style"
   description: "XStream extension for Hibernate 3/4 to untie Java objects from Hibernate."
@@ -395,10 +403,11 @@ packages:
     url: "https://github.com/x-stream/xstream.git/xstream-hibernate.git"
     revision: "v-1.4.x"
     path: ""
-- package_manager: "Maven"
-  namespace: "com.thoughtworks.xstream"
-  name: "xstream"
-  version: "1.4.9"
+- id:
+    package_manager: "Maven"
+    namespace: "com.thoughtworks.xstream"
+    name: "xstream"
+    version: "1.4.9"
   declared_licenses:
   - "BSD style"
   description: "XStream is a serialization library from Java objects to XML and back."
@@ -421,10 +430,11 @@ packages:
     url: "https://github.com/x-stream/xstream.git/xstream.git"
     revision: "v-1.4.x"
     path: ""
-- package_manager: "Maven"
-  namespace: "commons-codec"
-  name: "commons-codec"
-  version: "1.10"
+- id:
+    package_manager: "Maven"
+    namespace: "commons-codec"
+    name: "commons-codec"
+    version: "1.10"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "The Apache Commons Codec package contains simple encoder and decoders\
@@ -450,10 +460,11 @@ packages:
     url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "dom4j"
-  name: "dom4j"
-  version: "1.6.1"
+- id:
+    package_manager: "Maven"
+    namespace: "dom4j"
+    name: "dom4j"
+    version: "1.6.1"
   declared_licenses: []
   description: "dom4j: the flexible XML framework for Java"
   homepage_url: "http://dom4j.org"
@@ -475,10 +486,11 @@ packages:
     url: "pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "io.netty"
-  name: "netty-buffer"
-  version: "4.1.9.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "io.netty"
+    name: "netty-buffer"
+    version: "4.1.9.Final"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Netty is an asynchronous event-driven network application framework\
@@ -503,10 +515,11 @@ packages:
     url: "https://github.com/netty/netty.git/netty-buffer.git"
     revision: "netty-4.1.9.Final"
     path: ""
-- package_manager: "Maven"
-  namespace: "io.netty"
-  name: "netty-codec"
-  version: "4.1.9.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "io.netty"
+    name: "netty-codec"
+    version: "4.1.9.Final"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Netty is an asynchronous event-driven network application framework\
@@ -531,10 +544,11 @@ packages:
     url: "https://github.com/netty/netty.git/netty-codec.git"
     revision: "netty-4.1.9.Final"
     path: ""
-- package_manager: "Maven"
-  namespace: "io.netty"
-  name: "netty-common"
-  version: "4.1.9.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "io.netty"
+    name: "netty-common"
+    version: "4.1.9.Final"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Netty is an asynchronous event-driven network application framework\
@@ -559,10 +573,11 @@ packages:
     url: "https://github.com/netty/netty.git/netty-common.git"
     revision: "netty-4.1.9.Final"
     path: ""
-- package_manager: "Maven"
-  namespace: "io.netty"
-  name: "netty-resolver"
-  version: "4.1.9.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "io.netty"
+    name: "netty-resolver"
+    version: "4.1.9.Final"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Netty is an asynchronous event-driven network application framework\
@@ -587,10 +602,11 @@ packages:
     url: "https://github.com/netty/netty.git/netty-resolver.git"
     revision: "netty-4.1.9.Final"
     path: ""
-- package_manager: "Maven"
-  namespace: "io.netty"
-  name: "netty-transport"
-  version: "4.1.9.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "io.netty"
+    name: "netty-transport"
+    version: "4.1.9.Final"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Netty is an asynchronous event-driven network application framework\
@@ -615,10 +631,11 @@ packages:
     url: "https://github.com/netty/netty.git/netty-transport.git"
     revision: "netty-4.1.9.Final"
     path: ""
-- package_manager: "Maven"
-  namespace: "jgnash"
-  name: "jgnash-resources"
-  version: "2.30.0"
+- id:
+    package_manager: "Maven"
+    namespace: "jgnash"
+    name: "jgnash-resources"
+    version: "2.30.0"
   declared_licenses: []
   description: "jGnash Resources"
   homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-resources/"
@@ -640,10 +657,11 @@ packages:
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "junit"
-  name: "junit"
-  version: "4.12"
+- id:
+    package_manager: "Maven"
+    namespace: "junit"
+    name: "junit"
+    version: "4.12"
   declared_licenses:
   - "Eclipse Public License 1.0"
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
@@ -667,10 +685,11 @@ packages:
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
-- package_manager: "Maven"
-  namespace: "log4j"
-  name: "log4j"
-  version: "1.2.17"
+- id:
+    package_manager: "Maven"
+    namespace: "log4j"
+    name: "log4j"
+    version: "1.2.17"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "Apache Log4j 1.2"
@@ -693,10 +712,11 @@ packages:
     url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "net.sf.kxml"
-  name: "kxml2"
-  version: "2.3.0"
+- id:
+    package_manager: "Maven"
+    namespace: "net.sf.kxml"
+    name: "kxml2"
+    version: "2.3.0"
   declared_licenses:
   - "BSD style"
   - "Public Domain"
@@ -722,10 +742,11 @@ packages:
     url: ""
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.apache.commons"
-  name: "commons-lang3"
-  version: "3.3.2"
+- id:
+    package_manager: "Maven"
+    namespace: "org.apache.commons"
+    name: "commons-lang3"
+    version: "3.3.2"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
@@ -750,10 +771,11 @@ packages:
     url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.apache.poi"
-  name: "poi-ooxml-schemas"
-  version: "3.14"
+- id:
+    package_manager: "Maven"
+    namespace: "org.apache.poi"
+    name: "poi-ooxml-schemas"
+    version: "3.14"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "Apache POI - Java API To Access Microsoft Format Files"
@@ -776,10 +798,11 @@ packages:
     url: ""
     revision: ""
     path: ""
-- package_manager: "Maven"
-  namespace: "org.apache.poi"
-  name: "poi-ooxml"
-  version: "3.14"
+- id:
+    package_manager: "Maven"
+    namespace: "org.apache.poi"
+    name: "poi-ooxml"
+    version: "3.14"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "Apache POI - Java API To Access Microsoft Format Files"
@@ -802,10 +825,11 @@ packages:
     url: ""
     revision: ""
     path: ""
-- package_manager: "Maven"
-  namespace: "org.apache.poi"
-  name: "poi"
-  version: "3.14"
+- id:
+    package_manager: "Maven"
+    namespace: "org.apache.poi"
+    name: "poi"
+    version: "3.14"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "Apache POI - Java API To Access Microsoft Format Files"
@@ -828,10 +852,11 @@ packages:
     url: ""
     revision: ""
     path: ""
-- package_manager: "Maven"
-  namespace: "org.apache.xmlbeans"
-  name: "xmlbeans"
-  version: "2.6.0"
+- id:
+    package_manager: "Maven"
+    namespace: "org.apache.xmlbeans"
+    name: "xmlbeans"
+    version: "2.6.0"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "XmlBeans main jar"
@@ -854,10 +879,11 @@ packages:
     url: "https://svn.apache.org/repos/asf/xmlbeans"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.hamcrest"
-  name: "hamcrest-all"
-  version: "1.3"
+- id:
+    package_manager: "Maven"
+    namespace: "org.hamcrest"
+    name: "hamcrest-all"
+    version: "1.3"
   declared_licenses:
   - "New BSD License"
   description: "A self-contained hamcrest jar containing all of the sub-modules in\
@@ -881,10 +907,11 @@ packages:
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git/hamcrest-all"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.hibernate.common"
-  name: "hibernate-commons-annotations"
-  version: "5.0.1.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "org.hibernate.common"
+    name: "hibernate-commons-annotations"
+    version: "5.0.1.Final"
   declared_licenses:
   - "GNU Lesser General Public License"
   description: "Common reflection code used in support of annotation processing"
@@ -907,10 +934,11 @@ packages:
     url: "https://github.com/hibernate/hibernate-commons-annotations.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.hibernate.javax.persistence"
-  name: "hibernate-jpa-2.1-api"
-  version: "1.0.0.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "org.hibernate.javax.persistence"
+    name: "hibernate-jpa-2.1-api"
+    version: "1.0.0.Final"
   declared_licenses:
   - "Eclipse Distribution License (EDL), Version 1.0"
   - "Eclipse Public License (EPL), Version 1.0"
@@ -935,10 +963,11 @@ packages:
     url: "https://github.com/hibernate/hibernate-jpa-api.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.hibernate"
-  name: "hibernate-c3p0"
-  version: "5.2.10.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "org.hibernate"
+    name: "hibernate-c3p0"
+    version: "5.2.10.Final"
   declared_licenses:
   - "GNU Lesser General Public License"
   description: "Integration for c3p0 Connection pooling into Hibernate O/RM"
@@ -961,10 +990,11 @@ packages:
     url: "https://github.com/hibernate/hibernate-orm.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.hibernate"
-  name: "hibernate-core"
-  version: "5.2.10.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "org.hibernate"
+    name: "hibernate-core"
+    version: "5.2.10.Final"
   declared_licenses:
   - "GNU Lesser General Public License"
   description: "The core O/RM functionality as provided by Hibernate"
@@ -987,10 +1017,11 @@ packages:
     url: "https://github.com/hibernate/hibernate-orm.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.hsqldb"
-  name: "hsqldb"
-  version: "2.4.0"
+- id:
+    package_manager: "Maven"
+    namespace: "org.hsqldb"
+    name: "hsqldb"
+    version: "2.4.0"
   declared_licenses:
   - "HSQLDB License, a BSD open source license"
   description: "HSQLDB - Lightweight 100% Java SQL Database Engine"
@@ -1013,10 +1044,11 @@ packages:
     url: "http://svn.code.sf.net/p/hsqldb/svn/base"
     revision: "2.4.0"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.javassist"
-  name: "javassist"
-  version: "3.20.0-GA"
+- id:
+    package_manager: "Maven"
+    namespace: "org.javassist"
+    name: "javassist"
+    version: "3.20.0-GA"
   declared_licenses:
   - "Apache License 2.0"
   - "LGPL 2.1"
@@ -1042,10 +1074,11 @@ packages:
     url: "ssh://git@github.com/jboss-javassist/javassist.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.jboss.logging"
-  name: "jboss-logging"
-  version: "3.3.0.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "org.jboss.logging"
+    name: "jboss-logging"
+    version: "3.3.0.Final"
   declared_licenses:
   - "Apache License, version 2.0"
   description: "The JBoss Logging Framework"
@@ -1068,10 +1101,11 @@ packages:
     url: "https://github.com/jboss-logging/jboss-logging.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.jboss.spec.javax.transaction"
-  name: "jboss-transaction-api_1.2_spec"
-  version: "1.0.1.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "org.jboss.spec.javax.transaction"
+    name: "jboss-transaction-api_1.2_spec"
+    version: "1.0.1.Final"
   declared_licenses:
   - "Common Development and Distribution License"
   - "GNU General Public License, Version 2 with the Classpath Exception"
@@ -1095,10 +1129,11 @@ packages:
     url: "ssh://git@github.com/jboss/jboss-transaction-api_spec.git"
     revision: "jboss-transaction-api_1.2_spec-1.0.1.Final"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.jboss"
-  name: "jandex"
-  version: "2.0.3.Final"
+- id:
+    package_manager: "Maven"
+    namespace: "org.jboss"
+    name: "jandex"
+    version: "2.0.3.Final"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Parent POM for JBoss projects. Provides default project build configuration."
@@ -1121,10 +1156,11 @@ packages:
     url: "ssh://git@github.com/jboss/jboss-parent-pom.git/jandex"
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.slf4j"
-  name: "slf4j-api"
-  version: "1.7.21"
+- id:
+    package_manager: "Maven"
+    namespace: "org.slf4j"
+    name: "slf4j-api"
+    version: "1.7.21"
   declared_licenses:
   - "MIT License"
   description: "The slf4j API"
@@ -1147,10 +1183,11 @@ packages:
     url: ""
     revision: "HEAD"
     path: ""
-- package_manager: "Maven"
-  namespace: "org.slf4j"
-  name: "slf4j-log4j12"
-  version: "1.7.21"
+- id:
+    package_manager: "Maven"
+    namespace: "org.slf4j"
+    name: "slf4j-log4j12"
+    version: "1.7.21"
   declared_licenses:
   - "MIT License"
   description: "SLF4J LOG4J-12 Binding"

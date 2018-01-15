@@ -39,25 +39,9 @@ import java.util.SortedSet
 @JsonIgnoreProperties("normalizedName", "identifier", "normalizedVcsUrl")
 data class Package(
         /**
-         * The name of the package manager that was used to discover this package, for example Maven or NPM.
+         * The unique identifier of this package.
          */
-        @JsonProperty("package_manager")
-        val packageManager: String,
-
-        /**
-         * The namespace of the package, for example the group id in Maven or the scope in NPM.
-         */
-        val namespace: String,
-
-        /**
-         * The name of the package.
-         */
-        val name: String,
-
-        /**
-         * The version of the package.
-         */
-        val version: String,
+        val id: Identifier,
 
         /**
          * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
@@ -103,22 +87,17 @@ data class Package(
     /**
      * The normalized package name, can be used to create directories.
      */
-    val normalizedName = name.fileSystemEncode()
-
-    /**
-     * The unique identifier for this package, created from [packageManager], [namespace], [name], and [version].
-     */
-    val identifier = "$packageManager:$namespace:$normalizedName:$version"
+    val normalizedName = id.name.fileSystemEncode()
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
      * dependencies still need to be filled out.
      */
     fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf()) =
-            PackageReference(namespace, name, version, dependencies)
+            PackageReference(id.namespace, id.name, id.version, dependencies)
 
     /**
      * A comparison function to sort packages by their identifier.
      */
-    override fun compareTo(other: Package) = compareValuesBy(this, other, { it.identifier })
+    override fun compareTo(other: Package) = compareValuesBy(this, other, { it.id.toString() })
 }
