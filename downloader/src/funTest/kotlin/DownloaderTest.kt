@@ -99,5 +99,37 @@ class DownloaderTest : StringSpec() {
             exception.message shouldBe "Calculated SHA-1 hash 'a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa' differs " +
                     "from expected hash '0123456789abcdef0123456789abcdef01234567'."
         }.config(tags = setOf(Expensive))
+
+        "Falls back to downloading source package when download from VCS fails" {
+            val pkg = Package(
+                    packageManager = "Gradle",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12",
+                    declaredLicenses = sortedSetOf(),
+                    description = "",
+                    homepageUrl = "",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                            url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
+                            hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
+                            hashAlgorithm = "SHA-1"
+                    ),
+                    vcs = VcsInfo(
+                            provider = "Git",
+                            url = "https://example.com/invalid-repo-url",
+                            revision = "8964880d9bac33f0a7f030a74c7c9299a8f117c8",
+                            path = ""
+                    )
+            )
+
+            val downloadDir = Main.download(pkg, outputDir)
+
+            val licenseFile = File(downloadDir, "LICENSE-junit.txt")
+            licenseFile.exists() shouldBe true
+            licenseFile.length() shouldBe 11376L
+
+            downloadDir.walkTopDown().count() shouldBe 259
+        }.config(tags = setOf(Expensive))
     }
 }
