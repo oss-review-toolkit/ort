@@ -100,10 +100,14 @@ abstract class VersionControlSystem {
                     var revision = ""
                     var path = ""
 
-                    if (pathIterator.hasNext() && pathIterator.next().toString() in listOf("blob", "tree")) {
-                        if (pathIterator.hasNext()) {
+                    if (pathIterator.hasNext()) {
+                        val extra = pathIterator.next().toString()
+                        if (extra in listOf("blob", "tree") && pathIterator.hasNext()) {
                             revision = pathIterator.next().toString()
                             path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                        } else {
+                            // Just treat all the extra components as a path.
+                            path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
                         }
                     }
 
