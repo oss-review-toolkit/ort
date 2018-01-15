@@ -77,6 +77,9 @@ abstract class GitBase : VersionControlSystem() {
 }
 
 object Git : GitBase() {
+    // TODO: Make this configurable.
+    private const val HISTORY_DEPTH = 10
+
     override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("git", true)
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).exitValue() == 0
@@ -117,7 +120,8 @@ object Git : GitBase() {
 
             // To safe network bandwidth, first try to only fetch exactly the revision we want.
             try {
-                runGitCommand(targetDir, "fetch", "origin", revision)
+                log.info { "Trying to fetch only revision '$revision' with depth limited to $HISTORY_DEPTH." }
+                runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
                 return workingTree
             } catch (e: IOException) {
@@ -126,16 +130,32 @@ object Git : GitBase() {
                 }
 
                 log.warn {
-                    "Could not fetch only '$revision': ${e.message}\n" +
+                    "Could not fetch only revision '$revision': ${e.message}\n" +
+                            "Falling back to fetching all refs."
+                }
+            }
+
+            // Fall back to fetching all refs with limited depth of history.
+            try {
+                log.info { "Trying to fetch all refs with depth limited to $HISTORY_DEPTH." }
+                runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "--tags", "origin")
+                runGitCommand(targetDir, "checkout", revision)
+                return workingTree
+            } catch (e: IOException) {
+                if (Main.stacktrace) {
+                    e.printStackTrace()
+                }
+
+                log.warn {
+                    "Could not fetch with only a depth of $HISTORY_DEPTH: ${e.message}\n" +
                             "Falling back to fetching everything."
                 }
             }
 
             // Fall back to fetching everything.
-            log.info { "Fetching origin and trying to checkout '$revision'." }
+            log.info { "Trying to fetch everything including tags." }
             runGitCommand(targetDir, "fetch", "--tags", "origin")
             runGitCommand(targetDir, "checkout", revision)
-
             return workingTree
         } catch (e: IOException) {
             if (Main.stacktrace) {
