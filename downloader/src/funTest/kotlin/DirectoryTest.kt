@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -49,10 +50,12 @@ class DirectoryTest : StringSpec() {
     init {
         "Creates directories for Gradle submodules" {
             val pkg = Package(
-                    packageManager = "Gradle",
-                    namespace = "",
-                    name = "project :model",
-                    version = "",
+                    id = Identifier(
+                            packageManager = "Gradle",
+                            namespace = "",
+                            name = "project :model",
+                            version = ""
+                    ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",

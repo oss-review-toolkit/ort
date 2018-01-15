@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: true
 project:
-  package_manager: "Maven"
-  namespace: "com.here.ort.maven"
-  name: "maven-project"
-  version: "1.0-SNAPSHOT"
+  id:
+    package_manager: "Maven"
+    namespace: "com.here.ort.maven"
+    name: "maven-project"
+    version: "1.0-SNAPSHOT"
   declared_licenses: []
   aliases: []
   vcs:

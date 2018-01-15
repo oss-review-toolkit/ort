@@ -29,6 +29,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -268,10 +269,12 @@ class NPM : PackageManager() {
             val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
 
             val module = Package(
-                    packageManager = javaClass.simpleName,
-                    namespace = namespace,
-                    name = name,
-                    version = version,
+                    id = Identifier(
+                            packageManager = javaClass.simpleName,
+                            namespace = namespace,
+                            name = name,
+                            version = version
+                    ),
                     declaredLicenses = declaredLicenses,
                     description = description,
                     homepageUrl = homepageUrl,
@@ -285,11 +288,11 @@ class NPM : PackageManager() {
                     vcsProcessed = vcsMerged
             )
 
-            require(module.name.isNotEmpty()) {
+            require(module.id.name.isNotEmpty()) {
                 "Generated package info for $identifier has no name."
             }
 
-            require(module.version.isNotEmpty()) {
+            require(module.id.version.isNotEmpty()) {
                 "Generated package info for $identifier has no version."
             }
 
@@ -454,10 +457,12 @@ class NPM : PackageManager() {
         vcsMerged = vcsMerged.merge(vcsFromWorkingTree)
 
         val project = Project(
-                packageManager = javaClass.simpleName,
-                namespace = namespace,
-                name = name,
-                version = version,
+                id = Identifier(
+                        packageManager = javaClass.simpleName,
+                        namespace = namespace,
+                        name = name,
+                        version = version
+                ),
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
                 vcs = vcsFromPackage,

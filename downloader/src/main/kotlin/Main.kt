@@ -173,7 +173,7 @@ object Main {
                     e.printStackTrace()
                 }
 
-                log.error { "Could not download '${pkg.identifier}': ${e.message}" }
+                log.error { "Could not download '${pkg.id}': ${e.message}" }
             }
         }
     }
@@ -191,7 +191,7 @@ object Main {
      */
     fun download(target: Package, outputDirectory: File): File {
         // TODO: add namespace to path
-        val targetDir = File(outputDirectory, "${target.normalizedName}/${target.version}").apply { safeMkdirs() }
+        val targetDir = File(outputDirectory, "${target.normalizedName}/${target.id.version}").apply { safeMkdirs() }
 
         if (target.vcsProcessed.url.isNotBlank()) {
             try {
@@ -201,7 +201,7 @@ object Main {
                     e.printStackTrace()
                 }
 
-                log.info { "VCS download failed for '${target.identifier}'." }
+                log.info { "VCS download failed for '${target.id}'." }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
                 targetDir.safeDeleteRecursively()
@@ -214,7 +214,7 @@ object Main {
 
     private fun downloadFromVcs(target: Package, outputDirectory: File): File {
         log.info {
-            "Trying to download '${target.identifier}' sources to '${outputDirectory.absolutePath}' from VCS..."
+            "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
 
         if (target.vcsProcessed.url != target.vcs.url) {
@@ -227,7 +227,7 @@ object Main {
         if (target.vcsProcessed.revision.isBlank()) {
             log.warn {
                 "No VCS revision provided, downloaded source code will probably not match package version " +
-                        "${target.version}."
+                        "${target.id.version}."
             }
         } else {
             log.info { "Trying to download revision '${target.vcsProcessed.revision}'." }
@@ -261,7 +261,7 @@ object Main {
             throw DownloadException("Could not find an applicable VCS provider.")
         }
 
-        val workingTree = applicableVcs.download(target.vcsProcessed, target.version, outputDirectory)
+        val workingTree = applicableVcs.download(target.vcsProcessed, target.id.version, outputDirectory)
         val revision = workingTree.getRevision()
 
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
@@ -271,7 +271,7 @@ object Main {
 
     private fun downloadSourcePackage(target: Package, outputDirectory: File): File {
         log.info {
-            "Trying to download '${target.identifier}' sources to '${outputDirectory.absolutePath}' from package..."
+            "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from package..."
         }
 
         if (target.sourceArtifact.url.isBlank()) {

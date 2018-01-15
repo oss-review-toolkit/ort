@@ -32,6 +32,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
@@ -200,14 +201,14 @@ class PIP : PackageManager() {
                 // See https://wiki.python.org/moin/PyPIJSON.
                 val pkgRequest = Request.Builder()
                         .get()
-                        .url("https://pypi.python.org/pypi/${pkg.name}/${pkg.version}/json")
+                        .url("https://pypi.python.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
                         .build()
 
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     val body = response.body()?.string()?.trim()
 
                     if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrBlank()) {
-                        log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.identifier}'." }
+                        log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id}'." }
                         if (body != null) {
                             log.warn { "Response was '$body'." }
                         }
@@ -219,7 +220,7 @@ class PIP : PackageManager() {
                     val pkgData = try {
                         jsonMapper.readTree(body)!!
                     } catch (e: IOException) {
-                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
+                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
 
                         // Fall back to returning the original package data.
                         return@use pkg
@@ -229,7 +230,7 @@ class PIP : PackageManager() {
                         val pkgInfo = pkgData["info"]
                         // TODO: Support multiple package types of the same package version. Arbitrarily choose the
                         // first for now.
-                        val pkgRelease = pkgData["releases"][pkg.version][0]
+                        val pkgRelease = pkgData["releases"][pkg.id.version][0]
 
                         val declaredLicenses = sortedSetOf<String>()
 
@@ -251,10 +252,7 @@ class PIP : PackageManager() {
 
                         // Amend package information with more details.
                         Package(
-                                packageManager = pkg.packageManager,
-                                namespace = pkg.namespace,
-                                name = pkg.name,
-                                version = pkg.version,
+                                id = pkg.id,
                                 declaredLicenses = declaredLicenses,
                                 description = pkgInfo["summary"]?.asText() ?: pkg.description,
                                 homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
@@ -267,7 +265,7 @@ class PIP : PackageManager() {
                                 vcs = pkg.vcs
                         )
                     } catch (e: NullPointerException) {
-                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.identifier}': ${e.message}" }
+                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
 
                         // Fall back to returning the original package data.
                         pkg
@@ -285,10 +283,12 @@ class PIP : PackageManager() {
 
         val vcsDir = VersionControlSystem.forDirectory(projectDir)
         val project = Project(
-                packageManager = javaClass.simpleName,
-                namespace = "",
-                name = projectName,
-                version = projectVersion,
+                id = Identifier(
+                        packageManager = javaClass.simpleName,
+                        namespace = "",
+                        name = projectName,
+                        version = projectVersion
+                ),
                 declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
                 vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
@@ -382,10 +382,12 @@ class PIP : PackageManager() {
             val packageVersion = it["installed_version"].asText()
 
             val dependencyPackage = Package(
-                    packageManager = javaClass.simpleName,
-                    namespace = "",
-                    name = packageName,
-                    version = packageVersion,
+                    id = Identifier(
+                            packageManager = javaClass.simpleName,
+                            namespace = "",
+                            name = packageName,
+                            version = packageVersion
+                    ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
