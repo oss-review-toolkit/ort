@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: true
 project:
-  package_manager: "Gradle"
-  namespace: ""
-  name: "Gradle sample"
-  version: ""
+  id:
+    package_manager: "Gradle"
+    namespace: ""
+    name: "Gradle sample"
+    version: ""
   declared_licenses: []
   aliases: []
   vcs:

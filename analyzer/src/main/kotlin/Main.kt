@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
@@ -188,10 +189,12 @@ object Main {
 
             val vcsDir = VersionControlSystem.forDirectory(absoluteProjectPath)
             val project = Project(
-                    packageManager = "",
-                    namespace = "",
-                    name = absoluteProjectPath.name,
-                    version = "",
+                    id = Identifier(
+                            packageManager = "",
+                            namespace = "",
+                            name = absoluteProjectPath.name,
+                            version = ""
+                    ),
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
                     vcs = vcsDir?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY,

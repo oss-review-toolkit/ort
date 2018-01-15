@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -50,10 +51,12 @@ class DownloaderTest : StringSpec() {
     init {
         "Downloads and unpacks JAR source package" {
             val pkg = Package(
-                    packageManager = "Gradle",
-                    namespace = "junit",
-                    name = "junit",
-                    version = "4.12",
+                    id = Identifier(
+                            packageManager = "Gradle",
+                            namespace = "junit",
+                            name = "junit",
+                            version = "4.12"
+                    ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
@@ -77,10 +80,12 @@ class DownloaderTest : StringSpec() {
 
         "Download of JAR source package fails when hash is incorrect" {
             val pkg = Package(
-                    packageManager = "Gradle",
-                    namespace = "junit",
-                    name = "junit",
-                    version = "4.12",
+                    id = Identifier(
+                            packageManager = "Gradle",
+                            namespace = "junit",
+                            name = "junit",
+                            version = "4.12"
+                    ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
@@ -103,10 +108,12 @@ class DownloaderTest : StringSpec() {
 
         "Falls back to downloading source package when download from VCS fails" {
             val pkg = Package(
-                    packageManager = "Gradle",
-                    namespace = "junit",
-                    name = "junit",
-                    version = "4.12",
+                    id = Identifier(
+                            packageManager = "Gradle",
+                            namespace = "junit",
+                            name = "junit",
+                            version = "4.12"
+                    ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",

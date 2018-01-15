@@ -50,7 +50,7 @@ data class Scope(
     /**
      * Returns whether the given package is contained as a (transitive) dependency in this scope.
      */
-    fun contains(pkg: Package) = contains(pkg.identifier)
+    fun contains(pkg: Package) = contains(pkg.id.toString())
 
     /**
      * Returns whether the package identified by [pkgId] is contained as a (transitive) dependency in this scope.

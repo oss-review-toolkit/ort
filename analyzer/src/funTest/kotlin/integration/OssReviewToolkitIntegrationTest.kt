@@ -26,6 +26,7 @@ import com.here.ort.analyzer.managers.Maven
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.analyzer.managers.PIP
 import com.here.ort.analyzer.managers.SBT
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -35,10 +36,12 @@ import java.io.File
 class OssReviewToolkitIntegrationTest : AbstractIntegrationSpec() {
 
     override val pkg: Package = Package(
-            packageManager = "Gradle",
-            namespace = "com.here.ort",
-            name = "OSS Review Toolkit",
-            version = "",
+            id = Identifier(
+                    packageManager = "Gradle",
+                    namespace = "com.here.ort",
+                    name = "OSS Review Toolkit",
+                    version = ""
+            ),
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",

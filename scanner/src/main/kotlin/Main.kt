@@ -208,9 +208,9 @@ object Main {
             packages.addAll(analyzerResult.packages)
 
             packages.forEach { pkg ->
-                val entry = pkgSummary.getOrPut(pkg.identifier) { SummaryEntry() }
+                val entry = pkgSummary.getOrPut(pkg.id.toString()) { SummaryEntry() }
                 entry.scopes.addAll(findScopesForPackage(pkg, analyzerResult.project))
-                scanEntry(entry, pkg.identifier, pkg)
+                scanEntry(entry, pkg.id.toString(), pkg)
             }
         }
 

@@ -1,10 +1,11 @@
 ---
 allowDynamicVersions: true
 project:
-  package_manager: "Gradle"
-  namespace: ""
-  name: "lib"
-  version: ""
+  id:
+    package_manager: "Gradle"
+    namespace: ""
+    name: "lib"
+    version: ""
   declared_licenses: []
   aliases: []
   vcs:
@@ -186,10 +187,11 @@ project:
         errors: []
       errors: []
 packages:
-- package_manager: "Gradle"
-  namespace: "junit"
-  name: "junit"
-  version: "4.12"
+- id:
+    package_manager: "Gradle"
+    namespace: "junit"
+    name: "junit"
+    version: "4.12"
   declared_licenses:
   - "Eclipse Public License 1.0"
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
@@ -213,10 +215,11 @@ packages:
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
-- package_manager: "Gradle"
-  namespace: "org.apache.commons"
-  name: "commons-lang3"
-  version: "3.5"
+- id:
+    package_manager: "Gradle"
+    namespace: "org.apache.commons"
+    name: "commons-lang3"
+    version: "3.5"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
@@ -241,10 +244,11 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
-- package_manager: "Gradle"
-  namespace: "org.apache.commons"
-  name: "commons-text"
-  version: "1.1"
+- id:
+    package_manager: "Gradle"
+    namespace: "org.apache.commons"
+    name: "commons-text"
+    version: "1.1"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Text is a library focused on algorithms working on\
@@ -268,10 +272,11 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: "HEAD"
     path: ""
-- package_manager: "Gradle"
-  namespace: "org.hamcrest"
-  name: "hamcrest-core"
-  version: "1.3"
+- id:
+    package_manager: "Gradle"
+    namespace: "org.hamcrest"
+    name: "hamcrest-core"
+    version: "1.3"
   declared_licenses:
   - "New BSD License"
   description: "This is the core API of hamcrest matcher framework to be used by third-party\

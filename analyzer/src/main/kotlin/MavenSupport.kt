@@ -20,6 +20,7 @@
 package com.here.ort.analyzer
 
 import ch.frankel.slf4k.*
+import com.here.ort.model.Identifier
 
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -275,10 +276,12 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val sourceRemoteArtifact = requestRemoteArtifact(sourceArtifact, repositories)
 
         return Package(
-                packageManager = packageManager,
-                namespace = mavenProject.groupId,
-                name = mavenProject.artifactId,
-                version = mavenProject.version,
+                id = Identifier(
+                        packageManager = packageManager,
+                        namespace = mavenProject.groupId,
+                        name = mavenProject.artifactId,
+                        version = mavenProject.version
+                ),
                 declaredLicenses = parseLicenses(mavenProject),
                 description = mavenProject.description ?: "",
                 homepageUrl = mavenProject.url ?: "",
