@@ -116,6 +116,19 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
 
+        "properly split extra path components" {
+            val actual = VersionControlSystem.splitUrl(
+                    "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded"
+            )
+            val expected = VcsInfo(
+                    "Git",
+                    "ssh://git@github.com/EsotericSoftware/kryo.git",
+                    "",
+                    "kryo-shaded"
+            )
+            actual shouldBe expected
+        }
+
         "not modify Bitbucket URLs without a path" {
             val actual = VersionControlSystem.splitUrl(
                     "https://bitbucket.org/paniq/masagin"
