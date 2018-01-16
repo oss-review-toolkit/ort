@@ -152,13 +152,14 @@ class NPM : PackageManager() {
                     packages.values.toSortedSet())
         } finally {
             // Delete node_modules folder to not pollute the scan.
+            log.info { "Deleting temporary '$modulesDir'..." }
             if (!modulesDir.safeDeleteRecursively()) {
                 throw IOException("Unable to delete the '$modulesDir' directory.")
             }
 
             // Restore any previously existing "node_modules" directory.
             if (tempModulesDir != null) {
-                log.info { "Restoring original '$modulesDir' directory from '$tempModulesDir'." }
+                log.info { "Restoring original '$modulesDir' directory from '$tempModulesDir'..." }
                 Files.move(tempModulesDir.toPath(), modulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
                 if (!tempModulesDir.parentFile.delete()) {
                     throw IOException("Unable to delete the '${tempModulesDir.parent}' directory.")
