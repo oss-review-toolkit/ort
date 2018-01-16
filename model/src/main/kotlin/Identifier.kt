@@ -20,6 +20,12 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 /**
  * A unique identifier for a software package.
@@ -99,4 +105,16 @@ data class Identifier(
     }
 
     override fun toString() = "$packageManager:$namespace:$name:$version"
+}
+
+class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class.java) {
+    override fun serialize(value: Identifier, gen: JsonGenerator, provider: SerializerProvider) {
+        gen.writeString(value.toString())
+    }
+}
+
+class IdentifierFromStringDeserializer : StdDeserializer<Identifier>(Identifier::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Identifier {
+        return Identifier.fromString(p.valueAsString)
+    }
 }
