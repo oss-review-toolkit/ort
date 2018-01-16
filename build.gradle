@@ -142,4 +142,25 @@ subprojects {
         outputFormat = 'javadoc'
         outputDirectory = "$buildDir/javadoc"
     }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task dokkaJar(type: Jar, dependsOn: dokka) {
+        classifier = 'dokka'
+        from dokka.outputDirectory
+    }
+
+    task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+        classifier = 'javadoc'
+        from dokkaJavadoc.outputDirectory
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives dokkaJar
+        archives javadocJar
+    }
 }
