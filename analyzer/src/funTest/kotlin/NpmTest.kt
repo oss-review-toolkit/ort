@@ -20,6 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.utils.yamlMapper
 
@@ -35,6 +36,8 @@ import java.io.File
 
 class NpmTest : FreeSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/npm")
+    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    private val vcsRevision = vcsDir.getRevision()
 
     @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
@@ -57,10 +60,16 @@ class NpmTest : FreeSpec() {
         }
     }
 
-    private fun patchExpectedResult(workingDir: File) =
-            File(projectDir.parentFile, "npm-expected-output.yml")
-                    .readText()
-                    .replaceFirst("npm-project", "npm-${workingDir.name}")
+    private fun patchExpectedResult(workingDir: File): String {
+        val vcsPath = "analyzer/" + workingDir.path.replace("\\", "/")
+        return File(projectDir.parentFile, "npm-expected-output.yml")
+                .readText()
+                // project.name:
+                .replaceFirst("npm-project", "npm-${workingDir.name}")
+                // project.vcs_processed:
+                .replaceFirst("revision: \"<REPLACE>\"", "revision: \"$vcsRevision\"")
+                .replaceFirst("path: \"<REPLACE>\"", "path: \"$vcsPath\"")
+    }
 
     init {
         "NPM should" - {
