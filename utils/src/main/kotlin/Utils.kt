@@ -155,7 +155,7 @@ fun File.safeMkdirs() {
         return
     }
 
-    throw IOException("Could not create directory ${this.absolutePath}.")
+    throw IOException("Could not create directory '${this.absolutePath}'.")
 }
 
 /**
