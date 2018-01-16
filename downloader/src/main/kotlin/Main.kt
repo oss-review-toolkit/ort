@@ -190,7 +190,6 @@ object Main {
      * @throws DownloadException In case the download failed.
      */
     fun download(target: Package, outputDirectory: File): File {
-        // TODO: return also SHA1 which was finally cloned
         val p = fun(string: String) = println("${target.identifier}: $string")
 
         // TODO: add namespace to path
