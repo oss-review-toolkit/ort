@@ -20,6 +20,7 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Mercurial
+import com.here.ort.utils.getUserConfigDirectory
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
@@ -54,6 +55,10 @@ class MercurialTest : StringSpec() {
             val version = Mercurial.getVersion()
             println("Mercurial version $version detected.")
             version shouldNotBe ""
+        }
+
+        "Mercurial detects non-working-trees" {
+            Mercurial.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
         }
 
         "Mercurial correctly detects URLs to remote repositories" {

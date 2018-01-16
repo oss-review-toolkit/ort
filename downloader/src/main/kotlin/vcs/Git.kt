@@ -50,6 +50,7 @@ abstract class GitBase : VersionControlSystem() {
                         return false
                     }
 
+                    // Do not use runGitCommand() here as we do not require the command to succeed.
                     val isInsideWorkTree = ProcessCapture(workingDir, "git", "rev-parse", "--is-inside-work-tree")
                     return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
                 }

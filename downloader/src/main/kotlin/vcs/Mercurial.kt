@@ -51,8 +51,9 @@ object Mercurial : VersionControlSystem() {
                         return false
                     }
 
-                    val repositoryRoot = runMercurialCommand(workingDir, "root").stdout().trimEnd()
-                    return workingDir.path.startsWith(repositoryRoot)
+                    // Do not use runMercurialCommand() here as we do not require the command to succeed.
+                    val hgRootPath = ProcessCapture(workingDir, "hg", "root")
+                    return hgRootPath.exitValue() == 0 && workingDir.path.startsWith(hgRootPath.stdout().trimEnd())
                 }
 
                 override fun getRemoteUrl() =

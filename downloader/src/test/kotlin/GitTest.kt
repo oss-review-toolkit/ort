@@ -20,6 +20,7 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.unpack
+import com.here.ort.utils.getUserConfigDirectory
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
@@ -54,6 +55,10 @@ class GitTest : StringSpec() {
             val version = Git.getVersion()
             println("Git version $version detected.")
             version shouldNotBe ""
+        }
+
+        "Git detects non-working-trees" {
+            Git.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
         }
 
         "Git correctly detects URLs to remote repositories" {
