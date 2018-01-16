@@ -55,6 +55,11 @@ abstract class GitBase : VersionControlSystem() {
                     return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
                 }
 
+                override fun isShallow(): Boolean {
+                    val dotGitDir = runGitCommand(workingDir, "rev-parse", "--absolute-git-dir").stdout().trimEnd()
+                    return File(dotGitDir, "shallow").isFile
+                }
+
                 override fun getRemoteUrl() =
                         runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
 
