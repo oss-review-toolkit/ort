@@ -38,6 +38,12 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
 
@@ -140,10 +146,47 @@ fun String.fileSystemDecode(): String =
         java.net.URLDecoder.decode(this, "UTF-8")
 
 /**
- * Delete files recursively without failing if e.g. individual files in symlinked directories could not be deleted due
- * to permission issues if in the end the named directory does not exist anymore.
+ * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
  */
-fun File.safeDeleteRecursively() = this.deleteRecursively() || !this.exists()
+fun File.safeDeleteRecursively(): Boolean {
+    if (!this.exists()) {
+        return true
+    }
+
+    // This call to walkFileTree() implicitly uses EnumSet.noneOf(FileVisitOption.class), i.e.
+    // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
+    Files.walkFileTree(this.toPath(), object : SimpleFileVisitor<Path>() {
+        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+            if (OS.isWindows && attrs.isOther) {
+                // Unlink junctions to turn them into empty directories.
+                val fsutil = ProcessCapture("fsutil", "reparsepoint", "delete", dir.toString())
+                if (fsutil.exitValue() == 0) {
+                    return FileVisitResult.SKIP_SUBTREE
+                }
+            }
+
+            return FileVisitResult.CONTINUE
+        }
+
+        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+            try {
+                Files.delete(file)
+            } catch (e: java.nio.file.AccessDeniedException) {
+                if (file.toFile().setWritable(true)) {
+                    // Try again.
+                    Files.delete(file)
+                }
+            }
+
+            return FileVisitResult.CONTINUE
+        }
+
+        override fun postVisitDirectory(dir: Path, exc: IOException?) =
+                FileVisitResult.CONTINUE.also { Files.delete(dir) }
+    })
+
+    return !this.exists()
+}
 
 /**
  * Create all missing intermediate directories without failing if any already exists.
