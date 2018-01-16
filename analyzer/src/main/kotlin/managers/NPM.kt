@@ -42,6 +42,7 @@ import com.here.ort.utils.asTextOrEmpty
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 
 import com.vdurmont.semver4j.Requirement
@@ -211,7 +212,7 @@ class NPM : PackageManager() {
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-            val vcs = try {
+            val vcsFromPackage = try {
                 val jsonResponse = OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     if (response.code() != HttpURLConnection.HTTP_OK) {
                         throw IOException("Could not retrieve package info about $encodedName: " +
@@ -264,6 +265,9 @@ class NPM : PackageManager() {
                 }
             }
 
+            val vcsFromUrl = VersionControlSystem.splitUrl(normalizeVcsUrl(vcsFromPackage.url))
+            val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
+
             val module = Package(
                     packageManager = javaClass.simpleName,
                     namespace = namespace,
@@ -278,7 +282,8 @@ class NPM : PackageManager() {
                             hashAlgorithm = hashAlgorithm
                     ),
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcs
+                    vcs = vcsFromPackage,
+                    vcsProcessed = vcsMerged
             )
 
             require(module.name.isNotEmpty()) {
@@ -440,12 +445,14 @@ class NPM : PackageManager() {
 
         val projectDir = packageJson.parentFile
 
-        // Try to get VCS information from the package.json's repository field, or otherwise from the VCS working tree.
-        val vcs = parseVcsInfo(json).takeUnless {
-            it == VcsInfo.EMPTY
-        } ?: VersionControlSystem.forDirectory(projectDir)?.let {
-            it.getInfo(projectDir)
-        } ?: VcsInfo.EMPTY
+        // Merge VCS information from all our sources.
+        val vcsFromPackage = parseVcsInfo(json)
+        val vcsFromUrl = VersionControlSystem.splitUrl(normalizeVcsUrl(vcsFromPackage.url))
+        val vcsFromWorkingTree = VersionControlSystem.forDirectory(projectDir)
+                ?.let { it.getInfo(projectDir) } ?: VcsInfo.EMPTY
+
+        var vcsMerged = vcsFromUrl.merge(vcsFromPackage)
+        vcsMerged = vcsMerged.merge(vcsFromWorkingTree)
 
         val project = Project(
                 packageManager = javaClass.simpleName,
@@ -454,7 +461,8 @@ class NPM : PackageManager() {
                 version = version,
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
-                vcs = vcs,
+                vcs = vcsFromPackage,
+                vcsProcessed = vcsMerged,
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
