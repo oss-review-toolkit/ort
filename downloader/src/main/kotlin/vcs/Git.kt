@@ -160,8 +160,15 @@ object Git : GitBase() {
 
             // Fall back to fetching everything.
             log.info { "Trying to fetch everything including tags." }
-            runGitCommand(targetDir, "fetch", "--tags", "origin")
+
+            if (workingTree.isShallow()) {
+                runGitCommand(targetDir, "fetch", "--unshallow", "--tags", "origin")
+            } else {
+                runGitCommand(targetDir, "fetch", "--tags", "origin")
+            }
+
             runGitCommand(targetDir, "checkout", revision)
+
             return workingTree
         } catch (e: IOException) {
             if (Main.stacktrace) {
