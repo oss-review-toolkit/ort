@@ -56,6 +56,8 @@ object Mercurial : VersionControlSystem() {
                     return hgRootPath.exitValue() == 0 && workingDir.path.startsWith(hgRootPath.stdout().trimEnd())
                 }
 
+                override fun isShallow() = false
+
                 override fun getRemoteUrl() =
                         runMercurialCommand(workingDir, "paths", "default").stdout().trimEnd()
 
