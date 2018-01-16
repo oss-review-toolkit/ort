@@ -80,6 +80,7 @@ abstract class VersionControlSystem {
             }
 
             return when {
+                uri.host == null -> VcsInfo("", vcsUrl, "", "")
                 uri.host.endsWith("github.com") -> {
                     var url = uri.scheme + "://" + uri.authority
 
