@@ -43,7 +43,7 @@ class NpmTest : FreeSpec() {
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         try {
             super.interceptTestCase(context, test)
-        } catch (exception: Exception) {
+        } finally {
             // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
             // from failing tests.
             projectDir.listFiles().forEach {
@@ -55,8 +55,6 @@ class NpmTest : FreeSpec() {
                     }
                 }
             }
-
-            throw exception
         }
     }
 
