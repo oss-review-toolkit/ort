@@ -1,0 +1,12 @@
+---
+- id: "Gradle:org.hamcrest::"
+  data:
+    homepage_url: "http://hamcrest.org/JavaHamcrest/"
+- id: "Gradle:org.hamcrest:hamcrest-core:"
+  data:
+    description: "Curated description."
+- id: "Gradle:org.hamcrest:hamcrest-core:1.3"
+  data:
+    declared_licenses:
+    - "curated license a"
+    - "curated license b"
