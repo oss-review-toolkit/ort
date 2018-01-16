@@ -20,6 +20,7 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Subversion
+import com.here.ort.utils.getUserConfigDirectory
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
@@ -54,6 +55,10 @@ class SubversionTest : StringSpec() {
             val version = Subversion.getVersion()
             println("Subversion version $version detected.")
             version shouldNotBe ""
+        }
+
+        "Subversion detects non-working-trees" {
+            Subversion.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
         }
 
         "Subversion correctly detects URLs to remote repositories" {
