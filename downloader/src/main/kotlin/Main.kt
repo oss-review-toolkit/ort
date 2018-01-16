@@ -190,11 +190,8 @@ object Main {
      * @throws DownloadException In case the download failed.
      */
     fun download(target: Package, outputDirectory: File): File {
-        val p = fun(string: String) = println("${target.identifier}: $string")
-
         // TODO: add namespace to path
         val targetDir = File(outputDirectory, "${target.normalizedName}/${target.version}").apply { safeMkdirs() }
-        p("Downloading source code to '${targetDir.absolutePath}'...")
 
         if (target.vcsProcessed.url.isNotBlank()) {
             try {
@@ -204,60 +201,82 @@ object Main {
                     e.printStackTrace()
                 }
 
-                // Clean up any files left from the failed VCS download (i.e. a ".git" directory)
-                targetDir.safeDeleteRecursively()
+                log.info { "VCS download failed for '${target.identifier}'." }
+
+                // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
+                if (!targetDir.safeDeleteRecursively()) {
+                    log.warn { "Unable to cleanup ${targetDir.absolutePath} after failed VCS download." }
+                }
+
                 targetDir.safeMkdirs()
-                p("Download from VCS failed.")
             }
         }
 
-        p("Trying to download source package ...")
         return downloadSourcePackage(target, targetDir)
     }
 
     private fun downloadFromVcs(target: Package, outputDirectory: File): File {
-        val p = fun(string: String) = println("${target.identifier}: $string")
-
-        p("Trying to download from URL '${target.vcsProcessed.url}'...")
+        log.info {
+            "Trying to download '${target.identifier}' sources to '${outputDirectory.absolutePath}' from VCS..."
+        }
 
         if (target.vcsProcessed.url != target.vcs.url) {
-            p("URL was normalized, original URL was '${target.vcs.url}'.")
+            println("Using processed VCS URL '${target.vcsProcessed.url}'.")
+            println("Original VCS URL was '${target.vcs.url}'.")
+        } else {
+            println("Using VCS URL '${target.vcsProcessed.url}'.")
         }
 
         if (target.vcsProcessed.revision.isBlank()) {
-            p("WARNING: No VCS revision provided, downloaded source code does likely not match revision " +
-                    target.version)
+            log.warn {
+                "No VCS revision provided, downloaded source code will probably not match package version " +
+                        "${target.version}."
+            }
         } else {
-            p("Downloading revision '${target.vcsProcessed.revision}'.")
+            log.info { "Trying to download revision '${target.vcsProcessed.revision}'." }
         }
 
         var applicableVcs: VersionControlSystem? = null
 
-        p("Trying to detect VCS...")
-
         if (target.vcsProcessed.provider.isNotBlank()) {
-            p("from provider name '${target.vcsProcessed.provider}'...")
             applicableVcs = VersionControlSystem.forProvider(target.vcsProcessed.provider)
+            log.info {
+                if (applicableVcs != null) {
+                    "Detected VCS provider '$applicableVcs' from provider name '${target.vcsProcessed.provider}'."
+                } else {
+                    "Could not detect VCS provider from provider name '${target.vcsProcessed.provider}'."
+                }
+            }
         }
 
         if (applicableVcs == null) {
-            p("from URL '${target.vcsProcessed.url}'...")
             applicableVcs = VersionControlSystem.forUrl(target.vcsProcessed.url)
+            log.info {
+                if (applicableVcs != null) {
+                    "Detected VCS provider '$applicableVcs' from URL '${target.vcsProcessed.url}'."
+                } else {
+                    "Could not detect VCS provider from URL '${target.vcsProcessed.url}'."
+                }
+            }
         }
 
         if (applicableVcs == null) {
             throw DownloadException("Could not find an applicable VCS provider.")
         }
 
-        p("Using VCS provider '$applicableVcs'.")
-
         val workingTree = applicableVcs.download(target.vcsProcessed, target.version, outputDirectory)
         val revision = workingTree.getRevision()
-        p("Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'.")
+
+        log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
+
         return outputDirectory
     }
 
     private fun downloadSourcePackage(target: Package, outputDirectory: File): File {
+        log.info {
+            "Trying to download '${target.identifier}' sources to '${outputDirectory.absolutePath}' from package..."
+        }
+
         if (target.sourceArtifact.url.isBlank()) {
             throw DownloadException("No source artifact URL provided.")
         }
