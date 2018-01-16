@@ -101,6 +101,11 @@ object Main {
             order = 0)
     var allowDynamicVersions = false
 
+    @Parameter(description = "A YAML file that contains package curation data.",
+            names = ["--package-curations-file"],
+            order = 0)
+    var packageCurationsFile: File? = null
+
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
             order = 0)
@@ -222,7 +227,26 @@ object Main {
         managedDefinitionFiles.forEach { manager, files ->
             // Print the list of dependencies.
             val results = manager.create().resolveDependencies(absoluteProjectPath, files)
-            results.forEach { definitionFile, analyzerResult ->
+
+            val curatedResults = packageCurationsFile?.let {
+                val provider = YamlFilePackageCurationProvider(it)
+                results.mapValues { entry ->
+                    AnalyzerResult(
+                            allowDynamicVersions = entry.value.allowDynamicVersions,
+                            project = entry.value.project,
+                            errors = entry.value.errors,
+                            packages = entry.value.packages.map { pkg ->
+                                val curations = provider.getCurationsFor(pkg.id)
+                                curations.fold(pkg) { cur, packageCuration ->
+                                    log.debug { "Applying curation '$packageCuration' to package '${pkg.id}'." }
+                                    packageCuration.apply(cur)
+                                }
+                            }.toSortedSet()
+                    )
+                }
+            } ?: results
+
+            curatedResults.forEach { definitionFile, analyzerResult ->
                 writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
                 if (analyzerResult.hasErrors()) {
                     failedAnalysis.add(definitionFile.absolutePath)

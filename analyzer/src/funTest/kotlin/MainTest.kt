@@ -19,10 +19,14 @@
 
 package com.here.ort.analyzer
 
+import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.ByteArrayOutputStream
@@ -98,6 +102,29 @@ class MainTest : StringSpec() {
             lines.next() shouldBe "Scanning project path:"
             lines.next() shouldBe "\t" + inputDir.absolutePath
             lines.next() shouldBe "NPM projects found in:"
+        }
+
+        "Package curation data file is applied correctly" {
+            val inputDir = File(syntheticProjectDir, "gradle")
+            val curationsOutputDir = File(outputDir, "curations")
+
+            Main.main(arrayOf(
+                    "-m", "Gradle",
+                    "-i", inputDir.path,
+                    "-o", curationsOutputDir.path,
+                    "--package-curations-file", "src/funTest/assets/projects/synthetic/gradle/curations.yml"
+            ))
+
+            val resultsFile = File(curationsOutputDir, "lib/build-gradle-dependencies.yml")
+            val analyzerResult = yamlMapper.readValue(resultsFile, AnalyzerResult::class.java)
+            val hamcrestCorePackage = analyzerResult.packages.find {
+                it.id == Identifier("Gradle", "org.hamcrest", "hamcrest-core", "1.3")
+            }
+
+            hamcrestCorePackage shouldNotBe null
+            hamcrestCorePackage!!.homepageUrl shouldBe "http://hamcrest.org/JavaHamcrest/"
+            hamcrestCorePackage.description shouldBe "Curated description."
+            hamcrestCorePackage.declaredLicenses shouldBe sortedSetOf("curated license a", "curated license b")
         }
     }
 }
