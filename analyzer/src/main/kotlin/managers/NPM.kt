@@ -153,9 +153,7 @@ class NPM : PackageManager() {
         } finally {
             // Delete node_modules folder to not pollute the scan.
             log.info { "Deleting temporary '$modulesDir'..." }
-            if (!modulesDir.safeDeleteRecursively()) {
-                throw IOException("Unable to delete the '$modulesDir' directory.")
-            }
+            modulesDir.safeDeleteRecursively()
 
             // Restore any previously existing "node_modules" directory.
             if (tempModulesDir != null) {

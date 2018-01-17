@@ -147,10 +147,12 @@ fun String.fileSystemDecode(): String =
 
 /**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
+ *
+ * @throws IOException if the directory could not be deleted.
  */
-fun File.safeDeleteRecursively(): Boolean {
+fun File.safeDeleteRecursively() {
     if (!this.exists()) {
-        return true
+        return
     }
 
     // This call to walkFileTree() implicitly uses EnumSet.noneOf(FileVisitOption.class), i.e.
@@ -185,7 +187,9 @@ fun File.safeDeleteRecursively(): Boolean {
                 FileVisitResult.CONTINUE.also { Files.delete(dir) }
     })
 
-    return !this.exists()
+    if (this.exists()) {
+        throw IOException("Could not delete directory '${this.absolutePath}'.")
+    }
 }
 
 /**

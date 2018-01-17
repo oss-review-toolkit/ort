@@ -204,10 +204,7 @@ object Main {
                 log.info { "VCS download failed for '${target.identifier}'." }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
-                if (!targetDir.safeDeleteRecursively()) {
-                    log.warn { "Unable to cleanup ${targetDir.absolutePath} after failed VCS download." }
-                }
-
+                targetDir.safeDeleteRecursively()
                 targetDir.safeMkdirs()
             }
         }

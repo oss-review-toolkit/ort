@@ -297,9 +297,7 @@ class PIP : PackageManager() {
         )
 
         // Remove the virtualenv by simply deleting the directory.
-        if (!virtualEnvDir.safeDeleteRecursively()) {
-            log.warn { "Unable to delete temporary directory '$virtualEnvDir'." }
-        }
+        virtualEnvDir.safeDeleteRecursively()
 
         return AnalyzerResult(true, project, packages)
     }
