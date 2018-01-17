@@ -96,6 +96,8 @@ data class SubversionLogEntry(
         val msg: String)
 
 object Subversion : VersionControlSystem() {
+    override val movingRevisionNames = emptyList<String>()
+
     override fun getVersion(): String {
         val subversionVersionRegex = Regex("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
@@ -157,7 +159,7 @@ object Subversion : VersionControlSystem() {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
             runSvnCommand(targetDir, "checkout", vcs.url, "--depth", "empty", ".")
 
-            return if (vcs.revision.isNotBlank()) {
+            return if (isFixedRevision(vcs.revision)) {
                 if (vcs.path.isBlank()) {
                     // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
                     runSvnCommand(targetDir, "update", "-r", vcs.revision, "--set-depth", "infinity")

@@ -236,17 +236,14 @@ abstract class VersionControlSystem {
     }
 
     /**
+     * A fixed list of named revisions that usually move as new revisions are created.
+     */
+    protected abstract val movingRevisionNames: List<String>
+
+    /**
      * Return the VCS command's version string, or an empty string if the version cannot be determined.
      */
     abstract fun getVersion(): String
-
-    /**
-     * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.
-     */
-    fun isAtLeastVersion(expectedVersion: String): Boolean {
-        val actualVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
-        return actualVersion.isGreaterThanOrEqualTo(Semver(expectedVersion, Semver.SemverType.LOOSE))
-    }
 
     /**
      * Return a working tree instance for this VCS.
@@ -274,4 +271,17 @@ abstract class VersionControlSystem {
      * @throws DownloadException In case the download failed.
      */
     abstract fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree
+
+    /**
+     * Check whether the given [revision] is likely to name a fixed revision that does not move.
+     */
+    fun isFixedRevision(revision: String) = revision.isNotBlank() && revision !in movingRevisionNames
+
+    /**
+     * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.
+     */
+    fun isAtLeastVersion(expectedVersion: String): Boolean {
+        val actualVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
+        return actualVersion.isGreaterThanOrEqualTo(Semver(expectedVersion, Semver.SemverType.LOOSE))
+    }
 }
