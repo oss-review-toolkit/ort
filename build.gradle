@@ -1,7 +1,7 @@
 plugins {
     // We need to hard-code the version here because of
     // https://github.com/gradle/gradle/issues/1697
-    id 'org.jetbrains.kotlin.jvm' version '1.2.10' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.2.20' apply false
     id 'org.jetbrains.dokka' version '0.9.15' apply false
 
     // Note that the detekt Gradle plugin version does not necessarily
@@ -52,7 +52,7 @@ subprojects {
     }
 
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2.10'
+        compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2.20'
 
         testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
 
@@ -68,7 +68,7 @@ subprojects {
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
     configurations.all {
         resolutionStrategy {
-            force 'org.jetbrains.kotlin:kotlin-reflect:1.2.10'
+            force 'org.jetbrains.kotlin:kotlin-reflect:1.2.20'
         }
     }
 
