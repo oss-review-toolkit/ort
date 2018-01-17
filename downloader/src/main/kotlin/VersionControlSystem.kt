@@ -153,6 +153,8 @@ abstract class VersionControlSystem {
      */
     override fun toString(): String = javaClass.simpleName
 
+    abstract val movingRevisionNames: List<String>
+
     /**
      * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
      * root directory of the tree. The root directory can be determined by calling [getRootPath].

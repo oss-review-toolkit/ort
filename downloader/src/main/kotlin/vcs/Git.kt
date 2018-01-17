@@ -35,6 +35,8 @@ import java.io.File
 import java.io.IOException
 
 abstract class GitBase : VersionControlSystem() {
+    override val movingRevisionNames = listOf("HEAD", "master")
+
     override fun getVersion(): String {
         val gitVersionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
@@ -111,7 +113,7 @@ object Git : GitBase() {
 
             val workingTree = getWorkingTree(targetDir)
 
-            val revision = if (vcs.revision.isNotBlank()) {
+            val revision = if (vcs.revision.isNotBlank() && vcs.revision !in movingRevisionNames) {
                 vcs.revision
             } else {
                 log.info { "Trying to guess $this revision for version '$version'." }

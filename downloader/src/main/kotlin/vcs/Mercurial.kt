@@ -36,6 +36,8 @@ object Mercurial : VersionControlSystem() {
     private const val EXTENSION_LARGE_FILES = "largefiles = "
     private const val EXTENSION_SPARSE = "sparse = "
 
+    override val movingRevisionNames = listOf("tip", "default")
+
     override fun getVersion(): String {
         val mercurialVersionRegex = Regex("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
@@ -111,7 +113,7 @@ object Mercurial : VersionControlSystem() {
 
             val workingTree = getWorkingTree(targetDir)
 
-            val revision = if (vcs.revision.isNotBlank()) {
+            val revision = if (vcs.revision.isNotBlank() && vcs.revision !in movingRevisionNames) {
                 vcs.revision
             } else {
                 log.info { "Trying to guess $this revision for version '$version'." }
