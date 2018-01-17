@@ -61,7 +61,7 @@ class UtilsTest : WordSpec({
             normalizeVcsUrl("") shouldBe ""
         }
 
-        "properly handle anonymous Git / HTTPS URL schemes" {
+        "handle anonymous Git / HTTPS URL schemes" {
             val packages = mapOf(
                     "git://github.com/cheeriojs/cheerio.git"
                             to "https://github.com/cheeriojs/cheerio.git",
@@ -76,7 +76,7 @@ class UtilsTest : WordSpec({
             }
         }
 
-        "properly handle authenticated SSH URL schemes" {
+        "handle authenticated SSH URL schemes" {
             val packages = mapOf(
                     "git+ssh://git@github.com/logicalparadox/idris.git"
                             to "ssh://git@github.com/logicalparadox/idris.git",
