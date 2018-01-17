@@ -142,5 +142,16 @@ class UtilsTest : WordSpec({
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
+
+        "fixup crazy URLs" {
+            val packages = mapOf(
+                    "https://git@github.com:hacksparrow/node-easyimage.git"
+                            to "https://github.com/hacksparrow/node-easyimage.git"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
+            }
+        }
     }
 })
