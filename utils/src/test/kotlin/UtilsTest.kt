@@ -44,8 +44,11 @@ class UtilsTest : WordSpec({
         "create a valid file name" {
             val tempDir = createTempDir()
             val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
+
             fileFromStr.isFile shouldBe true
-            tempDir.safeDeleteRecursively() shouldBe true
+
+            // This should not throw an IOException.
+            tempDir.safeDeleteRecursively()
         }
 
         "be reversible by String.urldecode" {
