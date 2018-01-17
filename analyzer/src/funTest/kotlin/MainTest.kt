@@ -19,6 +19,8 @@
 
 package com.here.ort.analyzer
 
+import com.here.ort.utils.safeDeleteRecursively
+
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -43,7 +45,7 @@ class MainTest : StringSpec() {
         try {
             super.interceptTestCase(context, test)
         } finally {
-            outputDir.deleteRecursively()
+            outputDir.safeDeleteRecursively()
         }
     }
 

@@ -19,6 +19,8 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.utils.safeDeleteRecursively
+
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -36,7 +38,7 @@ class ArchiveUtilsTest : StringSpec() {
         try {
             super.interceptTestCase(context, test)
         } finally {
-            outputDir.deleteRecursively()
+            outputDir.safeDeleteRecursively()
         }
     }
 
