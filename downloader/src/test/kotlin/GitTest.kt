@@ -21,6 +21,7 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.unpack
 import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
@@ -46,7 +47,7 @@ class GitTest : StringSpec() {
         try {
             super.interceptSpec(context, spec)
         } finally {
-            zipContentDir.deleteRecursively()
+            zipContentDir.safeDeleteRecursively()
         }
     }
 

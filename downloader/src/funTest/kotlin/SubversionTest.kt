@@ -21,6 +21,7 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.Expensive
+import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
@@ -46,7 +47,7 @@ class SubversionTest : StringSpec() {
         try {
             super.interceptTestCase(context, test)
         } finally {
-            outputDir.deleteRecursively()
+            outputDir.safeDeleteRecursively()
         }
     }
 

@@ -25,6 +25,7 @@ import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.utils.Expensive
+import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.shouldBe
@@ -70,7 +71,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         try {
             super.interceptSpec(context, spec)
         } finally {
-            outputDir.deleteRecursively()
+            outputDir.safeDeleteRecursively()
         }
     }
 

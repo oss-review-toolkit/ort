@@ -23,6 +23,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.Expensive
+import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
@@ -42,7 +43,7 @@ class DownloaderTest : StringSpec() {
         try {
             super.interceptTestCase(context, test)
         } finally {
-            outputDir.deleteRecursively()
+            outputDir.safeDeleteRecursively()
         }
     }
 

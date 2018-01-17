@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
+import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.TestCaseContext
@@ -51,7 +52,7 @@ class NpmTest : FreeSpec() {
                     val nodeModulesDir = File(it, "node_modules")
                     val gitKeepFile = File(nodeModulesDir, ".gitkeep")
                     if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
-                        nodeModulesDir.deleteRecursively()
+                        nodeModulesDir.safeDeleteRecursively()
                     }
                 }
             }
