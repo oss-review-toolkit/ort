@@ -35,7 +35,6 @@ class BabelTest : WordSpec() {
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsRevision = vcsDir.getRevision()
 
-    @Suppress("CatchException")
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         try {
             super.interceptTestCase(context, test)
