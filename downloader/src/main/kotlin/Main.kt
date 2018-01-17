@@ -201,7 +201,7 @@ object Main {
                     e.printStackTrace()
                 }
 
-                log.info { "VCS download failed for '${target.id}'." }
+                log.info { "VCS download failed for '${target.id}': ${e.message}" }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
                 targetDir.safeDeleteRecursively()
