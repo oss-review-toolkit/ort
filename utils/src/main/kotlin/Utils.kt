@@ -98,8 +98,10 @@ fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trimEnd('/')
 
-    url = url.replace(Regex("(.+://)?git@github\\.com[:/](.+)")) {
-        "ssh://git@github.com/${it.groupValues[2]}"
+    url = url.replace(Regex("^(.*(https|ssh).*://)?git@github\\.com[:/](.+)$")) {
+        // Like the Git client itself, default to ssh for URLs that do not contain a protocol scheme.
+        val scheme = it.groupValues[2].let { if (it.isNotBlank()) it else "ssh" }
+        "$scheme://git@github.com/${it.groupValues[3]}"
     }
 
     // A hierarchical URI looks like
