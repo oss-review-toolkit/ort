@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -43,7 +42,6 @@ import com.here.ort.utils.asTextOrEmpty
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
-import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 
 import com.vdurmont.semver4j.Requirement
@@ -265,9 +263,6 @@ class NPM : PackageManager() {
                 }
             }
 
-            val vcsFromUrl = VersionControlSystem.splitUrl(normalizeVcsUrl(vcsFromPackage.url))
-            val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
-
             val module = Package(
                     id = Identifier(
                             packageManager = javaClass.simpleName,
@@ -285,7 +280,7 @@ class NPM : PackageManager() {
                     ),
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = vcsFromPackage,
-                    vcsProcessed = vcsMerged
+                    vcsProcessed = processPackageVcs(vcsFromPackage)
             )
 
             require(module.id.name.isNotEmpty()) {
@@ -447,14 +442,7 @@ class NPM : PackageManager() {
 
         val projectDir = packageJson.parentFile
 
-        // Merge VCS information from all our sources.
         val vcsFromPackage = parseVcsInfo(json)
-        val vcsFromUrl = VersionControlSystem.splitUrl(normalizeVcsUrl(vcsFromPackage.url))
-        val vcsFromWorkingTree = VersionControlSystem.forDirectory(projectDir)
-                ?.let { it.getInfo(projectDir) } ?: VcsInfo.EMPTY
-
-        var vcsMerged = vcsFromUrl.merge(vcsFromPackage)
-        vcsMerged = vcsMerged.merge(vcsFromWorkingTree)
 
         val project = Project(
                 id = Identifier(
@@ -466,7 +454,7 @@ class NPM : PackageManager() {
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
                 vcs = vcsFromPackage,
-                vcsProcessed = vcsMerged,
+                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage),
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
