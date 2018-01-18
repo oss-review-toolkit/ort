@@ -22,8 +22,10 @@ package com.here.ort.analyzer
 import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.managers.*
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Project
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 
@@ -108,6 +110,26 @@ abstract class PackageManager {
             })
 
             return result
+        }
+
+        /**
+         * Merge the [VcsInfo] read from the package with [VcsInfo] deduced from the VCS URL.
+         */
+        fun processPackageVcs(vcsFromPackage: VcsInfo): VcsInfo {
+            val vcsNormalized = vcsFromPackage.normalize()
+            val vcsFromUrl = VersionControlSystem.splitUrl(vcsNormalized.url)
+            return vcsFromUrl.merge(vcsNormalized)
+        }
+
+        /**
+         * Merge the [VcsInfo] read from the project with [VcsInfo] deduced from the VCS URL and from the working
+         * directory.
+         */
+        fun processProjectVcs(projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY): VcsInfo {
+            val vcsFromWorkingTree = VersionControlSystem.forDirectory(projectDir)
+                    ?.getInfo(projectDir)?.normalize() ?: VcsInfo.EMPTY
+
+            return processPackageVcs(vcsFromProject).merge(vcsFromWorkingTree)
         }
     }
 

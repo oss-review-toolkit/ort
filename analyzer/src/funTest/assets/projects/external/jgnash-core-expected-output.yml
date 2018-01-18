@@ -14,7 +14,7 @@ project:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: ""
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-core"
     revision: "HEAD"
     path: ""
@@ -259,7 +259,7 @@ packages:
     revision: "classmate-1.3.0"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "ssh://git@github.com/cowtowncoder/java-classmate.git"
     revision: "classmate-1.3.0"
     path: ""
@@ -289,7 +289,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/virtuald/curvesapi.git"
     revision: "HEAD"
     path: ""
@@ -316,7 +316,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/h2database/h2database.git"
     revision: "HEAD"
     path: ""
@@ -344,7 +344,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "ssh://git@github.com/swaldman/c3p0.git"
     revision: "HEAD"
     path: ""
@@ -372,7 +372,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "ssh://git@github.com/swaldman/mchange-commons-java.git"
     revision: "HEAD"
     path: ""
@@ -399,10 +399,10 @@ packages:
     revision: "v-1.4.x"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/x-stream/xstream.git/xstream-hibernate.git"
+    provider: "Git"
+    url: "https://github.com/x-stream/xstream.git"
     revision: "v-1.4.x"
-    path: ""
+    path: "xstream-hibernate.git"
 - id:
     package_manager: "Maven"
     namespace: "com.thoughtworks.xstream"
@@ -426,10 +426,10 @@ packages:
     revision: "v-1.4.x"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/x-stream/xstream.git/xstream.git"
+    provider: "Git"
+    url: "https://github.com/x-stream/xstream.git"
     revision: "v-1.4.x"
-    path: ""
+    path: "xstream.git"
 - id:
     package_manager: "Maven"
     namespace: "commons-codec"
@@ -456,7 +456,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "svn"
+    provider: ""
     url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
     revision: "HEAD"
     path: ""
@@ -482,7 +482,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "cvs"
+    provider: ""
     url: "pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
     revision: "HEAD"
     path: ""
@@ -511,10 +511,10 @@ packages:
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/netty/netty.git/netty-buffer.git"
+    provider: "Git"
+    url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: ""
+    path: "netty-buffer.git"
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -540,10 +540,10 @@ packages:
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/netty/netty.git/netty-codec.git"
+    provider: "Git"
+    url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: ""
+    path: "netty-codec.git"
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -569,10 +569,10 @@ packages:
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/netty/netty.git/netty-common.git"
+    provider: "Git"
+    url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: ""
+    path: "netty-common.git"
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -598,10 +598,10 @@ packages:
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/netty/netty.git/netty-resolver.git"
+    provider: "Git"
+    url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: ""
+    path: "netty-resolver.git"
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -627,10 +627,10 @@ packages:
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "https://github.com/netty/netty.git/netty-transport.git"
+    provider: "Git"
+    url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: ""
+    path: "netty-transport.git"
 - id:
     package_manager: "Maven"
     namespace: "jgnash"
@@ -653,7 +653,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: ""
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
     revision: "HEAD"
     path: ""
@@ -681,7 +681,7 @@ packages:
     revision: "r4.12"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -708,7 +708,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "svn"
+    provider: ""
     url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
     revision: "HEAD"
     path: ""
@@ -767,7 +767,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "svn"
+    provider: ""
     url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
     revision: "HEAD"
     path: ""
@@ -875,7 +875,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "svn"
+    provider: ""
     url: "https://svn.apache.org/repos/asf/xmlbeans"
     revision: "HEAD"
     path: ""
@@ -903,10 +903,10 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "ssh://git@github.com/hamcrest/JavaHamcrest.git/hamcrest-all"
+    provider: "Git"
+    url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: "HEAD"
-    path: ""
+    path: "hamcrest-all"
 - id:
     package_manager: "Maven"
     namespace: "org.hibernate.common"
@@ -930,7 +930,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/hibernate/hibernate-commons-annotations.git"
     revision: "HEAD"
     path: ""
@@ -959,7 +959,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/hibernate/hibernate-jpa-api.git"
     revision: "HEAD"
     path: ""
@@ -986,7 +986,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/hibernate/hibernate-orm.git"
     revision: "HEAD"
     path: ""
@@ -1013,7 +1013,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/hibernate/hibernate-orm.git"
     revision: "HEAD"
     path: ""
@@ -1040,7 +1040,7 @@ packages:
     revision: "2.4.0"
     path: ""
   vcs_processed:
-    provider: "svn"
+    provider: ""
     url: "http://svn.code.sf.net/p/hsqldb/svn/base"
     revision: "2.4.0"
     path: ""
@@ -1070,7 +1070,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "ssh://git@github.com/jboss-javassist/javassist.git"
     revision: "HEAD"
     path: ""
@@ -1097,7 +1097,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/jboss-logging/jboss-logging.git"
     revision: "HEAD"
     path: ""
@@ -1125,7 +1125,7 @@ packages:
     revision: "jboss-transaction-api_1.2_spec-1.0.1.Final"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "ssh://git@github.com/jboss/jboss-transaction-api_spec.git"
     revision: "jboss-transaction-api_1.2_spec-1.0.1.Final"
     path: ""
@@ -1152,10 +1152,10 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "ssh://git@github.com/jboss/jboss-parent-pom.git/jandex"
+    provider: "Git"
+    url: "ssh://git@github.com/jboss/jboss-parent-pom.git"
     revision: "HEAD"
-    path: ""
+    path: "jandex"
 - id:
     package_manager: "Maven"
     namespace: "org.slf4j"

@@ -202,7 +202,8 @@ object Main {
                     ),
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcs = vcsDir?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY,
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = vcsDir?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY,
                     homepageUrl = "",
                     scopes = sortedSetOf()
             )
