@@ -25,6 +25,31 @@ import io.kotlintest.specs.StringSpec
 
 class VcsInfoTest : StringSpec({
     "Merging VcsInfo" should {
+        "ignore empty information" {
+            val inputA = VcsInfo(
+                    provider = "",
+                    url = "",
+                    revision = "",
+                    path = ""
+            )
+
+            val inputB = VcsInfo(
+                    provider = "provider",
+                    url = "url",
+                    revision = "revision",
+                    path = "path"
+            )
+
+            val output = VcsInfo(
+                    provider = "provider",
+                    url = "url",
+                    revision = "revision",
+                    path = "path"
+            )
+
+            inputA.merge(inputB) shouldBe output
+        }
+
         "prefer provider spelling that matches VCS class names" {
             val inputA = VcsInfo(
                     provider = "Git",

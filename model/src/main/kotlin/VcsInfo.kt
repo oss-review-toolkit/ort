@@ -63,6 +63,10 @@ data class VcsInfo(
      * If in question, information in this instance has precedence over information in the other instance.
      */
     fun merge(other: VcsInfo): VcsInfo {
+        if (this == EMPTY) {
+            return other
+        }
+
         var provider = this.provider
         if (provider.equals(other.provider, true)) {
             // Prefer the other provider only if its spelling matches the VCS class names.
