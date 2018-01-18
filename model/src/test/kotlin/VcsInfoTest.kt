@@ -19,11 +19,62 @@
 
 package com.here.ort.model
 
+import com.here.ort.utils.yamlMapper
+
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
 class VcsInfoTest : StringSpec({
+    "Deserializing VcsInfo" should {
+        "work when all fields are given" {
+            val yaml = """
+                ---
+                provider: "provider"
+                url: "url"
+                revision: "revision"
+                path: "path"
+                """.trimIndent()
+
+            println(yaml)
+
+            val vcsInfo = yamlMapper.readValue(yaml, VcsInfo::class.java)
+
+            vcsInfo.provider shouldBe "provider"
+            vcsInfo.url shouldBe "url"
+            vcsInfo.revision shouldBe "revision"
+            vcsInfo.path shouldBe "path"
+        }
+
+        "assign empty strings to missing fields when only provider is set" {
+            val yaml = """
+                ---
+                provider: "provider"
+                """.trimIndent()
+
+            val vcsInfo = yamlMapper.readValue(yaml, VcsInfo::class.java)
+
+            vcsInfo.provider shouldBe "provider"
+            vcsInfo.url shouldBe ""
+            vcsInfo.revision shouldBe ""
+            vcsInfo.path shouldBe ""
+        }
+
+        "assign empty strings to missing fields when only path is set" {
+            val yaml = """
+                ---
+                path: "path"
+                """.trimIndent()
+
+            val vcsInfo = yamlMapper.readValue(yaml, VcsInfo::class.java)
+
+            vcsInfo.provider shouldBe ""
+            vcsInfo.url shouldBe ""
+            vcsInfo.revision shouldBe ""
+            vcsInfo.path shouldBe "path"
+        }
+    }
+
     "Merging VcsInfo" should {
         "ignore empty information" {
             val inputA = VcsInfo(

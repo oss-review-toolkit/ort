@@ -19,11 +19,19 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+
+import com.here.ort.utils.asTextOrEmpty
 import com.here.ort.utils.normalizeVcsUrl
 
 /**
  * Bundles general Version Control System information.
  */
+@JsonDeserialize(using = VcsInfoDeserializer::class)
 data class VcsInfo(
         /**
          * The name of the VCS provider, for example Git, Hg or SVN.
@@ -99,4 +107,15 @@ data class VcsInfo(
      * Returns this [VcsInfo] in normalized form. Currently, this only applies [normalizeVcsUrl] to the [url].
      */
     fun normalize() = copy(url = normalizeVcsUrl(url))
+}
+
+class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
+        val node = p.codec.readTree<JsonNode>(p)
+        val provider = node.get("provider").asTextOrEmpty()
+        val url = node.get("url").asTextOrEmpty()
+        val revision = node.get("revision").asTextOrEmpty()
+        val path = node.get("path").asTextOrEmpty()
+        return VcsInfo(provider, url, revision, path)
+    }
 }
