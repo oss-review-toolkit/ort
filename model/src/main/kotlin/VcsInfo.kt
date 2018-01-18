@@ -94,4 +94,9 @@ data class VcsInfo(
 
         return VcsInfo(provider, url, revision, path)
     }
+
+    /**
+     * Returns this [VcsInfo] with [normalizeVcsUrl] applied to the [url].
+     */
+    fun normalize() = VcsInfo(provider, normalizeVcsUrl(url), revision, path)
 }
