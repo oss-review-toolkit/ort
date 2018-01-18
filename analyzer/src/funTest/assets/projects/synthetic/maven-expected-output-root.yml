@@ -9,14 +9,14 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: "Git"
+    provider: ""
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
+    path: ""
   vcs_processed:
     provider: "Git"
-    url: ""
-    revision: ""
+    url: "<REPLACE>"
+    revision: "<REPLACE>"
     path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes: []

@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -262,7 +261,8 @@ class PIP : PackageManager() {
                                         hashAlgorithm = "MD5"
                                 ),
                                 sourceArtifact = RemoteArtifact.EMPTY,
-                                vcs = pkg.vcs
+                                vcs = pkg.vcs,
+                                vcsProcessed = processPackageVcs(pkg.vcs)
                         )
                     } catch (e: NullPointerException) {
                         log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
@@ -281,7 +281,6 @@ class PIP : PackageManager() {
                 Scope("install", true, installDependencies)
         )
 
-        val vcsDir = VersionControlSystem.forDirectory(projectDir)
         val project = Project(
                 id = Identifier(
                         packageManager = javaClass.simpleName,
@@ -291,7 +290,8 @@ class PIP : PackageManager() {
                 ),
                 declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
-                vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = processProjectVcs(projectDir),
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )

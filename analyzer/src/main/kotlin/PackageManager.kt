@@ -28,7 +28,6 @@ import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
-import com.here.ort.utils.normalizeVcsUrl
 
 import java.io.File
 import java.nio.file.FileVisitResult

@@ -9,14 +9,14 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: "Git"
+    provider: ""
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
+    path: ""
   vcs_processed:
     provider: "Git"
-    url: ""
-    revision: ""
+    url: "<REPLACE>"
+    revision: "<REPLACE>"
     path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes:
@@ -95,7 +95,7 @@ packages:
     revision: "LANG_3_5"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: ""
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
@@ -123,7 +123,7 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: ""
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: "HEAD"
     path: ""
