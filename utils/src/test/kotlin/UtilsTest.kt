@@ -143,6 +143,19 @@ class UtilsTest : WordSpec({
             }
         }
 
+        "convert git to https for GitHub URLs" {
+            val packages = mapOf(
+                    "git://github.com:ccavanaugh/jgnash.git"
+                            to "https://github.com/ccavanaugh/jgnash.git",
+                    "git://github.com/netty/netty.git/netty-buffer"
+                            to "https://github.com/netty/netty.git/netty-buffer"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
+            }
+        }
+
         "fixup crazy URLs" {
             val packages = mapOf(
                     "https://git@github.com:hacksparrow/node-easyimage.git"

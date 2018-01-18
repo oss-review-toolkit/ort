@@ -15,7 +15,7 @@ project:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "git://github.com:ccavanaugh/jgnash.git"
+    url: "https://github.com/ccavanaugh/jgnash.git"
     revision: "HEAD"
     path: ""
   homepage_url: "http://sourceforge.net/projects/jgnash/"
