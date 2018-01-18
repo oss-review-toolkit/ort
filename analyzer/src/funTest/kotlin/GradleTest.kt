@@ -35,15 +35,19 @@ import java.io.File
 class GradleTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    private val vcsProvider = vcsDir.getProvider()
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
+    private val vcsPath = vcsDir.getPathToRoot(projectDir)
 
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename)
                     .readText()
                     // vcs_processed:
+                    .replaceFirst("provider: \"<REPLACE>\"", "provider: \"$vcsProvider\"")
                     .replaceFirst("url: \"<REPLACE>\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
                     .replaceFirst("revision: \"<REPLACE>\"", "revision: \"$vcsRevision\"")
+                    .replaceFirst("path: \"<REPLACE>\"", "path: \"$vcsPath\"")
 
     init {
         "Root project dependencies are detected correctly" {

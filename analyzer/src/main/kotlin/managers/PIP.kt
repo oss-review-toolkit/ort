@@ -261,7 +261,8 @@ class PIP : PackageManager() {
                                         hashAlgorithm = "MD5"
                                 ),
                                 sourceArtifact = RemoteArtifact.EMPTY,
-                                vcs = pkg.vcs
+                                vcs = pkg.vcs,
+                                vcsProcessed = processPackageVcs(pkg.vcs)
                         )
                     } catch (e: NullPointerException) {
                         log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
@@ -290,6 +291,7 @@ class PIP : PackageManager() {
                 declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
+                vcsProcessed = processProjectVcs(projectDir),
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )

@@ -134,6 +134,7 @@ class Gradle : PackageManager() {
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
+                    vcsProcessed = processProjectVcs(projectDir),
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )

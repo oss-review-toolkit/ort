@@ -14,10 +14,10 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
-    url: ""
-    revision: ""
-    path: ""
+    provider: "<REPLACE>"
+    url: "<REPLACE>"
+    revision: "<REPLACE>"
+    path: "<REPLACE>"
   homepage_url: "http://maven.apache.org"
   scopes: []
 packages: []

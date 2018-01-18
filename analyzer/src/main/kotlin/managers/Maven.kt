@@ -139,6 +139,7 @@ class Maven : PackageManager() {
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 aliases = emptyList(),
                 vcs = vcsFromPackage,
+                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage),
                 homepageUrl = mavenProject.url ?: "",
                 scopes = scopes.values.toSortedSet()
         )
