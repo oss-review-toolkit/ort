@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.here.ort.utils.normalizeVcsUrl
+
 /**
  * Bundles general Version Control System information.
  */
@@ -92,4 +94,9 @@ data class VcsInfo(
 
         return VcsInfo(provider, url, revision, path)
     }
+
+    /**
+     * Returns this [VcsInfo] in normalized form. Currently, this only applies [normalizeVcsUrl] to the [url].
+     */
+    fun normalize() = copy(url = normalizeVcsUrl(url))
 }

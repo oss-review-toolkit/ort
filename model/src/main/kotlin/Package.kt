@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import com.here.ort.utils.fileSystemEncode
-import com.here.ort.utils.normalizeVcsUrl
 
 import java.util.SortedSet
 
@@ -82,7 +81,7 @@ data class Package(
          * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
          */
         @JsonProperty("vcs_processed")
-        val vcsProcessed: VcsInfo = VcsInfo(vcs.provider, normalizeVcsUrl(vcs.url), vcs.revision, vcs.path)
+        val vcsProcessed: VcsInfo = vcs.normalize()
 ) : Comparable<Package> {
     /**
      * The normalized package name, can be used to create directories.
