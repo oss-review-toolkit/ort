@@ -98,10 +98,27 @@ fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trimEnd('/')
 
-    url = url.replace(Regex("^(.*(https|ssh).*://)?git@github\\.com[:/](.+)$")) {
-        // Like the Git client itself, default to ssh for URLs that do not contain a protocol scheme.
-        val scheme = it.groupValues[2].let { if (it.isNotBlank()) it else "ssh" }
-        "$scheme://git@github.com/${it.groupValues[3]}"
+    if (url.startsWith("pserver:")) {
+        // Do not touch CVS URLs for now.
+        return url
+    }
+
+    // URLs to Git repos may omit the scheme and use an scp-like URL that uses ":" to separate the host from the path,
+    // see https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a. Make this an explicit ssh URL so it can be parsed
+    // by Java's URI class.
+    url = url.replace(Regex("^(.*)([a-zA-Z]+):([a-zA-Z]+)(.*)$")) {
+        val tail = "${it.groupValues[1]}${it.groupValues[2]}/${it.groupValues[3]}${it.groupValues[4]}"
+        if (url.contains("://")) {
+            tail
+        } else {
+            "ssh://" + tail
+        }
+    }
+
+    // Drop any VCS name with "+" from the scheme.
+    url = url.replace(Regex("^(.+)\\+(.+)(://.+)$")) {
+        // Use the string to the right of "+" which should be the protocol.
+        "${it.groupValues[2]}${it.groupValues[3]}"
     }
 
     // A hierarchical URI looks like
@@ -122,7 +139,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 
     if (uri.scheme != "ssh" && uri.host != null && uri.host.endsWith("github.com")) {
         // Ensure the path ends in ".git".
-        val path = if (uri.path.endsWith(".git")) uri.path else uri.path + ".git"
+        val path = if (uri.path.contains(Regex("\\.git(/|$)"))) uri.path else uri.path + ".git"
 
         // Remove any user name and "www" prefix.
         val host = uri.authority.substringAfter("@").removePrefix("www.")

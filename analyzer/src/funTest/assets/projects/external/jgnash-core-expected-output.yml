@@ -15,7 +15,7 @@ project:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "git://github.com:ccavanaugh/jgnash.git/jgnash-core"
+    url: "https://github.com/ccavanaugh/jgnash.git/jgnash-core"
     revision: "HEAD"
     path: ""
   homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-core/"
@@ -400,7 +400,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "https://github.com/x-stream/xstream.git/xstream-hibernate.git"
+    url: "https://github.com/x-stream/xstream.git/xstream-hibernate"
     revision: "v-1.4.x"
     path: ""
 - id:
@@ -427,7 +427,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "https://github.com/x-stream/xstream.git/xstream.git"
+    url: "https://github.com/x-stream/xstream.git/xstream"
     revision: "v-1.4.x"
     path: ""
 - id:
@@ -512,7 +512,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "https://github.com/netty/netty.git/netty-buffer.git"
+    url: "https://github.com/netty/netty.git/netty-buffer"
     revision: "netty-4.1.9.Final"
     path: ""
 - id:
@@ -541,7 +541,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "https://github.com/netty/netty.git/netty-codec.git"
+    url: "https://github.com/netty/netty.git/netty-codec"
     revision: "netty-4.1.9.Final"
     path: ""
 - id:
@@ -570,7 +570,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "https://github.com/netty/netty.git/netty-common.git"
+    url: "https://github.com/netty/netty.git/netty-common"
     revision: "netty-4.1.9.Final"
     path: ""
 - id:
@@ -599,7 +599,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "https://github.com/netty/netty.git/netty-resolver.git"
+    url: "https://github.com/netty/netty.git/netty-resolver"
     revision: "netty-4.1.9.Final"
     path: ""
 - id:
@@ -628,7 +628,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "https://github.com/netty/netty.git/netty-transport.git"
+    url: "https://github.com/netty/netty.git/netty-transport"
     revision: "netty-4.1.9.Final"
     path: ""
 - id:
@@ -654,7 +654,7 @@ packages:
     path: ""
   vcs_processed:
     provider: "git"
-    url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
+    url: "https://github.com/ccavanaugh/jgnash.git/jgnash-resources"
     revision: "HEAD"
     path: ""
 - id:
