@@ -88,13 +88,6 @@ data class SubversionTagsEntry(
         val commit: SubversionInfoCommit,
         val lock: SubversionInfoLock?)
 
-data class SubversionLogEntry(
-        @JacksonXmlProperty(isAttribute = true)
-        val revision: String,
-        val author: String,
-        val date: String,
-        val msg: String)
-
 object Subversion : VersionControlSystem() {
     override val movingRevisionNames = emptyList<String>()
 
