@@ -26,6 +26,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.AnalyzerResult
@@ -190,7 +191,7 @@ object Main {
 
     /**
      * Download the source code of the [target] package to a folder inside [outputDirectory]. The folder name is created
-     * from the [name][Package.name] and [version][Package.version] of the [target] package.
+     * from the [name][Identifier.name] and [version][Identifier.version] of the [target] package [id][Package.id].
      *
      * @param target The description of the package to download.
      * @param outputDirectory The parent directory to download the source code to.
