@@ -9,15 +9,15 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: "Git"
+    provider: ""
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    path: ""
   vcs_processed:
-    provider: "Git"
+    provider: ""
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    path: ""
   homepage_url: ""
   scopes:
   - name: "archives"

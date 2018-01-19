@@ -9,15 +9,15 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: "Git"
+    provider: ""
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
+    path: ""
   vcs_processed:
-    provider: "Git"
+    provider: ""
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
+    path: ""
   homepage_url: "http://maven.apache.org"
   scopes:
   - name: "compile"
