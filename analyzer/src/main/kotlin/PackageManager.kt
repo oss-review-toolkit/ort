@@ -127,7 +127,7 @@ abstract class PackageManager {
          */
         fun processProjectVcs(projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY): VcsInfo {
             val vcsFromWorkingTree = VersionControlSystem.forDirectory(projectDir)
-                    ?.getInfo(projectDir) ?: VcsInfo.EMPTY
+                    ?.getInfo(projectDir)?.normalize() ?: VcsInfo.EMPTY
 
             return processPackageVcs(vcsFromProject).merge(vcsFromWorkingTree)
         }

@@ -14,9 +14,9 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
-    url: ""
-    revision: ""
+    provider: "Git"
+    url: "https://github.com/deis/example-python-flask.git"
+    revision: "0773991e36a4c69b121cdb05146d6140347d4065"
     path: ""
   homepage_url: ""
   scopes:

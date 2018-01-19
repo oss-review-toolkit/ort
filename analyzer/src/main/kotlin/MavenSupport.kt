@@ -275,6 +275,8 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         val sourceRemoteArtifact = requestRemoteArtifact(sourceArtifact, repositories)
 
+        val vcsFromPackage = parseVcsInfo(mavenProject)
+
         return Package(
                 id = Identifier(
                         packageManager = packageManager,
@@ -287,7 +289,8 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 homepageUrl = mavenProject.url ?: "",
                 binaryArtifact = binaryRemoteArtifact,
                 sourceArtifact = sourceRemoteArtifact,
-                vcs = parseVcsInfo(mavenProject)
+                vcs = vcsFromPackage,
+                vcsProcessed = PackageManager.processPackageVcs(vcsFromPackage)
         )
     }
 

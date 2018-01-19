@@ -14,10 +14,10 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
-    url: ""
-    revision: ""
-    path: ""
+    provider: "Git"
+    url: "<REPLACE>"
+    revision: "<REPLACE>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes:
   - name: "archives"
@@ -211,7 +211,7 @@ packages:
     revision: "r4.12"
     path: ""
   vcs_processed:
-    provider: "git"
+    provider: "Git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -297,8 +297,8 @@ packages:
     revision: "HEAD"
     path: ""
   vcs_processed:
-    provider: "git"
-    url: "ssh://git@github.com/hamcrest/JavaHamcrest.git/hamcrest-core"
+    provider: "Git"
+    url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: "HEAD"
-    path: ""
+    path: "hamcrest-core"
 errors: []
