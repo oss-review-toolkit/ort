@@ -145,6 +145,11 @@ Usage: downloader [options]
     --debug
       Enable debug logging and keep any temporary files.
       Default: false
+    --allow-moving-revisions
+      Allow the download of moving revisions (like e.g. HEAD or master in
+      Git). By default these revision are forbidden because they are not
+      pointing to a stable revision of the source code.
+      Default: false
   * --output-dir, -o
       The output directory to download the source code to.
     --info
