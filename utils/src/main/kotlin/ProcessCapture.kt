@@ -21,9 +21,6 @@ package com.here.ort.utils
 
 import ch.frankel.slf4k.*
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
-
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
@@ -146,20 +143,4 @@ fun getCommandVersion(
     }
 
     return versionString ?: ""
-}
-
-/**
- * Parse the standard output of a process as JSON.
- */
-fun parseJsonProcessOutput(workingDir: File, vararg command: String, jsonLines: Boolean = false): JsonNode {
-    val process = ProcessCapture(workingDir, *command).requireSuccess()
-
-    // Support parsing multiple lines with one JSON object per line by wrapping the whole output into a JSON array.
-    if (jsonLines) {
-        val array = JsonNodeFactory.instance.arrayNode()
-        process.stdoutFile.readLines().forEach { array.add(jsonMapper.readTree(it)) }
-        return array
-    }
-
-    return jsonMapper.readTree(process.stdout())
 }
