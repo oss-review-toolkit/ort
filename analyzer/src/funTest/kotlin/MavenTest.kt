@@ -30,13 +30,13 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class MavenTest : StringSpec() {
-    private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic/maven")
-    private val vcsDir = VersionControlSystem.forDirectory(syntheticProjectDir)!!
+    private val projectDir = File("src/funTest/assets/projects/synthetic/maven")
+    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
     private fun patchExpectedResult(filename: String) =
-            File(syntheticProjectDir.parentFile, filename)
+            File(projectDir.parentFile, filename)
                     .readText()
                     // vcs_processed:
                     .replaceFirst("url: \"<REPLACE>\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
@@ -71,17 +71,17 @@ class MavenTest : StringSpec() {
         }
 
         "Root project dependencies are detected correctly" {
-            val pomFile = File(syntheticProjectDir, "pom.xml")
+            val pomFile = File(projectDir, "pom.xml")
             val expectedResult = patchExpectedResult("maven-expected-output-root.yml")
 
-            val result = Maven.create().resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(projectDir, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly" {
-            val pomFileApp = File(syntheticProjectDir, "app/pom.xml")
-            val pomFileLib = File(syntheticProjectDir, "lib/pom.xml")
+            val pomFileApp = File(projectDir, "app/pom.xml")
+            val pomFileLib = File(projectDir, "lib/pom.xml")
 
             val expectedResult = patchExpectedResult("maven-expected-output-app.yml")
 
@@ -89,16 +89,16 @@ class MavenTest : StringSpec() {
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
             // not work.
             val result = Maven.create()
-                    .resolveDependencies(syntheticProjectDir, listOf(pomFileApp, pomFileLib))[pomFileApp]
+                    .resolveDependencies(projectDir, listOf(pomFileApp, pomFileLib))[pomFileApp]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
         "External dependencies are detected correctly" {
-            val pomFile = File(syntheticProjectDir, "lib/pom.xml")
+            val pomFile = File(projectDir, "lib/pom.xml")
             val expectedResult = patchExpectedResult("maven-expected-output-lib.yml")
 
-            val result = Maven.create().resolveDependencies(syntheticProjectDir, listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(projectDir, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
