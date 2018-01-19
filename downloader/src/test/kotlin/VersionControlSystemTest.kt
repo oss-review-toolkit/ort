@@ -170,4 +170,45 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
     }
+
+    "splitUrl for GitLab" should {
+        "not modify URLs without a path" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://gitlab.com/rich-harris/rollup-plugin-buble.git"
+            )
+            val expected = VcsInfo(
+                    provider = "Git",
+                    url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                    revision = "",
+                    path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "split tree URLs" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://gitlab.com/Rich-Harris/rollup-plugin-buble/tree/master/src"
+            )
+            val expected = VcsInfo(
+                    provider = "Git",
+                    url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
+                    revision = "master",
+                    path = "src"
+            )
+            actual shouldBe expected
+        }
+
+        "split blob URLs" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://gitlab.com/Rich-Harris/rollup-plugin-buble/blob/v0.15.0/README.md"
+            )
+            val expected = VcsInfo(
+                    provider = "Git",
+                    url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
+                    revision = "v0.15.0",
+                    path = "README.md"
+            )
+            actual shouldBe expected
+        }
+    }
 })
