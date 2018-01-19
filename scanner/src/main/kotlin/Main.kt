@@ -45,6 +45,7 @@ import java.util.SortedSet
 
 import kotlin.system.exitProcess
 
+@Suppress("unused") // The class is only used to serialize data.
 class ScanSummary(
         val pkgSummary: PackageSummary,
         val cacheStats: CacheStatistics
