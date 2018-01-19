@@ -134,6 +134,7 @@ class Gradle : PackageManager() {
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
+                    vcsProcessed = processProjectVcs(projectDir),
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )
@@ -157,7 +158,7 @@ class Gradle : PackageManager() {
         if (dependency.error == null) {
             // Only look for a package when there was no error resolving the dependency.
             packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
-                if (dependency.pomFile.isNotBlank()) {
+                val pkg = if (dependency.pomFile.isNotBlank()) {
                     // TODO: Provide extension and classifier.
                     val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, "jar",
                             dependency.version)
@@ -178,6 +179,8 @@ class Gradle : PackageManager() {
                             vcs = VcsInfo.EMPTY
                     )
                 }
+
+                pkg.copy(vcsProcessed = processPackageVcs(pkg.vcs))
             }
         }
 

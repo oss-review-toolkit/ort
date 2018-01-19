@@ -14,10 +14,10 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
-    url: ""
-    revision: ""
-    path: ""
+    provider: "Git"
+    url: "<REPLACE>"
+    revision: "<REPLACE>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes: []
 packages: []
