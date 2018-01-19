@@ -152,14 +152,14 @@ object Subversion : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
             runSvnCommand(targetDir, "checkout", vcs.url, "--depth", "empty", ".")
 
-            return if (isFixedRevision(vcs.revision)) {
+            return if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
                 if (vcs.path.isBlank()) {
                     // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
                     runSvnCommand(targetDir, "update", "-r", vcs.revision, "--set-depth", "infinity")

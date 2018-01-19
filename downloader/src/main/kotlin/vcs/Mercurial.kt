@@ -85,7 +85,7 @@ object Mercurial : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree {
+    override fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
@@ -113,7 +113,7 @@ object Mercurial : VersionControlSystem() {
 
             val workingTree = getWorkingTree(targetDir)
 
-            val revision = if (isFixedRevision(vcs.revision)) {
+            val revision = if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
                 vcs.revision
             } else {
                 log.info { "Trying to guess $this revision for version '$version'." }

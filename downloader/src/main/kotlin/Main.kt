@@ -99,6 +99,12 @@ object Main {
             order = 0)
     private var entities = DataEntity.ALL
 
+    @Parameter(description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
+            "these revision are forbidden because they are not pointing to a stable revision of the source code.",
+            names = ["--allow-moving-revisions"],
+            order = 0)
+    private var allowMovingRevisions = false
+
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
             order = 0)
@@ -261,7 +267,8 @@ object Main {
             throw DownloadException("Could not find an applicable VCS provider.")
         }
 
-        val workingTree = applicableVcs.download(target.vcsProcessed, target.id.version, outputDirectory)
+        val workingTree = applicableVcs.download(target.vcsProcessed, target.id.version, outputDirectory,
+                allowMovingRevisions)
         val revision = workingTree.getRevision()
 
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }

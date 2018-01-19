@@ -270,7 +270,8 @@ abstract class VersionControlSystem {
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(vcs: VcsInfo, version: String, targetDir: File): WorkingTree
+    abstract fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean = false)
+            : WorkingTree
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
