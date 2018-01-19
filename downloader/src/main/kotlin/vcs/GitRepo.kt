@@ -40,9 +40,8 @@ object GitRepo : GitBase() {
     override fun isApplicableUrl(vcsUrl: String) = false
 
     /**
-     * Clones the Git repositories defined in the manifest file using the Git Repo tool.
-     *
-     * @param vcsPath The path to the repo manifest file in the repository. Defaults to "manifest.xml" if not provided.
+     * Clones the Git repositories defined in the manifest file using the Git Repo tool. The manifest file is checkout
+     * from the repository defined in [vcs], its location is defined by [VcsInfo.path].
      *
      * @throws DownloadException In case the download failed.
      */
