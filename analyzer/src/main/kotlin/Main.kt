@@ -34,6 +34,10 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.PARAMETER_ORDER_HELP
+import com.here.ort.utils.PARAMETER_ORDER_LOGGING
+import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -64,26 +68,26 @@ object Main {
     @Parameter(description = "A list of package managers to activate.",
             names = ["--package-managers", "-m"],
             converter = PackageManagerConverter::class,
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var packageManagers = PackageManager.ALL
 
     @Parameter(description = "The project directory to scan.",
             names = ["--input-dir", "-i"],
             required = true,
-            order = 0)
+            order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var inputDir: File
 
     @Parameter(description = "The directory to write dependency information to.",
             names = ["--output-dir", "-o"],
             required = true,
-            order = 0)
+            order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
     @Parameter(description = "The data format used for dependency information.",
             names = ["--output-format", "-f"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var outputFormat = OutputFormat.YAML
 
     @Suppress("LateinitUsage")
@@ -91,40 +95,40 @@ object Main {
 
     @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
             names = ["--ignore-versions"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     var ignoreVersions = false
 
     @Parameter(description = "Allow dynamic versions of dependencies. This can result in unstable results when " +
             "dependencies use version ranges. This option only affects package managers that support lock files, " +
             "like NPM.",
             names = ["--allow-dynamic-versions"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     var allowDynamicVersions = false
 
     @Parameter(description = "A YAML file that contains package curation data.",
             names = ["--package-curations-file"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     var packageCurationsFile: File? = null
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
             names = ["--debug"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
             names = ["--stacktrace"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = ["--help", "-h"],
             help = true,
-            order = 100)
+            order = PARAMETER_ORDER_HELP)
     private var help = false
 
     private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: AnalyzerResult) {

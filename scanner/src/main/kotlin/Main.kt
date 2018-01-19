@@ -31,6 +31,10 @@ import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.scanner.scanners.ScanCode
+import com.here.ort.utils.PARAMETER_ORDER_HELP
+import com.here.ort.utils.PARAMETER_ORDER_LOGGING
+import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
@@ -85,64 +89,64 @@ object Main {
     @Parameter(description = "The dependencies analysis file to use. Source code will be downloaded automatically if " +
             "needed. This parameter and --input-path are mutually exclusive.",
             names = ["--dependencies-file", "-d"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var dependenciesFile: File? = null
 
     @Parameter(description = "The input directory or file to scan. This parameter and --dependencies-file are " +
             "mutually exclusive.",
             names = ["--input-path", "-i"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var inputPath: File? = null
 
     @Parameter(description = "The output directory to store the scan results in.",
             names = ["--output-dir", "-o"],
             required = true,
-            order = 0)
+            order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
     @Parameter(description = "The output directory for downloaded source code. Defaults to <output-dir>/downloads.",
             names = ["--download-dir"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var downloadDir: File? = null
 
     @Parameter(description = "The scanner to use.",
             names = ["--scanner", "-s"],
             converter = ScannerConverter::class,
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var scanner: Scanner = ScanCode
 
     @Parameter(description = "The path to the configuration file.",
             names = ["--config", "-c"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     @Suppress("LateinitUsage")
     private var configFile: File? = null
 
     @Parameter(description = "The list of file formats for the summary files.",
             names = ["--summary-format", "-f"],
             converter = OutputFormatConverter::class,
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var summaryFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
             names = ["--debug"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
             names = ["--stacktrace"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = ["--help", "-h"],
             help = true,
-            order = 100)
+            order = PARAMETER_ORDER_HELP)
     private var help = false
 
     /**

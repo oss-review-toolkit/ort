@@ -52,6 +52,26 @@ val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
 val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
 /**
+ * Ordinal for mandatory program parameters.
+ */
+const val PARAMETER_ORDER_MANDATORY = 0
+
+/**
+ * Ordinal for optional program parameters.
+ */
+const val PARAMETER_ORDER_OPTIONAL = 1
+
+/**
+ * Ordinal for logging related program parameters.
+ */
+const val PARAMETER_ORDER_LOGGING = 2
+
+/**
+ * Ordinal for the help program parameter.
+ */
+const val PARAMETER_ORDER_HELP = 100
+
+/**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
 object OkHttpClientHelper {
