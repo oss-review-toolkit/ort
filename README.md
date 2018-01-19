@@ -70,23 +70,16 @@ The `analyzer` command line tool takes the following arguments:
 ```
 Usage: analyzer [options]
   Options:
+  * --input-dir, -i
+      The project directory to scan.
+  * --output-dir, -o
+      The directory to write dependency information to.
+    --package-curations-file
+      A YAML file that contains package curation data.
     --ignore-versions
       Ignore versions of required tools. NOTE: This may lead to erroneous
       results.
       Default: false
-    --debug
-      Enable debug logging and keep any temporary files.
-      Default: false
-    --stacktrace
-      Print out the stacktrace for all exceptions.
-      Default: false
-  * --input-dir, -i
-      The project directory to scan.
-    --info
-      Enable info logging.
-      Default: false
-  * --output-dir, -o
-      The directory to write dependency information to.
     --allow-dynamic-versions
       Allow dynamic versions of dependencies. This can result in unstable
       results when dependencies use version ranges. This option only affects
@@ -99,6 +92,15 @@ Usage: analyzer [options]
       The data format used for dependency information.
       Default: YAML
       Possible Values: [JSON, YAML]
+    --debug
+      Enable debug logging and keep any temporary files.
+      Default: false
+    --stacktrace
+      Print out the stacktrace for all exceptions.
+      Default: false
+    --info
+      Enable info logging.
+      Default: false
     --help, -h
       Display the command line help.
 ```
@@ -114,6 +116,8 @@ The `graph` command line tool takes the following arguments:
 ```
 Usage: graph [options]
   Options:
+  * --dependencies-file, -d
+      The dependencies analysis file to use.
     --info
       Enable info logging.
       Default: false
@@ -123,8 +127,6 @@ Usage: graph [options]
     --stacktrace
       Print out the stacktrace for all exceptions.
       Default: false
-  * --dependencies-file, -d
-      The dependencies analysis file to use.
     --help, -h
       Display the command line help.
 ```
@@ -142,25 +144,25 @@ Usage: downloader [options]
   Options:
   * --dependencies-file, -d
       The dependencies analysis file to use.
-    --debug
-      Enable debug logging and keep any temporary files.
-      Default: false
+  * --output-dir, -o
+      The output directory to download the source code to.
     --allow-moving-revisions
       Allow the download of moving revisions (like e.g. HEAD or master in
       Git). By default these revision are forbidden because they are not
       pointing to a stable revision of the source code.
       Default: false
-  * --output-dir, -o
-      The output directory to download the source code to.
+    --entities, -e
+      The data entities from the dependencies analysis file to download.
+      Default: [PACKAGES, PROJECT]
+    --debug
+      Enable debug logging and keep any temporary files.
+      Default: false
     --info
       Enable info logging.
       Default: false
     --stacktrace
       Print out the stacktrace for all exceptions.
       Default: false
-    --entities, -e
-      The data entities from the dependencies analysis file to download.
-      Default: [PACKAGES, PROJECT]
     --help, -h
       Display the command line help.
 ```
@@ -192,30 +194,30 @@ Usage: scanner [options]
     --summary-format, -f
       The list of file formats for the summary files.
       Default: [YAML]
-    --info
-      Enable info logging.
-      Default: false
     --dependencies-file, -d
       The dependencies analysis file to use. Source code will be downloaded
       automatically if needed. This parameter and --input-path are mutually
       exclusive.
-    --debug
-      Enable debug logging and keep any temporary files.
-      Default: false
     --input-path, -i
       The input directory or file to scan. This parameter and
       --dependencies-file are mutually exclusive.
     --download-dir
-      The output directory for downloaded source code. Defaults to 
+      The output directory for downloaded source code. Defaults to
       <output-dir>/downloads.
-    --stacktrace
-      Print out the stacktrace for all exceptions.
-      Default: false
     --scanner, -s
       The scanner to use.
       Default: ScanCode
     --config, -c
       The path to the configuration file.
+    --info
+      Enable info logging.
+      Default: false
+    --debug
+      Enable debug logging and keep any temporary files.
+      Default: false
+    --stacktrace
+      Print out the stacktrace for all exceptions.
+      Default: false
     --help, -h
       Display the command line help.
 ```

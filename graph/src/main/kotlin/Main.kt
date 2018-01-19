@@ -25,6 +25,9 @@ import com.beust.jcommander.Parameter
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.PackageReference
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.utils.PARAMETER_ORDER_HELP
+import com.here.ort.utils.PARAMETER_ORDER_LOGGING
+import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.yamlMapper
@@ -48,29 +51,29 @@ object Main {
     @Parameter(description = "The dependencies analysis file to use.",
             names = ["--dependencies-file", "-d"],
             required = true,
-            order = 0)
+            order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var dependenciesFile: File
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
             names = ["--debug"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
             names = ["--stacktrace"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = ["--help", "-h"],
             help = true,
-            order = 100)
+            order = PARAMETER_ORDER_HELP)
     private var help = false
 
     /**

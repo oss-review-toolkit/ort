@@ -30,6 +30,10 @@ import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.PARAMETER_ORDER_HELP
+import com.here.ort.utils.PARAMETER_ORDER_LOGGING
+import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -82,48 +86,48 @@ object Main {
     @Parameter(description = "The dependencies analysis file to use.",
             names = ["--dependencies-file", "-d"],
             required = true,
-            order = 0)
+            order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var dependenciesFile: File
 
     @Parameter(description = "The output directory to download the source code to.",
             names = ["--output-dir", "-o"],
             required = true,
-            order = 0)
+            order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
     @Parameter(description = "The data entities from the dependencies analysis file to download.",
             names = ["--entities", "-e"],
             converter = DataEntityConverter::class,
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var entities = DataEntity.ALL
 
     @Parameter(description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
             "these revision are forbidden because they are not pointing to a stable revision of the source code.",
             names = ["--allow-moving-revisions"],
-            order = 0)
+            order = PARAMETER_ORDER_OPTIONAL)
     private var allowMovingRevisions = false
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var info = false
 
     @Parameter(description = "Enable debug logging and keep any temporary files.",
             names = ["--debug"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     private var debug = false
 
     @Parameter(description = "Print out the stacktrace for all exceptions.",
             names = ["--stacktrace"],
-            order = 0)
+            order = PARAMETER_ORDER_LOGGING)
     var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = ["--help", "-h"],
             help = true,
-            order = 100)
+            order = PARAMETER_ORDER_HELP)
     private var help = false
 
     /**
