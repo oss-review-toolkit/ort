@@ -88,7 +88,7 @@ object OkHttpClientHelper {
     /**
      * Create a request body for the specified file.
      */
-    fun createRequestBody(source: File) = RequestBody.create(guessMediaType(source.name), source)
+    fun createRequestBody(source: File): RequestBody = RequestBody.create(guessMediaType(source.name), source)
 
     /**
      * Execute a request using the client for the specified cache directory.
