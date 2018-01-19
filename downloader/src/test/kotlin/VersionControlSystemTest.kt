@@ -90,7 +90,7 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
 
-        "properly split GitHub tree URLs" {
+        "split GitHub tree URLs" {
             val actual = VersionControlSystem.splitUrl(
                     "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"
             )
@@ -103,7 +103,7 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
 
-        "properly split GitHub blob URLs" {
+        "split GitHub blob URLs" {
             val actual = VersionControlSystem.splitUrl(
                     "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js"
             )
@@ -116,7 +116,7 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
 
-        "properly split extra path components" {
+        "split extra path components" {
             val actual = VersionControlSystem.splitUrl(
                     "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded"
             )
@@ -142,7 +142,7 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
 
-        "properly split Bitbucket tree URLs" {
+        "split Bitbucket tree URLs" {
             val actual = VersionControlSystem.splitUrl(
                     "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/src/java/com/yevster/example/?at=master"
             )
@@ -155,7 +155,7 @@ class VersionControlSystemTest : WordSpec({
             actual shouldBe expected
         }
 
-        "properly split Bitbucket blob URLs" {
+        "split Bitbucket blob URLs" {
             val actual = VersionControlSystem.splitUrl(
                     "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/README.md?at=master"
             )
