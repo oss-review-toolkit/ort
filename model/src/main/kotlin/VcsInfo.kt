@@ -78,10 +78,16 @@ data class VcsInfo(
         }
 
         var provider = this.provider
-        if (provider.equals(other.provider, true)) {
-            // Prefer the other provider only if its spelling matches the VCS class names.
-            if (other.provider.toLowerCase().capitalize() == other.provider) {
+        if (provider.isBlank()) {
+            if (other.provider.isNotBlank()) {
                 provider = other.provider
+            }
+        } else {
+            if (provider.equals(other.provider, true)) {
+                // Prefer the other provider only if its spelling matches the VCS class names.
+                if (other.provider.toLowerCase().capitalize() == other.provider) {
+                    provider = other.provider
+                }
             }
         }
 
