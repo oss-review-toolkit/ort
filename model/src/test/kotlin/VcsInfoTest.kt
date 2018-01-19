@@ -120,7 +120,7 @@ class VcsInfoTest : StringSpec({
             inputB.merge(inputA).provider shouldBe "Git"
         }
 
-        "prefer more complete information" {
+        "prefer more complete information for GitHub" {
             val inputA = VcsInfo(
                     provider = "Git",
                     url = "https://github.com/babel/babel.git",
@@ -140,6 +140,31 @@ class VcsInfoTest : StringSpec({
                     url = "https://github.com/babel/babel.git",
                     revision = "master",
                     path = "packages/babel-cli"
+            )
+
+            inputA.merge(inputB) shouldBe output
+        }
+
+        "prefer more complete information for GitLab" {
+            val inputA = VcsInfo(
+                    provider = "",
+                    url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                    revision = "",
+                    path = ""
+            )
+
+            val inputB = VcsInfo(
+                    provider = "git",
+                    url = "git+https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                    revision = "9928a569351a80c2f7dc065f61085954daed5312",
+                    path = ""
+            )
+
+            val output = VcsInfo(
+                    provider = "git",
+                    url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                    revision = "9928a569351a80c2f7dc065f61085954daed5312",
+                    path = ""
             )
 
             inputA.merge(inputB) shouldBe output
