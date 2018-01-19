@@ -38,12 +38,9 @@ class MavenTest : StringSpec() {
     private fun patchExpectedResult(filename: String) =
             File(syntheticProjectDir.parentFile, filename)
                     .readText()
-                    // vcs:
-                    .replaceFirst("url: \"\"", "url: \"$vcsUrl\"")
-                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
                     // vcs_processed:
-                    .replaceFirst("url: \"\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
-                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
+                    .replaceFirst("url: \"<REPLACE>\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
+                    .replaceFirst("revision: \"<REPLACE>\"", "revision: \"$vcsRevision\"")
 
     init {
         "jgnash parent dependencies are detected correctly" {

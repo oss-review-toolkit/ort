@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -281,7 +280,6 @@ class PIP : PackageManager() {
                 Scope("install", true, installDependencies)
         )
 
-        val vcsDir = VersionControlSystem.forDirectory(projectDir)
         val project = Project(
                 id = Identifier(
                         packageManager = javaClass.simpleName,
@@ -291,7 +289,7 @@ class PIP : PackageManager() {
                 ),
                 declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
-                vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
+                vcs = VcsInfo.EMPTY,
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )

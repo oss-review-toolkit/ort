@@ -29,7 +29,6 @@ import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
-import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -125,7 +124,6 @@ class Gradle : PackageManager() {
                 Scope(configuration.name, true, dependencies.toSortedSet())
             }
 
-            val vcsDir = VersionControlSystem.forDirectory(projectDir)
             val project = Project(
                     id = Identifier(
                             packageManager = javaClass.simpleName,
@@ -135,7 +133,7 @@ class Gradle : PackageManager() {
                     ),
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
-                    vcs = vcsDir?.getInfo(projectDir) ?: VcsInfo.EMPTY,
+                    vcs = VcsInfo.EMPTY,
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )
