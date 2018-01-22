@@ -21,6 +21,7 @@ package com.here.ort.scanner
 
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.ExpensiveTag
+import com.here.ort.utils.ScanPathTag
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.matchers.shouldBe
@@ -48,6 +49,6 @@ class ScanPathTest : StringSpec() {
         "ScanCode recognizes our own LICENSE" {
             val result = ScanCode.scan(File("../LICENSE"), outputDir)
             result.licenses shouldBe setOf("Apache-2.0")
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(tags = setOf(ExpensiveTag, ScanPathTag))
     }
 }
