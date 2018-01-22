@@ -20,9 +20,11 @@
 package com.here.ort.utils
 
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
+import java.io.IOException
 import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
@@ -165,6 +167,55 @@ class UtilsTest : WordSpec({
             packages.forEach { actualUrl, expectedUrl ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
+        }
+    }
+
+    "File.safeMkDirs()" should {
+        "should succeed if directory already exists" {
+            val directory = createTempDir()
+            directory.deleteOnExit()
+
+            directory.isDirectory shouldBe true
+            directory.safeMkdirs() // should not throw exception
+            directory.isDirectory shouldBe true // should still be a directory afterwards
+        }
+
+        "should succeed if directory could be created" {
+            val parent = createTempDir()
+            parent.deleteOnExit()
+            val child = File(parent, "child")
+            child.deleteOnExit()
+
+            parent.isDirectory shouldBe true
+            child.safeMkdirs() // should not throw exception
+            child.isDirectory shouldBe true
+        }
+
+        "should succeed if file parent does not yet exist" {
+            // Test case for an unexpected behaviour of File.mkdirs() which returns false for
+            // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
+            // directory was successfully created.
+            val parent = createTempDir()
+            parent.deleteOnExit()
+            val nonExistingParent = File(parent, "parent1/parent2")
+            nonExistingParent.deleteOnExit()
+            val child = File(nonExistingParent, "/")
+            child.deleteOnExit()
+
+            parent.isDirectory shouldBe true
+            nonExistingParent.exists() shouldBe false
+            child.exists() shouldBe false
+            child.safeMkdirs() // should not throw exception
+            child.isDirectory shouldBe true
+        }
+
+        "should throw exception if file is not a directory" {
+            val file = createTempFile()
+            file.deleteOnExit()
+
+            file.isFile shouldBe true
+            shouldThrow<IOException> { file.safeMkdirs() }
+            file.isFile shouldBe true // should still be a file afterwards
         }
     }
 })
