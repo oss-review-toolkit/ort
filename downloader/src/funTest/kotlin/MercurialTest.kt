@@ -20,7 +20,7 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.Expensive
+import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCaseContext
@@ -72,7 +72,7 @@ class MercurialTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Mercurial can download only a single path" {
             val vcs = VcsInfo("Mercurial", REPO_URL, REPO_REV, REPO_PATH)
@@ -99,7 +99,7 @@ class MercurialTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(Expensive))
+        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
 
         "Mercurial can download based on a version" {
             val vcs = VcsInfo("Mercurial", REPO_URL, "", "")
@@ -108,7 +108,7 @@ class MercurialTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Mercurial can download only a single path based on a version" {
             val vcs = VcsInfo("Mercurial", REPO_URL, "", REPO_PATH_FOR_VERSION)
@@ -136,6 +136,6 @@ class MercurialTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(Expensive))
+        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
     }
 }

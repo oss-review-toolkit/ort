@@ -20,7 +20,7 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.Expensive
+import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCaseContext
@@ -71,7 +71,7 @@ class GitTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Git can download only a single path" {
             val vcs = VcsInfo("Git", REPO_URL, REPO_REV, REPO_PATH)
@@ -90,7 +90,7 @@ class GitTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Git can download based on a version" {
             val vcs = VcsInfo("Git", REPO_URL, "", "")
@@ -99,7 +99,7 @@ class GitTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Git can download only a single path based on a version" {
             val vcs = VcsInfo("Git", REPO_URL, "", REPO_PATH_FOR_VERSION)
@@ -117,6 +117,6 @@ class GitTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
     }
 }
