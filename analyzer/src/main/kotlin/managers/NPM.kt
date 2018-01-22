@@ -193,7 +193,7 @@ class NPM : PackageManager() {
             var downloadUrl: String
 
             var hash: String
-            val hashAlgorithm = HashAlgorithm.UNKNOWN
+            val hashAlgorithm = HashAlgorithm.SHA1
 
             val identifier = "$rawName@$version"
 
