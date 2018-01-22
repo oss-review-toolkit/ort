@@ -22,3 +22,5 @@ package com.here.ort.utils
 import io.kotlintest.Tag
 
 object ExpensiveTag : Tag()
+
+object ScanPathTag : Tag()
