@@ -28,6 +28,7 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -192,7 +193,7 @@ class NPM : PackageManager() {
             var downloadUrl: String
 
             var hash: String
-            val hashAlgorithm = ""
+            val hashAlgorithm = HashAlgorithm.UNKNOWN
 
             val identifier = "$rawName@$version"
 

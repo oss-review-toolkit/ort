@@ -39,7 +39,7 @@ data class RemoteArtifact(
          * The name of the algorithm used to calculate the [hash].
          */
         @JsonProperty("hash_algorithm")
-        val hashAlgorithm: String
+        val hashAlgorithm: HashAlgorithm
 ) {
     companion object {
         /**
@@ -49,7 +49,7 @@ data class RemoteArtifact(
         val EMPTY = RemoteArtifact(
                 url = "",
                 hash = "",
-                hashAlgorithm = ""
+                hashAlgorithm = HashAlgorithm.UNKNOWN
         )
     }
 }
