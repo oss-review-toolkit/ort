@@ -20,8 +20,10 @@
 package com.here.ort.scanner
 
 import com.here.ort.scanner.scanners.ScanCode
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
+
 import java.io.File
 
 internal object Resources
