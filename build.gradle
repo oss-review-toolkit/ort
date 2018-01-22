@@ -55,6 +55,7 @@ subprojects {
         compile 'org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2.20'
 
         testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+        testCompile project(':utils-test')
 
         funTestCompile sourceSets.main.output
         funTestCompile sourceSets.test.output
