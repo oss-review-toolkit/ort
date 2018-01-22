@@ -49,12 +49,12 @@ class PackageCurationTest : StringSpec() {
                             binaryArtifact = RemoteArtifact(
                                     url = "http://binary.artifact",
                                     hash = "binary.hash",
-                                    hashAlgorithm = "binary.algorithm"
+                                    hashAlgorithm = HashAlgorithm.UNKNOWN
                             ),
                             sourceArtifact = RemoteArtifact(
                                     url = "http://source.artifact",
                                     hash = "source.hash",
-                                    hashAlgorithm = "source.algorithm"
+                                    hashAlgorithm = HashAlgorithm.UNKNOWN
                             ),
                             vcs = VcsInfo(
                                     provider = "git",

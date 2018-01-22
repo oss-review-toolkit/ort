@@ -30,6 +30,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -319,13 +320,19 @@ object Main {
         return outputDirectory
     }
 
-    private fun verifyChecksum(file: File, hash: String, hashAlgorithm: String) {
-        val digest = when (hashAlgorithm.toLowerCase()) {
-            "md5" -> file.inputStream().use { DigestUtils.md5Hex(it) }
-            "sha1", "sha-1" -> file.inputStream().use { DigestUtils.sha1Hex(it) }
-            else -> {
-                log.error { "Unknown hash algorithm: $hashAlgorithm" }
-                ""
+    private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {
+        val digest = file.inputStream().use {
+            when (hashAlgorithm) {
+                HashAlgorithm.MD2 -> DigestUtils.md2Hex(it)
+                HashAlgorithm.MD5 -> DigestUtils.md5Hex(it)
+                HashAlgorithm.SHA1 -> DigestUtils.sha1Hex(it)
+                HashAlgorithm.SHA256 -> DigestUtils.sha256Hex(it)
+                HashAlgorithm.SHA384 -> DigestUtils.sha384Hex(it)
+                HashAlgorithm.SHA512 -> DigestUtils.sha512Hex(it)
+                HashAlgorithm.UNKNOWN -> {
+                    log.error { "Unknown hash algorithm." }
+                    ""
+                }
             }
         }
 

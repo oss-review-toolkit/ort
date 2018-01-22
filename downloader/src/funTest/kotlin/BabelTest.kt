@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -72,7 +73,7 @@ class BabelTest : StringSpec() {
                     binaryArtifact = RemoteArtifact(
                             url = "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz",
                             hash = "502ab54874d7db88ad00b887a06383ce03d002f1",
-                            hashAlgorithm = ""
+                            hashAlgorithm = HashAlgorithm.UNKNOWN
                     ),
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = vcsFromPackage,
