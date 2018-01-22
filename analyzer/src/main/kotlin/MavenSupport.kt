@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -220,7 +221,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 }
 
                 val downloadUrl = "${repository.url}/$remoteLocation"
-                return RemoteArtifact(downloadUrl, actualChecksum, checksum.algorithm).also {
+                return RemoteArtifact(downloadUrl, actualChecksum, HashAlgorithm.fromString(checksum.algorithm)).also {
                     log.debug { "Writing remote artifact for $artifact to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }

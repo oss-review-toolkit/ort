@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -64,7 +65,7 @@ class DownloaderTest : StringSpec() {
                     sourceArtifact = RemoteArtifact(
                             url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
                             hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
-                            hashAlgorithm = "SHA-1"
+                            hashAlgorithm = HashAlgorithm.SHA1
                     ),
                     vcs = VcsInfo.EMPTY
             )
@@ -93,7 +94,7 @@ class DownloaderTest : StringSpec() {
                     sourceArtifact = RemoteArtifact(
                             url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
                             hash = "0123456789abcdef0123456789abcdef01234567",
-                            hashAlgorithm = "SHA-1"
+                            hashAlgorithm = HashAlgorithm.SHA1
                     ),
                     vcs = VcsInfo.EMPTY
             )
@@ -121,7 +122,7 @@ class DownloaderTest : StringSpec() {
                     sourceArtifact = RemoteArtifact(
                             url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
                             hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
-                            hashAlgorithm = "SHA-1"
+                            hashAlgorithm = HashAlgorithm.SHA1
                     ),
                     vcs = VcsInfo(
                             provider = "Git",

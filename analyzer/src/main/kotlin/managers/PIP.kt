@@ -31,6 +31,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
@@ -258,7 +259,7 @@ class PIP : PackageManager() {
                                 binaryArtifact = RemoteArtifact(
                                         url = pkgRelease["url"]?.asText() ?: pkg.binaryArtifact.url,
                                         hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
-                                        hashAlgorithm = "MD5"
+                                        hashAlgorithm = HashAlgorithm.MD5
                                 ),
                                 sourceArtifact = RemoteArtifact.EMPTY,
                                 vcs = pkg.vcs,
