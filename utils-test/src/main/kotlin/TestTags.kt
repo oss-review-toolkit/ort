@@ -21,4 +21,4 @@ package com.here.ort.utils
 
 import io.kotlintest.Tag
 
-object Expensive : Tag()
+object ExpensiveTag : Tag()

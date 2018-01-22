@@ -24,7 +24,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
-import com.here.ort.utils.Expensive
+import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.matchers.beEmpty
@@ -81,7 +81,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
             workingTree.getProvider() shouldBe pkg.vcs.provider
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "All package manager definition files are found" {
             val definitionFiles = PackageManager.findManagedFiles(downloadDir)
@@ -95,7 +95,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                 expectedFiles shouldNotBe null
                 files.sorted().joinToString("\n") shouldBe expectedFiles!!.sorted().joinToString("\n")
             }
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Analyzer creates one non-empty result per definition file" {
             definitionFilesForTest.forEach { manager, files ->
@@ -112,6 +112,6 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     result.hasErrors() shouldBe false
                 }
             }
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
     }
 }

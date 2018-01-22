@@ -23,7 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.Expensive
+import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCaseContext
@@ -76,7 +76,7 @@ class DownloaderTest : StringSpec() {
             licenseFile.length() shouldBe 11376L
 
             downloadDir.walkTopDown().count() shouldBe 234
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Download of JAR source package fails when hash is incorrect" {
             val pkg = Package(
@@ -104,7 +104,7 @@ class DownloaderTest : StringSpec() {
 
             exception.message shouldBe "Calculated SHA-1 hash 'a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa' differs " +
                     "from expected hash '0123456789abcdef0123456789abcdef01234567'."
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
 
         "Falls back to downloading source package when download from VCS fails" {
             val pkg = Package(
@@ -138,6 +138,6 @@ class DownloaderTest : StringSpec() {
             licenseFile.length() shouldBe 11376L
 
             downloadDir.walkTopDown().count() shouldBe 234
-        }.config(tags = setOf(Expensive))
+        }.config(tags = setOf(ExpensiveTag))
     }
 }

@@ -32,7 +32,7 @@ script:
     fi
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" != "cron" ]; then
-      ./gradlew -DexcludeTags=Expensive --stacktrace check | tee log.txt;
+      ./gradlew -DexcludeTags=ExpensiveTag --stacktrace check | tee log.txt;
     else
       ./gradlew --stacktrace check | tee log.txt;
     fi
