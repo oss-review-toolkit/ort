@@ -73,7 +73,7 @@ class BabelTest : StringSpec() {
                     binaryArtifact = RemoteArtifact(
                             url = "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz",
                             hash = "502ab54874d7db88ad00b887a06383ce03d002f1",
-                            hashAlgorithm = HashAlgorithm.UNKNOWN
+                            hashAlgorithm = HashAlgorithm.SHA1
                     ),
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = vcsFromPackage,
