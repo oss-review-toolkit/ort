@@ -233,7 +233,10 @@ fun File.safeDeleteRecursively() {
  * @throws IOException if any missing directory could not be created.
  */
 fun File.safeMkdirs() {
-    if (this.isDirectory || this.mkdirs()) {
+    // Do not blindly trust mkdirs() returning "false" as it can fail for edge-cases like
+    // File(File("/tmp/parent1/parent2"), "/").mkdirs() if parent1 does not exist, although the directory is
+    // successfully created.
+    if (this.isDirectory || this.mkdirs() || this.isDirectory) {
         return
     }
 
