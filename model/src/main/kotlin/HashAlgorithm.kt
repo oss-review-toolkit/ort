@@ -33,6 +33,7 @@ enum class HashAlgorithm(private vararg val aliases: String) {
 
     companion object {
         @JsonCreator
+        @JvmStatic
         fun fromString(alias: String) =
                 enumValues<HashAlgorithm>().find {
                     it.aliases.contains(alias.toUpperCase())
