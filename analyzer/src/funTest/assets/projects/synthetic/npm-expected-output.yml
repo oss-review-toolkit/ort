@@ -1273,17 +1273,17 @@ packages:
     hash: "5efe7d4a6d8c453c7e9eaf55d931f4a22fac5169"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://registry.npmjs.org/@types/node/-/node-6.0.79.tgz"
+    hash: "5efe7d4a6d8c453c7e9eaf55d931f4a22fac5169"
+    hash_algorithm: "SHA-1"
   vcs:
     provider: "git"
     url: "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
-    url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+    provider: ""
+    url: ""
     revision: ""
     path: ""
 errors: []
