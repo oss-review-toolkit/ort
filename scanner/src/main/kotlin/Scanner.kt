@@ -37,7 +37,8 @@ abstract class Scanner {
          */
         val ALL by lazy {
             listOf(
-                    ScanCode
+                    ScanCode,
+                    Licensee
             )
         }
     }
