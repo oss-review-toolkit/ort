@@ -48,7 +48,9 @@ import kotlin.system.exitProcess
 @Suppress("unused") // The class is only used to serialize data.
 class ScanSummary(
         val pkgSummary: PackageSummary,
-        val cacheStats: CacheStatistics
+        val cacheStats: CacheStatistics,
+        val scannedScopes: SortedSet<String>,
+        val ignoredScopes: SortedSet<String>
 )
 
 typealias PackageSummary = MutableMap<String, SummaryEntry>
@@ -98,6 +100,12 @@ object Main {
             names = ["--input-path", "-i"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var inputPath: File? = null
+
+    @Parameter(description = "The list of scopes that shall be scanned. Works only with the " +
+            "--dependencies-file parameter. If empty, all scopes are scanned.",
+            names = ["--scopes"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    var includeScopes: List<String> = listOf()
 
     @Parameter(description = "The output directory to store the scan results in.",
             names = ["--output-dir", "-o"],
@@ -199,6 +207,9 @@ object Main {
 
         val pkgSummary: PackageSummary = mutableMapOf()
 
+        val scannedScopesNames: MutableSet<String> = mutableSetOf()
+        val ignoredScopes: MutableSet<String> = mutableSetOf()
+
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
                 "Provided path is not a file: ${dependenciesFile.absolutePath}"
@@ -213,7 +224,24 @@ object Main {
             val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
 
             val packages = mutableListOf(analyzerResult.project.toPackage())
-            packages.addAll(analyzerResult.packages)
+
+            if (includeScopes.isNotEmpty()) {
+                println("Limiting scan to scopes: $includeScopes")
+                val includedScopesMap = analyzerResult.project.scopes.groupBy { includeScopes.contains(it.name) }
+                includedScopesMap[false]?.let { ignoredScopes.addAll(it.map { scope -> scope.name }) }
+                val includedScopesNames = includedScopesMap[true]
+                if (includedScopesNames != null) {
+                    scannedScopesNames.addAll(includedScopesNames.map { it.name })
+                    packages.addAll(
+                            analyzerResult.packages.filter { pkg -> includedScopesNames.any { it.contains(pkg) } })
+                } else {
+                    println("No scopes found for given names, scanning whole project.")
+                    packages.addAll(analyzerResult.packages)
+                }
+            } else {
+                scannedScopesNames.addAll(analyzerResult.project.scopes.map { it.name }.toSortedSet())
+                packages.addAll(analyzerResult.packages)
+            }
 
             packages.forEach { pkg ->
                 val entry = pkgSummary.getOrPut(pkg.id.toString()) { SummaryEntry() }
@@ -231,7 +259,8 @@ object Main {
             scanEntry(entry, inputPath.absolutePath, inputPath)
         }
 
-        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats))
+        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopesNames.toSortedSet(),
+                ignoredScopes.toSortedSet()))
     }
 
     private fun findScopesForPackage(pkg: Package, project: Project) =
