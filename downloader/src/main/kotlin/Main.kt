@@ -220,7 +220,7 @@ object Main {
             }
         }
 
-        return downloadSourcePackage(target, targetDir)
+        return downloadSourceArtifact(target, targetDir)
     }
 
     private fun downloadFromVcs(target: Package, outputDirectory: File): File {
@@ -281,9 +281,9 @@ object Main {
         return outputDirectory
     }
 
-    private fun downloadSourcePackage(target: Package, outputDirectory: File): File {
+    private fun downloadSourceArtifact(target: Package, outputDirectory: File): File {
         log.info {
-            "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from package..."
+            "Trying to download source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
         }
 
         if (target.sourceArtifact.url.isBlank()) {
