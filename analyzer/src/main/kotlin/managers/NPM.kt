@@ -66,6 +66,8 @@ class NPM : PackageManager() {
             "JavaScript",
             listOf("package.json")
     ) {
+        private const val DEFINITELY_TYPED_VCS_URL = "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+
         override fun create() = NPM()
 
         val npm: String
@@ -290,7 +292,17 @@ class NPM : PackageManager() {
                 "Generated package info for $identifier has no version."
             }
 
-            packages[identifier] = module
+            // For TypeScript definitions there is no way to get the Git revision of the type definitions for a
+            // particular NPM package version. The DefinitelyTyped project only uses a directory hierarchy of
+            // "types/<package name>" without a version, and there are no tags in Git. See e.g.
+            // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/chai
+            packages[identifier] = if (module.vcsProcessed.url == DEFINITELY_TYPED_VCS_URL) {
+                // Clear the VCS URL to directly trigger source artifact download and use the binary artifact as the
+                // source artifact.
+                module.copy(sourceArtifact = module.binaryArtifact, vcsProcessed = VcsInfo.EMPTY)
+            } else {
+                module
+            }
         }
 
         return packages
