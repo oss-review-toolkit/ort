@@ -113,18 +113,22 @@ object Git : GitBase() {
 
             val workingTree = getWorkingTree(targetDir)
 
-            val revision = if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
-                vcs.revision
-            } else {
-                log.info { "Trying to guess $this revision for version '$version'." }
-                workingTree.guessRevisionNameForVersion(version).also { revision ->
-                    if (revision.isBlank()) {
-                        throw IOException("Unable to determine a revision to checkout.")
-                    }
+            val revisionCandidates = mutableListOf<String>()
 
+            if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
+                revisionCandidates.add(vcs.revision)
+            }
+
+            log.info { "Trying to guess a $this revision for version '$version' to fall back to." }
+            workingTree.guessRevisionNameForVersion(version).also { revision ->
+                if (revision.isNotBlank()) {
+                    revisionCandidates.add(revision)
                     log.info { "Found $this revision '$revision' for version '$version'." }
                 }
             }
+
+            val revision = revisionCandidates.firstOrNull()
+                    ?: throw IOException("Unable to determine a revision to checkout.")
 
             // To safe network bandwidth, first try to only fetch exactly the revision we want.
             try {
@@ -169,7 +173,20 @@ object Git : GitBase() {
                 runGitCommand(targetDir, "fetch", "--tags", "origin")
             }
 
-            runGitCommand(targetDir, "checkout", revision)
+            revisionCandidates.find { candidate ->
+                try {
+                    runGitCommand(targetDir, "checkout", candidate)
+                    true
+                } catch (e: IOException) {
+                    if (Main.stacktrace) {
+                        e.printStackTrace()
+                    }
+
+                    log.info { "Failed to checkout revision '$candidate'. Trying next candidate, if any." }
+
+                    false
+                }
+            } ?: throw IOException("Unable to determine a revision to checkout.")
 
             return workingTree
         } catch (e: IOException) {
