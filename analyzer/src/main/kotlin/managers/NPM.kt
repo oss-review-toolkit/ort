@@ -239,7 +239,6 @@ class NPM : PackageManager() {
                 downloadUrl = dist["tarball"].asText()
 
                 hash = dist["shasum"].asText()
-                // TODO: add detection of hash algorithm
 
                 parseVcsInfo(infoJson)
             } catch (e: Exception) {
@@ -256,7 +255,6 @@ class NPM : PackageManager() {
                         downloadUrl = json["_resolved"].asTextOrEmpty()
 
                         hash = json["_integrity"].asTextOrEmpty()
-                        // TODO: add detection of hash algorithm
 
                         parseVcsInfo(json)
                     }
