@@ -229,11 +229,11 @@ object Main {
             "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
 
-        if (target.vcsProcessed.url != target.vcs.url) {
-            println("Using processed VCS URL '${target.vcsProcessed.url}'.")
-            println("Original VCS URL was '${target.vcs.url}'.")
+        if (target.vcsProcessed != target.vcs) {
+            println("Using processed ${target.vcsProcessed}.")
+            println("Original was ${target.vcs}.")
         } else {
-            println("Using VCS URL '${target.vcsProcessed.url}'.")
+            println("Using ${target.vcsProcessed}.")
         }
 
         if (target.vcsProcessed.revision.isBlank()) {
