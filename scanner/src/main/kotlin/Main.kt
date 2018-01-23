@@ -99,6 +99,12 @@ object Main {
             order = PARAMETER_ORDER_OPTIONAL)
     private var inputPath: File? = null
 
+    @Parameter(description = "The list of scopes that shall be scanned for licenses. Works only with " +
+            "--dependencies-file parameter. If empty, all scopes are scanned.",
+            names = ["--scopes-list", "-l"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    var includeScopes: List<String> = listOf()
+
     @Parameter(description = "The output directory to store the scan results in.",
             names = ["--output-dir", "-o"],
             required = true,
@@ -213,7 +219,17 @@ object Main {
             val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
 
             val packages = mutableListOf(analyzerResult.project.toPackage())
-            packages.addAll(analyzerResult.packages)
+            if (includeScopes.isNotEmpty()) {
+                println("Limiting scan to scopes: $includeScopes")
+                val includedScopes = analyzerResult.project.scopes.filter { includeScopes.contains(it.name) }
+                packages.addAll(analyzerResult.packages.filter { pkg ->
+                    includedScopes.any {
+                        it.contains(pkg)
+                    }
+                })
+            } else {
+                packages.addAll(analyzerResult.packages)
+            }
 
             packages.forEach { pkg ->
                 val entry = pkgSummary.getOrPut(pkg.id.toString()) { SummaryEntry() }
