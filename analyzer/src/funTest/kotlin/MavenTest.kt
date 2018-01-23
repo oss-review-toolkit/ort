@@ -38,7 +38,7 @@ class MavenTest : StringSpec() {
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename)
                     .readText()
-                    // vcs_processed:
+                    // project.vcs_processed:
                     .replaceFirst("url: \"<REPLACE>\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
                     .replaceFirst("revision: \"<REPLACE>\"", "revision: \"$vcsRevision\"")
 
