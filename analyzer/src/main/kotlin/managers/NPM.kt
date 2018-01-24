@@ -238,9 +238,9 @@ class NPM : PackageManager() {
                 homepageUrl = infoJson["homepage"].asTextOrEmpty()
 
                 val dist = infoJson["dist"]
-                downloadUrl = dist["tarball"].asText()
+                downloadUrl = dist["tarball"].asTextOrEmpty()
 
-                hash = dist["shasum"].asText()
+                hash = dist["shasum"].asTextOrEmpty()
 
                 parseVcsInfo(infoJson)
             } catch (e: Exception) {
