@@ -23,4 +23,4 @@ import io.kotlintest.Tag
 
 object ExpensiveTag : Tag()
 
-object ScanPathTag : Tag()
+object ScanCodeTag : Tag()
