@@ -190,13 +190,13 @@ class NPM : PackageManager() {
                 it?.asText()
             }
 
-            var description: String
-            var homepageUrl: String
-            var downloadUrl: String
+            var description = json["description"].asTextOrEmpty()
+            var homepageUrl = json["homepage"].asTextOrEmpty()
+            var downloadUrl = json["_resolved"].asTextOrEmpty()
+            var hash = json["_integrity"].asTextOrEmpty()
+            var vcsFromPackage = parseVcsInfo(json)
 
-            var hash: String
             val hashAlgorithm = HashAlgorithm.SHA1
-
             val identifier = "$rawName@$version"
 
             // Download package info from registry.npmjs.org.
@@ -213,7 +213,7 @@ class NPM : PackageManager() {
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-            val vcsFromPackage = try {
+            try {
                 val jsonResponse = OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     if (response.code() != HttpURLConnection.HTTP_OK) {
                         throw IOException("Could not retrieve package info about $encodedName: " +
@@ -232,33 +232,23 @@ class NPM : PackageManager() {
                 }
 
                 val packageInfo = jsonMapper.readTree(jsonResponse)
-                val infoJson = packageInfo["versions"][version]
+                packageInfo["versions"][version].let { versionInfo ->
+                    description = versionInfo["description"].asTextOrEmpty()
+                    homepageUrl = versionInfo["homepage"].asTextOrEmpty()
 
-                description = infoJson["description"].asTextOrEmpty()
-                homepageUrl = infoJson["homepage"].asTextOrEmpty()
+                    versionInfo["dist"].let { dist ->
+                        downloadUrl = dist["tarball"].asTextOrEmpty()
+                        hash = dist["shasum"].asTextOrEmpty()
+                    }
 
-                val dist = infoJson["dist"]
-                downloadUrl = dist["tarball"].asTextOrEmpty()
-
-                hash = dist["shasum"].asTextOrEmpty()
-
-                parseVcsInfo(infoJson)
+                    vcsFromPackage = parseVcsInfo(versionInfo)
+                }
             } catch (e: Exception) {
                 when (e) {
                     is IOException, is NullPointerException -> {
                         if (Main.stacktrace) {
                             e.printStackTrace()
                         }
-
-                        // Fallback to getting detailed info from the package.json file. Some info will likely be
-                        // missing.
-                        description = json["description"].asTextOrEmpty()
-                        homepageUrl = json["homepage"].asTextOrEmpty()
-                        downloadUrl = json["_resolved"].asTextOrEmpty()
-
-                        hash = json["_integrity"].asTextOrEmpty()
-
-                        parseVcsInfo(json)
                     }
                     else -> throw e
                 }
