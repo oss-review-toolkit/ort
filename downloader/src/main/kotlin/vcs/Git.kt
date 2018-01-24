@@ -124,6 +124,8 @@ object Git : GitBase() {
                 if (revision.isNotBlank()) {
                     revisionCandidates.add(revision)
                     log.info { "Found $this revision '$revision' for version '$version'." }
+                } else {
+                    log.info { "No $this revision for version '$version' found." }
                 }
             }
 
