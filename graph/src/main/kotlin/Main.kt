@@ -68,7 +68,7 @@ object Main {
     @Parameter(description = "Print out the stacktrace for all exceptions.",
             names = ["--stacktrace"],
             order = PARAMETER_ORDER_LOGGING)
-    var stacktrace = false
+    private var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = ["--help", "-h"],
@@ -99,6 +99,9 @@ object Main {
             jc.usage()
             exitProcess(1)
         }
+
+        // Make the parameter globally available.
+        com.here.ort.utils.printStackTrace = stacktrace
 
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"

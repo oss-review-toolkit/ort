@@ -24,7 +24,6 @@ import DependencyTreeModel
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
@@ -142,7 +141,7 @@ class Gradle : PackageManager() {
             return AnalyzerResult(true, project, packages.values.toSortedSet(),
                     dependencyTreeModel.errors)
         } catch (e: BuildException) {
-            if (Main.stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 

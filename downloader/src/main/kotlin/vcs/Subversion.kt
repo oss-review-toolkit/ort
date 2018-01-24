@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 import com.here.ort.downloader.DownloadException
-import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
@@ -183,7 +182,7 @@ object Subversion : VersionControlSystem() {
                 getWorkingTree(File(targetDir, tagPath))
             }
         } catch (e: IOException) {
-            if (Main.stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 

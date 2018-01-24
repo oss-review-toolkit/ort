@@ -22,7 +22,6 @@ package com.here.ort.downloader.vcs
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
-import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OS
@@ -137,7 +136,7 @@ object Git : GitBase() {
                 runGitCommand(targetDir, "checkout", "FETCH_HEAD")
                 return workingTree
             } catch (e: IOException) {
-                if (Main.stacktrace) {
+                if (com.here.ort.utils.printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -154,7 +153,7 @@ object Git : GitBase() {
                 runGitCommand(targetDir, "checkout", revision)
                 return workingTree
             } catch (e: IOException) {
-                if (Main.stacktrace) {
+                if (com.here.ort.utils.printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -178,7 +177,7 @@ object Git : GitBase() {
                     runGitCommand(targetDir, "checkout", candidate)
                     true
                 } catch (e: IOException) {
-                    if (Main.stacktrace) {
+                    if (com.here.ort.utils.printStackTrace) {
                         e.printStackTrace()
                     }
 
@@ -190,7 +189,7 @@ object Git : GitBase() {
 
             return workingTree
         } catch (e: IOException) {
-            if (Main.stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 

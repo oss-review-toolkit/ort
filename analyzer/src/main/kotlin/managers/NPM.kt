@@ -239,7 +239,7 @@ class NPM : PackageManager() {
                             vcsFromPackage = parseVcsInfo(versionInfo)
                         }
                     } catch (e: NullPointerException) {
-                        if (Main.stacktrace) {
+                        if (com.here.ort.utils.printStackTrace) {
                             e.printStackTrace()
                         }
                     }

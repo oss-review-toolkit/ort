@@ -22,7 +22,6 @@ package com.here.ort.downloader.vcs
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
-import com.here.ort.downloader.Main
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -58,7 +57,7 @@ object GitRepo : GitBase() {
 
             return getWorkingTree(targetDir)
         } catch (e: IOException) {
-            if (Main.stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 
