@@ -19,6 +19,7 @@
 
 package com.here.ort.scanner
 
+import com.here.ort.scanner.scanners.Licensee
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.ScanPathTag
@@ -50,5 +51,10 @@ class ScanPathTest : StringSpec() {
             val result = ScanCode.scan(File("../LICENSE"), outputDir)
             result.licenses shouldBe setOf("Apache-2.0")
         }.config(tags = setOf(ExpensiveTag, ScanPathTag))
+
+        "Licensee recognizes our own LICENSE" {
+            val result = Licensee.scan(File("../LICENSE"), outputDir)
+            result.licenses shouldBe setOf("Apache License 2.0")
+        }.config(tags = setOf(ScanPathTag))
     }
 }
