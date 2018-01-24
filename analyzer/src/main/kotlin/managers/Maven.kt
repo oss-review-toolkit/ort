@@ -21,7 +21,6 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
@@ -84,7 +83,7 @@ class Maven : PackageManager() {
         val projectBuildingResults = try {
             projectBuilder.build(definitionFiles, false, projectBuildingRequest)
         } catch (e: ProjectBuildingException) {
-            if (Main.stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 
@@ -158,7 +157,7 @@ class Maven : PackageManager() {
 
             return pkg.toReference(dependencies)
         } catch (e: ProjectBuildingException) {
-            if (Main.stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 

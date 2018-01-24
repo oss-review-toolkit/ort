@@ -70,7 +70,7 @@ object Main {
             try {
                 return OutputFormat.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (stacktrace) {
+                if (com.here.ort.utils.printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -142,7 +142,7 @@ object Main {
     @Parameter(description = "Print out the stacktrace for all exceptions.",
             names = ["--stacktrace"],
             order = PARAMETER_ORDER_LOGGING)
-    var stacktrace = false
+    private var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = ["--help", "-h"],
@@ -173,6 +173,9 @@ object Main {
             jc.usage()
             exitProcess(1)
         }
+
+        // Make the parameter globally available.
+        com.here.ort.utils.printStackTrace = stacktrace
 
         if ((dependenciesFile != null) == (inputPath != null)) {
             throw IllegalArgumentException("Either --dependencies-file or --input-path must be specified.")
@@ -250,7 +253,7 @@ object Main {
 
             println("Found licenses for '$identifier': ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {
-            if (stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 

@@ -157,7 +157,7 @@ abstract class PackageManager {
                         result[definitionFile] = it
                     }
                 } catch (e: Exception) {
-                    if (Main.stacktrace) {
+                    if (com.here.ort.utils.printStackTrace) {
                         e.printStackTrace()
                     }
 

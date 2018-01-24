@@ -76,7 +76,7 @@ object Main {
             try {
                 return DataEntity.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (stacktrace) {
+                if (com.here.ort.utils.printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -124,7 +124,7 @@ object Main {
     @Parameter(description = "Print out the stacktrace for all exceptions.",
             names = ["--stacktrace"],
             order = PARAMETER_ORDER_LOGGING)
-    var stacktrace = false
+    private var stacktrace = false
 
     @Parameter(description = "Display the command line help.",
             names = ["--help", "-h"],
@@ -156,6 +156,9 @@ object Main {
             exitProcess(1)
         }
 
+        // Make the parameter globally available.
+        com.here.ort.utils.printStackTrace = stacktrace
+
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
@@ -181,7 +184,7 @@ object Main {
             try {
                 download(pkg, outputDir)
             } catch (e: DownloadException) {
-                if (stacktrace) {
+                if (com.here.ort.utils.printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -209,7 +212,7 @@ object Main {
             try {
                 return downloadFromVcs(target, targetDir)
             } catch (e: DownloadException) {
-                if (stacktrace) {
+                if (com.here.ort.utils.printStackTrace) {
                     e.printStackTrace()
                 }
 

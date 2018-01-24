@@ -47,6 +47,11 @@ import java.nio.file.attribute.BasicFileAttributes
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
 
+/**
+ * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
+ */
+var printStackTrace = false
+
 val jsonMapper = ObjectMapper().registerKotlinModule()
 val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
 val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()

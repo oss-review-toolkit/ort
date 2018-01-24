@@ -81,7 +81,7 @@ abstract class Scanner {
         val sourceDirectory = try {
             Main.download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
         } catch (e: DownloadException) {
-            if (Main.stacktrace) {
+            if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 
