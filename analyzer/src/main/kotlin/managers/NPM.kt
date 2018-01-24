@@ -296,6 +296,7 @@ class NPM : PackageManager() {
             // particular NPM package version. The DefinitelyTyped project only uses a directory hierarchy of
             // "types/<package name>" without a version, and there are no tags in Git. See e.g.
             // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/chai
+            // TODO: Think about how this can be turned into a generic curation.
             packages[identifier] = if (module.id.namespace == "@types"
                     && module.vcsProcessed.url == DEFINITELY_TYPED_VCS_URL) {
                 // Clear the VCS URL to directly trigger source artifact download and use the binary artifact as the
