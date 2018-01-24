@@ -21,6 +21,8 @@ install:
   - pip install virtualenv==15.1.0
   - cinst sbt --version 1.0.2 -y
   - refreshenv
+  - set PATH=C:\Ruby25\bin;%PATH%
+  - gem install licensee -v 9.8.0
 
 # Even if "classes" is a task dependency of "check" below, use it here to
 # override the default MSBuild (which would fail otherwise).
