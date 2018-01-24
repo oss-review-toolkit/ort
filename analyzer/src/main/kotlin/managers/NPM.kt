@@ -213,44 +213,41 @@ class NPM : PackageManager() {
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-            try {
-                val jsonResponse = OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
-                    if (response.code() != HttpURLConnection.HTTP_OK) {
-                        throw IOException("Could not retrieve package info about $encodedName: " +
-                                "${response.code()} - ${response.message()}")
-                    }
-
-                    response.body()?.string().also {
-                        log.debug {
-                            if (response.cacheResponse() != null) {
-                                "Retrieved info about $encodedName from local cache."
-                            } else {
-                                "Downloaded info about $encodedName from NPM registry."
-                            }
+            OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    log.debug {
+                        if (response.cacheResponse() != null) {
+                            "Retrieved info about $encodedName from local cache."
+                        } else {
+                            "Downloaded info about $encodedName from NPM registry."
                         }
                     }
-                }
 
-                val packageInfo = jsonMapper.readTree(jsonResponse)
-                packageInfo["versions"][version].let { versionInfo ->
-                    description = versionInfo["description"].asTextOrEmpty()
-                    homepageUrl = versionInfo["homepage"].asTextOrEmpty()
+                    try {
+                        val jsonResponse = response.body()?.string()
+                        val packageInfo = jsonMapper.readTree(jsonResponse)
 
-                    versionInfo["dist"].let { dist ->
-                        downloadUrl = dist["tarball"].asTextOrEmpty()
-                        hash = dist["shasum"].asTextOrEmpty()
-                    }
+                        packageInfo["versions"][version].let { versionInfo ->
+                            description = versionInfo["description"].asTextOrEmpty()
+                            homepageUrl = versionInfo["homepage"].asTextOrEmpty()
 
-                    vcsFromPackage = parseVcsInfo(versionInfo)
-                }
-            } catch (e: Exception) {
-                when (e) {
-                    is IOException, is NullPointerException -> {
+                            versionInfo["dist"].let { dist ->
+                                downloadUrl = dist["tarball"].asTextOrEmpty()
+                                hash = dist["shasum"].asTextOrEmpty()
+                            }
+
+                            vcsFromPackage = parseVcsInfo(versionInfo)
+                        }
+                    } catch (e: NullPointerException) {
                         if (Main.stacktrace) {
                             e.printStackTrace()
                         }
                     }
-                    else -> throw e
+                } else {
+                    log.info {
+                        "Could not retrieve package information for '$encodedName' " +
+                                "from public NPM registry: ${response.code()} - ${response.message()}"
+                    }
                 }
             }
 
