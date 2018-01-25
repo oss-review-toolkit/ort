@@ -21,6 +21,8 @@ import groovy.transform.Immutable
 
 import javax.inject.Inject
 
+import org.gradle.api.internal.artifacts.repositories.DefaultFlatDirArtifactRepository
+import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactRepository
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 
@@ -119,7 +121,18 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                 }
             }
 
-            List<String> repositories = project.repositories.collect { it.url.toString() }
+            List<String> repositories = project.repositories.findResults {
+                if (it instanceof DefaultMavenArtifactRepository) {
+                    it.url.toString()
+                } else if (it instanceof DefaultFlatDirArtifactRepository) {
+                    errors.add("Project uses a flat dir repository, dependencies from this repository will be " +
+                            "ignored: ${it.dirs}")
+                    null
+                } else {
+                    errors.add("Unknown repository type: ${it.getClass().name}")
+                    null
+                }
+            }
 
             return new DependencyTreeModelImpl(project.name, configurations, repositories, errors)
         }
