@@ -288,6 +288,7 @@ class NPM : PackageManager() {
                     && module.vcsProcessed.url == DEFINITELY_TYPED_VCS_URL) {
                 // Clear the VCS URL to directly trigger source artifact download and use the binary artifact as the
                 // source artifact.
+                log.info { "Falling back to source artifact for TypeScript type definition package '${module.id}'." }
                 module.copy(sourceArtifact = module.binaryArtifact, vcsProcessed = VcsInfo.EMPTY)
             } else {
                 module
