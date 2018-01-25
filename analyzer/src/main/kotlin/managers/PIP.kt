@@ -228,10 +228,7 @@ class PIP : PackageManager() {
 
                     try {
                         val pkgInfo = pkgData["info"]
-                        // TODO: Support multiple package types of the same package version. Arbitrarily choose the
-                        // first for now.
-                        val pkgRelease = pkgData["releases"][pkg.id.version][0]
-
+                        var pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
                         val declaredLicenses = sortedSetOf<String>()
 
                         // Use the top-level license field as well as the license classifiers as the declared licenses.
@@ -256,11 +253,7 @@ class PIP : PackageManager() {
                                 declaredLicenses = declaredLicenses,
                                 description = pkgInfo["summary"]?.asText() ?: pkg.description,
                                 homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
-                                binaryArtifact = RemoteArtifact(
-                                        url = pkgRelease["url"]?.asText() ?: pkg.binaryArtifact.url,
-                                        hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
-                                        hashAlgorithm = HashAlgorithm.MD5
-                                ),
+                                binaryArtifact = getBinaryArtifact(pkg, pkgReleases),
                                 sourceArtifact = RemoteArtifact.EMPTY,
                                 vcs = pkg.vcs,
                                 vcsProcessed = processPackageVcs(pkg.vcs)
@@ -301,6 +294,17 @@ class PIP : PackageManager() {
         virtualEnvDir.safeDeleteRecursively()
 
         return AnalyzerResult(true, project, packages)
+    }
+
+    private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {
+        // Prefer python wheels and fall back to the first entry (probably a sdist).
+        val pkgRelease = pkgReleases.asSequence().find { it["packagetype"].asText() == "bdist_wheel" } ?: pkgReleases[0]
+
+        return RemoteArtifact(
+                url = pkgRelease["url"]?.asText() ?: pkg.binaryArtifact.url,
+                hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
+                hashAlgorithm = HashAlgorithm.MD5
+        )
     }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
