@@ -68,6 +68,10 @@ interface Dependency {
 
     String getVersion()
 
+    String getExtension()
+
+    String getClassifier()
+
     List<Dependency> getDependencies()
 
     String getError()
@@ -80,6 +84,8 @@ class DependencyImpl implements Dependency, Serializable {
     String groupId
     String artifactId
     String version
+    String extension
+    String classifier
     List<Dependency> dependencies
     String error
     String pomFile
@@ -112,7 +118,16 @@ class DependencyTreePlugin implements Plugin<Gradle> {
             List<Configuration> configurations = project.configurations.findResults { configuration ->
                 if (configuration.canBeResolved) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
-                    List<Dependency> dependencies = result.getRoot().getDependencies().collect { parseDependency(it, project, []) }
+                    Set<ResolvedArtifact> resolvedArtifacts
+                    try {
+                        resolvedArtifacts = configuration.getResolvedConfiguration().getResolvedArtifacts()
+                    } catch (ResolveException e) {
+                        resolvedArtifacts = []
+                    }
+
+                    List<Dependency> dependencies = result.getRoot().getDependencies().collect {
+                        parseDependency(it, project, resolvedArtifacts, [])
+                    }
 
                     new ConfigurationImpl(configuration.name, dependencies)
                 } else {
@@ -137,12 +152,14 @@ class DependencyTreePlugin implements Plugin<Gradle> {
             return new DependencyTreeModelImpl(project.name, configurations, repositories, errors)
         }
 
-        Dependency parseDependency(DependencyResult dependencyResult, Project project, List<String> parents) {
+        Dependency parseDependency(DependencyResult dependencyResult, Project project,
+                                   Set<ResolvedArtifact> resolvedArtifacts, List<String> parents) {
             if (dependencyResult instanceof ResolvedDependencyResult) {
                 List<Dependency> dependencies = dependencyResult.selected.dependencies.findResults { dependency ->
                     // Do not follow circular dependencies, these can exist for project dependencies.
                     if (!(dependencyResult.requested.displayName in parents)) {
-                        parseDependency(dependency, project, [*parents, dependencyResult.requested.displayName])
+                        parseDependency(dependency, project, resolvedArtifacts,
+                                [*parents, dependencyResult.requested.displayName])
                     } else {
                         null
                     }
@@ -165,19 +182,25 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     } else {
                         error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }
-                    return new DependencyImpl(id.group, id.module, id.version, dependencies, error, pomFile)
+                    def artifact = resolvedArtifacts.find {
+                        id.group == it.owner.id.group && id.module == it.owner.id.name && id.version == it.owner.version
+                    }
+                    def extension = artifact != null ? artifact.extension : ""
+                    def classifier = artifact != null ? artifact.classifier : ""
+                    return new DependencyImpl(id.group, id.module, id.version, extension, classifier, dependencies,
+                            error, pomFile)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     // TODO: Decide how to mark project dependencies in the model.
-                    return new DependencyImpl("", id.displayName, "", dependencies, null, "")
+                    return new DependencyImpl("", id.displayName, "", "", "", dependencies, null, "")
                 } else {
-                    return new DependencyImpl("", id.displayName, "", dependencies,
+                    return new DependencyImpl("", id.displayName, "", "", "", dependencies,
                             "Unknown id type: ${id.getClass().simpleName}".toString(), "")
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
-                return new DependencyImpl("", dependencyResult.attempted.displayName, "", [],
+                return new DependencyImpl("", dependencyResult.attempted.displayName, "", "", "", [],
                         "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), "")
             } else {
-                return new DependencyImpl("", dependencyResult.requested.displayName, "", [],
+                return new DependencyImpl("", dependencyResult.requested.displayName, "", "", "", [],
                         "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), "")
             }
         }
