@@ -19,8 +19,11 @@
 
 package com.here.ort.analyzer
 
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
+import com.here.ort.utils.ExpensiveTag
+import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.yamlMapper
 
@@ -38,6 +41,11 @@ import java.io.PrintStream
  */
 class MainTest : StringSpec() {
     private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic")
+    private val gradleProjectDir = File("src/funTest/assets/projects/synthetic/gradle")
+    private val vcsDir = VersionControlSystem.forDirectory(gradleProjectDir)!!
+    private val vcsUrl = vcsDir.getRemoteUrl()
+    private val vcsNormalizedUrl = normalizeVcsUrl(vcsUrl)
+    private val vcsRevision = vcsDir.getRevision()
 
     private lateinit var outputDir: File
 
@@ -104,6 +112,30 @@ class MainTest : StringSpec() {
             lines.next() shouldBe "NPM projects found in:"
         }
 
+        "Merging into single results file creates correct output" {
+            val outputAnalyzerDir = File(outputDir, "analyzer_results")
+
+            Main.main(arrayOf(
+                    "-m", "Gradle",
+                    "-i", gradleProjectDir.absolutePath,
+                    "-o", outputAnalyzerDir.path,
+                    "--merge-results"
+            ))
+            val resultsFile = File(outputAnalyzerDir, "all-dependencies.yml")
+            val expectedResult = patchExpectedResult(File
+            ("src/funTest/assets/projects/synthetic/gradle-all-dependencies-expected-result.yml").readText())
+
+            // Compare some of the values instead of whole string to avoid problems with formatting paths.
+            val resultTree = yamlMapper.readTree(resultsFile.readText())
+            val expectedResultTree = yamlMapper.readTree(expectedResult)
+
+            resultTree["repository"]["name"].asText() shouldBe expectedResultTree["repository"]["name"].asText()
+            resultTree["projects"] shouldBe expectedResultTree["projects"]
+            resultTree["project_id_result_file_path_map"].asIterable().count() shouldBe
+                    expectedResultTree["project_id_result_file_path_map"].asIterable().count()
+            resultTree["packages"] shouldBe expectedResultTree["packages"]
+        }.config(tags = setOf(ExpensiveTag))
+
         "Package curation data file is applied correctly" {
             val inputDir = File(syntheticProjectDir, "gradle")
             val curationsOutputDir = File(outputDir, "curations")
@@ -127,4 +159,8 @@ class MainTest : StringSpec() {
             hamcrestCorePackage.declaredLicenses shouldBe sortedSetOf("curated license a", "curated license b")
         }
     }
+
+    private fun patchExpectedResult(expectedResult: String) = expectedResult.replace("<REPLACE_URL>", vcsUrl)
+            .replace("<REPLACE_REV>", vcsRevision)
+            .replace("<REPLACE_URL_PROCESSED>", vcsNormalizedUrl)
 }

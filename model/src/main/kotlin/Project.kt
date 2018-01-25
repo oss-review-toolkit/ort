@@ -67,7 +67,7 @@ data class Project(
          * The dependency scopes defined by this project.
          */
         val scopes: SortedSet<Scope>
-) {
+) : Comparable<Project> {
     /**
      * Return a [Package] representation of this [Project].
      */
@@ -81,6 +81,11 @@ data class Project(
             vcs = vcs,
             vcsProcessed = vcsProcessed
     )
+
+    /**
+     * A comparison function to sort projects by their identifier.
+     */
+    override fun compareTo(other: Project) = compareValuesBy(this, other, { it.id.toString() })
 
     companion object {
         /**
