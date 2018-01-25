@@ -254,7 +254,7 @@ class PIP : PackageManager() {
                                 description = pkgInfo["summary"]?.asText() ?: pkg.description,
                                 homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
                                 binaryArtifact = getBinaryArtifact(pkg, pkgReleases),
-                                sourceArtifact = RemoteArtifact.EMPTY,
+                                sourceArtifact = getSourceArtifact(pkgReleases),
                                 vcs = pkg.vcs,
                                 vcsProcessed = processPackageVcs(pkg.vcs)
                         )
@@ -305,6 +305,14 @@ class PIP : PackageManager() {
                 hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
                 hashAlgorithm = HashAlgorithm.MD5
         )
+    }
+
+    private fun getSourceArtifact(pkgReleases: ArrayNode): RemoteArtifact {
+        val pkgSource = pkgReleases.asSequence().find { it["packagetype"].asText() == "sdist" } ?: return RemoteArtifact.EMPTY
+        val url = pkgSource["url"]?.asText() ?: return RemoteArtifact.EMPTY
+        val hash = pkgSource["md5_digest"]?.asText() ?: return RemoteArtifact.EMPTY
+
+        return RemoteArtifact(url = url, hash = hash, hashAlgorithm = HashAlgorithm.MD5)
     }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
