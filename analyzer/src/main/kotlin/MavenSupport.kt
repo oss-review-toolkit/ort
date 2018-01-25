@@ -153,13 +153,16 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
         val artifactDescriptorResult = repoSystem
                 .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
-        log.debug { "Found potential repositories for '$artifact': ${artifactDescriptorResult.repositories}" }
+        val allRepositories = artifactDescriptorResult.repositories + repositories
+
+        // Filter local repositories, as remote artifacts should never point to files on the local disk.
+        val remoteRepositories = allRepositories.filterNot { it.url.startsWith("file:/") }
+        log.debug { "Found potential repositories for '$artifact': $remoteRepositories" }
+        log.debug { "Ignoring local repositories: ${allRepositories - remoteRepositories}" }
 
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
-        val allRepositories = artifactDescriptorResult.repositories + repositories
-
-        allRepositories.forEach { repository ->
+        remoteRepositories.forEach { repository ->
             val repositoryLayout = repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
 
             val remoteLocation = repositoryLayout.getLocation(artifact, false)
@@ -232,7 +235,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
         }
 
-        log.warn { "Unable to find '$artifact' in any of ${allRepositories.map { it.url }}." }
+        log.warn { "Unable to find '$artifact' in any of ${remoteRepositories.map { it.url }}." }
 
         return RemoteArtifact.EMPTY.also {
             log.debug { "Writing empty remote artifact for $artifact to disk cache." }
