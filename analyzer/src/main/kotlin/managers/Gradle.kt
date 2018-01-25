@@ -158,9 +158,8 @@ class Gradle : PackageManager() {
             // Only look for a package when there was no error resolving the dependency.
             packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
                 val pkg = if (dependency.pomFile.isNotBlank()) {
-                    // TODO: Provide extension and classifier.
-                    val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, "jar",
-                            dependency.version)
+                    val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, dependency.classifier,
+                            dependency.extension, dependency.version)
                     maven.parsePackage(artifact, repositories, javaClass.simpleName)
                 } else {
                     Package(
