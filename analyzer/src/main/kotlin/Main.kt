@@ -31,8 +31,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
+import com.here.ort.model.MergedResultsBuilder
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Project
+import com.here.ort.model.ScannedDirectoryDetails
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -85,6 +87,12 @@ object Main {
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
+    @Parameter(description = "Merge all results into additional single result file. NOTE: original result files for " +
+            "all build files are kept along.",
+            names = ["--merge-results"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var createMergedResult = false
+
     @Parameter(description = "The data format used for dependency information.",
             names = ["--output-format", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
@@ -131,7 +139,7 @@ object Main {
             order = PARAMETER_ORDER_HELP)
     private var help = false
 
-    private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: AnalyzerResult) {
+    private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: AnalyzerResult): File {
         // Mirror the directory structure from the project in the output.
         val currentDir = if (currentPath.isFile) currentPath.parentFile else currentPath
         val outputDir = File(outputRoot, currentDir.toRelativeString(projectRoot)).apply { safeMkdirs() }
@@ -141,6 +149,7 @@ object Main {
         println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
         mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
         println("done.")
+        return outputFile
     }
 
     /**
@@ -196,10 +205,11 @@ object Main {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers)
         }
 
+        val vcsDir = VersionControlSystem.forDirectory(absoluteProjectPath)
+
         if (managedDefinitionFiles.isEmpty()) {
             println("No package-managed projects found.")
 
-            val vcsDir = VersionControlSystem.forDirectory(absoluteProjectPath)
             val project = Project(
                     id = Identifier(
                             packageManager = "",
@@ -218,6 +228,10 @@ object Main {
             val analyzerResult = AnalyzerResult(allowDynamicVersions, project, sortedSetOf())
             writeResultFile(absoluteProjectPath, absoluteProjectPath, absoluteOutputPath, analyzerResult)
 
+            if (createMergedResult) {
+                println("Merged result not created (nothing to merge).")
+            }
+
             exitProcess(0)
         }
 
@@ -231,6 +245,21 @@ object Main {
 
         val failedAnalysis = sortedSetOf<String>()
 
+        val mergedResultsBuilder = if (createMergedResult) {
+            val repoDetails = ScannedDirectoryDetails(name = absoluteProjectPath.name,
+                    path = absoluteProjectPath.absolutePath,
+                    vcs = if (vcsDir != null) {
+                        VcsInfo(provider = vcsDir.getProvider(),
+                                url = vcsDir.getRemoteUrl(),
+                                revision = vcsDir.getRevision(),
+                                path = "")
+                    } else {
+                        VcsInfo.EMPTY
+                    })
+            MergedResultsBuilder(allowDynamicVersions, repoDetails)
+        } else {
+            null
+        }
         // Resolve dependencies per package manager.
         managedDefinitionFiles.forEach { manager, files ->
             // Print the list of dependencies.
@@ -255,11 +284,21 @@ object Main {
             } ?: results
 
             curatedResults.forEach { definitionFile, analyzerResult ->
-                writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
+                val resultFile = writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath,
+                        analyzerResult)
+                mergedResultsBuilder?.addResult(resultFile.absolutePath, analyzerResult)
                 if (analyzerResult.hasErrors()) {
                     failedAnalysis.add(definitionFile.absolutePath)
                 }
             }
+        }
+        mergedResultsBuilder?.build()?.let {
+            val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileEnding)
+
+            println("Writing merged results\nto\n\t$outputFile")
+            println("map size: ${it.projectIdResultFilePathMap.size}")
+            mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, it)
+            println("done.")
         }
 
         if (failedAnalysis.isNotEmpty()) {
