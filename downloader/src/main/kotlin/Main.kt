@@ -286,12 +286,12 @@ object Main {
     }
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): File {
-        log.info {
-            "Trying to download source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
-        }
-
         if (target.sourceArtifact.url.isBlank()) {
             throw DownloadException("No source artifact URL provided.")
+        }
+
+        log.info {
+            "Trying to download source artifact for '${target.id}' from '${target.sourceArtifact.url}'..."
         }
 
         val request = Request.Builder().url(target.sourceArtifact.url).build()
@@ -318,6 +318,10 @@ object Main {
             if (!tempFile.delete()) {
                 log.warn { "Unable to delete temporary file '$tempFile'." }
             }
+        }
+
+        log.info {
+            "Successfully downloaded source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
         }
 
         return outputDirectory
