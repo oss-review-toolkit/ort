@@ -73,9 +73,9 @@ packages:
     hash: "d3351b10f54446203ac0fd8839850c62"
     hash_algorithm: "MD5"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://pypi.python.org/packages/4b/3a/4c20183df155dd2e39168e35d53a388efb384a512ca6c73001d8292c094a/Flask-0.12.tar.gz"
+    hash: "c1d30f51cff4a38f9454b23328a15c5a"
+    hash_algorithm: "MD5"
   vcs:
     provider: ""
     url: ""
@@ -101,9 +101,9 @@ packages:
     hash: "7472b9df828747c2d44eb539558bbf7a"
     hash_algorithm: "MD5"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://pypi.python.org/packages/5f/bd/5815d4d925a2b8cbbb4b4960f018441b0c65f24ba29f3bdcfb3c8218a307/Jinja2-2.8.1.tar.gz"
+    hash: "150a8f1c180272753cf46dd3cdd6decf"
+    hash_algorithm: "MD5"
   vcs:
     provider: ""
     url: ""
@@ -128,9 +128,9 @@ packages:
     hash: "2fcedc9284d50e577b5192e8e3578355"
     hash_algorithm: "MD5"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
+    hash: "2fcedc9284d50e577b5192e8e3578355"
+    hash_algorithm: "MD5"
   vcs:
     provider: ""
     url: ""
@@ -155,9 +155,9 @@ packages:
     hash: "11f469d64429cc75f995cf6be5662133"
     hash_algorithm: "MD5"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://pypi.python.org/packages/9f/08/a3bb1c045ec602dc680906fc0261c267bed6b3bb4609430aff92c3888ec8/Werkzeug-0.14.1.tar.gz"
+    hash: "6d20b5be2d245be4ac7706cc390d130c"
+    hash_algorithm: "MD5"
   vcs:
     provider: ""
     url: ""
@@ -182,9 +182,9 @@ packages:
     hash: "5e7a4e296b3212da2ff11017675d7a4d"
     hash_algorithm: "MD5"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://pypi.python.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
+    hash: "fc4cc00c4863833230d3af92af48abd4"
+    hash_algorithm: "MD5"
   vcs:
     provider: ""
     url: ""
@@ -209,9 +209,9 @@ packages:
     hash: "ab69dff52e2e0bccb25bf1e3a82e1448"
     hash_algorithm: "MD5"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80/gunicorn-19.6.0.tar.gz"
+    hash: "338e5e8a83ea0f0625f768dba4597530"
+    hash_algorithm: "MD5"
   vcs:
     provider: ""
     url: ""
@@ -237,9 +237,9 @@ packages:
     hash: "a3d55aa79369aef5345c036a8a26307f"
     hash_algorithm: "MD5"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "https://pypi.python.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
+    hash: "a3d55aa79369aef5345c036a8a26307f"
+    hash_algorithm: "MD5"
   vcs:
     provider: ""
     url: ""
