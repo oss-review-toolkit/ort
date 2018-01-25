@@ -223,7 +223,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     log.warn { "Unable to delete temporary file '$tempFile'." }
                 }
 
-                val downloadUrl = "${repository.url}/$remoteLocation"
+                val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
                 return RemoteArtifact(downloadUrl, actualChecksum, HashAlgorithm.fromString(checksum.algorithm)).also {
                     log.debug { "Writing remote artifact for $artifact to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
