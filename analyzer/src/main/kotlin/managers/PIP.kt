@@ -314,8 +314,7 @@ class PIP : PackageManager() {
             it["packagetype"].asText() == "sdist"
         }
 
-        if (pkgSources.count() == 0)
-            return RemoteArtifact.EMPTY
+        if (pkgSources.count() == 0) return RemoteArtifact.EMPTY
 
         val pkgSource = pkgSources.find {
             it["filename"].asText().endsWith(".tar.bz2")
