@@ -310,9 +310,16 @@ class PIP : PackageManager() {
     }
 
     private fun getSourceArtifact(pkgReleases: ArrayNode): RemoteArtifact {
-        val pkgSource = pkgReleases.asSequence().find {
+        val pkgSources = pkgReleases.asSequence().filter {
             it["packagetype"].asText() == "sdist"
-        } ?: return RemoteArtifact.EMPTY
+        }
+
+        if (pkgSources.count() == 0)
+            return RemoteArtifact.EMPTY
+
+        val pkgSource = pkgSources.find {
+            it["filename"].asText().endsWith(".tar.bz2")
+        } ?: pkgSources.elementAt(0)
 
         val url = pkgSource["url"]?.asText() ?: return RemoteArtifact.EMPTY
         val hash = pkgSource["md5_digest"]?.asText() ?: return RemoteArtifact.EMPTY
