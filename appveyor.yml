@@ -2,6 +2,7 @@ environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
 
 cache:
+  - $(HOME)\.gradle\caches\build-cache-1
   - $(HOME)\.gradle\caches\jars-1
   - $(HOME)\.gradle\caches\jars-2
   - $(HOME)\.gradle\caches\jars-3
