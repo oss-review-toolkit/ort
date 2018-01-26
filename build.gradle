@@ -101,6 +101,13 @@ subprojects {
         toolVersion = '0.8.0'
     }
 
+    test {
+        testLogging {
+            events 'started', 'passed', 'skipped', 'failed'
+            exceptionFormat 'full'
+        }
+    }
+
     task funTest(type: Test) {
         description = 'Runs the functional tests.'
         group = 'Verification'
