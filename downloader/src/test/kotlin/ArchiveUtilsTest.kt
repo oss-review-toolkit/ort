@@ -57,6 +57,20 @@ class ArchiveUtilsTest : StringSpec() {
             fileB.readText() shouldBe "b\n"
         }
 
+        "Tar bzip2 archive can be unpacked" {
+            val archive = File("src/test/assets/test.tar.bz2")
+
+            archive.unpack(outputDir)
+
+            val fileA = File(outputDir, "a")
+            val fileB = File(outputDir, "dir/b")
+
+            fileA.exists() shouldBe true
+            fileA.readText() shouldBe "a\n"
+            fileB.exists() shouldBe true
+            fileB.readText() shouldBe "b\n"
+        }
+
         "Zip archive can be unpacked" {
             val archive = File("src/test/assets/test.zip")
 
