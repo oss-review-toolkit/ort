@@ -54,6 +54,13 @@ Currently, the following package managers / build systems can be detected and qu
 * [NPM](https://www.npmjs.com/)
 * [PIP](https://pip.pypa.io/)
 
+## Supported license scanners
+
+ORT comes with some example implementations for wrappers around license / copyright scanners:
+
+* [Licensee](https://github.com/benbalter/licensee)
+* [ScanCode](https://github.com/nexB/scancode-toolkit)
+
 ## Usage
 
 ### [analyzer](./analyzer/src/main/kotlin)
