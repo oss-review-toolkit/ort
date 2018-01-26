@@ -41,7 +41,8 @@ fun File.unpack(targetDirectory: File) {
 }
 
 /**
- * Unpack the file assuming that it is a tar archive. This implementation ignores empty directories and symbolic links.
+ * Unpack the file assuming that it is a tape archive (tar). This implementation ignores empty directories and symbolic
+ * links.
  *
  * @param targetDirectory The target directory to store the unpacked content of this archive.
  */
@@ -52,7 +53,7 @@ fun File.unpackTar(targetDirectory: File) {
         "gz", "tgz" -> GzipCompressorInputStream(inputStream())
         "bz2", "tbz2" -> BZip2CompressorInputStream(inputStream())
         "tar" -> inputStream()
-        else -> throw IOException("Unknown compression scheme for tar archive '$absolutePath'.")
+        else -> throw IOException("Unknown compression scheme for tar file '$absolutePath'.")
     }
 
     TarArchiveInputStream(inputStream).use {
