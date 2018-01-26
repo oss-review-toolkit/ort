@@ -26,27 +26,36 @@ import java.io.IOException
 
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 
-private val TAR_GZ_EXTENSIONS = listOf(".tar.gz", ".tgz")
+private val TAR_EXTENSIONS = listOf(".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2")
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
 
 fun File.unpack(targetDirectory: File) {
     when {
-        TAR_GZ_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackTarGz(targetDirectory)
+        TAR_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackTar(targetDirectory)
         ZIP_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackZip(targetDirectory)
         else -> throw IOException("Unknown archive type for file '$absolutePath'.")
     }
 }
 
 /**
- * Unpack the file assuming that it is a tar gz file. This implementation ignores empty directories and symbolic links.
+ * Unpack the file assuming that it is a tar archive. This implementation ignores empty directories and symbolic links.
  *
  * @param targetDirectory The target directory to store the unpacked content of this archive.
  */
-fun File.unpackTarGz(targetDirectory: File) {
-    val gzipInputStream = GzipCompressorInputStream(inputStream())
-    TarArchiveInputStream(gzipInputStream).use {
+fun File.unpackTar(targetDirectory: File) {
+    val suffix = this.name.toLowerCase().substringAfterLast('.')
+
+    val inputStream = when (suffix) {
+        "gz", "tgz" -> GzipCompressorInputStream(inputStream())
+        "bz2", "tbz2" -> BZip2CompressorInputStream(inputStream())
+        "tar" -> inputStream()
+        else -> throw IOException("Unknown compression scheme for tar archive '$absolutePath'.")
+    }
+
+    TarArchiveInputStream(inputStream).use {
         while (true) {
             val entry = it.nextTarEntry ?: break
 
