@@ -208,7 +208,9 @@ object Main {
         // TODO: add namespace to path
         val targetDir = File(outputDirectory, "${target.normalizedName}/${target.id.version}").apply { safeMkdirs() }
 
-        if (target.vcsProcessed.url.isNotBlank()) {
+        if (target.vcsProcessed.url.isBlank()) {
+            log.info { "No VCS URL provided for '${target.id}'." }
+        } else {
             try {
                 return downloadFromVcs(target, targetDir)
             } catch (e: DownloadException) {
@@ -287,7 +289,7 @@ object Main {
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): File {
         if (target.sourceArtifact.url.isBlank()) {
-            throw DownloadException("No source artifact URL provided.")
+            throw DownloadException("No source artifact URL provided for '${target.id}'.")
         }
 
         log.info {
