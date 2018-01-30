@@ -71,6 +71,10 @@ object ScanCode : Scanner() {
                 resultsFile.absolutePath
         )
 
+        if (process.stderr().isNotBlank()) {
+            log.debug { process.stderr() }
+        }
+
         val result = getResult(resultsFile)
 
         with(process) {
@@ -91,7 +95,7 @@ object ScanCode : Scanner() {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
-        if (resultsFile.isFile) {
+        if (resultsFile.isFile && resultsFile.length() > 0) {
             val json = jsonMapper.readTree(resultsFile)
             json["files"]?.forEach { file ->
                 file["licenses"]?.forEach { license ->

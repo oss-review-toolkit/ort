@@ -19,11 +19,14 @@
 
 package com.here.ort.scanner.scanners
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.Scanner
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.yamlMapper
+import com.here.ort.utils.log
 
 import java.io.File
 
@@ -40,6 +43,10 @@ object Licensee : Scanner() {
                 path.name
         )
 
+        if (process.stderr().isNotBlank()) {
+            log.debug { process.stderr() }
+        }
+
         with(process) {
             if (exitValue() == 0) {
                 stdoutFile.copyTo(resultsFile)
@@ -55,7 +62,7 @@ object Licensee : Scanner() {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
-        if (resultsFile.isFile) {
+        if (resultsFile.isFile && resultsFile.length() > 0) {
             // Convert Licensee's output for "Closest licenses" (in case of non-exact matches) into proper YAML
             // by replacing the asterisk with a dash.
             val yamlResults = resultsFile.readText().replace("    * ", "    - ")
