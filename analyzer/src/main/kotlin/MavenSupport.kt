@@ -207,7 +207,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
                     // Sometimes the checksum file contains a path after the actual checksum, so strip everything after
                     // the first space.
-                    tempFile.readLines().first().substringBefore(" ")
+                    tempFile.useLines { it.first().substringBefore(" ") }
                 } catch (e: Exception) {
                     if (com.here.ort.utils.printStackTrace) {
                         e.printStackTrace()
