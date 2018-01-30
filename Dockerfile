@@ -11,29 +11,29 @@ RUN ["/bin/bash", "-c", "set -o pipefail \
 
 # Install required packages.
 RUN apt update && apt install -y --no-install-recommends \
-    # Platform tools
+    # Platform tools:
     apt-utils \
     build-essential \
-    # Package managers
+    # Package managers:
     python-pip \
     python-setuptools \
     python-wheel \
     nodejs \
     sbt \
     yarn=1.3.2-1 \
-    # Version Control Systems
+    # Version Control Systems:
     cvs \
     git \
     mercurial \
     subversion \
-    # ScanCode dependencies.
+    # ScanCode dependencies:
     bzip2 \
     libxml2-dev \
     libxslt1-dev \
     python-dev \
     xz-utils \
     zlib1g \
-    # Workaround for broken libmagic vendored in ScanCode
+    # Workaround for broken libmagic vendored in ScanCode:
     libmagic1 \
     libmagic-mgc \
  # Install package manager specifics.
