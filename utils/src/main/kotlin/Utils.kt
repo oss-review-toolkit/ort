@@ -123,7 +123,7 @@ fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trimEnd('/')
 
-    if (url.startsWith("pserver:")) {
+    if (url.startsWith(":pserver:") || url.startsWith(":ext:")) {
         // Do not touch CVS URLs for now.
         return url
     }

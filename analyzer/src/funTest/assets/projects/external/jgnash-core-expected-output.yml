@@ -478,12 +478,12 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     provider: "cvs"
-    url: "pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
+    url: ":pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
     revision: "HEAD"
     path: ""
   vcs_processed:
     provider: "cvs"
-    url: "pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
+    url: ":pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
     revision: "HEAD"
     path: ""
 - id:
