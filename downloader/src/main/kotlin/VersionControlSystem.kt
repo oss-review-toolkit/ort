@@ -220,7 +220,12 @@ abstract class VersionControlSystem {
             // For now, only consider tag names, and not e.g. branch names.
             val candidates = listRemoteTags().filter { tagName ->
                 versionNames.any { versionName ->
-                    tagName.endsWith(versionName) && tagName.removeSuffix(versionName).lastOrNull() != '.'
+                    // Allow to ignore suffixes to tag names that are separated by something else than '.', e.g. for
+                    // version "3.3.1" accept tag "3.3.1-npm-packages" but not tag "3.3.1.0".
+                    tagName.startsWith(versionName) && tagName.removePrefix(versionName).firstOrNull() != '.'
+                            // Allow to ignore prefixes to tag names that are separated by something else than '.', e.g.
+                            // for version "0.10" accept tag "docutils-0.10" but not tag "1.0.10".
+                            || tagName.endsWith(versionName) && tagName.removeSuffix(versionName).lastOrNull() != '.'
                 }
             }
 
