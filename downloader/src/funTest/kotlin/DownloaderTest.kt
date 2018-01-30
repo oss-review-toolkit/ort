@@ -140,5 +140,33 @@ class DownloaderTest : StringSpec() {
 
             downloadDir.walkTopDown().count() shouldBe 234
         }.config(tags = setOf(ExpensiveTag))
+
+        "Can download source artifact from SourceForce" {
+            val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
+            val pkg = Package(
+                    id = Identifier(
+                            packageManager = "Maven",
+                            namespace = "tyrex",
+                            name = "tyrex",
+                            version = "1.0.1"
+                    ),
+                    declaredLicenses = sortedSetOf(),
+                    description = "",
+                    homepageUrl = "",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                            url = url,
+                            hash = "49fe486f44197c8e5106ed7487526f77b597308f",
+                            hashAlgorithm = HashAlgorithm.SHA1
+                    ),
+                    vcs = VcsInfo.EMPTY
+            )
+
+            val downloadDir = Main.download(pkg, outputDir)
+            val tyrexDir = File(downloadDir, "tyrex-1.0.1")
+
+            tyrexDir.isDirectory shouldBe true
+            tyrexDir.walkTopDown().count() shouldBe 409
+        }.config(tags = setOf(ExpensiveTag))
     }
 }
