@@ -24,6 +24,8 @@ install:
   - pip install virtualenv==15.1.0
   - cinst sbt --version 1.0.2 -y
   - refreshenv
+  - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
+  - set PATH=%PATH%;C:\msys64\usr\bin
   - set PATH=C:\Ruby25\bin;%PATH%
   - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
       gem install licensee -v 9.8.0

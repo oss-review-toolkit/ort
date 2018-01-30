@@ -41,7 +41,8 @@ abstract class VersionControlSystem {
                     Git,
                     GitRepo,
                     Mercurial,
-                    Subversion
+                    Subversion,
+                    Cvs
             )
         }
 
