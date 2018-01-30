@@ -160,6 +160,8 @@ class UtilsTest : WordSpec({
 
         "fixup crazy URLs" {
             val packages = mapOf(
+                    "git@github.com/cisco/node-jose.git"
+                            to "ssh://git@github.com/cisco/node-jose.git",
                     "https://git@github.com:hacksparrow/node-easyimage.git"
                             to "https://github.com/hacksparrow/node-easyimage.git"
             )

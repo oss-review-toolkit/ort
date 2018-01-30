@@ -131,6 +131,11 @@ fun normalizeVcsUrl(vcsUrl: String): String {
         if (url.contains("://")) tail else "ssh://" + tail
     }
 
+    // Fixup scp-like Git URLs that do not use a ':' after the server part.
+    if (url.startsWith("git@")) {
+        url = "ssh://" + url
+    }
+
     // Drop any VCS name with "+" from the scheme.
     url = url.replace(Regex("^(.+)\\+(.+)(://.+)$")) {
         // Use the string to the right of "+" which should be the protocol.
