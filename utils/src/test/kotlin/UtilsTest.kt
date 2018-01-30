@@ -84,8 +84,8 @@ class UtilsTest : WordSpec({
                             to "ssh://git@github.com/logicalparadox/idris.git",
                     "git@github.com:heremaps/oss-review-toolkit.git"
                             to "ssh://git@github.com/heremaps/oss-review-toolkit.git",
-                    "ssh://gerrit.server.com:29418/parent/project"
-                            to "ssh://gerrit.server.com:29418/parent/project"
+                    "ssh://user@gerrit.server.com:29418/parent/project"
+                            to "ssh://user@gerrit.server.com:29418/parent/project"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
