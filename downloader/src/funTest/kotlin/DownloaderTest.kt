@@ -73,7 +73,7 @@ class DownloaderTest : StringSpec() {
             val downloadDir = Main.download(pkg, outputDir)
 
             val licenseFile = File(downloadDir, "LICENSE-junit.txt")
-            licenseFile.exists() shouldBe true
+            licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
             downloadDir.walkTopDown().count() shouldBe 234
@@ -135,7 +135,7 @@ class DownloaderTest : StringSpec() {
             val downloadDir = Main.download(pkg, outputDir)
 
             val licenseFile = File(downloadDir, "LICENSE-junit.txt")
-            licenseFile.exists() shouldBe true
+            licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
             downloadDir.walkTopDown().count() shouldBe 234
