@@ -484,7 +484,7 @@ class NPM : PackageManager() {
         log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        ProcessCapture(workingDir, managerCommand, "install").requireSuccess()
+        ProcessCapture(workingDir, managerCommand, "install", "--ignore-scripts").requireSuccess()
 
         // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         // platforms except for Mac.
