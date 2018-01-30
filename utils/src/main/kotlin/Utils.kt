@@ -123,11 +123,6 @@ fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trimEnd('/')
 
-    if (url.startsWith("pserver:")) {
-        // Do not touch CVS URLs for now.
-        return url
-    }
-
     // URLs to Git repos may omit the scheme and use an scp-like URL that uses ":" to separate the host from the path,
     // see https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a. Make this an explicit ssh URL so it can be parsed
     // by Java's URI class.
