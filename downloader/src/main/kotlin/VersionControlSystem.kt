@@ -211,21 +211,33 @@ abstract class VersionControlSystem {
                 return ""
             }
 
-            val versionNames = setOf(
-                    version,
-                    version.replace('.', '-'),
-                    version.replace('.', '_')
-            )
+            val versionElementSeparators = listOf('.', '-', '_')
 
             // For now, only consider tag names, and not e.g. branch names.
             val candidates = listRemoteTags().filter { tagName ->
-                versionNames.any { versionName ->
-                    // Allow to ignore suffixes to tag names that are separated by something else than '.', e.g. for
-                    // version "3.3.1" accept tag "3.3.1-npm-packages" but not tag "3.3.1.0".
-                    tagName.startsWith(versionName) && tagName.removePrefix(versionName).firstOrNull() != '.'
-                            // Allow to ignore prefixes to tag names that are separated by something else than '.', e.g.
-                            // for version "0.10" accept tag "docutils-0.10" but not tag "1.0.10".
-                            || tagName.endsWith(versionName) && tagName.removeSuffix(versionName).lastOrNull() != '.'
+                versionElementSeparators.any { separator ->
+                    val versionName = version.replace('.', separator)
+
+                    when {
+                        // Allow to ignore suffixes in tag names that are separated by something else than the current
+                        // separator, e.g. for version "3.3.1" accept tag "3.3.1-npm-packages" but not tag "3.3.1.0".
+                        tagName.startsWith(versionName) -> {
+                            val tail = tagName.removePrefix(versionName)
+                            tail.firstOrNull() != separator
+                        }
+
+                        // Allow to ignore prefixes in tag names that are separated by something else than the current
+                        // separator, e.g. for version "0.10" accept tag "docutils-0.10" but not tag "1.0.10".
+                        tagName.endsWith(versionName) -> {
+                            val head = tagName.removeSuffix(versionName)
+                            val last = head.lastOrNull()
+                            val nextToLast = head.dropLast(1).lastOrNull()
+                            last == null ||
+                                    (last in versionElementSeparators && (nextToLast == null || !nextToLast.isDigit()))
+                        }
+
+                        else  -> false
+                    }
                 }
             }
 
