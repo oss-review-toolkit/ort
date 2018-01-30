@@ -32,6 +32,7 @@ import java.net.URISyntaxException
 import java.net.URLConnection
 
 import okhttp3.Cache
+import okhttp3.ConnectionSpec
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -102,7 +103,11 @@ object OkHttpClientHelper {
         val client = clients.getOrPut(cachePath) {
             val cacheDirectory = File(getUserConfigDirectory(), cachePath)
             val cache = Cache(cacheDirectory, 10 * 1024 * 1024)
-            OkHttpClient.Builder().cache(cache).build()
+            val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
+            OkHttpClient.Builder()
+                    .cache(cache)
+                    .connectionSpecs(specs)
+                    .build()
         }
 
         return client.newCall(request).execute()
