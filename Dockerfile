@@ -33,6 +33,9 @@ RUN apt update && apt install -y --no-install-recommends \
     python-dev \
     xz-utils \
     zlib1g \
+    # Workaround for broken libmagic vendored in ScanCode
+    libmagic1 \
+    libmagic-mgc \
  # Install package manager specifics.
  && npm install -g npm@5.5.1 \
  && pip install virtualenv==15.1.0 pipdeptree==0.10.1 \
@@ -41,6 +44,8 @@ RUN apt update && apt install -y --no-install-recommends \
  && chmod a+x /usr/local/bin/repo \
  # Install ScanCode.
  && curl -sL https://github.com/nexB/scancode-toolkit/releases/download/v2.2.1/scancode-toolkit-2.2.1.tar.bz2 | tar -C /opt -jx \
+ && cp /usr/share/file/magic.mgc /opt/scancode-toolkit-2.2.1/src/typecode/data/magic/noarch/magic.mgc \
+ && cp /usr/lib/x86_64-linux-gnu/libmagic.so.1.0.0 /opt/scancode-toolkit-2.2.1/src/typecode/bin/linux-64/lib/libmagic.so \
  # Clean up the apt cache to reduce the image size.
  && apt -y autoremove \
  && apt -y clean \
