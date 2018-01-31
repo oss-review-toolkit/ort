@@ -40,9 +40,8 @@ import java.io.PrintStream
  * A test for the main entry point of the application.
  */
 class MainTest : StringSpec() {
-    private val syntheticProjectDir = File("src/funTest/assets/projects/synthetic")
-    private val gradleProjectDir = File("src/funTest/assets/projects/synthetic/gradle")
-    private val vcsDir = VersionControlSystem.forDirectory(gradleProjectDir)!!
+    private val projectDir = File("src/funTest/assets/projects/synthetic")
+    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsNormalizedUrl = normalizeVcsUrl(vcsUrl)
     private val vcsRevision = vcsDir.getRevision()
@@ -63,7 +62,7 @@ class MainTest : StringSpec() {
 
     init {
         "Activating only Gradle works" {
-            val inputDir = File(syntheticProjectDir, "gradle")
+            val inputDir = File(projectDir, "gradle")
 
             // Redirect standard output to a stream.
             val standardOut = System.out
@@ -88,7 +87,7 @@ class MainTest : StringSpec() {
         }
 
         "Activating only NPM works" {
-            val inputDir = File(syntheticProjectDir, "npm/package-lock")
+            val inputDir = File(projectDir, "npm/package-lock")
 
             // Redirect standard output to a stream.
             val standardOut = System.out
@@ -117,13 +116,13 @@ class MainTest : StringSpec() {
 
             Main.main(arrayOf(
                     "-m", "Gradle",
-                    "-i", gradleProjectDir.absolutePath,
+                    "-i", File(projectDir, "gradle").absolutePath,
                     "-o", outputAnalyzerDir.path,
                     "--merge-results"
             ))
             val resultsFile = File(outputAnalyzerDir, "all-dependencies.yml")
-            val expectedResult = patchExpectedResult(File
-            ("src/funTest/assets/projects/synthetic/gradle-all-dependencies-expected-result.yml").readText())
+            val expectedResult = patchExpectedResult(
+                    File(projectDir, "gradle-all-dependencies-expected-result.yml").readText())
 
             // Compare some of the values instead of whole string to avoid problems with formatting paths.
             val resultTree = yamlMapper.readTree(resultsFile.readText())
@@ -137,14 +136,14 @@ class MainTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "Package curation data file is applied correctly" {
-            val inputDir = File(syntheticProjectDir, "gradle")
+            val inputDir = File(projectDir, "gradle")
             val curationsOutputDir = File(outputDir, "curations")
 
             Main.main(arrayOf(
                     "-m", "Gradle",
                     "-i", inputDir.path,
                     "-o", curationsOutputDir.path,
-                    "--package-curations-file", "src/funTest/assets/projects/synthetic/gradle/curations.yml"
+                    "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
             ))
 
             val resultsFile = File(curationsOutputDir, "lib/build-gradle-dependencies.yml")
