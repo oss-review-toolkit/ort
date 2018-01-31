@@ -16,8 +16,8 @@ project:
     path: ""
   vcs_processed:
     provider: "Git"
-    url: "ssh://git@github.com/soc/directories.git"
-    revision: "HEAD"
+    url: "https://github.com/soc/directories.git"
+    revision: "ed193b425d5c184029481e2330baaf5628bbefac"
     path: ""
   homepage_url: "https://github.com/soc/directories"
   scopes:
