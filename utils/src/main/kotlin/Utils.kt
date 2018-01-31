@@ -110,6 +110,42 @@ object OkHttpClientHelper {
 }
 
 /**
+ * Filter a list of [names] to include only those that likely belong to the given [version].
+ */
+fun filterVersionNames(version: String, names: List<String>): List<String> {
+    if (version.isBlank()) return emptyList()
+
+    val versionElementSeparators = listOf('.', '-', '_')
+
+    return names.filter { name ->
+        versionElementSeparators.any { separator ->
+            val versionName = version.replace('.', separator)
+
+            when {
+                // Allow to ignore suffixes in names that are separated by something else than the current
+                // separator, e.g. for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
+                name.startsWith(versionName) -> {
+                    val tail = name.removePrefix(versionName)
+                    tail.firstOrNull() != separator
+                }
+
+                // Allow to ignore prefixes in names that are separated by something else than the current
+                // separator, e.g. for version "0.10" accept "docutils-0.10" but not "1.0.10".
+                name.endsWith(versionName) -> {
+                    val head = name.removeSuffix(versionName)
+                    val last = head.lastOrNull()
+                    val nextToLast = head.dropLast(1).lastOrNull()
+                    last == null ||
+                            (last in versionElementSeparators && (nextToLast == null || !nextToLast.isDigit()))
+                }
+
+                else -> false
+            }
+        }
+    }
+}
+
+/**
  * Return the directory to store user-specific configuration in.
  */
 fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
