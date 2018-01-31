@@ -34,8 +34,8 @@ import java.io.File
 class BabelTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/npm-babel")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
-    private val vcsUrl = normalizeVcsUrl(vcsDir.getRemoteUrl())
 
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         try {
@@ -58,7 +58,7 @@ class BabelTest : WordSpec() {
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename).readText()
                     // project.vcs_processed:
-                    .replaceFirst("<REPLACE_URL>", vcsUrl)
+                    .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
                     .replaceFirst("<REPLACE_REVISION>", vcsRevision)
 
     init {

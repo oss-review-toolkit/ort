@@ -39,8 +39,8 @@ import java.io.File
 class NpmTest : FreeSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/npm")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
-    private val vcsUrl = normalizeVcsUrl(vcsDir.getRemoteUrl())
 
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         try {
@@ -66,7 +66,7 @@ class NpmTest : FreeSpec() {
                 // project.name:
                 .replaceFirst("npm-project", "npm-${workingDir.name}")
                 // project.vcs_processed:
-                .replaceFirst("<REPLACE_URL>", vcsUrl)
+                .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
                 .replaceFirst("<REPLACE_REVISION>", vcsRevision)
                 .replaceFirst("<REPLACE_PATH>", vcsPath)
     }

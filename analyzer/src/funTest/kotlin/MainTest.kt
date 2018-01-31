@@ -43,7 +43,6 @@ class MainTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsNormalizedUrl = normalizeVcsUrl(vcsUrl)
     private val vcsRevision = vcsDir.getRevision()
 
     private lateinit var outputDir: File
@@ -64,7 +63,7 @@ class MainTest : StringSpec() {
             filename.readText()
                     .replace("<REPLACE_URL>", vcsUrl)
                     .replace("<REPLACE_REVISION>", vcsRevision)
-                    .replace("<REPLACE_URL_PROCESSED>", vcsNormalizedUrl)
+                    .replace("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(vcsUrl))
 
     init {
         "Activating only Gradle works" {
