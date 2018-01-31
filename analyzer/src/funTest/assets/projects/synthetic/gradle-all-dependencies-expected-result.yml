@@ -72,6 +72,11 @@ projects:
           dependencies: []
           errors: []
         errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
+        errors: []
       errors: []
   - name: "compileClasspath"
     delivered: true
@@ -89,6 +94,11 @@ projects:
           version: "3.5"
           dependencies: []
           errors: []
+        errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
         errors: []
       errors: []
   - name: "compileOnly"
@@ -111,6 +121,11 @@ projects:
           dependencies: []
           errors: []
         errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
+        errors: []
       errors: []
   - name: "runtime"
     delivered: true
@@ -128,6 +143,11 @@ projects:
           version: "3.5"
           dependencies: []
           errors: []
+        errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
         errors: []
       errors: []
   - name: "runtimeClasspath"
@@ -147,6 +167,11 @@ projects:
           dependencies: []
           errors: []
         errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
+        errors: []
       errors: []
   - name: "testCompile"
     delivered: true
@@ -165,6 +190,11 @@ projects:
           dependencies: []
           errors: []
         errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
+        errors: []
       errors: []
   - name: "testCompileClasspath"
     delivered: true
@@ -182,6 +212,11 @@ projects:
           version: "3.5"
           dependencies: []
           errors: []
+        errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
         errors: []
       errors: []
   - name: "testCompileOnly"
@@ -204,6 +239,11 @@ projects:
           dependencies: []
           errors: []
         errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
+        errors: []
       errors: []
   - name: "testRuntimeClasspath"
     delivered: true
@@ -221,6 +261,11 @@ projects:
           version: "3.5"
           dependencies: []
           errors: []
+        errors: []
+      - namespace: "org.apache.struts"
+        name: "struts2-assembly"
+        version: "2.5.14.1"
+        dependencies: []
         errors: []
       errors: []
 - id:
@@ -404,6 +449,11 @@ projects:
         dependencies: []
         errors: []
       errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
+      errors: []
   - name: "compileClasspath"
     delivered: true
     dependencies:
@@ -416,6 +466,11 @@ projects:
         version: "3.5"
         dependencies: []
         errors: []
+      errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
       errors: []
   - name: "compileOnly"
     delivered: true
@@ -433,6 +488,11 @@ projects:
         dependencies: []
         errors: []
       errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
+      errors: []
   - name: "runtime"
     delivered: true
     dependencies:
@@ -446,6 +506,11 @@ projects:
         dependencies: []
         errors: []
       errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
+      errors: []
   - name: "runtimeClasspath"
     delivered: true
     dependencies:
@@ -458,6 +523,11 @@ projects:
         version: "3.5"
         dependencies: []
         errors: []
+      errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
       errors: []
   - name: "testCompile"
     delivered: true
@@ -482,6 +552,11 @@ projects:
         dependencies: []
         errors: []
       errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
+      errors: []
   - name: "testCompileClasspath"
     delivered: true
     dependencies:
@@ -504,6 +579,11 @@ projects:
         version: "3.5"
         dependencies: []
         errors: []
+      errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
       errors: []
   - name: "testCompileOnly"
     delivered: true
@@ -531,6 +611,11 @@ projects:
         dependencies: []
         errors: []
       errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
+      errors: []
   - name: "testRuntimeClasspath"
     delivered: true
     dependencies:
@@ -553,6 +638,11 @@ projects:
         version: "3.5"
         dependencies: []
         errors: []
+      errors: []
+    - namespace: "org.apache.struts"
+      name: "struts2-assembly"
+      version: "2.5.14.1"
+      dependencies: []
       errors: []
 project_id_result_file_path_map:
   'Gradle::Gradle sample:': "build-gradle-dependencies.yml"
@@ -670,6 +760,33 @@ packages:
     provider: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: "HEAD"
+    path: ""
+- id:
+    package_manager: "Gradle"
+    namespace: "org.apache.struts"
+    name: "struts2-assembly"
+    version: "2.5.14.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  description: "Apache Struts 2"
+  homepage_url: "http://struts.apache.org/struts2-assembly/"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apache/struts/struts2-assembly/2.5.14.1/struts2-assembly-2.5.14.1-min-lib.zip"
+    hash: "8e75a38e3b8ceb01e007c5899d8d29e7a075cb7d"
+    hash_algorithm: "SHA-1"
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    provider: "git"
+    url: "https://gitbox.apache.org/repos/asf/struts.git/struts2-assembly"
+    revision: "STRUTS_2_5_14_1"
+    path: ""
+  vcs_processed:
+    provider: "git"
+    url: "https://gitbox.apache.org/repos/asf/struts.git/struts2-assembly"
+    revision: "STRUTS_2_5_14_1"
     path: ""
 - id:
     package_manager: "Gradle"
