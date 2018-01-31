@@ -133,6 +133,37 @@ class UtilsTest : WordSpec({
             filterVersionNames("0.3.10", names).joinToString("\n") shouldBe "prest-0.3.10"
             filterVersionNames("1.0", names).joinToString("\n") shouldBe ""
         }
+
+        "find names with a 'v' prefix" {
+            val names = listOf(
+                    "v6.2.0",
+                    "v6.2.1",
+                    "v6.2.2",
+                    "v6.20.0",
+                    "v6.20.1",
+                    "v6.20.2",
+                    "v6.20.3",
+                    "v6.21.0",
+                    "v6.21.1",
+                    "v6.22.0",
+                    "v6.22.1",
+                    "v6.22.2",
+                    "v6.23.0",
+                    "v6.23.1",
+                    "v6.24.0",
+                    "v6.24.1",
+                    "v6.25.0",
+                    "v6.26.0",
+                    "v7.0.0-beta.0",
+                    "v7.0.0-beta.1",
+                    "v7.0.0-beta.2",
+                    "v7.0.0-beta.3"
+            )
+
+            filterVersionNames("6.26.0", names).joinToString("\n") shouldBe "v6.26.0"
+            filterVersionNames("7.0.0-beta.2", names).joinToString("\n") shouldBe "v7.0.0-beta.2"
+            filterVersionNames("2.0", names).joinToString("\n") shouldBe ""
+        }
     }
 
     "normalizeVcsUrl" should {
