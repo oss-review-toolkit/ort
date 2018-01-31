@@ -39,11 +39,10 @@ class GradleTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     private fun patchExpectedResult(filename: String) =
-            File(projectDir.parentFile, filename)
-                    .readText()
+            File(projectDir.parentFile, filename).readText()
                     // project.vcs_processed:
-                    .replaceFirst("url: \"<REPLACE>\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
-                    .replaceFirst("revision: \"<REPLACE>\"", "revision: \"$vcsRevision\"")
+                    .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
+                    .replaceFirst("<REPLACE_REVISION>", vcsRevision)
 
     init {
         "Root project dependencies are detected correctly" {

@@ -15,8 +15,8 @@ project:
     path: ""
   vcs_processed:
     provider: "Git"
-    url: "<REPLACE>"
-    revision: "<REPLACE>"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/maven"
   homepage_url: "http://maven.apache.org"
   scopes: []

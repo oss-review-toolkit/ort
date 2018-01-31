@@ -54,10 +54,9 @@ class BabelTest : WordSpec() {
     }
 
     private fun patchExpectedResult(filename: String) =
-            File(projectDir.parentFile, filename)
-                    .readText()
+            File(projectDir.parentFile, filename).readText()
                     // project.vcs_processed:
-                    .replaceFirst("revision: \"<REPLACE>\"", "revision: \"$vcsRevision\"")
+                    .replaceFirst("<REPLACE_REVISION>", vcsRevision)
 
     init {
         "Babel dependencies" should {

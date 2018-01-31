@@ -60,6 +60,12 @@ class MainTest : StringSpec() {
         }
     }
 
+    private fun patchExpectedResult(filename: File) =
+            filename.readText()
+                    .replace("<REPLACE_URL>", vcsUrl)
+                    .replace("<REPLACE_REVISION>", vcsRevision)
+                    .replace("<REPLACE_URL_PROCESSED>", vcsNormalizedUrl)
+
     init {
         "Activating only Gradle works" {
             val inputDir = File(projectDir, "gradle")
@@ -121,8 +127,7 @@ class MainTest : StringSpec() {
                     "--merge-results"
             ))
             val resultsFile = File(outputAnalyzerDir, "all-dependencies.yml")
-            val expectedResult = patchExpectedResult(
-                    File(projectDir, "gradle-all-dependencies-expected-result.yml").readText())
+            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"))
 
             // Compare some of the values instead of whole string to avoid problems with formatting paths.
             val resultTree = yamlMapper.readTree(resultsFile.readText())
@@ -158,8 +163,4 @@ class MainTest : StringSpec() {
             hamcrestCorePackage.declaredLicenses shouldBe sortedSetOf("curated license a", "curated license b")
         }
     }
-
-    private fun patchExpectedResult(expectedResult: String) = expectedResult.replace("<REPLACE_URL>", vcsUrl)
-            .replace("<REPLACE_REV>", vcsRevision)
-            .replace("<REPLACE_URL_PROCESSED>", vcsNormalizedUrl)
 }

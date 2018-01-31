@@ -60,13 +60,12 @@ class NpmTest : FreeSpec() {
 
     private fun patchExpectedResult(workingDir: File): String {
         val vcsPath = "analyzer/" + workingDir.path.replace("\\", "/")
-        return File(projectDir.parentFile, "npm-expected-output.yml")
-                .readText()
+        return File(projectDir.parentFile, "npm-expected-output.yml").readText()
                 // project.name:
                 .replaceFirst("npm-project", "npm-${workingDir.name}")
                 // project.vcs_processed:
-                .replaceFirst("revision: \"<REPLACE>\"", "revision: \"$vcsRevision\"")
-                .replaceFirst("path: \"<REPLACE>\"", "path: \"$vcsPath\"")
+                .replaceFirst("<REPLACE_REVISION>", vcsRevision)
+                .replaceFirst("<REPLACE_PATH>", vcsPath)
     }
 
     init {

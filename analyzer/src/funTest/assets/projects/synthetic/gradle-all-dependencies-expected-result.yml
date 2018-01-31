@@ -6,12 +6,12 @@ repository:
   vcs:
     provider: "Git"
     url: "<REPLACE_URL>"
-    revision: "<REPLACE_REV>"
+    revision: "<REPLACE_REVISION>"
     path: ""
   vcs_processed:
     provider: "Git"
     url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REV>"
+    revision: "<REPLACE_REVISION>"
     path: ""
 projects:
 - id:
@@ -29,7 +29,7 @@ projects:
   vcs_processed:
     provider: "Git"
     url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REV>"
+    revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes: []
@@ -48,7 +48,7 @@ projects:
   vcs_processed:
     provider: "Git"
     url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REV>"
+    revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes:
@@ -238,7 +238,7 @@ projects:
   vcs_processed:
     provider: "Git"
     url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REV>"
+    revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes:
@@ -384,7 +384,7 @@ projects:
   vcs_processed:
     provider: "Git"
     url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REV>"
+    revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes:
