@@ -126,18 +126,25 @@ class MainTest : StringSpec() {
                     "-o", outputAnalyzerDir.path,
                     "--merge-results"
             ))
-            val resultsFile = File(outputAnalyzerDir, "all-dependencies.yml")
-            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"))
 
-            // Compare some of the values instead of whole string to avoid problems with formatting paths.
+            val resultsFile = File(outputAnalyzerDir, "all-dependencies.yml")
             val resultTree = yamlMapper.readTree(resultsFile.readText())
+
+            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"))
             val expectedResultTree = yamlMapper.readTree(expectedResult)
 
-            resultTree["repository"]["name"].asText() shouldBe expectedResultTree["repository"]["name"].asText()
-            resultTree["projects"] shouldBe expectedResultTree["projects"]
+            // Compare some of the values instead of whole string to avoid problems with formatting paths.
+            resultTree["repository"]["name"].asText() shouldBe
+                    expectedResultTree["repository"]["name"].asText()
+
+            yamlMapper.writeValueAsString(resultTree["projects"]) shouldBe
+                    yamlMapper.writeValueAsString(expectedResultTree["projects"])
+
             resultTree["project_id_result_file_path_map"].asIterable().count() shouldBe
                     expectedResultTree["project_id_result_file_path_map"].asIterable().count()
-            resultTree["packages"] shouldBe expectedResultTree["packages"]
+
+            yamlMapper.writeValueAsString(resultTree["packages"]) shouldBe
+                    yamlMapper.writeValueAsString(expectedResultTree["packages"])
         }.config(tags = setOf(ExpensiveTag))
 
         "Package curation data file is applied correctly" {
