@@ -58,6 +58,89 @@ class UtilsTest : WordSpec({
         }
     }
 
+    "filterVersionNames" should {
+        "return an empty list for a blank version" {
+            val names = listOf("dummy")
+
+            filterVersionNames("", names) shouldBe emptyList<String>()
+            filterVersionNames(" ", names) shouldBe emptyList<String>()
+        }
+
+        "find names separated by underscores" {
+            val names = listOf(
+                    "A02",
+                    "A03",
+                    "A04",
+                    "DEV0_9_3",
+                    "DEV0_9_4",
+                    "DEV_0_9_7",
+                    "Exoffice",
+                    "PROD_1_0_1",
+                    "PROD_1_0_2",
+                    "PROD_1_0_3",
+                    "before_SourceForge",
+                    "before_debug_changes"
+            )
+
+            filterVersionNames("1.0.3", names).joinToString("\n") shouldBe "PROD_1_0_3"
+            filterVersionNames("1", names).joinToString("\n") shouldBe ""
+            filterVersionNames("0.3", names).joinToString("\n") shouldBe ""
+        }
+
+        "find names separated by dots" {
+            val names = listOf(
+                    "0.10.0",
+                    "0.10.1",
+                    "0.5.0",
+                    "0.6.0",
+                    "0.7.0",
+                    "0.8.0",
+                    "0.9.0"
+            )
+
+            filterVersionNames("0.10.0", names).joinToString("\n") shouldBe "0.10.0"
+            filterVersionNames("0.10", names).joinToString("\n") shouldBe ""
+            filterVersionNames("10.0", names).joinToString("\n") shouldBe ""
+            filterVersionNames("1", names).joinToString("\n") shouldBe ""
+        }
+
+        "find names with mixed separators" {
+            val names = listOf(
+                    "docutils-0.10",
+                    "docutils-0.11",
+                    "docutils-0.12",
+                    "docutils-0.13.1",
+                    "docutils-0.14",
+                    "docutils-0.14.0a",
+                    "docutils-0.14a0",
+                    "docutils-0.14rc1",
+                    "docutils-0.14rc2",
+                    "docutils-0.3.7",
+                    "docutils-0.3.9",
+                    "docutils-0.4",
+                    "docutils-0.5",
+                    "docutils-0.6",
+                    "docutils-0.7",
+                    "docutils-0.8",
+                    "docutils-0.8.1",
+                    "docutils-0.9",
+                    "docutils-0.9.1",
+                    "initial",
+                    "merged_to_nesting",
+                    "prest-0.3.10",
+                    "prest-0.3.11",
+                    "start"
+            )
+
+            filterVersionNames("0.3.9", names).joinToString("\n") shouldBe "docutils-0.3.9"
+            filterVersionNames("0.14", names).joinToString("\n") shouldBe "docutils-0.14"
+            filterVersionNames("0.3.10", names).joinToString("\n") shouldBe "prest-0.3.10"
+            filterVersionNames("0.13", names).joinToString("\n") shouldBe ""
+            filterVersionNames("13.1", names).joinToString("\n") shouldBe ""
+            filterVersionNames("1.0", names).joinToString("\n") shouldBe ""
+        }
+    }
+
     "normalizeVcsUrl" should {
         "do nothing for empty URLs" {
             normalizeVcsUrl("") shouldBe ""
