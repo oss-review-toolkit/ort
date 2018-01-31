@@ -44,7 +44,8 @@ object GitRepo : GitBase() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+                          recursive: Boolean): WorkingTree {
         val revision = if (pkg.vcsProcessed.revision.isNotBlank()) pkg.vcsProcessed.revision else "master"
         val manifestPath = if (pkg.vcsProcessed.path.isNotBlank()) pkg.vcsProcessed.path else "manifest.xml"
 
