@@ -109,13 +109,5 @@ class SubversionTest : StringSpec() {
             val workingTree = Subversion.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
         }
-
-        "Guessing the Subversion revision for a version works" {
-            val workingTree = Subversion.getWorkingTree(zipContentDir)
-            workingTree.guessRevisionNameForVersion("0.3.9") shouldBe "docutils-0.3.9"
-            workingTree.guessRevisionNameForVersion("0.3.10") shouldBe "prest-0.3.10"
-            workingTree.guessRevisionNameForVersion("1.0") shouldBe ""
-            workingTree.guessRevisionNameForVersion("") shouldBe ""
-        }
     }
 }
