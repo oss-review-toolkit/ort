@@ -207,7 +207,7 @@ abstract class VersionControlSystem {
          *
          * @return A matching VCS revision or an empty String if no match is found.
          */
-        internal fun guessRevisionNameForVersion(version: String) =
+        fun guessRevisionNameForVersion(version: String) =
                 filterVersionNames(version, listRemoteTags()).firstOrNull() ?: ""
 
         /**
