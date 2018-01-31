@@ -16,7 +16,7 @@ project:
     path: ""
   vcs_processed:
     provider: "Git"
-    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: ""

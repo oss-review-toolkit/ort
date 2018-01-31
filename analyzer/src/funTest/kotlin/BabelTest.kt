@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.yamlMapper
 
@@ -34,6 +35,7 @@ class BabelTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/npm-babel")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsRevision = vcsDir.getRevision()
+    private val vcsUrl = normalizeVcsUrl(vcsDir.getRemoteUrl())
 
     override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
         try {
@@ -56,6 +58,7 @@ class BabelTest : WordSpec() {
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename).readText()
                     // project.vcs_processed:
+                    .replaceFirst("<REPLACE_URL>", vcsUrl)
                     .replaceFirst("<REPLACE_REVISION>", vcsRevision)
 
     init {

@@ -16,7 +16,7 @@ project:
   vcs_processed:
     provider: "Git"
     url: "https://github.com/ccavanaugh/jgnash.git"
-    revision: "HEAD"
+    revision: "2aa4cce7d7fd46164030f2b4d244c4b89e77f722"
     path: "jgnash-core"
   homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-core/"
   scopes:

@@ -16,7 +16,7 @@ project:
     path: ""
   vcs_processed:
     provider: "Git"
-    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/npm-babel"
   homepage_url: ""
