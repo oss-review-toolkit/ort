@@ -134,9 +134,10 @@ fun filterVersionNames(version: String, names: List<String>): List<String> {
                 name.endsWith(versionName) -> {
                     val head = name.removeSuffix(versionName)
                     val last = head.lastOrNull()
-                    val nextToLast = head.dropLast(1).lastOrNull()
-                    last == null ||
-                            (last in versionElementSeparators && (nextToLast == null || !nextToLast.isDigit()))
+                    val forelast = head.dropLast(1).lastOrNull()
+                    last == null
+                            || (last in versionElementSeparators && (forelast == null || !forelast.isDigit()))
+                            || (last.toLowerCase() == 'v' && (forelast == null || forelast in versionElementSeparators))
                 }
 
                 else -> false
