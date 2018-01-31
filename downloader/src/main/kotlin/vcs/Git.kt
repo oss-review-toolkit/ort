@@ -98,110 +98,16 @@ object Git : GitBase() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).exitValue() == 0
 
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+                          recursive: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
-            // Do not use "git clone" to have more control over what is being fetched.
-            runGitCommand(targetDir, "init")
-            runGitCommand(targetDir, "remote", "add", "origin", pkg.vcsProcessed.url)
-
-            if (OS.isWindows) {
-                runGitCommand(targetDir, "config", "core.longpaths", "true")
-            }
-
-            if (pkg.vcsProcessed.path.isNotBlank()) {
-                log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
-                runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
-                val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-                File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path)
-            }
-
-            val workingTree = getWorkingTree(targetDir)
-
-            val revisionCandidates = mutableListOf<String>()
-
-            if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
-                revisionCandidates.add(pkg.vcsProcessed.revision)
-            } else {
-                log.warn {
-                    "No valid revision specified. Other possible candidates might cause the downloaded source code " +
-                            "to not match the package version."
+            return createWorkingTree(pkg, targetDir, allowMovingRevisions).also {
+                if (recursive && File(targetDir, ".gitmodules").isFile) {
+                    runGitCommand(targetDir, "submodule", "update", "--init", "--recursive")
                 }
             }
-
-            log.info { "Trying to guess a $this revision for version '${pkg.id.version}' to fall back to." }
-            workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
-                if (revision.isNotBlank()) {
-                    revisionCandidates.add(revision)
-                    log.info { "Found $this revision '$revision' for version '${pkg.id.version}'." }
-                } else {
-                    log.info { "No $this revision for version '${pkg.id.version}' found." }
-                }
-            }
-
-            val revision = revisionCandidates.firstOrNull()
-                    ?: throw IOException("Unable to determine a revision to checkout.")
-
-            // To safe network bandwidth, first try to only fetch exactly the revision we want.
-            try {
-                log.info { "Trying to fetch only revision '$revision' with depth limited to $HISTORY_DEPTH." }
-                runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
-                runGitCommand(targetDir, "checkout", "FETCH_HEAD")
-                return workingTree
-            } catch (e: IOException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
-
-                log.warn {
-                    "Could not fetch only revision '$revision': ${e.message}\n" +
-                            "Falling back to fetching all refs."
-                }
-            }
-
-            // Fall back to fetching all refs with limited depth of history.
-            try {
-                log.info { "Trying to fetch all refs with depth limited to $HISTORY_DEPTH." }
-                runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "--tags", "origin")
-                runGitCommand(targetDir, "checkout", revision)
-                return workingTree
-            } catch (e: IOException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
-
-                log.warn {
-                    "Could not fetch with only a depth of $HISTORY_DEPTH: ${e.message}\n" +
-                            "Falling back to fetching everything."
-                }
-            }
-
-            // Fall back to fetching everything.
-            log.info { "Trying to fetch everything including tags." }
-
-            if (workingTree.isShallow()) {
-                runGitCommand(targetDir, "fetch", "--unshallow", "--tags", "origin")
-            } else {
-                runGitCommand(targetDir, "fetch", "--tags", "origin")
-            }
-
-            revisionCandidates.find { candidate ->
-                try {
-                    runGitCommand(targetDir, "checkout", candidate)
-                    true
-                } catch (e: IOException) {
-                    if (com.here.ort.utils.printStackTrace) {
-                        e.printStackTrace()
-                    }
-
-                    log.info { "Failed to checkout revision '$candidate'. Trying next candidate, if any." }
-
-                    false
-                }
-            } ?: throw IOException("Unable to determine a revision to checkout.")
-
-            return workingTree
         } catch (e: IOException) {
             if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
@@ -209,5 +115,108 @@ object Git : GitBase() {
 
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
+    }
+
+    private fun createWorkingTree(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+        // Do not use "git clone" to have more control over what is being fetched.
+        runGitCommand(targetDir, "init")
+        runGitCommand(targetDir, "remote", "add", "origin", pkg.vcsProcessed.url)
+
+        if (OS.isWindows) {
+            runGitCommand(targetDir, "config", "core.longpaths", "true")
+        }
+
+        if (pkg.vcsProcessed.path.isNotBlank()) {
+            log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
+            runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
+            val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
+            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path)
+        }
+
+        val workingTree = getWorkingTree(targetDir)
+
+        val revisionCandidates = mutableListOf<String>()
+
+        if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+            revisionCandidates.add(pkg.vcsProcessed.revision)
+        } else {
+            log.warn {
+                "No valid revision specified. Other possible candidates might cause the downloaded source code " +
+                        "to not match the package version."
+            }
+        }
+
+        log.info { "Trying to guess a $this revision for version '${pkg.id.version}' to fall back to." }
+        workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
+            if (revision.isNotBlank()) {
+                revisionCandidates.add(revision)
+                log.info { "Found $this revision '$revision' for version '${pkg.id.version}'." }
+            } else {
+                log.info { "No $this revision for version '${pkg.id.version}' found." }
+            }
+        }
+
+        val revision = revisionCandidates.firstOrNull()
+                ?: throw IOException("Unable to determine a revision to checkout.")
+
+        // To safe network bandwidth, first try to only fetch exactly the revision we want.
+        try {
+            log.info { "Trying to fetch only revision '$revision' with depth limited to $HISTORY_DEPTH." }
+            runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
+            runGitCommand(targetDir, "checkout", "FETCH_HEAD")
+            return workingTree
+        } catch (e: IOException) {
+            if (com.here.ort.utils.printStackTrace) {
+                e.printStackTrace()
+            }
+
+            log.warn {
+                "Could not fetch only revision '$revision': ${e.message}\n" +
+                        "Falling back to fetching all refs."
+            }
+        }
+
+        // Fall back to fetching all refs with limited depth of history.
+        try {
+            log.info { "Trying to fetch all refs with depth limited to $HISTORY_DEPTH." }
+            runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "--tags", "origin")
+            runGitCommand(targetDir, "checkout", revision)
+            return workingTree
+        } catch (e: IOException) {
+            if (com.here.ort.utils.printStackTrace) {
+                e.printStackTrace()
+            }
+
+            log.warn {
+                "Could not fetch with only a depth of $HISTORY_DEPTH: ${e.message}\n" +
+                        "Falling back to fetching everything."
+            }
+        }
+
+        // Fall back to fetching everything.
+        log.info { "Trying to fetch everything including tags." }
+
+        if (workingTree.isShallow()) {
+            runGitCommand(targetDir, "fetch", "--unshallow", "--tags", "origin")
+        } else {
+            runGitCommand(targetDir, "fetch", "--tags", "origin")
+        }
+
+        revisionCandidates.find { candidate ->
+            try {
+                runGitCommand(targetDir, "checkout", candidate)
+                true
+            } catch (e: IOException) {
+                if (com.here.ort.utils.printStackTrace) {
+                    e.printStackTrace()
+                }
+
+                log.info { "Failed to checkout revision '$candidate'. Trying next candidate, if any." }
+
+                false
+            }
+        } ?: throw IOException("Unable to determine a revision to checkout.")
+
+        return workingTree
     }
 }

@@ -148,7 +148,8 @@ object Cvs : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.matches("^:(ext|pserver):[^@]+@.+$".toRegex())
 
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+                          recursive: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         val path = if (pkg.vcsProcessed.path.isBlank()) "." else pkg.vcsProcessed.path

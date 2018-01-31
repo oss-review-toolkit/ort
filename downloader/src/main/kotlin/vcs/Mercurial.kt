@@ -91,7 +91,8 @@ object Mercurial : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+                          recursive: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
