@@ -32,15 +32,22 @@ import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 import java.io.IOException
+import java.util.regex.Pattern
 
 abstract class GitBase : VersionControlSystem() {
     override val movingRevisionNames = listOf("HEAD", "master")
 
     override fun getVersion(): String {
-        val gitVersionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
+        val versionRegex = Pattern.compile("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
         return getCommandVersion("git") {
-            gitVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""
+            versionRegex.matcher(it.lineSequence().first()).let {
+                if (it.matches()) {
+                    it.group("version")
+                } else {
+                    ""
+                }
+            }
         }
     }
 

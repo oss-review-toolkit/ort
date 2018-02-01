@@ -67,6 +67,7 @@ import org.eclipse.aether.transfer.AbstractTransferListener
 import org.eclipse.aether.transfer.TransferEvent
 
 import java.io.File
+import java.util.regex.Pattern
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
@@ -75,7 +76,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         private const val GIGABYTE = 1024L * 1024L
         private const val HOUR = 60 * 60
 
-        val SCM_REGEX = Regex("scm:(?<provider>[^:]+):(?<url>.+)")
+        val SCM_REGEX = Pattern.compile("scm:(?<provider>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
                 DiskCache(File(getUserConfigDirectory(), "${Main.TOOL_NAME}/cache/remote_artifacts"),
@@ -306,18 +307,22 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             val connection = scm.connection ?: ""
             val tag = scm.tag ?: ""
 
-            val (provider, url) = SCM_REGEX.matchEntire(connection)?.groups?.let { match ->
-                val provider = match["provider"]!!.value
-                val url = match["url"]!!.value
+            val (provider, url) = SCM_REGEX.matcher(connection).let {
+                if (it.matches()) {
+                    val provider = it.group("provider")
+                    val url = it.group("url")
 
-                // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the
-                // Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up here.
-                if (provider == "cvs" && !url.startsWith(":")) {
-                    Pair(provider, ":" + url)
+                    // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the
+                    // Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up here.
+                    if (provider == "cvs" && !url.startsWith(":")) {
+                        Pair(provider, ":" + url)
+                    } else {
+                        Pair(provider, url)
+                    }
                 } else {
-                    Pair(provider, url)
+                    Pair("", "")
                 }
-            } ?: Pair("", "")
+            }
 
             VcsInfo(provider, url, tag, "")
         } ?: VcsInfo.EMPTY

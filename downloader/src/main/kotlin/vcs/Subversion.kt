@@ -36,6 +36,7 @@ import com.here.ort.utils.xmlMapper
 
 import java.io.File
 import java.io.IOException
+import java.util.regex.Pattern
 
 data class SubversionInfoRepository(
         val root: String,
@@ -91,10 +92,16 @@ object Subversion : VersionControlSystem() {
     override val movingRevisionNames = emptyList<String>()
 
     override fun getVersion(): String {
-        val subversionVersionRegex = Regex("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
+        val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
         return getCommandVersion("svn") {
-            subversionVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""
+            versionRegex.matcher(it.lineSequence().first()).let {
+                if (it.matches()) {
+                    it.group("version")
+                } else {
+                    ""
+                }
+            }
         }
     }
 
