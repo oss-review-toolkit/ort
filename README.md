@@ -88,6 +88,10 @@ Usage: analyzer [options]
       Ignore versions of required tools. NOTE: This may lead to erroneous
       results.
       Default: false
+    --merge-results
+      Merge all results into a single results file. The individual scan
+      results files for each build file will still be created.
+      Default: false
     --allow-dynamic-versions
       Allow dynamic versions of dependencies. This can result in unstable
       results when dependencies use version ranges. This option only affects
