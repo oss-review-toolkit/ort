@@ -26,10 +26,11 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
-import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Scope
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -105,7 +106,7 @@ object Main {
             "--dependencies-file parameter. If empty, all scopes are scanned.",
             names = ["--scopes"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var includeScopes: List<String> = listOf()
+    private var scopesToScan = listOf<String>()
 
     @Parameter(description = "The output directory to store the scan results in.",
             names = ["--output-dir", "-o"],
@@ -207,8 +208,8 @@ object Main {
 
         val pkgSummary: PackageSummary = mutableMapOf()
 
-        val scannedScopesNames: MutableSet<String> = mutableSetOf()
-        val ignoredScopesNames: MutableSet<String> = mutableSetOf()
+        val includedScopes: SortedSet<Scope> = sortedSetOf()
+        val excludedScopes: SortedSet<Scope> = sortedSetOf()
 
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
@@ -225,20 +226,25 @@ object Main {
 
             val packages = mutableListOf(analyzerResult.project.toPackage())
 
-            if (includeScopes.isNotEmpty()) {
-                println("Limiting scan to scopes: $includeScopes")
-                val includedScopesMap = analyzerResult.project.scopes.groupBy { includeScopes.contains(it.name) }
-                includedScopesMap[false]?.let { ignoredScopesNames.addAll(it.map { scope -> scope.name }) }
-                val includedScopes = includedScopesMap[true]
-                if (includedScopes != null) {
-                    scannedScopesNames.addAll(includedScopes.map { it.name })
+            if (scopesToScan.isNotEmpty()) {
+                println("Limiting scan to scopes $scopesToScan")
+
+                analyzerResult.project.scopes.partition { scopesToScan.contains(it.name) }.let {
+                    includedScopes.addAll(it.first)
+                    excludedScopes.addAll(it.second)
+                }
+
+                if (includedScopes.isNotEmpty()) {
                     packages.addAll(
-                            analyzerResult.packages.filter { pkg -> includedScopes.any { it.contains(pkg) } })
+                            analyzerResult.packages.filter { pkg ->
+                                includedScopes.any { scope -> scope.contains(pkg) }
+                            }
+                    )
                 } else {
-                    println("No scopes found for given scopes $includeScopes.")
+                    println("No scopes found for given scopes $scopesToScan.")
                 }
             } else {
-                scannedScopesNames.addAll(analyzerResult.project.scopes.map { it.name }.toSortedSet())
+                includedScopes.addAll(analyzerResult.project.scopes)
                 packages.addAll(analyzerResult.packages)
             }
 
@@ -258,8 +264,9 @@ object Main {
             scanEntry(entry, inputPath.absolutePath, inputPath)
         }
 
-        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopesNames.toSortedSet(),
-                ignoredScopesNames.toSortedSet()))
+        val scannedScopes = includedScopes.map { it.name }.toSortedSet()
+        val ignoredScopes = excludedScopes.map { it.name }.toSortedSet()
+        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopes, ignoredScopes))
     }
 
     private fun findScopesForPackage(pkg: Package, project: Project) =
