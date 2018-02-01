@@ -1,7 +1,7 @@
 # OSS Review Toolkit
 
-| Linux | Windows |
-| :---- | :------ |
+| Linux (OpenJDK 8)            | Windows (Oracle JDK 9)          |
+| :--------------------------- | :------------------------------ |
 [ ![Linux build status][1]][2] | [![Windows build status][3]][4] |
 
 [1]: https://travis-ci.org/heremaps/oss-review-toolkit.svg?branch=master
@@ -29,7 +29,7 @@ The toolkit is envisioned to consist out of the following libraries:
 
 To get started with the OSS Review Toolkit, simply:
 
-1. Ensure the JDK for Java 8 or later (not the JRE as you need the `javac` compiler) is installed and the `JAVA_HOME`
+1. Ensure OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler) is installed and the `JAVA_HOME`
 environment variable set.
 2. Clone this repository.
 3. Change into the repo directory on your machine and run `./gradlew installDist` to setup the build environment (e.g.
