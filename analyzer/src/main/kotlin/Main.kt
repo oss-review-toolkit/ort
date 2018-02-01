@@ -207,7 +207,7 @@ object Main {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers)
         }
 
-        val vcsDir = VersionControlSystem.forDirectory(absoluteProjectPath)
+        val vcs = VersionControlSystem.forDirectory(absoluteProjectPath)
 
         if (managedDefinitionFiles.isEmpty()) {
             println("No package-managed projects found.")
@@ -222,7 +222,7 @@ object Main {
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
-                    vcsProcessed = vcsDir?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY,
+                    vcsProcessed = vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY,
                     homepageUrl = "",
                     scopes = sortedSetOf()
             )
@@ -248,16 +248,11 @@ object Main {
         val failedAnalysis = sortedSetOf<String>()
 
         val mergedResultsBuilder = if (createMergedResult) {
-            val repoDetails = ScannedDirectoryDetails(name = absoluteProjectPath.name,
+            val repoDetails = ScannedDirectoryDetails(
+                    name = absoluteProjectPath.name,
                     path = absoluteProjectPath.absolutePath,
-                    vcs = if (vcsDir != null) {
-                        VcsInfo(provider = vcsDir.getProvider(),
-                                url = vcsDir.getRemoteUrl(),
-                                revision = vcsDir.getRevision(),
-                                path = "")
-                    } else {
-                        VcsInfo.EMPTY
-                    })
+                    vcs = vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY
+            )
             MergedResultsBuilder(allowDynamicVersions, repoDetails)
         } else {
             null
