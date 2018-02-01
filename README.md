@@ -216,6 +216,10 @@ Usage: scanner [options]
     --download-dir
       The output directory for downloaded source code. Defaults to
       <output-dir>/downloads.
+    --scopes
+      The list of scopes that shall be scanned. Works only with the
+      --dependencies-file parameter. If empty, all scopes are scanned.
+      Default: []
     --scanner, -s
       The scanner to use.
       Default: ScanCode
