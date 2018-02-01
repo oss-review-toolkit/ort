@@ -67,7 +67,6 @@ class MergedResultsBuilder(
         private val allowDynamicVersions: Boolean,
         private val directoryDetails: ScannedDirectoryDetails
 ) {
-
     private val projects = mutableSetOf<Project>()
     private val projectResultsFiles = mutableMapOf<Identifier, String>()
     private val packages = mutableSetOf<Package>()
@@ -88,7 +87,6 @@ class MergedResultsBuilder(
 }
 
 data class ScannedDirectoryDetails(
-
         /**
          * Name of top level input directory
          */

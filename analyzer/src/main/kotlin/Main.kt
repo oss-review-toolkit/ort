@@ -150,6 +150,7 @@ object Main {
         println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
         mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
         println("done.")
+
         return outputFile
     }
 
@@ -261,6 +262,7 @@ object Main {
         } else {
             null
         }
+
         // Resolve dependencies per package manager.
         managedDefinitionFiles.forEach { manager, files ->
             // Print the list of dependencies.
@@ -293,6 +295,7 @@ object Main {
                 }
             }
         }
+
         mergedResultsBuilder?.build()?.let {
             val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileEnding)
 
