@@ -31,6 +31,7 @@ import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 
 import java.io.File
+import java.util.regex.Pattern
 
 object ScanCode : Scanner() {
     private const val OUTPUT_FORMAT = "json-pp"
@@ -39,7 +40,8 @@ object ScanCode : Scanner() {
     private val DEFAULT_OPTIONS = listOf("--copyright", "--license", "--info", "--diag", "--only-findings",
             "--strip-root")
 
-    private val TIMEOUT_REGEX = Regex("ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds.")
+    private val TIMEOUT_REGEX = Pattern.compile(
+            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds.")
 
     override val resultFileExtension = "json"
 
@@ -116,8 +118,10 @@ object ScanCode : Scanner() {
 
     internal fun hasOnlyTimeoutErrors(result: Result): Boolean {
         result.errors.singleOrNull()?.let { error ->
-            TIMEOUT_REGEX.matchEntire(error)?.let { match ->
-                return match.groups["timeout"]!!.value == TIMEOUT.toString()
+            TIMEOUT_REGEX.matcher(error).let {
+                if (it.matches()) {
+                    return it.group("timeout") == TIMEOUT.toString()
+                }
             }
         }
 

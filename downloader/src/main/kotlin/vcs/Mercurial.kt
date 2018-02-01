@@ -30,6 +30,7 @@ import com.here.ort.utils.log
 
 import java.io.File
 import java.io.IOException
+import java.util.regex.Pattern
 
 object Mercurial : VersionControlSystem() {
     private const val EXTENSION_LARGE_FILES = "largefiles = "
@@ -38,10 +39,16 @@ object Mercurial : VersionControlSystem() {
     override val movingRevisionNames = listOf("tip", "default")
 
     override fun getVersion(): String {
-        val mercurialVersionRegex = Regex("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
+        val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
         return getCommandVersion("hg") {
-            mercurialVersionRegex.matchEntire(it.lineSequence().first())?.groups?.get("version")?.value ?: ""
+            versionRegex.matcher(it.lineSequence().first()).let {
+                if (it.matches()) {
+                    it.group("version")
+                } else {
+                    ""
+                }
+            }
         }
     }
 
