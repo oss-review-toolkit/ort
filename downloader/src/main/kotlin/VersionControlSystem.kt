@@ -168,9 +168,10 @@ abstract class VersionControlSystem {
         fun getProvider() = this@VersionControlSystem.toString()
 
         /**
-         * Conveniently return all VCS information for a given [path].
+         * Conveniently return all VCS information, optionally for a given [path] in the working tree.
          */
-        fun getInfo(path: File) = VcsInfo(getProvider(), getRemoteUrl(), getRevision(), getPathToRoot(path))
+        fun getInfo(path: File? = null) =
+                VcsInfo(getProvider(), getRemoteUrl(), getRevision(), path?.let { getPathToRoot(it) } ?: "" )
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.
