@@ -145,7 +145,7 @@ object Main {
         val currentDir = if (currentPath.isFile) currentPath.parentFile else currentPath
         val outputDir = File(outputRoot, currentDir.toRelativeString(projectRoot)).apply { safeMkdirs() }
         val outputFile = File(outputDir, currentPath.name.replace('.', '-') +
-                "-dependencies." + outputFormat.fileEnding)
+                "-dependencies." + outputFormat.fileExtension)
 
         println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
         mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
@@ -292,7 +292,7 @@ object Main {
         }
 
         mergedResultsBuilder?.build()?.let {
-            val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileEnding)
+            val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileExtension)
 
             println("Writing merged results\nto\n\t$outputFile")
             mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, it)
