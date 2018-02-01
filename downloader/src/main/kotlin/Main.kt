@@ -164,8 +164,8 @@ object Main {
         }
 
         val mapper = when (dependenciesFile.extension) {
-            OutputFormat.JSON.fileEnding -> jsonMapper
-            OutputFormat.YAML.fileEnding -> yamlMapper
+            OutputFormat.JSON.fileExtension -> jsonMapper
+            OutputFormat.YAML.fileExtension -> yamlMapper
             else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
         }
 

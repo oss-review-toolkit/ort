@@ -20,9 +20,9 @@
 package com.here.ort.model
 
 /**
- * An enumeration of supported output file formats.
+ * An enumeration of supported output file formats and their [fileExtension] (not including the dot).
  */
-enum class OutputFormat(val fileEnding: String) {
+enum class OutputFormat(val fileExtension: String) {
     /**
      * Specifies the [JSON](http://www.json.org/) format.
      */

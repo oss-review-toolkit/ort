@@ -216,8 +216,8 @@ object Main {
             }
 
             val mapper = when (dependenciesFile.extension) {
-                OutputFormat.JSON.fileEnding -> jsonMapper
-                OutputFormat.YAML.fileEnding -> yamlMapper
+                OutputFormat.JSON.fileExtension -> jsonMapper
+                OutputFormat.YAML.fileExtension -> yamlMapper
                 else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
             }
 
@@ -293,7 +293,7 @@ object Main {
 
     private fun writeSummary(outputDirectory: File, scanSummary: ScanSummary) {
         summaryFormats.forEach { format ->
-            val summaryFile = File(outputDirectory, "scan-summary.${format.fileEnding}")
+            val summaryFile = File(outputDirectory, "scan-summary.${format.fileExtension}")
             val mapper = when (format) {
                 OutputFormat.JSON -> jsonMapper
                 OutputFormat.YAML -> yamlMapper
