@@ -58,6 +58,11 @@ data class PackageReference(
         val errors: List<String> = emptyList()
 ) : Comparable<PackageReference> {
     /**
+     * A comparison function to sort package references by their identifier.
+     */
+    override fun compareTo(other: PackageReference) = compareValuesBy(this, other, { it.identifier })
+
+    /**
      * The normalized package name, can be used to create directories.
      */
     val normalizedName = name.fileSystemEncode()
@@ -82,9 +87,4 @@ data class PackageReference(
             pkgRef.identifier == pkgId.substringAfter(":") || pkgRef.dependsOn(pkgId)
         } != null
     }
-
-    /**
-     * A comparison function to sort package references by their identifier.
-     */
-    override fun compareTo(other: PackageReference) = compareValuesBy(this, other, { it.identifier })
 }

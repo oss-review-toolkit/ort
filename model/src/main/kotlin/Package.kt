@@ -84,6 +84,11 @@ data class Package(
         val vcsProcessed: VcsInfo = vcs.normalize()
 ) : Comparable<Package> {
     /**
+     * A comparison function to sort packages by their identifier.
+     */
+    override fun compareTo(other: Package) = compareValuesBy(this, other, { it.id.toString() })
+
+    /**
      * The normalized package name, can be used to create directories.
      */
     val normalizedName = id.name.fileSystemEncode()
@@ -94,9 +99,4 @@ data class Package(
      */
     fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf()) =
             PackageReference(id.namespace, id.name, id.version, dependencies)
-
-    /**
-     * A comparison function to sort packages by their identifier.
-     */
-    override fun compareTo(other: Package) = compareValuesBy(this, other, { it.id.toString() })
 }
