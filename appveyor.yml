@@ -24,10 +24,9 @@ install:
   - set PATH=C:\Ruby25\bin;%PATH%
   - gem install licensee -v 9.8.0
 
-# Even if "classes" is a task dependency of "check" below, use it here to
-# override the default MSBuild (which would fail otherwise).
+# Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
-  - gradlew classes
+  - echo org.gradle.java.home=C:/Program Files/Java/jdk9>>%HOME%\.gradle\gradle.properties
 
 test_script:
   - gradlew -DexcludeTags=ExpensiveTag --stacktrace check
