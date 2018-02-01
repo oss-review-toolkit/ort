@@ -89,7 +89,7 @@ data class Project(
 
     companion object {
         /**
-         * A constant for a [Project] where all properties are empty strings or empty collections.
+         * A constant for a [Project] where all properties are empty.
          */
         @JvmField
         val EMPTY = Project(

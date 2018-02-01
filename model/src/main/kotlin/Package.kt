@@ -99,4 +99,20 @@ data class Package(
      */
     fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf()) =
             PackageReference(id.namespace, id.name, id.version, dependencies)
+
+    companion object {
+        /**
+         * A constant for a [Package] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = Package(
+                id = Identifier.EMPTY,
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY
+        )
+    }
 }
