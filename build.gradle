@@ -97,10 +97,6 @@ subprojects {
         }
     }
 
-    jacoco {
-        toolVersion = '0.8.0'
-    }
-
     test {
         testLogging {
             events 'started', 'passed', 'skipped', 'failed'
@@ -127,6 +123,17 @@ subprojects {
         testLogging {
             events 'started', 'passed', 'skipped', 'failed'
             exceptionFormat 'full'
+        }
+    }
+
+    jacoco {
+        toolVersion = '0.8.0'
+    }
+
+    gradle.taskGraph.whenReady { graph ->
+        def enabled = graph.allTasks.any { it instanceof JacocoReport }
+        tasks.withType(Test) {
+            jacoco.enabled = enabled
         }
     }
 
