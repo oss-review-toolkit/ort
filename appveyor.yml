@@ -34,9 +34,9 @@ build_script:
 test_script:
   - ps: |
       if ($env:APPVEYOR_SCHEDULED_BUILD -eq "True") {
-        .\gradlew.bat --stacktrace check
+        .\gradlew.bat --stacktrace check 2>&1 | %{ "$_" }
       } else {
-        .\gradlew.bat -DexcludeTags=ExpensiveTag --stacktrace check
+        .\gradlew.bat -DexcludeTags=ExpensiveTag --stacktrace check 2>&1 | %{ "$_" }
       }
 
 on_finish:
