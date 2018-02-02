@@ -16,6 +16,8 @@ cache:
   - $(HOME)\.ort\downloader\cache\http
   - $(HOME)\.ort\scanner\cache\http
 
+clone_depth: 50
+
 install:
   - git submodule update --init --recursive
   - npm install -g npm@5.5.1 yarn@1.3.2
