@@ -138,6 +138,11 @@ object Main {
             order = PARAMETER_ORDER_OPTIONAL)
     private var summaryFormats = listOf(OutputFormat.YAML)
 
+    @Parameter(description = "The path to executable of Askalono tool. Makes sense only with --scanner askalono",
+            names = ["--askalono-path"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var askalanoPath = ""
+
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
             order = PARAMETER_ORDER_LOGGING)
@@ -183,8 +188,9 @@ object Main {
             exitProcess(1)
         }
 
-        // Make the parameter globally available.
+        // Make the parameters globally available.
         com.here.ort.utils.printStackTrace = stacktrace
+        com.here.ort.scanner.scanners.askalonoExecutablePath = askalanoPath
 
         if ((dependenciesFile != null) == (inputPath != null)) {
             throw IllegalArgumentException("Either --dependencies-file or --input-path must be specified.")
@@ -285,6 +291,7 @@ object Main {
                 else -> throw IllegalArgumentException("Unsupported scan input.")
             }
             entry.licenses.addAll(result.licenses)
+            entry.errors.addAll(result.errors)
 
             println("Found licenses for '$identifier': ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {

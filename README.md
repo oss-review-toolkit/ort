@@ -210,6 +210,10 @@ Usage: scanner [options]
       The dependencies analysis file to use. Source code will be downloaded
       automatically if needed. This parameter and --input-path are mutually
       exclusive.
+    --askalono-path
+      The path to executable of Askalono tool. Makes sense only with --scanner
+      askalono
+      Default: <empty string>
     --input-path, -i
       The input directory or file to scan. This parameter and
       --dependencies-file are mutually exclusive.
@@ -225,14 +229,14 @@ Usage: scanner [options]
       Default: ScanCode
     --config, -c
       The path to the configuration file.
-    --info
-      Enable info logging.
-      Default: false
     --debug
       Enable debug logging and keep any temporary files.
       Default: false
     --stacktrace
       Print out the stacktrace for all exceptions.
+      Default: false
+    --info
+      Enable info logging.
       Default: false
     --help, -h
       Display the command line help.
