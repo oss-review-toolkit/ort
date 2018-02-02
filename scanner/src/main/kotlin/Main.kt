@@ -250,14 +250,21 @@ object Main {
                 packages.addAll(analyzerResult.packages)
             }
 
-            packages.forEach { pkg ->
-                val entry = pkgSummary.getOrPut(pkg.id.toString()) { SummaryEntry() }
-                entry.scopes.addAll(findScopesForPackage(pkg, analyzerResult.project))
-                scanEntry(entry, pkg.id.toString(), pkg)
+            val results = scanner.scan(packages, outputDir, downloadDir)
+            results.forEach { pkg, result ->
+                pkgSummary[pkg.id.toString()] = SummaryEntry(
+                        scopes = findScopesForPackage(pkg, analyzerResult.project).toSortedSet(),
+                        licenses = result.licenses,
+                        errors = result.errors.toMutableList()
+                )
             }
         }
 
         inputPath?.let { inputPath ->
+            require(scanner is LocalScanner) {
+                "To scan local files the chosen scanner must be a local scanner."
+            }
+
             require(inputPath.exists()) {
                 "Provided path does not exist: ${inputPath.absolutePath}"
             }
@@ -274,18 +281,14 @@ object Main {
     private fun findScopesForPackage(pkg: Package, project: Project) =
             project.scopes.filter { it.contains(pkg) }.map { it.name }
 
-    private fun scanEntry(entry: SummaryEntry, identifier: String, input: Any) {
+    private fun scanEntry(entry: SummaryEntry, identifier: String, input: File) {
         try {
             println("Scanning package '$identifier'...")
 
-            val result = when (input) {
-                is Package -> {
-                    entry.licenses.addAll(input.declaredLicenses)
-                    scanner.scan(input, outputDir, downloadDir)
-                }
-                is File -> scanner.scan(input, outputDir)
-                else -> throw IllegalArgumentException("Unsupported scan input.")
-            }
+            val localScanner = scanner as LocalScanner
+
+            val result = localScanner.scan(input, outputDir)
+
             entry.licenses.addAll(result.licenses)
             entry.errors.addAll(result.errors)
 

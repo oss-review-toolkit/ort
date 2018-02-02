@@ -19,45 +19,13 @@
 
 package com.here.ort.scanner
 
-import ch.frankel.slf4k.*
-
-import com.here.ort.downloader.DownloadException
-import com.here.ort.downloader.Main
 import com.here.ort.model.Package
 import com.here.ort.scanner.scanners.*
-import com.here.ort.utils.getPathFromEnvironment
-import com.here.ort.utils.log
-import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 import java.util.SortedSet
 
 abstract class Scanner {
-    /**
-     * The directory the scanner was bootstrapped to, if so.
-     */
-    protected val scannerDir by lazy {
-        getPathFromEnvironment(scannerExe)?.parentFile ?: run {
-            log.info { "Bootstrapping scanner '$this' as it was not found in PATH." }
-            bootstrap()
-        }
-    }
-
-    /**
-     * The scanner's executable file name.
-     */
-    protected abstract val scannerExe: String
-
-    /**
-     * The full path to the scanner executable.
-     */
-    protected val scannerPath by lazy { File(scannerDir, scannerExe) }
-
-    /**
-     * A property containing the file name extension of the scanner's native output format, without the dot.
-     */
-    protected abstract val resultFileExt: String
-
     companion object {
         /**
          * The list of all available scanners. This needs to be initialized lazily to ensure the referred objects,
@@ -74,103 +42,11 @@ abstract class Scanner {
 
     data class Result(val licenses: SortedSet<String>, val errors: SortedSet<String>)
 
+    abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null)
+            : Map<Package, Result>
+
     /**
      * Return the Java class name as a simple way to refer to the scanner.
      */
     override fun toString(): String = javaClass.simpleName
-
-    /**
-     * Scan the provided [pkg] for license information, writing results to [outputDirectory]. If a scan result is found
-     * in the cache, it is used without running the actual scan. If no cached scan result is found, the package's source
-     * code is downloaded and scanned afterwards.
-     *
-     * @param pkg The package to scan.
-     * @param outputDirectory The base directory to store scan results in.
-     * @param downloadDirectory The directory to download source code to. Defaults to [outputDirectory]/downloads if
-     *                          null.
-     *
-     * @return The set of found licenses.
-     *
-     * @throws ScanException In case the package could not be scanned.
-     */
-    fun scan(pkg: Package, outputDirectory: File, downloadDirectory: File? = null): Result {
-        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scannerName = toString().toLowerCase()
-
-        // TODO: Consider implementing this logic in the Package class itself when creating the identifier.
-        // Also, think about what to use if we have neither a version nor a hash.
-        val pkgRevision = pkg.id.version.let { if (it.isBlank()) pkg.vcsProcessed.revision.take(7) else it }
-
-        val resultsFile = File(scanResultsDirectory,
-                "${pkg.id.name}-${pkgRevision}_$scannerName.$resultFileExt")
-
-        if (ScanResultsCache.read(pkg, resultsFile)) {
-            return getResult(resultsFile)
-        }
-
-        val downloadResult = try {
-            Main.download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
-        } catch (e: DownloadException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
-
-            throw ScanException("Package '${pkg.id}' could not be scanned.", e)
-        }
-
-        val version = getVersion(scannerPath.absolutePath)
-        println("Running $this version $version on directory '${downloadResult.downloadDirectory.absolutePath}'.")
-
-        return scanPath(downloadResult.downloadDirectory, resultsFile).also {
-            println("Stored $this results in '${resultsFile.absolutePath}'.")
-            ScanResultsCache.write(pkg, resultsFile)
-        }
-    }
-
-    /**
-     * Scan the provided [path] for license information, writing results to [outputDirectory]. Note that no caching will
-     * be used in this mode.
-     *
-     * @param path The directory or file to scan.
-     * @param outputDirectory The base directory to store scan results in.
-     *
-     * @return The set of found licenses.
-     *
-     * @throws ScanException In case the package could not be scanned.
-     */
-    fun scan(path: File, outputDirectory: File): Result {
-        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scannerName = toString().toLowerCase()
-        val resultsFile = File(scanResultsDirectory,
-                "${path.nameWithoutExtension}_$scannerName.$resultFileExt")
-
-        val version = getVersion(scannerPath.absolutePath)
-        println("Running $this version $version on path '${path.absolutePath}'.")
-
-        return scanPath(path, resultsFile).also {
-            println("Stored $this results in '${resultsFile.absolutePath}'.")
-        }
-    }
-
-    /**
-     * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.
-     *
-     * @return The directory the scanner is installed in, or null if the scanner was not bootstrapped.
-     */
-    protected open fun bootstrap(): File? = null
-
-    /**
-     * Return the version of the specified scanner [executable], or an empty string in case of failure.
-     */
-    abstract fun getVersion(executable: String): String
-
-    /**
-     * Scan the provided [path] for license information, writing results to [resultsFile].
-     */
-    protected abstract fun scanPath(path: File, resultsFile: File): Result
-
-    /**
-     * Convert the scanner's native file format to a [Result].
-     */
-    internal abstract fun getResult(resultsFile: File): Result
 }
