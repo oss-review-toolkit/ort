@@ -30,7 +30,12 @@ build_script:
   - echo org.gradle.java.home=C:/Program Files/Java/jdk9>>%HOME%\.gradle\gradle.properties
 
 test_script:
-  - gradlew -DexcludeTags=ExpensiveTag --stacktrace check
+  - ps: |
+      if ($env:APPVEYOR_SCHEDULED_BUILD -eq "True") {
+        .\gradlew.bat --stacktrace check
+      } else {
+        .\gradlew.bat -DexcludeTags=ExpensiveTag --stacktrace check
+      }
 
 on_finish:
   - gradlew --stop # Fix "fileHashes.bin" being used by another process.
