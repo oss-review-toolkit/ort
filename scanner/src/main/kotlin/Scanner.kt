@@ -37,6 +37,7 @@ abstract class Scanner {
          */
         val ALL by lazy {
             listOf(
+                    Askalono,
                     Licensee,
                     ScanCode
             )

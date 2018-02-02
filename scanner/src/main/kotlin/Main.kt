@@ -138,6 +138,11 @@ object Main {
             order = PARAMETER_ORDER_OPTIONAL)
     private var summaryFormats = listOf(OutputFormat.YAML)
 
+    @Parameter(description = "The path to executable of Askalono tool. Makes sense only with '--scanner askalono'.",
+            names = ["--askalono-path"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    var askalanoPath = ""
+
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
             order = PARAMETER_ORDER_LOGGING)
@@ -285,6 +290,7 @@ object Main {
                 else -> throw IllegalArgumentException("Unsupported scan input.")
             }
             entry.licenses.addAll(result.licenses)
+            entry.errors.addAll(result.errors)
 
             println("Found licenses for '$identifier': ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {
