@@ -250,10 +250,15 @@ object Main {
                 packages.addAll(analyzerResult.packages)
             }
 
-            packages.forEach { pkg ->
-                val entry = pkgSummary.getOrPut(pkg.id.toString()) { SummaryEntry() }
-                entry.scopes.addAll(findScopesForPackage(pkg, analyzerResult.project))
-                scanEntry(entry, pkg.id.toString(), pkg)
+            val results = scanner.scan(packages, outputDir, downloadDir)
+            results.forEach {
+                pkgSummary.getOrPut(it.key.id.toString()) {
+                    SummaryEntry(
+                            scopes = findScopesForPackage(it.key, analyzerResult.project).toSortedSet(),
+                            licenses = it.value.licenses,
+                            errors = it.value.errors.toMutableList()
+                    )
+                }
             }
         }
 
@@ -278,12 +283,18 @@ object Main {
         try {
             println("Scanning package '$identifier'...")
 
+            require(scanner is LocalScanner) {
+                "To scan local files the chosen scanner must be a local scanner."
+            }
+
+            val localScanner = scanner as LocalScanner
+
             val result = when (input) {
                 is Package -> {
                     entry.licenses.addAll(input.declaredLicenses)
-                    scanner.scan(input, outputDir, downloadDir)
+                    localScanner.scan(input, outputDir, downloadDir)
                 }
-                is File -> scanner.scan(input, outputDir)
+                is File -> localScanner.scan(input, outputDir)
                 else -> throw IllegalArgumentException("Unsupported scan input.")
             }
             entry.licenses.addAll(result.licenses)

@@ -21,25 +21,26 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.utils.unpack
+import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.Main
 import com.here.ort.scanner.ScanException
-import com.here.ort.scanner.Scanner
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.unpack
 
 import okhttp3.Request
+
 import okio.Okio
 
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 
-object BoyterLc : Scanner() {
+object BoyterLc : LocalScanner() {
     const val VERSION = "1.1.1"
 
     override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
