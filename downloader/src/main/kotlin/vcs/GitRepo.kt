@@ -49,10 +49,12 @@ object GitRepo : GitBase() {
         val manifestPath = if (vcs.path.isNotBlank()) vcs.path else "manifest.xml"
 
         try {
-            log.debug { "Initialize git-repo from ${vcs.url} with branch $revision and manifest $manifestPath." }
+            log.info {
+                "Initializing git-repo from ${vcs.url} with revision '$revision' and manifest '$manifestPath'."
+            }
             runRepoCommand(targetDir, "init", "--depth", "1", "-b", revision, "-u", vcs.url, "-m", manifestPath)
 
-            log.debug { "Start git-repo sync." }
+            log.info { "Starting git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
 
             return getWorkingTree(targetDir)
@@ -61,7 +63,7 @@ object GitRepo : GitBase() {
                 e.printStackTrace()
             }
 
-            throw DownloadException("Could not clone ${vcs.url}/$manifestPath", e)
+            throw DownloadException("Could not clone from ${vcs.url} using manifest '$manifestPath'.", e)
         }
     }
 

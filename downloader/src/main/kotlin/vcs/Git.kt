@@ -123,6 +123,11 @@ object Git : GitBase() {
 
             if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
                 revisionCandidates.add(vcs.revision)
+            } else {
+                log.warn {
+                    "No valid revision specified. Other possible candidates might cause the downloaded source code " +
+                            "to not match the package version."
+                }
             }
 
             log.info { "Trying to guess a $this revision for version '$version' to fall back to." }

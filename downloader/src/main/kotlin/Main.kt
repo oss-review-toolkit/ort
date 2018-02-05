@@ -241,15 +241,6 @@ object Main {
             println("Using ${target.vcsProcessed}.")
         }
 
-        if (target.vcsProcessed.revision.isBlank()) {
-            log.warn {
-                "No VCS revision provided, downloaded source code will probably not match package version " +
-                        "${target.id.version}."
-            }
-        } else {
-            log.info { "Trying to download revision '${target.vcsProcessed.revision}'." }
-        }
-
         var applicableVcs: VersionControlSystem? = null
 
         if (target.vcsProcessed.provider.isNotBlank()) {
