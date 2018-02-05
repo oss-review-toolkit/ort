@@ -305,7 +305,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
     fun parseVcsInfo(mavenProject: MavenProject): VcsInfo {
         return mavenProject.scm?.let { scm ->
             val connection = scm.connection ?: ""
-            val tag = scm.tag ?: ""
+            val tag = scm.tag?.takeIf { it != "HEAD" } ?: ""
 
             val (provider, url) = SCM_REGEX.matcher(connection).let {
                 if (it.matches()) {

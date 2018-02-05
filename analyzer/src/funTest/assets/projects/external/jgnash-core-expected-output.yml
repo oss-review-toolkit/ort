@@ -11,7 +11,7 @@ project:
   vcs:
     provider: "git"
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-core"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
@@ -286,12 +286,12 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/virtuald/curvesapi.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/virtuald/curvesapi.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -313,12 +313,12 @@ packages:
   vcs:
     provider: "git"
     url: "https://github.com/h2database/h2database"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/h2database/h2database.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -341,12 +341,12 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:swaldman/c3p0.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "ssh://git@github.com/swaldman/c3p0.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -369,12 +369,12 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:swaldman/mchange-commons-java.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "ssh://git@github.com/swaldman/mchange-commons-java.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -453,12 +453,12 @@ packages:
   vcs:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -479,12 +479,12 @@ packages:
   vcs:
     provider: "cvs"
     url: ":pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "cvs"
     url: ":pserver:anonymous@cvs.sourceforge.net:/cvsroot/dom4j:dom4j"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -650,12 +650,12 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/ccavanaugh/jgnash.git"
-    revision: "HEAD"
+    revision: ""
     path: "jgnash-resources"
 - id:
     package_manager: "Maven"
@@ -705,12 +705,12 @@ packages:
   vcs:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -735,12 +735,12 @@ packages:
   vcs:
     provider: ""
     url: ""
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: ""
     url: ""
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -764,12 +764,12 @@ packages:
   vcs:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "svn"
     url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -872,12 +872,12 @@ packages:
   vcs:
     provider: "svn"
     url: "https://svn.apache.org/repos/asf/xmlbeans/"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "svn"
     url: "https://svn.apache.org/repos/asf/xmlbeans"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -900,12 +900,12 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
-    revision: "HEAD"
+    revision: ""
     path: "hamcrest-all"
 - id:
     package_manager: "Maven"
@@ -927,12 +927,12 @@ packages:
   vcs:
     provider: "git"
     url: "http://github.com/hibernate/hibernate-commons-annotations.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/hibernate/hibernate-commons-annotations.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -956,12 +956,12 @@ packages:
   vcs:
     provider: "git"
     url: "http://github.com/hibernate/hibernate-jpa-api.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/hibernate/hibernate-jpa-api.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -983,12 +983,12 @@ packages:
   vcs:
     provider: "git"
     url: "http://github.com/hibernate/hibernate-orm.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/hibernate/hibernate-orm.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -1010,12 +1010,12 @@ packages:
   vcs:
     provider: "git"
     url: "http://github.com/hibernate/hibernate-orm.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/hibernate/hibernate-orm.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -1067,12 +1067,12 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:jboss-javassist/javassist.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "ssh://git@github.com/jboss-javassist/javassist.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -1094,12 +1094,12 @@ packages:
   vcs:
     provider: "git"
     url: "git://github.com/jboss-logging/jboss-logging.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "https://github.com/jboss-logging/jboss-logging.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -1149,12 +1149,12 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:jboss/jboss-parent-pom.git/jandex"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "ssh://git@github.com/jboss/jboss-parent-pom.git"
-    revision: "HEAD"
+    revision: ""
     path: "jandex"
 - id:
     package_manager: "Maven"
@@ -1176,12 +1176,12 @@ packages:
   vcs:
     provider: ""
     url: ""
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: ""
     url: ""
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Maven"
@@ -1203,11 +1203,11 @@ packages:
   vcs:
     provider: ""
     url: ""
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: ""
     url: ""
-    revision: "HEAD"
+    revision: ""
     path: ""
 errors: []

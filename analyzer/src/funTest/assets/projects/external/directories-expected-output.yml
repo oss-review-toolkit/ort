@@ -12,7 +12,7 @@ project:
   vcs:
     provider: "git"
     url: "git@github.com:soc/directories.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
@@ -85,11 +85,11 @@ packages:
   vcs:
     provider: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "Git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
-    revision: "HEAD"
+    revision: ""
     path: "hamcrest-core"
 errors: []

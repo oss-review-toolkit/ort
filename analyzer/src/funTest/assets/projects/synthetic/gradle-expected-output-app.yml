@@ -313,12 +313,12 @@ packages:
   vcs:
     provider: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
   vcs_processed:
     provider: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: "HEAD"
+    revision: ""
     path: ""
 - id:
     package_manager: "Gradle"
