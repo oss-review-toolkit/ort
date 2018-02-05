@@ -122,13 +122,16 @@ object Mercurial : VersionControlSystem() {
             val revision = if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
                 vcs.revision
             } else {
-                log.info { "Trying to guess $this revision for version '$version'." }
+                log.info { "Trying to guess a $this revision for version '$version'." }
                 workingTree.guessRevisionNameForVersion(version).also { revision ->
                     if (revision.isBlank()) {
                         throw IOException("Unable to determine a revision to checkout.")
                     }
 
-                    log.info { "Found $this revision '$revision' for version '$version'." }
+                    log.warn {
+                        "Using guessed $this revision '$revision' for version '$version'. This might cause the " +
+                                "downloaded source code to not match the package version."
+                    }
                 }
             }
 
