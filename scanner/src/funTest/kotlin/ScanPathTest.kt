@@ -55,6 +55,6 @@ class ScanPathTest : StringSpec() {
         "Licensee recognizes our own LICENSE" {
             val result = Licensee.scan(File("../LICENSE"), outputDir)
             result.licenses shouldBe setOf("Apache License 2.0")
-        }
+        }.config(tags = setOf(ExpensiveTag))
     }
 }
