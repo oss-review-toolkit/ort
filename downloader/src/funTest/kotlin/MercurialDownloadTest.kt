@@ -36,7 +36,7 @@ private const val REPO_VERSION = "1.1"
 private const val REPO_REV_FOR_VERSION = "562fed42b4f3dceaacf6f1051963c865c0241e28"
 private const val REPO_PATH_FOR_VERSION = "Resources"
 
-class MercurialTest : StringSpec() {
+class MercurialDownloadTest : StringSpec() {
     private lateinit var outputDir: File
 
     // Required to make lateinit of outputDir work.

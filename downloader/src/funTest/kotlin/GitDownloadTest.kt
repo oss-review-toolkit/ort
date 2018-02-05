@@ -29,14 +29,14 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-private const val REPO_URL = "https://svn.code.sf.net/p/sendmessage/code"
-private const val REPO_REV = "115"
-private const val REPO_PATH = "trunk"
-private const val REPO_VERSION = "1.0.1"
-private const val REPO_REV_FOR_VERSION = "30"
-private const val REPO_PATH_FOR_VERSION = "src/resources"
+private const val REPO_URL = "https://github.com/jriecken/dependency-graph"
+private const val REPO_REV = "8964880d9bac33f0a7f030a74c7c9299a8f117c8"
+private const val REPO_PATH = "lib"
+private const val REPO_VERSION = "0.4.1"
+private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe8f"
+private const val REPO_PATH_FOR_VERSION = "specs"
 
-class SubversionTest : StringSpec() {
+class GitDownloadTest : StringSpec() {
     private lateinit var outputDir: File
 
     // Required to make lateinit of outputDir work.
@@ -52,17 +52,20 @@ class SubversionTest : StringSpec() {
     }
 
     init {
-        "Subversion can download a given revision" {
-            val vcs = VcsInfo("Subversion", REPO_URL, REPO_REV, "")
+        "Git can download a given revision" {
+            val vcs = VcsInfo("Git", REPO_URL, REPO_REV, "")
             val expectedFiles = listOf(
-                    ".svn",
-                    "branches",
-                    "tags",
-                    "trunk",
-                    "wiki"
+                    ".git",
+                    ".gitignore",
+                    "CHANGELOG.md",
+                    "LICENSE",
+                    "README.md",
+                    "lib",
+                    "package.json",
+                    "specs"
             )
 
-            val workingTree = Subversion.download(vcs, "", outputDir)
+            val workingTree = Git.download(vcs, "", outputDir)
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
@@ -70,47 +73,46 @@ class SubversionTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }.config(tags = setOf(ExpensiveTag))
 
-        "Subversion can download only a single path" {
-            val vcs = VcsInfo("Subversion", REPO_URL, REPO_REV, REPO_PATH)
+        "Git can download only a single path" {
+            val vcs = VcsInfo("Git", REPO_URL, REPO_REV, REPO_PATH)
             val expectedFiles = listOf(
-                    "SendMessage.sln",
-                    "default.build",
-                    "default.build.user.tmpl",
-                    "sktoolslib", // This is an external.
-                    "src",
-                    "tools",
-                    "version.build.in",
-                    "versioninfo.build"
+                    File(REPO_PATH, "dep_graph.js"),
+                    File(REPO_PATH, "index.d.ts")
             )
 
-            val workingTree = Subversion.download(vcs, "", outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+            val workingTree = Git.download(vcs, "", outputDir)
+            val actualFiles = workingTree.workingDir.walkBottomUp()
+                    .onEnter { it.name != ".git" }
+                    .filter { it.isFile }
+                    .map { it.relativeTo(outputDir) }
+                    .sortedBy { it.path }
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }.config(tags = setOf(ExpensiveTag))
 
-        "Subversion can download based on a version" {
-            val vcs = VcsInfo("Subversion", REPO_URL, "", "")
+        "Git can download based on a version" {
+            val vcs = VcsInfo("Git", REPO_URL, "", "")
 
-            val workingTree = Subversion.download(vcs, REPO_VERSION, outputDir)
+            val workingTree = Git.download(vcs, REPO_VERSION, outputDir)
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }.config(tags = setOf(ExpensiveTag))
 
-        "Subversion can download only a single path based on a version" {
-            val vcs = VcsInfo("Subversion", REPO_URL, "", REPO_PATH_FOR_VERSION)
+        "Git can download only a single path based on a version" {
+            val vcs = VcsInfo("Git", REPO_URL, "", REPO_PATH_FOR_VERSION)
             val expectedFiles = listOf(
-                    "SendMessage.ico",
-                    "searchw.cur",
-                    "searchw.ico",
-                    "windowmessages.xml"
+                    File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 
-            val workingTree = Subversion.download(vcs, REPO_VERSION, outputDir)
-            val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list().sorted()
+            val workingTree = Git.download(vcs, REPO_VERSION, outputDir)
+            val actualFiles = workingTree.workingDir.walkBottomUp()
+                    .onEnter { it.name != ".git" }
+                    .filter { it.isFile }
+                    .map { it.relativeTo(outputDir) }
+                    .sortedBy { it.path }
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
