@@ -9,7 +9,7 @@
 [3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
 [4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
 
-The OSS Review Toolkit (ORT for short) is a suite of tools to assist with reviewing Free and Open Source Software dependencies in your software. At a high level, it works by analyzing your source code for dependencies, downloading the source code of the dependencies, and scanning all source code for license information and summarizing the results. The different tools in the suite are designed as libraries (for programmatic use) with minimal command line interfaces (for scripted use, [doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
+The OSS Review Toolkit (ORT for short) is a suite of tools to assist with reviewing Free and Open Source Software dependencies in your software. At a high level, it works by analyzing your source code for dependencies, downloading the source code of the dependencies, scanning all source code for license information, and summarizing the results. The different tools in the suite are designed as libraries (for programmatic use) with minimal command line interfaces (for scripted use, [doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
 
 The goal of ORT is to give the Open Source community a toolset that can enable reviews during source code creation by providing open-sourced tooling for developers to do basic compliance checks and get insights on their dependencies.
 
