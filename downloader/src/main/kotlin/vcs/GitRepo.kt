@@ -22,7 +22,7 @@ package com.here.ort.downloader.vcs
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
-import com.here.ort.model.VcsInfo
+import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 
@@ -40,19 +40,21 @@ object GitRepo : GitBase() {
 
     /**
      * Clones the Git repositories defined in the manifest file using the Git Repo tool. The manifest file is checked
-     * out from the repository defined in [vcs], its location is defined by [VcsInfo.path].
+     * out from the repository defined in [pkg.vcsProcessed], its location is defined by [pkg.vcsProcessed.path].
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
-        val revision = if (vcs.revision.isNotBlank()) vcs.revision else "master"
-        val manifestPath = if (vcs.path.isNotBlank()) vcs.path else "manifest.xml"
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+        val revision = if (pkg.vcsProcessed.revision.isNotBlank()) pkg.vcsProcessed.revision else "master"
+        val manifestPath = if (pkg.vcsProcessed.path.isNotBlank()) pkg.vcsProcessed.path else "manifest.xml"
 
         try {
             log.info {
-                "Initializing git-repo from ${vcs.url} with revision '$revision' and manifest '$manifestPath'."
+                "Initializing git-repo from ${pkg.vcsProcessed.url} with revision '$revision' " +
+                        "and manifest '$manifestPath'."
             }
-            runRepoCommand(targetDir, "init", "--depth", "1", "-b", revision, "-u", vcs.url, "-m", manifestPath)
+            runRepoCommand(targetDir, "init", "--depth", "1", "-b", revision, "-u", pkg.vcsProcessed.url,
+                    "-m", manifestPath)
 
             log.info { "Starting git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
@@ -63,7 +65,7 @@ object GitRepo : GitBase() {
                 e.printStackTrace()
             }
 
-            throw DownloadException("Could not clone from ${vcs.url} using manifest '$manifestPath'.", e)
+            throw DownloadException("Could not clone from ${pkg.vcsProcessed.url} using manifest '$manifestPath'.", e)
         }
     }
 

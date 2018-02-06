@@ -171,6 +171,17 @@ class UtilsTest : WordSpec({
             filterVersionNames("7.0.0", names).joinToString("\n") shouldBe ""
             filterVersionNames("2.0", names).joinToString("\n") shouldBe ""
         }
+
+        "find names with the project name as the prefix" {
+            val names = listOf(
+                    "babel-plugin-transform-member-expression-literals@6.9.0",
+                    "babel-plugin-transform-simplify-comparison-operators@6.9.0",
+                    "babel-plugin-transform-property-literals@6.9.0"
+            )
+
+            filterVersionNames("6.9.0", names, "babel-plugin-transform-simplify-comparison-operators")
+                    .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
+        }
     }
 
     "normalizeVcsUrl" should {

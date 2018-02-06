@@ -22,7 +22,7 @@ package com.here.ort.downloader.vcs
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.VcsInfo
+import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
@@ -148,30 +148,30 @@ object Cvs : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.matches("^:(ext|pserver):[^@]+@.+$".toRegex())
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
-        val path = if (vcs.path.isBlank()) "." else vcs.path
+        val path = if (pkg.vcsProcessed.path.isBlank()) "." else pkg.vcsProcessed.path
 
         // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
-        runCvsCommand(targetDir, "-z3", "-d", vcs.url, "checkout", "-l", ".")
+        runCvsCommand(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
         val workingTree = getWorkingTree(targetDir)
 
-        val revision = if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
-            vcs.revision
+        val revision = if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+            pkg.vcsProcessed.revision
         } else {
             // Create all working tree directories in order to be able to query the log.
             runCvsCommand(targetDir, "update", "-d")
 
-            log.info { "Trying to guess a $this revision for version '$version'." }
+            log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
 
-            workingTree.guessRevisionNameForVersion(version).also {
+            workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also {
                 if (it.isBlank()) {
                     throw IOException("Unable to determine a revision to checkout.")
                 }
 
                 log.warn {
-                    "Using guessed $this revision '$it' for version '$version'. This might cause the " +
+                    "Using guessed $this revision '$it' for version '${pkg.id.version}'. This might cause the " +
                             "downloaded source code to not match the package version."
                 }
 

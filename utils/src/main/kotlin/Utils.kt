@@ -115,14 +115,14 @@ object OkHttpClientHelper {
 }
 
 /**
- * Filter a list of [names] to include only those that likely belong to the given [version].
+ * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
  */
-fun filterVersionNames(version: String, names: List<String>): List<String> {
+fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
     if (version.isBlank()) return emptyList()
 
     val versionElementSeparators = listOf('.', '-', '_')
 
-    return names.filter { name ->
+    val filteredByVersion = names.filter { name ->
         versionElementSeparators.any { separator ->
             val versionName = version.replace('.', separator)
 
@@ -141,6 +141,7 @@ fun filterVersionNames(version: String, names: List<String>): List<String> {
                     val last = head.lastOrNull()
                     val forelast = head.dropLast(1).lastOrNull()
                     last == null
+                            || (last !in versionElementSeparators && !last.isDigit())
                             || (last in versionElementSeparators && (forelast == null || !forelast.isDigit()))
                             || (last.toLowerCase() == 'v' && (forelast == null || forelast in versionElementSeparators))
                 }
@@ -148,6 +149,13 @@ fun filterVersionNames(version: String, names: List<String>): List<String> {
                 else -> false
             }
         }
+    }
+
+    return filteredByVersion.filter {
+        // startsWith("") returns "true" for any string, so we get an unfiltered list if "project" is "null".
+        it.startsWith(project ?: "")
+    }.let {
+        if (it.isEmpty()) filteredByVersion else it
     }
 }
 
