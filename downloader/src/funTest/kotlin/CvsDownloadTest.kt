@@ -19,6 +19,8 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.model.Identifier
+import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
@@ -52,13 +54,13 @@ class CvsDownloadTest : StringSpec() {
 
     init {
         "CVS can download a given revision" {
-            val vcs = VcsInfo("CVS", REPO_URL, REPO_REV, "")
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, ""))
             val expectedFiles = listOf(
                     "CVS",
                     "xmlenc"
             )
 
-            val workingTree = Cvs.download(vcs, "", outputDir)
+            val workingTree = Cvs.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.list().sorted()
 
             // Use forward slashes also on Windows as the CVS client comes from MSYS2.
@@ -73,12 +75,12 @@ class CvsDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "CVS can download only a single path" {
-            val vcs = VcsInfo("CVS", REPO_URL, REPO_REV, REPO_PATH)
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, REPO_PATH))
             val expectedFiles = listOf(
                     File(REPO_PATH, "changes.xml")
             )
 
-            val workingTree = Cvs.download(vcs, "", outputDir)
+            val workingTree = Cvs.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != "CVS" }
                     .filter { it.isFile }
@@ -90,9 +92,12 @@ class CvsDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "CVS can download based on a version" {
-            val vcs = VcsInfo("CVS", REPO_URL, "", "")
+            val pkg = Package.EMPTY.copy(
+                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    vcsProcessed = VcsInfo("CVS", REPO_URL, "", "")
+            )
 
-            val workingTree = Cvs.download(vcs, REPO_VERSION, outputDir)
+            val workingTree = Cvs.download(pkg, outputDir)
 
             // Use forward slashes also on Windows as the CVS client comes from MSYS2.
             val buildXmlFile = "xmlenc/build.xml"
@@ -105,12 +110,15 @@ class CvsDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "CVS can download only a single path based on a version" {
-            val vcs = VcsInfo("CVS", REPO_URL, "", REPO_PATH_FOR_VERSION)
+            val pkg = Package.EMPTY.copy(
+                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    vcsProcessed = VcsInfo("CVS", REPO_URL, "", REPO_PATH_FOR_VERSION)
+            )
             val expectedFiles = listOf(
                     File(REPO_PATH_FOR_VERSION)
             )
 
-            val workingTree = Cvs.download(vcs, REPO_VERSION, outputDir)
+            val workingTree = Cvs.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != "CVS" }
                     .filter { it.isFile }

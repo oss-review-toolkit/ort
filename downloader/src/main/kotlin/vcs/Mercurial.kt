@@ -23,7 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.VcsInfo
+import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
@@ -91,14 +91,14 @@ object Mercurial : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
             // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
             val extensionsList = mutableListOf(EXTENSION_LARGE_FILES)
 
-            if (vcs.path.isNotBlank() && isAtLeastVersion("4.3")) {
+            if (pkg.vcsProcessed.path.isNotBlank() && isAtLeastVersion("4.3")) {
                 // Starting with version 4.3 Mercurial has experimental built-in support for sparse checkouts, see
                 // https://www.mercurial-scm.org/wiki/WhatsNew#Mercurial_4.3_.2F_4.3.1_.282017-08-10.29
                 extensionsList.add(EXTENSION_SPARSE)
@@ -107,30 +107,30 @@ object Mercurial : VersionControlSystem() {
             runMercurialCommand(targetDir, "init")
             File(targetDir, ".hg/hgrc").writeText("""
                 [paths]
-                default = ${vcs.url}
+                default = ${pkg.vcsProcessed.url}
                 [extensions]
 
                 """.trimIndent() + extensionsList.joinToString(separator = "\n"))
 
             if (extensionsList.contains(EXTENSION_SPARSE)) {
-                log.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
-                runMercurialCommand(targetDir, "debugsparse", "-I", "${vcs.path}/**")
+                log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
+                runMercurialCommand(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**")
             }
 
             val workingTree = getWorkingTree(targetDir)
 
-            val revision = if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
-                vcs.revision
+            val revision = if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+                pkg.vcsProcessed.revision
             } else {
-                log.info { "Trying to guess a $this revision for version '$version'." }
-                workingTree.guessRevisionNameForVersion(version).also { revision ->
+                log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
+                workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
                     if (revision.isBlank()) {
                         throw IOException("Unable to determine a revision to checkout.")
                     }
 
                     log.warn {
-                        "Using guessed $this revision '$revision' for version '$version'. This might cause the " +
-                                "downloaded source code to not match the package version."
+                        "Using guessed $this revision '$revision' for version '${pkg.id.version}'. This might cause " +
+                                "the downloaded source code to not match the package version."
                     }
                 }
             }
@@ -149,7 +149,7 @@ object Mercurial : VersionControlSystem() {
                 e.printStackTrace()
             }
 
-            throw DownloadException("$this failed to download from URL '${vcs.url}'.", e)
+            throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
 

@@ -20,6 +20,7 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.*
+import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.filterVersionNames
 
@@ -205,12 +206,12 @@ abstract class VersionControlSystem {
         abstract fun listRemoteTags(): List<String>
 
         /**
-         * Search (symbolic) names of VCS revisions for matches with the given version.
+         * Search (symbolic) names of VCS revisions for matches with the given [project] and [version].
          *
          * @return A matching VCS revision or an empty String if no match is found.
          */
-        fun guessRevisionNameForVersion(version: String) =
-                filterVersionNames(version, listRemoteTags()).firstOrNull() ?: ""
+        fun guessRevisionName(project: String, version: String) =
+                filterVersionNames(version, listRemoteTags(), project).firstOrNull() ?: ""
 
         /**
          * Return the relative path to [path] with respect to the VCS root.
@@ -252,14 +253,13 @@ abstract class VersionControlSystem {
     abstract fun isApplicableUrl(vcsUrl: String): Boolean
 
     /**
-     * Download the source code as specified by the VCS information.
+     * Download the source code as specified by the package information.
      *
      * @return An object describing the downloaded working tree.
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean = false)
-            : WorkingTree
+    abstract fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean = false): WorkingTree
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.

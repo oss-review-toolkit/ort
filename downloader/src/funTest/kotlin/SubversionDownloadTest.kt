@@ -19,6 +19,8 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.model.Identifier
+import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
@@ -53,7 +55,7 @@ class SubversionDownloadTest : StringSpec() {
 
     init {
         "Subversion can download a given revision" {
-            val vcs = VcsInfo("Subversion", REPO_URL, REPO_REV, "")
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, ""))
             val expectedFiles = listOf(
                     ".svn",
                     "branches",
@@ -62,7 +64,7 @@ class SubversionDownloadTest : StringSpec() {
                     "wiki"
             )
 
-            val workingTree = Subversion.download(vcs, "", outputDir)
+            val workingTree = Subversion.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
@@ -71,7 +73,7 @@ class SubversionDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "Subversion can download only a single path" {
-            val vcs = VcsInfo("Subversion", REPO_URL, REPO_REV, REPO_PATH)
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, REPO_PATH))
             val expectedFiles = listOf(
                     "SendMessage.sln",
                     "default.build",
@@ -83,7 +85,7 @@ class SubversionDownloadTest : StringSpec() {
                     "versioninfo.build"
             )
 
-            val workingTree = Subversion.download(vcs, "", outputDir)
+            val workingTree = Subversion.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
@@ -92,16 +94,22 @@ class SubversionDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "Subversion can download based on a version" {
-            val vcs = VcsInfo("Subversion", REPO_URL, "", "")
+            val pkg = Package.EMPTY.copy(
+                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "", "")
+            )
 
-            val workingTree = Subversion.download(vcs, REPO_VERSION, outputDir)
+            val workingTree = Subversion.download(pkg, outputDir)
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }.config(tags = setOf(ExpensiveTag))
 
         "Subversion can download only a single path based on a version" {
-            val vcs = VcsInfo("Subversion", REPO_URL, "", REPO_PATH_FOR_VERSION)
+            val pkg = Package.EMPTY.copy(
+                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "", REPO_PATH_FOR_VERSION)
+            )
             val expectedFiles = listOf(
                     "SendMessage.ico",
                     "searchw.cur",
@@ -109,7 +117,7 @@ class SubversionDownloadTest : StringSpec() {
                     "windowmessages.xml"
             )
 
-            val workingTree = Subversion.download(vcs, REPO_VERSION, outputDir)
+            val workingTree = Subversion.download(pkg, outputDir)
             val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list().sorted()
 
             workingTree.isValid() shouldBe true

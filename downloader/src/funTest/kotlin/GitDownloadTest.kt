@@ -19,6 +19,8 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.model.Identifier
+import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
@@ -53,7 +55,7 @@ class GitDownloadTest : StringSpec() {
 
     init {
         "Git can download a given revision" {
-            val vcs = VcsInfo("Git", REPO_URL, REPO_REV, "")
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, ""))
             val expectedFiles = listOf(
                     ".git",
                     ".gitignore",
@@ -65,7 +67,7 @@ class GitDownloadTest : StringSpec() {
                     "specs"
             )
 
-            val workingTree = Git.download(vcs, "", outputDir)
+            val workingTree = Git.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
@@ -74,13 +76,13 @@ class GitDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "Git can download only a single path" {
-            val vcs = VcsInfo("Git", REPO_URL, REPO_REV, REPO_PATH)
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, REPO_PATH))
             val expectedFiles = listOf(
                     File(REPO_PATH, "dep_graph.js"),
                     File(REPO_PATH, "index.d.ts")
             )
 
-            val workingTree = Git.download(vcs, "", outputDir)
+            val workingTree = Git.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != ".git" }
                     .filter { it.isFile }
@@ -93,21 +95,27 @@ class GitDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "Git can download based on a version" {
-            val vcs = VcsInfo("Git", REPO_URL, "", "")
+            val pkg = Package.EMPTY.copy(
+                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    vcsProcessed = VcsInfo("Git", REPO_URL, "", "")
+            )
 
-            val workingTree = Git.download(vcs, REPO_VERSION, outputDir)
+            val workingTree = Git.download(pkg, outputDir)
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }.config(tags = setOf(ExpensiveTag))
 
         "Git can download only a single path based on a version" {
-            val vcs = VcsInfo("Git", REPO_URL, "", REPO_PATH_FOR_VERSION)
+            val pkg = Package.EMPTY.copy(
+                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    vcsProcessed = VcsInfo("Git", REPO_URL, "", REPO_PATH_FOR_VERSION)
+            )
             val expectedFiles = listOf(
                     File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 
-            val workingTree = Git.download(vcs, REPO_VERSION, outputDir)
+            val workingTree = Git.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != ".git" }
                     .filter { it.isFile }

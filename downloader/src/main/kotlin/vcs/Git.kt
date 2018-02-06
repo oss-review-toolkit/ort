@@ -23,7 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.VcsInfo
+import com.here.ort.model.Package
 import com.here.ort.utils.OS
 import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
@@ -98,31 +98,31 @@ object Git : GitBase() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
             // Do not use "git clone" to have more control over what is being fetched.
             runGitCommand(targetDir, "init")
-            runGitCommand(targetDir, "remote", "add", "origin", vcs.url)
+            runGitCommand(targetDir, "remote", "add", "origin", pkg.vcsProcessed.url)
 
             if (OS.isWindows) {
                 runGitCommand(targetDir, "config", "core.longpaths", "true")
             }
 
-            if (vcs.path.isNotBlank()) {
-                log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
+            if (pkg.vcsProcessed.path.isNotBlank()) {
+                log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
                 runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
                 val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-                File(gitInfoDir, "sparse-checkout").writeText(vcs.path)
+                File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path)
             }
 
             val workingTree = getWorkingTree(targetDir)
 
             val revisionCandidates = mutableListOf<String>()
 
-            if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
-                revisionCandidates.add(vcs.revision)
+            if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+                revisionCandidates.add(pkg.vcsProcessed.revision)
             } else {
                 log.warn {
                     "No valid revision specified. Other possible candidates might cause the downloaded source code " +
@@ -130,13 +130,13 @@ object Git : GitBase() {
                 }
             }
 
-            log.info { "Trying to guess a $this revision for version '$version' to fall back to." }
-            workingTree.guessRevisionNameForVersion(version).also { revision ->
+            log.info { "Trying to guess a $this revision for version '${pkg.id.version}' to fall back to." }
+            workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
                 if (revision.isNotBlank()) {
                     revisionCandidates.add(revision)
-                    log.info { "Found $this revision '$revision' for version '$version'." }
+                    log.info { "Found $this revision '$revision' for version '$${pkg.id.version}'." }
                 } else {
-                    log.info { "No $this revision for version '$version' found." }
+                    log.info { "No $this revision for version '$${pkg.id.version}' found." }
                 }
             }
 
@@ -207,7 +207,7 @@ object Git : GitBase() {
                 e.printStackTrace()
             }
 
-            throw DownloadException("$this failed to download from URL '${vcs.url}'.", e)
+            throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
 }

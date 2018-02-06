@@ -269,8 +269,7 @@ object Main {
             throw DownloadException("Could not find an applicable VCS provider.")
         }
 
-        val workingTree = applicableVcs.download(target.vcsProcessed, target.id.version, outputDirectory,
-                allowMovingRevisions)
+        val workingTree = applicableVcs.download(target, outputDirectory, allowMovingRevisions)
         val revision = workingTree.getRevision()
 
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }

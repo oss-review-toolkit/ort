@@ -28,7 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.VcsInfo
+import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
@@ -151,42 +151,44 @@ object Subversion : VersionControlSystem() {
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
 
-    override fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
+    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
-            runSvnCommand(targetDir, "checkout", vcs.url, "--depth", "empty", ".")
+            runSvnCommand(targetDir, "checkout", pkg.vcsProcessed.url, "--depth", "empty", ".")
 
-            return if (allowMovingRevisions || isFixedRevision(vcs.revision)) {
-                if (vcs.path.isBlank()) {
+            return if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+                if (pkg.vcsProcessed.path.isBlank()) {
                     // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
-                    runSvnCommand(targetDir, "update", "-r", vcs.revision, "--set-depth", "infinity")
+                    runSvnCommand(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--set-depth", "infinity")
                     getWorkingTree(targetDir)
                 } else {
                     // Deepen only the given path.
-                    runSvnCommand(targetDir, "update", "-r", vcs.revision, "--depth", "infinity", "--parents", vcs.path)
+                    runSvnCommand(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--depth", "infinity",
+                            "--parents", pkg.vcsProcessed.path)
 
                     // Only return that part of the working tree that has the right revision.
-                    getWorkingTree(File(targetDir, vcs.path))
+                    getWorkingTree(File(targetDir, pkg.vcsProcessed.path))
                 }
             } else {
-                log.info { "Trying to guess a $this revision for version '$version'." }
+                log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
 
-                val revision = getWorkingTree(targetDir).guessRevisionNameForVersion(version)
+                val revision = getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
                 if (revision.isBlank()) {
                     throw IOException("Unable to determine a revision to checkout.")
                 }
 
                 log.warn {
-                    "Using guessed $this revision '$revision' for version '$version'. This might cause the " +
+                    "Using guessed $this revision '$revision' for version '${pkg.id.version}'. This might cause the " +
                             "downloaded source code to not match the package version."
                 }
 
                 // In Subversion, tags are not symbolic names for revisions but names of directories containing
                 // snapshots, checking out a tag just is a sparse checkout of that path.
                 val tagPath = "tags/" + revision
-                runSvnCommand(targetDir, "update", "--depth", "infinity", "--parents", tagPath + "/" + vcs.path)
+                runSvnCommand(targetDir, "update", "--depth", "infinity", "--parents",
+                        tagPath + "/" + pkg.vcsProcessed.path)
 
                 // Only return that part of the working tree that has the right revision.
                 getWorkingTree(File(targetDir, tagPath))
@@ -196,7 +198,7 @@ object Subversion : VersionControlSystem() {
                 e.printStackTrace()
             }
 
-            throw DownloadException("$this failed to download from URL '${vcs.url}'.", e)
+            throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
 
