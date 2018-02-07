@@ -59,7 +59,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -82,7 +82,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -108,7 +108,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -131,7 +131,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -154,7 +154,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -177,7 +177,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -200,7 +200,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -226,7 +226,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -249,7 +249,7 @@ projects:
     delivered: true
     dependencies:
     - namespace: ""
-      name: "project :lib"
+      name: "project _lib"
       version: ""
       dependencies:
       - namespace: "org.apache.commons"
@@ -653,7 +653,7 @@ packages:
 - id:
     package_manager: "Gradle"
     namespace: ""
-    name: "project :lib"
+    name: "project _lib"
     version: ""
   declared_licenses: []
   description: ""
