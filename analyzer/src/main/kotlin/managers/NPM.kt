@@ -223,24 +223,19 @@ class NPM : PackageManager() {
                         }
                     }
 
-                    try {
-                        val jsonResponse = response.body()?.string()
-                        val packageInfo = jsonMapper.readTree(jsonResponse)
+                    response.body()?.let { body ->
+                        val packageInfo = jsonMapper.readTree(body.string())
 
-                        packageInfo["versions"][version].let { versionInfo ->
+                        packageInfo["versions"][version]?.let { versionInfo ->
                             description = versionInfo["description"].asTextOrEmpty()
                             homepageUrl = versionInfo["homepage"].asTextOrEmpty()
 
-                            versionInfo["dist"].let { dist ->
+                            versionInfo["dist"]?.let { dist ->
                                 downloadUrl = dist["tarball"].asTextOrEmpty()
                                 hash = dist["shasum"].asTextOrEmpty()
                             }
 
                             vcsFromPackage = parseVcsInfo(versionInfo)
-                        }
-                    } catch (e: NullPointerException) {
-                        if (com.here.ort.utils.printStackTrace) {
-                            e.printStackTrace()
                         }
                     }
                 } else {
