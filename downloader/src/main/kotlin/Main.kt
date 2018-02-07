@@ -189,6 +189,7 @@ object Main {
                 }
 
                 log.error { "Could not download '${pkg.id}': ${e.message}" }
+                exitProcess(1)
             }
         }
     }
