@@ -408,10 +408,12 @@ class NPM : PackageManager() {
             if (parent.name == "node_modules") {
                 parent = parent.parentFile
             }
+
             log.debug {
                 "Could not find package file for $name in ${startDir.absolutePath}, looking in " +
                         "${parent.absolutePath} instead"
             }
+
             return buildTree(rootDir, parent, name, packages, dependencyBranch)
         }
     }
