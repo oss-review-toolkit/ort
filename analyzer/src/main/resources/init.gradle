@@ -191,9 +191,9 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                             error, pomFile)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     // TODO: Decide how to mark project dependencies in the model.
-                    return new DependencyImpl('', id.displayName, '', '', '', dependencies, null, '')
+                    return new DependencyImpl('', id.displayName.replace(':', '_'), '', '', '', dependencies, null, '')
                 } else {
-                    return new DependencyImpl('', id.displayName, '', '', '', dependencies,
+                    return new DependencyImpl('', id.displayName.replace(':', '_'), '', '', '', dependencies,
                             "Unknown id type: ${id.getClass().simpleName}".toString(), '')
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
