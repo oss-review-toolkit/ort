@@ -336,8 +336,7 @@ class NPM : PackageManager() {
             log.debug { "Looking for dependencies in scope $scope" }
             val dependencyMap = json[scope]
             dependencyMap.fields().forEach { (name, _) ->
-                val dependency = buildTree(packageJson.parentFile, packageJson.parentFile, name, packages)
-                if (dependency != null) {
+                buildTree(packageJson.parentFile, packageJson.parentFile, name, packages)?.let { dependency ->
                     dependencies.add(dependency)
                 }
             }
