@@ -365,8 +365,9 @@ class NPM : PackageManager() {
             log.debug { "Found package file for module $name: ${packageFile.absolutePath}" }
 
             val packageJson = jsonMapper.readTree(packageFile)
+            val rawName = packageJson["name"].asText()
             val version = packageJson["version"].asText()
-            val identifier = "$name@$version"
+            val identifier = "$rawName@$version"
 
             if (dependencyBranch.contains(identifier)) {
                 log.warn {
