@@ -180,6 +180,8 @@ object Main {
             packages.addAll(analyzerResult.packages)
         }
 
+        var error = false
+
         packages.forEach { pkg ->
             try {
                 download(pkg, outputDir)
@@ -189,8 +191,12 @@ object Main {
                 }
 
                 log.error { "Could not download '${pkg.id}': ${e.message}" }
+
+                error = true
             }
         }
+
+        if (error) exitProcess(1)
     }
 
     /**
