@@ -26,11 +26,13 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Project
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -85,12 +87,15 @@ object Main {
         }
     }
 
-    @Parameter(description = "The dependencies analysis file to use.",
+    @Parameter(description = "A dependencies analysis file to use. Must not be used with '--project-url'.",
             names = ["--dependencies-file", "-d"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
-    @Suppress("LateinitUsage")
-    private lateinit var dependenciesFile: File
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var dependenciesFile: File? = null
+
+    @Parameter(description = "A VCS URL to a project to download. Must not be used with '--dependencies-file'.",
+            names = ["--project-url"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var projectUrl: String? = null
 
     @Parameter(description = "The output directory to download the source code to.",
             names = ["--output-dir", "-o"],
@@ -159,17 +164,37 @@ object Main {
         // Make the parameter globally available.
         com.here.ort.utils.printStackTrace = stacktrace
 
-        require(dependenciesFile.isFile) {
-            "Provided path is not a file: ${dependenciesFile.absolutePath}"
+        if (dependenciesFile != null && projectUrl != null) {
+            throw IllegalArgumentException(
+                    "The '--dependencies-file' and '--project-url' parameters must not be used together.")
         }
 
-        val mapper = when (dependenciesFile.extension) {
-            OutputFormat.JSON.fileExtension -> jsonMapper
-            OutputFormat.YAML.fileExtension -> yamlMapper
-            else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
+        val analyzerResult = dependenciesFile?.let {
+            require(it.isFile) {
+                "Provided path is not a file: ${it.absolutePath}"
+            }
+
+            val mapper = when (it.extension) {
+                OutputFormat.JSON.fileExtension -> jsonMapper
+                OutputFormat.YAML.fileExtension -> yamlMapper
+                else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
+            }
+
+            mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+        } ?: run {
+            // TODO: Allow to specify the project name as a parameter.
+            val projectName = projectUrl!!.substringAfterLast('/').substringBeforeLast('.')
+
+            // TODO: Allow to specify the VCS revision as a parameter.
+            allowMovingRevisions = true
+            val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
+
+            val dummyId = Identifier.EMPTY.copy(name = projectName)
+            val dummyProject = Project.EMPTY.copy(id = dummyId, vcs = vcs)
+
+            AnalyzerResult(false, dummyProject, sortedSetOf())
         }
 
-        val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
         val packages = mutableListOf<Package>()
 
         if (entities.contains(DataEntity.PROJECT)) {
