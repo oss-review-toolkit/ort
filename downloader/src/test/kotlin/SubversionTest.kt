@@ -72,7 +72,7 @@ class SubversionTest : StringSpec() {
 
             workingTree.getProvider() shouldBe "Subversion"
             workingTree.isValid() shouldBe true
-            workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code"
+            workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code/trunk/docutils"
             workingTree.getRevision() shouldBe "8207"
             workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
