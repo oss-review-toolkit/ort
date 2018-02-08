@@ -134,9 +134,9 @@ object Git : GitBase() {
             workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
                 if (revision.isNotBlank()) {
                     revisionCandidates.add(revision)
-                    log.info { "Found $this revision '$revision' for version '$${pkg.id.version}'." }
+                    log.info { "Found $this revision '$revision' for version '${pkg.id.version}'." }
                 } else {
-                    log.info { "No $this revision for version '$${pkg.id.version}' found." }
+                    log.info { "No $this revision for version '${pkg.id.version}' found." }
                 }
             }
 
