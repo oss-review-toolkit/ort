@@ -107,6 +107,7 @@ object Subversion : VersionControlSystem() {
 
     override fun getWorkingTree(vcsDirectory: File) =
             object : WorkingTree(vcsDirectory) {
+                private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
                 private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
                         .with(DeserializationFeature.UNWRAP_ROOT_VALUE)
 
@@ -120,16 +121,23 @@ object Subversion : VersionControlSystem() {
 
                 override fun isShallow() = false
 
-                override fun getRemoteUrl() = runSvnInfoCommand()?.repository?.root ?: ""
+                override fun getRemoteUrl() = runSvnInfoCommand()?.url ?: ""
 
                 override fun getRevision() = runSvnInfoCommand()?.commit?.revision ?: ""
 
                 override fun getRootPath() = runSvnInfoCommand()?.workingCopy?.absolutePath ?: ""
 
                 override fun listRemoteTags(): List<String> {
-                    // Assume the recommended layout that has "branches", "tags", and "trunk" at the root level, see
-                    // http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.tour.importing.layout
-                    val svnInfoTags = runSvnCommand(workingDir, "info", "--xml", "--depth=immediates", "^/tags")
+                    val remoteUrl = getRemoteUrl()
+
+                    val projectRoot = if (directoryNamespaces.any { remoteUrl.contains("/$it/") }) {
+                        runSvnInfoCommand()?.repository?.root ?: ""
+                    } else {
+                        remoteUrl
+                    }
+
+                    val svnInfoTags = runSvnCommand(workingDir, "info", "--xml", "--depth=immediates",
+                            "$projectRoot/tags")
                     val valueType = xmlMapper.typeFactory
                             .constructCollectionType(List::class.java, SubversionTagsEntry::class.java)
                     val tagsEntries: List<SubversionTagsEntry> = xmlMapper.readValue(svnInfoTags.stdout(), valueType)
