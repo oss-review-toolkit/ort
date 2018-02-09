@@ -22,6 +22,7 @@ package com.here.ort.downloader
 import com.here.ort.downloader.vcs.Subversion
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.unpack
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
