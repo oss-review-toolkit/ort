@@ -47,14 +47,14 @@ class ScanPathTest : StringSpec() {
     }
 
     init {
-        "ScanCode recognizes our own LICENSE" {
-            val result = ScanCode.scan(File("../LICENSE"), outputDir)
-            result.licenses shouldBe setOf("Apache-2.0")
-        }.config(tags = setOf(ExpensiveTag, ScanCodeTag))
-
         "Licensee recognizes our own LICENSE" {
             val result = Licensee.scan(File("../LICENSE"), outputDir)
             result.licenses shouldBe setOf("Apache License 2.0")
         }.config(tags = setOf(ExpensiveTag))
+
+        "ScanCode recognizes our own LICENSE" {
+            val result = ScanCode.scan(File("../LICENSE"), outputDir)
+            result.licenses shouldBe setOf("Apache-2.0")
+        }.config(tags = setOf(ExpensiveTag, ScanCodeTag))
     }
 }
