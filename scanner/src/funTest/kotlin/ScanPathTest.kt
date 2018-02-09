@@ -19,6 +19,7 @@
 
 package com.here.ort.scanner
 
+import com.here.ort.scanner.scanners.BoyterLc
 import com.here.ort.scanner.scanners.Licensee
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.ExpensiveTag
@@ -47,6 +48,11 @@ class ScanPathTest : StringSpec() {
     }
 
     init {
+        "BoyterLc recognizes our own LICENSE" {
+            val result = BoyterLc.scan(File("src/main/kotlin/scanners/BoyterLc.kt"), outputDir)
+            result.licenses shouldBe setOf("Apache-2.0")
+        }.config(tags = setOf(ExpensiveTag))
+
         "Licensee recognizes our own LICENSE" {
             val result = Licensee.scan(File("src/main/kotlin/scanners/Licensee.kt"), outputDir)
             result.licenses shouldBe setOf("Apache License 2.0")
