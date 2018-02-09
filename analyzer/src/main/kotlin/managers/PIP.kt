@@ -204,7 +204,7 @@ class PIP : PackageManager() {
                         .url("https://pypi.python.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
                         .build()
 
-                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+                OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, pkgRequest).use { response ->
                     val body = response.body()?.string()?.trim()
 
                     if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrBlank()) {
