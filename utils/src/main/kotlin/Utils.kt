@@ -165,6 +165,31 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 
 /**
+ * Return whether the given executable is in the system's PATH environment.
+ */
+fun isInPathEnvironment(executable: String): Boolean {
+    val paths = System.getenv("PATH")?.splitToSequence(File.pathSeparatorChar) ?: emptySequence()
+
+    val executables = if (OS.isWindows) {
+        val pathExt = System.getenv("PATHEXT")?.let {
+            it.split(File.pathSeparatorChar).map { it.toLowerCase().drop(1) }
+        } ?: emptyList()
+
+        if (executable.substringAfterLast(".").toLowerCase() !in pathExt) {
+            pathExt.map { "$executable.$it" }
+        } else {
+            listOf(executable)
+        }
+    } else {
+        listOf(executable)
+    }
+
+    return paths.find { path ->
+        executables.any { File(path, it).isFile }
+    } != null
+}
+
+/**
  * Normalize a VCS URL by converting it to a common pattern. For example NPM defines some shortcuts for GitHub or GitLab
  * URLs which are converted to full URLs so that they can be used in a common way.
  *
