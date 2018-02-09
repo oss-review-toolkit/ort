@@ -50,6 +50,7 @@ import java.io.IOException
 import kotlin.system.exitProcess
 
 import okhttp3.Request
+import okio.Okio
 
 import org.apache.commons.codec.digest.DigestUtils
 
@@ -320,15 +321,13 @@ object Main {
         val request = Request.Builder().get().url(target.sourceArtifact.url).build()
 
         val response = OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
-        if (!response.isSuccessful || response.body() == null) {
+        val body = response.body()
+        if (!response.isSuccessful || body == null) {
             throw DownloadException("Failed to download source artifact: $response")
         }
 
         val tempFile = createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/"))
-
-        tempFile.outputStream().use { stream ->
-            stream.write(response.body()!!.bytes())
-        }
+        Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
 
         verifyChecksum(tempFile, target.sourceArtifact.hash, target.sourceArtifact.hashAlgorithm)
 

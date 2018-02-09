@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit
 
 import okhttp3.CacheControl
 import okhttp3.Request
+import okio.Okio
 
 class ArtifactoryCache(
         private val url: String,
@@ -51,7 +52,10 @@ class ArtifactoryCache(
         return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
             (response.code() == HttpURLConnection.HTTP_OK).also {
                 val message = if (it) {
-                    response.body()?.let { target.writeBytes(it.bytes()) }
+                    response.body()?.let { body ->
+                        Okio.buffer(Okio.sink(target)).use { it.writeAll(body.source()) }
+                    }
+
                     if (response.cacheResponse() != null) {
                         "Retrieved $cachePath from local cache."
                     } else {
