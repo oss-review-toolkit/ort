@@ -286,6 +286,7 @@ object Main {
                 else -> throw IllegalArgumentException("Unsupported scan input.")
             }
             entry.licenses.addAll(result.licenses)
+            entry.errors.addAll(result.errors)
 
             println("Found licenses for '$identifier': ${entry.licenses.joinToString()}")
         } catch (e: ScanException) {
