@@ -48,12 +48,12 @@ class ScanPathTest : StringSpec() {
 
     init {
         "Licensee recognizes our own LICENSE" {
-            val result = Licensee.scan(File("../LICENSE"), outputDir)
+            val result = Licensee.scan(File("src/main/kotlin/scanners/Licensee.kt"), outputDir)
             result.licenses shouldBe setOf("Apache License 2.0")
         }.config(tags = setOf(ExpensiveTag))
 
         "ScanCode recognizes our own LICENSE" {
-            val result = ScanCode.scan(File("../LICENSE"), outputDir)
+            val result = ScanCode.scan(File("src/main/kotlin/scanners/ScanCode.kt"), outputDir)
             result.licenses shouldBe setOf("Apache-2.0")
         }.config(tags = setOf(ExpensiveTag, ScanCodeTag))
     }
