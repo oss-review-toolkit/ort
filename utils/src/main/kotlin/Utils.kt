@@ -252,18 +252,17 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 }
 
 /**
- * Return the string encoded for safe use as a file name.
+ * Recursively collect the exception messages of this [Exception] and all its causes.
  */
-fun String.fileSystemEncode() =
-        // URLEncoder does not encode "." and "*", so do that manually.
-        java.net.URLEncoder.encode(this, "UTF-8").replace("*", "%2A").replace(".", "%2E")
-
-/**
- * Return the decoded string for a safe file name.
- */
-fun String.fileSystemDecode(): String =
-        // URLDecoder does decode "." and "*".
-        java.net.URLDecoder.decode(this, "UTF-8")
+fun Exception.collectMessages(): List<String> {
+    val messages = mutableListOf<String>()
+    var cause: Throwable? = this
+    while (cause != null) {
+        messages.add("${cause.javaClass.simpleName}: ${cause.message}")
+        cause = cause.cause
+    }
+    return messages
+}
 
 /**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
@@ -342,14 +341,15 @@ fun File.toSafeURI(): URI {
 fun JsonNode?.asTextOrEmpty(): String = if (this != null) this.asText() else ""
 
 /**
- * Recursively collect the exception messages of this [Exception] and all its causes.
+ * Return the string encoded for safe use as a file name.
  */
-fun Exception.collectMessages(): List<String> {
-    val messages = mutableListOf<String>()
-    var cause: Throwable? = this
-    while (cause != null) {
-        messages.add("${cause.javaClass.simpleName}: ${cause.message}")
-        cause = cause.cause
-    }
-    return messages
-}
+fun String.fileSystemEncode() =
+        // URLEncoder does not encode "." and "*", so do that manually.
+        java.net.URLEncoder.encode(this, "UTF-8").replace("*", "%2A").replace(".", "%2E")
+
+/**
+ * Return the decoded string for a safe file name.
+ */
+fun String.fileSystemDecode(): String =
+        // URLDecoder does decode "." and "*".
+        java.net.URLDecoder.decode(this, "UTF-8")
