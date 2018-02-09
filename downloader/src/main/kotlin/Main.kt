@@ -317,7 +317,7 @@ object Main {
             "Trying to download source artifact for '${target.id}' from '${target.sourceArtifact.url}'..."
         }
 
-        val request = Request.Builder().url(target.sourceArtifact.url).build()
+        val request = Request.Builder().get().url(target.sourceArtifact.url).build()
 
         val response = OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
         if (!response.isSuccessful || response.body() == null) {
