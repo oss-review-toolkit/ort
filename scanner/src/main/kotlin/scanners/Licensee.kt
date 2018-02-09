@@ -31,15 +31,14 @@ import com.here.ort.utils.log
 import java.io.File
 
 object Licensee : Scanner() {
-    override val resultFileExtension = "yml"
+    override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
+    override val resultFileExt = "yml"
 
     override fun scanPath(path: File, resultsFile: File): Result {
-        val executable = if (OS.isWindows) "licensee.bat" else "licensee"
-
         println("Running Licensee in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
                 path.parentFile,
-                executable,
+                scannerExe,
                 path.name
         )
 

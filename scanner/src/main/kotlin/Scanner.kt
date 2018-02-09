@@ -23,18 +23,33 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
 import com.here.ort.scanner.scanners.*
+import com.here.ort.utils.isInPathEnvironment
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 import java.util.SortedSet
 
 abstract class Scanner {
-    protected val scannerDir: File?
-
-    constructor() {
-        scannerDir = bootstrap()
-        scannerDir?.let { it.deleteOnExit() }
+    /**
+     * The directory the scanner was bootstrapped to, if so.
+     */
+    protected val scannerDir by lazy {
+        if (isInPathEnvironment(scannerExe)) {
+            null
+        } else {
+            bootstrap()?.also { it.deleteOnExit() }
+        }
     }
+
+    /**
+     * The scanner's executable file name.
+     */
+    protected abstract val scannerExe: String
+
+    /**
+     * A property containing the file name extension of the scanner's native output format, without the dot.
+     */
+    protected abstract val resultFileExt: String
 
     companion object {
         /**
@@ -80,7 +95,7 @@ abstract class Scanner {
         val pkgRevision = pkg.id.version.let { if (it.isBlank()) pkg.vcs.revision.take(7) else it }
 
         val resultsFile = File(scanResultsDirectory,
-                "${pkg.id.name}-${pkgRevision}_$scannerName.$resultFileExtension")
+                "${pkg.id.name}-${pkgRevision}_$scannerName.$resultFileExt")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
             return getResult(resultsFile)
@@ -114,15 +129,10 @@ abstract class Scanner {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scannerName = toString().toLowerCase()
         val resultsFile = File(scanResultsDirectory,
-                "${path.nameWithoutExtension}_$scannerName.$resultFileExtension")
+                "${path.nameWithoutExtension}_$scannerName.$resultFileExt")
 
         return scanPath(path, resultsFile)
     }
-
-    /**
-     * A property containing the file name extension of the scanner's native output format, without the dot.
-     */
-    protected abstract val resultFileExtension: String
 
     /**
      * Bootstrap the scanner to be ready for use, like downloading and / or installing it.

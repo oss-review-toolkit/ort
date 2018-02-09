@@ -43,14 +43,13 @@ object ScanCode : Scanner() {
     private val TIMEOUT_REGEX = Pattern.compile(
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds.")
 
-    override val resultFileExtension = "json"
+    override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
+    override val resultFileExt = "json"
 
     override fun scanPath(path: File, resultsFile: File): Result {
-        val executable = if (OS.isWindows) "scancode.bat" else "scancode"
-
         log.info { "Detecting the ScanCode version..." }
 
-        val version = getCommandVersion(executable, transform = {
+        val version = getCommandVersion(scannerExe, transform = {
             // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
             it.substringAfter("ScanCode version ")
         })
@@ -64,7 +63,7 @@ object ScanCode : Scanner() {
 
         println("Running ScanCode in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
-                executable,
+                scannerExe,
                 *options.toTypedArray(),
                 "--timeout", TIMEOUT.toString(),
                 "-n", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString(),
