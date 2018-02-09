@@ -213,7 +213,7 @@ class NPM : PackageManager() {
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-            OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+            OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, pkgRequest).use { response ->
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     log.debug {
                         if (response.cacheResponse() != null) {

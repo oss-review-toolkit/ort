@@ -54,6 +54,7 @@ import kotlin.system.exitProcess
  */
 object Main {
     const val TOOL_NAME = "analyzer"
+    const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
     private class PackageManagerConverter : IStringConverter<PackageManagerFactory<PackageManager>> {
         companion object {

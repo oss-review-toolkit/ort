@@ -67,6 +67,7 @@ class SummaryEntry(
  */
 object Main {
     const val TOOL_NAME = "scanner"
+    const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
     private class OutputFormatConverter : IStringConverter<OutputFormat> {
         override fun convert(name: String): OutputFormat {
