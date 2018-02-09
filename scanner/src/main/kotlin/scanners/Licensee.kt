@@ -50,7 +50,7 @@ object Licensee : Scanner() {
         with(process) {
             if (exitValue() == 0) {
                 stdoutFile.copyTo(resultsFile)
-                println("Stored Licensee results in '${resultsFile.absolutePath}'.")
+                println("Stored $this results in '${resultsFile.absolutePath}'.")
                 return getResult(resultsFile)
             } else {
                 throw ScanException(failMessage)

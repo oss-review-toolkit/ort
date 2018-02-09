@@ -81,7 +81,7 @@ object ScanCode : Scanner() {
 
         with(process) {
             if (exitValue() == 0 || hasOnlyTimeoutErrors(result)) {
-                println("Stored ScanCode results in '${resultsFile.absolutePath}'.")
+                println("Stored $this results in '${resultsFile.absolutePath}'.")
                 return result
             } else {
                 throw ScanException(failMessage)
