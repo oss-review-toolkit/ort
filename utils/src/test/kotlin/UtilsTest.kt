@@ -184,6 +184,22 @@ class UtilsTest : WordSpec({
         }
     }
 
+    "isInPathEnvironment" should {
+        "find system executables on Windows" {
+            isInPathEnvironment("winver") shouldBe true
+            isInPathEnvironment("winver.exe") shouldBe true
+
+            isInPathEnvironment("*") shouldBe false
+            isInPathEnvironment("nul") shouldBe false
+        }.config(enabled = OS.isWindows)
+
+        "find system executables on non-Windows" {
+            isInPathEnvironment("sh") shouldBe true
+
+            isInPathEnvironment("/") shouldBe false
+        }.config(enabled = !OS.isWindows)
+    }
+
     "normalizeVcsUrl" should {
         "do nothing for empty URLs" {
             normalizeVcsUrl("") shouldBe ""
