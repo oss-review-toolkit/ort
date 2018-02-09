@@ -41,7 +41,8 @@ import java.net.HttpURLConnection
 object BoyterLc : Scanner() {
     const val VERSION = "1.0.1"
 
-    override val resultFileExtension = "json"
+    override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
+    override val resultFileExt = "json"
 
     override fun bootstrap(): File? {
         val url = if (OS.isWindows) {
@@ -78,12 +79,10 @@ object BoyterLc : Scanner() {
     }
 
     override fun scanPath(path: File, resultsFile: File): Result {
-        val executable = if (OS.isWindows) "lc.exe" else "lc"
-
         // For now, lc can only scan whole directories, not single files, see https://github.com/boyter/lc/issues/6.
         val directory = if (path.isDirectory) path.absolutePath else path.absoluteFile.parent
         val process = ProcessCapture(
-                File(scannerDir, executable).absolutePath,
+                File(scannerDir, scannerExe).absolutePath,
                 "--format", "json",
                 "--output", resultsFile.absolutePath,
                 directory
