@@ -207,7 +207,7 @@ class PIP : PackageManager() {
                 OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, pkgRequest).use { response ->
                     val body = response.body()?.string()?.trim()
 
-                    if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrBlank()) {
+                    if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
                         log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id}'." }
                         if (body != null) {
                             log.warn { "Response was '$body'." }
