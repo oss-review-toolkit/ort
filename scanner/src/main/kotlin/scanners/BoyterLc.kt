@@ -21,7 +21,7 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.downloader.unpack
+import com.here.ort.utils.unpack
 import com.here.ort.scanner.Main
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.Scanner

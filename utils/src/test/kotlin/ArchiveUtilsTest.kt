@@ -17,9 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
-
-import com.here.ort.utils.safeDeleteRecursively
+package com.here.ort.utils
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe

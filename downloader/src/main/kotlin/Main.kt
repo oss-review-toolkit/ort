@@ -42,6 +42,7 @@ import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.unpack
 import com.here.ort.utils.yamlMapper
 
 import java.io.File

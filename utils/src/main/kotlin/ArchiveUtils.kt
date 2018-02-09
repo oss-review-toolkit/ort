@@ -17,9 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
-
-import com.here.ort.utils.safeMkdirs
+package com.here.ort.utils
 
 import java.io.File
 import java.io.IOException
