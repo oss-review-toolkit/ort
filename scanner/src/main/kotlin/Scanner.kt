@@ -29,6 +29,12 @@ import java.io.File
 import java.util.SortedSet
 
 abstract class Scanner {
+    protected val scannerDir: File?
+
+    constructor() {
+        scannerDir = bootstrap()
+        scannerDir?.let { it.deleteOnExit() }
+    }
 
     companion object {
         /**
@@ -116,6 +122,13 @@ abstract class Scanner {
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
     protected abstract val resultFileExtension: String
+
+    /**
+     * Bootstrap the scanner to be ready for use, like downloading and / or installing it.
+     *
+     * @return The directory the scanner is installed in.
+     */
+    protected open fun bootstrap(): File? = null
 
     /**
      * Scan the provided [path] for license information, writing results to [resultsFile].
