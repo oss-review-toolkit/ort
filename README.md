@@ -62,6 +62,12 @@ ORT comes with some example implementations for wrappers around license / copyri
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
+## Supported remote caches
+
+For reusing already known scan results, ORT can currently use one of the following backends as a remote cache:
+
+* [Artifactory](https://jfrog.com/artifactory/)
+
 ## Usage
 
 ### [analyzer](./analyzer/src/main/kotlin)
@@ -185,7 +191,7 @@ Usage: downloader [options]
 This tool wraps underlying license / copyright scanners with a common API. This way all supported scanners can be used
 in the same way to easily run them and compare their results. If passed a dependencies analysis file (`-d`), the Scanner
 will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In order to not
-download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a (remote) cache, hosted
+download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote cache, hosted
 e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented). Using the example of
 configuring an Artifactory cache, the YAML-based configuration file would look like:
 
