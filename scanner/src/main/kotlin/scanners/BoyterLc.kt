@@ -74,6 +74,10 @@ object BoyterLc : Scanner() {
             log.info { "Unpacking '$scannerArchive' to '$scannerDir'... " }
             scannerArchive.unpack(scannerDir)
 
+            if (!OS.isWindows) {
+                File(scannerDir, scannerExe).setExecutable(true)
+            }
+
             scannerDir
         }
     }
