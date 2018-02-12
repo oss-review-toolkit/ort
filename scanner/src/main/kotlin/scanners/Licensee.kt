@@ -25,7 +25,8 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.yamlMapper
+import com.here.ort.utils.getCommandVersion
+import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 
 import java.io.File
@@ -34,15 +35,21 @@ object Licensee : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
     override val resultFileExt = "yml"
 
-    // Licensee cannot report its version before https://github.com/benbalter/licensee/pull/269 which is not contained
-    // in any release yet.
-    override fun getVersion(executable: String) = "9.8.0"
+    override fun bootstrap(): File? {
+        ProcessCapture("gem", "install", "--user-install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
+        val ruby = ProcessCapture("ruby", "-rubygems", "-e", "puts Gem.user_dir").requireSuccess()
+        val userDir = ruby.stdout().trimEnd()
+        return File(userDir, "bin")
+    }
+
+    override fun getVersion(executable: String) = getCommandVersion(scannerPath.absolutePath, "version")
 
     override fun scanPath(path: File, resultsFile: File): Result {
         val process = ProcessCapture(
-                path.parentFile,
-                scannerExe,
-                path.name
+                scannerPath.absolutePath,
+                "detect",
+                "--json",
+                path.absolutePath
         )
 
         if (process.stderr().isNotBlank()) {
@@ -65,16 +72,14 @@ object Licensee : LocalScanner() {
         val errors = sortedSetOf<String>()
 
         if (resultsFile.isFile && resultsFile.length() > 0) {
-            // Convert Licensee's output for "Closest licenses" (in case of non-exact matches) into proper YAML
-            // by replacing the asterisk with a dash.
-            val yamlResults = resultsFile.readText().replace("    * ", "    - ")
-            val scanOutput = yamlMapper.readTree(yamlResults)
-            val matchedFiles = scanOutput["Matched files"].asIterable().map { it.asText() }
+            val jsonResults = resultsFile.readText()
+            val scanOutput = jsonMapper.readTree(jsonResults)
+            val matchedFiles = scanOutput["matched_files"]
 
             fileCount = matchedFiles.count()
 
             matchedFiles.forEach {
-                licenses.add(scanOutput[it]["License"].asText())
+                licenses.add(it["matched_license"].asText().capitalize())
             }
         }
 
