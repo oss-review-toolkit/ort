@@ -63,7 +63,6 @@ object ScanCode : Scanner() {
             options.add("--verbose")
         }
 
-        println("Running ScanCode in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
                 scannerPath.absolutePath,
                 *options.toTypedArray(),
@@ -82,7 +81,6 @@ object ScanCode : Scanner() {
 
         with(process) {
             if (exitValue() == 0 || hasOnlyTimeoutErrors(result)) {
-                println("Stored $this results in '${resultsFile.absolutePath}'.")
                 return result
             } else {
                 throw ScanException(failMessage)
