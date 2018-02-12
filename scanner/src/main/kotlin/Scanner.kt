@@ -43,6 +43,11 @@ abstract class Scanner {
     protected abstract val scannerExe: String
 
     /**
+     * The full path to the scanner executable.
+     */
+    protected val scannerPath by lazy { File(scannerDir, scannerExe) }
+
+    /**
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
     protected abstract val resultFileExt: String

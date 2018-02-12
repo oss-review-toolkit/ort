@@ -77,7 +77,7 @@ object BoyterLc : Scanner() {
             if (!OS.isWindows) {
                 // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
                 // Unix mode bits.
-                File(scannerDir, scannerExe).setExecutable(true)
+                scannerPath.setExecutable(true)
             }
 
             scannerDir
@@ -86,7 +86,7 @@ object BoyterLc : Scanner() {
 
     override fun scanPath(path: File, resultsFile: File): Result {
         val process = ProcessCapture(
-                File(scannerDir, scannerExe).absolutePath,
+                scannerPath.absolutePath,
                 "--confidence", "0.982", // Cut-off value to only get "Apache-2.0" (and not also "ECL-2.0") returned.
                 "--format", "json",
                 "--output", resultsFile.absolutePath,
