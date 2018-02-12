@@ -28,6 +28,7 @@ import com.here.ort.scanner.Scanner
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 
@@ -83,6 +84,12 @@ object BoyterLc : Scanner() {
             scannerDir
         }
     }
+
+    override fun getVersion(executable: String) =
+            getCommandVersion(scannerPath.absolutePath, transform = {
+                // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
+                it.substringAfter("licensechecker version ")
+            })
 
     override fun scanPath(path: File, resultsFile: File): Result {
         val process = ProcessCapture(
