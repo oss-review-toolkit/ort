@@ -50,7 +50,7 @@ class ScanPathTest : StringSpec() {
     init {
         "BoyterLc recognizes our own LICENSE" {
             val result = BoyterLc.scan(File("../LICENSE"), outputDir)
-            result.licenses shouldBe setOf("Apache-2.0")
+            result.licenses shouldBe setOf("Apache-2.0", "ECL-2.0")
         }.config(tags = setOf(ExpensiveTag))
 
         "Licensee recognizes our own LICENSE" {
