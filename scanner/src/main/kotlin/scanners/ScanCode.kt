@@ -46,10 +46,14 @@ object ScanCode : Scanner() {
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
     override val resultFileExt = "json"
 
+    override fun bootstrap(): File? {
+        return File("src/funTest/assets/scanners/scancode-toolkit")
+    }
+
     override fun scanPath(path: File, resultsFile: File): Result {
         log.info { "Detecting the ScanCode version..." }
 
-        val version = getCommandVersion(scannerExe, transform = {
+        val version = getCommandVersion(scannerPath.absolutePath, transform = {
             // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
             it.substringAfter("ScanCode version ")
         })
@@ -63,7 +67,7 @@ object ScanCode : Scanner() {
 
         println("Running ScanCode in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
-                scannerExe,
+                scannerPath.absolutePath,
                 *options.toTypedArray(),
                 "--timeout", TIMEOUT.toString(),
                 "-n", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString(),

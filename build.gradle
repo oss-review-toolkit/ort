@@ -116,10 +116,6 @@ subprojects {
                 excludeTags: System.getProperty("excludeTags")
         ]
 
-        // Add the Git submodule for ScanCode to PATH so functional tests can find the scanner.
-        def scanCodePath = new File("$rootDir/scanner/src/funTest/assets/scanners/scancode-toolkit")
-        environment('PATH', scanCodePath.path + File.pathSeparator + System.getenv('PATH'))
-
         testLogging {
             events 'started', 'passed', 'skipped', 'failed'
             exceptionFormat 'full'
