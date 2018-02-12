@@ -120,7 +120,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
                     Set<ResolvedArtifact> resolvedArtifacts
                     try {
-                        resolvedArtifacts = configuration.getResolvedConfiguration().getResolvedArtifacts()
+                        resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration.artifacts
                     } catch (ResolveException e) {
                         resolvedArtifacts = []
                     }
