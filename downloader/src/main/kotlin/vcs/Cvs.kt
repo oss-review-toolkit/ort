@@ -21,6 +21,7 @@ package com.here.ort.downloader.vcs
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
@@ -152,45 +153,53 @@ object Cvs : VersionControlSystem() {
                           recursive: Boolean): WorkingTree {
         log.info { "Using $this version ${getVersion()}." }
 
-        val path = if (pkg.vcsProcessed.path.isBlank()) "." else pkg.vcsProcessed.path
+        try {
+            val path = if (pkg.vcsProcessed.path.isBlank()) "." else pkg.vcsProcessed.path
 
-        // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
-        runCvsCommand(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
-        val workingTree = getWorkingTree(targetDir)
+            // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
+            runCvsCommand(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
+            val workingTree = getWorkingTree(targetDir)
 
-        val revision = if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
-            pkg.vcsProcessed.revision
-        } else {
-            // Create all working tree directories in order to be able to query the log.
-            runCvsCommand(targetDir, "update", "-d")
+            val revision = if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+                pkg.vcsProcessed.revision
+            } else {
+                // Create all working tree directories in order to be able to query the log.
+                runCvsCommand(targetDir, "update", "-d")
 
-            log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
+                log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
 
-            workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also {
-                if (it.isBlank()) {
-                    throw IOException("Unable to determine a revision to checkout.")
-                }
+                workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also {
+                    if (it.isBlank()) {
+                        throw IOException("Unable to determine a revision to checkout.")
+                    }
 
-                log.warn {
-                    "Using guessed $this revision '$it' for version '${pkg.id.version}'. This might cause the " +
-                            "downloaded source code to not match the package version."
-                }
+                    log.warn {
+                        "Using guessed $this revision '$it' for version '${pkg.id.version}'. This might cause the " +
+                                "downloaded source code to not match the package version."
+                    }
 
-                // Clean the temporarily updated working tree again.
-                targetDir.listFiles().forEach {
-                    if (it.isDirectory) {
-                        if (it.name != "CVS") it.safeDeleteRecursively()
-                    } else {
-                        it.delete()
+                    // Clean the temporarily updated working tree again.
+                    targetDir.listFiles().forEach {
+                        if (it.isDirectory) {
+                            if (it.name != "CVS") it.safeDeleteRecursively()
+                        } else {
+                            it.delete()
+                        }
                     }
                 }
             }
+
+            // Checkout the working tree of the desired revision.
+            runCvsCommand(targetDir, "checkout", "-r", revision, path)
+
+            return workingTree
+        } catch (e: IOException) {
+            if (com.here.ort.utils.printStackTrace) {
+                e.printStackTrace()
+            }
+
+            throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
-
-        // Checkout the working tree of the desired revision.
-        runCvsCommand(targetDir, "checkout", "-r", revision, path)
-
-        return workingTree
     }
 
     fun runCvsCommand(workingDir: File, vararg args: String) =
