@@ -70,18 +70,18 @@ object BoyterLc : Scanner() {
             val scannerArchive = createTempFile(suffix = url.substringAfterLast("/"))
             Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
 
-            val scannerDir = createTempDir()
+            val unpackDir = createTempDir()
 
-            log.info { "Unpacking '$scannerArchive' to '$scannerDir'... " }
-            scannerArchive.unpack(scannerDir)
+            log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
+            scannerArchive.unpack(unpackDir)
 
             if (!OS.isWindows) {
                 // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
                 // Unix mode bits.
-                scannerPath.setExecutable(true)
+                File(unpackDir, scannerExe).setExecutable(true)
             }
 
-            scannerDir
+            unpackDir
         }
     }
 
@@ -94,7 +94,7 @@ object BoyterLc : Scanner() {
     override fun scanPath(path: File, resultsFile: File): Result {
         val process = ProcessCapture(
                 scannerPath.absolutePath,
-                "--confidence", "0.982", // Cut-off value to only get "Apache-2.0" (and not also "ECL-2.0") returned.
+                "--confidence", "0.95", // Cut-off value to only get most relevant matches.
                 "--format", "json",
                 "--output", resultsFile.absolutePath,
                 path.absolutePath
