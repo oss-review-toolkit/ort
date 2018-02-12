@@ -131,9 +131,9 @@ abstract class Scanner {
     }
 
     /**
-     * Bootstrap the scanner to be ready for use, like downloading and / or installing it.
+     * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.
      *
-     * @return The directory the scanner is installed in.
+     * @return The directory the scanner is installed in, or null if the scanner was not bootstrapped.
      */
     protected open fun bootstrap(): File? = null
 
