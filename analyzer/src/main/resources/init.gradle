@@ -121,15 +121,17 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     Set<ResolvedArtifact> resolvedArtifacts
                     try {
                         resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration.artifacts
+
+                        List<Dependency> dependencies = result.getRoot().getDependencies().collect {
+                            parseDependency(it, project, resolvedArtifacts, [])
+                        }
+
+                        new ConfigurationImpl(configuration.name, dependencies)
                     } catch (ResolveException e) {
-                        resolvedArtifacts = []
+                        project.logger.info("Configuration '${configuration.name}' could not be resolved: ${e.message}")
+                        errors.add(collectCauses(e).toString())
+                        null
                     }
-
-                    List<Dependency> dependencies = result.getRoot().getDependencies().collect {
-                        parseDependency(it, project, resolvedArtifacts, [])
-                    }
-
-                    new ConfigurationImpl(configuration.name, dependencies)
                 } else {
                     project.logger.info("Configuration '${configuration.name}' cannot be resolved.")
                     null
