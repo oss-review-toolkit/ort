@@ -87,6 +87,7 @@ object BoyterLc : Scanner() {
     override fun scanPath(path: File, resultsFile: File): Result {
         val process = ProcessCapture(
                 File(scannerDir, scannerExe).absolutePath,
+                "--confidence", "0.982", // Cut-off value to only get "Apache-2.0" (and not also "ECL-2.0") returned.
                 "--format", "json",
                 "--output", resultsFile.absolutePath,
                 path.absolutePath
@@ -113,9 +114,9 @@ object BoyterLc : Scanner() {
         if (resultsFile.isFile && resultsFile.length() > 0) {
             val json = jsonMapper.readTree(resultsFile)
             json.forEach { file ->
-                file["LicenseIdentified"].forEach { license ->
-                    licenses.add(license["LicenseId"].asText())
-                }
+                licenses.addAll(file["LicenseGuesses"].map { license ->
+                    license["LicenseId"].asText()
+                })
             }
         }
 
