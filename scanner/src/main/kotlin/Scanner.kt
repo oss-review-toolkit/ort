@@ -34,7 +34,7 @@ abstract class Scanner {
      * The directory the scanner was bootstrapped to, if so.
      */
     protected val scannerDir by lazy {
-        getPathFromEnvironment(scannerExe) ?: bootstrap()?.also { it.deleteOnExit() }
+        getPathFromEnvironment(scannerExe)?.parentFile ?: bootstrap()?.also { it.deleteOnExit() }
     }
 
     /**
