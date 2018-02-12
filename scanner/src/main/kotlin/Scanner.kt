@@ -112,6 +112,9 @@ abstract class Scanner {
             throw ScanException("Package '${pkg.id}' could not be scanned.", e)
         }
 
+        val version = getVersion(scannerPath.absolutePath)
+        println("Running $this version $version on directory '${sourceDirectory.absolutePath}'.")
+
         return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, resultsFile) }
     }
 
@@ -132,6 +135,9 @@ abstract class Scanner {
         val resultsFile = File(scanResultsDirectory,
                 "${path.nameWithoutExtension}_$scannerName.$resultFileExt")
 
+        val version = getVersion(scannerPath.absolutePath)
+        println("Running $this version $version on path '${path.absolutePath}'.")
+
         return scanPath(path, resultsFile)
     }
 
@@ -141,6 +147,11 @@ abstract class Scanner {
      * @return The directory the scanner is installed in, or null if the scanner was not bootstrapped.
      */
     protected open fun bootstrap(): File? = null
+
+    /**
+     * Return the version of the specified scanner [executable], or an empty string in case of failure.
+     */
+    abstract fun getVersion(executable: String): String
 
     /**
      * Scan the provided [path] for license information, writing results to [resultsFile].

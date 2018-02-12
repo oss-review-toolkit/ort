@@ -50,16 +50,14 @@ object ScanCode : Scanner() {
         return File("src/funTest/assets/scanners/scancode-toolkit")
     }
 
+    override fun getVersion(executable: String) =
+            getCommandVersion(scannerPath.absolutePath, transform = {
+                // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
+                // the prefix.
+                it.substringAfter("ScanCode version ")
+            })
+
     override fun scanPath(path: File, resultsFile: File): Result {
-        log.info { "Detecting the ScanCode version..." }
-
-        val version = getCommandVersion(scannerPath.absolutePath, transform = {
-            // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so remove the prefix.
-            it.substringAfter("ScanCode version ")
-        })
-
-        log.info { "Using ScanCode version $version." }
-
         val options = DEFAULT_OPTIONS.toMutableList()
         if (log.isEnabledFor(Level.DEBUG)) {
             options.add("--verbose")

@@ -34,6 +34,10 @@ object Licensee : Scanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
     override val resultFileExt = "yml"
 
+    // Licensee cannot report its version before https://github.com/benbalter/licensee/pull/269 which is not contained
+    // in any release yet.
+    override fun getVersion(executable: String) = "9.8.0"
+
     override fun scanPath(path: File, resultsFile: File): Result {
         println("Running Licensee in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
