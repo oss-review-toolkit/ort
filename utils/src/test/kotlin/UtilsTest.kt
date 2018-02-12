@@ -20,6 +20,7 @@
 package com.here.ort.utils
 
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.specs.WordSpec
 
@@ -186,17 +187,22 @@ class UtilsTest : WordSpec({
 
     "isInPathEnvironment" should {
         "find system executables on Windows" {
-            isInPathEnvironment("winver") shouldBe true
-            isInPathEnvironment("winver.exe") shouldBe true
+            val winverPath = File(System.getenv("SYSTEMROOT"), "system32/winver.exe")
 
-            isInPathEnvironment("*") shouldBe false
-            isInPathEnvironment("nul") shouldBe false
+            getPathFromEnvironment("winver") shouldNotBe null
+            getPathFromEnvironment("winver") shouldBe winverPath
+
+            getPathFromEnvironment("winver.exe") shouldNotBe null
+            getPathFromEnvironment("winver.exe") shouldBe winverPath
+
+            getPathFromEnvironment("*") shouldBe null
+            getPathFromEnvironment("nul") shouldBe null
         }.config(enabled = OS.isWindows)
 
         "find system executables on non-Windows" {
-            isInPathEnvironment("sh") shouldBe true
+            getPathFromEnvironment("sh") shouldBe "/bin/sh"
 
-            isInPathEnvironment("/") shouldBe false
+            getPathFromEnvironment("/") shouldBe null
         }.config(enabled = !OS.isWindows)
     }
 
