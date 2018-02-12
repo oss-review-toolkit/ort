@@ -29,36 +29,6 @@ import java.io.IOException
 import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
-    "String.urlencode" should {
-        val str = "project: fünky\$name*>nul."
-
-        "encode '*'" {
-            "*".fileSystemEncode() shouldBe "%2A"
-        }
-
-        "encode '.'" {
-            ".".fileSystemEncode() shouldBe "%2E"
-        }
-
-        "encode ':'" {
-            ":".fileSystemEncode() shouldBe "%3A"
-        }
-
-        "create a valid file name" {
-            val tempDir = createTempDir()
-            val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
-
-            fileFromStr.isFile shouldBe true
-
-            // This should not throw an IOException.
-            tempDir.safeDeleteRecursively()
-        }
-
-        "be reversible by String.urldecode" {
-            str.fileSystemEncode().fileSystemDecode() shouldBe str
-        }
-    }
-
     "filterVersionNames" should {
         "return an empty list for a blank version" {
             val names = listOf("dummy")
@@ -369,6 +339,36 @@ class UtilsTest : WordSpec({
             file.isFile shouldBe true
             shouldThrow<IOException> { file.safeMkdirs() }
             file.isFile shouldBe true // should still be a file afterwards
+        }
+    }
+
+    "String.urlencode" should {
+        val str = "project: fünky\$name*>nul."
+
+        "encode '*'" {
+            "*".fileSystemEncode() shouldBe "%2A"
+        }
+
+        "encode '.'" {
+            ".".fileSystemEncode() shouldBe "%2E"
+        }
+
+        "encode ':'" {
+            ":".fileSystemEncode() shouldBe "%3A"
+        }
+
+        "create a valid file name" {
+            val tempDir = createTempDir()
+            val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
+
+            fileFromStr.isFile shouldBe true
+
+            // This should not throw an IOException.
+            tempDir.safeDeleteRecursively()
+        }
+
+        "be reversible by String.urldecode" {
+            str.fileSystemEncode().fileSystemDecode() shouldBe str
         }
     }
 })
