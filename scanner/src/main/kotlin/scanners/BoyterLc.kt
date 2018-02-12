@@ -106,7 +106,6 @@ object BoyterLc : Scanner() {
 
         with(process) {
             if (exitValue() == 0) {
-                println("Stored $this results in '${resultsFile.absolutePath}'.")
                 return getResult(resultsFile)
             } else {
                 throw ScanException(failMessage)

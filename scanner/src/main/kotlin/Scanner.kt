@@ -115,7 +115,10 @@ abstract class Scanner {
         val version = getVersion(scannerPath.absolutePath)
         println("Running $this version $version on directory '${sourceDirectory.absolutePath}'.")
 
-        return scanPath(sourceDirectory, resultsFile).also { ScanResultsCache.write(pkg, resultsFile) }
+        return scanPath(sourceDirectory, resultsFile).also {
+            println("Stored $this results in '${resultsFile.absolutePath}'.")
+            ScanResultsCache.write(pkg, resultsFile)
+        }
     }
 
     /**
@@ -138,7 +141,9 @@ abstract class Scanner {
         val version = getVersion(scannerPath.absolutePath)
         println("Running $this version $version on path '${path.absolutePath}'.")
 
-        return scanPath(path, resultsFile)
+        return scanPath(path, resultsFile).also {
+            println("Stored $this results in '${resultsFile.absolutePath}'.")
+        }
     }
 
     /**

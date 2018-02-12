@@ -39,7 +39,6 @@ object Licensee : Scanner() {
     override fun getVersion(executable: String) = "9.8.0"
 
     override fun scanPath(path: File, resultsFile: File): Result {
-        println("Running Licensee in directory '${path.absolutePath}'...")
         val process = ProcessCapture(
                 path.parentFile,
                 scannerExe,
@@ -53,7 +52,6 @@ object Licensee : Scanner() {
         with(process) {
             if (exitValue() == 0) {
                 stdoutFile.copyTo(resultsFile)
-                println("Stored $this results in '${resultsFile.absolutePath}'.")
                 return getResult(resultsFile)
             } else {
                 throw ScanException(failMessage)
