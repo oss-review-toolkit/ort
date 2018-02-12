@@ -78,7 +78,7 @@ object BoyterLc : Scanner() {
             if (!OS.isWindows) {
                 // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
                 // Unix mode bits.
-                scannerPath.setExecutable(true)
+                File(unpackDir, scannerExe).setExecutable(true)
             }
 
             unpackDir
