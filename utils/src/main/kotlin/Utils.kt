@@ -165,9 +165,9 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 
 /**
- * Return whether the given executable is in the system's PATH environment.
+ * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
  */
-fun isInPathEnvironment(executable: String): Boolean {
+fun getPathFromEnvironment(executable: String): File? {
     val paths = System.getenv("PATH")?.splitToSequence(File.pathSeparatorChar) ?: emptySequence()
 
     val executables = if (OS.isWindows) {
@@ -184,9 +184,16 @@ fun isInPathEnvironment(executable: String): Boolean {
         listOf(executable)
     }
 
-    return paths.find { path ->
-        executables.any { File(path, it).isFile }
-    } != null
+    paths.forEach { path ->
+        executables.forEach {
+            val pathToExecutable = File(path, it)
+            if (pathToExecutable.isFile) {
+                return pathToExecutable
+            }
+        }
+    }
+
+    return null
 }
 
 /**

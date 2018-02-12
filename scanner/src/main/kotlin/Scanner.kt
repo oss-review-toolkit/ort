@@ -23,7 +23,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
 import com.here.ort.scanner.scanners.*
-import com.here.ort.utils.isInPathEnvironment
+import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
@@ -34,11 +34,7 @@ abstract class Scanner {
      * The directory the scanner was bootstrapped to, if so.
      */
     protected val scannerDir by lazy {
-        if (isInPathEnvironment(scannerExe)) {
-            null
-        } else {
-            bootstrap()?.also { it.deleteOnExit() }
-        }
+        getPathFromEnvironment(scannerExe) ?: bootstrap()?.also { it.deleteOnExit() }
     }
 
     /**
