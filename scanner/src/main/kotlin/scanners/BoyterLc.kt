@@ -94,7 +94,7 @@ object BoyterLc : Scanner() {
     override fun scanPath(path: File, resultsFile: File): Result {
         val process = ProcessCapture(
                 scannerPath.absolutePath,
-                "--confidence", "0.982", // Cut-off value to only get "Apache-2.0" (and not also "ECL-2.0") returned.
+                "--confidence", "0.95", // Cut-off value to only get most relevant matches.
                 "--format", "json",
                 "--output", resultsFile.absolutePath,
                 path.absolutePath
