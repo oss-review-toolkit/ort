@@ -39,7 +39,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 
 object BoyterLc : Scanner() {
-    const val VERSION = "1.0.1"
+    const val VERSION = "1.1.1"
 
     override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
     override val resultFileExt = "json"
@@ -85,13 +85,11 @@ object BoyterLc : Scanner() {
     }
 
     override fun scanPath(path: File, resultsFile: File): Result {
-        // For now, lc can only scan whole directories, not single files, see https://github.com/boyter/lc/issues/6.
-        val directory = if (path.isDirectory) path.absolutePath else path.absoluteFile.parent
         val process = ProcessCapture(
                 File(scannerDir, scannerExe).absolutePath,
                 "--format", "json",
                 "--output", resultsFile.absolutePath,
-                directory
+                path.absolutePath
         )
 
         if (process.stderr().isNotBlank()) {
