@@ -109,7 +109,7 @@ class PIP : PackageManager() {
         return definitionFiles
     }
 
-    override fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(workingDir: File, definitionFile: File): AnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
         // 2. Get meta-data about the local project via pydep (only for setup.py-based projects).
@@ -285,7 +285,7 @@ class PIP : PackageManager() {
                 declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(projectDir),
+                vcsProcessed = processProjectVcs(workingDir),
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )

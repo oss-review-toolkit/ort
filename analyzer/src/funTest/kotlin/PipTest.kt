@@ -35,7 +35,7 @@ class PipTest : WordSpec({
             val projectDir = File(workingDir, "spdx-tools-python")
             val definitionFile = File(projectDir, "setup.py")
 
-            val result = PIP.create().resolveDependencies(projectDir, listOf(definitionFile))[definitionFile]
+            val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
             val expectedResult = File(workingDir, "spdx-tools-python-expected-output.yml").readText()
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -47,7 +47,7 @@ class PipTest : WordSpec({
             val projectDir = File(workingDir, "example-python-flask")
             val definitionFile = File(projectDir, "requirements.txt")
 
-            val result = PIP.create().resolveDependencies(projectDir, listOf(definitionFile))[definitionFile]
+            val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
             val expectedResult = File(workingDir, "example-python-flask-expected-output.yml").readText()
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult

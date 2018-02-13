@@ -262,7 +262,7 @@ object Main {
         // Resolve dependencies per package manager.
         managedDefinitionFiles.forEach { manager, files ->
             // Print the list of dependencies.
-            val results = manager.create().resolveDependencies(absoluteProjectPath, files)
+            val results = manager.create().resolveDependencies(files)
 
             val curatedResults = packageCurationsFile?.let {
                 val provider = YamlFilePackageCurationProvider(it)

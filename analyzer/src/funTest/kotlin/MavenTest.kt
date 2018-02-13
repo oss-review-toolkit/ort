@@ -47,7 +47,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
-            val result = Maven.create().resolveDependencies(projectDir, listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -64,7 +64,7 @@ class MavenTest : StringSpec() {
             // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
             // of transitive dependencies would not work.
             val result = Maven.create()
-                    .resolveDependencies(projectDir, listOf(pomFileCore, pomFileResources))[pomFileCore]
+                    .resolveDependencies(listOf(pomFileCore, pomFileResources))[pomFileCore]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -73,7 +73,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = patchExpectedResult("maven-expected-output-root.yml")
 
-            val result = Maven.create().resolveDependencies(projectDir, listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -88,7 +88,7 @@ class MavenTest : StringSpec() {
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
             // not work.
             val result = Maven.create()
-                    .resolveDependencies(projectDir, listOf(pomFileApp, pomFileLib))[pomFileApp]
+                    .resolveDependencies(listOf(pomFileApp, pomFileLib))[pomFileApp]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -97,7 +97,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "lib/pom.xml")
             val expectedResult = patchExpectedResult("maven-expected-output-lib.yml")
 
-            val result = Maven.create().resolveDependencies(projectDir, listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
