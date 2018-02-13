@@ -21,8 +21,6 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import com.here.ort.utils.fileSystemEncode
-
 import java.util.SortedSet
 
 /**
@@ -63,15 +61,10 @@ data class PackageReference(
     override fun compareTo(other: PackageReference) = compareValuesBy(this, other, { it.identifier })
 
     /**
-     * The normalized package name, can be used to create directories.
-     */
-    val normalizedName = name.fileSystemEncode()
-
-    /**
      * The minimum human readable information to identify the package referred to. As references are specific to the
      * package manager, it is not explicitly included.
      */
-    val identifier = "$namespace:$normalizedName:$version"
+    val identifier = "$namespace:$name:$version"
 
     /**
      * Returns whether the given package is a (transitive) dependency of this reference.
