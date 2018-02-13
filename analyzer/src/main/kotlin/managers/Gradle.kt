@@ -37,7 +37,10 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OS
+import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+
+import org.apache.maven.project.ProjectBuildingException
 
 import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
@@ -154,28 +157,50 @@ class Gradle : PackageManager() {
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
                                 repositories: List<RemoteRepository>): PackageReference {
+        val errors = dependency.error?.let { mutableListOf(it) } ?: mutableListOf()
+
+        // Only look for a package when there was no error resolving the dependency.
         if (dependency.error == null) {
-            // Only look for a package when there was no error resolving the dependency.
-            packages.getOrPut("${dependency.groupId}:${dependency.artifactId}:${dependency.version}") {
+            val identifier = "${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
+
+            val rawPackage by lazy {
+                Package(
+                        id = Identifier(
+                                packageManager = javaClass.simpleName,
+                                namespace = dependency.groupId,
+                                name = dependency.artifactId,
+                                version = dependency.version
+                        ),
+                        declaredLicenses = sortedSetOf(),
+                        description = "",
+                        homepageUrl = "",
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+                )
+            }
+
+            packages.getOrPut(identifier) {
                 val pkg = if (dependency.pomFile.isNotBlank()) {
                     val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, dependency.classifier,
                             dependency.extension, dependency.version)
-                    maven.parsePackage(artifact, repositories, javaClass.simpleName)
+                    try {
+                        maven.parsePackage(artifact, repositories, javaClass.simpleName)
+                    } catch (e: ProjectBuildingException) {
+                        if (com.here.ort.utils.printStackTrace) {
+                            e.printStackTrace()
+                        }
+
+                        log.error {
+                            "Could not get package information for dependency '$identifier': ${e.message}"
+                        }
+
+                        errors.addAll(e.collectMessages())
+
+                        rawPackage
+                    }
                 } else {
-                    Package(
-                            id = Identifier(
-                                    packageManager = javaClass.simpleName,
-                                    namespace = dependency.groupId,
-                                    name = dependency.artifactId,
-                                    version = dependency.version
-                            ),
-                            declaredLicenses = sortedSetOf(),
-                            description = "",
-                            homepageUrl = "",
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                    )
+                    rawPackage
                 }
 
                 pkg.copy(vcsProcessed = processPackageVcs(pkg.vcs))
@@ -184,7 +209,7 @@ class Gradle : PackageManager() {
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
         return PackageReference(dependency.groupId, dependency.artifactId, dependency.version,
-                transitiveDependencies.toSortedSet(), dependency.error?.let { listOf(it) } ?: emptyList())
+                transitiveDependencies.toSortedSet(), errors)
     }
 
     /**
