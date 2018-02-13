@@ -97,16 +97,25 @@ class SBT : PackageManager() {
 
         definitionFiles.forEach { definitionFile ->
             val workingDir = definitionFile.parentFile
-            val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
-                    .requireSuccess()
 
-            // Get the list of POM files created by "sbt makePom". A single call might create multiple POM files in
-            // case of sub-projects.
-            val makePomFiles = sbt.stdout().lines().mapNotNull {
-                POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+            // Check if a POM was already generated if this is a sub-module in a multi-module project.
+            val targetDir = File(workingDir, "target")
+            val hasPom = targetDir.isDirectory && targetDir.listFiles { _, name ->
+                name.startsWith(workingDir.name + "-") && name.endsWith(".pom")
+            }.isNotEmpty()
+
+            if (!hasPom) {
+                val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
+                        .requireSuccess()
+
+                // Get the list of POM files created by "sbt makePom". A single call might create multiple POM files in
+                // case of sub-projects.
+                val makePomFiles = sbt.stdout().lines().mapNotNull {
+                    POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+                }
+
+                pomFiles.addAll(makePomFiles)
             }
-
-            pomFiles.addAll(makePomFiles)
         }
 
         return pomFiles.toList()
