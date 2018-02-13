@@ -121,8 +121,8 @@ class SBT : PackageManager() {
         return pomFiles.toList()
     }
 
-    override fun resolveDependencies(projectDir: File, definitionFiles: List<File>) =
+    override fun resolveDependencies(definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
             // TODO: Fix Maven being listed as the package manager in the result.
-            Maven.create().resolveDependencies(projectDir, prepareResolution(definitionFiles))
+            Maven.create().enableSbtMode().resolveDependencies(prepareResolution(definitionFiles))
 }

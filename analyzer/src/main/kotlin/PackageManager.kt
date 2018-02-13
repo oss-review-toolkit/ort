@@ -141,7 +141,7 @@ abstract class PackageManager {
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
-    open fun resolveDependencies(projectDir: File, definitionFiles: List<File>): ResolutionResult {
+    open fun resolveDependencies(definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, AnalyzerResult>()
 
         prepareResolution(definitionFiles).forEach { definitionFile ->
@@ -151,7 +151,7 @@ abstract class PackageManager {
 
             val elapsed = measureTimeMillis {
                 try {
-                    resolveDependencies(projectDir, workingDir, definitionFile)?.let {
+                    resolveDependencies(workingDir, definitionFile)?.let {
                         result[definitionFile] = it
                     }
                 } catch (e: Exception) {
@@ -183,7 +183,7 @@ abstract class PackageManager {
     /**
      * Resolve dependencies for a single [definitionFile], returning the [AnalyzerResult].
      */
-    protected open fun resolveDependencies(projectDir: File, workingDir: File, definitionFile: File): AnalyzerResult? {
+    protected open fun resolveDependencies(workingDir: File, definitionFile: File): AnalyzerResult? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
