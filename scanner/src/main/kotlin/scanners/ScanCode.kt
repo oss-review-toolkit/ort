@@ -41,7 +41,7 @@ object ScanCode : Scanner() {
             "--strip-root")
 
     private val TIMEOUT_REGEX = Pattern.compile(
-            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds.")
+            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: .+\\)")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
     override val resultFileExt = "json"
@@ -108,7 +108,8 @@ object ScanCode : Scanner() {
                     licenses.add(name)
                 }
 
-                errors.addAll(file["scan_errors"].map { it.asText() })
+                val path = file["path"].asText()
+                errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
             }
         }
 
@@ -116,14 +117,18 @@ object ScanCode : Scanner() {
     }
 
     internal fun hasOnlyTimeoutErrors(result: Result): Boolean {
-        result.errors.singleOrNull()?.let { error ->
-            TIMEOUT_REGEX.matcher(error).let {
-                if (it.matches()) {
-                    return it.group("timeout") == TIMEOUT.toString()
+        if (result.errors.isEmpty()) {
+            return false
+        }
+
+        result.errors.forEach { error ->
+            TIMEOUT_REGEX.matcher(error).let { matcher ->
+                if (!matcher.matches() || matcher.group("timeout") != TIMEOUT.toString()) {
+                    return false
                 }
             }
         }
 
-        return false
+        return true
     }
 }
