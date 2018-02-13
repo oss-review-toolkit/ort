@@ -75,6 +75,16 @@ class Maven : PackageManager() {
 
     private val projectsByIdentifier = mutableMapOf<String, ProjectBuildingResult>()
 
+    private var sbtMode = false
+
+    /**
+     * Enable compatibility mode with POM files generated from SBT using "sbt makePom".
+     */
+    fun enableSbtMode(): Maven {
+        sbtMode = true
+        return this
+    }
+
     override fun command(workingDir: File) = "mvn"
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
@@ -128,6 +138,10 @@ class Maven : PackageManager() {
 
         val vcsFromPackage = maven.parseVcsInfo(mavenProject)
 
+        // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
+        // project directory is the parent of this.
+        val vcsDir = if (sbtMode) workingDir.parentFile else workingDir
+
         val project = Project(
                 id = Identifier(
                         packageManager = javaClass.simpleName,
@@ -138,7 +152,7 @@ class Maven : PackageManager() {
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 aliases = emptyList(),
                 vcs = vcsFromPackage,
-                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage),
+                vcsProcessed = processProjectVcs(vcsDir, vcsFromPackage),
                 homepageUrl = mavenProject.url ?: "",
                 scopes = scopes.values.toSortedSet()
         )

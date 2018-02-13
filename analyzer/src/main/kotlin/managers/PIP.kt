@@ -285,7 +285,7 @@ class PIP : PackageManager() {
                 declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(projectDir),
+                vcsProcessed = processProjectVcs(workingDir),
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )
