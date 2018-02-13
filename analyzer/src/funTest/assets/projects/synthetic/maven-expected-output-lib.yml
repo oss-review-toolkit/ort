@@ -17,7 +17,7 @@ project:
     provider: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/maven"
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven/lib"
   homepage_url: "http://maven.apache.org"
   scopes:
   - name: "compile"

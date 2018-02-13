@@ -68,7 +68,7 @@ class BabelTest : WordSpec() {
                 val packageFile = File(projectDir, "package.json")
 
                 val expectedResult = patchExpectedResult("${projectDir.name}-expected-output.yml")
-                val actualResult = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val actualResult = npm.resolveDependencies(listOf(packageFile))[packageFile]
 
                 yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
             }

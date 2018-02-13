@@ -78,7 +78,7 @@ class NpmTest : FreeSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.npm
@@ -90,7 +90,7 @@ class NpmTest : FreeSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.npm
@@ -101,7 +101,7 @@ class NpmTest : FreeSpec() {
                 val workingDir = File(projectDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
                 result!!.project shouldBe Project.EMPTY
@@ -114,7 +114,7 @@ class NpmTest : FreeSpec() {
                 val workingDir = File(projectDir, "multiple-lockfiles")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
                 result!!.project shouldBe Project.EMPTY
@@ -130,7 +130,7 @@ class NpmTest : FreeSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.npm
@@ -144,7 +144,7 @@ class NpmTest : FreeSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
                 val expectedResult = patchExpectedResult(workingDir)
 
                 npm.command(workingDir) shouldBe NPM.yarn

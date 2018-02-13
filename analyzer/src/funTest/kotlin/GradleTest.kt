@@ -49,7 +49,7 @@ class GradleTest : StringSpec() {
             val packageFile = File(projectDir, "build.gradle")
             val expectedResult = patchExpectedResult("gradle-expected-output-root.yml")
 
-            val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
@@ -60,7 +60,7 @@ class GradleTest : StringSpec() {
             val packageFile = File(projectDir, "app/build.gradle")
             val expectedResult = patchExpectedResult("gradle-expected-output-app.yml")
 
-            val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
@@ -71,7 +71,7 @@ class GradleTest : StringSpec() {
             val packageFile = File(projectDir, "lib/build.gradle")
             val expectedResult = patchExpectedResult("gradle-expected-output-lib.yml")
 
-            val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
@@ -82,7 +82,7 @@ class GradleTest : StringSpec() {
             val packageFile = File(projectDir, "lib-without-repo/build.gradle")
             val expectedResult = patchExpectedResult("gradle-expected-output-lib-without-repo.yml")
 
-            val result = Gradle.create().resolveDependencies(projectDir, listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()

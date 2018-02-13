@@ -44,7 +44,7 @@ class SbtTest : FreeSpec({
             definitionFile.isFile shouldBe true
             expectedOutputFile.isFile shouldBe true
 
-            val resolutionResult = sbt.resolveDependencies(projectDir, listOf(definitionFile))
+            val resolutionResult = sbt.resolveDependencies(listOf(definitionFile))
 
             // Because of the mapping from SBT to POM files we cannot use definitionFile as the key, so just ensure
             // there is exactly one entry to take.
