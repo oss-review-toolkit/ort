@@ -71,6 +71,7 @@ object BoyterLc : Scanner() {
             Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
 
             val unpackDir = createTempDir()
+            unpackDir.deleteOnExit()
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)
