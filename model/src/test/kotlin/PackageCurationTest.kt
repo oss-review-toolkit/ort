@@ -57,7 +57,7 @@ class PackageCurationTest : StringSpec() {
                                     hashAlgorithm = HashAlgorithm.UNKNOWN
                             ),
                             vcs = VcsInfo(
-                                    provider = "git",
+                                    type = "git",
                                     url = "http://url.git",
                                     revision = "revision",
                                     path = "path"
@@ -92,7 +92,7 @@ class PackageCurationTest : StringSpec() {
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo(
-                            provider = "git",
+                            type = "git",
                             url = "http://url.git",
                             revision = "revision",
                             path = "path"
@@ -103,7 +103,7 @@ class PackageCurationTest : StringSpec() {
                     data = PackageCurationData(
                             homepageUrl = "http://home.page",
                             vcs = VcsInfo(
-                                    provider = "",
+                                    type = "",
                                     url = "http://url.git",
                                     revision = "",
                                     path = ""
@@ -121,7 +121,7 @@ class PackageCurationTest : StringSpec() {
                 binaryArtifact shouldBe pkg.binaryArtifact
                 sourceArtifact shouldBe pkg.sourceArtifact
                 vcs shouldBe VcsInfo(
-                        provider = pkg.vcs.provider,
+                        type = pkg.vcs.type,
                         url = curation.data.vcs!!.url,
                         revision = pkg.vcs.revision,
                         path = pkg.vcs.path
@@ -154,7 +154,7 @@ class PackageCurationTest : StringSpec() {
                     data = PackageCurationData(
                             homepageUrl = "http://home.page",
                             vcs = VcsInfo(
-                                    provider = "",
+                                    type = "",
                                     url = "http://url.git",
                                     revision = "",
                                     path = ""

@@ -9,12 +9,12 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: "git"
+    type: "git"
     url: "git://github.com:ccavanaugh/jgnash.git"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "https://github.com/ccavanaugh/jgnash.git"
     revision: "2aa4cce7d7fd46164030f2b4d244c4b89e77f722"
     path: ""
@@ -53,12 +53,12 @@ packages:
     hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "git://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -81,12 +81,12 @@ packages:
     hash: "47e033b7ab18c5dbd5fe29fc1bd5a40afe028818"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: "hamcrest-all"

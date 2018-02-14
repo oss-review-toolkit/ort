@@ -15,7 +15,7 @@
       hash: ""
       hash_algorithm: ""
     vcs:
-      provider: ""
+      type: ""
       url: "http://url.git"
       revision: ""
       path: ""

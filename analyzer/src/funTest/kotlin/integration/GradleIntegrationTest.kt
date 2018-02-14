@@ -45,7 +45,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo(
-                    provider = "Git",
+                    type = "Git",
                     url = "https://github.com/gradle/gradle.git",
                     revision = "v4.4.0",
                     path = ""

@@ -80,7 +80,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             val workingTree = VersionControlSystem.forDirectory(downloadDir)
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
-            workingTree.getProvider() shouldBe pkg.vcs.provider
+            workingTree.getType() shouldBe pkg.vcs.type
         }.config(tags = setOf(ExpensiveTag))
 
         "All package manager definition files are found" {
@@ -104,8 +104,8 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->
-                    VersionControlSystem.forProvider(result.project.vcsProcessed.provider) shouldBe
-                            VersionControlSystem.forProvider(pkg.vcs.provider)
+                    VersionControlSystem.forType(result.project.vcsProcessed.type) shouldBe
+                            VersionControlSystem.forType(pkg.vcs.type)
                     result.project.vcsProcessed.url shouldBe pkg.vcs.url
                     result.project.scopes shouldNot beEmpty()
                     result.packages shouldNot beEmpty()

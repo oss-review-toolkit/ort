@@ -30,11 +30,9 @@ import java.io.File
 import java.io.IOException
 
 object GitRepo : GitBase() {
-    override fun getWorkingTree(vcsDirectory: File) =
-            super.getWorkingTree(File(vcsDirectory, ".repo/manifests"))
+    override fun getWorkingTree(vcsDirectory: File) = super.getWorkingTree(File(vcsDirectory, ".repo/manifests"))
 
-    override fun isApplicableProvider(vcsProvider: String) =
-            vcsProvider.toLowerCase() in listOf("gitrepo", "git-repo", "repo")
+    override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("gitrepo", "git-repo", "repo")
 
     override fun isApplicableUrl(vcsUrl: String) = false
 

@@ -4,12 +4,12 @@ repository:
   name: "gradle"
   path: ""
   vcs:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: ""
@@ -22,12 +22,12 @@ projects:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -41,12 +41,12 @@ projects:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -276,12 +276,12 @@ projects:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -422,12 +422,12 @@ projects:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -667,12 +667,12 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -695,12 +695,12 @@ packages:
     hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "git://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -724,12 +724,12 @@ packages:
     hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
   vcs_processed:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
@@ -752,12 +752,12 @@ packages:
     hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: ""
     path: ""
@@ -779,12 +779,12 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
-    provider: "git"
+    type: "git"
     url: "https://gitbox.apache.org/repos/asf/struts.git/struts2-assembly"
     revision: "STRUTS_2_5_14_1"
     path: ""
   vcs_processed:
-    provider: "git"
+    type: "git"
     url: "https://gitbox.apache.org/repos/asf/struts.git/struts2-assembly"
     revision: "STRUTS_2_5_14_1"
     path: ""
@@ -808,12 +808,12 @@ packages:
     hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: "hamcrest-core"

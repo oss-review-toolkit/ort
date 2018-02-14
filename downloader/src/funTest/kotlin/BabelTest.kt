@@ -52,7 +52,7 @@ class BabelTest : StringSpec() {
     init {
         "Babel packages should be correctly downloaded" {
             val vcsFromPackage = VcsInfo(
-                    provider = "git",
+                    type = "git",
                     url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
                     revision = "",
                     path = ""

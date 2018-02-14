@@ -155,7 +155,7 @@ object Subversion : VersionControlSystem() {
                 }
             }
 
-    override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("subversion", "svn")
+    override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("subversion", "svn")
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
 

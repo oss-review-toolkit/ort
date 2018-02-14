@@ -48,9 +48,9 @@ abstract class VersionControlSystem {
         }
 
         /**
-         * Return the applicable VCS for the given [vcsProvider], or null if none is applicable.
+         * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
-        fun forProvider(vcsProvider: String) = ALL.find { it.isApplicableProvider(vcsProvider) }
+        fun forType(vcsType: String) = ALL.find { it.isApplicableType(vcsType) }
 
         /**
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
@@ -107,12 +107,12 @@ abstract class VersionControlSystem {
                         }
                     }
 
-                    val provider = forUrl(url)?.toString() ?: ""
-                    if (provider == "Git") {
+                    val type = forUrl(url)?.toString() ?: ""
+                    if (type == "Git") {
                         url += ".git"
                     }
 
-                    VcsInfo(provider, url, revision, path)
+                    VcsInfo(type, url, revision, path)
                 }
 
                 uri.host.endsWith("gitlab.com") || uri.host.endsWith("github.com") -> {
@@ -167,13 +167,13 @@ abstract class VersionControlSystem {
         /**
          * Return a simple string representation for the VCS this working tree belongs to.
          */
-        fun getProvider() = this@VersionControlSystem.toString()
+        fun getType() = this@VersionControlSystem.toString()
 
         /**
          * Conveniently return all VCS information, optionally for a given [path] in the working tree.
          */
         fun getInfo(path: File? = null) =
-                VcsInfo(getProvider(), getRemoteUrl(), getRevision(), path?.let { getPathToRoot(it) } ?: "" )
+                VcsInfo(getType(), getRemoteUrl(), getRevision(), path?.let { getPathToRoot(it) } ?: "" )
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.
@@ -240,10 +240,10 @@ abstract class VersionControlSystem {
     abstract fun getWorkingTree(vcsDirectory: File): WorkingTree
 
     /**
-     * Return true if the provider name matches this VCS. For example for SVN it should return true on "svn",
+     * Return true if the type name matches this VCS. For example for SVN it should return true on "svn",
      * "subversion", or any other spelling that clearly identifies SVN.
      */
-    abstract fun isApplicableProvider(vcsProvider: String): Boolean
+    abstract fun isApplicableType(vcsType: String): Boolean
 
     /**
      * Return true if this VCS can download from the provided URL. Should only return true when it's almost unambiguous,
