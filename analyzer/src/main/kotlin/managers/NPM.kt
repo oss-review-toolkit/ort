@@ -186,8 +186,14 @@ class NPM : PackageManager() {
             val version = json["version"].asText()
 
             val declaredLicenses = sortedSetOf<String>()
-            setOf(json["license"]).mapNotNullTo(declaredLicenses) {
-                it?.asText()
+
+            json["license"]?.let { licenseNode ->
+                val type = licenseNode.textValue() ?: licenseNode["type"].asTextOrEmpty()
+                declaredLicenses.add(type)
+            }
+
+            json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
+                licenseNode["type"]?.asText()
             }
 
             var description = json["description"].asTextOrEmpty()
