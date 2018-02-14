@@ -9,12 +9,12 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/maven"
@@ -56,12 +56,12 @@ packages:
     hash: ""
     hash_algorithm: ""
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -85,12 +85,12 @@ packages:
     hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
   vcs_processed:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
@@ -113,12 +113,12 @@ packages:
     hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "git"
+    type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: ""
     path: ""

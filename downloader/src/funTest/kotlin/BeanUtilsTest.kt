@@ -50,7 +50,7 @@ class BeanUtilsTest : StringSpec() {
     init {
         "BeanUtils SVN tag should be correctly downloaded" {
             val vcsFromCuration = VcsInfo(
-                    provider = "svn",
+                    type = "svn",
                     url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",
                     revision = "",
                     path = ""

@@ -34,9 +34,9 @@ import com.here.ort.utils.normalizeVcsUrl
 @JsonDeserialize(using = VcsInfoDeserializer::class)
 data class VcsInfo(
         /**
-         * The name of the VCS provider, for example Git, Hg or SVN.
+         * The name of the VCS type, for example Git, Hg or SVN.
          */
-        val provider: String,
+        val type: String,
 
         /**
          * The URL to the VCS repository.
@@ -49,7 +49,7 @@ data class VcsInfo(
         val revision: String,
 
         /**
-         * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS provider. For
+         * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
          * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
          * interpreted as the path to the manifest file.
          */
@@ -61,7 +61,7 @@ data class VcsInfo(
          */
         @JvmField
         val EMPTY = VcsInfo(
-                provider = "",
+                type = "",
                 url = "",
                 revision = "",
                 path = ""
@@ -77,16 +77,16 @@ data class VcsInfo(
             return other
         }
 
-        var provider = this.provider
-        if (provider.isBlank()) {
-            if (other.provider.isNotBlank()) {
-                provider = other.provider
+        var type = this.type
+        if (type.isBlank()) {
+            if (other.type.isNotBlank()) {
+                type = other.type
             }
         } else {
-            if (provider.equals(other.provider, true)) {
-                // Prefer the other provider only if its spelling matches the VCS class names.
-                if (other.provider.toLowerCase().capitalize() == other.provider) {
-                    provider = other.provider
+            if (type.equals(other.type, true)) {
+                // Prefer the other type only if its spelling matches the VCS class names.
+                if (other.type.toLowerCase().capitalize() == other.type) {
+                    type = other.type
                 }
             }
         }
@@ -106,7 +106,7 @@ data class VcsInfo(
             path = other.path
         }
 
-        return VcsInfo(provider, url, revision, path)
+        return VcsInfo(type, url, revision, path)
     }
 
     /**
@@ -118,10 +118,10 @@ data class VcsInfo(
 class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
         val node = p.codec.readTree<JsonNode>(p)
-        val provider = node.get("provider").asTextOrEmpty()
+        val type = node.get("type").asTextOrEmpty()
         val url = node.get("url").asTextOrEmpty()
         val revision = node.get("revision").asTextOrEmpty()
         val path = node.get("path").asTextOrEmpty()
-        return VcsInfo(provider, url, revision, path)
+        return VcsInfo(type, url, revision, path)
     }
 }

@@ -9,12 +9,12 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "https://github.com/deis/example-python-flask.git"
     revision: "0773991e36a4c69b121cdb05146d6140347d4065"
     path: ""
@@ -77,12 +77,12 @@ packages:
     hash: "c1d30f51cff4a38f9454b23328a15c5a"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -105,12 +105,12 @@ packages:
     hash: "150a8f1c180272753cf46dd3cdd6decf"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -132,12 +132,12 @@ packages:
     hash: "2fcedc9284d50e577b5192e8e3578355"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -159,12 +159,12 @@ packages:
     hash: "6d20b5be2d245be4ac7706cc390d130c"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -186,12 +186,12 @@ packages:
     hash: "fc4cc00c4863833230d3af92af48abd4"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -213,12 +213,12 @@ packages:
     hash: "338e5e8a83ea0f0625f768dba4597530"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -241,12 +241,12 @@ packages:
     hash: "a3d55aa79369aef5345c036a8a26307f"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""

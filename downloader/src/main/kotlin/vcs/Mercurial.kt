@@ -87,7 +87,7 @@ object Mercurial : VersionControlSystem() {
                 }
             }
 
-    override fun isApplicableProvider(vcsProvider: String) = vcsProvider.toLowerCase() in listOf("mercurial", "hg")
+    override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("mercurial", "hg")
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 

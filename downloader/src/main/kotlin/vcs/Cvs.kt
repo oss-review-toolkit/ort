@@ -145,7 +145,7 @@ object Cvs : VersionControlSystem() {
                 }
             }
 
-    override fun isApplicableProvider(vcsProvider: String) = vcsProvider.equals("cvs", true)
+    override fun isApplicableType(vcsType: String) = vcsType.equals("cvs", true)
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.matches("^:(ext|pserver):[^@]+@.+$".toRegex())
 

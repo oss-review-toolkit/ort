@@ -10,12 +10,12 @@ project:
   - "Mozilla Public License 2.0"
   aliases: []
   vcs:
-    provider: "git"
+    type: "git"
     url: "git@github.com:soc/directories.git"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "https://github.com/soc/directories.git"
     revision: "ed193b425d5c184029481e2330baaf5628bbefac"
     path: ""
@@ -54,12 +54,12 @@ packages:
     hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "git://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -83,12 +83,12 @@ packages:
     hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
     hash_algorithm: "SHA-1"
   vcs:
-    provider: "git"
+    type: "git"
     url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-core"
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: "hamcrest-core"

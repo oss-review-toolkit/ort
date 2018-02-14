@@ -276,13 +276,13 @@ object Main {
 
         var applicableVcs: VersionControlSystem? = null
 
-        if (target.vcsProcessed.provider.isNotBlank()) {
-            applicableVcs = VersionControlSystem.forProvider(target.vcsProcessed.provider)
+        if (target.vcsProcessed.type.isNotBlank()) {
+            applicableVcs = VersionControlSystem.forType(target.vcsProcessed.type)
             log.info {
                 if (applicableVcs != null) {
-                    "Detected VCS provider '$applicableVcs' from provider name '${target.vcsProcessed.provider}'."
+                    "Detected VCS type '$applicableVcs' from type name '${target.vcsProcessed.type}'."
                 } else {
-                    "Could not detect VCS provider from provider name '${target.vcsProcessed.provider}'."
+                    "Could not detect VCS type from type name '${target.vcsProcessed.type}'."
                 }
             }
         }
@@ -291,15 +291,15 @@ object Main {
             applicableVcs = VersionControlSystem.forUrl(target.vcsProcessed.url)
             log.info {
                 if (applicableVcs != null) {
-                    "Detected VCS provider '$applicableVcs' from URL '${target.vcsProcessed.url}'."
+                    "Detected VCS type '$applicableVcs' from URL '${target.vcsProcessed.url}'."
                 } else {
-                    "Could not detect VCS provider from URL '${target.vcsProcessed.url}'."
+                    "Could not detect VCS type from URL '${target.vcsProcessed.url}'."
                 }
             }
         }
 
         if (applicableVcs == null) {
-            throw DownloadException("Could not find an applicable VCS provider.")
+            throw DownloadException("Could not find an applicable VCS type.")
         }
 
         val workingTree = applicableVcs.download(target, outputDirectory, allowMovingRevisions)

@@ -9,12 +9,12 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "https://github.com/spdx/tools-python.git"
     revision: "a48022e65a8897d0e4f2e93d8e53695d2c13ea23"
     path: ""
@@ -72,12 +72,12 @@ packages:
     hash: "0e1203fce27ce65e2d01c5f21c4d428f"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -99,12 +99,12 @@ packages:
     hash: "1d63c166ab250bab87d8dcc42dcca70e"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -126,12 +126,12 @@ packages:
     hash: "0214e42d63af850256962b6744c948d9"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -155,12 +155,12 @@ packages:
     hash: "534fe35b13c5857d53fa1ac5a41eca67"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
@@ -182,12 +182,12 @@ packages:
     hash: "d12789f9baf7e9fb2524c0c64f1773f8"
     hash_algorithm: "MD5"
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""

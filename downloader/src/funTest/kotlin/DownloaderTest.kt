@@ -125,7 +125,7 @@ class DownloaderTest : StringSpec() {
                             hashAlgorithm = HashAlgorithm.SHA1
                     ),
                     vcs = VcsInfo(
-                            provider = "Git",
+                            type = "Git",
                             url = "https://example.com/invalid-repo-url",
                             revision = "8964880d9bac33f0a7f030a74c7c9299a8f117c8",
                             path = ""

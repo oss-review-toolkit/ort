@@ -9,12 +9,12 @@ project:
   declared_licenses: []
   aliases: []
   vcs:
-    provider: ""
+    type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    provider: "Git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/maven"

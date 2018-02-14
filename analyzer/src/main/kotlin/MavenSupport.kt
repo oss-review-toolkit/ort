@@ -76,7 +76,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         private const val GIGABYTE = 1024L * 1024L
         private const val HOUR = 60 * 60
 
-        val SCM_REGEX = Pattern.compile("scm:(?<provider>[^:]+):(?<url>.+)")!!
+        val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
                 DiskCache(File(getUserConfigDirectory(), "${Main.TOOL_NAME}/cache/remote_artifacts"),
@@ -307,24 +307,24 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             val connection = scm.connection ?: ""
             val tag = scm.tag?.takeIf { it != "HEAD" } ?: ""
 
-            val (provider, url) = SCM_REGEX.matcher(connection).let {
+            val (type, url) = SCM_REGEX.matcher(connection).let {
                 if (it.matches()) {
-                    val provider = it.group("provider")
+                    val type = it.group("type")
                     val url = it.group("url")
 
                     // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the
                     // Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up here.
-                    if (provider == "cvs" && !url.startsWith(":")) {
-                        Pair(provider, ":" + url)
+                    if (type == "cvs" && !url.startsWith(":")) {
+                        Pair(type, ":" + url)
                     } else {
-                        Pair(provider, url)
+                        Pair(type, url)
                     }
                 } else {
                     Pair("", "")
                 }
             }
 
-            VcsInfo(provider, url, tag, "")
+            VcsInfo(type, url, tag, "")
         } ?: VcsInfo.EMPTY
     }
 }
