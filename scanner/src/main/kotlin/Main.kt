@@ -225,6 +225,7 @@ object Main {
 
             val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
 
+            // Add the project itself also as a "package" to scan.
             val packages = mutableListOf(analyzerResult.project.toPackage())
 
             if (scopesToScan.isNotEmpty()) {
