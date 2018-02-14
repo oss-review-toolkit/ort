@@ -37,6 +37,11 @@ project:
           dependencies: []
           errors: []
         errors: []
+      - namespace: "org.jenkins-ci"
+        name: "version-number"
+        version: "1.4"
+        dependencies: []
+        errors: []
       errors: []
 packages:
 - id:
@@ -121,5 +126,32 @@ packages:
     type: "git"
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: ""
+    path: ""
+- id:
+    package_manager: "Maven"
+    namespace: "org.jenkins-ci"
+    name: "version-number"
+    version: "1.4"
+  declared_licenses:
+  - "MIT License"
+  description: ""
+  homepage_url: "http://jenkins-ci.org/version-number/"
+  binary_artifact:
+    url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4.jar"
+    hash: "5d0f2ea16514c0ec8de86c102ce61a7837e45eb8"
+    hash_algorithm: "SHA-1"
+  source_artifact:
+    url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4-sources.jar"
+    hash: "ab4e04d731d43157f66d80e4a5daef33ce24f0c2"
+    hash_algorithm: "SHA-1"
+  vcs:
+    type: "git"
+    url: "git://github.com/jenkinsci/lib-version-number.git"
+    revision: "version-number-1.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/jenkinsci/lib-version-number.git"
+    revision: "version-number-1.4"
     path: ""
 errors: []
