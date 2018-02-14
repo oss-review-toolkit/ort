@@ -1,0 +1,25 @@
+---
+allowDynamicVersions: true
+project:
+  id:
+    package_manager: "Maven"
+    namespace: "com.here.ort.maven"
+    name: "maven-parent-project"
+    version: "1.0-SNAPSHOT"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  aliases: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven-parent"
+  homepage_url: "http://maven.apache.org"
+  scopes: []
+packages: []
+errors: []

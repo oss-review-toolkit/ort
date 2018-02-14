@@ -35,10 +35,11 @@ import com.here.ort.utils.yamlMapper
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
+import org.apache.maven.execution.MavenExecutionRequestPopulator
 import org.apache.maven.model.building.ModelBuildingRequest
-import org.apache.maven.project.DefaultProjectBuildingRequest
 import org.apache.maven.project.MavenProject
 import org.apache.maven.project.ProjectBuilder
+import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils
 
@@ -129,14 +130,22 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         return projectBuilder.build(pomFile, projectBuildingRequest)
     }
 
-    fun createProjectBuildingRequest(resolveDependencies: Boolean) =
-            DefaultProjectBuildingRequest().apply {
-                isResolveDependencies = resolveDependencies
-                repositorySession = repositorySystemSession
-                systemProperties["java.home"] = System.getProperty("java.home")
-                systemProperties["java.version"] = System.getProperty("java.version")
-                validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
-            }
+    fun createProjectBuildingRequest(resolveDependencies: Boolean): ProjectBuildingRequest {
+        val request = DefaultMavenExecutionRequest()
+
+        val populator = container.lookup(MavenExecutionRequestPopulator::class.java, "default")
+        populator.populateDefaults(request)
+
+        val projectBuildingRequest = request.projectBuildingRequest
+
+        return projectBuildingRequest.apply {
+            isResolveDependencies = resolveDependencies
+            repositorySession = repositorySystemSession
+            systemProperties["java.home"] = System.getProperty("java.home")
+            systemProperties["java.version"] = System.getProperty("java.version")
+            validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
+        }
+    }
 
     private fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
         remoteArtifactCache.read(artifact.toString())?.let {
