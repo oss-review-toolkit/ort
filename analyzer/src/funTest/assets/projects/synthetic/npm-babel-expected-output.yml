@@ -2856,7 +2856,7 @@ packages:
     name: "array-unique"
     version: "0.2.1"
   declared_licenses:
-  - ""
+  - "MIT"
   description: "Return an array free of duplicate values. Fastest ES5 implementation."
   homepage_url: "https://github.com/jonschlinkert/array-unique"
   binary_artifact:
@@ -3642,7 +3642,8 @@ packages:
     namespace: ""
     name: "esutils"
     version: "2.0.2"
-  declared_licenses: []
+  declared_licenses:
+  - "BSD"
   description: "utility box for ECMAScript language tools"
   homepage_url: "https://github.com/estools/esutils"
   binary_artifact:
@@ -3920,7 +3921,7 @@ packages:
     name: "glob-base"
     version: "0.3.0"
   declared_licenses:
-  - ""
+  - "MIT"
   description: "Returns an object with the (non-glob) base path and the actual pattern."
   homepage_url: "https://github.com/jonschlinkert/glob-base"
   binary_artifact:
@@ -4496,7 +4497,7 @@ packages:
     name: "is-primitive"
     version: "2.0.0"
   declared_licenses:
-  - ""
+  - "MIT"
   description: "Returns `true` if the value is a primitive. "
   homepage_url: "https://github.com/jonschlinkert/is-primitive"
   binary_artifact:
@@ -5178,7 +5179,7 @@ packages:
     name: "preserve"
     version: "0.2.0"
   declared_licenses:
-  - ""
+  - "MIT"
   description: "Temporarily substitute tokens in the given `string` with placeholders,\
     \ then put them back after transforming the string."
   homepage_url: "https://github.com/jonschlinkert/preserve"
@@ -5453,7 +5454,7 @@ packages:
     name: "repeat-element"
     version: "1.1.2"
   declared_licenses:
-  - ""
+  - "MIT"
   description: "Create an array by repeating the given value n times."
   homepage_url: "https://github.com/jonschlinkert/repeat-element"
   binary_artifact:
@@ -5858,7 +5859,8 @@ packages:
     namespace: ""
     name: "v8flags"
     version: "2.1.1"
-  declared_licenses: []
+  declared_licenses:
+  - "MIT"
   description: "Get available v8 flags."
   homepage_url: "https://github.com/tkellen/node-v8flags"
   binary_artifact:
