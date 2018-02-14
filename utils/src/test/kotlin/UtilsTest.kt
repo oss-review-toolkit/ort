@@ -264,6 +264,19 @@ class UtilsTest : WordSpec({
             }
         }
 
+        "add missing git@ for GitHub SSH URLs" {
+            val packages = mapOf(
+                    "ssh://github.com/heremaps/here-aaa-java-sdk.git"
+                            to "ssh://git@github.com/heremaps/here-aaa-java-sdk.git",
+                    "ssh://github.com/heremaps/here-aaa-java-sdk"
+                            to "ssh://git@github.com/heremaps/here-aaa-java-sdk.git"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
+            }
+        }
+
         "handle a trailing slash correctly" {
             val packages = mapOf(
                     "https://github.com/kilian/electron-to-chromium/"
