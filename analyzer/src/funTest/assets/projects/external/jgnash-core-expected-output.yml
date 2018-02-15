@@ -222,9 +222,9 @@ packages:
     hash: "83cd2cd674a217ade95a4bb83a8a14f351f48bd0"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "http://jasperreports.sourceforge.net/maven2/antlr/antlr/2.7.7/antlr-2.7.7-sources.jar"
+    hash: "Project"
+    hash_algorithm: "SHA-1"
   vcs:
     type: ""
     url: ""
@@ -640,13 +640,13 @@ packages:
   description: "jGnash Resources"
   homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-resources/"
   binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "http://jasperreports.sourceforge.net/maven2/jgnash/jgnash-resources/2.30.0/jgnash-resources-2.30.0.jar"
+    hash: "Project"
+    hash_algorithm: "SHA-1"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "http://jasperreports.sourceforge.net/maven2/jgnash/jgnash-resources/2.30.0/jgnash-resources-2.30.0-sources.jar"
+    hash: "Project"
+    hash_algorithm: "SHA-1"
   vcs:
     type: "git"
     url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
@@ -785,9 +785,9 @@ packages:
     hash: "97fe4bfdef7f103bfd9ec63c98ea90469afeec7b"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "http://jasperreports.sourceforge.net/maven2/org/apache/poi/poi-ooxml-schemas/3.14/poi-ooxml-schemas-3.14-sources.jar"
+    hash: "Project"
+    hash_algorithm: "SHA-1"
   vcs:
     type: ""
     url: ""
@@ -866,9 +866,9 @@ packages:
     hash: "29e80d2dd51f9dcdef8f9ffaee0d4dc1c9bbfc87"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
+    url: "http://jasperreports.sourceforge.net/maven2/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0-sources.jar"
+    hash: "Project"
+    hash_algorithm: "SHA-1"
   vcs:
     type: "svn"
     url: "https://svn.apache.org/repos/asf/xmlbeans/"
