@@ -98,7 +98,7 @@ class SBT : PackageManager() {
         definitionFiles.forEach { definitionFile ->
             val workingDir = definitionFile.parentFile
 
-            // Check if a POM was already generated if this is a sub-module in a multi-module project.
+            // Check if a POM was already generated if this is a sub-project in a multi-project.
             val targetDir = File(workingDir, "target")
             val hasPom = targetDir.isDirectory && targetDir.walkTopDown().filter {
                 it.isFile && it.extension == "pom"
