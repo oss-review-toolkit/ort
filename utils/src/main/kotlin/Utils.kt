@@ -223,10 +223,12 @@ fun normalizeVcsUrl(vcsUrl: String): String {
         url = "ssh://" + url
     }
 
-    // Drop any VCS name with "+" from the scheme.
-    url = url.replace(Regex("^(.+)\\+(.+)(://.+)$")) {
-        // Use the string to the right of "+" which should be the protocol.
-        "${it.groupValues[2]}${it.groupValues[3]}"
+    // Drop any non-SVN VCS name with "+" from the scheme.
+    if (!url.startsWith("svn+")) {
+        url = url.replace(Regex("^(.+)\\+(.+)(://.+)$")) {
+            // Use the string to the right of "+" which should be the protocol.
+            "${it.groupValues[2]}${it.groupValues[3]}"
+        }
     }
 
     // A hierarchical URI looks like
