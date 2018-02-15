@@ -331,6 +331,17 @@ class UtilsTest : WordSpec({
             }
         }
 
+        "not strip svn+ prefix from Subversion URLs" {
+            val packages = mapOf(
+                    "svn+ssh://svn.code.sf.net/p/stddecimal/code/trunk"
+                            to "svn+ssh://svn.code.sf.net/p/stddecimal/code/trunk"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
+            }
+        }
+
         "fixup crazy URLs" {
             val packages = mapOf(
                     "git@github.com/cisco/node-jose.git"
