@@ -33,6 +33,7 @@ import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
+import java.io.IOException
 
 class SBT : PackageManager() {
     companion object : PackageManagerFactory<SBT>(
@@ -106,15 +107,25 @@ class SBT : PackageManager() {
 
             if (!hasPom) {
                 val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
-                        .requireSuccess()
+                if (sbt.exitValue() == 0) {
+                    // Get the list of POM files created by parsing stdout. A single call might create multiple POM
+                    // files in case of sub-projects.
+                    val makePomFiles = sbt.stdout().lines().mapNotNull {
+                        POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+                    }
 
-                // Get the list of POM files created by "sbt makePom". A single call might create multiple POM files in
-                // case of sub-projects.
-                val makePomFiles = sbt.stdout().lines().mapNotNull {
-                    POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+                    pomFiles.addAll(makePomFiles)
+                } else {
+                    if (pomFiles.isEmpty()) {
+                        throw IOException(sbt.failMessage)
+                    } else {
+                        log.warn {
+                            "A subsequent call to '${sbt.commandLine}' in directory '$workingDir' failed. " +
+                                    "This might be acceptable if this is a sub-project in a multi-project " +
+                                    "that does not publish any artifacts."
+                        }
+                    }
                 }
-
-                pomFiles.addAll(makePomFiles)
             }
         }
 
