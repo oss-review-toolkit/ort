@@ -101,7 +101,7 @@ class SBT : PackageManager() {
             // Check if a POM was already generated if this is a sub-module in a multi-module project.
             val targetDir = File(workingDir, "target")
             val hasPom = targetDir.isDirectory && targetDir.listFiles { _, name ->
-                name.startsWith(workingDir.name + "-") && name.endsWith(".pom")
+                name.endsWith(".pom")
             }.isNotEmpty()
 
             if (!hasPom) {
