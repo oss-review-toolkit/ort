@@ -80,10 +80,7 @@ class Maven : PackageManager() {
     /**
      * Enable compatibility mode with POM files generated from SBT using "sbt makePom".
      */
-    fun enableSbtMode(): Maven {
-        sbtMode = true
-        return this
-    }
+    fun enableSbtMode() = this.apply { sbtMode = true }
 
     override fun command(workingDir: File) = "mvn"
 
