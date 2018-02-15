@@ -100,9 +100,9 @@ class SBT : PackageManager() {
 
             // Check if a POM was already generated if this is a sub-module in a multi-module project.
             val targetDir = File(workingDir, "target")
-            val hasPom = targetDir.isDirectory && targetDir.listFiles { _, name ->
-                name.endsWith(".pom")
-            }.isNotEmpty()
+            val hasPom = targetDir.isDirectory && targetDir.walkTopDown().filter {
+                it.isFile && it.extension == "pom"
+            }.any()
 
             if (!hasPom) {
                 val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
