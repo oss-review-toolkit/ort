@@ -49,7 +49,7 @@ projects:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
   homepage_url: ""
   scopes:
   - name: "archives"
@@ -284,7 +284,7 @@ projects:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
   homepage_url: ""
   scopes:
   - name: "archives"
@@ -430,7 +430,7 @@ projects:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
   homepage_url: ""
   scopes:
   - name: "archives"
