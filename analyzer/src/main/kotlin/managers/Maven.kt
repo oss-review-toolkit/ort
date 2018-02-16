@@ -137,7 +137,21 @@ class Maven : PackageManager() {
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent of this.
-        val projectDir = if (sbtMode) workingDir.parentFile else workingDir
+        var projectDir = workingDir
+
+        if (sbtMode) {
+            var targetDir: File? = projectDir
+
+            while (targetDir != null && targetDir.name != "target") {
+                targetDir = targetDir.parentFile
+            }
+
+            projectDir = if (targetDir == null) {
+                workingDir
+            } else {
+                targetDir.parentFile ?: workingDir
+            }
+        }
 
         val project = Project(
                 id = Identifier(
