@@ -102,7 +102,7 @@ abstract class Scanner {
             return getResult(resultsFile)
         }
 
-        val sourceDirectory = try {
+        val downloadResult = try {
             Main.download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
         } catch (e: DownloadException) {
             if (com.here.ort.utils.printStackTrace) {
@@ -113,9 +113,9 @@ abstract class Scanner {
         }
 
         val version = getVersion(scannerPath.absolutePath)
-        println("Running $this version $version on directory '${sourceDirectory.absolutePath}'.")
+        println("Running $this version $version on directory '${downloadResult.downloadDirectory.absolutePath}'.")
 
-        return scanPath(sourceDirectory, resultsFile).also {
+        return scanPath(downloadResult.downloadDirectory, resultsFile).also {
             println("Stored $this results in '${resultsFile.absolutePath}'.")
             ScanResultsCache.write(pkg, resultsFile)
         }

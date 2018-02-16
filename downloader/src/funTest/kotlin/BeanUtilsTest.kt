@@ -71,14 +71,21 @@ class BeanUtilsTest : StringSpec() {
                     vcs = vcsFromCuration
             )
 
-            val downloadDir = Main.download(pkg, outputDir)
-            val workingTree = VersionControlSystem.forDirectory(downloadDir)
+            val downloadResult = Main.download(pkg, outputDir)
+            downloadResult.sourceArtifact shouldBe null
+            downloadResult.vcsInfo shouldNotBe null
+            downloadResult.vcsInfo!!.type shouldBe "Subversion"
+            downloadResult.vcsInfo!!.url shouldBe vcsFromCuration.url
+            downloadResult.vcsInfo!!.revision shouldBe "928490"
+            downloadResult.vcsInfo!!.path shouldBe vcsFromCuration.path
+
+            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
 
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
             workingTree.getRevision() shouldBe "1823084"
 
-            val tagsBeanUtils183Dir = File(downloadDir, "tags/BEANUTILS_1_8_3")
+            val tagsBeanUtils183Dir = File(downloadResult.downloadDirectory, "tags/BEANUTILS_1_8_3")
             tagsBeanUtils183Dir.isDirectory shouldBe true
             tagsBeanUtils183Dir.walkTopDown().count() shouldBe 302
         }

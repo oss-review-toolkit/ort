@@ -80,14 +80,22 @@ class BabelTest : StringSpec() {
                     vcsProcessed = vcsMerged
             )
 
-            val downloadDir = Main.download(pkg, outputDir)
-            val workingTree = VersionControlSystem.forDirectory(downloadDir)
+            val downloadResult = Main.download(pkg, outputDir)
+
+            downloadResult.sourceArtifact shouldBe null
+            downloadResult.vcsInfo shouldNotBe null
+            downloadResult.vcsInfo!!.type shouldBe pkg.vcsProcessed.type
+            downloadResult.vcsInfo!!.url shouldBe pkg.vcsProcessed.url
+            downloadResult.vcsInfo!!.revision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+            downloadResult.vcsInfo!!.path shouldBe pkg.vcsProcessed.path
+
+            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
 
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
             workingTree.getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
 
-            val babelCliDir = File(downloadDir, "packages/babel-cli")
+            val babelCliDir = File(downloadResult.downloadDirectory, "packages/babel-cli")
             babelCliDir.isDirectory shouldBe true
             babelCliDir.walkTopDown().count() shouldBe 242
         }

@@ -52,6 +52,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
     )
 
     override val expectedDefinitionFiles by lazy {
+        val downloadDir = downloadResult.downloadDirectory
         mapOf(
                 NPM as PackageManagerFactory<PackageManager> to listOf(
                         File(downloadDir, "package.json"),
@@ -64,6 +65,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
     }
 
     override val definitionFilesForTest by lazy {
-        mapOf(NPM as PackageManagerFactory<PackageManager> to listOf(File(downloadDir, "package.json")))
+        mapOf(NPM as PackageManagerFactory<PackageManager> to
+                listOf(File(downloadResult.downloadDirectory, "package.json")))
     }
 }

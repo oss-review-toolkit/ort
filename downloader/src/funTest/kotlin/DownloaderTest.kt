@@ -29,6 +29,7 @@ import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.shouldThrow
 import io.kotlintest.specs.StringSpec
 
@@ -70,13 +71,18 @@ class DownloaderTest : StringSpec() {
                     vcs = VcsInfo.EMPTY
             )
 
-            val downloadDir = Main.download(pkg, outputDir)
+            val downloadResult = Main.download(pkg, outputDir)
+            downloadResult.vcsInfo shouldBe null
+            downloadResult.sourceArtifact shouldNotBe null
+            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
+            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+            downloadResult.sourceArtifact!!.hashAlgorithm shouldBe pkg.sourceArtifact.hashAlgorithm
 
-            val licenseFile = File(downloadDir, "LICENSE-junit.txt")
+            val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadDir.walkTopDown().count() shouldBe 234
+            downloadResult.downloadDirectory.walkTopDown().count() shouldBe 234
         }.config(tags = setOf(ExpensiveTag))
 
         "Download of JAR source package fails when hash is incorrect" {
@@ -132,13 +138,18 @@ class DownloaderTest : StringSpec() {
                     )
             )
 
-            val downloadDir = Main.download(pkg, outputDir)
+            val downloadResult = Main.download(pkg, outputDir)
+            downloadResult.vcsInfo shouldBe null
+            downloadResult.sourceArtifact shouldNotBe null
+            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
+            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+            downloadResult.sourceArtifact!!.hashAlgorithm shouldBe pkg.sourceArtifact.hashAlgorithm
 
-            val licenseFile = File(downloadDir, "LICENSE-junit.txt")
+            val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadDir.walkTopDown().count() shouldBe 234
+            downloadResult.downloadDirectory.walkTopDown().count() shouldBe 234
         }.config(tags = setOf(ExpensiveTag))
 
         "Can download source artifact from SourceForce" {
@@ -162,8 +173,14 @@ class DownloaderTest : StringSpec() {
                     vcs = VcsInfo.EMPTY
             )
 
-            val downloadDir = Main.download(pkg, outputDir)
-            val tyrexDir = File(downloadDir, "tyrex-1.0.1")
+            val downloadResult = Main.download(pkg, outputDir)
+            downloadResult.vcsInfo shouldBe null
+            downloadResult.sourceArtifact shouldNotBe null
+            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
+            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+            downloadResult.sourceArtifact!!.hashAlgorithm shouldBe pkg.sourceArtifact.hashAlgorithm
+
+            val tyrexDir = File(downloadResult.downloadDirectory, "tyrex-1.0.1")
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walkTopDown().count() shouldBe 409
