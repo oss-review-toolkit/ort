@@ -37,12 +37,10 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
     val commandLine = command.joinToString(" ")
 
     private val tempPrefix = command.first().padEnd(3, '_')
+    private val tempDir = createTempDir("ort")
 
-    @Suppress("UnsafeCallOnNullableType")
-    val stdoutFile = File.createTempFile(tempPrefix, ".stdout")!!
-
-    @Suppress("UnsafeCallOnNullableType")
-    val stderrFile = File.createTempFile(tempPrefix, ".stderr")!!
+    val stdoutFile = File(tempDir, "$tempPrefix.stdout")
+    val stderrFile = File(tempDir, "$tempPrefix.stderr")
 
     private val builder = ProcessBuilder(*command)
             .directory(workingDir)
