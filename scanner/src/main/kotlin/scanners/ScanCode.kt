@@ -53,7 +53,12 @@ object ScanCode : Scanner() {
     override val resultFileExt = "json"
 
     override fun bootstrap(): File? {
-        return File("src/funTest/assets/scanners/scancode-toolkit")
+        val scancodeDir = File("src/funTest/assets/scanners/scancode-toolkit")
+        val configureExe = if (OS.isWindows) "configure.bat" else "configure"
+        val configurePath = File(scancodeDir, configureExe)
+        ProcessCapture(configurePath.absolutePath, "clean").requireSuccess()
+        ProcessCapture(configurePath.absolutePath).requireSuccess()
+        return scancodeDir
     }
 
     override fun getVersion(executable: String) =
