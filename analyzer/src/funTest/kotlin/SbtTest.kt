@@ -20,6 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.SBT
+import com.here.ort.downloader.vcs.Git
 import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
@@ -37,6 +38,9 @@ class SbtTest : FreeSpec({
 
             val definitionFile = File(projectDir, "build.sbt")
             val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
+
+            // Clean any previously generated POM files / target directories.
+            Git.run(projectDir, "clean", "-fd")
 
             // Even if we do not explicit depend on the definitionFile, explicitly check for it before calling
             // resolveDependencies() to avoid potentially less readable errors from "sbt makePom". Similar for the
