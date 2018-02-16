@@ -19,13 +19,15 @@
 
 package com.here.ort.scanner
 
-import ch.frankel.slf4k.info
+import ch.frankel.slf4k.*
 
 import com.here.ort.model.Package
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 
 import java.io.File
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit
 
@@ -49,25 +51,35 @@ class ArtifactoryCache(
                 .url("$url/$cachePath")
                 .build()
 
-        return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
-            (response.code() == HttpURLConnection.HTTP_OK).also {
-                val message = if (it) {
-                    response.body()?.let { body ->
-                        Okio.buffer(Okio.sink(target)).use { it.writeAll(body.source()) }
-                    }
+        try {
+            return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+                (response.code() == HttpURLConnection.HTTP_OK).also {
+                    val message = if (it) {
+                        response.body()?.let { body ->
+                            Okio.buffer(Okio.sink(target)).use { it.writeAll(body.source()) }
+                        }
 
-                    if (response.cacheResponse() != null) {
-                        "Retrieved $cachePath from local cache."
+                        if (response.cacheResponse() != null) {
+                            "Retrieved $cachePath from local cache."
+                        } else {
+                            "Downloaded $cachePath from Artifactory cache."
+                        }
                     } else {
-                        "Downloaded $cachePath from Artifactory cache."
+                        "Could not get $cachePath from Artifactory cache: ${response.code()} - " +
+                                response.message()
                     }
-                } else {
-                    "Could not get $cachePath from Artifactory cache: ${response.code()} - " +
-                            response.message()
-                }
 
-                log.info { message }
+                    log.info { message }
+                }
             }
+        } catch (e: IOException) {
+            if (printStackTrace) {
+                e.printStackTrace()
+            }
+
+            log.warn { "Could not get $cachePath from Artifactory cache: ${e.message}" }
+
+            return false
         }
     }
 
@@ -82,17 +94,27 @@ class ArtifactoryCache(
                 .url("$url/$cachePath")
                 .build()
 
-        return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
-            (response.code() == HttpURLConnection.HTTP_CREATED).also {
-                log.info {
-                    if (it) {
-                        "Uploaded $cachePath to Artifactory cache."
-                    } else {
-                        "Could not upload $cachePath to artifactory cache: ${response.code()} - " +
-                                response.message()
+        try {
+            return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+                (response.code() == HttpURLConnection.HTTP_CREATED).also {
+                    log.info {
+                        if (it) {
+                            "Uploaded $cachePath to Artifactory cache."
+                        } else {
+                            "Could not upload $cachePath to Artifactory cache: ${response.code()} - " +
+                                    response.message()
+                        }
                     }
                 }
             }
+        } catch (e: IOException) {
+            if (printStackTrace) {
+                e.printStackTrace()
+            }
+
+            log.warn { "Could not upload $cachePath to Artifactory cache: ${e.message}" }
+
+            return false
         }
     }
 
