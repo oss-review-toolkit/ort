@@ -56,7 +56,8 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
         // The Gradle project contains far too many definition files to list them all here. Use this tests to double
         // check that all of them are found, and that they are assigned to the correct package manager.
         val gradleFilenames = listOf("build.gradle", "settings.gradle")
-        val gradleFiles = downloadDir.walkTopDown().filter { it.name in gradleFilenames }.toMutableList()
+        val gradleFiles =
+                downloadResult.downloadDirectory.walkTopDown().filter { it.name in gradleFilenames }.toMutableList()
 
         // settings.gradle shall only be detected if there is no build.gradle file in the same directory.
         gradleFiles.removeAll {
@@ -65,11 +66,12 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
 
         mapOf(
                 Gradle to gradleFiles,
-                Maven to downloadDir.walkTopDown().filter { it.name == "pom.xml" }.toList()
+                Maven to downloadResult.downloadDirectory.walkTopDown().filter { it.name == "pom.xml" }.toList()
         )
     }
 
     override val definitionFilesForTest by lazy {
-        mapOf(Gradle as PackageManagerFactory<PackageManager> to listOf(File(downloadDir, "buildSrc/build.gradle")))
+        mapOf(Gradle as PackageManagerFactory<PackageManager> to
+                listOf(File(downloadResult.downloadDirectory, "buildSrc/build.gradle")))
     }
 }

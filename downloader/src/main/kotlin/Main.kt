@@ -32,6 +32,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -72,6 +73,22 @@ object Main {
              */
             @JvmField
             val ALL = DataEntity.values().asList()
+        }
+    }
+
+    /**
+     * This class describes what was downloaded by [download] or if any exception occured. Either [sourceArtifact] or
+     * [vcsInfo] is set to a non-null value.
+     */
+    data class DownloadResult(
+        val downloadDirectory: File,
+        val sourceArtifact: RemoteArtifact? = null,
+        val vcsInfo: VcsInfo? = null
+    ) {
+        init {
+            require((sourceArtifact == null) != (vcsInfo == null)) {
+                "Either sourceArtifact or vcsInfo must be set, but not both."
+            }
         }
     }
 
@@ -237,7 +254,7 @@ object Main {
      *
      * @throws DownloadException In case the download failed.
      */
-    fun download(target: Package, outputDirectory: File): File {
+    fun download(target: Package, outputDirectory: File): DownloadResult {
         // TODO: add namespace to path
         val targetDir = File(outputDirectory, "${target.normalizedName}/${target.id.version}").apply { safeMkdirs() }
 
@@ -262,7 +279,7 @@ object Main {
         return downloadSourceArtifact(target, targetDir)
     }
 
-    private fun downloadFromVcs(target: Package, outputDirectory: File): File {
+    private fun downloadFromVcs(target: Package, outputDirectory: File): DownloadResult {
         log.info {
             "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
@@ -307,10 +324,16 @@ object Main {
 
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
 
-        return outputDirectory
+        val vcsInfo = VcsInfo(
+                type = applicableVcs.javaClass.simpleName,
+                url = target.vcsProcessed.url,
+                revision = revision,
+                path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
+        )
+        return DownloadResult(outputDirectory, vcsInfo = vcsInfo)
     }
 
-    private fun downloadSourceArtifact(target: Package, outputDirectory: File): File {
+    private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
         if (target.sourceArtifact.url.isBlank()) {
             throw DownloadException("No source artifact URL provided for '${target.id}'.")
         }
@@ -347,7 +370,7 @@ object Main {
             "Successfully downloaded source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
         }
 
-        return outputDirectory
+        return DownloadResult(outputDirectory, sourceArtifact = target.sourceArtifact)
     }
 
     private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {
