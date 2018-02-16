@@ -34,8 +34,6 @@ import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.Spec
 import io.kotlintest.specs.StringSpec
 
-import java.io.File
-
 abstract class AbstractIntegrationSpec : StringSpec() {
 
     /**
@@ -57,7 +55,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     /**
      * The directory where the source code of [pkg] was downloaded to.
      */
-    protected lateinit var downloadDir: File
+    protected lateinit var downloadResult: Main.DownloadResult
 
     /**
      * The instance needs to be shared between tests because otherwise the source code of [pkg] would have to be
@@ -67,7 +65,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
         val outputDir = createTempDir()
-        downloadDir = Main.download(pkg, outputDir)
+        downloadResult = Main.download(pkg, outputDir)
         try {
             super.interceptSpec(context, spec)
         } finally {
@@ -77,14 +75,17 @@ abstract class AbstractIntegrationSpec : StringSpec() {
 
     init {
         "Source code was downloaded successfully" {
-            val workingTree = VersionControlSystem.forDirectory(downloadDir)
+            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
             workingTree.getType() shouldBe pkg.vcs.type
+            downloadResult.sourceArtifact shouldBe null
+            downloadResult.vcsInfo shouldNotBe null
+            downloadResult.vcsInfo!!.type shouldBe workingTree.getType()
         }.config(tags = setOf(ExpensiveTag))
 
         "All package manager definition files are found" {
-            val definitionFiles = PackageManager.findManagedFiles(downloadDir)
+            val definitionFiles = PackageManager.findManagedFiles(downloadResult.downloadDirectory)
 
             definitionFiles.size shouldBe expectedDefinitionFiles.size
             definitionFiles.forEach { manager, files ->
