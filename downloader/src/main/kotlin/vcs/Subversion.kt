@@ -157,7 +157,8 @@ object Subversion : VersionControlSystem() {
 
     override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("subversion", "svn")
 
-    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
+    override fun isApplicableUrl(vcsUrl: String) =
+            vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
