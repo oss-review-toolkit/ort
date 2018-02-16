@@ -36,6 +36,7 @@ object Mercurial : VersionControlSystem() {
     private const val EXTENSION_LARGE_FILES = "largefiles = "
     private const val EXTENSION_SPARSE = "sparse = "
 
+    override val commandName = "hg"
     override val movingRevisionNames = listOf("tip", "default")
 
     override fun getVersion(): String {
@@ -67,20 +68,19 @@ object Mercurial : VersionControlSystem() {
                 override fun isShallow() = false
 
                 override fun getRemoteUrl() =
-                        runMercurialCommand(workingDir, "paths", "default").stdout().trimEnd()
+                        run(workingDir, "paths", "default").stdout().trimEnd()
 
                 override fun getRevision() =
-                        runMercurialCommand(workingDir, "--debug", "id", "-i").stdout().trimEnd()
+                        run(workingDir, "--debug", "id", "-i").stdout().trimEnd()
 
-                override fun getRootPath() = runMercurialCommand(workingDir, "root").stdout().trimEnd()
+                override fun getRootPath() = run(workingDir, "root").stdout().trimEnd()
                         .replace(File.separatorChar, '/')
 
                 override fun listRemoteTags(): List<String> {
                     // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
                     // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
-                    runMercurialCommand(workingDir, "pull", "-r", "default")
-                    val tags = runMercurialCommand(workingDir, "cat", "-r", "default", ".hgtags")
-                            .stdout().trimEnd()
+                    run(workingDir, "pull", "-r", "default")
+                    val tags = run(workingDir, "cat", "-r", "default", ".hgtags").stdout().trimEnd()
                     return tags.lines().map {
                         it.split(' ').last()
                     }.sorted()
@@ -105,7 +105,7 @@ object Mercurial : VersionControlSystem() {
                 extensionsList.add(EXTENSION_SPARSE)
             }
 
-            runMercurialCommand(targetDir, "init")
+            run(targetDir, "init")
             File(targetDir, ".hg/hgrc").writeText("""
                 [paths]
                 default = ${pkg.vcsProcessed.url}
@@ -115,7 +115,7 @@ object Mercurial : VersionControlSystem() {
 
             if (extensionsList.contains(EXTENSION_SPARSE)) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
-                runMercurialCommand(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**")
+                run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**")
             }
 
             val workingTree = getWorkingTree(targetDir)
@@ -139,10 +139,10 @@ object Mercurial : VersionControlSystem() {
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
-            runMercurialCommand(targetDir, "pull", "-r", revision)
+            run(targetDir, "pull", "-r", revision)
 
             // Explicitly update the working tree to the desired revision.
-            runMercurialCommand(targetDir, "update", revision)
+            run(targetDir, "update", revision)
 
             return workingTree
         } catch (e: IOException) {
@@ -153,7 +153,4 @@ object Mercurial : VersionControlSystem() {
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
-
-    private fun runMercurialCommand(workingDir: File, vararg args: String) =
-            ProcessCapture(workingDir, "hg", *args).requireSuccess()
 }
