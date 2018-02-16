@@ -90,7 +90,7 @@ data class SubversionTagsEntry(
 
 object Subversion : VersionControlSystem() {
     override val commandName = "svn"
-    override val movingRevisionNames = emptyList<String>()
+    override val movingRevisionNames = listOf("HEAD")
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
@@ -168,14 +168,16 @@ object Subversion : VersionControlSystem() {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
             run(targetDir, "checkout", pkg.vcsProcessed.url, "--depth", "empty", ".")
 
-            return if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+            var revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: "HEAD"
+
+            return if (allowMovingRevisions || isFixedRevision(revision)) {
                 if (pkg.vcsProcessed.path.isBlank()) {
                     // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
-                    run(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--set-depth", "infinity")
+                    run(targetDir, "update", "-r", revision, "--set-depth", "infinity")
                     getWorkingTree(targetDir)
                 } else {
                     // Deepen only the given path.
-                    run(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--depth", "infinity", "--parents",
+                    run(targetDir, "update", "-r", revision, "--depth", "infinity", "--parents",
                             pkg.vcsProcessed.path)
 
                     // Only return that part of the working tree that has the right revision.
@@ -184,7 +186,8 @@ object Subversion : VersionControlSystem() {
             } else {
                 log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
 
-                val revision = getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
+                revision = getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
+
                 if (revision.isBlank()) {
                     throw IOException("Unable to determine a revision to checkout.")
                 }
