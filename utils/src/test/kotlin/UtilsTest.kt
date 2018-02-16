@@ -150,6 +150,12 @@ class UtilsTest : WordSpec({
             filterVersionNames("1.0", names).joinToString("\n") shouldBe ""
         }
 
+        "find names with mixed separators and different capitalization" {
+            val names = listOf("CLASSWORLDS_1_1_ALPHA_2")
+
+            filterVersionNames("1.1-alpha-2", names).joinToString("\n") shouldBe "CLASSWORLDS_1_1_ALPHA_2"
+        }
+
         "find names with a 'v' prefix" {
             val names = listOf(
                     "v6.2.0",
