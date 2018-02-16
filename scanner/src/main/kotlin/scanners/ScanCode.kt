@@ -37,8 +37,14 @@ object ScanCode : Scanner() {
     private const val OUTPUT_FORMAT = "json-pp"
     private const val TIMEOUT = 300
 
-    private val DEFAULT_OPTIONS = listOf("--copyright", "--license", "--info", "--diag", "--only-findings",
-            "--strip-root")
+    private val DEFAULT_OPTIONS = listOf(
+            "--copyright",
+            "--license",
+            "--license-text",
+            "--info",
+            "--only-findings",
+            "--strip-root"
+    )
 
     private val TIMEOUT_REGEX = Pattern.compile(
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: .+\\)")
@@ -60,17 +66,23 @@ object ScanCode : Scanner() {
     override fun scanPath(path: File, resultsFile: File): Result {
         val options = DEFAULT_OPTIONS.toMutableList()
         if (log.isEnabledFor(Level.DEBUG)) {
+            options.add("--license-diag")
             options.add("--verbose")
+        }
+
+        val outputFormatOption = if (OUTPUT_FORMAT.startsWith("json")) {
+            "--$OUTPUT_FORMAT"
+        } else {
+            "--output-$OUTPUT_FORMAT"
         }
 
         val process = ProcessCapture(
                 scannerPath.absolutePath,
                 *options.toTypedArray(),
                 "--timeout", TIMEOUT.toString(),
-                "-n", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString(),
-                "-f", OUTPUT_FORMAT,
+                "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString(),
                 path.absolutePath,
-                resultsFile.absolutePath
+                outputFormatOption, resultsFile.absolutePath
         )
 
         if (process.stderr().isNotBlank()) {
