@@ -52,7 +52,7 @@ class ArtifactoryCache(
                 .build()
 
         try {
-            return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+            return OkHttpClientHelper.executeWithRetry(Main.HTTP_CACHE_PATH, request).use { response ->
                 (response.code() == HttpURLConnection.HTTP_OK).also {
                     val message = if (it) {
                         response.body()?.let { body ->
@@ -95,7 +95,7 @@ class ArtifactoryCache(
                 .build()
 
         try {
-            return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+            return OkHttpClientHelper.executeWithRetry(Main.HTTP_CACHE_PATH, request).use { response ->
                 (response.code() == HttpURLConnection.HTTP_CREATED).also {
                     log.info {
                         if (it) {

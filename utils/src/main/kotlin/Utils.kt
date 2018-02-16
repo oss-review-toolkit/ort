@@ -19,6 +19,8 @@
 
 package com.here.ort.utils
 
+import ch.frankel.slf4k.*
+
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
@@ -98,6 +100,9 @@ object OkHttpClientHelper {
 
     /**
      * Execute a request using the client for the specified cache directory.
+     *
+     * @param cachePath The path to the local cache.
+     * @param request The HTTP request object.
      */
     fun execute(cachePath: String, request: Request): Response {
         val client = clients.getOrPut(cachePath) {
@@ -111,6 +116,31 @@ object OkHttpClientHelper {
         }
 
         return client.newCall(request).execute()
+    }
+
+    /**
+     * Call [execute] repeatedly if an [IOException] occurs.
+     *
+     * @param cachePath The path to the local cache.
+     * @param request The HTTP request object.
+     * @param repetitions How often the request is repeated if an [IOException] occurs.
+     * @param timeout The timeout between two repetitions in milliseconds.
+     */
+    fun executeWithRetry(cachePath: String, request: Request, repetitions: Int = 2, timeout: Long = 0): Response {
+        (1..repetitions).forEach { i ->
+            try {
+                return execute(cachePath, request)
+            } catch (e: IOException) {
+                log.debug { "Attempt $i/$repetitions for $request failed: ${e.message}" }
+                if (i == repetitions) {
+                    throw e
+                }
+            }
+            Thread.sleep(timeout)
+        }
+
+        // This code will never be executed but the compiler cannot find out so throw an IOException here.
+        throw IOException("$request failed.")
     }
 }
 
