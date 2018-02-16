@@ -120,34 +120,33 @@ object OkHttpClientHelper {
 fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
     if (version.isBlank()) return emptyList()
 
-    val versionElementSeparators = listOf('.', '-', '_')
+    val normalizedSeparator = '_'
+    val normalizedVersion = version.replace(Regex("(\\.|-)"), normalizedSeparator.toString()).toLowerCase()
 
-    val filteredByVersion = names.filter { name ->
-        versionElementSeparators.any { separator ->
-            val versionName = version.replace('.', separator)
+    val filteredByVersion = names.filter {
+        val normalizedName = it.replace(Regex("(\\.|-)"), normalizedSeparator.toString()).toLowerCase()
 
-            when {
-                // Allow to ignore suffixes in names that are separated by something else than the current
-                // separator, e.g. for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
-                name.startsWith(versionName) -> {
-                    val tail = name.removePrefix(versionName)
-                    tail.firstOrNull() != separator
-                }
-
-                // Allow to ignore prefixes in names that are separated by something else than the current
-                // separator, e.g. for version "0.10" accept "docutils-0.10" but not "1.0.10".
-                name.endsWith(versionName) -> {
-                    val head = name.removeSuffix(versionName)
-                    val last = head.lastOrNull()
-                    val forelast = head.dropLast(1).lastOrNull()
-                    last == null
-                            || (last !in versionElementSeparators && !last.isDigit())
-                            || (last in versionElementSeparators && (forelast == null || !forelast.isDigit()))
-                            || (last.toLowerCase() == 'v' && (forelast == null || forelast in versionElementSeparators))
-                }
-
-                else -> false
+        when {
+            // Allow to ignore suffixes in names that are separated by something else than the current
+            // separator, e.g. for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
+            normalizedName.startsWith(normalizedVersion) -> {
+                val tail = normalizedName.removePrefix(normalizedVersion)
+                tail.firstOrNull() != normalizedSeparator
             }
+
+            // Allow to ignore prefixes in names that are separated by something else than the current
+            // separator, e.g. for version "0.10" accept "docutils-0.10" but not "1.0.10".
+            normalizedName.endsWith(normalizedVersion) -> {
+                val head = normalizedName.removeSuffix(normalizedVersion)
+                val last = head.lastOrNull()
+                val forelast = head.dropLast(1).lastOrNull()
+                last == null
+                        || (last != normalizedSeparator && !last.isDigit())
+                        || (last == normalizedSeparator && (forelast == null || !forelast.isDigit()))
+                        || (last.toLowerCase() == 'v' && (forelast == null || forelast == normalizedSeparator))
+            }
+
+            else -> false
         }
     }
 
