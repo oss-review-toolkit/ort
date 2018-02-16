@@ -25,7 +25,7 @@ project:
     dependencies:
     - namespace: ""
       name: "ply"
-      version: "3.10"
+      version: "3.11"
       dependencies: []
       errors: []
     - namespace: ""
@@ -85,18 +85,18 @@ packages:
     package_manager: "PIP"
     namespace: ""
     name: "ply"
-    version: "3.10"
+    version: "3.11"
   declared_licenses:
   - "BSD"
   description: "Python Lex & Yacc"
   homepage_url: "http://www.dabeaz.com/ply/"
   binary_artifact:
-    url: "https://pypi.python.org/packages/ce/3d/1f9ca69192025046f02a02ffc61bfbac2731aab06325a218370fd93e18df/ply-3.10.tar.gz"
-    hash: "1d63c166ab250bab87d8dcc42dcca70e"
+    url: "https://pypi.python.org/packages/a3/58/35da89ee790598a0700ea49b2a66594140f44dec458c07e8e3d4979137fc/ply-3.11-py2.py3-none-any.whl"
+    hash: "62b6ad5affddc9926ab5571f390cc840"
     hash_algorithm: "MD5"
   source_artifact:
-    url: "https://pypi.python.org/packages/ce/3d/1f9ca69192025046f02a02ffc61bfbac2731aab06325a218370fd93e18df/ply-3.10.tar.gz"
-    hash: "1d63c166ab250bab87d8dcc42dcca70e"
+    url: "https://pypi.python.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da/ply-3.11.tar.gz"
+    hash: "6465f602e656455affcd7c5734c638f8"
     hash_algorithm: "MD5"
   vcs:
     type: ""
