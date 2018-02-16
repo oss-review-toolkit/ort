@@ -75,7 +75,7 @@ abstract class Scanner {
     data class Result(val licenses: SortedSet<String>, val errors: SortedSet<String>)
 
     /**
-     * Return the Java class name as a simply way to refer to the scanner.
+     * Return the Java class name as a simple way to refer to the scanner.
      */
     override fun toString(): String = javaClass.simpleName
 
