@@ -19,11 +19,14 @@
 
 package com.here.ort.scanner
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
 import com.here.ort.scanner.scanners.*
 import com.here.ort.utils.getPathFromEnvironment
+import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
@@ -34,7 +37,10 @@ abstract class Scanner {
      * The directory the scanner was bootstrapped to, if so.
      */
     protected val scannerDir by lazy {
-        getPathFromEnvironment(scannerExe)?.parentFile ?: bootstrap()
+        getPathFromEnvironment(scannerExe)?.parentFile ?: run {
+            log.info { "Bootstrapping scanner '$this' as it was not found in PATH." }
+            bootstrap()
+        }
     }
 
     /**
