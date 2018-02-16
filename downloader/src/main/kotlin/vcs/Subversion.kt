@@ -89,6 +89,7 @@ data class SubversionTagsEntry(
         val lock: SubversionInfoLock?)
 
 object Subversion : VersionControlSystem() {
+    override val commandName = "svn"
     override val movingRevisionNames = emptyList<String>()
 
     override fun getVersion(): String {
@@ -136,8 +137,7 @@ object Subversion : VersionControlSystem() {
                         remoteUrl
                     }
 
-                    val svnInfoTags = runSvnCommand(workingDir, "info", "--xml", "--depth=immediates",
-                            "$projectRoot/tags")
+                    val svnInfoTags = run(workingDir, "info", "--xml", "--depth=immediates", "$projectRoot/tags")
                     val valueType = xmlMapper.typeFactory
                             .constructCollectionType(List::class.java, SubversionTagsEntry::class.java)
                     val tagsEntries: List<SubversionTagsEntry> = xmlMapper.readValue(svnInfoTags.stdout(), valueType)
@@ -165,17 +165,17 @@ object Subversion : VersionControlSystem() {
 
         try {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
-            runSvnCommand(targetDir, "checkout", pkg.vcsProcessed.url, "--depth", "empty", ".")
+            run(targetDir, "checkout", pkg.vcsProcessed.url, "--depth", "empty", ".")
 
             return if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
                 if (pkg.vcsProcessed.path.isBlank()) {
                     // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
-                    runSvnCommand(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--set-depth", "infinity")
+                    run(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--set-depth", "infinity")
                     getWorkingTree(targetDir)
                 } else {
                     // Deepen only the given path.
-                    runSvnCommand(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--depth", "infinity",
-                            "--parents", pkg.vcsProcessed.path)
+                    run(targetDir, "update", "-r", pkg.vcsProcessed.revision, "--depth", "infinity", "--parents",
+                            pkg.vcsProcessed.path)
 
                     // Only return that part of the working tree that has the right revision.
                     getWorkingTree(File(targetDir, pkg.vcsProcessed.path))
@@ -196,8 +196,7 @@ object Subversion : VersionControlSystem() {
                 // In Subversion, tags are not symbolic names for revisions but names of directories containing
                 // snapshots, checking out a tag just is a sparse checkout of that path.
                 val tagPath = "tags/" + revision
-                runSvnCommand(targetDir, "update", "--depth", "infinity", "--parents",
-                        tagPath + "/" + pkg.vcsProcessed.path)
+                run(targetDir, "update", "--depth", "infinity", "--parents", tagPath + "/" + pkg.vcsProcessed.path)
 
                 // Only return that part of the working tree that has the right revision.
                 getWorkingTree(File(targetDir, tagPath))
@@ -210,7 +209,4 @@ object Subversion : VersionControlSystem() {
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
-
-    private fun runSvnCommand(workingDir: File, vararg args: String) =
-            ProcessCapture(workingDir, "svn", *args).requireSuccess()
 }

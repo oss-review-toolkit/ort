@@ -22,6 +22,7 @@ package com.here.ort.downloader
 import com.here.ort.downloader.vcs.*
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.filterVersionNames
 
 import com.vdurmont.semver4j.Semver
@@ -225,9 +226,20 @@ abstract class VersionControlSystem {
     }
 
     /**
+     * The name of the command line program to run for this VCS implementation.
+     */
+    protected abstract val commandName: String
+
+    /**
      * A fixed list of named revisions that usually move as new revisions are created.
      */
     protected abstract val movingRevisionNames: List<String>
+
+    /**
+     * A convenience function to run the command line program for this VCS implementation.
+     */
+    fun run(workingDir: File, vararg args: String) =
+            ProcessCapture(workingDir, commandName, *args).requireSuccess()
 
     /**
      * Return the VCS command's version string, or an empty string if the version cannot be determined.

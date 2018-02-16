@@ -65,7 +65,7 @@ class CvsDownloadTest : StringSpec() {
 
             // Use forward slashes also on Windows as the CVS client comes from MSYS2.
             val buildXmlFile = "xmlenc/build.xml"
-            val buildXmlStatus = Cvs.runCvsCommand(outputDir, "status", buildXmlFile)
+            val buildXmlStatus = Cvs.run(outputDir, "status", buildXmlFile)
 
             workingTree.isValid() shouldBe true
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
@@ -101,7 +101,7 @@ class CvsDownloadTest : StringSpec() {
 
             // Use forward slashes also on Windows as the CVS client comes from MSYS2.
             val buildXmlFile = "xmlenc/build.xml"
-            val buildXmlStatus = Cvs.runCvsCommand(outputDir, "status", buildXmlFile)
+            val buildXmlStatus = Cvs.run(outputDir, "status", buildXmlFile)
 
             workingTree.isValid() shouldBe true
 

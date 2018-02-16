@@ -35,6 +35,7 @@ import java.io.IOException
 import java.util.regex.Pattern
 
 abstract class GitBase : VersionControlSystem() {
+    override val commandName = "git"
     override val movingRevisionNames = listOf("HEAD", "master")
 
     override fun getVersion(): String {
@@ -64,30 +65,26 @@ abstract class GitBase : VersionControlSystem() {
                 }
 
                 override fun isShallow(): Boolean {
-                    val dotGitDir = runGitCommand(workingDir, "rev-parse", "--absolute-git-dir").stdout().trimEnd()
+                    val dotGitDir = run(workingDir, "rev-parse", "--absolute-git-dir").stdout().trimEnd()
                     return File(dotGitDir, "shallow").isFile
                 }
 
                 override fun getRemoteUrl() =
-                        runGitCommand(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
+                        run(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
 
                 override fun getRevision() =
-                        runGitCommand(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
+                        run(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
 
                 override fun getRootPath() =
-                        runGitCommand(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
+                        run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
 
                 override fun listRemoteTags(): List<String> {
-                    val tags = runGitCommand(workingDir, "ls-remote", "--refs", "origin", "refs/tags/*")
-                            .stdout().trimEnd()
+                    val tags = run(workingDir, "ls-remote", "--refs", "origin", "refs/tags/*").stdout().trimEnd()
                     return tags.lines().map {
                         it.split('\t').last().removePrefix("refs/tags/")
                     }
                 }
             }
-
-    protected fun runGitCommand(workingDir: File, vararg args: String) =
-            ProcessCapture(workingDir, "git", *args).requireSuccess()
 }
 
 object Git : GitBase() {
@@ -105,7 +102,7 @@ object Git : GitBase() {
         try {
             return createWorkingTree(pkg, targetDir, allowMovingRevisions).also {
                 if (recursive && File(targetDir, ".gitmodules").isFile) {
-                    runGitCommand(targetDir, "submodule", "update", "--init", "--recursive")
+                    run(targetDir, "submodule", "update", "--init", "--recursive")
                 }
             }
         } catch (e: IOException) {
@@ -119,16 +116,16 @@ object Git : GitBase() {
 
     private fun createWorkingTree(pkg: Package, targetDir: File, allowMovingRevisions: Boolean): WorkingTree {
         // Do not use "git clone" to have more control over what is being fetched.
-        runGitCommand(targetDir, "init")
-        runGitCommand(targetDir, "remote", "add", "origin", pkg.vcsProcessed.url)
+        run(targetDir, "init")
+        run(targetDir, "remote", "add", "origin", pkg.vcsProcessed.url)
 
         if (OS.isWindows) {
-            runGitCommand(targetDir, "config", "core.longpaths", "true")
+            run(targetDir, "config", "core.longpaths", "true")
         }
 
         if (pkg.vcsProcessed.path.isNotBlank()) {
             log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
-            runGitCommand(targetDir, "config", "core.sparseCheckout", "true")
+            run(targetDir, "config", "core.sparseCheckout", "true")
             val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
             File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path)
         }
@@ -162,8 +159,8 @@ object Git : GitBase() {
         // To safe network bandwidth, first try to only fetch exactly the revision we want.
         try {
             log.info { "Trying to fetch only revision '$revision' with depth limited to $HISTORY_DEPTH." }
-            runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
-            runGitCommand(targetDir, "checkout", "FETCH_HEAD")
+            run(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
+            run(targetDir, "checkout", "FETCH_HEAD")
             return workingTree
         } catch (e: IOException) {
             if (com.here.ort.utils.printStackTrace) {
@@ -179,8 +176,8 @@ object Git : GitBase() {
         // Fall back to fetching all refs with limited depth of history.
         try {
             log.info { "Trying to fetch all refs with depth limited to $HISTORY_DEPTH." }
-            runGitCommand(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "--tags", "origin")
-            runGitCommand(targetDir, "checkout", revision)
+            run(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "--tags", "origin")
+            run(targetDir, "checkout", revision)
             return workingTree
         } catch (e: IOException) {
             if (com.here.ort.utils.printStackTrace) {
@@ -197,14 +194,14 @@ object Git : GitBase() {
         log.info { "Trying to fetch everything including tags." }
 
         if (workingTree.isShallow()) {
-            runGitCommand(targetDir, "fetch", "--unshallow", "--tags", "origin")
+            run(targetDir, "fetch", "--unshallow", "--tags", "origin")
         } else {
-            runGitCommand(targetDir, "fetch", "--tags", "origin")
+            run(targetDir, "fetch", "--tags", "origin")
         }
 
         revisionCandidates.find { candidate ->
             try {
-                runGitCommand(targetDir, "checkout", candidate)
+                run(targetDir, "checkout", candidate)
                 true
             } catch (e: IOException) {
                 if (com.here.ort.utils.printStackTrace) {

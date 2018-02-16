@@ -39,6 +39,7 @@ import java.util.regex.Pattern
 typealias CvsFileRevisions = List<Pair<String, String>>
 
 object Cvs : VersionControlSystem() {
+    override val commandName = "cvs"
     override val movingRevisionNames = emptyList<String>()
 
     override fun getVersion(): String {
@@ -78,7 +79,7 @@ object Cvs : VersionControlSystem() {
                         getFileRevisionsHash(getFileRevisions())
 
                 private fun getFileRevisions(): CvsFileRevisions {
-                    val cvsLog = runCvsCommand(workingDir, "log", "-h")
+                    val cvsLog = run(workingDir, "log", "-h")
 
                     var currentWorkingFile = ""
                     return cvsLog.stdout().lines().mapNotNull { line ->
@@ -122,7 +123,7 @@ object Cvs : VersionControlSystem() {
                 }
 
                 override fun listRemoteTags(): List<String> {
-                    val cvsLog = runCvsCommand(workingDir, "log", "-h")
+                    val cvsLog = run(workingDir, "log", "-h")
                     var tagsSectionStarted = false
 
                     val tagsList = cvsLog.stdout().lines().mapNotNull {
@@ -157,14 +158,14 @@ object Cvs : VersionControlSystem() {
             val path = if (pkg.vcsProcessed.path.isBlank()) "." else pkg.vcsProcessed.path
 
             // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
-            runCvsCommand(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
+            run(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
             val workingTree = getWorkingTree(targetDir)
 
             val revision = if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
                 pkg.vcsProcessed.revision
             } else {
                 // Create all working tree directories in order to be able to query the log.
-                runCvsCommand(targetDir, "update", "-d")
+                run(targetDir, "update", "-d")
 
                 log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
 
@@ -190,7 +191,7 @@ object Cvs : VersionControlSystem() {
             }
 
             // Checkout the working tree of the desired revision.
-            runCvsCommand(targetDir, "checkout", "-r", revision, path)
+            run(targetDir, "checkout", "-r", revision, path)
 
             return workingTree
         } catch (e: IOException) {
@@ -201,7 +202,4 @@ object Cvs : VersionControlSystem() {
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
-
-    fun runCvsCommand(workingDir: File, vararg args: String) =
-            ProcessCapture(workingDir, "cvs", *args).requireSuccess()
 }
