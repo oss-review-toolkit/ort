@@ -192,7 +192,7 @@ object Main {
             val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
 
             val dummyId = Identifier.EMPTY.copy(name = projectName)
-            val dummyProject = Project.EMPTY.copy(id = dummyId, vcs = vcs)
+            val dummyProject = Project.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs)
 
             AnalyzerResult(false, dummyProject, sortedSetOf())
         }
