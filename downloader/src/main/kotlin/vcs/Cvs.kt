@@ -39,6 +39,7 @@ import java.util.regex.Pattern
 typealias CvsFileRevisions = List<Pair<String, String>>
 
 object Cvs : VersionControlSystem() {
+    override val aliases = listOf("cvs")
     override val commandName = "cvs"
     override val movingRevisionNames = emptyList<String>()
 
@@ -145,8 +146,6 @@ object Cvs : VersionControlSystem() {
                     return tagsList.toSortedSet().toList()
                 }
             }
-
-    override fun isApplicableType(vcsType: String) = vcsType.equals("cvs", true)
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.matches("^:(ext|pserver):[^@]+@.+$".toRegex())
 

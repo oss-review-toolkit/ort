@@ -36,6 +36,7 @@ object Mercurial : VersionControlSystem() {
     private const val EXTENSION_LARGE_FILES = "largefiles = "
     private const val EXTENSION_SPARSE = "sparse = "
 
+    override val aliases = listOf("mercurial", "hg")
     override val commandName = "hg"
     override val movingRevisionNames = listOf("tip", "default")
 
@@ -86,8 +87,6 @@ object Mercurial : VersionControlSystem() {
                     }.sorted()
                 }
             }
-
-    override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("mercurial", "hg")
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 
