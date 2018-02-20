@@ -30,6 +30,7 @@ import com.here.ort.utils.DiskCache
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.yamlMapper
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -65,6 +66,7 @@ import org.eclipse.aether.spi.connector.layout.RepositoryLayoutProvider
 import org.eclipse.aether.spi.connector.transport.GetTask
 import org.eclipse.aether.spi.connector.transport.TransporterProvider
 import org.eclipse.aether.transfer.AbstractTransferListener
+import org.eclipse.aether.transfer.NoRepositoryLayoutException
 import org.eclipse.aether.transfer.TransferEvent
 
 import java.io.File
@@ -173,7 +175,17 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
         remoteRepositories.forEach { repository ->
-            val repositoryLayout = repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
+            val repositoryLayout = try {
+                repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
+            } catch (e: NoRepositoryLayoutException) {
+                if (printStackTrace) {
+                    e.printStackTrace()
+                }
+
+                log.warn { "Could not search for '$artifact'in '$repository': ${e.message}" }
+
+                return@forEach
+            }
 
             val remoteLocation = repositoryLayout.getLocation(artifact, false)
             log.debug { "Remote location for '$artifact': $remoteLocation" }
