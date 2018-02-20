@@ -89,6 +89,7 @@ data class SubversionTagsEntry(
         val lock: SubversionInfoLock?)
 
 object Subversion : VersionControlSystem() {
+    override val aliases = listOf("subversion", "svn")
     override val commandName = "svn"
     override val movingRevisionNames = listOf("HEAD")
 
@@ -154,8 +155,6 @@ object Subversion : VersionControlSystem() {
                     return svnInfoReader.readValue(info.stdout())
                 }
             }
-
-    override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("subversion", "svn")
 
     override fun isApplicableUrl(vcsUrl: String) =
             vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
