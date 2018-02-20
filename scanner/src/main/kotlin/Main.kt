@@ -58,7 +58,8 @@ typealias PackageSummary = MutableMap<String, SummaryEntry>
 
 class SummaryEntry(
         val scopes: SortedSet<String> = sortedSetOf(),
-        val licenses: SortedSet<String> = sortedSetOf(),
+        val declaredLicenses: SortedSet<String> = sortedSetOf(),
+        val detectedLicenses: SortedSet<String> = sortedSetOf(),
         val errors: MutableList<String> = mutableListOf()
 )
 
@@ -252,11 +253,17 @@ object Main {
 
             val results = scanner.scan(packages, outputDir, downloadDir)
             results.forEach { pkg, result ->
-                pkgSummary[pkg.id.toString()] = SummaryEntry(
+                val entry = SummaryEntry(
                         scopes = findScopesForPackage(pkg, analyzerResult.project).toSortedSet(),
-                        licenses = result.licenses,
+                        declaredLicenses = pkg.declaredLicenses,
+                        detectedLicenses = result.licenses,
                         errors = result.errors.toMutableList()
                 )
+
+                pkgSummary[pkg.id.toString()] = entry
+
+                println("Declared licenses for '${pkg.id}': ${entry.declaredLicenses.joinToString()}")
+                println("Detected licenses for '${pkg.id}': ${entry.detectedLicenses.joinToString()}")
             }
         }
 
@@ -289,10 +296,10 @@ object Main {
 
             val result = localScanner.scan(input, outputDir)
 
-            entry.licenses.addAll(result.licenses)
+            entry.detectedLicenses.addAll(result.licenses)
             entry.errors.addAll(result.errors)
 
-            println("Found licenses for '$identifier': ${entry.licenses.joinToString()}")
+            println("Detected licenses for '$identifier': ${entry.detectedLicenses.joinToString()}")
         } catch (e: ScanException) {
             if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
