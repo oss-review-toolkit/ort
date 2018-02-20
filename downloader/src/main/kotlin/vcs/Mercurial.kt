@@ -38,6 +38,7 @@ object Mercurial : VersionControlSystem() {
 
     override val commandName = "hg"
     override val movingRevisionNames = listOf("tip", "default")
+    override val names = listOf("mercurial", "hg")
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
@@ -86,8 +87,6 @@ object Mercurial : VersionControlSystem() {
                     }.sorted()
                 }
             }
-
-    override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("mercurial", "hg")
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
 

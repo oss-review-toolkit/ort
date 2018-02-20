@@ -91,7 +91,7 @@ object Git : GitBase() {
     // TODO: Make this configurable.
     private const val HISTORY_DEPTH = 10
 
-    override fun isApplicableType(vcsType: String) = vcsType.equals("git", true)
+    override val names = listOf("git")
 
     override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).exitValue() == 0
 

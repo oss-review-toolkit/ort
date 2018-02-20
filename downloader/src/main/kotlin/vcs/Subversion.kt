@@ -91,6 +91,7 @@ data class SubversionTagsEntry(
 object Subversion : VersionControlSystem() {
     override val commandName = "svn"
     override val movingRevisionNames = listOf("HEAD")
+    override val names = listOf("subversion", "svn")
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
@@ -154,8 +155,6 @@ object Subversion : VersionControlSystem() {
                     return svnInfoReader.readValue(info.stdout())
                 }
             }
-
-    override fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in listOf("subversion", "svn")
 
     override fun isApplicableUrl(vcsUrl: String) =
             vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).exitValue() == 0

@@ -41,6 +41,7 @@ typealias CvsFileRevisions = List<Pair<String, String>>
 object Cvs : VersionControlSystem() {
     override val commandName = "cvs"
     override val movingRevisionNames = emptyList<String>()
+    override val names = listOf("cvs")
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
@@ -145,8 +146,6 @@ object Cvs : VersionControlSystem() {
                     return tagsList.toSortedSet().toList()
                 }
             }
-
-    override fun isApplicableType(vcsType: String) = vcsType.equals("cvs", true)
 
     override fun isApplicableUrl(vcsUrl: String) = vcsUrl.matches("^:(ext|pserver):[^@]+@.+$".toRegex())
 
