@@ -27,11 +27,13 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 
+private val UNCOMPRESSED_EXTENSIONS = listOf(".pom")
 private val TAR_EXTENSIONS = listOf(".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2")
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
 
 fun File.unpack(targetDirectory: File) {
     when {
+        UNCOMPRESSED_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> {}
         TAR_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackTar(targetDirectory)
         ZIP_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackZip(targetDirectory)
         else -> throw IOException("Unknown archive type for file '$absolutePath'.")
