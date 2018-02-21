@@ -277,7 +277,7 @@ object Main {
             }
 
             val entry = pkgSummary.getOrPut(inputPath.absolutePath) { SummaryEntry() }
-            scanEntry(entry, inputPath.absolutePath, inputPath)
+            scanEntry(entry, inputPath)
         }
 
         val scannedScopes = includedScopes.map { it.name }.toSortedSet()
@@ -288,9 +288,9 @@ object Main {
     private fun findScopesForPackage(pkg: Package, project: Project) =
             project.scopes.filter { it.contains(pkg) }.map { it.name }
 
-    private fun scanEntry(entry: SummaryEntry, identifier: String, input: File) {
+    private fun scanEntry(entry: SummaryEntry, input: File) {
         try {
-            println("Scanning package '$identifier'...")
+            println("Scanning '${input.absolutePath}'...")
 
             val localScanner = scanner as LocalScanner
 
@@ -299,13 +299,13 @@ object Main {
             entry.detectedLicenses.addAll(result.licenses)
             entry.errors.addAll(result.errors)
 
-            println("Detected licenses for '$identifier': ${entry.detectedLicenses.joinToString()}")
+            println("Detected licenses for '${input.absolutePath}': ${entry.detectedLicenses.joinToString()}")
         } catch (e: ScanException) {
             if (com.here.ort.utils.printStackTrace) {
                 e.printStackTrace()
             }
 
-            log.error { "Could not scan '$identifier': ${e.message}" }
+            log.error { "Could not scan '${input.absolutePath}': ${e.message}" }
 
             entry.errors.addAll(e.collectMessages())
         }
