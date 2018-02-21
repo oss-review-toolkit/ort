@@ -268,16 +268,38 @@ object Main {
         }
 
         inputPath?.let { inputPath ->
-            require(scanner is LocalScanner) {
-                "To scan local files the chosen scanner must be a local scanner."
-            }
-
             require(inputPath.exists()) {
                 "Provided path does not exist: ${inputPath.absolutePath}"
             }
 
-            val entry = pkgSummary.getOrPut(inputPath.absolutePath) { SummaryEntry() }
-            scanEntry(entry, inputPath.absolutePath, inputPath)
+            val localScanner = scanner as? LocalScanner
+
+            if (localScanner != null) {
+                println("Scanning path '${inputPath.absolutePath}'...")
+
+                val entry = try {
+                    val result = localScanner.scan(inputPath, outputDir)
+
+                    println("Detected licenses for path '${inputPath.absolutePath}': ${result.licenses.joinToString()}")
+
+                    SummaryEntry(
+                            detectedLicenses = result.licenses,
+                            errors = result.errors.toMutableList()
+                    )
+                } catch (e: ScanException) {
+                    if (com.here.ort.utils.printStackTrace) {
+                        e.printStackTrace()
+                    }
+
+                    log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
+
+                    SummaryEntry(errors = e.collectMessages().toMutableList())
+                }
+
+                pkgSummary[inputPath.absolutePath] = entry
+            } else {
+                throw IllegalArgumentException("To scan local files the chosen scanner must be a local scanner.")
+            }
         }
 
         val scannedScopes = includedScopes.map { it.name }.toSortedSet()
@@ -287,29 +309,6 @@ object Main {
 
     private fun findScopesForPackage(pkg: Package, project: Project) =
             project.scopes.filter { it.contains(pkg) }.map { it.name }
-
-    private fun scanEntry(entry: SummaryEntry, identifier: String, input: File) {
-        try {
-            println("Scanning package '$identifier'...")
-
-            val localScanner = scanner as LocalScanner
-
-            val result = localScanner.scan(input, outputDir)
-
-            entry.detectedLicenses.addAll(result.licenses)
-            entry.errors.addAll(result.errors)
-
-            println("Detected licenses for '$identifier': ${entry.detectedLicenses.joinToString()}")
-        } catch (e: ScanException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
-
-            log.error { "Could not scan '$identifier': ${e.message}" }
-
-            entry.errors.addAll(e.collectMessages())
-        }
-    }
 
     private fun writeSummary(outputDirectory: File, scanSummary: ScanSummary) {
         summaryFormats.forEach { format ->
