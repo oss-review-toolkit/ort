@@ -24,8 +24,10 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
+import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
@@ -73,7 +75,19 @@ abstract class LocalScanner : Scanner() {
     abstract fun getVersion(executable: String): String
 
     override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File?): Map<Package, Result> {
-        return packages.associateBy { it }.mapValues { scan(it.value, outputDirectory, downloadDirectory) }
+        return packages.associateBy { it }.mapValues {
+            try {
+                scan(it.value, outputDirectory, downloadDirectory)
+            } catch (e: ScanException) {
+                if (printStackTrace) {
+                    e.printStackTrace()
+                }
+
+                log.error { "Could not scan package '${it.key.id}': ${e.message}" }
+
+                Result(sortedSetOf(), errors = e.collectMessages().toSortedSet())
+            }
+        }
     }
 
     /**
