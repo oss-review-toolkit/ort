@@ -32,10 +32,11 @@ private val TAR_EXTENSIONS = listOf(".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
 
 fun File.unpack(targetDirectory: File) {
+    val lowerName = this.name.toLowerCase()
     when {
-        UNCOMPRESSED_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> {}
-        TAR_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackTar(targetDirectory)
-        ZIP_EXTENSIONS.any { this.name.toLowerCase().endsWith(it) } -> unpackZip(targetDirectory)
+        UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {}
+        TAR_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackTar(targetDirectory)
+        ZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackZip(targetDirectory)
         else -> throw IOException("Unknown archive type for file '$absolutePath'.")
     }
 }
@@ -47,9 +48,9 @@ fun File.unpack(targetDirectory: File) {
  * @param targetDirectory The target directory to store the unpacked content of this archive.
  */
 fun File.unpackTar(targetDirectory: File) {
-    val suffix = this.name.toLowerCase().substringAfterLast('.')
+    val lowerExtension = this.extension.toLowerCase()
 
-    val inputStream = when (suffix) {
+    val inputStream = when (lowerExtension) {
         "gz", "tgz" -> GzipCompressorInputStream(inputStream())
         "bz2", "tbz2" -> BZip2CompressorInputStream(inputStream())
         "tar" -> inputStream()
