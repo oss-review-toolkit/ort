@@ -19,7 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -32,10 +31,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer
  */
 data class Identifier(
         /**
-         * The name of the package manager that was used to discover this package, for example Maven or NPM.
+         * The name of the provider that hosts this package, for example Maven or NPM.
          */
-        @JsonProperty("package_manager")
-        val packageManager: String,
+        val provider: String,
 
         /**
          * The namespace of the package, for example the group id in Maven or the scope in NPM.
@@ -58,20 +56,20 @@ data class Identifier(
          */
         @JvmField
         val EMPTY = Identifier(
-                packageManager = "",
+                provider = "",
                 namespace = "",
                 name = "",
                 version = ""
         )
 
         /**
-         * Create an [Identifier] from a string with the format "packageManager:namespace:name:version". If the string
+         * Create an [Identifier] from a string with the format "provider:namespace:name:version". If the string
          * has less than three colon separators the missing values are assigned empty strings.
          */
         fun fromString(identifier: String): Identifier {
             val list = identifier.split(':')
             return Identifier(
-                    packageManager = list.getOrNull(0) ?: "",
+                    provider = list.getOrNull(0) ?: "",
                     namespace = list.getOrNull(1) ?: "",
                     name = list.getOrNull(2) ?: "",
                     version = list.getOrNull(3) ?: ""
@@ -81,7 +79,7 @@ data class Identifier(
 
     /**
      * Returns true if this matches the other identifier. To match, both identifiers need to have the same
-     * [packageManager] and [namespace], and the [name] and [version] must be either equal or empty for at least one of
+     * [provider] and [namespace], and the [name] and [version] must be either equal or empty for at least one of
      * them.
      *
      * Examples for matching identifiers:
@@ -94,7 +92,7 @@ data class Identifier(
      * * "maven:org.hamcrest:hamcrest-core:" <-> "maven:org.hamcrest:hamcrest-library:"
      */
     fun matches(other: Identifier): Boolean {
-        if (!packageManager.equals(other.packageManager, true)) {
+        if (!provider.equals(other.provider, true)) {
             return false
         }
 
@@ -108,7 +106,7 @@ data class Identifier(
         return nameMatches && versionMatches
     }
 
-    override fun toString() = "$packageManager:$namespace:$name:$version"
+    override fun toString() = "$provider:$namespace:$name:$version"
 }
 
 class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class.java) {

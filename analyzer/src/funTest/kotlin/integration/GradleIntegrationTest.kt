@@ -34,7 +34,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
 
     override val pkg: Package = Package(
             id = Identifier(
-                    packageManager = "Gradle",
+                    provider = "maven",
                     namespace = "org.gradle",
                     name = "Gradle",
                     version = "4.4.0"

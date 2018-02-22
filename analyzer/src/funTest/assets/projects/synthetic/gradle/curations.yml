@@ -1,11 +1,11 @@
 ---
-- id: "Gradle:org.hamcrest::"
+- id: "maven:org.hamcrest::"
   curations:
     homepage_url: "http://hamcrest.org/JavaHamcrest/"
-- id: "Gradle:org.hamcrest:hamcrest-core:"
+- id: "maven:org.hamcrest:hamcrest-core:"
   curations:
     description: "Curated description."
-- id: "Gradle:org.hamcrest:hamcrest-core:1.3"
+- id: "maven:org.hamcrest:hamcrest-core:1.3"
   curations:
     declared_licenses:
     - "curated license a"

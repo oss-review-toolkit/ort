@@ -254,7 +254,7 @@ class NPM : PackageManager() {
 
             val module = Package(
                     id = Identifier(
-                            packageManager = javaClass.simpleName,
+                            provider = "NPM",
                             namespace = namespace,
                             name = name,
                             version = version
@@ -450,7 +450,7 @@ class NPM : PackageManager() {
 
         val project = Project(
                 id = Identifier(
-                        packageManager = javaClass.simpleName,
+                        provider = NPM.toString(),
                         namespace = namespace,
                         name = name,
                         version = version

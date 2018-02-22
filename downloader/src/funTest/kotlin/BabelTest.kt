@@ -62,7 +62,7 @@ class BabelTest : StringSpec() {
 
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "NPM",
+                            provider = "npm",
                             namespace = "",
                             name = "babel-cli",
                             version = "6.26.0"

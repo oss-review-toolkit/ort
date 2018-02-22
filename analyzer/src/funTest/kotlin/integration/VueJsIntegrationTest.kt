@@ -33,7 +33,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
 
     override val pkg: Package = Package(
             id = Identifier(
-                    packageManager = "NPM",
+                    provider = "npm",
                     namespace = "",
                     name = "Vue.js",
                     version = ""

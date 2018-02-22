@@ -120,7 +120,7 @@ class ArtifactoryCache(
 
     private fun cachePath(pkg: Package, resultsFile: File) =
             "scan-results/" +
-                    "${pkg.id.packageManager.valueOrUnderscore()}/" +
+                    "${pkg.id.provider.valueOrUnderscore()}/" +
                     "${pkg.id.namespace.valueOrUnderscore()}/" +
                     "${pkg.id.name.valueOrUnderscore()}/" +
                     "${pkg.id.version.valueOrUnderscore()}/" +

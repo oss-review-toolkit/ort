@@ -2,7 +2,7 @@
 allowDynamicVersions: false
 project:
   id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "npm-project"
     version: "2.0.0"
@@ -309,7 +309,7 @@ project:
       errors: []
 packages:
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "asap"
     version: "2.0.5"
@@ -336,7 +336,7 @@ packages:
     revision: "e7f3d29eed4967ecfcaddbfc9542e2ee12b76227"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "boolbase"
     version: "1.0.0"
@@ -363,7 +363,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "cheerio"
     version: "1.0.0-rc.1"
@@ -391,7 +391,7 @@ packages:
     revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "coffee-script"
     version: "1.12.6"
@@ -418,7 +418,7 @@ packages:
     revision: "f0e9837dca51244ef994ff535768d3a606912020"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "core-util-is"
     version: "1.0.2"
@@ -445,7 +445,7 @@ packages:
     revision: "a177da234df5638b363ddc15fa324619a38577c8"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "cson-parser"
     version: "1.3.5"
@@ -472,7 +472,7 @@ packages:
     revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "cson"
     version: "4.1.0"
@@ -500,7 +500,7 @@ packages:
     revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "css-select"
     version: "1.2.0"
@@ -527,7 +527,7 @@ packages:
     revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "css-what"
     version: "2.1.0"
@@ -554,7 +554,7 @@ packages:
     revision: "fd6b9f62146efec8e17ee80ddaebdfb6ede21d7b"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "dom-serializer"
     version: "0.1.0"
@@ -581,7 +581,7 @@ packages:
     revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "domelementtype"
     version: "1.1.3"
@@ -607,7 +607,7 @@ packages:
     revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "domelementtype"
     version: "1.3.0"
@@ -633,7 +633,7 @@ packages:
     revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "domhandler"
     version: "2.4.1"
@@ -660,7 +660,7 @@ packages:
     revision: "9b17cc6cc9387a87dde6eb8ddbae11c753e7d23d"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "domutils"
     version: "1.5.1"
@@ -686,7 +686,7 @@ packages:
     revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "eachr"
     version: "3.2.0"
@@ -715,7 +715,7 @@ packages:
     revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "editions"
     version: "1.3.3"
@@ -743,7 +743,7 @@ packages:
     revision: "272530079d941652a2679cf2152e83ed2f3f2129"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "entities"
     version: "1.1.1"
@@ -770,7 +770,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "extract-opts"
     version: "3.3.1"
@@ -797,7 +797,7 @@ packages:
     revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "graceful-fs"
     version: "4.1.11"
@@ -824,7 +824,7 @@ packages:
     revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "htmlparser2"
     version: "3.9.2"
@@ -851,7 +851,7 @@ packages:
     revision: "e1f12f626f65cf4a082f89bdde89081b54187818"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "inherits"
     version: "2.0.3"
@@ -879,7 +879,7 @@ packages:
     revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "isarray"
     version: "1.0.0"
@@ -906,7 +906,7 @@ packages:
     revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "lodash"
     version: "4.17.4"
@@ -933,7 +933,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "long"
     version: "3.2.0"
@@ -960,7 +960,7 @@ packages:
     revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "nth-check"
     version: "1.0.1"
@@ -987,7 +987,7 @@ packages:
     revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "parse5"
     version: "3.0.2"
@@ -1015,7 +1015,7 @@ packages:
     revision: "969ed22f53db38c101449e05a1b804ea456d4e04"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "process-nextick-args"
     version: "1.0.7"
@@ -1042,7 +1042,7 @@ packages:
     revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "promise"
     version: "7.3.1"
@@ -1069,7 +1069,7 @@ packages:
     revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "readable-stream"
     version: "2.3.3"
@@ -1096,7 +1096,7 @@ packages:
     revision: "cd59995050105b946884ee20e3bcadc252feda8c"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "requirefresh"
     version: "2.1.0"
@@ -1123,7 +1123,7 @@ packages:
     revision: "f0c589db055ba21ebb30da442742cd19e64e3efa"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "safe-buffer"
     version: "5.1.1"
@@ -1150,7 +1150,7 @@ packages:
     revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "safefs"
     version: "4.1.0"
@@ -1178,7 +1178,7 @@ packages:
     revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "string_decoder"
     version: "1.0.3"
@@ -1205,7 +1205,7 @@ packages:
     revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "typechecker"
     version: "4.4.1"
@@ -1233,7 +1233,7 @@ packages:
     revision: "ab3925bc0270f8df65f5c05ae1ba09e648aaff8e"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "util-deprecate"
     version: "1.0.2"
@@ -1260,7 +1260,7 @@ packages:
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: "@types"
     name: "node"
     version: "6.0.79"

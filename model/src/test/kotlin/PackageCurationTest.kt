@@ -28,7 +28,7 @@ class PackageCurationTest : StringSpec() {
         "apply overwrites the correct values" {
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "maven",
+                            provider = "maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -81,7 +81,7 @@ class PackageCurationTest : StringSpec() {
         "apply changes only curated fields" {
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "maven",
+                            provider = "maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -132,7 +132,7 @@ class PackageCurationTest : StringSpec() {
         "applying curation fails when identifiers do not match" {
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "maven",
+                            provider = "maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -146,7 +146,7 @@ class PackageCurationTest : StringSpec() {
             )
             val curation = PackageCuration(
                     id = Identifier(
-                            packageManager = "",
+                            provider = "",
                             namespace = "",
                             name = "",
                             version = ""

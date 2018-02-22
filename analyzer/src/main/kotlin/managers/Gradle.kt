@@ -128,7 +128,7 @@ class Gradle : PackageManager() {
 
             val project = Project(
                     id = Identifier(
-                            packageManager = javaClass.simpleName,
+                            provider = Gradle.toString(),
                             namespace = "",
                             name = dependencyTreeModel.name,
                             version = ""
@@ -166,7 +166,7 @@ class Gradle : PackageManager() {
             val rawPackage by lazy {
                 Package(
                         id = Identifier(
-                                packageManager = javaClass.simpleName,
+                                provider = "Maven",
                                 namespace = dependency.groupId,
                                 name = dependency.artifactId,
                                 version = dependency.version
@@ -185,7 +185,7 @@ class Gradle : PackageManager() {
                     val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, dependency.classifier,
                             dependency.extension, dependency.version)
                     try {
-                        maven.parsePackage(artifact, repositories, javaClass.simpleName)
+                        maven.parsePackage(artifact, repositories)
                     } catch (e: ProjectBuildingException) {
                         if (com.here.ort.utils.printStackTrace) {
                             e.printStackTrace()
