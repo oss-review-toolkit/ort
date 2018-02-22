@@ -362,6 +362,14 @@ class UtilsTest : WordSpec({
         }
     }
 
+    "searchUpwardsForSubdirectory" should {
+        "find the root Git directory" {
+            val gitRoot = searchUpwardsForSubdirectory(File("src"), ".git")
+            gitRoot shouldNotBe null
+            gitRoot shouldBe File("..").canonicalFile
+        }
+    }
+
     "File.safeMkDirs()" should {
         "should succeed if directory already exists" {
             val directory = createTempDir()
