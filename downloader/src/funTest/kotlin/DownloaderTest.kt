@@ -54,7 +54,7 @@ class DownloaderTest : StringSpec() {
         "Downloads and unpacks JAR source package" {
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "Gradle",
+                            provider = "Maven",
                             namespace = "junit",
                             name = "junit",
                             version = "4.12"
@@ -88,7 +88,7 @@ class DownloaderTest : StringSpec() {
         "Download of JAR source package fails when hash is incorrect" {
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "Gradle",
+                            provider = "Maven",
                             namespace = "junit",
                             name = "junit",
                             version = "4.12"
@@ -116,7 +116,7 @@ class DownloaderTest : StringSpec() {
         "Falls back to downloading source package when download from VCS fails" {
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "Gradle",
+                            provider = "Maven",
                             namespace = "junit",
                             name = "junit",
                             version = "4.12"
@@ -156,7 +156,7 @@ class DownloaderTest : StringSpec() {
             val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "Maven",
+                            provider = "Maven",
                             namespace = "tyrex",
                             name = "tyrex",
                             version = "1.0.1"

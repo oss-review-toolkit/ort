@@ -277,7 +277,7 @@ class PIP : PackageManager() {
 
         val project = Project(
                 id = Identifier(
-                        packageManager = javaClass.simpleName,
+                        provider = PIP.toString(),
                         namespace = "",
                         name = projectName,
                         version = projectVersion
@@ -407,7 +407,7 @@ class PIP : PackageManager() {
 
             val dependencyPackage = Package(
                     id = Identifier(
-                            packageManager = javaClass.simpleName,
+                            provider = "PyPI",
                             namespace = "",
                             name = packageName,
                             version = packageVersion
