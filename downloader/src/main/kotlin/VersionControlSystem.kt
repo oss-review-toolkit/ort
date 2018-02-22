@@ -217,7 +217,7 @@ abstract class VersionControlSystem {
         /**
          * Return the relative path to [path] with respect to the VCS root.
          */
-        fun getPathToRoot(path: File): String {
+        open fun getPathToRoot(path: File): String {
             val relativePath = path.absoluteFile.relativeTo(File(getRootPath())).toString()
 
             // Use Unix paths even on Windows for consistent output.

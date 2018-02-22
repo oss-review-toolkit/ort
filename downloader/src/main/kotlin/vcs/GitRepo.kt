@@ -32,7 +32,20 @@ import java.io.IOException
 object GitRepo : GitBase() {
     override val aliases = listOf("gitrepo", "git-repo", "repo")
 
-    override fun getWorkingTree(vcsDirectory: File) = super.getWorkingTree(File(vcsDirectory, ".repo/manifests"))
+    override fun getWorkingTree(vcsDirectory: File) =
+            object : GitWorkingTree(File(vcsDirectory, ".repo/manifests")) {
+                // Return the directory in which "repo init" was run (that directory in not managed with Git).
+                override fun getRootPath() = vcsDirectory.absolutePath
+
+                override fun getPathToRoot(path: File): String {
+                    // GitRepo is special in that the path to the root is supposed to return the path to the manifest
+                    // file in use, which is symlinked from ".repo/manifest.xml". So resolve that path to the underlying
+                    // manifest inside the "manifests" directory.
+                    val manifestLink = File(path, ".repo/manifest.xml")
+                    val manifestDir = File(path, ".repo/manifests")
+                    return manifestLink.canonicalFile.toRelativeString(manifestDir)
+                }
+            }
 
     override fun isApplicableUrl(vcsUrl: String) = false
 
