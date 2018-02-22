@@ -2,7 +2,7 @@
 allowDynamicVersions: false
 project:
   id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "npm-project-that-depends-on-babel"
     version: "1.0.0"
@@ -2714,7 +2714,7 @@ project:
     dependencies: []
 packages:
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "ansi-regex"
     version: "2.1.1"
@@ -2741,7 +2741,7 @@ packages:
     revision: "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "ansi-styles"
     version: "2.2.1"
@@ -2768,7 +2768,7 @@ packages:
     revision: "95c59b23be760108b6530ca1c89477c21b258032"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "anymatch"
     version: "1.3.2"
@@ -2796,7 +2796,7 @@ packages:
     revision: "a16f5bd07f1e36c4eef08c1291c6c119d1663639"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "arr-diff"
     version: "2.0.0"
@@ -2824,7 +2824,7 @@ packages:
     revision: "b89f54eb88ca51afd0e0ea6be9a4a63e5ccecf27"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "arr-flatten"
     version: "1.1.0"
@@ -2851,7 +2851,7 @@ packages:
     revision: "76a1ae28b03fdb1cbe5d49fa521bc4807b9f94d3"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "array-unique"
     version: "0.2.1"
@@ -2878,7 +2878,7 @@ packages:
     revision: "36fde8e586fb7cf880b8b3aa6515df889e64ed85"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "async-each"
     version: "1.0.1"
@@ -2906,7 +2906,7 @@ packages:
     revision: "f2342d85633d0dc1034a49387ca01c08c1189823"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-cli"
     version: "6.26.0"
@@ -2933,7 +2933,7 @@ packages:
     revision: "master"
     path: "packages/babel-cli"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-code-frame"
     version: "6.26.0"
@@ -2960,7 +2960,7 @@ packages:
     revision: "master"
     path: "packages/babel-code-frame"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-core"
     version: "6.26.0"
@@ -2987,7 +2987,7 @@ packages:
     revision: "master"
     path: "packages/babel-core"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-generator"
     version: "6.26.0"
@@ -3014,7 +3014,7 @@ packages:
     revision: "master"
     path: "packages/babel-generator"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-helpers"
     version: "6.24.1"
@@ -3041,7 +3041,7 @@ packages:
     revision: "master"
     path: "packages/babel-helpers"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-messages"
     version: "6.23.0"
@@ -3068,7 +3068,7 @@ packages:
     revision: "master"
     path: "packages/babel-messages"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-polyfill"
     version: "6.26.0"
@@ -3095,7 +3095,7 @@ packages:
     revision: "master"
     path: "packages/babel-polyfill"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-register"
     version: "6.26.0"
@@ -3122,7 +3122,7 @@ packages:
     revision: "master"
     path: "packages/babel-register"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-runtime"
     version: "6.26.0"
@@ -3149,7 +3149,7 @@ packages:
     revision: "master"
     path: "packages/babel-runtime"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-template"
     version: "6.26.0"
@@ -3176,7 +3176,7 @@ packages:
     revision: "master"
     path: "packages/babel-template"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-traverse"
     version: "6.26.0"
@@ -3204,7 +3204,7 @@ packages:
     revision: "master"
     path: "packages/babel-traverse"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babel-types"
     version: "6.26.0"
@@ -3231,7 +3231,7 @@ packages:
     revision: "master"
     path: "packages/babel-types"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "babylon"
     version: "6.18.0"
@@ -3258,7 +3258,7 @@ packages:
     revision: "da66d3f65b0d305c0bb042873d57f26f0c0b0538"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "balanced-match"
     version: "1.0.0"
@@ -3285,7 +3285,7 @@ packages:
     revision: "d701a549a7653a874eebce7eca25d3577dc868ac"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "binary-extensions"
     version: "1.11.0"
@@ -3312,7 +3312,7 @@ packages:
     revision: "a2370df9507ac5c618c32334ea259370b34ad3be"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "brace-expansion"
     version: "1.1.8"
@@ -3339,7 +3339,7 @@ packages:
     revision: "8f59e68bd5c915a0d624e8e39354e1ccf672edf6"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "braces"
     version: "1.8.5"
@@ -3367,7 +3367,7 @@ packages:
     revision: "24874614ebeda1c5405180f1f6c9f374bcf384ce"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "chalk"
     version: "1.1.3"
@@ -3394,7 +3394,7 @@ packages:
     revision: "0d8d8c204eb87a4038219131ad4d8369c9f59d24"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "chokidar"
     version: "1.7.0"
@@ -3421,7 +3421,7 @@ packages:
     revision: "3b1071a6dd82397842f4f7dc63b72c703bd06275"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "commander"
     version: "2.12.2"
@@ -3448,7 +3448,7 @@ packages:
     revision: "6864c953d781d4f665afecbdace84d9d80e45060"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "concat-map"
     version: "0.0.1"
@@ -3475,7 +3475,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "convert-source-map"
     version: "1.5.1"
@@ -3503,7 +3503,7 @@ packages:
     revision: "0771098071f3b7c48ec6604291cad28b3b679d02"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "core-js"
     version: "2.5.2"
@@ -3530,7 +3530,7 @@ packages:
     revision: "a03fd191eaea071fa56eb6a1a806470272deb9d7"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "core-util-is"
     version: "1.0.2"
@@ -3557,7 +3557,7 @@ packages:
     revision: "a177da234df5638b363ddc15fa324619a38577c8"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "debug"
     version: "2.6.9"
@@ -3584,7 +3584,7 @@ packages:
     revision: "13abeae468fea297d0dccc50bc55590809241083"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "detect-indent"
     version: "4.0.0"
@@ -3611,7 +3611,7 @@ packages:
     revision: "dbbc78fcb37907116eb120a8324070a1df0e8d86"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "escape-string-regexp"
     version: "1.0.5"
@@ -3638,7 +3638,7 @@ packages:
     revision: "db124a3e1aae9d692c4899e42a5c6c3e329eaa20"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "esutils"
     version: "2.0.2"
@@ -3665,7 +3665,7 @@ packages:
     revision: "3ffd1c403f3f29db9e8a9574b1895682e57b6a7f"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "expand-brackets"
     version: "0.1.5"
@@ -3692,7 +3692,7 @@ packages:
     revision: "1b07fda8ee8b6426d95e6539785b74c57e9ee542"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "expand-range"
     version: "1.8.2"
@@ -3720,7 +3720,7 @@ packages:
     revision: "4c873af0870df8382bafc66a93d5c89e3aad3d4d"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "extglob"
     version: "0.3.2"
@@ -3748,7 +3748,7 @@ packages:
     revision: "8c3f38bbd9e0afaf31a87e411c0d15532434ef41"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "filename-regex"
     version: "2.0.1"
@@ -3775,7 +3775,7 @@ packages:
     revision: "821fec482acdb1ce3f23a804ce8a86724d02b4e6"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "fill-range"
     version: "2.2.3"
@@ -3803,7 +3803,7 @@ packages:
     revision: "6cb50d5c679d9e6d9e8ad97bb2efd63a8c8da610"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "for-in"
     version: "1.0.2"
@@ -3832,7 +3832,7 @@ packages:
     revision: "5f97ad4f6556e938d9b71614259ddd8044a081e3"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "for-own"
     version: "0.1.5"
@@ -3861,7 +3861,7 @@ packages:
     revision: "e64ee3492f218c812011ec3feff4194e9272d2a1"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "fs-readdir-recursive"
     version: "1.1.0"
@@ -3888,7 +3888,7 @@ packages:
     revision: "f810b44477696081ebef9c0d5eafb24005c8e82b"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "fs.realpath"
     version: "1.0.0"
@@ -3916,7 +3916,7 @@ packages:
     revision: "03e7c884431fe185dfebbc9b771aeca339c1807a"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "glob-base"
     version: "0.3.0"
@@ -3943,7 +3943,7 @@ packages:
     revision: "adbc0ab07ec8a85f76ffd1b54dd41cdb9d1d0b83"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "glob-parent"
     version: "2.0.0"
@@ -3970,7 +3970,7 @@ packages:
     revision: "a956910c7ccb5eafd1b3fe900ceb6335cc5b6d3d"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "glob"
     version: "7.1.2"
@@ -3997,7 +3997,7 @@ packages:
     revision: "8fa8d561e08c9eed1d286c6a35be2cd8123b2fb7"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "globals"
     version: "9.18.0"
@@ -4024,7 +4024,7 @@ packages:
     revision: "09ba8754235e5953507b8d0543d65098bc7bb78d"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "graceful-fs"
     version: "4.1.11"
@@ -4051,7 +4051,7 @@ packages:
     revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "has-ansi"
     version: "2.0.0"
@@ -4078,7 +4078,7 @@ packages:
     revision: "0722275e1bef139fcd09137da6e5550c3cd368b9"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "home-or-tmp"
     version: "2.0.0"
@@ -4105,7 +4105,7 @@ packages:
     revision: "dd1411a0b2531a4e2c592ae733fd45dd0f9c7163"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "inflight"
     version: "1.0.6"
@@ -4132,7 +4132,7 @@ packages:
     revision: "a547881738c8f57b27795e584071d67cf6ac1a57"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "inherits"
     version: "2.0.3"
@@ -4160,7 +4160,7 @@ packages:
     revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "invariant"
     version: "2.2.2"
@@ -4187,7 +4187,7 @@ packages:
     revision: "49ae54d5a09c99a447e7dafa46bd3aa8f6923d98"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-binary-path"
     version: "1.0.1"
@@ -4214,7 +4214,7 @@ packages:
     revision: "ed26bd7be5e29dad159c2771cb99dd48913f9de0"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-buffer"
     version: "1.1.6"
@@ -4241,7 +4241,7 @@ packages:
     revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-dotfile"
     version: "1.0.3"
@@ -4269,7 +4269,7 @@ packages:
     revision: "1548d0045c182dfb0ac7b747e2d484dcd382b09d"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-equal-shallow"
     version: "0.1.3"
@@ -4297,7 +4297,7 @@ packages:
     revision: "dceb47dd9c9c21066958116e3b54b3c8c251ee4a"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-extendable"
     version: "0.1.1"
@@ -4326,7 +4326,7 @@ packages:
     revision: "c36a0732e6a76931c6f66c5931d1f3e54fa44380"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-extglob"
     version: "1.0.0"
@@ -4353,7 +4353,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-finite"
     version: "1.0.2"
@@ -4380,7 +4380,7 @@ packages:
     revision: "43f8bb814834d8573d11ba4a631d19006d0c8897"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-glob"
     version: "2.0.1"
@@ -4410,7 +4410,7 @@ packages:
     revision: "d7db1b2dd559b3d5a73f89dbe72d9e9f4d6587d7"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-number"
     version: "2.1.0"
@@ -4437,7 +4437,7 @@ packages:
     revision: "d06c6e2cc048d3cad016cb8dfb055bb14d86fffa"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-number"
     version: "3.0.0"
@@ -4464,7 +4464,7 @@ packages:
     revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-posix-bracket"
     version: "0.1.1"
@@ -4492,7 +4492,7 @@ packages:
     revision: "43972556cfdbb681a15072da75c97952c4e4deba"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "is-primitive"
     version: "2.0.0"
@@ -4519,7 +4519,7 @@ packages:
     revision: "c512b7c95fb049aa9b1f039ddc0670611b66cce2"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "isarray"
     version: "1.0.0"
@@ -4546,7 +4546,7 @@ packages:
     revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "isobject"
     version: "2.1.0"
@@ -4573,7 +4573,7 @@ packages:
     revision: "d693ec8d31b02b42a19b2d806407a4ecb2f9fb73"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "js-tokens"
     version: "3.0.2"
@@ -4600,7 +4600,7 @@ packages:
     revision: "8315904c840b14d28de1b0a4968194555f61bea3"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "jsesc"
     version: "1.3.0"
@@ -4628,7 +4628,7 @@ packages:
     revision: "2c43a8a223e297155b2b2ccca344df4d6ee4233c"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "json5"
     version: "0.5.1"
@@ -4655,7 +4655,7 @@ packages:
     revision: "6be6a70e250e6fbbf42db75cd1f6a1aadeeeeb07"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "kind-of"
     version: "3.2.2"
@@ -4682,7 +4682,7 @@ packages:
     revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "kind-of"
     version: "4.0.0"
@@ -4709,7 +4709,7 @@ packages:
     revision: "30bee16e8dffa67417ba35d31bd9bc31517a2d83"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "lodash"
     version: "4.17.4"
@@ -4736,7 +4736,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "loose-envify"
     version: "1.3.1"
@@ -4764,7 +4764,7 @@ packages:
     revision: "7b2d41e61a7ddba5335154b4aba327f6e850f7fd"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "micromatch"
     version: "2.3.11"
@@ -4792,7 +4792,7 @@ packages:
     revision: "f194c187d04677b03047bb7d8d25643725f7a577"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "minimatch"
     version: "3.0.4"
@@ -4819,7 +4819,7 @@ packages:
     revision: "e46989a323d5f0aa4781eff5e2e6e7aafa223321"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "minimist"
     version: "0.0.8"
@@ -4846,7 +4846,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "mkdirp"
     version: "0.5.1"
@@ -4873,7 +4873,7 @@ packages:
     revision: "d4eff0f06093aed4f387e88e9fc301cb76beedc7"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "ms"
     version: "2.0.0"
@@ -4900,7 +4900,7 @@ packages:
     revision: "9b88d1568a52ec9bb67ecc8d2aa224fa38fd41f4"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "normalize-path"
     version: "2.1.1"
@@ -4929,7 +4929,7 @@ packages:
     revision: "da1a45e7a514910ce39875b5327b1d0fa9be3d3e"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "number-is-nan"
     version: "1.0.1"
@@ -4956,7 +4956,7 @@ packages:
     revision: "ed9cdac3f428cc929b61bb230da42c87477af4b9"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "object-assign"
     version: "4.1.1"
@@ -4983,7 +4983,7 @@ packages:
     revision: "a89774b252c91612203876984bbd6addbe3b5a0e"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "object.omit"
     version: "2.0.1"
@@ -5011,7 +5011,7 @@ packages:
     revision: "6634673e6e88c65796f1df4bcb787dede6dc7ffc"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "once"
     version: "1.4.0"
@@ -5038,7 +5038,7 @@ packages:
     revision: "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "os-homedir"
     version: "1.0.2"
@@ -5065,7 +5065,7 @@ packages:
     revision: "b1b0ae70a5965fef7005ff6509a5dd1a78c95e36"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "os-tmpdir"
     version: "1.0.2"
@@ -5092,7 +5092,7 @@ packages:
     revision: "1abf9cf5611b4be7377060ea67054b45cbf6813c"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "output-file-sync"
     version: "1.1.2"
@@ -5120,7 +5120,7 @@ packages:
     revision: "42d4b6792bbaee919805b2cb9afc95233addb239"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "parse-glob"
     version: "3.0.4"
@@ -5147,7 +5147,7 @@ packages:
     revision: "9bfccb63acdeb3b1ed62035b3adef0e5081d8fc6"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "path-is-absolute"
     version: "1.0.1"
@@ -5174,7 +5174,7 @@ packages:
     revision: "edc91d348b21dac2ab65ea2fbec2868e2eff5eb6"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "preserve"
     version: "0.2.0"
@@ -5202,7 +5202,7 @@ packages:
     revision: "1bf405d35e4aea06a2ee83db2d34dc54abc0a1f9"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "private"
     version: "0.1.8"
@@ -5229,7 +5229,7 @@ packages:
     revision: "8fde2c4c9f760c0ae17f3ff375c02d6498472fbc"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "process-nextick-args"
     version: "1.0.7"
@@ -5256,7 +5256,7 @@ packages:
     revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "randomatic"
     version: "1.1.7"
@@ -5285,7 +5285,7 @@ packages:
     revision: "d91c5f90e785db08a9b9e518926b444671092f26"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "readable-stream"
     version: "2.3.3"
@@ -5312,7 +5312,7 @@ packages:
     revision: "cd59995050105b946884ee20e3bcadc252feda8c"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "readdirp"
     version: "2.1.0"
@@ -5339,7 +5339,7 @@ packages:
     revision: "5a3751f86a1c2bbbb8e3a42685d4191992631e6c"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "regenerator-runtime"
     version: "0.10.5"
@@ -5366,7 +5366,7 @@ packages:
     revision: "master"
     path: "packages/regenerator-runtime"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "regenerator-runtime"
     version: "0.11.1"
@@ -5393,7 +5393,7 @@ packages:
     revision: "master"
     path: "packages/regenerator-runtime"
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "regex-cache"
     version: "0.4.4"
@@ -5422,7 +5422,7 @@ packages:
     revision: "e5ced08e45d2cc2d286a9e7b5a574963f6577712"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "remove-trailing-separator"
     version: "1.1.0"
@@ -5449,7 +5449,7 @@ packages:
     revision: "f4e8acca09106efeef5a5164f1ad2192fe97fd69"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "repeat-element"
     version: "1.1.2"
@@ -5476,7 +5476,7 @@ packages:
     revision: "7a6b21d58eafcc44fc8de133c70a8398ee9fdd8d"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "repeat-string"
     version: "1.6.1"
@@ -5504,7 +5504,7 @@ packages:
     revision: "1a95c5d99a02999ccd2cf4663959a18bd2def7b8"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "repeating"
     version: "2.0.1"
@@ -5531,7 +5531,7 @@ packages:
     revision: "be02bcaf9a674b3c155477b3bf282136bcf44770"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "safe-buffer"
     version: "5.1.1"
@@ -5558,7 +5558,7 @@ packages:
     revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "set-immediate-shim"
     version: "1.0.1"
@@ -5585,7 +5585,7 @@ packages:
     revision: "4c50df7ade5a368e106fee82351ee0a378c990f7"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "slash"
     version: "1.0.0"
@@ -5612,7 +5612,7 @@ packages:
     revision: "c801dd4568ad9380b534067eabe88942394f82ff"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "source-map-support"
     version: "0.4.18"
@@ -5639,7 +5639,7 @@ packages:
     revision: "b9b5a5576272916237a253393220770c858685d6"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "source-map"
     version: "0.5.7"
@@ -5666,7 +5666,7 @@ packages:
     revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "string_decoder"
     version: "1.0.3"
@@ -5693,7 +5693,7 @@ packages:
     revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "strip-ansi"
     version: "3.0.1"
@@ -5720,7 +5720,7 @@ packages:
     revision: "8270705c704956da865623e564eba4875c3ea17f"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "supports-color"
     version: "2.0.0"
@@ -5747,7 +5747,7 @@ packages:
     revision: "8400d98ade32b2adffd50902c06d9e725a5c6588"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "to-fast-properties"
     version: "1.0.3"
@@ -5774,7 +5774,7 @@ packages:
     revision: "76e30a0b6040781a705cb351fb2e4a1d879f1adb"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "trim-right"
     version: "1.0.1"
@@ -5801,7 +5801,7 @@ packages:
     revision: "105fb46669afb0deb49d14bd688b276297e59dff"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "user-home"
     version: "1.1.1"
@@ -5828,7 +5828,7 @@ packages:
     revision: "cf6ba885d3e6bf625fb3c15ad0334fa623968481"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "util-deprecate"
     version: "1.0.2"
@@ -5855,7 +5855,7 @@ packages:
     revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "v8flags"
     version: "2.1.1"
@@ -5882,7 +5882,7 @@ packages:
     revision: "4c628146efa7eda11df0e10c73b3d8687873569e"
     path: ""
 - id:
-    package_manager: "NPM"
+    provider: "NPM"
     namespace: ""
     name: "wrappy"
     version: "1.0.2"

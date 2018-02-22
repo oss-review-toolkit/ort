@@ -2,7 +2,7 @@
 allowDynamicVersions: true
 project:
   id:
-    package_manager: "PIP"
+    provider: "PIP"
     namespace: ""
     name: "example-python-flask"
     version: ""
@@ -60,7 +60,7 @@ project:
       errors: []
 packages:
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "Flask"
     version: "0.12"
@@ -87,7 +87,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "Jinja2"
     version: "2.8.1"
@@ -115,7 +115,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "MarkupSafe"
     version: "1.0"
@@ -142,7 +142,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "Werkzeug"
     version: "0.14.1"
@@ -169,7 +169,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "click"
     version: "6.7"
@@ -196,7 +196,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "gunicorn"
     version: "19.6.0"
@@ -223,7 +223,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "itsdangerous"
     version: "0.24"

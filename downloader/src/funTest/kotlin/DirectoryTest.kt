@@ -51,7 +51,7 @@ class DirectoryTest : StringSpec() {
         "Creates directories for Gradle submodules" {
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "Gradle",
+                            provider = "Maven",
                             namespace = "",
                             name = "project :model",
                             version = ""

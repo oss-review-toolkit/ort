@@ -79,7 +79,7 @@ class HttpCacheTest : StringSpec() {
 
             val pkg = Package(
                     id = Identifier(
-                            packageManager = "packageManager",
+                            provider = "provider",
                             namespace = "namespace",
                             name = "name",
                             version = "version"
