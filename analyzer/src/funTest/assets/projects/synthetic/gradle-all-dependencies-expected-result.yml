@@ -15,7 +15,7 @@ repository:
     path: ""
 projects:
 - id:
-    package_manager: "Gradle"
+    provider: "Gradle"
     namespace: ""
     name: "Gradle sample"
     version: ""
@@ -34,7 +34,7 @@ projects:
   homepage_url: ""
   scopes: []
 - id:
-    package_manager: "Gradle"
+    provider: "Gradle"
     namespace: ""
     name: "app"
     version: ""
@@ -269,7 +269,7 @@ projects:
         errors: []
       errors: []
 - id:
-    package_manager: "Gradle"
+    provider: "Gradle"
     namespace: ""
     name: "lib-without-repo"
     version: ""
@@ -415,7 +415,7 @@ projects:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
 - id:
-    package_manager: "Gradle"
+    provider: "Gradle"
     namespace: ""
     name: "lib"
     version: ""
@@ -651,7 +651,7 @@ project_id_result_file_path_map:
   'Gradle::lib-without-repo:': "lib-without-repo/build-gradle-dependencies.yml"
 packages:
 - id:
-    package_manager: "Gradle"
+    provider: "Maven"
     namespace: ""
     name: "project _lib"
     version: ""
@@ -677,7 +677,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "Gradle"
+    provider: "Maven"
     namespace: "junit"
     name: "junit"
     version: "4.12"
@@ -705,7 +705,7 @@ packages:
     revision: "r4.12"
     path: ""
 - id:
-    package_manager: "Gradle"
+    provider: "Maven"
     namespace: "org.apache.commons"
     name: "commons-lang3"
     version: "3.5"
@@ -734,7 +734,7 @@ packages:
     revision: "LANG_3_5"
     path: ""
 - id:
-    package_manager: "Gradle"
+    provider: "Maven"
     namespace: "org.apache.commons"
     name: "commons-text"
     version: "1.1"
@@ -762,7 +762,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "Gradle"
+    provider: "Maven"
     namespace: "org.apache.struts"
     name: "struts2-assembly"
     version: "2.5.14.1"
@@ -789,7 +789,7 @@ packages:
     revision: "STRUTS_2_5_14_1"
     path: ""
 - id:
-    package_manager: "Gradle"
+    provider: "Maven"
     namespace: "org.hamcrest"
     name: "hamcrest-core"
     version: "1.3"

@@ -160,7 +160,7 @@ class MainTest : StringSpec() {
             val resultsFile = File(curationsOutputDir, "lib/build-gradle-dependencies.yml")
             val analyzerResult = yamlMapper.readValue(resultsFile, AnalyzerResult::class.java)
             val hamcrestCorePackage = analyzerResult.packages.find {
-                it.id == Identifier("Gradle", "org.hamcrest", "hamcrest-core", "1.3")
+                it.id == Identifier("Maven", "org.hamcrest", "hamcrest-core", "1.3")
             }
 
             hamcrestCorePackage shouldNotBe null

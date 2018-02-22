@@ -2,7 +2,7 @@
 allowDynamicVersions: true
 project:
   id:
-    package_manager: "Maven"
+    provider: "Maven"
     namespace: "com.here.ort.maven"
     name: "maven-lib"
     version: "1.0-SNAPSHOT"
@@ -53,7 +53,7 @@ project:
       errors: []
 packages:
 - id:
-    package_manager: "Maven"
+    provider: "Maven"
     namespace: "junit"
     name: "junit"
     version: "3.8.1"
@@ -81,7 +81,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "Maven"
+    provider: "Maven"
     namespace: "org.apache.beam"
     name: "beam-parent"
     version: "2.3.0"
@@ -110,7 +110,7 @@ packages:
     revision: "v2.3.0-RC3"
     path: ""
 - id:
-    package_manager: "Maven"
+    provider: "Maven"
     namespace: "org.apache.commons"
     name: "commons-lang3"
     version: "3.5"
@@ -139,7 +139,7 @@ packages:
     revision: "LANG_3_5"
     path: ""
 - id:
-    package_manager: "Maven"
+    provider: "Maven"
     namespace: "org.apache.commons"
     name: "commons-text"
     version: "1.1"
@@ -167,7 +167,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "Maven"
+    provider: "Maven"
     namespace: "org.jenkins-ci"
     name: "version-number"
     version: "1.4"

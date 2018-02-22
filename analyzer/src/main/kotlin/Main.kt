@@ -215,7 +215,7 @@ object Main {
 
             val project = Project(
                     id = Identifier(
-                            packageManager = "",
+                            provider = "",
                             namespace = "",
                             name = absoluteProjectPath.name,
                             version = ""

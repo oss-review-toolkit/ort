@@ -2,7 +2,7 @@
 allowDynamicVersions: true
 project:
   id:
-    package_manager: "PIP"
+    provider: "PIP"
     namespace: ""
     name: "spdx-tools"
     version: "0.5.4"
@@ -55,7 +55,7 @@ project:
       errors: []
 packages:
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "isodate"
     version: "0.6.0"
@@ -82,7 +82,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "ply"
     version: "3.11"
@@ -109,7 +109,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "pyparsing"
     version: "2.2.0"
@@ -136,7 +136,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "rdflib"
     version: "4.2.2"
@@ -165,7 +165,7 @@ packages:
     revision: ""
     path: ""
 - id:
-    package_manager: "PIP"
+    provider: "PyPI"
     namespace: ""
     name: "six"
     version: "1.11.0"

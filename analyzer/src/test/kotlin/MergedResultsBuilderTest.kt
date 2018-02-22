@@ -68,7 +68,7 @@ class MergedResultsBuilderTest : StringSpec() {
 
     private fun createTestDependencyPkg(i: Int) = Package(
             id = Identifier(
-                    packageManager = "Gradle",
+                    provider = "Maven",
                     namespace = "",
                     name = "dependency-$i",
                     version = ""
@@ -83,7 +83,7 @@ class MergedResultsBuilderTest : StringSpec() {
 
     private fun createTestSubProject(i: Int) = Project(
             id = Identifier(
-                    packageManager = "Gradle",
+                    provider = "Maven",
                     namespace = "",
                     name = "sub-project-$i",
                     version = ""),

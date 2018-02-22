@@ -146,7 +146,7 @@ class Maven : PackageManager() {
 
         val project = Project(
                 id = Identifier(
-                        packageManager = if (sbtMode) SBT::class.java.simpleName else javaClass.simpleName,
+                        provider = if (sbtMode) SBT.toString() else Maven.toString(),
                         namespace = mavenProject.groupId,
                         name = mavenProject.artifactId,
                         version = mavenProject.version
@@ -165,7 +165,7 @@ class Maven : PackageManager() {
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
         try {
             val pkg = packages.getOrPut(node.artifact.identifier()) {
-                maven.parsePackage(node.artifact, node.repositories, javaClass.simpleName,
+                maven.parsePackage(node.artifact, node.repositories,
                         projectsByIdentifier.mapValues { it.value.project })
             }
 
