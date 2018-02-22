@@ -33,6 +33,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.Scope
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import java.io.File
 
@@ -136,21 +137,11 @@ class Maven : PackageManager() {
         val vcsFromPackage = maven.parseVcsInfo(mavenProject)
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
-        // project directory is the parent of this.
-        var projectDir = workingDir
-
-        if (sbtMode) {
-            var targetDir: File? = projectDir
-
-            while (targetDir != null && targetDir.name != "target") {
-                targetDir = targetDir.parentFile
-            }
-
-            projectDir = if (targetDir == null) {
-                workingDir
-            } else {
-                targetDir.parentFile ?: workingDir
-            }
+        // project directory is the parent directory of this.
+        val projectDir = if (sbtMode) {
+            searchUpwardsForSubdirectory(workingDir, "target") ?: workingDir
+        } else {
+            workingDir
         }
 
         val project = Project(
