@@ -52,39 +52,40 @@ abstract class GitBase : VersionControlSystem() {
         }
     }
 
-    override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory) {
-                override fun isValid(): Boolean {
-                    if (!workingDir.isDirectory) {
-                        return false
-                    }
-
-                    // Do not use runGitCommand() here as we do not require the command to succeed.
-                    val isInsideWorkTree = ProcessCapture(workingDir, "git", "rev-parse", "--is-inside-work-tree")
-                    return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
-                }
-
-                override fun isShallow(): Boolean {
-                    val dotGitDir = run(workingDir, "rev-parse", "--absolute-git-dir").stdout().trimEnd()
-                    return File(dotGitDir, "shallow").isFile
-                }
-
-                override fun getRemoteUrl() =
-                        run(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
-
-                override fun getRevision() =
-                        run(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
-
-                override fun getRootPath() =
-                        run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
-
-                override fun listRemoteTags(): List<String> {
-                    val tags = run(workingDir, "ls-remote", "--refs", "origin", "refs/tags/*").stdout().trimEnd()
-                    return tags.lines().map {
-                        it.split('\t').last().removePrefix("refs/tags/")
-                    }
-                }
+    open inner class GitWorkingTree(workingDir: File) : WorkingTree(workingDir) {
+        override fun isValid(): Boolean {
+            if (!workingDir.isDirectory) {
+                return false
             }
+
+            // Do not use runGitCommand() here as we do not require the command to succeed.
+            val isInsideWorkTree = ProcessCapture(workingDir, "git", "rev-parse", "--is-inside-work-tree")
+            return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
+        }
+
+        override fun isShallow(): Boolean {
+            val dotGitDir = run(workingDir, "rev-parse", "--absolute-git-dir").stdout().trimEnd()
+            return File(dotGitDir, "shallow").isFile
+        }
+
+        override fun getRemoteUrl() =
+                run(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
+
+        override fun getRevision() =
+                run(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
+
+        override fun getRootPath() =
+                run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
+
+        override fun listRemoteTags(): List<String> {
+            val tags = run(workingDir, "ls-remote", "--refs", "origin", "refs/tags/*").stdout().trimEnd()
+            return tags.lines().map {
+                it.split('\t').last().removePrefix("refs/tags/")
+            }
+        }
+    }
+
+    override fun getWorkingTree(vcsDirectory: File) : WorkingTree = GitWorkingTree(vcsDirectory)
 }
 
 object Git : GitBase() {

@@ -25,6 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import java.io.File
 import java.io.IOException
@@ -32,7 +33,29 @@ import java.io.IOException
 object GitRepo : GitBase() {
     override val aliases = listOf("gitrepo", "git-repo", "repo")
 
-    override fun getWorkingTree(vcsDirectory: File) = super.getWorkingTree(File(vcsDirectory, ".repo/manifests"))
+    override fun getWorkingTree(vcsDirectory: File) : WorkingTree {
+        val repoRoot = searchUpwardsForSubdirectory(vcsDirectory, ".repo")
+
+        return if (repoRoot == null) {
+            object : GitWorkingTree(vcsDirectory) {
+                override fun isValid() = false
+            }
+        } else {
+            object : GitWorkingTree(File(repoRoot, ".repo/manifests")) {
+                // Return the directory in which "repo init" was run (that directory in not managed with Git).
+                override fun getRootPath() = workingDir.parentFile.parent
+
+                override fun getPathToRoot(path: File): String {
+                    // GitRepo is special in that the path to the root is supposed to constantly return the path to the
+                    // manifest file in use which is symlinked from ".repo/manifest.xml". So resolve that path to the
+                    // underlying manifest file inside the "manifests" directory and ignore the actual path argument.
+                    val manifestLink = File(getRootPath(), ".repo/manifest.xml")
+                    val manifestDir = File(getRootPath(), ".repo/manifests")
+                    return manifestLink.canonicalFile.toRelativeString(manifestDir)
+                }
+            }
+        }
+    }
 
     override fun isApplicableUrl(vcsUrl: String) = false
 
