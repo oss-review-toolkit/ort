@@ -1,19 +1,8 @@
-buildscript {
-    repositories {
-        maven {
-            url 'https://dl.bintray.com/kotlin/kotlin-eap'
-        }
-     }
-
-    dependencies {
-        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.9.16-eap-3'
-    }
-}
-
 plugins {
     // We need to hard-code the version here because of
     // https://github.com/gradle/gradle/issues/1697
     id 'org.jetbrains.kotlin.jvm' version '1.2.21' apply false
+    id 'org.jetbrains.dokka' version '0.9.16' apply false
 
     // Note that the detekt Gradle plugin version does not necessarily
     // match the detekt tool version.
