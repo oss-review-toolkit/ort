@@ -28,6 +28,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
@@ -110,16 +111,7 @@ object Cvs : VersionControlSystem() {
                 }
 
                 override fun getRootPath(): String {
-                    // Walk the path up towards the root until we find a CVS directory.
-                    var parentDir = workingDir.toPath()
-
-                    val rootDir = workingDir.toPath().asIterable().reversed().map {
-                        parentDir = parentDir.parent
-                        parentDir.resolve(it)
-                    }.find {
-                        it.resolve("CVS").toFile().isDirectory
-                    }?.toString() ?: ""
-
+                    val rootDir = searchUpwardsForSubdirectory(workingDir, "CVS")?.toString() ?: ""
                     return rootDir.replace(File.separatorChar, '/')
                 }
 
