@@ -165,7 +165,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
         val artifactDescriptorResult = repoSystem
                 .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
-        val allRepositories = artifactDescriptorResult.repositories + repositories
+        val allRepositories = (artifactDescriptorResult.repositories + repositories).toSet()
 
         // Filter local repositories, as remote artifacts should never point to files on the local disk.
         val remoteRepositories = allRepositories.filterNot { it.url.startsWith("file:/") }
