@@ -364,7 +364,7 @@ class UtilsTest : WordSpec({
 
     "searchUpwardsForSubdirectory" should {
         "find the root Git directory" {
-            val gitRoot = searchUpwardsForSubdirectory(File("src"), ".git")
+            val gitRoot = File("src").searchUpwardsForSubdirectory(".git")
             gitRoot shouldNotBe null
             gitRoot shouldBe File("..").canonicalFile
         }

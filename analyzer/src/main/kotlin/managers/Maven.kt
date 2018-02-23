@@ -139,7 +139,7 @@ class Maven : PackageManager() {
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent directory of this.
         val projectDir = if (sbtMode) {
-            searchUpwardsForSubdirectory(workingDir, "target") ?: workingDir
+            workingDir.searchUpwardsForSubdirectory("target") ?: workingDir
         } else {
             workingDir
         }

@@ -270,20 +270,6 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 }
 
 /**
- * Search [startDir] upwards towards the root until a contained sub-directory called [searchDirName] is found and return
- * it, or return null if no such directory is found.
- */
-fun searchUpwardsForSubdirectory(startDir: File, searchDirName: String): File? {
-    var currentDir: File? = startDir.absoluteFile
-
-    while (currentDir != null && !File(currentDir, searchDirName).isDirectory) {
-        currentDir = currentDir.parentFile
-    }
-
-    return currentDir
-}
-
-/**
  * Recursively collect the exception messages of this [Exception] and all its causes.
  */
 fun Exception.collectMessages(): List<String> {
@@ -357,6 +343,22 @@ fun File.safeMkdirs() {
     }
 
     throw IOException("Could not create directory '${this.absolutePath}'.")
+}
+
+/**
+ * Search [this] directory upwards towards the root until a contained sub-directory called [searchDirName] is found and
+ * return it, or return null if no such directory is found.
+ */
+fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
+    if (!this.isDirectory) return null
+
+    var currentDir: File? = this.absoluteFile
+
+    while (currentDir != null && !File(currentDir, searchDirName).isDirectory) {
+        currentDir = currentDir.parentFile
+    }
+
+    return currentDir
 }
 
 /**

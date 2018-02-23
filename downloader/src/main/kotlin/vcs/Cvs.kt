@@ -111,7 +111,7 @@ object Cvs : VersionControlSystem() {
                 }
 
                 override fun getRootPath(): String {
-                    val rootDir = searchUpwardsForSubdirectory(workingDir, "CVS")?.toString() ?: ""
+                    val rootDir = workingDir.searchUpwardsForSubdirectory("CVS")?.toString() ?: ""
                     return rootDir.replace(File.separatorChar, '/')
                 }
 
