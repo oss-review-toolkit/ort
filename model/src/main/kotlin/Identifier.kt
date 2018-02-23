@@ -106,6 +106,7 @@ data class Identifier(
         return nameMatches && versionMatches
     }
 
+    // TODO: Consider using a PURL here, see https://github.com/package-url/purl-spec#purl.
     override fun toString() = "$provider:$namespace:$name:$version"
 }
 
