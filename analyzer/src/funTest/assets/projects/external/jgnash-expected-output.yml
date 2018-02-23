@@ -82,12 +82,12 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
+    url: "git@github.com:hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
-    path: "hamcrest-all"
+    path: ""
 errors: []

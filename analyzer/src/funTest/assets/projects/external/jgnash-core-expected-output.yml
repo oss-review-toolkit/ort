@@ -10,7 +10,7 @@ project:
   aliases: []
   vcs:
     type: "git"
-    url: "git://github.com:ccavanaugh/jgnash.git/jgnash-core"
+    url: "git://github.com:ccavanaugh/jgnash.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -395,14 +395,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "https://github.com/x-stream/xstream.git/xstream-hibernate"
+    url: "https://github.com/x-stream/xstream.git"
     revision: "v-1.4.x"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/x-stream/xstream.git"
     revision: "v-1.4.x"
-    path: "xstream-hibernate"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "com.thoughtworks.xstream"
@@ -422,14 +422,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "https://github.com/x-stream/xstream.git/xstream"
+    url: "https://github.com/x-stream/xstream.git"
     revision: "v-1.4.x"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/x-stream/xstream.git"
     revision: "v-1.4.x"
-    path: "xstream"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "commons-codec"
@@ -507,14 +507,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git://github.com/netty/netty.git/netty-buffer"
+    url: "git://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: "netty-buffer"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -536,14 +536,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git://github.com/netty/netty.git/netty-codec"
+    url: "git://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: "netty-codec"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -565,14 +565,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git://github.com/netty/netty.git/netty-common"
+    url: "git://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: "netty-common"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -594,14 +594,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git://github.com/netty/netty.git/netty-resolver"
+    url: "git://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: "netty-resolver"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "io.netty"
@@ -623,14 +623,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git://github.com/netty/netty.git/netty-transport"
+    url: "git://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/netty/netty.git"
     revision: "netty-4.1.9.Final"
-    path: "netty-transport"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "jgnash"
@@ -649,14 +649,14 @@ packages:
     hash_algorithm: ""
   vcs:
     type: "git"
-    url: "git://github.com:ccavanaugh/jgnash.git/jgnash-resources"
+    url: "git://github.com:ccavanaugh/jgnash.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/ccavanaugh/jgnash.git"
     revision: ""
-    path: "jgnash-resources"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "junit"
@@ -899,14 +899,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git@github.com:hamcrest/JavaHamcrest.git/hamcrest-all"
+    url: "git@github.com:hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
-    path: "hamcrest-all"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "org.hibernate.common"
@@ -1148,14 +1148,14 @@ packages:
     hash_algorithm: "SHA-1"
   vcs:
     type: "git"
-    url: "git@github.com:jboss/jboss-parent-pom.git/jandex"
+    url: "git@github.com:jboss/jboss-parent-pom.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
     url: "ssh://git@github.com/jboss/jboss-parent-pom.git"
     revision: ""
-    path: "jandex"
+    path: ""
 - id:
     package_manager: "Maven"
     namespace: "org.slf4j"

@@ -329,7 +329,25 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
     fun parseVcsInfo(mavenProject: MavenProject): VcsInfo {
         return mavenProject.scm?.let { scm ->
-            val connection = scm.connection ?: ""
+            // If a Maven project does not define an SCM URL Maven takes the SCM URL of the parent project and appends
+            // the artifact ID of the child to this URL. This is fundamentally broken because it e.g. breaks all Git
+            // URLs and makes the bold assumption that the child is in a direct subdirectory of the parent. To fix this
+            // remove any paths appended by Maven by recursively taking the SCM URL of the parent project if it starts
+            // with the same string.
+            var parent = mavenProject.parent
+            var connection = scm.connection ?: ""
+            while(parent != null) {
+                val parentConnection = parent.scm?.connection
+                if (
+                    parentConnection != null && parentConnection.isNotBlank() && connection.startsWith(parentConnection)
+                ) {
+                    connection = parentConnection
+                    parent = parent.parent
+                } else {
+                    break
+                }
+            }
+
             val tag = scm.tag?.takeIf { it != "HEAD" } ?: ""
 
             val (type, url) = SCM_REGEX.matcher(connection).let {
