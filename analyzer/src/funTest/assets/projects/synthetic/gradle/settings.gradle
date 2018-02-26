@@ -1,4 +1,4 @@
-rootProject.name = 'Gradle sample'
+rootProject.name = 'Gradle-Example'
 
 include ':app'
 include ':lib'
