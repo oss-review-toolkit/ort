@@ -1,6 +1,8 @@
 The [OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) gratefully accepts contributions via
 [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the
-[GitHub project](https://github.com/heremaps/oss-review-toolkit/pulls).
+[GitHub project](https://github.com/heremaps/oss-review-toolkit/pulls). As part of filing a pull request we ask you to
+accept our [Contributor License Agreement](https://gist.github.com/heremaps-bot/dcb932a07b424f8ed68341054e7e3a53) (CLA)
+to grant us proper rights for your contribution.
 
 In order to maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 
