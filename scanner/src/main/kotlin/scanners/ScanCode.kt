@@ -29,6 +29,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import java.io.File
 import java.util.regex.Pattern
@@ -53,7 +54,8 @@ object ScanCode : LocalScanner() {
     override val resultFileExt = "json"
 
     override fun bootstrap(): File? {
-        val scancodeDir = File("src/funTest/assets/scanners/scancode-toolkit")
+        val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
+        val scancodeDir = File(gitRoot, "scanner/src/funTest/assets/scanners/scancode-toolkit")
         val configureExe = if (OS.isWindows) "configure.bat" else "configure"
         val configurePath = File(scancodeDir, configureExe)
         ProcessCapture(configurePath.absolutePath, "--clean").requireSuccess()
