@@ -347,7 +347,7 @@ fun File.safeMkdirs() {
 
 /**
  * Search [this] directory upwards towards the root until a contained sub-directory called [searchDirName] is found and
- * return it, or return null if no such directory is found.
+ * return the parent of [searchDirName], or return null if no such directory is found.
  */
 fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
     if (!this.isDirectory) return null
