@@ -84,6 +84,7 @@ class GitTest : StringSpec() {
             val expectedTags = listOf(
                     "0.10.0",
                     "0.10.1",
+                    "0.11.0",
                     "0.5.0",
                     "0.6.0",
                     "0.7.0",
