@@ -68,23 +68,13 @@ class Gradle : PackageManager() {
             listOf("build.gradle", "settings.gradle")
     ) {
         override fun create() = Gradle()
-    }
 
-    val gradle: String
-    val wrapper: String
+        val gradle = if (OS.isWindows) "gradle.bat" else "gradle"
+        val wrapper = if (OS.isWindows) "gradlew.bat" else "gradlew"
+    }
 
     val maven = MavenSupport { localRepositoryManager ->
         GradleLocalRepositoryManager(localRepositoryManager)
-    }
-
-    init {
-        if (OS.isWindows) {
-            gradle = "gradle.bat"
-            wrapper = "gradlew.bat"
-        } else {
-            gradle = "gradle"
-            wrapper = "gradlew"
-        }
     }
 
     override fun command(workingDir: File) = if (File(workingDir, wrapper).isFile) wrapper else gradle
