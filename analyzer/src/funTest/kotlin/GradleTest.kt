@@ -28,8 +28,6 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.Spec
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.properties.forAll
@@ -69,7 +67,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.errors shouldBe listOf<String>()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -80,7 +78,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.errors shouldBe listOf<String>()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -91,7 +89,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.errors shouldBe listOf<String>()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -102,7 +100,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.errors shouldBe listOf<String>()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -150,7 +148,7 @@ class GradleTest : StringSpec() {
                 val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
-                result!!.errors should beEmpty()
+                result!!.errors shouldBe listOf<String>()
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }.config(tags = setOf(ExpensiveTag))
