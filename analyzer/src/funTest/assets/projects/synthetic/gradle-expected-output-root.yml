@@ -4,7 +4,7 @@ project:
   id:
     provider: "Gradle"
     namespace: ""
-    name: "Gradle sample"
+    name: "Gradle-Example"
     version: ""
   declared_licenses: []
   aliases: []
