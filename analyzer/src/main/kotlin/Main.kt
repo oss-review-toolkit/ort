@@ -209,7 +209,9 @@ object Main {
 
         val vcs = VersionControlSystem.forDirectory(absoluteProjectPath)
 
-        if (managedDefinitionFiles.isEmpty()) {
+        val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any { it.parentFile == inputDir }
+
+        if (managedDefinitionFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
             managedDefinitionFiles[Unmanaged] = listOf(absoluteProjectPath)
         }
 
