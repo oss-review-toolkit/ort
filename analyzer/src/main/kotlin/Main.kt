@@ -28,12 +28,11 @@ import com.beust.jcommander.ParameterException
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
+import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.Identifier
 import com.here.ort.model.MergedResultsBuilder
 import com.here.ort.model.OutputFormat
-import com.here.ort.model.Project
 import com.here.ort.model.ScannedDirectoryDetails
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -205,37 +204,13 @@ object Main {
             // manager despite its name.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
         } else {
-            PackageManager.findManagedFiles(absoluteProjectPath, packageManagers)
+            PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
         }
 
         val vcs = VersionControlSystem.forDirectory(absoluteProjectPath)
 
         if (managedDefinitionFiles.isEmpty()) {
-            println("No package-managed projects found.")
-
-            val project = Project(
-                    id = Identifier(
-                            provider = "",
-                            namespace = "",
-                            name = absoluteProjectPath.name,
-                            version = ""
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    aliases = emptyList(),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY,
-                    homepageUrl = "",
-                    scopes = sortedSetOf()
-            )
-
-            val analyzerResult = AnalyzerResult(allowDynamicVersions, project, sortedSetOf())
-            writeResultFile(absoluteProjectPath, absoluteProjectPath, absoluteOutputPath, analyzerResult)
-
-            if (createMergedResult) {
-                println("Merged results not created (nothing to merge).")
-            }
-
-            exitProcess(0)
+            managedDefinitionFiles[Unmanaged] = listOf(absoluteProjectPath)
         }
 
         // Print a summary of all projects found per package manager.
