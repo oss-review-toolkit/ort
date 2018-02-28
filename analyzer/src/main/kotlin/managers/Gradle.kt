@@ -79,10 +79,10 @@ class Gradle : PackageManager() {
 
     override fun command(workingDir: File) = if (File(workingDir, wrapper).isFile) wrapper else gradle
 
-    override fun resolveDependencies(workingDir: File, definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
         val connection = GradleConnector
                 .newConnector()
-                .forProjectDirectory(workingDir)
+                .forProjectDirectory(definitionFile.parentFile)
                 .connect()
 
         try {
@@ -126,7 +126,7 @@ class Gradle : PackageManager() {
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(workingDir),
+                    vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",
                     scopes = scopes.toSortedSet()
             )

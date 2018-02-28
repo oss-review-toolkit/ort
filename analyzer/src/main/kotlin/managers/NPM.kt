@@ -122,7 +122,8 @@ class NPM : PackageManager() {
         return definitionFiles
     }
 
-    override fun resolveDependencies(workingDir: File, definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+        val workingDir = definitionFile.parentFile
         val modulesDir = File(workingDir, "node_modules")
 
         var tempModulesDir: File? = null

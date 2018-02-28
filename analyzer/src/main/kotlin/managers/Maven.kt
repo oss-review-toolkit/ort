@@ -119,7 +119,8 @@ class Maven : PackageManager() {
         return definitionFiles
     }
 
-    override fun resolveDependencies(workingDir: File, definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+        val workingDir = definitionFile.parentFile
         val projectBuildingResult = maven.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
         val packages = mutableMapOf<String, Package>()

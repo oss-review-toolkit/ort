@@ -109,13 +109,14 @@ class PIP : PackageManager() {
         return definitionFiles
     }
 
-    override fun resolveDependencies(workingDir: File, definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
         // 2. Get meta-data about the local project via pydep (only for setup.py-based projects).
         // 3. Get the hierarchy of dependencies via pipdeptree.
         // 4. Get additional remote package meta-data via PyPIJSON.
 
+        val workingDir = definitionFile.parentFile
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
         // List all packages installed locally in the virtualenv. As only the plain text pipdeptree output shows the

@@ -145,13 +145,11 @@ abstract class PackageManager {
         val result = mutableMapOf<File, AnalyzerResult>()
 
         prepareResolution(definitionFiles).forEach { definitionFile ->
-            val workingDir = definitionFile.parentFile
-
-            println("Resolving ${javaClass.simpleName} dependencies in '$workingDir'...")
+            println("Resolving ${javaClass.simpleName} dependencies for '$definitionFile'...")
 
             val elapsed = measureTimeMillis {
                 try {
-                    resolveDependencies(workingDir, definitionFile)?.let {
+                    resolveDependencies(definitionFile)?.let {
                         result[definitionFile] = it
                     }
                 } catch (e: Exception) {
@@ -162,12 +160,12 @@ abstract class PackageManager {
                     result[definitionFile] = AnalyzerResult(Main.allowDynamicVersions, Project.EMPTY,
                             sortedSetOf(), e.collectMessages())
 
-                    log.error { "Resolving dependencies in '${workingDir.name}' failed with: ${e.message}" }
+                    log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
                 }
             }
 
             log.info {
-                "Resolving ${javaClass.simpleName} dependencies in '${workingDir.name}' took ${elapsed / 1000}s."
+                "Resolving ${javaClass.simpleName} dependencies for '${definitionFile.name}' took ${elapsed / 1000}s."
             }
         }
 
@@ -183,7 +181,7 @@ abstract class PackageManager {
     /**
      * Resolve dependencies for a single [definitionFile], returning the [AnalyzerResult].
      */
-    protected open fun resolveDependencies(workingDir: File, definitionFile: File): AnalyzerResult? {
+    protected open fun resolveDependencies(definitionFile: File): AnalyzerResult? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
