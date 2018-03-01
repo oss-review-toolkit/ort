@@ -219,7 +219,7 @@ object Main {
         managedDefinitionFiles.forEach { manager, files ->
             println("$manager projects found in:")
             println(files.joinToString("\n") {
-                "\t${it.toRelativeString(absoluteProjectPath)}"
+                "\t${it.toRelativeString(absoluteProjectPath).let { if (it.isEmpty()) "." else it}}"
             })
         }
 
