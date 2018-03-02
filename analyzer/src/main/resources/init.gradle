@@ -143,10 +143,10 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     it.url.toString()
                 } else if (it instanceof DefaultFlatDirArtifactRepository) {
                     errors.add('Project uses a flat dir repository, dependencies from this repository will be ' +
-                            "ignored: ${it.dirs}")
+                            "ignored: ${it.dirs}".toString())
                     null
                 } else {
-                    errors.add("Unknown repository type: ${it.getClass().name}")
+                    errors.add("Unknown repository type: ${it.getClass().name}".toString())
                     null
                 }
             }
