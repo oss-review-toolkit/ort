@@ -1,15 +1,17 @@
 {
   "scancode_notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
-  "scancode_version": "2.2.1.post59.970c46191",
+  "scancode_version": "2.2.1.post277.4d68f9377",
   "scancode_options": {
+    "input": "esprima",
     "--copyright": true,
-    "--license": true,
     "--info": true,
-    "--license-score": 0,
+    "--json-pp": "result.json",
+    "--license": true,
+    "--license-text": true,
+    "--only-findings": true,
+    "--processes": "15",
     "--strip-root": true,
-    "--format": "json-pp",
-    "--diag": true,
-    "--only-findings": true
+    "--timeout": "300.0"
   },
   "files_count": 40,
   "files": [
@@ -2944,7 +2946,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -2968,7 +2971,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -2992,7 +2996,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3016,7 +3021,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3040,7 +3046,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3064,7 +3071,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3088,7 +3096,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3112,7 +3121,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3136,7 +3146,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3160,7 +3171,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3184,7 +3196,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
@@ -3208,7 +3221,8 @@
       "is_source": true,
       "is_script": false,
       "scan_errors": [
-        "ERROR: Processing interrupted: timeout after 300 seconds."
+        "ERROR: for scanner: licenses:\nERROR: Processing interrupted: timeout after 300 seconds.",
+        "ERROR: for scanner: copyrights:\nERROR: Processing interrupted: timeout after 300 seconds."
       ]
     },
     {
