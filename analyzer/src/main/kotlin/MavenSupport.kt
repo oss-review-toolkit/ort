@@ -363,7 +363,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the
                 // Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up here.
                 if (type == "cvs" && !url.startsWith(":")) {
-                    Pair(type, ":" + url)
+                    Pair(type, ":$url")
                 } else {
                     Pair(type, url)
                 }
