@@ -20,6 +20,9 @@ project:
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
   homepage_url: ""
   scopes:
+  - name: "annotationProcessor"
+    delivered: true
+    dependencies: []
   - name: "archives"
     delivered: true
     dependencies: []
@@ -76,6 +79,9 @@ project:
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+  - name: "testAnnotationProcessor"
+    delivered: true
+    dependencies: []
   - name: "testCompile"
     delivered: true
     dependencies:

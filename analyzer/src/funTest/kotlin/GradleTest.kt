@@ -109,25 +109,26 @@ class GradleTest : StringSpec() {
 
             // See https://blog.gradle.org/java-9-support-update.
             val gradleVersionsThatSupportJava9 = arrayOf(
-                    row("4.5.1", ""),
-                    row("4.5", ""),
-                    row("4.4.1", ""),
-                    row("4.4", ""),
-                    row("4.3.1", ""),
-                    row("4.3", ""),
-                    row("4.2.1", "")
+                    row("4.6", ""),
+                    row("4.5.1", "-3.4"),
+                    row("4.5", "-3.4"),
+                    row("4.4.1", "-3.4"),
+                    row("4.4", "-3.4"),
+                    row("4.3.1", "-3.4"),
+                    row("4.3", "-3.4"),
+                    row("4.2.1", "-3.4")
             )
 
             val gradleVersionsThatDoNotSupportJava9 = arrayOf(
-                    row("4.2", ""),
-                    row("4.1", ""),
-                    row("4.0.2", ""),
-                    row("4.0.1", ""),
-                    row("4.0", ""),
-                    row("3.5.1", ""),
-                    row("3.5", ""),
-                    row("3.4.1", ""),
-                    row("3.4", ""),
+                    row("4.2", "-3.4"),
+                    row("4.1", "-3.4"),
+                    row("4.0.2", "-3.4"),
+                    row("4.0.1", "-3.4"),
+                    row("4.0", "-3.4"),
+                    row("3.5.1", "-3.4"),
+                    row("3.5", "-3.4"),
+                    row("3.4.1", "-3.4"),
+                    row("3.4", "-3.4"),
                     row("3.3", "-3.3")
             )
 
