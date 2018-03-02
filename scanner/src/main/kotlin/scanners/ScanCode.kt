@@ -57,10 +57,12 @@ object ScanCode : LocalScanner() {
         val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
         val scancodeDir = File(gitRoot, "scanner/src/funTest/assets/scanners/scancode-toolkit")
         if (!scancodeDir.isDirectory) return null
+
         val configureExe = if (OS.isWindows) "configure.bat" else "configure"
         val configurePath = File(scancodeDir, configureExe)
         ProcessCapture(configurePath.absolutePath, "--clean").requireSuccess()
         ProcessCapture(configurePath.absolutePath).requireSuccess()
+
         return scancodeDir
     }
 
