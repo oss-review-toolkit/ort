@@ -109,6 +109,10 @@ scanner:
     apiToken: $ARTIFACTORY_API_KEY
 ```
 
+## Getting Started
+
+Please see [GettingStarted.md](./GettingStarted.md) for an introduction to the tools.
+
 ## Development
 
 The toolkit is written in [Kotlin](https://kotlinlang.org/) and uses [Gradle](https://gradle.org/) as the build system.
