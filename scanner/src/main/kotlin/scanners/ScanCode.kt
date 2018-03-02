@@ -52,6 +52,7 @@ object ScanCode : LocalScanner() {
             "ERROR: Unknown error:\n.+MemoryError\n (?<file>\\(File: .+\\))", Pattern.DOTALL)
 
     private val TIMEOUT_ERROR_REGEX = Pattern.compile(
+            "ERROR: for scanner: (?<scanner>\\w+):\n" +
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: .+\\)")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
