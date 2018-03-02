@@ -301,11 +301,11 @@ class UtilsTest : WordSpec({
             var userRoot = Paths.get(userDir).root.toString().replace("\\", "/")
 
             if (!userDir.startsWith("/")) {
-                userDir = "/" + userDir
+                userDir = "/$userDir"
             }
 
             if (!userRoot.startsWith("/")) {
-                userRoot = "/" + userRoot
+                userRoot = "/$userRoot"
             }
 
             val packages = mapOf(

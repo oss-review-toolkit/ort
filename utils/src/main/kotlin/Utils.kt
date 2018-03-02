@@ -214,12 +214,12 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     // by Java's URI class.
     url = url.replace(Regex("^(.*)([a-zA-Z]+):([a-zA-Z]+)(.*)$")) {
         val tail = "${it.groupValues[1]}${it.groupValues[2]}/${it.groupValues[3]}${it.groupValues[4]}"
-        if (url.contains("://")) tail else "ssh://" + tail
+        if (url.contains("://")) tail else "ssh://$tail"
     }
 
     // Fixup scp-like Git URLs that do not use a ':' after the server part.
     if (url.startsWith("git@")) {
-        url = "ssh://" + url
+        url = "ssh://$url"
     }
 
     // Drop any non-SVN VCS name with "+" from the scheme.
@@ -256,11 +256,11 @@ fun normalizeVcsUrl(vcsUrl: String): String {
                 return if (uri.scheme == "ssh") {
                     // Ensure the generic "git" user name is specified.
                     val host = uri.authority.let { if (it.startsWith("git@")) it else "git@$it" }
-                    "ssh://" + host + path
+                    "ssh://$host$path"
                 } else {
                     // Remove any user name and "www" prefix.
                     val host = uri.authority.substringAfter("@").removePrefix("www.")
-                    "https://" + host + path
+                    "https://$host$path"
                 }
             }
         }

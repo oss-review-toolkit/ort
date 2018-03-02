@@ -198,7 +198,7 @@ object Subversion : VersionControlSystem() {
 
                 // In Subversion, tags are not symbolic names for revisions but names of directories containing
                 // snapshots, checking out a tag just is a sparse checkout of that path.
-                val tagPath = "tags/" + revision
+                val tagPath = "tags/$revision"
                 run(targetDir, "update", "--depth", "infinity", "--parents", tagPath + "/" + pkg.vcsProcessed.path)
 
                 // Only return that part of the working tree that has the right revision.
