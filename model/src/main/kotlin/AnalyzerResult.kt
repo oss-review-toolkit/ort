@@ -74,6 +74,6 @@ data class AnalyzerResult(
             it.dependencies.forEach { addErrors(it) }
         }
 
-        return collectedErrors.mapValues { it.value.distinct() }
+        return collectedErrors.filterValues { it.isNotEmpty() }.mapValues { it.value.distinct() }
     }
 }
