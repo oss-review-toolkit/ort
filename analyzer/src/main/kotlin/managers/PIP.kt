@@ -229,7 +229,7 @@ class PIP : PackageManager() {
 
                     try {
                         val pkgInfo = pkgData["info"]
-                        var pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
+                        val pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
                         val declaredLicenses = sortedSetOf<String>()
 
                         // Use the top-level license field as well as the license classifiers as the declared licenses.
