@@ -47,6 +47,7 @@ object ScanCode : LocalScanner() {
             "--strip-root"
     )
 
+    // Note: The (File: ...) part in the patterns below is actually added by our own getResult() function.
     private val MEMORY_ERROR_REGEX = Pattern.compile(
             "ERROR: for scanner: (?<scanner>\\w+):\n" +
             "ERROR: Unknown error:\n.+MemoryError\n (?<file>\\(File: .+\\))", Pattern.DOTALL)
