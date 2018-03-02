@@ -51,7 +51,8 @@ class ScanSummary(
         val pkgSummary: PackageSummary,
         val cacheStats: CacheStatistics,
         val scannedScopes: SortedSet<String>,
-        val ignoredScopes: SortedSet<String>
+        val ignoredScopes: SortedSet<String>,
+        val analyzerErrors: Map<String, List<String>>
 )
 
 typealias PackageSummary = MutableMap<String, SummaryEntry>
@@ -212,6 +213,7 @@ object Main {
 
         val includedScopes = sortedSetOf<Scope>()
         val excludedScopes = sortedSetOf<Scope>()
+        val analyzerErrors = mutableMapOf<String, List<String>>()
 
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
@@ -225,6 +227,7 @@ object Main {
             }
 
             val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+            analyzerErrors.putAll(analyzerResult.collectErrors())
 
             // Add the project itself also as a "package" to scan.
             val packages = mutableListOf(analyzerResult.project.toPackage())
@@ -304,7 +307,8 @@ object Main {
 
         val scannedScopes = includedScopes.map { it.name }.toSortedSet()
         val ignoredScopes = excludedScopes.map { it.name }.toSortedSet()
-        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopes, ignoredScopes))
+        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopes, ignoredScopes,
+                analyzerErrors))
     }
 
     private fun findScopesForPackage(pkg: Package, project: Project) =
