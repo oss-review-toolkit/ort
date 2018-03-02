@@ -22,6 +22,7 @@ package com.here.ort.scanner
 import com.here.ort.scanner.scanners.ScanCode
 
 import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
@@ -42,6 +43,26 @@ class ScanCodeTest : WordSpec({
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
             val result = ScanCode.getResult(resultFile)
             ScanCode.hasOnlyTimeoutErrors(result) shouldBe false
+        }
+    }
+
+    "mapMemoryErrors()" should {
+        "return true for scan results with only timeout errors" {
+            val resultFileName = "/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json"
+            val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
+            val result = ScanCode.getResult(resultFile)
+            ScanCode.mapMemoryErrors(result) shouldBe true
+            result.errors shouldBe sortedSetOf(
+                    "ERROR: MemoryError in copyrights scanner (File: data.json)",
+                    "ERROR: MemoryError in licenses scanner (File: data.json)"
+            )
+        }
+
+        "return false for scan results without errors" {
+            val resultFileName = "/esprima-2.7.3_scancode-2.2.1.json"
+            val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
+            val result = ScanCode.getResult(resultFile)
+            ScanCode.mapMemoryErrors(result) shouldBe false
         }
     }
 })
