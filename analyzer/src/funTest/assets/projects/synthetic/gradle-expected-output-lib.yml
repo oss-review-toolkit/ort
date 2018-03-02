@@ -20,6 +20,9 @@ project:
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
   homepage_url: ""
   scopes:
+  - name: "annotationProcessor"
+    delivered: true
+    dependencies: []
   - name: "archives"
     delivered: true
     dependencies: []
@@ -116,6 +119,9 @@ project:
       version: "2.5.14.1"
       dependencies: []
       errors: []
+  - name: "testAnnotationProcessor"
+    delivered: true
+    dependencies: []
   - name: "testCompile"
     delivered: true
     dependencies:
