@@ -1,0 +1,48 @@
+{
+  "scancode_notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+  "scancode_version": "2.2.1.post277.4d68f9377",
+  "scancode_options": {
+    "input": "fixtures",
+    "--copyright": true,
+    "--info": true,
+    "--json-pp": "result.json",
+    "--license": true,
+    "--license-text": true,
+    "--only-findings": true,
+    "--processes": "15",
+    "--strip-root": true,
+    "--timeout": "300.0"
+  },
+  "files_count": 1,
+  "files": [
+    {
+      "path": "data.json",
+      "type": "file",
+      "name": "data.json",
+      "base_name": "data",
+      "extension": ".json",
+      "size": 98536916,
+      "date": "2018-03-01",
+      "sha1": "3bfaed45074fa95eda2be289a1fae9cb474661d9",
+      "md5": "a22225052141d329160361d9d9cc4679",
+      "mime_type": "text/plain",
+      "file_type": "UTF-8 Unicode text, with very long lines, with no line terminators",
+      "programming_language": "JSON",
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": true,
+      "is_script": false,
+      "licenses": [],
+      "copyrights": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": [
+        "ERROR: for scanner: licenses:\nERROR: Unknown error:\nTraceback (most recent call last):\n  File \"scancode-toolkit\\src\\scancode\\interrupt.py\", line 131, in runner\n    _res = func(*(args or ()), **(kwargs or {}))\n  File \"scancode-toolkit\\src\\scancode\\api.py\", line 134, in get_licenses\n    for match in idx.match(location=location, min_score=min_score):\n  File \"scancode-toolkit\\src\\licensedcode\\index.py\", line 426, in match\n    qry = query.build_query(location, query_string, self)\n  File \"scancode-toolkit\\src\\licensedcode\\query.py\", line 116, in build_query\n    qry = Query(location=location, idx=idx, line_threshold=80)\n  File \"scancode-toolkit\\src\\licensedcode\\query.py\", line 187, in __init__\n    self.tokenize_and_build_runs(self.tokens_by_line(tokenizer=tokenizer), line_threshold=line_threshold)\n  File \"scancode-toolkit\\src\\licensedcode\\query.py\", line 304, in tokenize_and_build_runs\n    for tokens in tokens_by_line:\n  File \"scancode-toolkit\\src\\licensedcode\\query.py\", line 272, in tokens_by_line\n    line_tokens_append(tid)\nMemoryError\n",
+        "ERROR: for scanner: copyrights:\nERROR: Unknown error:\nTraceback (most recent call last):\n  File \"scancode-toolkit\\src\\scancode\\interrupt.py\", line 131, in runner\n    _res = func(*(args or ()), **(kwargs or {}))\n  File \"scancode-toolkit\\src\\scancode\\api.py\", line 54, in get_copyrights\n    for copyrights, authors, _years, holders, start_line, end_line in detect_copyrights(location):\n  File \"scancode-toolkit\\src\\cluecode\\copyrights.py\", line 69, in detect_copyrights\n    for numbered_lines in candidate_lines(analysis.text_lines(location, demarkup=True)):\n  File \"scancode-toolkit\\src\\cluecode\\copyrights.py\", line 1477, in candidate_lines\n    for line_number, line in enumerate(lines):\n  File \"scancode-toolkit\\src\\textcode\\analysis.py\", line 187, in unicode_text_lines\n    yield remove_verbatim_cr_lf_tab_chars(as_unicode(line))\n  File \"scancode-toolkit\\src\\textcode\\analysis.py\", line 143, in as_unicode\n    s = line.decode('UTF-8')\n  File \"scancode-toolkit\\lib\\encodings\\utf_8.py\", line 16, in decode\n    return codecs.utf_8_decode(input, errors, True)\nMemoryError\n"
+      ]
+    }
+  ]
+}

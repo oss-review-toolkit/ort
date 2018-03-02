@@ -47,7 +47,11 @@ object ScanCode : LocalScanner() {
             "--strip-root"
     )
 
-    private val TIMEOUT_REGEX = Pattern.compile(
+    private val MEMORY_ERROR_REGEX = Pattern.compile(
+            "ERROR: for scanner: (?<scanner>\\w+):\n" +
+            "ERROR: Unknown error:\n.+MemoryError\n (?<file>\\(File: .+\\))", Pattern.DOTALL)
+
+    private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: .+\\)")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
@@ -100,9 +104,10 @@ object ScanCode : LocalScanner() {
         }
 
         val result = getResult(resultsFile)
+        val hasOnlyMemoryErrors = mapMemoryErrors(result)
 
         with(process) {
-            if (exitValue() == 0 || hasOnlyTimeoutErrors(result)) {
+            if (exitValue() == 0 || hasOnlyMemoryErrors || hasOnlyTimeoutErrors(result)) {
                 return result
             } else {
                 throw ScanException(failMessage)
@@ -138,13 +143,39 @@ object ScanCode : LocalScanner() {
         return Result(licenses, errors)
     }
 
+    internal fun mapMemoryErrors(result: Result): Boolean {
+        if (result.errors.isEmpty()) {
+            return false
+        }
+
+        var onlyMemoryErrors = true
+
+        val errors = result.errors.toSortedSet()
+        result.errors.clear()
+
+        errors.mapTo(result.errors) { error ->
+            MEMORY_ERROR_REGEX.matcher(error).let { matcher ->
+                if (matcher.matches()) {
+                    val scanner = matcher.group("scanner")
+                    val file = matcher.group("file")
+                    "ERROR: MemoryError in $scanner scanner $file"
+                } else {
+                    onlyMemoryErrors = false
+                    error
+                }
+            }
+        }
+
+        return onlyMemoryErrors
+    }
+
     internal fun hasOnlyTimeoutErrors(result: Result): Boolean {
         if (result.errors.isEmpty()) {
             return false
         }
 
         result.errors.forEach { error ->
-            TIMEOUT_REGEX.matcher(error).let { matcher ->
+            TIMEOUT_ERROR_REGEX.matcher(error).let { matcher ->
                 if (!matcher.matches() || matcher.group("timeout") != TIMEOUT.toString()) {
                     return false
                 }
