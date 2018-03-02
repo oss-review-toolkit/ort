@@ -102,9 +102,9 @@ object Cvs : VersionControlSystem() {
                 }
 
                 private fun getFileRevisionsHash(fileRevisions: CvsFileRevisions): String {
-                    val digest = fileRevisions.fold(DigestUtils.getSha1Digest()) { digest, pair ->
-                        DigestUtils.updateDigest(digest, pair.first)
-                        DigestUtils.updateDigest(digest, pair.second)
+                    val digest = fileRevisions.fold(DigestUtils.getSha1Digest()) { digest, (file, revision) ->
+                        DigestUtils.updateDigest(digest, file)
+                        DigestUtils.updateDigest(digest, revision)
                     }.digest()
 
                     return Hex.encodeHexString(digest)
