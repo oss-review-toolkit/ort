@@ -210,8 +210,8 @@ object Main {
 
         val pkgSummary: PackageSummary = mutableMapOf()
 
-        val includedScopes: SortedSet<Scope> = sortedSetOf()
-        val excludedScopes: SortedSet<Scope> = sortedSetOf()
+        val includedScopes = sortedSetOf<Scope>()
+        val excludedScopes = sortedSetOf<Scope>()
 
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
