@@ -130,7 +130,7 @@ abstract class LocalScanner : Scanner() {
         }
 
         val version = getVersion(scannerPath.absolutePath)
-        println("Running $this version $version on directory '${downloadResult.downloadDirectory.absolutePath}'.")
+        println("Running $this version $version on directory '${downloadResult.downloadDirectory.canonicalPath}'.")
 
         return scanPath(downloadResult.downloadDirectory, resultsFile).also {
             println("Stored $this results in '${resultsFile.absolutePath}'.")
@@ -156,7 +156,7 @@ abstract class LocalScanner : Scanner() {
                 "${path.nameWithoutExtension}_$scannerName.$resultFileExt")
 
         val version = getVersion(scannerPath.absolutePath)
-        println("Running $this version $version on path '${path.absolutePath}'.")
+        println("Running $this version $version on path '${path.canonicalPath}'.")
 
         return scanPath(path, resultsFile).also {
             println("Stored $this results in '${resultsFile.absolutePath}'.")
