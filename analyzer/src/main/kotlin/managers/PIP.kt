@@ -63,11 +63,10 @@ class PIP : PackageManager() {
     ) {
         override fun create() = PIP()
 
-        private const val PIPDEPTREE_VERSION = "0.10.1"
-        private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
-
-        private val PIPDEPTREE_TOP_LEVEL_REGEX = Regex("([\\w-]+).*")
+        private const val PIPDEPTREE_VERSION = "0.11.0"
         private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
+
+        private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
     }
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
@@ -119,10 +118,8 @@ class PIP : PackageManager() {
         val workingDir = definitionFile.parentFile
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
-        // List all packages installed locally in the virtualenv. As only the plain text pipdeptree output shows the
-        // hierarchy of dependencies, but the JSON output is easier to parse, we unfortunately need both.
-        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l")
-        val pipdeptreeJson = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json")
+        // List all packages installed locally in the virtualenv.
+        val pipdeptreeJsonTree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
 
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
@@ -163,41 +160,28 @@ class PIP : PackageManager() {
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
 
-        if (pipdeptreeJson.exitValue() == 0) {
-            val allDependencies = jsonMapper.readTree(pipdeptreeJson.stdout()) as ArrayNode
+        if (pipdeptreeJsonTree.exitValue() == 0) {
+            val fullDependencyTree = jsonMapper.readTree(pipdeptreeJsonTree.stdout())
 
-            if (definitionFile.name != "setup.py" && pipdeptree.exitValue() == 0) {
-                val topLevelDependencies = pipdeptree.stdout().lines().mapNotNull {
-                    PIPDEPTREE_TOP_LEVEL_REGEX.matchEntire(it)?.groupValues?.get(1).takeUnless {
-                        it in PIPDEPTREE_DEPENDENCIES
-                    }
+            val projectDependencies = if (definitionFile.name == "setup.py") {
+                // The tree contains a root node for the project itself and pipdeptree's dependencies are also at the
+                // root next to it, as siblings.
+                fullDependencyTree.find {
+                    it["package_name"].asText() == projectName
+                }?.get("dependencies")
+                        ?: throw IOException("pipdeptree output does not contain the project dependencies.")
+            } else {
+                // The tree does not contain a node for the project itself. Its dependencies are on the root level
+                // together with the dependencies of pipdeptree itself, which we need to filter out.
+                fullDependencyTree.filterNot {
+                    it["package_name"].asText() in PIPDEPTREE_DEPENDENCIES
                 }
-
-                // Put in a fake root dependency for the project itself.
-                val projectData = jsonMapper.createObjectNode()
-                projectData.putObject("package").put("package_name", projectName)
-
-                val projectDependencies = projectData.putArray("dependencies")
-                topLevelDependencies.forEach { name ->
-                    val dependency = jsonMapper.createObjectNode()
-                    dependency.put("package_name", name)
-
-                    val version = allDependencies.asSequence().map {
-                        it["package"]
-                    }.find {
-                        it["package_name"].asText() == name
-                    }?.get("installed_version")?.asText()
-                    dependency.put("installed_version", version)
-
-                    projectDependencies.add(dependency)
-                }
-
-                allDependencies.add(projectData)
             }
 
             val packageTemplates = sortedSetOf<Package>()
-            parseDependencies(projectName, allDependencies, packageTemplates, installDependencies)
+            parseDependencies(projectDependencies, packageTemplates, installDependencies)
 
+            // Enrich the package templates with additional meta-data from PyPI.
             packageTemplates.mapTo(packages) { pkg ->
                 // See https://wiki.python.org/moin/PyPIJSON.
                 val pkgRequest = Request.Builder()
@@ -366,52 +350,18 @@ class PIP : PackageManager() {
         return virtualEnvDir
     }
 
-    private fun parseDependencies(rootPackageName: String, allDependencies: Iterable<JsonNode>,
-                                  packages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>) {
-        // With JSON output enabled pipdeptree does not really return a tree but a list of all dependencies:
-        // [
-        //     {
-        //         "dependencies": [],
-        //         "package": {
-        //             "installed_version": "1.16",
-        //             "package_name": "patch",
-        //             "key": "patch"
-        //         }
-        //     },
-        //     {
-        //         "dependencies": [
-        //             {
-        //                 "required_version": null,
-        //                 "installed_version": "36.5.0",
-        //                 "package_name": "setuptools",
-        //                 "key": "setuptools"
-        //             }
-        //         ],
-        //         "package": {
-        //             "installed_version": "1.2.1",
-        //             "package_name": "zc.lockfile",
-        //             "key": "zc.lockfile"
-        //         }
-        //     }
-        // ]
+    private fun parseDependencies(dependencies: Iterable<JsonNode>,
+                                  allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>) {
+        dependencies.forEach { dependency ->
+            val name = dependency["package_name"].asText()
+            val version = dependency["installed_version"].asText()
 
-        val packageData = allDependencies.find { it["package"]["package_name"].asText() == rootPackageName }
-        if (packageData == null) {
-            log.error { "No package data found for '$rootPackageName'." }
-            return
-        }
-
-        val packageDependencies = packageData["dependencies"]
-        packageDependencies.forEach {
-            val packageName = it["package_name"].asText()
-            val packageVersion = it["installed_version"].asText()
-
-            val dependencyPackage = Package(
+            val pkg = Package(
                     id = Identifier(
                             provider = "PyPI",
                             namespace = "",
-                            name = packageName,
-                            version = packageVersion
+                            name = name,
+                            version = version
                     ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
@@ -420,12 +370,12 @@ class PIP : PackageManager() {
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
             )
-            packages.add(dependencyPackage)
+            allPackages.add(pkg)
 
-            val packageRef = dependencyPackage.toReference()
+            val packageRef = pkg.toReference()
             installDependencies.add(packageRef)
 
-            parseDependencies(packageName, allDependencies, packages, packageRef.dependencies)
+            parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
         }
     }
 }
