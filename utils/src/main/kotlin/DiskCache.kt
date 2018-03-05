@@ -112,12 +112,13 @@ class DiskCache(
         try {
             diskLruCache.get(diskKey)?.use { entry ->
                 val time = entry.getString(INDEX_TIMESTAMP).toLong()
-                if (time + timeToLive < timeInSeconds()) {
-                    diskLruCache.remove(diskKey)
-                } else {
+                if (time + timeToLive >= timeInSeconds()) {
                     return entry.getString(INDEX_DATA)
                 }
             }
+
+            // Remove the expired entry after the snapshot was closed.
+            diskLruCache.remove(diskKey)
         } catch (e: IOException) {
             log.error { "Could not read cache entry for key '$diskKey': ${e.message}" }
         }
