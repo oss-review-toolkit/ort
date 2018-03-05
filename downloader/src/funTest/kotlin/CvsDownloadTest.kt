@@ -72,7 +72,7 @@ class CvsDownloadTest : StringSpec() {
 
             // Only tag "RELEASE_0_52" has revision 1.159 of "xmlenc/build.xml".
             buildXmlStatus.stdout().contains("Working revision:\t1.159") shouldBe true
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(tags = setOf(ExpensiveTag), enabled = false)
 
         "CVS can download only a single path" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, REPO_PATH))
@@ -89,7 +89,7 @@ class CvsDownloadTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(tags = setOf(ExpensiveTag), enabled = false)
 
         "CVS can download based on a version" {
             val pkg = Package.EMPTY.copy(
@@ -107,7 +107,7 @@ class CvsDownloadTest : StringSpec() {
 
             // Only tag "RELEASE_0_52" has revision 1.159 of "xmlenc/build.xml".
             buildXmlStatus.stdout().contains("Working revision:\t1.159") shouldBe true
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(tags = setOf(ExpensiveTag), enabled = false)
 
         "CVS can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
@@ -127,6 +127,6 @@ class CvsDownloadTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(tags = setOf(ExpensiveTag), enabled = false)
     }
 }
