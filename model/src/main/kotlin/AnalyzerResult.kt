@@ -74,7 +74,7 @@ data class AnalyzerResult(
         }
 
         return mutableMapOf<String, List<String>>().apply {
-            this["Analyzer"] = errors.toMutableList()
+            this[project.id.toString()] = errors.toMutableList()
 
             collectedErrors.forEach { pkg, errors ->
                 if (errors.isNotEmpty()) {
