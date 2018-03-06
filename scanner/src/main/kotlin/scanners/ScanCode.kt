@@ -54,7 +54,7 @@ object ScanCode : LocalScanner() {
 
     private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "ERROR: for scanner: (?<scanner>\\w+):\n" +
-            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: .+\\)")
+            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. (?<file>\\(File: .+\\))")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
     override val resultFileExt = "json"
@@ -106,10 +106,12 @@ object ScanCode : LocalScanner() {
         }
 
         val result = getResult(resultsFile)
+
         val hasOnlyMemoryErrors = mapMemoryErrors(result)
+        val hasOnlyTimeoutErrors = mapTimeoutErrors(result)
 
         with(process) {
-            if (exitValue() == 0 || hasOnlyMemoryErrors || hasOnlyTimeoutErrors(result)) {
+            if (exitValue() == 0 || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
                 return result
             } else {
                 throw ScanException(failMessage)
@@ -145,6 +147,10 @@ object ScanCode : LocalScanner() {
         return Result(licenses, errors)
     }
 
+    /**
+     * Map messages about memory errors to a more compact form. Return true if solely memory errors occurred, return
+     * false otherwise.
+     */
     internal fun mapMemoryErrors(result: Result): Boolean {
         if (result.errors.isEmpty()) {
             return false
@@ -171,19 +177,33 @@ object ScanCode : LocalScanner() {
         return onlyMemoryErrors
     }
 
-    internal fun hasOnlyTimeoutErrors(result: Result): Boolean {
+    /**
+     * Map messages about timeout errors to a more compact form. Return true if solely memory errors occurred, return
+     * false otherwise.
+     */
+    internal fun mapTimeoutErrors(result: Result): Boolean {
         if (result.errors.isEmpty()) {
             return false
         }
 
-        result.errors.forEach { error ->
+        var onlyTimeoutErrors = true
+
+        val errors = result.errors.toSortedSet()
+        result.errors.clear()
+
+        errors.mapTo(result.errors) { error ->
             TIMEOUT_ERROR_REGEX.matcher(error).let { matcher ->
-                if (!matcher.matches() || matcher.group("timeout") != TIMEOUT.toString()) {
-                    return false
+                if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
+                    val scanner = matcher.group("scanner")
+                    val file = matcher.group("file")
+                    "ERROR: Timeout after $TIMEOUT seconds in $scanner scanner $file"
+                } else {
+                    onlyTimeoutErrors = false
+                    error
                 }
             }
         }
 
-        return true
+        return onlyTimeoutErrors
     }
 }
