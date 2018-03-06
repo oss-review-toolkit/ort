@@ -61,7 +61,7 @@ data class AnalyzerResult(
 
     fun collectErrors(): Map<String, List<String>> {
         val collectedErrors = mutableMapOf<String, MutableList<String>>()
-        collectedErrors["Analyzer"] = errors.toMutableList()
+        collectedErrors["${project.id.namespace}:${project.id.name}:${project.id.version}"] = errors.toMutableList()
 
         fun addErrors(pkgReference: PackageReference) {
             val errorsForPkg = collectedErrors.getOrPut(pkgReference.identifier) { mutableListOf() }
