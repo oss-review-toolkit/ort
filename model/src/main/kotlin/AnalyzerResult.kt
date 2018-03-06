@@ -74,6 +74,7 @@ data class AnalyzerResult(
             it.dependencies.forEach { addErrors(it) }
         }
 
-        return collectedErrors.filterValues { it.isNotEmpty() }.mapValues { it.value.distinct() }
+        return collectedErrors.filterValues { it.isNotEmpty() }.mapKeys { "${project.id.provider}:${it.key}" }
+                .mapValues { it.value.distinct() }
     }
 }
