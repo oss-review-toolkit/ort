@@ -29,19 +29,69 @@ import java.io.File
 internal object Resources
 
 class ScanCodeTest : WordSpec({
-    "hasOnlyTimeoutErrors()" should {
+    "mapTimeoutErrors()" should {
         "return true for scan results with only timeout errors" {
             val resultFileName = "/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
             val result = ScanCode.getResult(resultFile)
-            ScanCode.hasOnlyTimeoutErrors(result) shouldBe true
+            ScanCode.mapTimeoutErrors(result) shouldBe true
+            result.errors.joinToString("\n") shouldBe sortedSetOf(
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/angular-1.2.5.json)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/angular-1.2.5.tokens)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/jquery-1.9.1.json)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/jquery-1.9.1.tokens)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.json)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.tokens)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/mootools-1.4.5.json)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/mootools-1.4.5.tokens)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/underscore-1.5.2.json)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/underscore-1.5.2.tokens)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/yui-3.12.0.json)",
+                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
+                            "(File: test/3rdparty/syntax/yui-3.12.0.tokens)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/angular-1.2.5.json)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/angular-1.2.5.tokens)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/jquery-1.9.1.json)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/jquery-1.9.1.tokens)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.json)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.tokens)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/mootools-1.4.5.json)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/mootools-1.4.5.tokens)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/underscore-1.5.2.json)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/underscore-1.5.2.tokens)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/yui-3.12.0.json)",
+                    "ERROR: Timeout after 300 seconds in licenses scanner " +
+                            "(File: test/3rdparty/syntax/yui-3.12.0.tokens)"
+            ).joinToString("\n")
         }
 
         "return false for scan results without errors" {
             val resultFileName = "/esprima-2.7.3_scancode-2.2.1.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
             val result = ScanCode.getResult(resultFile)
-            ScanCode.hasOnlyTimeoutErrors(result) shouldBe false
+            ScanCode.mapTimeoutErrors(result) shouldBe false
         }
     }
 
@@ -51,10 +101,10 @@ class ScanCodeTest : WordSpec({
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
             val result = ScanCode.getResult(resultFile)
             ScanCode.mapMemoryErrors(result) shouldBe true
-            result.errors shouldBe sortedSetOf(
+            result.errors.joinToString("\n") shouldBe sortedSetOf(
                     "ERROR: MemoryError in copyrights scanner (File: data.json)",
                     "ERROR: MemoryError in licenses scanner (File: data.json)"
-            )
+            ).joinToString("\n")
         }
 
         "return false for scan results without errors" {
