@@ -50,7 +50,7 @@ object Licensee : LocalScanner() {
         }
 
         with(process) {
-            if (exitValue() == 0) {
+            if (isSuccess()) {
                 stdoutFile.copyTo(resultsFile)
                 return getResult(resultsFile)
             } else {

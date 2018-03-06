@@ -149,7 +149,7 @@ object Subversion : VersionControlSystem() {
 
                 private fun runSvnInfoCommand(): SubversionInfoEntry? {
                     val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
-                    if (info.exitValue() != 0) {
+                    if (info.isError()) {
                         return null
                     }
                     return svnInfoReader.readValue(info.stdout())
@@ -157,7 +157,7 @@ object Subversion : VersionControlSystem() {
             }
 
     override fun isApplicableUrl(vcsUrl: String) =
-            vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).exitValue() == 0
+            vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess()
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {

@@ -63,7 +63,7 @@ object Mercurial : VersionControlSystem() {
 
                     // Do not use runMercurialCommand() here as we do not require the command to succeed.
                     val hgRootPath = ProcessCapture(workingDir, "hg", "root")
-                    return hgRootPath.exitValue() == 0 && workingDir.path.startsWith(hgRootPath.stdout().trimEnd())
+                    return hgRootPath.isSuccess() && workingDir.path.startsWith(hgRootPath.stdout().trimEnd())
                 }
 
                 override fun isShallow() = false
@@ -88,7 +88,7 @@ object Mercurial : VersionControlSystem() {
                 }
             }
 
-    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).exitValue() == 0
+    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).isSuccess()
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {

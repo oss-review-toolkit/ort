@@ -67,7 +67,7 @@ object Cvs : VersionControlSystem() {
                         return false
                     }
 
-                    return ProcessCapture(workingDir, "cvs", "status", "-l").exitValue() == 0
+                    return ProcessCapture(workingDir, "cvs", "status", "-l").isSuccess()
                 }
 
                 override fun isShallow() = false

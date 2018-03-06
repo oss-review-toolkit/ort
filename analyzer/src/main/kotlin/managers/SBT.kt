@@ -107,7 +107,7 @@ class SBT : PackageManager() {
 
             if (!hasPom) {
                 val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
-                if (sbt.exitValue() == 0) {
+                if (sbt.isSuccess()) {
                     // Get the list of POM files created by parsing stdout. A single call might create multiple POM
                     // files in case of sub-projects.
                     val makePomFiles = sbt.stdout().lines().mapNotNull {
