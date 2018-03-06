@@ -161,7 +161,15 @@ object Git : GitBase() {
         try {
             log.info { "Trying to fetch only revision '$revision' with depth limited to $HISTORY_DEPTH." }
             run(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
-            run(targetDir, "checkout", "FETCH_HEAD")
+
+            // The documentation for git-fetch states that "By default, any tag that points into the histories being
+            // fetched is also fetched", but that is not true for shallow fetches of a tag; then the tag itself is not
+            // fetched. So create it manually afterwards.
+            if (revision in workingTree.listRemoteTags()) {
+                run(targetDir, "tag", revision, "FETCH_HEAD")
+            }
+
+            run(targetDir, "checkout", revision)
             return workingTree
         } catch (e: IOException) {
             if (com.here.ort.utils.printStackTrace) {
