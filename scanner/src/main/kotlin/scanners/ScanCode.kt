@@ -105,7 +105,7 @@ object ScanCode : LocalScanner() {
             log.debug { process.stderr() }
         }
 
-        val result = getResult(resultsFile)
+        val result = getPlainResult(resultsFile)
 
         val hasOnlyMemoryErrors = mapMemoryErrors(result)
         val hasOnlyTimeoutErrors = mapTimeoutErrors(result)
@@ -123,7 +123,7 @@ object ScanCode : LocalScanner() {
         // TODO: Add results of license scan to YAML model
     }
 
-    override fun getResult(resultsFile: File): Result {
+    internal fun getPlainResult(resultsFile: File): Result {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
@@ -146,6 +146,12 @@ object ScanCode : LocalScanner() {
 
         return Result(licenses, errors)
     }
+
+    override fun getResult(resultsFile: File) =
+            getPlainResult(resultsFile).also {
+                mapMemoryErrors(it)
+                mapTimeoutErrors(it)
+            }
 
     /**
      * Map messages about memory errors to a more compact form. Return true if solely memory errors occurred, return
