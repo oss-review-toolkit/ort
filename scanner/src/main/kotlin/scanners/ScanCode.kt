@@ -111,7 +111,7 @@ object ScanCode : LocalScanner() {
         val hasOnlyTimeoutErrors = mapTimeoutErrors(result)
 
         with(process) {
-            if (exitValue() == 0 || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
+            if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
                 return result
             } else {
                 throw ScanException(failMessage)

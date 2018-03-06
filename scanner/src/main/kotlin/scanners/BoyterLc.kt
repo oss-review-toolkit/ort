@@ -107,7 +107,7 @@ object BoyterLc : LocalScanner() {
         }
 
         with(process) {
-            if (exitValue() == 0) {
+            if (isSuccess()) {
                 return getResult(resultsFile)
             } else {
                 throw ScanException(failMessage)

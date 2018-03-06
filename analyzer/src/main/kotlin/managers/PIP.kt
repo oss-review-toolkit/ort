@@ -160,7 +160,7 @@ class PIP : PackageManager() {
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
 
-        if (pipdeptreeJsonTree.exitValue() == 0) {
+        if (pipdeptreeJsonTree.isSuccess()) {
             val fullDependencyTree = jsonMapper.readTree(pipdeptreeJsonTree.stdout())
 
             val projectDependencies = if (definitionFile.name == "setup.py") {
@@ -342,7 +342,7 @@ class PIP : PackageManager() {
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
         // to a test.
         with(pip) {
-            if (exitValue() != 0) {
+            if (isError()) {
                 log.error { failMessage }
             }
         }

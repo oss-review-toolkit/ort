@@ -299,7 +299,7 @@ fun File.safeDeleteRecursively() {
             if (OS.isWindows && attrs.isOther) {
                 // Unlink junctions to turn them into empty directories.
                 val fsutil = ProcessCapture("fsutil", "reparsepoint", "delete", dir.toString())
-                if (fsutil.exitValue() == 0) {
+                if (fsutil.isSuccess()) {
                     return FileVisitResult.SKIP_SUBTREE
                 }
             }

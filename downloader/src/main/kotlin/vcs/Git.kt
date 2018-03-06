@@ -60,7 +60,7 @@ abstract class GitBase : VersionControlSystem() {
 
             // Do not use runGitCommand() here as we do not require the command to succeed.
             val isInsideWorkTree = ProcessCapture(workingDir, "git", "rev-parse", "--is-inside-work-tree")
-            return isInsideWorkTree.exitValue() == 0 && isInsideWorkTree.stdout().trimEnd().toBoolean()
+            return isInsideWorkTree.isSuccess() && isInsideWorkTree.stdout().trimEnd().toBoolean()
         }
 
         override fun isShallow(): Boolean {
@@ -94,7 +94,7 @@ object Git : GitBase() {
 
     override val aliases = listOf("git")
 
-    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).exitValue() == 0
+    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).isSuccess()
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {

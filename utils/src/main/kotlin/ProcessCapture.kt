@@ -81,6 +81,16 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
     fun exitValue() = process.exitValue()
 
     /**
+     * Return true if the [exitValue] is not 0.
+     */
+    fun isError() = exitValue() != 0
+
+    /**
+     * Return true if the [exitValue] is 0.
+     */
+    fun isSuccess() = exitValue() == 0
+
+    /**
      * Return the standard output stream of the terminated process as a string.
      */
     fun stdout() = stdoutFile.readText()
@@ -94,7 +104,7 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
      * Throw an [IOException] in case [exitValue] is not 0.
      */
     fun requireSuccess(): ProcessCapture {
-        if (exitValue() != 0) {
+        if (isError()) {
             throw IOException(failMessage)
         }
         return this
