@@ -33,7 +33,7 @@ class ScanCodeTest : WordSpec({
         "return true for scan results with only timeout errors" {
             val resultFileName = "/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
-            val result = ScanCode.getResult(resultFile)
+            val result = ScanCode.getPlainResult(resultFile)
             ScanCode.mapTimeoutErrors(result) shouldBe true
             result.errors.joinToString("\n") shouldBe sortedSetOf(
                     "ERROR: Timeout after 300 seconds in copyrights scanner " +
@@ -99,7 +99,7 @@ class ScanCodeTest : WordSpec({
         "return true for scan results with only memory errors" {
             val resultFileName = "/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
-            val result = ScanCode.getResult(resultFile)
+            val result = ScanCode.getPlainResult(resultFile)
             ScanCode.mapMemoryErrors(result) shouldBe true
             result.errors.joinToString("\n") shouldBe sortedSetOf(
                     "ERROR: MemoryError in copyrights scanner (File: data.json)",
