@@ -42,6 +42,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.yamlMapper
 
 import java.io.File
+import java.util.SortedMap
 import java.util.SortedSet
 
 import kotlin.system.exitProcess
@@ -52,7 +53,7 @@ class ScanSummary(
         val cacheStats: CacheStatistics,
         val scannedScopes: SortedSet<String>,
         val ignoredScopes: SortedSet<String>,
-        val analyzerErrors: Map<String, List<String>>
+        val analyzerErrors: SortedMap<String, List<String>>
 )
 
 typealias PackageSummary = MutableMap<String, SummaryEntry>
@@ -213,7 +214,7 @@ object Main {
 
         val includedScopes = sortedSetOf<Scope>()
         val excludedScopes = sortedSetOf<Scope>()
-        val analyzerErrors = mutableMapOf<String, List<String>>()
+        val analyzerErrors = sortedMapOf<String, List<String>>()
 
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
