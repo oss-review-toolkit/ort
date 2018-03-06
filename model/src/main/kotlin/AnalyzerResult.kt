@@ -61,7 +61,6 @@ data class AnalyzerResult(
 
     fun collectErrors(): Map<String, List<String>> {
         val collectedErrors = mutableMapOf<String, MutableList<String>>()
-        collectedErrors["Analyzer"] = errors.toMutableList()
 
         fun addErrors(pkgReference: PackageReference) {
             val errorsForPkg = collectedErrors.getOrPut(pkgReference.identifier) { mutableListOf() }
@@ -74,6 +73,14 @@ data class AnalyzerResult(
             it.dependencies.forEach { addErrors(it) }
         }
 
-        return collectedErrors.filterValues { it.isNotEmpty() }.mapValues { it.value.distinct() }
+        return mutableMapOf<String, List<String>>().apply {
+            this["Analyzer"] = errors.toMutableList()
+
+            collectedErrors.forEach { pkg, errors ->
+                if (errors.isNotEmpty()) {
+                    this[pkg] = errors.distinct()
+                }
+            }
+        }
     }
 }
