@@ -78,7 +78,7 @@ data class AnalyzerResult(
 
             collectedErrors.forEach { pkg, errors ->
                 if (errors.isNotEmpty()) {
-                    this[pkg] = errors.distinct()
+                    this["${project.id.provider}:$pkg"] = errors.distinct()
                 }
             }
         }
