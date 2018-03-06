@@ -101,7 +101,7 @@ download or scan any previously scanned sources, the Scanner can be configured (
 e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented). Using the example of
 configuring an Artifactory cache, the YAML-based configuration file would look like:
 
-```
+```yaml
 scanner:
   cache:
     type: Artifactory
