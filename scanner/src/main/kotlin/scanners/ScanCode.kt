@@ -47,14 +47,14 @@ object ScanCode : LocalScanner() {
             "--strip-root"
     )
 
-    // Note: The (File: ...) part in the patterns below is actually added by our own getResult() function.
+    // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
     private val MEMORY_ERROR_REGEX = Pattern.compile(
-            "ERROR: for scanner: (?<scanner>\\w+):\n" +
-            "ERROR: Unknown error:\n.+MemoryError\n (?<file>\\(File: .+\\))", Pattern.DOTALL)
+            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+            "ERROR: Unknown error:\n.+MemoryError\n \\(File: (?<file>.+)\\)", Pattern.DOTALL)
 
     private val TIMEOUT_ERROR_REGEX = Pattern.compile(
-            "ERROR: for scanner: (?<scanner>\\w+):\n" +
-            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. (?<file>\\(File: .+\\))")
+            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
     override val resultFileExt = "json"
@@ -170,9 +170,8 @@ object ScanCode : LocalScanner() {
         errors.mapTo(result.errors) { error ->
             MEMORY_ERROR_REGEX.matcher(error).let { matcher ->
                 if (matcher.matches()) {
-                    val scanner = matcher.group("scanner")
                     val file = matcher.group("file")
-                    "ERROR: MemoryError in $scanner scanner $file"
+                    "ERROR: MemoryError while scanning file '$file'."
                 } else {
                     onlyMemoryErrors = false
                     error
@@ -200,9 +199,8 @@ object ScanCode : LocalScanner() {
         errors.mapTo(result.errors) { error ->
             TIMEOUT_ERROR_REGEX.matcher(error).let { matcher ->
                 if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
-                    val scanner = matcher.group("scanner")
                     val file = matcher.group("file")
-                    "ERROR: Timeout after $TIMEOUT seconds in $scanner scanner $file"
+                    "ERROR: Timeout after $TIMEOUT seconds while scanning file '$file'."
                 } else {
                     onlyTimeoutErrors = false
                     error

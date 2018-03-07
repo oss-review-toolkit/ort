@@ -36,54 +36,30 @@ class ScanCodeTest : WordSpec({
             val result = ScanCode.getPlainResult(resultFile)
             ScanCode.mapTimeoutErrors(result) shouldBe true
             result.errors.joinToString("\n") shouldBe sortedSetOf(
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/angular-1.2.5.json)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/angular-1.2.5.tokens)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/jquery-1.9.1.json)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/jquery-1.9.1.tokens)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.json)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.tokens)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/mootools-1.4.5.json)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/mootools-1.4.5.tokens)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/underscore-1.5.2.json)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/underscore-1.5.2.tokens)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/yui-3.12.0.json)",
-                    "ERROR: Timeout after 300 seconds in copyrights scanner " +
-                            "(File: test/3rdparty/syntax/yui-3.12.0.tokens)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/angular-1.2.5.json)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/angular-1.2.5.tokens)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/jquery-1.9.1.json)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/jquery-1.9.1.tokens)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.json)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/jquery.mobile-1.4.2.tokens)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/mootools-1.4.5.json)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/mootools-1.4.5.tokens)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/underscore-1.5.2.json)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/underscore-1.5.2.tokens)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/yui-3.12.0.json)",
-                    "ERROR: Timeout after 300 seconds in licenses scanner " +
-                            "(File: test/3rdparty/syntax/yui-3.12.0.tokens)"
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/angular-1.2.5.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/angular-1.2.5.tokens'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/jquery-1.9.1.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/jquery-1.9.1.tokens'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/jquery.mobile-1.4.2.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/jquery.mobile-1.4.2.tokens'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/mootools-1.4.5.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/mootools-1.4.5.tokens'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/underscore-1.5.2.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/underscore-1.5.2.tokens'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/yui-3.12.0.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/yui-3.12.0.tokens'."
             ).joinToString("\n")
         }
 
@@ -102,8 +78,7 @@ class ScanCodeTest : WordSpec({
             val result = ScanCode.getPlainResult(resultFile)
             ScanCode.mapMemoryErrors(result) shouldBe true
             result.errors.joinToString("\n") shouldBe sortedSetOf(
-                    "ERROR: MemoryError in copyrights scanner (File: data.json)",
-                    "ERROR: MemoryError in licenses scanner (File: data.json)"
+                    "ERROR: MemoryError while scanning file 'data.json'."
             ).joinToString("\n")
         }
 
