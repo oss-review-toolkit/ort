@@ -19,16 +19,20 @@
 
 package com.here.ort.downloader
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.downloader.vcs.*
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.filterVersionNames
 import com.here.ort.utils.getPathFromEnvironment
+import com.here.ort.utils.log
 
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
+import java.io.IOException
 import java.net.URI
 import java.net.URISyntaxException
 import java.nio.file.Paths
@@ -66,7 +70,12 @@ abstract class VersionControlSystem {
                 ALL.asSequence().map {
                     it.getWorkingTree(vcsDirectory)
                 }.find {
-                    it.isValid()
+                    try {
+                        it.isValid()
+                    } catch (e: IOException) {
+                        log.debug { "Exception while trying VCS ${it.getType()}, treating it as non-applicable." }
+                        false
+                    }
                 }
 
         /**
