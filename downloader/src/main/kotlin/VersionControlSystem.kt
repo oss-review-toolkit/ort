@@ -29,6 +29,7 @@ import com.here.ort.utils.getPathFromEnvironment
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
+import java.io.IOException
 import java.net.URI
 import java.net.URISyntaxException
 import java.nio.file.Paths
@@ -66,7 +67,11 @@ abstract class VersionControlSystem {
                 ALL.asSequence().map {
                     it.getWorkingTree(vcsDirectory)
                 }.find {
-                    it.isValid()
+                    try {
+                        it.isValid()
+                    } catch (e: IOException) {
+                        false
+                    }
                 }
 
         /**
