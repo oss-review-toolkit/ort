@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.downloader.vcs.Subversion
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -88,6 +89,6 @@ class BeanUtilsTest : StringSpec() {
             val tagsBeanUtils183Dir = File(downloadResult.downloadDirectory, "tags/BEANUTILS_1_8_3")
             tagsBeanUtils183Dir.isDirectory shouldBe true
             tagsBeanUtils183Dir.walkTopDown().count() shouldBe 302
-        }
+        }.config(enabled = Subversion.isInPath())
     }
 }
