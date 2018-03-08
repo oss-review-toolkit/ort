@@ -31,7 +31,7 @@ Follow these steps to get started with the OSS Review Toolkit:
 
 1. Ensure OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler) is installed and the `JAVA_HOME`
 environment variable set.
-2. Clone this repository.
+2. Clone this repository *recursively*, i.e. with submodules (`git clone --recurse-submodules`).
 3. Change into the repo directory on your machine and run `./gradlew installDist` to setup the build environment (e.g.
 get Gradle etc.) and build/install the start scripts for ORT. The individual start scripts can then be run directly from
 their respective locations as follows:
