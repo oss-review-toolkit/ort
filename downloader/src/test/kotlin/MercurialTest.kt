@@ -57,18 +57,18 @@ class MercurialTest : StringSpec() {
             val version = Mercurial.getVersion()
             println("Mercurial version $version detected.")
             version shouldNotBe ""
-        }
+        }.config(enabled = Mercurial.isInPath())
 
         "Mercurial detects non-working-trees" {
             Mercurial.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
-        }
+        }.config(enabled = Mercurial.isInPath())
 
         "Mercurial correctly detects URLs to remote repositories" {
             Mercurial.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
 
             // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
             Mercurial.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
-        }
+        }.config(enabled = Mercurial.isInPath())
 
         "Detected Mercurial working tree information is correct" {
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
@@ -79,7 +79,7 @@ class MercurialTest : StringSpec() {
             workingTree.getRevision() shouldBe "422ca71c35132f1f55d20a13355708aec7669b50"
             workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
-        }
+        }.config(enabled = Mercurial.isInPath())
 
         "Mercurial correctly lists remote tags" {
             val expectedTags = listOf(
@@ -90,6 +90,6 @@ class MercurialTest : StringSpec() {
 
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
-        }
+        }.config(enabled = Mercurial.isInPath())
     }
 }

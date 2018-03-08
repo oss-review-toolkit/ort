@@ -74,7 +74,7 @@ class MercurialDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag))
 
         "Mercurial can download only a single path" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, REPO_PATH))
@@ -101,7 +101,7 @@ class MercurialDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
+        }.config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
 
         "Mercurial can download based on a version" {
             val pkg = Package.EMPTY.copy(
@@ -113,7 +113,7 @@ class MercurialDownloadTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag))
 
         "Mercurial can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
@@ -144,6 +144,6 @@ class MercurialDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
+        }.config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
     }
 }

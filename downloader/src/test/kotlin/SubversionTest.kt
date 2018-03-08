@@ -57,11 +57,11 @@ class SubversionTest : StringSpec() {
             val version = Subversion.getVersion()
             println("Subversion version $version detected.")
             version shouldNotBe ""
-        }
+        }.config(enabled = Subversion.isInPath())
 
         "Subversion detects non-working-trees" {
             Subversion.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
-        }
+        }.config(enabled = Subversion.isInPath())
 
         "Subversion correctly detects URLs to remote repositories" {
             Subversion.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe true
@@ -77,7 +77,7 @@ class SubversionTest : StringSpec() {
             workingTree.getRevision() shouldBe "8207"
             workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
-        }
+        }.config(enabled = Subversion.isInPath())
 
         "Subversion correctly lists remote tags" {
             val expectedTags = listOf(

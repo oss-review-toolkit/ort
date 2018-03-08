@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader
 
+import com.here.ort.downloader.vcs.Mercurial
 import com.here.ort.model.VcsInfo
 
 import io.kotlintest.matchers.shouldBe
@@ -75,7 +76,7 @@ class VersionControlSystemTest : WordSpec({
                     path = ""
             )
             actual shouldBe expected
-        }
+        }.config(enabled = Mercurial.isInPath())
 
         "split tree URLs" {
             val actual = VersionControlSystem.splitUrl(
