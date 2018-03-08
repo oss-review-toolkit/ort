@@ -66,7 +66,7 @@ class SubversionTest : StringSpec() {
         "Subversion correctly detects URLs to remote repositories" {
             Subversion.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe true
             Subversion.isApplicableUrl("https://bitbucket.org/facebook/lz4revlog") shouldBe false
-        }.config(enabled = false)
+        }.config(enabled = Subversion.isInPath())
 
         "Detected Subversion working tree information is correct" {
             val workingTree = Subversion.getWorkingTree(zipContentDir)
@@ -109,6 +109,6 @@ class SubversionTest : StringSpec() {
 
             val workingTree = Subversion.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
-        }.config(enabled = false)
+        }.config(enabled = Subversion.isInPath())
     }
 }
