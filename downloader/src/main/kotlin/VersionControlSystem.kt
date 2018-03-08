@@ -24,6 +24,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.filterVersionNames
+import com.here.ort.utils.getPathFromEnvironment
 
 import com.vdurmont.semver4j.Semver
 
@@ -239,6 +240,11 @@ abstract class VersionControlSystem {
      * A fixed list of named revisions that usually move as new revisions are created.
      */
     protected abstract val movingRevisionNames: List<String>
+
+    /**
+     * Return whether the command for this VCS implementation is available in the system PATH.
+     */
+    fun isInPath() = getPathFromEnvironment(commandName) != null
 
     /**
      * A convenience function to run the command line program for this VCS implementation.
