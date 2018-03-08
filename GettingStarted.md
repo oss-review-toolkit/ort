@@ -22,10 +22,10 @@ For some of the supported package managers and SCMs additional tools need to be 
 
 * CVS
 * Mercurial
-* Node JS version 8.x and NPM version 5.5.1 (required for this tutorial because we scan `mime-types` which is an NPM project)
+* NPM 5.5.1 and Node.js 8.x (required for this tutorial because we scan `mime-types` which is an NPM project)
 * SBT
 * Subversion
-* Yarn (version 1.3.2)
+* Yarn 1.3.2
 
 ## 2. Download & Install ORT
 
