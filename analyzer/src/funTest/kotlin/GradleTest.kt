@@ -152,7 +152,7 @@ class GradleTest : StringSpec() {
                 result!!.errors shouldBe listOf<String>()
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(tags = setOf(ExpensiveTag), enabled = false)
     }
 
     private fun gradleWrapper(version: String) {
