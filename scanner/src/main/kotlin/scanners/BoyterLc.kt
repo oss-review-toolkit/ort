@@ -41,7 +41,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 
 object BoyterLc : LocalScanner() {
-    const val VERSION = "1.3.0"
+    const val VERSION = "1.3.1"
 
     override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
     override val resultFileExt = "json"
