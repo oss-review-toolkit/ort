@@ -116,7 +116,15 @@ abstract class LocalScanner : Scanner() {
                 "${pkg.id.name}-${pkgRevision}_$scannerName.$resultFileExt")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
-            return getResult(resultsFile)
+            val results = getResult(resultsFile)
+            if (results.fileCount > 0) {
+                return results
+            } else {
+                // Ignore empty scan results. It is likely that something went wrong when they were created, and if not,
+                // it is cheap to re-create them.
+
+                log.info { "Ignoring cached scan result as it is empty." }
+            }
         }
 
         val downloadResult = try {
@@ -134,7 +142,16 @@ abstract class LocalScanner : Scanner() {
 
         return scanPath(downloadResult.downloadDirectory, resultsFile).also {
             println("Stored $this results in '${resultsFile.absolutePath}'.")
-            ScanResultsCache.write(pkg, resultsFile)
+
+            val results = getResult(resultsFile)
+            if (results.fileCount > 0) {
+                ScanResultsCache.write(pkg, resultsFile)
+            } else {
+                // Ignore empty scan results. It is likely that something went wrong when they were created, and if not,
+                // it is cheap to re-create them.
+
+                log.info { "Not writing empty scan result to cache." }
+            }
         }
     }
 
