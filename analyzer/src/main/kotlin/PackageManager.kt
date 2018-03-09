@@ -65,6 +65,12 @@ abstract class PackageManager {
             )
         }
 
+        private val IGNORED_DIRECTORIES = listOf(
+                // Ignore resources in a standard Maven / Gradle project layout.
+                "src/main/resources",
+                "src/test/resources"
+        )
+
         /**
          * Recursively search for files managed by a package manager.
          *
@@ -81,7 +87,14 @@ abstract class PackageManager {
 
             Files.walkFileTree(directory.toPath(), object : SimpleFileVisitor<Path>() {
                 override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
-                    val filesInDir = dir.toFile().listFiles()
+                    val dirAsFile = dir.toFile()
+
+                    if (IGNORED_DIRECTORIES.any { dirAsFile.endsWith(it) }) {
+                        println("Skipping direrctory '$dirAsFile' as it is part of the ignore list.")
+                        return FileVisitResult.SKIP_SUBTREE
+                    }
+
+                    val filesInDir = dirAsFile.listFiles()
 
                     packageManagers.forEach { manager ->
                         // Create a list of lists of matching files per glob.
