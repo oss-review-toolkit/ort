@@ -85,7 +85,7 @@ abstract class LocalScanner : Scanner() {
 
                 log.error { "Could not scan package '${it.key.id}': ${e.message}" }
 
-                Result(sortedSetOf(), errors = e.collectMessages().toSortedSet())
+                Result(fileCount = 0, licenses = sortedSetOf(), errors = e.collectMessages().toSortedSet())
             }
         }
     }

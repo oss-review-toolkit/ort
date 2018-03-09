@@ -60,6 +60,7 @@ object Licensee : LocalScanner() {
     }
 
     override fun getResult(resultsFile: File): Result {
+        var fileCount = 0
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
@@ -69,11 +70,14 @@ object Licensee : LocalScanner() {
             val yamlResults = resultsFile.readText().replace("    * ", "    - ")
             val scanOutput = yamlMapper.readTree(yamlResults)
             val matchedFiles = scanOutput["Matched files"].asIterable().map { it.asText() }
+
+            fileCount = matchedFiles.count()
+
             matchedFiles.forEach {
                 licenses.add(scanOutput[it]["License"].asText())
             }
         }
 
-        return Result(licenses, errors)
+        return Result(fileCount, licenses, errors)
     }
 }
