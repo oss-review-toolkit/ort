@@ -73,7 +73,10 @@ abstract class VersionControlSystem {
                     try {
                         it.isValid()
                     } catch (e: IOException) {
-                        log.debug { "Exception while trying VCS ${it.getType()}, treating it as non-applicable." }
+                        log.debug {
+                            "Exception while validating ${it.getType()} working tree, treating it as non-applicable."
+                        }
+
                         false
                     }
                 }
