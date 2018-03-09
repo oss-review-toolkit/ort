@@ -124,11 +124,15 @@ object ScanCode : LocalScanner() {
     }
 
     internal fun getPlainResult(resultsFile: File): Result {
+        var fileCount = 0
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
         if (resultsFile.isFile && resultsFile.length() > 0) {
             val json = jsonMapper.readTree(resultsFile)
+
+            fileCount = json["files_count"].intValue()
+
             json["files"]?.forEach { file ->
                 file["licenses"]?.forEach { license ->
                     var name = license["spdx_license_key"].asText()
@@ -144,7 +148,7 @@ object ScanCode : LocalScanner() {
             }
         }
 
-        return Result(licenses, errors)
+        return Result(fileCount, licenses, errors)
     }
 
     override fun getResult(resultsFile: File) =

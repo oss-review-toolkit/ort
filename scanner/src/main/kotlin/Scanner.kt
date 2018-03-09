@@ -40,7 +40,7 @@ abstract class Scanner {
         }
     }
 
-    data class Result(val licenses: SortedSet<String>, val errors: SortedSet<String>)
+    data class Result(val fileCount: Int, val licenses: SortedSet<String>, val errors: SortedSet<String>)
 
     abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null)
             : Map<Package, Result>

@@ -116,11 +116,15 @@ object BoyterLc : LocalScanner() {
     }
 
     override fun getResult(resultsFile: File): Result {
+        var fileCount = 0
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
         if (resultsFile.isFile && resultsFile.length() > 0) {
             val json = jsonMapper.readTree(resultsFile)
+
+            fileCount = json.count()
+
             json.forEach { file ->
                 licenses.addAll(file["LicenseGuesses"].map { license ->
                     license["LicenseId"].asText()
@@ -128,6 +132,6 @@ object BoyterLc : LocalScanner() {
             }
         }
 
-        return Result(licenses, errors)
+        return Result(fileCount, licenses, errors)
     }
 }
