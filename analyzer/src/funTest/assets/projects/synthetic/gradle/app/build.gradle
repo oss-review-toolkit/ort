@@ -1,7 +1,25 @@
+plugins {
+    id 'maven-publish'
+}
+
 repositories {
     jcenter()
 }
 
 dependencies {
     compile project(':lib')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom.withXml {
+                asNode().appendNode('licenses').appendNode('license')
+                        .appendNode('name', 'The Apache License, Version 2.0').parent()
+                        .appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+            }
+        }
+    }
 }
