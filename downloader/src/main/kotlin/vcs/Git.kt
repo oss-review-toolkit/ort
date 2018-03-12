@@ -90,7 +90,7 @@ abstract class GitBase : VersionControlSystem() {
 
 object Git : GitBase() {
     // TODO: Make this configurable.
-    private const val HISTORY_DEPTH = 10
+    private const val HISTORY_DEPTH = 50
 
     override val aliases = listOf("git")
 
