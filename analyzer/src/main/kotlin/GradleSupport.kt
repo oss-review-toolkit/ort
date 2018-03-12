@@ -22,7 +22,9 @@
 // here.
 
 interface DependencyTreeModel {
+    val group: String
     val name: String
+    val version: String
     val configurations: List<Configuration>
     val repositories: List<String>
     val errors: List<String>
