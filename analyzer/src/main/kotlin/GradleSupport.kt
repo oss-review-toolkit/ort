@@ -44,4 +44,5 @@ interface Dependency {
     val dependencies: List<Dependency>
     val error: String?
     val pomFile: String
+    val localPath: String?
 }
