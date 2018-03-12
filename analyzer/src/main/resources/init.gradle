@@ -39,6 +39,8 @@ interface DependencyTreeModel {
 
     List<Configuration> getConfigurations()
 
+    List<String> getRepositories()
+
     List<String> getErrors()
 }
 
