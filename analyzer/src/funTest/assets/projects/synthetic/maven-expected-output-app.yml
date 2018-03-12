@@ -71,10 +71,10 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/maven/lib"
 - id:
     provider: "Maven"
     namespace: "org.apache.beam"
