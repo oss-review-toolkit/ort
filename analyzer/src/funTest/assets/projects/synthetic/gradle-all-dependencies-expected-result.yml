@@ -690,10 +690,10 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
 - id:
     provider: "Maven"
     namespace: "junit"
