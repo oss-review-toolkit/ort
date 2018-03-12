@@ -36,11 +36,8 @@ apply plugin: DependencyTreePlugin
 
 interface DependencyTreeModel {
     String getName()
-
     List<Configuration> getConfigurations()
-
     List<String> getRepositories()
-
     List<String> getErrors()
 }
 
@@ -54,7 +51,6 @@ class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
 
 interface Configuration {
     String getName()
-
     List<Dependency> getDependencies()
 }
 
@@ -66,19 +62,12 @@ class ConfigurationImpl implements Configuration, Serializable {
 
 interface Dependency {
     String getGroupId()
-
     String getArtifactId()
-
     String getVersion()
-
     String getClassifier()
-
     String getExtension()
-
     List<Dependency> getDependencies()
-
     String getError()
-
     String getPomFile()
 }
 
