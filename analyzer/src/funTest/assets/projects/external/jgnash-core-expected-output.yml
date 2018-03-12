@@ -655,8 +655,8 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/ccavanaugh/jgnash.git"
-    revision: ""
-    path: ""
+    revision: "2aa4cce7d7fd46164030f2b4d244c4b89e77f722"
+    path: "jgnash-resources"
 - id:
     provider: "Maven"
     namespace: "junit"
