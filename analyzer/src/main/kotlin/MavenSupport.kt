@@ -271,7 +271,8 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
      * @param artifact The artifact for which the [Package] will be created.
      * @param repositories A list of remote repositories to search for [artifact].
      * @param localProjects Instances of local [MavenProject]s which have already been created, mapped by their
-     *                      identifier. If a project is found in this map no remote repositories will be queried.
+     *                      identifier. If a project is found in this map no remote repositories will be queried and the
+     *                      VCS working tree information will be used to create the [Package].
      */
     fun parsePackage(artifact: Artifact, repositories: List<RemoteRepository>,
                      localProjects: Map<String, MavenProject> = emptyMap()): Package {
@@ -305,6 +306,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         }
 
         val vcsFromPackage = parseVcsInfo(mavenProject)
+        val localDirectory = localProject?.file?.parentFile
 
         return Package(
                 id = Identifier(
@@ -319,7 +321,8 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 binaryArtifact = binaryRemoteArtifact,
                 sourceArtifact = sourceRemoteArtifact,
                 vcs = vcsFromPackage,
-                vcsProcessed = PackageManager.processPackageVcs(vcsFromPackage)
+                vcsProcessed = localDirectory?.let { PackageManager.processProjectVcs(it, vcsFromPackage) }
+                        ?: PackageManager.processPackageVcs(vcsFromPackage)
         )
     }
 
