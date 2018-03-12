@@ -270,11 +270,11 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
      *
      * @param artifact The artifact for which the [Package] will be created.
      * @param repositories A list of remote repositories to search for [artifact].
-     * @param cachedProjects Instances of [MavenProject] which have already been created, mapped by their identifier. If
-     *                       a project is found in this map no remote repositories will be queried.
+     * @param localProjects Instances of local [MavenProject]s which have already been created, mapped by their
+     *                      identifier. If a project is found in this map no remote repositories will be queried.
      */
     fun parsePackage(artifact: Artifact, repositories: List<RemoteRepository>,
-                     cachedProjects: Map<String, MavenProject> = emptyMap()): Package {
+                     localProjects: Map<String, MavenProject> = emptyMap()): Package {
         val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
         val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = createProjectBuildingRequest(true)
@@ -283,9 +283,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             mavenRepositorySystem.createRepository(it.url, it.id, true, null, true, null, null)
         }
 
-        val cachedProject = cachedProjects[artifact.identifier()]
+        val localProject = localProjects[artifact.identifier()]
 
-        val mavenProject = cachedProject ?: artifact.let {
+        val mavenProject = localProject ?: artifact.let {
             val pomArtifact = mavenRepositorySystem
                     .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
 
