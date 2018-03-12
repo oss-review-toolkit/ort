@@ -5,7 +5,7 @@ project:
     provider: "Gradle"
     namespace: ""
     name: "Gradle-Example"
-    version: ""
+    version: "unspecified"
   declared_licenses: []
   aliases: []
   vcs:

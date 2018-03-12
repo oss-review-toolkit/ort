@@ -119,9 +119,9 @@ class Gradle : PackageManager() {
             val project = Project(
                     id = Identifier(
                             provider = Gradle.toString(),
-                            namespace = "",
+                            namespace = dependencyTreeModel.group,
                             name = dependencyTreeModel.name,
-                            version = ""
+                            version = dependencyTreeModel.version
                     ),
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),

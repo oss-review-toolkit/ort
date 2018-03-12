@@ -35,7 +35,9 @@ import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 apply plugin: DependencyTreePlugin
 
 interface DependencyTreeModel {
+    String getGroup()
     String getName()
+    String getVersion()
     List<Configuration> getConfigurations()
     List<String> getRepositories()
     List<String> getErrors()
@@ -43,7 +45,9 @@ interface DependencyTreeModel {
 
 @Immutable
 class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
+    String group
     String name
+    String version
     List<Configuration> configurations
     List<String> repositories
     List<String> errors
@@ -147,7 +151,8 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                 }
             }
 
-            return new DependencyTreeModelImpl(project.name, configurations, repositories, errors)
+            return new DependencyTreeModelImpl(project.group ?: '', project.name, project.version ?: '',
+                    configurations, repositories, errors)
         }
 
         Dependency parseDependency(DependencyResult dependencyResult, Project project,
