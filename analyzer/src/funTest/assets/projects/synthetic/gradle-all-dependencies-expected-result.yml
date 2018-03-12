@@ -18,7 +18,7 @@ projects:
     provider: "Gradle"
     namespace: ""
     name: "Gradle-Example"
-    version: ""
+    version: "unspecified"
   declared_licenses: []
   aliases: []
   vcs:
@@ -35,9 +35,9 @@ projects:
   scopes: []
 - id:
     provider: "Gradle"
-    namespace: ""
+    namespace: "com.here.ort.gradle.example"
     name: "app"
-    version: ""
+    version: "1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
@@ -276,9 +276,9 @@ projects:
       errors: []
 - id:
     provider: "Gradle"
-    namespace: ""
+    namespace: "com.here.ort.gradle.example"
     name: "lib-without-repo"
-    version: ""
+    version: "1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
@@ -428,9 +428,9 @@ projects:
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
 - id:
     provider: "Gradle"
-    namespace: ""
+    namespace: "com.here.ort.gradle.example"
     name: "lib"
-    version: ""
+    version: "1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
