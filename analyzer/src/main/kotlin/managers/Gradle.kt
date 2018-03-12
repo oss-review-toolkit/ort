@@ -193,7 +193,7 @@ class Gradle : PackageManager() {
                     rawPackage
                 }
 
-                pkg.copy(vcsProcessed = processPackageVcs(pkg.vcs))
+                pkg.copy(vcsProcessed = if (dependency.localPath != null) processProjectVcs(File(dependency.localPath), pkg.vcs) else processPackageVcs(pkg.vcs))
             }
         }
 

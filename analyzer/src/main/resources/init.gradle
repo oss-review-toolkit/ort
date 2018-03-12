@@ -73,6 +73,7 @@ interface Dependency {
     List<Dependency> getDependencies()
     String getError()
     String getPomFile()
+    String getLocalPath()
 }
 
 @Immutable
@@ -85,6 +86,7 @@ class DependencyImpl implements Dependency, Serializable {
     List<Dependency> dependencies
     String error
     String pomFile
+    String localPath
 }
 
 class DependencyTreePlugin implements Plugin<Gradle> {
@@ -191,22 +193,22 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                     def classifier = artifact?.classifier ?: ''
                     def extension = artifact?.extension ?: ''
                     return new DependencyImpl(id.group, id.module, id.version, classifier, extension, dependencies,
-                            error, pomFile)
+                            error, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     def dependencyProject = project.rootProject.findProject(id.projectPath)
-                    // TODO: Decide how to mark project dependencies in the model.
                     return new DependencyImpl(dependencyProject.group ?: '', dependencyProject.name,
-                            dependencyProject.version ?: '', '', '', dependencies, null, '')
+                            dependencyProject.version ?: '', '', '', dependencies, null, '',
+                            dependencyProject.projectDir.absolutePath)
                 } else {
                     return new DependencyImpl('', id.displayName.replace(':', '_'), '', '', '', dependencies,
-                            "Unknown id type: ${id.getClass().simpleName}".toString(), '')
+                            "Unknown id type: ${id.getClass().simpleName}".toString(), '', null)
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
                 return new DependencyImpl('', dependencyResult.attempted.displayName, '', '', '', [],
-                        "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), '')
+                        "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), '', null)
             } else {
                 return new DependencyImpl('', dependencyResult.requested.displayName, '', '', '', [],
-                        "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), '')
+                        "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), '', null)
             }
         }
 
