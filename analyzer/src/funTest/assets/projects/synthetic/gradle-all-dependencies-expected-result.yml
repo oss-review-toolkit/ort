@@ -61,9 +61,9 @@ projects:
   - name: "compile"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -84,9 +84,9 @@ projects:
   - name: "compileClasspath"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -110,9 +110,9 @@ projects:
   - name: "default"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -133,9 +133,9 @@ projects:
   - name: "runtime"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -156,9 +156,9 @@ projects:
   - name: "runtimeClasspath"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -182,9 +182,9 @@ projects:
   - name: "testCompile"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -205,9 +205,9 @@ projects:
   - name: "testCompileClasspath"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -231,9 +231,9 @@ projects:
   - name: "testRuntime"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -254,9 +254,9 @@ projects:
   - name: "testRuntimeClasspath"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -670,9 +670,9 @@ project_id_result_file_path_map:
 packages:
 - id:
     provider: "Maven"
-    namespace: ""
-    name: "project _lib"
-    version: ""
+    namespace: "com.here.ort.gradle.example"
+    name: "lib"
+    version: "1.0.0"
   declared_licenses: []
   description: ""
   homepage_url: ""
