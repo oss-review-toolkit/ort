@@ -167,7 +167,7 @@ class Maven : PackageManager() {
         try {
             val pkg = packages.getOrPut(node.artifact.identifier()) {
                 maven.parsePackage(node.artifact, node.repositories,
-                        projectsByIdentifier.mapValues { it.value.project })
+                        projectsByIdentifier.mapValues { it.value.project }, sbtMode)
             }
 
             val dependencies = node.children.map { parseDependency(it, packages) }.toSortedSet()
