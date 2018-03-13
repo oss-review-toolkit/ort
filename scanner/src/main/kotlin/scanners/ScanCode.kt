@@ -43,7 +43,6 @@ object ScanCode : LocalScanner() {
             "--license",
             "--license-text",
             "--info",
-            "--only-findings",
             "--strip-root"
     )
 
