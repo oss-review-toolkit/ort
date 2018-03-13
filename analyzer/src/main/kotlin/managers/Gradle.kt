@@ -56,7 +56,6 @@ import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
 
-import org.gradle.tooling.BuildException
 import org.gradle.tooling.GradleConnector
 
 import java.io.File
@@ -133,13 +132,6 @@ class Gradle : PackageManager() {
 
             return AnalyzerResult(true, project, packages.values.toSortedSet(),
                     dependencyTreeModel.errors)
-        } catch (e: BuildException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
-
-            log.error { "Could not analyze '${definitionFile.absolutePath}': ${e.message}" }
-            return null
         } finally {
             connection.close()
         }
