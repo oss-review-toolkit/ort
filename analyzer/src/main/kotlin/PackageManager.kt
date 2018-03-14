@@ -59,7 +59,7 @@ abstract class PackageManager {
                     SBT,
                     NPM,
                     // TODO: CocoaPods,
-                    // TODO: Godep,
+                    // TODO: GoDep,
                     // TODO: Bower,
                     PIP
                     // TODO: Bundler
