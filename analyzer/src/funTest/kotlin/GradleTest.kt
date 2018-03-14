@@ -104,6 +104,16 @@ class GradleTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
+        "Fails nicely for Gradle version < 3.3" {
+            val packageFile = File("src/funTest/assets/projects/synthetic/gradle-unsupported-version/build.gradle")
+            val expectedResult = patchExpectedResult("gradle-expected-output-unsupported-version.yml")
+
+            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+
+            result shouldNotBe null
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+
         "Is compatible with Gradle >= 3.3" {
             val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 

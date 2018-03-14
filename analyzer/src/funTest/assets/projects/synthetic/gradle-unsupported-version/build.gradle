@@ -1,0 +1,6 @@
+plugins {
+    id 'java'
+}
+
+group 'com.here.ort.gradle.example'
+version '1.0.0'

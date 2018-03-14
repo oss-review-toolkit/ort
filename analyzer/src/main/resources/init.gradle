@@ -113,6 +113,17 @@ class DependencyTreePlugin implements Plugin<Gradle> {
 
             List<String> errors = []
 
+            def gradleVersion = project.gradle.gradleVersion.split('\\.')
+
+            if (gradleVersion[0].toInteger() < 3
+                    || (gradleVersion[0].toInteger() == 3 && gradleVersion[1].toInteger() < 3)) {
+                return new DependencyTreeModelImpl(project.group ?: '', project.name, project.version ?: '', [], [],
+                        [
+                                ("This project uses the unsupported Gradle version ${project.gradle.gradleVersion}. " +
+                                        'At least Gradle 3.3 is required.').toString()
+                        ])
+            }
+
             List<Configuration> configurations = project.configurations.findResults { configuration ->
                 if (configuration.canBeResolved) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()

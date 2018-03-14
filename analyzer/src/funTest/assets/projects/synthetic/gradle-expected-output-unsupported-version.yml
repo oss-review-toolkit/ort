@@ -1,0 +1,26 @@
+---
+allowDynamicVersions: true
+project:
+  id:
+    provider: "Gradle"
+    namespace: "com.here.ort.gradle.example"
+    name: "gradle-unsupported-version"
+    version: "1.0.0"
+  declared_licenses: []
+  aliases: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle-unsupported-version"
+  homepage_url: ""
+  scopes: []
+packages: []
+errors:
+- "This project uses the unsupported Gradle version 3.2.1. At least Gradle 3.3 is\
+  \ required."
