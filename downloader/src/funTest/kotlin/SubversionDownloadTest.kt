@@ -34,6 +34,8 @@ import java.io.File
 private const val REPO_URL = "https://svn.code.sf.net/p/sendmessage/code"
 private const val REPO_REV = "115"
 private const val REPO_PATH = "trunk"
+private const val REPO_TAG = "tags/SendMessage-1.0.2"
+private const val REPO_REV_FOR_TAG = "37"
 private const val REPO_VERSION = "1.0.1"
 private const val REPO_REV_FOR_VERSION = "30"
 private const val REPO_PATH_FOR_VERSION = "src/resources"
@@ -90,6 +92,24 @@ class SubversionDownloadTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
+            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+        }.config(enabled = Subversion.isInPath(), tags = setOf(ExpensiveTag))
+
+        "Subversion can download a given tag" {
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, "", REPO_TAG))
+            val expectedFiles = listOf(
+                    "SendMessage.proj",
+                    "SendMessage.sln",
+                    "src",
+                    "version.proj",
+                    "web"
+            )
+
+            val workingTree = Subversion.download(pkg, outputDir)
+            val actualFiles = workingTree.workingDir.list().sorted()
+
+            workingTree.isValid() shouldBe true
+            workingTree.getRevision() shouldBe REPO_REV_FOR_TAG
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }.config(enabled = Subversion.isInPath(), tags = setOf(ExpensiveTag))
 
