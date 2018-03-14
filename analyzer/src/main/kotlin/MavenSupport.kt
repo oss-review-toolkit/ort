@@ -133,10 +133,19 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         return projectBuilder.build(pomFile, projectBuildingRequest)
     }
 
+    // The MavenSettingsBuilder class is deprecated but internally it uses its successor SettingsBuilder. Calling
+    // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
+    @Suppress("DEPRECATION")
     fun createProjectBuildingRequest(resolveDependencies: Boolean): ProjectBuildingRequest {
         val request = DefaultMavenExecutionRequest()
 
         val populator = container.lookup(MavenExecutionRequestPopulator::class.java, "default")
+
+        val settingsBuilder = container.lookup(org.apache.maven.settings.MavenSettingsBuilder::class.java, "default")
+        // TODO: Add a way to configure the location of a user settings file and pass it to the method below.
+        val settings = settingsBuilder.buildSettings()
+
+        populator.populateFromSettings(request, settings)
         populator.populateDefaults(request)
 
         val projectBuildingRequest = request.projectBuildingRequest
