@@ -24,14 +24,14 @@ import com.here.ort.analyzer.PackageManagerFactory
 
 import java.io.File
 
-class Godep : PackageManager() {
-    companion object : PackageManagerFactory<Godep>(
-            "https://godoc.org/github.com/tools/godep",
+class GoDep : PackageManager() {
+    companion object : PackageManagerFactory<GoDep>(
+            "https://golang.github.io/dep/",
             "Go",
-            listOf("Godeps/Godeps.json")
+            listOf("Gopkg.toml")
     ) {
-        override fun create() = Godep()
+        override fun create() = GoDep()
     }
 
-    override fun command(workingDir: File) = "godep"
+    override fun command(workingDir: File) = "dep"
 }
