@@ -39,6 +39,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class GradleTest : StringSpec() {
+    private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
     private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -104,9 +105,17 @@ class GradleTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
-        "Is compatible with Gradle >= 3.3" {
-            val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
+        "Fails nicely for Gradle version < 3.3" {
+            val packageFile = File("src/funTest/assets/projects/synthetic/gradle-unsupported-version/build.gradle")
+            val expectedResult = patchExpectedResult("gradle-expected-output-unsupported-version.yml")
 
+            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+
+            result shouldNotBe null
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }.config(enabled = !isJava9OrAbove)
+
+        "Is compatible with Gradle >= 3.3" {
             // See https://blog.gradle.org/java-9-support-update.
             val gradleVersionsThatSupportJava9 = arrayOf(
                     row("4.6", ""),
