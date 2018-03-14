@@ -46,29 +46,6 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "compileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "compileOnly"
     delivered: true
     dependencies:
@@ -139,29 +116,6 @@ project:
         errors: []
       errors: []
   - name: "testCompile"
-    delivered: true
-    dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
-  - name: "testCompileClasspath"
     delivered: true
     dependencies:
     - namespace: ""

@@ -123,7 +123,7 @@ class DependencyTreePlugin implements Plugin<Gradle> {
             }
 
             List<Configuration> configurations = project.configurations.findResults { configuration ->
-                if (configuration.canBeResolved) {
+                if (configuration.canBeResolved && !configuration.name.endsWith('Classpath')) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
                     Set<ResolvedArtifact> resolvedArtifacts
                     try {

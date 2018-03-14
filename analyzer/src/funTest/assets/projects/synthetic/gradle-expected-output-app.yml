@@ -49,29 +49,6 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "compileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "compileOnly"
     delivered: true
     dependencies: []
@@ -121,29 +98,6 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "runtimeClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testAnnotationProcessor"
     delivered: true
     dependencies: []
@@ -170,56 +124,10 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "testCompileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testCompileOnly"
     delivered: true
     dependencies: []
   - name: "testRuntime"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
-  - name: "testRuntimeClasspath"
     delivered: true
     dependencies:
     - namespace: "com.here.ort.gradle.example"
