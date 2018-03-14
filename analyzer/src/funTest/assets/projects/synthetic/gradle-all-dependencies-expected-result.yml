@@ -81,29 +81,6 @@ projects:
         dependencies: []
         errors: []
       errors: []
-  - name: "compileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "compileOnly"
     delivered: true
     dependencies: []
@@ -153,29 +130,6 @@ projects:
         dependencies: []
         errors: []
       errors: []
-  - name: "runtimeClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testAnnotationProcessor"
     delivered: true
     dependencies: []
@@ -202,56 +156,10 @@ projects:
         dependencies: []
         errors: []
       errors: []
-  - name: "testCompileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testCompileOnly"
     delivered: true
     dependencies: []
   - name: "testRuntime"
-    delivered: true
-    dependencies:
-    - namespace: "com.here.ort.gradle.example"
-      name: "lib"
-      version: "1.0.0"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-text"
-        version: "1.1"
-        dependencies:
-        - namespace: "org.apache.commons"
-          name: "commons-lang3"
-          version: "3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - namespace: "org.apache.struts"
-        name: "struts2-assembly"
-        version: "2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
-  - name: "testRuntimeClasspath"
     delivered: true
     dependencies:
     - namespace: "com.here.ort.gradle.example"
@@ -309,16 +217,6 @@ projects:
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
-  - name: "compileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
-      dependencies: []
-      errors:
-      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
   - name: "compileOnly"
     delivered: true
     dependencies: []
@@ -333,16 +231,6 @@ projects:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
   - name: "runtime"
-    delivered: true
-    dependencies:
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
-      dependencies: []
-      errors:
-      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
-  - name: "runtimeClasspath"
     delivered: true
     dependencies:
     - namespace: ""
@@ -372,44 +260,10 @@ projects:
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
-  - name: "testCompileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: ""
-      name: "junit:junit:4.12"
-      version: ""
-      dependencies: []
-      errors:
-      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-        \ junit:junit:4.12 because no repositories are defined."
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
-      dependencies: []
-      errors:
-      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
   - name: "testCompileOnly"
     delivered: true
     dependencies: []
   - name: "testRuntime"
-    delivered: true
-    dependencies:
-    - namespace: ""
-      name: "junit:junit:4.12"
-      version: ""
-      dependencies: []
-      errors:
-      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-        \ junit:junit:4.12 because no repositories are defined."
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
-      dependencies: []
-      errors:
-      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
-  - name: "testRuntimeClasspath"
     delivered: true
     dependencies:
     - namespace: ""
@@ -469,24 +323,6 @@ projects:
       version: "2.5.14.1"
       dependencies: []
       errors: []
-  - name: "compileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "org.apache.commons"
-      name: "commons-text"
-      version: "1.1"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-lang3"
-        version: "3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - namespace: "org.apache.struts"
-      name: "struts2-assembly"
-      version: "2.5.14.1"
-      dependencies: []
-      errors: []
   - name: "compileOnly"
     delivered: true
     dependencies: []
@@ -509,24 +345,6 @@ projects:
       dependencies: []
       errors: []
   - name: "runtime"
-    delivered: true
-    dependencies:
-    - namespace: "org.apache.commons"
-      name: "commons-text"
-      version: "1.1"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-lang3"
-        version: "3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - namespace: "org.apache.struts"
-      name: "struts2-assembly"
-      version: "2.5.14.1"
-      dependencies: []
-      errors: []
-  - name: "runtimeClasspath"
     delivered: true
     dependencies:
     - namespace: "org.apache.commons"
@@ -575,66 +393,10 @@ projects:
       version: "2.5.14.1"
       dependencies: []
       errors: []
-  - name: "testCompileClasspath"
-    delivered: true
-    dependencies:
-    - namespace: "junit"
-      name: "junit"
-      version: "4.12"
-      dependencies:
-      - namespace: "org.hamcrest"
-        name: "hamcrest-core"
-        version: "1.3"
-        dependencies: []
-        errors: []
-      errors: []
-    - namespace: "org.apache.commons"
-      name: "commons-text"
-      version: "1.1"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-lang3"
-        version: "3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - namespace: "org.apache.struts"
-      name: "struts2-assembly"
-      version: "2.5.14.1"
-      dependencies: []
-      errors: []
   - name: "testCompileOnly"
     delivered: true
     dependencies: []
   - name: "testRuntime"
-    delivered: true
-    dependencies:
-    - namespace: "junit"
-      name: "junit"
-      version: "4.12"
-      dependencies:
-      - namespace: "org.hamcrest"
-        name: "hamcrest-core"
-        version: "1.3"
-        dependencies: []
-        errors: []
-      errors: []
-    - namespace: "org.apache.commons"
-      name: "commons-text"
-      version: "1.1"
-      dependencies:
-      - namespace: "org.apache.commons"
-        name: "commons-lang3"
-        version: "3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - namespace: "org.apache.struts"
-      name: "struts2-assembly"
-      version: "2.5.14.1"
-      dependencies: []
-      errors: []
-  - name: "testRuntimeClasspath"
     delivered: true
     dependencies:
     - namespace: "junit"
