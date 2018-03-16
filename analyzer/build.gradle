@@ -17,6 +17,7 @@ dependencies {
 
     compile "com.beust:jcommander:$jcommanderVersion"
     compile "com.vdurmont:semver4j:$semverVersion"
+    compile "com.moandjiezana.toml:toml4j:$toml4jVersion"
 
     compile "org.apache.maven:maven-core:$mavenVersion"
     compile "org.apache.maven:maven-compat:$mavenVersion"
