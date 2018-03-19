@@ -238,14 +238,14 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             dependencyProject.version ?: '', '', '', dependencies, null, '',
                             dependencyProject.projectDir.absolutePath)
                 } else {
-                    return new DependencyImpl('', id.displayName.replace(':', '_'), '', '', '', dependencies,
+                    return new DependencyImpl('', id.displayName.replace('project :', 'project '), '', '', '', dependencies,
                             "Unknown id type: ${id.getClass().simpleName}".toString(), '', null)
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
-                return new DependencyImpl('', dependencyResult.attempted.displayName, '', '', '', [],
+                return new DependencyImpl('', dependencyResult.attempted.displayName.replace('project :', 'project '), '', '', '', [],
                         "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), '', null)
             } else {
-                return new DependencyImpl('', dependencyResult.requested.displayName, '', '', '', [],
+                return new DependencyImpl('', dependencyResult.requested.displayName.replace('project :', 'project '), '', '', '', [],
                         "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), '', null)
             }
         }
