@@ -242,10 +242,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             "Unknown id type: ${id.getClass().simpleName}".toString(), '', null)
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
-                return new DependencyImpl('', dependencyResult.attempted.displayName, '', '', '', [],
+                return new DependencyImpl('', dependencyResult.attempted.displayName.replace('project :', 'project _'), '', '', '', [],
                         "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), '', null)
             } else {
-                return new DependencyImpl('', dependencyResult.requested.displayName, '', '', '', [],
+                return new DependencyImpl('', dependencyResult.requested.displayName.replace('project :', 'project _'), '', '', '', [],
                         "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), '', null)
             }
         }
