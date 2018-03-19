@@ -3,9 +3,9 @@ allowDynamicVersions: true
 project:
   id:
     provider: "Gradle"
-    namespace: ""
+    namespace: "com.here.ort.gradle.example"
     name: "app"
-    version: ""
+    version: "1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
@@ -26,9 +26,9 @@ project:
   - name: "compile"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -52,9 +52,9 @@ project:
   - name: "default"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -75,9 +75,9 @@ project:
   - name: "runtime"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -98,9 +98,9 @@ project:
   - name: "testCompile"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -124,9 +124,9 @@ project:
   - name: "testRuntime"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "project _lib"
-      version: ""
+    - namespace: "com.here.ort.gradle.example"
+      name: "lib"
+      version: "1.0.0"
       dependencies:
       - namespace: "org.apache.commons"
         name: "commons-text"
@@ -147,9 +147,9 @@ project:
 packages:
 - id:
     provider: "Maven"
-    namespace: ""
-    name: "project _lib"
-    version: ""
+    namespace: "com.here.ort.gradle.example"
+    name: "lib"
+    version: "1.0.0"
   declared_licenses: []
   description: ""
   homepage_url: ""
@@ -167,10 +167,10 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
 - id:
     provider: "Maven"
     namespace: "org.apache.commons"
