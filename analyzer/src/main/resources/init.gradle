@@ -32,7 +32,11 @@ import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 // See:
 // https://docs.gradle.org/current/userguide/init_scripts.html#sec:init_script_plugins
 // https://github.com/gradle/gradle/blob/176c18d/subprojects/docs/src/samples/toolingApi/customModel/plugin/src/main/java/org/gradle/sample/plugin/CustomPlugin.java
-apply plugin: DependencyTreePlugin
+if (AbstractDependencyTreePlugin.isCompatibleGradleVersion(gradle.gradleVersion)) {
+    apply plugin: DependencyTreePlugin
+} else {
+    apply plugin: LegacyDependencyTreePlugin
+}
 
 interface DependencyTreeModel {
     String getGroup()
@@ -89,16 +93,34 @@ class DependencyImpl implements Dependency, Serializable {
     String localPath
 }
 
-class DependencyTreePlugin implements Plugin<Gradle> {
+class DependencyTreePlugin extends AbstractDependencyTreePlugin<Gradle> {
+    @Inject
+    DependencyTreePlugin(ToolingModelBuilderRegistry registry) {
+        super(registry)
+    }
+}
+
+class LegacyDependencyTreePlugin extends AbstractDependencyTreePlugin<Project> {
+    @Inject
+    LegacyDependencyTreePlugin(ToolingModelBuilderRegistry registry) {
+        super(registry)
+    }
+}
+
+class AbstractDependencyTreePlugin<T> implements Plugin<T> {
+
+    static boolean isCompatibleGradleVersion(String gradleVersion) {
+        def array = gradleVersion.split('\\.')
+        return array[0].toInteger() > 2 || (array[0].toInteger() == 2 && array[1].toInteger() >= 14)
+    }
 
     private final ToolingModelBuilderRegistry registry
 
-    @Inject
-    DependencyTreePlugin(ToolingModelBuilderRegistry registry) {
+    AbstractDependencyTreePlugin(ToolingModelBuilderRegistry registry) {
         this.registry = registry
     }
 
-    void apply(Gradle gradle) {
+    void apply(T t) {
         registry.register(new DependencyTreeModelBuilder())
     }
 
@@ -113,21 +135,20 @@ class DependencyTreePlugin implements Plugin<Gradle> {
 
             List<String> errors = []
 
-            def gradleVersion = project.gradle.gradleVersion.split('\\.')
-
-            if (gradleVersion[0].toInteger() < 3
-                    || (gradleVersion[0].toInteger() == 3 && gradleVersion[1].toInteger() < 3)) {
+            if (!isCompatibleGradleVersion(project.gradle.gradleVersion)) {
                 return new DependencyTreeModelImpl(project.group ?: '', project.name, project.version ?: '', [], [],
                         [("This project uses the unsupported Gradle version ${project.gradle.gradleVersion}. " +
-                                'At least Gradle 3.3 is required.').toString()])
+                                'At least Gradle 2.14 is required.').toString()])
             }
 
             List<Configuration> configurations = project.configurations.findResults { configuration ->
-                if (configuration.canBeResolved && !configuration.name.endsWith('Classpath')) {
+                if ((!configuration.hasProperty('canBeResolved') || configuration.canBeResolved)
+                        && !configuration.name.endsWith('Classpath')) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
                     Set<ResolvedArtifact> resolvedArtifacts
                     try {
-                        resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration.artifacts
+                        resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration
+                                .getArtifacts(Specs.<org.gradle.api.artifacts.Dependency>satisfyAll())
 
                         List<Dependency> dependencies = result.getRoot().getDependencies().collect {
                             parseDependency(it, project, resolvedArtifacts, [])
@@ -197,7 +218,15 @@ class DependencyTreePlugin implements Plugin<Gradle> {
                         error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }
                     def artifact = resolvedArtifacts.find {
-                        id.group == it.owner.id.group && id.module == it.owner.id.name && id.version == it.owner.version
+                        // Cannot use instanceof because the classes below do not exist in all Gradle versions.
+                        if (it.owner.getClass().name == 'org.gradle.api.internal.artifacts.DefaultModuleVersionIdentifier') {
+                            id.group == it.owner.id.group && id.module == it.owner.id.name && id.version == it.owner.version
+                        } else if (it.owner.getClass().name == 'org.gradle.api.internal.artifacts.ivyservice.dynamicversions.DefaultResolvedModuleVersion') {
+                            id.group == it.owner.id.group && id.module == it.owner.id.name && id.version == it.owner.id.version
+                        } else {
+                            error = "Unknown artifact owner type: ${it.owner.getClass().name}".toString()
+                            false
+                        }
                     }
                     def classifier = artifact?.classifier ?: ''
                     def extension = artifact?.extension ?: ''

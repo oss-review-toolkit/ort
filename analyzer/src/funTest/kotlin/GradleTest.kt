@@ -105,7 +105,7 @@ class GradleTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
-        "Fails nicely for Gradle version < 3.3" {
+        "Fails nicely for Gradle version < 2.14" {
             val packageFile = File("src/funTest/assets/projects/synthetic/gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult("gradle-expected-output-unsupported-version.yml")
 
@@ -113,9 +113,9 @@ class GradleTest : StringSpec() {
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }.config(enabled = !isJava9OrAbove)
+        }.config(enabled = false)
 
-        "Is compatible with Gradle >= 3.3" {
+        "Is compatible with Gradle >= 2.14" {
             // See https://blog.gradle.org/java-9-support-update.
             val gradleVersionsThatSupportJava9 = arrayOf(
                     row("4.6", ""),
@@ -138,7 +138,13 @@ class GradleTest : StringSpec() {
                     row("3.5", "-3.4"),
                     row("3.4.1", "-3.4"),
                     row("3.4", "-3.4"),
-                    row("3.3", "-3.3")
+                    row("3.3", "-3.3"),
+                    row("3.2.1", "-3.3"),
+                    row("3.2", "-3.3"),
+                    row("3.1", "-3.3"),
+                    row("3.0", "-3.3"),
+                    row("2.14.1", "-3.3"),
+                    row("2.14", "-3.3")
             )
 
             val gradleVersions = if (isJava9OrAbove) {
