@@ -1,7 +1,7 @@
 # Configuration of Detekt rule sets, see: https://github.com/arturbosch/detekt#rulesets
 
 build:
-  failThreshold: 1
+  maxIssues: 0
   weights:
     comments: 0
 
