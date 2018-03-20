@@ -31,9 +31,9 @@ import java.io.IOException
  * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
  * standard error streams by redirecting output to temporary files.
  */
-class ProcessCapture(workingDir: File?, vararg command: String) {
+class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg command: String) {
     constructor(vararg command: String) : this(null, *command)
-
+    constructor(workingDir: File?, vararg command: String) : this(workingDir, mapOf(), *command)
     val commandLine = command.joinToString(" ")
 
     private val tempDir = createTempDir("ort")
@@ -46,6 +46,9 @@ class ProcessCapture(workingDir: File?, vararg command: String) {
             .directory(workingDir)
             .redirectOutput(stdoutFile)
             .redirectError(stderrFile)
+            .apply {
+                environment().putAll(environment)
+            }
 
     private val process = builder.start()
 
