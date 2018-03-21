@@ -242,7 +242,7 @@ object Main {
             allowMovingRevisions = true
             val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
 
-            val dummyId = Identifier.EMPTY.copy(name = projectName, version = "unknown")
+            val dummyId = Identifier.EMPTY.copy(name = projectName)
             val dummyPackage = Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs)
 
             listOf(dummyPackage)
@@ -293,7 +293,8 @@ object Main {
      */
     fun download(target: Package, outputDirectory: File): DownloadResult {
         // TODO: add namespace to path
-        val targetDir = File(outputDirectory, "${target.normalizedName}/${target.id.version}").apply { safeMkdirs() }
+        val version = target.id.version.takeUnless { it.isBlank() } ?: "unknown"
+        val targetDir = File(outputDirectory, "${target.normalizedName}/$version").apply { safeMkdirs() }
 
         if (target.vcsProcessed.url.isBlank()) {
             log.info { "No VCS URL provided for '${target.id}'." }
