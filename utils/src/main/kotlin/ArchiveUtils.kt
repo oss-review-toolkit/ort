@@ -122,15 +122,15 @@ fun File.packZip(targetFile: File, prefix: String = "") {
         "The target zip file '${targetFile.absolutePath}' must not exist."
     }
 
-    ZipArchiveOutputStream(targetFile).use {
-        it.setLevel(Deflater.BEST_COMPRESSION)
+    ZipArchiveOutputStream(targetFile).use { output ->
+        output.setLevel(Deflater.BEST_COMPRESSION)
         Files.walkFileTree(this.toPath(), object : SimpleFileVisitor<Path>() {
             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                 if (attrs.isRegularFile) {
                     val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
-                    it.putArchiveEntry(entry)
-                    file.toFile().inputStream().copyTo(it)
-                    it.closeArchiveEntry()
+                    output.putArchiveEntry(entry)
+                    file.toFile().inputStream().use { input -> input.copyTo(output) }
+                    output.closeArchiveEntry()
                 }
 
                 return FileVisitResult.CONTINUE
