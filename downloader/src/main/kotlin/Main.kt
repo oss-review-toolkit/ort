@@ -292,6 +292,8 @@ object Main {
      * @throws DownloadException In case the download failed.
      */
     fun download(target: Package, outputDirectory: File): DownloadResult {
+        log.info { "Trying to download source code for '${target.id}'." }
+
         // TODO: add namespace to path
         val version = target.id.version.takeUnless { it.isBlank() } ?: "unknown"
         val targetDir = File(outputDirectory, "${target.normalizedName}/$version").apply { safeMkdirs() }
