@@ -22,6 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
@@ -119,5 +120,11 @@ class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class
 class IdentifierFromStringDeserializer : StdDeserializer<Identifier>(Identifier::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Identifier {
         return Identifier.fromString(p.valueAsString)
+    }
+}
+
+class IdentifierFromStringKeyDeserializer : KeyDeserializer() {
+    override fun deserializeKey(key: String, ctxt: DeserializationContext): Identifier {
+        return Identifier.fromString(key)
     }
 }
