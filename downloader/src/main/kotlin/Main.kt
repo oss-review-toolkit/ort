@@ -43,6 +43,7 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.packZip
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.unpack
@@ -124,6 +125,11 @@ object Main {
             order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
+
+    @Parameter(description = "Archive the downloaded source code as ZIP files.",
+            names = ["--archive", "-a"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var archive = false
 
     @Parameter(description = "The data entities from the dependencies analysis file to download.",
             names = ["--entities", "-e"],
@@ -236,7 +242,7 @@ object Main {
             allowMovingRevisions = true
             val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
 
-            val dummyId = Identifier.EMPTY.copy(name = projectName)
+            val dummyId = Identifier.EMPTY.copy(name = projectName, version = "unknown")
             val dummyPackage = Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs)
 
             listOf(dummyPackage)
@@ -246,7 +252,20 @@ object Main {
 
         packages.forEach { pkg ->
             try {
-                download(pkg, outputDir)
+                val result = download(pkg, outputDir)
+
+                if (archive) {
+                    val zipFile = File(outputDir,
+                            "${result.downloadDirectory.parentFile.name}-${result.downloadDirectory.name}.zip")
+
+                    log.info {
+                        "Archiving directory '${result.downloadDirectory.absolutePath}' to '${zipFile.absolutePath}'."
+                    }
+
+                    result.downloadDirectory.packZip(zipFile,
+                            "${result.downloadDirectory.parentFile.name}/${result.downloadDirectory.name}/")
+                    result.downloadDirectory.parentFile.safeDeleteRecursively()
+                }
             } catch (e: DownloadException) {
                 if (com.here.ort.utils.printStackTrace) {
                     e.printStackTrace()
