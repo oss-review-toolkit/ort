@@ -111,7 +111,8 @@ fun File.unpackZip(targetDirectory: File) {
 
 /**
  * Pack the file into a zip file. If it is a directory its content is recursively added to the zip file. The compression
- * level used is [Deflater.BEST_COMPRESSION].
+ * level used is [Deflater.BEST_COMPRESSION]. Only regular files are added, for example symbolic links or directories
+ * are skipped.
  *
  * @param targetFile The target zip file, must not exist.
  * @param prefix A prefix to add to the file names in the zip file.
@@ -125,10 +126,12 @@ fun File.packZip(targetFile: File, prefix: String = "") {
         it.setLevel(Deflater.BEST_COMPRESSION)
         Files.walkFileTree(this.toPath(), object : SimpleFileVisitor<Path>() {
             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
-                it.putArchiveEntry(entry)
-                file.toFile().inputStream().copyTo(it)
-                it.closeArchiveEntry()
+                if (attrs.isRegularFile) {
+                    val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
+                    it.putArchiveEntry(entry)
+                    file.toFile().inputStream().copyTo(it)
+                    it.closeArchiveEntry()
+                }
 
                 return FileVisitResult.CONTINUE
             }
