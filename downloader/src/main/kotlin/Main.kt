@@ -295,8 +295,9 @@ object Main {
         log.info { "Trying to download source code for '${target.id}'." }
 
         // TODO: add namespace to path
+        val name = target.normalizedName.takeUnless { it.isBlank() } ?: "unknown"
         val version = target.id.version.takeUnless { it.isBlank() } ?: "unknown"
-        val targetDir = File(outputDirectory, "${target.normalizedName}/$version").apply { safeMkdirs() }
+        val targetDir = File(outputDirectory, "$name/$version").apply { safeMkdirs() }
 
         if (target.vcsProcessed.url.isBlank()) {
             log.info { "No VCS URL provided for '${target.id}'." }
