@@ -26,12 +26,14 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.fasterxml.jackson.databind.JsonMappingException
+
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
+import com.here.ort.model.MergedAnalyzerResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
-import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OkHttpClientHelper
@@ -188,7 +190,7 @@ object Main {
                     "The '--dependencies-file' and '--project-url' parameters must not be used together.")
         }
 
-        val analyzerResult = dependenciesFile?.let {
+        val packages = dependenciesFile?.let {
             require(it.isFile) {
                 "Provided path is not a file: ${it.absolutePath}"
             }
@@ -199,7 +201,33 @@ object Main {
                 else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
             }
 
-            mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+            // Read packages assuming the dependencies file contains an AnalyzerResult.
+            try {
+                val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+
+                mutableListOf<Package>().apply {
+                    if (entities.contains(DataEntity.PROJECT)) {
+                        add(analyzerResult.project.toPackage())
+                    }
+
+                    if (entities.contains(DataEntity.PACKAGES)) {
+                        addAll(analyzerResult.packages)
+                    }
+                }
+            } catch (e: JsonMappingException) {
+                // Read packages assuming the dependencies file contains a MergedAnalyzerResult.
+                val mergedAnalyzerResult = mapper.readValue(dependenciesFile, MergedAnalyzerResult::class.java)
+
+                mutableListOf<Package>().apply {
+                    if (entities.contains(DataEntity.PROJECT)) {
+                        addAll(mergedAnalyzerResult.projects.map { it.toPackage() })
+                    }
+
+                    if (entities.contains(DataEntity.PACKAGES)) {
+                        addAll(mergedAnalyzerResult.packages)
+                    }
+                }
+            }
         } ?: run {
             // TODO: Allow to specify the project name as a parameter.
             val projectName = projectUrl!!.substringAfterLast('/').substringBeforeLast('.')
@@ -209,19 +237,9 @@ object Main {
             val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
 
             val dummyId = Identifier.EMPTY.copy(name = projectName)
-            val dummyProject = Project.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs)
+            val dummyPackage = Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs)
 
-            AnalyzerResult(false, dummyProject, sortedSetOf())
-        }
-
-        val packages = mutableListOf<Package>()
-
-        if (entities.contains(DataEntity.PROJECT)) {
-            packages.add(analyzerResult.project.toPackage())
-        }
-
-        if (entities.contains(DataEntity.PACKAGES)) {
-            packages.addAll(analyzerResult.packages)
+            listOf(dummyPackage)
         }
 
         var error = false
