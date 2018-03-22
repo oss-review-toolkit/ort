@@ -47,9 +47,10 @@ object ScanCode : LocalScanner() {
     )
 
     // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
-    private val MEMORY_ERROR_REGEX = Pattern.compile(
+    private val UNKNOWN_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-            "ERROR: Unknown error:\n.+MemoryError\n \\(File: (?<file>.+)\\)", Pattern.DOTALL)
+            "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+            Pattern.DOTALL)
 
     private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
@@ -106,7 +107,7 @@ object ScanCode : LocalScanner() {
 
         val result = getPlainResult(resultsFile)
 
-        val hasOnlyMemoryErrors = mapMemoryErrors(result)
+        val hasOnlyMemoryErrors = mapUnknownErrors(result)
         val hasOnlyTimeoutErrors = mapTimeoutErrors(result)
 
         with(process) {
@@ -152,15 +153,15 @@ object ScanCode : LocalScanner() {
 
     override fun getResult(resultsFile: File) =
             getPlainResult(resultsFile).also {
-                mapMemoryErrors(it)
+                mapUnknownErrors(it)
                 mapTimeoutErrors(it)
             }
 
     /**
-     * Map messages about memory errors to a more compact form. Return true if solely memory errors occurred, return
+     * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return
      * false otherwise.
      */
-    internal fun mapMemoryErrors(result: Result): Boolean {
+    internal fun mapUnknownErrors(result: Result): Boolean {
         if (result.errors.isEmpty()) {
             return false
         }
@@ -170,14 +171,21 @@ object ScanCode : LocalScanner() {
         val errors = result.errors.toSortedSet()
         result.errors.clear()
 
-        errors.mapTo(result.errors) { error ->
-            MEMORY_ERROR_REGEX.matcher(error).let { matcher ->
-                if (matcher.matches()) {
+        errors.mapTo(result.errors) { fullError ->
+            UNKNOWN_ERROR_REGEX.matcher(fullError).let { matcher ->
+                if (matcher.matches()){
                     val file = matcher.group("file")
-                    "ERROR: MemoryError while scanning file '$file'."
+                    val error = matcher.group("error")
+                    if (error == "MemoryError") {
+                        "ERROR: MemoryError while scanning file '$file'."
+                    } else {
+                        onlyMemoryErrors = false
+                        val message = matcher.group("message").trim()
+                        "ERROR: $error while scanning file '$file' ($message)."
+                    }
                 } else {
                     onlyMemoryErrors = false
-                    error
+                    fullError
                 }
             }
         }
@@ -186,7 +194,7 @@ object ScanCode : LocalScanner() {
     }
 
     /**
-     * Map messages about timeout errors to a more compact form. Return true if solely memory errors occurred, return
+     * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return
      * false otherwise.
      */
     internal fun mapTimeoutErrors(result: Result): Boolean {
@@ -199,14 +207,14 @@ object ScanCode : LocalScanner() {
         val errors = result.errors.toSortedSet()
         result.errors.clear()
 
-        errors.mapTo(result.errors) { error ->
-            TIMEOUT_ERROR_REGEX.matcher(error).let { matcher ->
+        errors.mapTo(result.errors) { fullError ->
+            TIMEOUT_ERROR_REGEX.matcher(fullError).let { matcher ->
                 if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
                     val file = matcher.group("file")
                     "ERROR: Timeout after $TIMEOUT seconds while scanning file '$file'."
                 } else {
                     onlyTimeoutErrors = false
-                    error
+                    fullError
                 }
             }
         }
