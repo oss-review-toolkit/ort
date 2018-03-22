@@ -1,0 +1,47 @@
+{
+  "scancode_notice": "Generated with ScanCode and provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES\nOR CONDITIONS OF ANY KIND, either express or implied. No content created from\nScanCode should be considered or used as legal advice. Consult an Attorney\nfor any legal advice.\nScanCode is a free software code scanning tool from nexB Inc. and others.\nVisit https://github.com/nexB/scancode-toolkit/ for support and download.",
+  "scancode_version": "2.2.1.post277.4d68f9377",
+  "scancode_options": {
+    "input": "/workspace/downloads/unknown/app/build-gradle-dependencies.yml/kotlin-annotation-processing-gradle/1.2.21",
+    "--copyright": true,
+    "--info": true,
+    "--json-pp": "/workspace/results/unknown/app/build-gradle-dependencies.yml/scanResults/kotlin-annotation-processing-gradle-1.2.21_scancode.json",
+    "--license": true,
+    "--license-text": true,
+    "--processes": "15",
+    "--strip-root": true,
+    "--timeout": "300.0"
+  },
+  "files_count": 1,
+  "files": [
+    {
+      "path": "compiler/testData/cli/js-dce/withSourceMap.js.map",
+      "type": "file",
+      "name": "withSourceMap.js.map",
+      "base_name": "withSourceMap.js",
+      "extension": ".map",
+      "size": 183,
+      "date": "2018-03-21",
+      "sha1": "a58ae299019ccff0511d9de66fb16330dcadd9ea",
+      "md5": "529b3213c751c723707cec29913ddf8f",
+      "mime_type": "text/plain",
+      "file_type": "ASCII text, with no line terminators",
+      "programming_language": null,
+      "is_binary": false,
+      "is_text": true,
+      "is_archive": false,
+      "is_media": false,
+      "is_source": false,
+      "is_script": false,
+      "licenses": [],
+      "copyrights": [],
+      "files_count": 0,
+      "dirs_count": 0,
+      "size_count": 0,
+      "scan_errors": [
+        "ERROR: for scanner: licenses:\nERROR: Unknown error:\nTraceback (most recent call last):\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/scancode/interrupt.py\", line 91, in interruptible\n    return NO_ERROR, func(*(args or ()), **(kwargs or {}))\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/scancode/api.py\", line 143, in get_licenses\n    for match in idx.match(location=location, min_score=min_score):\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/licensedcode/index.py\", line 426, in match\n    qry = query.build_query(location, query_string, self)\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/licensedcode/query.py\", line 124, in build_query\n    qry = Query(location=location, idx=idx, line_threshold=80)\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/licensedcode/query.py\", line 197, in __init__\n    self.tokenize_and_build_runs(self.tokens_by_line(tokenizer=tokenizer), line_threshold=line_threshold)\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/licensedcode/query.py\", line 320, in tokenize_and_build_runs\n    for tokens in tokens_by_line:\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/licensedcode/query.py\", line 264, in tokens_by_line\n    for lnum, line  in enumerate(query_lines(self.location, self.query_string), line_start):\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/licensedcode/tokenize.py\", line 60, in query_lines\n    for line in lines:\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/textcode/analysis.py\", line 208, in js_map_sources_lines\n    for line in entry.splitlines():\nAttributeError: 'NoneType' object has no attribute 'splitlines'\n",
+        "ERROR: for scanner: copyrights:\nERROR: Unknown error:\nTraceback (most recent call last):\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/scancode/interrupt.py\", line 91, in interruptible\n    return NO_ERROR, func(*(args or ()), **(kwargs or {}))\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/scancode/api.py\", line 55, in get_copyrights\n    for copyrights, authors, _years, holders, start_line, end_line in detect_copyrights(location):\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/cluecode/copyrights.py\", line 84, in detect_copyrights\n    for numbered_lines in candidate_lines(analysis.text_lines(location, demarkup=True)):\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/cluecode/copyrights.py\", line 1631, in candidate_lines\n    for line_number, line in enumerate(lines):\n  File \"/workspace/oss-review-toolkit/scanner/src/funTest/assets/scanners/scancode-toolkit/src/textcode/analysis.py\", line 208, in js_map_sources_lines\n    for line in entry.splitlines():\nAttributeError: 'NoneType' object has no attribute 'splitlines'\n"
+      ]
+    }
+  ]
+}
