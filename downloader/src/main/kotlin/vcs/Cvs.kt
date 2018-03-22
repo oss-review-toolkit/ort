@@ -146,7 +146,7 @@ object Cvs : VersionControlSystem() {
         log.info { "Using $this version ${getVersion()}." }
 
         try {
-            val path = if (pkg.vcsProcessed.path.isBlank()) "." else pkg.vcsProcessed.path
+            val path = pkg.vcsProcessed.path.takeUnless { it.isBlank() } ?: "."
 
             // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
             run(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")

@@ -110,7 +110,7 @@ abstract class LocalScanner : Scanner() {
 
         // TODO: Consider implementing this logic in the Package class itself when creating the identifier.
         // Also, think about what to use if we have neither a version nor a hash.
-        val pkgRevision = pkg.id.version.let { if (it.isBlank()) pkg.vcsProcessed.revision.take(7) else it }
+        val pkgRevision = pkg.id.version.takeUnless { it.isBlank() } ?: pkg.vcsProcessed.revision.take(7)
 
         val resultsFile = File(scanResultsDirectory,
                 "${pkg.id.name}-${pkgRevision}_$scannerName.$resultFileExt")

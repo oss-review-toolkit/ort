@@ -326,7 +326,7 @@ class NPM : PackageManager() {
             modulesDir = modulesDir.parentFile
         }
 
-        return if (modulesDir.name == "node_modules") modulesDir else null
+        return modulesDir.takeIf { it.name == "node_modules" }
     }
 
     private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>)

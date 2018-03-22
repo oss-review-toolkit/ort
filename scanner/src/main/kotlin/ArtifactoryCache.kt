@@ -126,5 +126,5 @@ class ArtifactoryCache(
                     "${pkg.id.version.valueOrUnderscore()}/" +
                     resultsFile.name
 
-    private fun String?.valueOrUnderscore() = if (this == null || this.isEmpty()) "_" else this
+    private fun String?.valueOrUnderscore() = this?.takeUnless { it.isEmpty() } ?: "_"
 }

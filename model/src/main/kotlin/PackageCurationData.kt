@@ -75,10 +75,10 @@ data class PackageCurationData(
     fun apply(pkg: Package): Package {
         val curatedVcs = if (vcs != null) {
             VcsInfo(
-                    type = if (vcs.type.isNotBlank()) vcs.type else pkg.vcs.type,
-                    url = if (vcs.url.isNotBlank()) vcs.url else pkg.vcs.url,
-                    revision = if (vcs.revision.isNotBlank()) vcs.revision else pkg.vcs.revision,
-                    path = if (vcs.path.isNotBlank()) vcs.path else pkg.vcs.path
+                    type = vcs.type.takeUnless { it.isBlank() } ?: pkg.vcs.type,
+                    url = vcs.url.takeUnless { it.isBlank() } ?: pkg.vcs.url,
+                    revision = vcs.revision.takeUnless { it.isBlank() } ?: pkg.vcs.revision,
+                    path = vcs.path.takeUnless { it.isBlank() } ?: pkg.vcs.path
             )
         } else {
             pkg.vcs
