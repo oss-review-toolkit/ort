@@ -22,8 +22,6 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import com.here.ort.utils.fileSystemEncode
-
 import java.util.SortedSet
 
 /**
@@ -87,11 +85,6 @@ data class Package(
      * A comparison function to sort packages by their identifier.
      */
     override fun compareTo(other: Package) = compareValuesBy(this, other, { it.id.toString() })
-
-    /**
-     * The normalized package name, can be used to create directories.
-     */
-    val normalizedName = id.name.fileSystemEncode()
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
