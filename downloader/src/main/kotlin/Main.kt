@@ -257,15 +257,18 @@ object Main {
 
                 if (archive) {
                     val zipFile = File(outputDir,
-                            "${result.downloadDirectory.parentFile.name}-${result.downloadDirectory.name}.zip")
+                            "${pkg.id.provider.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
+                                    "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip")
 
                     log.info {
                         "Archiving directory '${result.downloadDirectory.absolutePath}' to '${zipFile.absolutePath}'."
                     }
 
                     result.downloadDirectory.packZip(zipFile,
-                            "${result.downloadDirectory.parentFile.name}/${result.downloadDirectory.name}/")
-                    result.downloadDirectory.parentFile.safeDeleteRecursively()
+                            "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
+
+                    val relativePath = outputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
+                    File(outputDir, relativePath.toString()).safeDeleteRecursively()
                 }
             } catch (e: DownloadException) {
                 if (com.here.ort.utils.printStackTrace) {
