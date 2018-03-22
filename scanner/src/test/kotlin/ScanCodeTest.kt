@@ -71,14 +71,25 @@ class ScanCodeTest : WordSpec({
         }
     }
 
-    "mapMemoryErrors()" should {
+    "mapUnknownErrors()" should {
         "return true for scan results with only memory errors" {
             val resultFileName = "/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
             val result = ScanCode.getPlainResult(resultFile)
-            ScanCode.mapMemoryErrors(result) shouldBe true
+            ScanCode.mapUnknownErrors(result) shouldBe true
             result.errors.joinToString("\n") shouldBe sortedSetOf(
                     "ERROR: MemoryError while scanning file 'data.json'."
+            ).joinToString("\n")
+        }
+
+        "return false for scan results with other unknown errors" {
+            val resultFileName = "/kotlin-annotation-processing-gradle-1.2.21_scancode.json"
+            val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
+            val result = ScanCode.getPlainResult(resultFile)
+            ScanCode.mapUnknownErrors(result) shouldBe false
+            result.errors.joinToString("\n") shouldBe sortedSetOf(
+                    "ERROR: AttributeError while scanning file 'compiler/testData/cli/js-dce/withSourceMap.js.map' " +
+                            "('NoneType' object has no attribute 'splitlines')."
             ).joinToString("\n")
         }
 
@@ -86,7 +97,7 @@ class ScanCodeTest : WordSpec({
             val resultFileName = "/esprima-2.7.3_scancode-2.2.1.json"
             val resultFile = File(Resources.javaClass.getResource(resultFileName).toURI())
             val result = ScanCode.getResult(resultFile)
-            ScanCode.mapMemoryErrors(result) shouldBe false
+            ScanCode.mapUnknownErrors(result) shouldBe false
         }
     }
 })
