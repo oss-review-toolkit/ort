@@ -379,7 +379,13 @@ fun JsonNode?.asTextOrEmpty(): String = if (this != null) this.asText() else ""
  */
 fun String.fileSystemEncode() =
         // URLEncoder does not encode "." and "*", so do that manually.
-        java.net.URLEncoder.encode(this, "UTF-8").replace("*", "%2A").replace(".", "%2E")
+        java.net.URLEncoder.encode(this, "UTF-8").replace("*", "%2A").let {
+            when {
+                it.matches(Regex("\\..+")) -> it.replace(".", "%2E")
+                it.startsWith(".") -> it.replaceFirst(".", "%2E")
+                else -> it
+            }
+        }
 
 /**
  * Return the decoded string for a safe file name.
