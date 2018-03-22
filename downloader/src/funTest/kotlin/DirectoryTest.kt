@@ -71,7 +71,19 @@ class DirectoryTest : StringSpec() {
             }
 
             outputDir.list().size shouldBe 1
-            outputDir.list().first() shouldBe pkg.id.name.fileSystemEncode()
+            outputDir.list().first() shouldBe pkg.id.provider.fileSystemEncode()
+
+            val namespaceDir = File(outputDir, outputDir.list().first())
+            namespaceDir.list().size shouldBe 1
+            namespaceDir.list().first() shouldBe "unknown"
+
+            val nameDir = File(namespaceDir, namespaceDir.list().first())
+            nameDir.list().size shouldBe 1
+            nameDir.list().first() shouldBe pkg.id.name.fileSystemEncode()
+
+            val versionDir = File(nameDir, nameDir.list().first())
+            versionDir.list().size shouldBe 1
+            versionDir.list().first() shouldBe "unknown"
         }
     }
 }
