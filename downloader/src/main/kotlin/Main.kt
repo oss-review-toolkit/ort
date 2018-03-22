@@ -295,10 +295,10 @@ object Main {
     fun download(target: Package, outputDirectory: File): DownloadResult {
         log.info { "Trying to download source code for '${target.id}'." }
 
-        val provider = target.id.provider.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
-        val namespace = target.id.namespace.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
-        val name = target.id.name.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
-        val version = target.id.version.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+        val provider = target.id.provider.encodeOrUnknown()
+        val namespace = target.id.namespace.encodeOrUnknown()
+        val name = target.id.name.encodeOrUnknown()
+        val version = target.id.version.encodeOrUnknown()
 
         val targetDir = File(outputDirectory, "$provider/$namespace/$name/$version").apply { safeMkdirs() }
 
@@ -437,4 +437,6 @@ object Main {
             throw DownloadException("Calculated $hashAlgorithm hash '$digest' differs from expected hash '$hash'.")
         }
     }
+
+    private fun String.encodeOrUnknown() = this.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
 }
