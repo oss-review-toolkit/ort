@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCaseContext
@@ -70,7 +71,7 @@ class DirectoryTest : StringSpec() {
             }
 
             outputDir.list().size shouldBe 1
-            outputDir.list().first() shouldBe pkg.normalizedName
+            outputDir.list().first() shouldBe pkg.id.name.fileSystemEncode()
         }
     }
 }

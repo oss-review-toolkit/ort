@@ -41,6 +41,7 @@ import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
@@ -295,7 +296,7 @@ object Main {
         log.info { "Trying to download source code for '${target.id}'." }
 
         // TODO: add namespace to path
-        val name = target.normalizedName.takeUnless { it.isBlank() } ?: "unknown"
+        val name = target.id.name.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
         val version = target.id.version.takeUnless { it.isBlank() } ?: "unknown"
         val targetDir = File(outputDirectory, "$name/$version").apply { safeMkdirs() }
 
