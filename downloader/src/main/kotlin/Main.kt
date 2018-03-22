@@ -295,10 +295,12 @@ object Main {
     fun download(target: Package, outputDirectory: File): DownloadResult {
         log.info { "Trying to download source code for '${target.id}'." }
 
-        // TODO: add namespace to path
+        val provider = target.id.provider.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+        val namespace = target.id.namespace.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
         val name = target.id.name.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
         val version = target.id.version.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
-        val targetDir = File(outputDirectory, "$name/$version").apply { safeMkdirs() }
+
+        val targetDir = File(outputDirectory, "$provider/$namespace/$name/$version").apply { safeMkdirs() }
 
         if (target.vcsProcessed.url.isBlank()) {
             log.info { "No VCS URL provided for '${target.id}'." }
