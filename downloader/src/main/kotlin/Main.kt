@@ -297,7 +297,7 @@ object Main {
 
         // TODO: add namespace to path
         val name = target.id.name.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
-        val version = target.id.version.takeUnless { it.isBlank() } ?: "unknown"
+        val version = target.id.version.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
         val targetDir = File(outputDirectory, "$name/$version").apply { safeMkdirs() }
 
         if (target.vcsProcessed.url.isBlank()) {
