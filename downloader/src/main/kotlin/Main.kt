@@ -45,6 +45,7 @@ import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
+import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.unpack
@@ -264,11 +265,19 @@ object Main {
                         "Archiving directory '${result.downloadDirectory.absolutePath}' to '${zipFile.absolutePath}'."
                     }
 
-                    result.downloadDirectory.packZip(zipFile,
-                            "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
+                    try {
+                        result.downloadDirectory.packZip(zipFile,
+                                "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
+                    } catch (e: IllegalArgumentException) {
+                        if (com.here.ort.utils.printStackTrace) {
+                            e.printStackTrace()
+                        }
 
-                    val relativePath = outputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
-                    File(outputDir, relativePath.toString()).safeDeleteRecursively()
+                        log.error { "Could not archive '${pkg.id}': ${e.message}" }
+                    } finally {
+                        val relativePath = outputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
+                        File(outputDir, relativePath.toString()).safeDeleteRecursively()
+                    }
                 }
             } catch (e: DownloadException) {
                 if (com.here.ort.utils.printStackTrace) {
