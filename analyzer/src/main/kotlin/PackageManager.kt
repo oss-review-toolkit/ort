@@ -33,6 +33,7 @@ import com.here.ort.utils.normalizeVcsUrl
 import java.io.File
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
+import java.nio.file.FileSystems
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
@@ -65,11 +66,16 @@ abstract class PackageManager {
             )
         }
 
-        private val IGNORED_DIRECTORIES = listOf(
+        private val IGNORED_DIRECTORY_MATCHERS = listOf(
                 // Ignore resources in a standard Maven / Gradle project layout.
                 "src/main/resources",
-                "src/test/resources"
-        )
+                "src/test/resources",
+                // Ignore virtual environments in Python.
+                "lib/python2.*/dist-packages",
+                "lib/python3.*/site-packages"
+        ).map {
+            FileSystems.getDefault().getPathMatcher("glob:**/$it")
+        }
 
         /**
          * Recursively search for files managed by a package manager.
@@ -87,13 +93,12 @@ abstract class PackageManager {
 
             Files.walkFileTree(directory.toPath(), object : SimpleFileVisitor<Path>() {
                 override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
-                    val dirAsFile = dir.toFile()
-
-                    if (IGNORED_DIRECTORIES.any { dirAsFile.endsWith(it) }) {
-                        println("Skipping direrctory '$dirAsFile' as it is part of the ignore list.")
+                    if (IGNORED_DIRECTORY_MATCHERS.any { it.matches(dir) }) {
+                        println("Skipping directory '$dir' as it is part of the ignore list.")
                         return FileVisitResult.SKIP_SUBTREE
                     }
 
+                    val dirAsFile = dir.toFile()
                     val filesInDir = dirAsFile.listFiles()
 
                     packageManagers.forEach { manager ->
