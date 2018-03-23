@@ -386,11 +386,11 @@ packages:
   description: "XStream extension for Hibernate 3/4 to untie Java objects from Hibernate."
   homepage_url: "http://x-stream.github.io/xstream-hibernate"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9.jar"
+    url: "http://jcenter.bintray.com/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9.jar"
     hash: "340bab230ead26225457a8968e342f3034dcb6c2"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9-sources.jar"
+    url: "http://jcenter.bintray.com/com/thoughtworks/xstream/xstream-hibernate/1.4.9/xstream-hibernate-1.4.9-sources.jar"
     hash: "f81ce4545c480c4e7a7d73fd6faf7578479b130a"
     hash_algorithm: "SHA-1"
   vcs:
@@ -413,11 +413,11 @@ packages:
   description: "XStream is a serialization library from Java objects to XML and back."
   homepage_url: "http://x-stream.github.io/xstream"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.4.9/xstream-1.4.9.jar"
+    url: "http://jcenter.bintray.com/com/thoughtworks/xstream/xstream/1.4.9/xstream-1.4.9.jar"
     hash: "c43f6e6bfa79b56e04a8898a923c3cf7144dd460"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.4.9/xstream-1.4.9-sources.jar"
+    url: "http://jcenter.bintray.com/com/thoughtworks/xstream/xstream/1.4.9/xstream-1.4.9-sources.jar"
     hash: "a9eb7942e1c58d99d53226b13cc21b4b88cb5cab"
     hash_algorithm: "SHA-1"
   vcs:
@@ -527,11 +527,11 @@ packages:
     \ and\n    clients."
   homepage_url: "http://netty.io/netty-codec/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.9.Final/netty-codec-4.1.9.Final.jar"
+    url: "http://jcenter.bintray.com/io/netty/netty-codec/4.1.9.Final/netty-codec-4.1.9.Final.jar"
     hash: "f41b5fdaaaf7b1e8de4e05be5f5b540f3b205959"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.9.Final/netty-codec-4.1.9.Final-sources.jar"
+    url: "http://jcenter.bintray.com/io/netty/netty-codec/4.1.9.Final/netty-codec-4.1.9.Final-sources.jar"
     hash: "086dc41eab00c51f56d384b3ea4772f3d7704e4a"
     hash_algorithm: "SHA-1"
   vcs:
@@ -1057,11 +1057,11 @@ packages:
     \    simple.  It is a class library for editing bytecodes in Java."
   homepage_url: "http://www.javassist.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA.jar"
+    url: "http://jcenter.bintray.com/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA.jar"
     hash: "a9cbcdfb7e9f86fbc74d3afae65f2248bfbf82a0"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA-sources.jar"
+    url: "http://jcenter.bintray.com/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA-sources.jar"
     hash: "d8fdc08a455bc0b28bc0bed1f0d032d935cee8e1"
     hash_algorithm: "SHA-1"
   vcs:
@@ -1112,11 +1112,11 @@ packages:
   description: "The Java Transaction 1.2 API classes"
   homepage_url: "http://www.jboss.org/jboss-transaction-api_1.2_spec"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.0.1.Final/jboss-transaction-api_1.2_spec-1.0.1.Final.jar"
+    url: "http://jcenter.bintray.com/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.0.1.Final/jboss-transaction-api_1.2_spec-1.0.1.Final.jar"
     hash: "4441f144a2a1f46ed48fcc6b476a4b6295e6d524"
     hash_algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.0.1.Final/jboss-transaction-api_1.2_spec-1.0.1.Final-sources.jar"
+    url: "http://jcenter.bintray.com/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.0.1.Final/jboss-transaction-api_1.2_spec-1.0.1.Final-sources.jar"
     hash: "2d0cb1e79e030277b094ef55fcfb97fd0443ee43"
     hash_algorithm: "SHA-1"
   vcs:

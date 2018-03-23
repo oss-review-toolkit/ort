@@ -37,6 +37,7 @@ import com.here.ort.utils.yamlMapper
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
+import org.apache.maven.execution.MavenExecutionRequest
 import org.apache.maven.execution.MavenExecutionRequestPopulator
 import org.apache.maven.model.building.ModelBuildingRequest
 import org.apache.maven.project.MavenProject
@@ -104,14 +105,34 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         }
     }
 
+    // The MavenSettingsBuilder class is deprecated but internally it uses its successor SettingsBuilder. Calling
+    // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
+    @Suppress("DEPRECATION")
+    private fun createMavenExecutionRequest() : MavenExecutionRequest {
+        val request = DefaultMavenExecutionRequest()
+
+        val populator = container.lookup(MavenExecutionRequestPopulator::class.java, "default")
+
+        val settingsBuilder = container.lookup(org.apache.maven.settings.MavenSettingsBuilder::class.java, "default")
+        // TODO: Add a way to configure the location of a user settings file and pass it to the method below which will
+        // merge the user settings with the global settings. The default location of the global settings file is
+        // "${user.home}/.m2/settings.xml". The settings file locations can already be overwritten using the system
+        // properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
+        val settings = settingsBuilder.buildSettings()
+
+        populator.populateFromSettings(request, settings)
+        populator.populateDefaults(request)
+
+        return request
+    }
+
     private fun createRepositorySystemSession(
             localRepositoryManagerConverter: (LocalRepositoryManager) -> LocalRepositoryManager = { it })
             : RepositorySystemSession {
         val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
         val aetherRepositorySystem = container.lookup(RepositorySystem::class.java, "default")
         val repositorySystemSession = MavenRepositorySystemUtils.newSession()
-        val mavenExecutionRequest = DefaultMavenExecutionRequest()
-        val localRepository = mavenRepositorySystem.createLocalRepository(mavenExecutionRequest,
+        val localRepository = mavenRepositorySystem.createLocalRepository(createMavenExecutionRequest(),
                 org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository)
 
         val session = LegacyLocalRepositoryManager.overlay(localRepository, repositorySystemSession,
@@ -133,25 +154,8 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         return projectBuilder.build(pomFile, projectBuildingRequest)
     }
 
-    // The MavenSettingsBuilder class is deprecated but internally it uses its successor SettingsBuilder. Calling
-    // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
-    @Suppress("DEPRECATION")
     fun createProjectBuildingRequest(resolveDependencies: Boolean): ProjectBuildingRequest {
-        val request = DefaultMavenExecutionRequest()
-
-        val populator = container.lookup(MavenExecutionRequestPopulator::class.java, "default")
-
-        val settingsBuilder = container.lookup(org.apache.maven.settings.MavenSettingsBuilder::class.java, "default")
-        // TODO: Add a way to configure the location of a user settings file and pass it to the method below which will
-        // merge the user settings with the global settings. The default location of the global settings file is
-        // "${user.home}/.m2/settings.xml". The settings file locations can already be overwritten using the system
-        // properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
-        val settings = settingsBuilder.buildSettings()
-
-        populator.populateFromSettings(request, settings)
-        populator.populateDefaults(request)
-
-        val projectBuildingRequest = request.projectBuildingRequest
+        val projectBuildingRequest = createMavenExecutionRequest().projectBuildingRequest
 
         return projectBuildingRequest.apply {
             isResolveDependencies = resolveDependencies
