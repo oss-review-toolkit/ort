@@ -39,12 +39,12 @@ import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
 import org.apache.maven.execution.MavenExecutionRequest
 import org.apache.maven.execution.MavenExecutionRequestPopulator
+import org.apache.maven.internal.aether.DefaultRepositorySystemSessionFactory
 import org.apache.maven.model.building.ModelBuildingRequest
 import org.apache.maven.project.MavenProject
 import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
-import org.apache.maven.repository.internal.MavenRepositorySystemUtils
 
 import org.codehaus.plexus.DefaultContainerConfiguration
 import org.codehaus.plexus.DefaultPlexusContainer
@@ -111,6 +111,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
     private fun createMavenExecutionRequest() : MavenExecutionRequest {
         val request = DefaultMavenExecutionRequest()
 
+        request.systemProperties["java.home"] = System.getProperty("java.home")
+        request.systemProperties["java.version"] = System.getProperty("java.version")
+
         val populator = container.lookup(MavenExecutionRequestPopulator::class.java, "default")
 
         val settingsBuilder = container.lookup(org.apache.maven.settings.MavenSettingsBuilder::class.java, "default")
@@ -131,7 +134,12 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             : RepositorySystemSession {
         val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
         val aetherRepositorySystem = container.lookup(RepositorySystem::class.java, "default")
-        val repositorySystemSession = MavenRepositorySystemUtils.newSession()
+        val repositorySystemSessionFactory = container.lookup(DefaultRepositorySystemSessionFactory::class.java,
+                "default")
+
+        val repositorySystemSession = repositorySystemSessionFactory
+                .newRepositorySession(createMavenExecutionRequest())
+
         val localRepository = mavenRepositorySystem.createLocalRepository(createMavenExecutionRequest(),
                 org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository)
 
@@ -160,8 +168,6 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         return projectBuildingRequest.apply {
             isResolveDependencies = resolveDependencies
             repositorySession = repositorySystemSession
-            systemProperties["java.home"] = System.getProperty("java.home")
-            systemProperties["java.version"] = System.getProperty("java.version")
             validationLevel = ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL
         }
     }
