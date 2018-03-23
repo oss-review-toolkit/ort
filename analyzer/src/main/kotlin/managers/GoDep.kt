@@ -19,12 +19,15 @@
 
 package com.here.ort.analyzer.managers
 
+import ch.frankel.slf4k.debug
+import ch.frankel.slf4k.warn
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.*
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 
 import com.moandjiezana.toml.Toml
@@ -45,30 +48,22 @@ class GoDep : PackageManager() {
     override fun command(workingDir: File) = "dep"
 
     override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
-        val workingDir = definitionFile.parentFile
+        val gopath = createTempDir(definitionFile.parentFile.name.padEnd(3, '_'), "_gopath")
+        val workingDir = setUpWorkspace(definitionFile, gopath)
+        val projects = parseProjects(workingDir, gopath)
 
-        // FIXME
-        // Handle missing lock file either with an error or by running "dep ensure"
-        // (when allowDynamicVersions is set).
-        val lockFile = File(workingDir, "Gopkg.lock")
-
-        val projects = Toml().read(lockFile).toMap()["projects"] as? List<*> ?: return null
         val packages: MutableList<Package> = mutableListOf()
         val packageRefs: MutableList<PackageReference> = mutableListOf()
-        val gopath = createTempDir(workingDir.name.padEnd(3, '_'), "gopath")
         val provider = GoDep.toString()
 
         for (project in projects) {
-            if (project !is Map<*, *>)
-                continue  // TODO log warning?
-
-            val name = project["name"] as? String ?: ""
-            val revision = project["revision"] as? String ?: ""
-            val version = project["version"] as? String ?: revision
+            // parseProjects() made sure that all entries contain these keys
+            val name = project["name"]!!
+            val revision = project["revision"]!!
+            val version = project["version"]!!
             val vcs = VcsInfo(provider, name, revision, "")
-
             var vcsProcessed = VcsInfo.EMPTY
-            var errors: MutableList<String> = mutableListOf()
+            val errors: MutableList<String> = mutableListOf()
 
             try {
                 vcsProcessed = resolveVcsInfo(vcs, gopath)
@@ -93,7 +88,7 @@ class GoDep : PackageManager() {
 
         val scope = Scope("default", true, packageRefs.toSortedSet())
 
-        val vcsProcessed = VersionControlSystem.forDirectory(workingDir)
+        val vcsProcessed = VersionControlSystem.forDirectory(definitionFile.parentFile)
                 ?.getInfo()?.normalize() ?: VcsInfo.EMPTY
 
         // TODO Keeping this between scans would speed things up considerably.
@@ -114,8 +109,53 @@ class GoDep : PackageManager() {
         )
     }
 
-    private fun resolveVcsInfo(vcs: VcsInfo, gopath: File): VcsInfo {
+    private fun setUpWorkspace(definitionFile: File, gopath: File): File {
+        val projectDir = definitionFile.parentFile
+        val destination = File(gopath, "src" + File.separator + projectDir.name)
+        projectDir.copyRecursively(destination)
+        return destination
+    }
 
+    private fun parseProjects(workingDir: File, gopath: File): List<Map<String, String>> {
+        val lockFile = File(workingDir, "Gopkg.lock")
+        if (!lockFile.isFile) {
+            if (!Main.allowDynamicVersions) {
+                throw IllegalArgumentException(
+                        "No lockfile found in $workingDir, dependency versions are unstable.")
+            }
+
+            log.debug { "Running \"dep ensure\" to generate missing lockfile in $workingDir" }
+
+            val env = mapOf("GOPATH" to gopath.absolutePath)
+            ProcessCapture(workingDir, env, "dep", "ensure").requireSuccess()
+        }
+
+        val entries = Toml().read(lockFile).toMap()["projects"]
+        if (entries == null) {
+            log.warn { "${lockFile.name} is missing any [[projects]] entries" }
+            return listOf()
+        }
+
+        val projects: MutableList<Map<String, String>> = mutableListOf()
+
+        for (entry in entries as List<*>) {
+            val project = entry as? Map<*, *> ?: continue
+            val name = project["name"]
+            val revision = project["revision"]
+
+            if (name !is String || revision !is String) {
+                log.warn { "Invalid [[projects]] entry in $lockFile: $entry" }
+                continue
+            }
+
+            val version = project["version"] as? String ?: revision
+            projects.add(mapOf("name" to name, "revision" to revision, "version" to version))
+        }
+
+        return projects
+    }
+
+    private fun resolveVcsInfo(vcs: VcsInfo, gopath: File): VcsInfo {
         val name = if (vcs.url.endsWith("/...")) {
             vcs.url
         } else {
@@ -123,7 +163,7 @@ class GoDep : PackageManager() {
         }
 
         val env = mapOf("GOPATH" to gopath.absolutePath)
-        ProcessCapture(gopath, env, "go", "get", "-d", name).requireSuccess()
+        ProcessCapture(null, env, "go", "get", "-d", name).requireSuccess()
 
         val pkgPath = "src" + File.separator + vcs.url.replace('/', File.separatorChar)
         val repoRoot = File(gopath, pkgPath)
