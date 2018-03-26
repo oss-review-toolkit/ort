@@ -64,6 +64,8 @@ class MainTest : StringSpec() {
                     .replace("<REPLACE_URL>", vcsUrl)
                     .replace("<REPLACE_REVISION>", vcsRevision)
                     .replace("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(vcsUrl))
+                    .replace("<REPLACE_REPOSITORY_PATH>", System.getProperty("user.dir"))
+                    .replace("<REPLACE_PROJECT_PATH>", "${outputDir.absolutePath}/analyzer_results")
 
     init {
         "Activating only Gradle works" {
@@ -119,6 +121,8 @@ class MainTest : StringSpec() {
         "Merging into single results file creates correct output" {
             val outputAnalyzerDir = File(outputDir, "analyzer_results")
 
+            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"))
+
             Main.main(arrayOf(
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
@@ -126,24 +130,9 @@ class MainTest : StringSpec() {
                     "--merge-results"
             ))
 
-            val resultsFile = File(outputAnalyzerDir, "all-dependencies.yml")
-            val resultTree = yamlMapper.readTree(resultsFile.readText())
+            val result = File(outputAnalyzerDir, "all-dependencies.yml").readText()
 
-            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"))
-            val expectedResultTree = yamlMapper.readTree(expectedResult)
-
-            // Compare some of the values instead of whole string to avoid problems with formatting paths.
-            resultTree["repository"]["name"].asText() shouldBe
-                    expectedResultTree["repository"]["name"].asText()
-
-            yamlMapper.writeValueAsString(resultTree["projects"]) shouldBe
-                    yamlMapper.writeValueAsString(expectedResultTree["projects"])
-
-            resultTree["project_id_result_file_path_map"].asIterable().count() shouldBe
-                    expectedResultTree["project_id_result_file_path_map"].asIterable().count()
-
-            yamlMapper.writeValueAsString(resultTree["packages"]) shouldBe
-                    yamlMapper.writeValueAsString(expectedResultTree["packages"])
+            result shouldBe expectedResult
         }.config(tags = setOf(ExpensiveTag))
 
         "Package curation data file is applied correctly" {

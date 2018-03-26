@@ -2,17 +2,17 @@
 allow_dynamic_versions: false
 repository:
   name: "gradle"
-  path: ""
+  path: "<REPLACE_REPOSITORY_PATH>/src/funTest/assets/projects/synthetic/gradle"
   vcs:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
 projects:
 - id:
     provider: "Gradle"
@@ -425,10 +425,10 @@ projects:
       dependencies: []
       errors: []
 project_id_result_file_path_map:
-  'Gradle::Gradle sample:': "build-gradle-dependencies.yml"
-  'Gradle::app:': "app/build-gradle-dependencies.yml"
-  'Gradle::lib:': "lib/build-gradle-dependencies.yml"
-  'Gradle::lib-without-repo:': "lib-without-repo/build-gradle-dependencies.yml"
+  'Gradle::Gradle-Example:': "<REPLACE_PROJECT_PATH>/build-gradle-dependencies.yml"
+  Gradle:com.here.ort.gradle.example:app:1.0.0: "<REPLACE_PROJECT_PATH>/app/build-gradle-dependencies.yml"
+  Gradle:com.here.ort.gradle.example:lib:1.0.0: "<REPLACE_PROJECT_PATH>/lib/build-gradle-dependencies.yml"
+  Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0: "<REPLACE_PROJECT_PATH>/lib-without-repo/build-gradle-dependencies.yml"
 packages:
 - id:
     provider: "Maven"
@@ -597,3 +597,4 @@ packages:
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""
+errors: []
