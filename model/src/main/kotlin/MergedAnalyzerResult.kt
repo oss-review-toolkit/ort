@@ -63,7 +63,7 @@ data class MergedAnalyzerResult(
         /**
          * The list of all errors.
          */
-        val errors: List<String>
+        val errors: SortedMap<Identifier, List<String>>
 )
 
 class MergedResultsBuilder(
@@ -73,7 +73,7 @@ class MergedResultsBuilder(
     private val projects = sortedSetOf<Project>()
     private val projectResultsFiles = sortedMapOf<Identifier, String>()
     private val packages = sortedSetOf<Package>()
-    private val errors = mutableListOf<String>()
+    private val errors = sortedMapOf<Identifier, List<String>>()
 
     fun build(): MergedAnalyzerResult =
             MergedAnalyzerResult(allowDynamicVersions, directoryDetails, projects, projectResultsFiles, packages,
@@ -83,7 +83,7 @@ class MergedResultsBuilder(
         projectResultsFiles[analyzerResult.project.id] = analyzerResultPath
         projects.add(analyzerResult.project)
         packages.addAll(analyzerResult.packages)
-        errors.addAll(analyzerResult.errors)
+        errors[analyzerResult.project.id] = analyzerResult.errors
     }
 }
 
