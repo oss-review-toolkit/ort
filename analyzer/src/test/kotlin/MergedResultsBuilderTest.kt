@@ -59,7 +59,9 @@ class MergedResultsBuilderTest : StringSpec() {
 
             val mergedResults = builder.build()
 
-            mergedResults.errors.size shouldBe 1
+            mergedResults.errors.size shouldBe 2
+            mergedResults.errors[subProject1.id]?.size shouldBe 0
+            mergedResults.errors[subProject2.id]?.size shouldBe 1
             mergedResults.projectResultsFiles.size shouldBe 2
             mergedResults.packages.size shouldBe 2
             mergedResults.projects.size shouldBe 2
