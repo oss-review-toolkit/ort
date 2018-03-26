@@ -221,12 +221,21 @@ abstract class VersionControlSystem {
         abstract fun listRemoteTags(): List<String>
 
         /**
-         * Search (symbolic) names of VCS revisions for matches with the given [project] and [version].
+         * Search (symbolic) names of VCS revisions for a match with the given [project] and [version].
          *
-         * @return A matching VCS revision or an empty String if no match is found.
+         * @return The matching VCS revision, never blank.
+         * @throws IOException If no or multiple matching revisions are found.
          */
-        fun guessRevisionName(project: String, version: String) =
-                filterVersionNames(version, listRemoteTags(), project).firstOrNull() ?: ""
+        fun guessRevisionName(project: String, version: String): String {
+            val versionNames = filterVersionNames(version, listRemoteTags(), project)
+            return when {
+                versionNames.isEmpty() ->
+                    throw IOException("No matching tag found for version '$version'.")
+                versionNames.size > 1 ->
+                    throw IOException("Multiple matching tags found for version '$version': $versionNames")
+                else -> versionNames.first()
+            }
+        }
 
         /**
          * Return the relative path to [path] with respect to the VCS root.

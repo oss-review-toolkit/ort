@@ -198,10 +198,10 @@ object Subversion : VersionControlSystem() {
                 } else {
                     log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
 
-                    revision = getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
-
-                    if (revision.isBlank()) {
-                        throw IOException("Unable to determine a revision to checkout.")
+                    revision = try {
+                        getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
+                    } catch (e: IOException) {
+                        throw IOException("Unable to determine a revision to checkout.", e)
                     }
 
                     log.warn {
