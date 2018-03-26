@@ -7,7 +7,8 @@ to grant us proper rights for your contribution.
 In order to maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 
 - We pay more attention to the quality of commit messages than most other projects on GitHub. In general, we share the
-  view on how commit message should be written with [the Git project itself](https://github.com/git/git/blob/master/Documentation/SubmittingPatches):
+  view on how commit message should be written with
+  [the Git project itself](https://github.com/git/git/blob/master/Documentation/SubmittingPatches):
 
   - [Make separate commits for logically separate changes.](https://github.com/git/git/blob/e6932248fcb41fb94a0be484050881e03c7eb298/Documentation/SubmittingPatches#L43)
     For example, pure formatting changes that do not change any behavior do usually not belong into the same commit as
