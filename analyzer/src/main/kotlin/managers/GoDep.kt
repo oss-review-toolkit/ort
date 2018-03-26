@@ -46,19 +46,28 @@ class GoDep : PackageManager() {
     companion object : PackageManagerFactory<GoDep>(
             "https://golang.github.io/dep/",
             "Go",
-            // TODO add filenames of manifests for supported legacy tools and import them with "dep init"
-            listOf("Gopkg.toml")
+            // FIXME DRY names of legacy manifest files
+            listOf("Gopkg.toml", "glide.yaml")
     ) {
+        // TODO Add remaining supported legacy manifest files.
+        private val LEGACY_MANIFESTS = mapOf("glide.yaml" to "glide.lock")
         override fun create() = GoDep()
     }
 
     override fun command(workingDir: File) = "dep"
 
     override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
-        val gopath = createTempDir(definitionFile.parentFile.name.padEnd(3, '_'), "_gopath")
-        val workingDir = setUpWorkspace(definitionFile, gopath)
-        val projects = parseProjects(workingDir, gopath)
+        // Normalize the path to avoid using "." as the name of the project when the analyzer is run with "-i .".
+        val projectDir = definitionFile.parentFile.toPath().normalize().toFile()
 
+        val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
+        val workingDir = setUpWorkspace(projectDir, gopath)
+
+        if (definitionFile.name in LEGACY_MANIFESTS.keys) {
+            importLegacyManifest(definitionFile, projectDir, workingDir, gopath)
+        }
+
+        val projects = parseProjects(workingDir, gopath)
         val packages: MutableList<Package> = mutableListOf()
         val packageRefs: MutableList<PackageReference> = mutableListOf()
         val provider = GoDep.toString()
@@ -68,6 +77,7 @@ class GoDep : PackageManager() {
             val name = project["name"]!!
             val revision = project["revision"]!!
             val version = project["version"]!!
+
             val vcs = VcsInfo(provider, name, revision, "")
             var vcsProcessed = VcsInfo.EMPTY
             val errors: MutableList<String> = mutableListOf()
@@ -99,9 +109,7 @@ class GoDep : PackageManager() {
         }
 
         val scope = Scope("default", true, packageRefs.toSortedSet())
-
-        val vcsProcessed = VersionControlSystem.forDirectory(definitionFile.parentFile)
-                ?.getInfo()?.normalize() ?: VcsInfo.EMPTY
+        val vcsProcessed = VersionControlSystem.forDirectory(projectDir)?.getInfo()?.normalize() ?: VcsInfo.EMPTY
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively()
@@ -109,7 +117,7 @@ class GoDep : PackageManager() {
         return AnalyzerResult(
                 allowDynamicVersions = Main.allowDynamicVersions,
                 project = Project(
-                        id = Identifier(provider, "", workingDir.name, vcsProcessed.revision),
+                        id = Identifier(provider, "", projectDir.name, vcsProcessed.revision),
                         declaredLicenses = sortedSetOf(),
                         aliases = emptyList(),
                         vcs = VcsInfo.EMPTY,
@@ -121,10 +129,34 @@ class GoDep : PackageManager() {
         )
     }
 
-    private fun setUpWorkspace(definitionFile: File, gopath: File): File {
-        val projectDir = definitionFile.parentFile
+    private fun importLegacyManifest(definitionFile: File, projectDir: File, workingDir: File, gopath: File) {
+        val lockFile = File(workingDir, LEGACY_MANIFESTS[definitionFile.name])
+
+        if (!lockFile.isFile && !Main.allowDynamicVersions) {
+            throw IllegalArgumentException(
+                    "No lockfile found in $projectDir, dependency versions are unstable.")
+        }
+
+        log.debug { "Running \"dep init\" to import legacy manifest file ${definitionFile.name}" }
+
+        val env = mapOf("GOPATH" to gopath.absolutePath)
+        ProcessCapture(workingDir, env, "dep", "init").requireSuccess()
+    }
+
+    private fun setUpWorkspace(projectDir: File, gopath: File): File {
         val destination = File(gopath, "src" + File.separator + projectDir.name)
+
+        log.debug { "Copying $projectDir to temporary directory $destination" }
+
         projectDir.copyRecursively(destination)
+
+        val dotGit = File(destination, ".git")
+        if (dotGit.isFile) {
+            // HACK "dep" seems to be confused by git submodules. We detect this by checking whether ".git" exists
+            // and is a regular file instead of a directory.
+            dotGit.delete()
+        }
+
         return destination
     }
 
