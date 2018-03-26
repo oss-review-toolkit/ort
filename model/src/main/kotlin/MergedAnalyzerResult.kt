@@ -70,15 +70,13 @@ class MergedResultsBuilder(
         private val allowDynamicVersions: Boolean,
         private val directoryDetails: ScannedDirectoryDetails
 ) {
-    private val projects = mutableSetOf<Project>()
+    private val projects = sortedSetOf<Project>()
     private val projectResultsFiles = sortedMapOf<Identifier, String>()
-    private val packages = mutableSetOf<Package>()
+    private val packages = sortedSetOf<Package>()
     private val errors = mutableListOf<String>()
 
     fun build(): MergedAnalyzerResult =
-            MergedAnalyzerResult(allowDynamicVersions, directoryDetails, projects.toSortedSet(),
-                    projectResultsFiles,
-                    packages.toSortedSet(),
+            MergedAnalyzerResult(allowDynamicVersions, directoryDetails, projects, projectResultsFiles, packages,
                     errors)
 
     fun addResult(analyzerResultPath: String, analyzerResult: AnalyzerResult) {
