@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
@@ -28,6 +29,7 @@ import java.util.SortedSet
 /**
  * A class that merges all information from individual AnalyzerResults created for each found build file
  */
+@JsonIgnoreProperties("analyzerResults")
 data class MergedAnalyzerResult(
         /**
          * If dynamic versions were allowed during the dependency resolution. If true it means that the dependency tree
@@ -64,7 +66,16 @@ data class MergedAnalyzerResult(
          * The list of all errors.
          */
         val errors: SortedMap<Identifier, List<String>>
-)
+) {
+    /**
+     * Create the individual [AnalyzerResult]s this [MergedAnalyzerResult] was built from.
+     */
+    fun createAnalyzerResults() = projects.map { project ->
+            val allDependencies = project.collectAllDependencies()
+            val projectPackages = packages.filter { allDependencies.contains(it.id) }.toSortedSet()
+            AnalyzerResult(allowDynamicVersions, project, projectPackages, errors[project.id] ?: listOf())
+        }
+}
 
 class MergedResultsBuilder(
         private val allowDynamicVersions: Boolean,
