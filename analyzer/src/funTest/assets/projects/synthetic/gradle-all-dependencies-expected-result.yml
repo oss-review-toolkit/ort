@@ -427,8 +427,8 @@ projects:
 project_id_result_file_path_map:
   'Gradle::Gradle-Example:': "<REPLACE_PROJECT_PATH>/build-gradle-dependencies.yml"
   Gradle:com.here.ort.gradle.example:app:1.0.0: "<REPLACE_PROJECT_PATH>/app/build-gradle-dependencies.yml"
-  Gradle:com.here.ort.gradle.example:lib:1.0.0: "<REPLACE_PROJECT_PATH>/lib/build-gradle-dependencies.yml"
   Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0: "<REPLACE_PROJECT_PATH>/lib-without-repo/build-gradle-dependencies.yml"
+  Gradle:com.here.ort.gradle.example:lib:1.0.0: "<REPLACE_PROJECT_PATH>/lib/build-gradle-dependencies.yml"
 packages:
 - id:
     provider: "Maven"

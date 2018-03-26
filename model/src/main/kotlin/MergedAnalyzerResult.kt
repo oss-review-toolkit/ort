@@ -22,6 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
+import java.util.SortedMap
 import java.util.SortedSet
 
 /**
@@ -52,7 +53,7 @@ data class MergedAnalyzerResult(
          */
         @JsonProperty("project_id_result_file_path_map")
         @JsonDeserialize(keyUsing = IdentifierFromStringKeyDeserializer::class)
-        val projectResultsFiles: Map<Identifier, String>,
+        val projectResultsFiles: SortedMap<Identifier, String>,
 
         /**
          * The set of identified packages for all projects.
@@ -70,7 +71,7 @@ class MergedResultsBuilder(
         private val directoryDetails: ScannedDirectoryDetails
 ) {
     private val projects = mutableSetOf<Project>()
-    private val projectResultsFiles = mutableMapOf<Identifier, String>()
+    private val projectResultsFiles = sortedMapOf<Identifier, String>()
     private val packages = mutableSetOf<Package>()
     private val errors = mutableListOf<String>()
 
