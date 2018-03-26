@@ -33,7 +33,7 @@ class GodepTest : FreeSpec() {
 
     init {
         "GoDep should" - {
-            "resolve dependencies from a lock file correctly" {
+            "resolve dependencies from a lockfile correctly" {
                 val projectDir = File("src/funTest/assets/projects/external/qmstr")
                 val manifestFile = File(projectDir, "Gopkg.toml")
                 val godep = GoDep.create()
@@ -65,11 +65,23 @@ class GodepTest : FreeSpec() {
 
                 Main.allowDynamicVersions = true
                 val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                Main.allowDynamicVersions = false
 
                 result shouldNotBe null
                 result!!.project shouldNotBe Project.EMPTY
                 result.packages.size shouldBe 4
                 result.errors.size shouldBe 0
+            }
+
+            "import dependencies from Glide" {
+                val projectDir = File("src/funTest/assets/projects/external/sprig")
+                val manifestFile = File(projectDir, "glide.yaml")
+                val godep = GoDep.create()
+
+                val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                val expectedResult = File(projectDir.parentFile, "sprig-expected-output.yml").readText()
+
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }
     }

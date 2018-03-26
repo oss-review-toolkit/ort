@@ -22,3 +22,6 @@
 	path = analyzer/src/funTest/assets/projects/external/qmstr
 	url = https://github.com/QMSTR/qmstr.git
 	ignore = untracked
+[submodule "analyzer/src/funTest/assets/projects/external/sprig"]
+	path = analyzer/src/funTest/assets/projects/external/sprig
+	url = https://github.com/Masterminds/sprig.git
