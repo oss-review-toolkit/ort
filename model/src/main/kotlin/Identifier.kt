@@ -50,7 +50,7 @@ data class Identifier(
          * The version of the package.
          */
         val version: String
-) {
+) : Comparable<Identifier> {
     companion object {
         /**
          * A constant for an [Identifier] where all properties are empty strings.
@@ -76,6 +76,10 @@ data class Identifier(
                     version = list.getOrNull(3) ?: ""
             )
         }
+    }
+
+    override fun compareTo(other: Identifier): Int {
+        return toString().compareTo(other.toString())
     }
 
     /**
