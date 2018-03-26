@@ -183,8 +183,9 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                 }
             }
 
-            return new DependencyTreeModelImpl(project.group ?: '', project.name, project.version ?: '',
-                    configurations, repositories, errors)
+            def version = project.version == 'unspecified' ? '' : project.version
+            return new DependencyTreeModelImpl(project.group ?: '', project.name, version ?: '', configurations,
+                    repositories, errors)
         }
 
         Dependency parseDependency(DependencyResult dependencyResult, Project project,

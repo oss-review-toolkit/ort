@@ -18,7 +18,7 @@ projects:
     provider: "Gradle"
     namespace: ""
     name: "Gradle-Example"
-    version: "unspecified"
+    version: ""
   declared_licenses: []
   aliases: []
   vcs:
