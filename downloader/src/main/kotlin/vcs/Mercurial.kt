@@ -123,15 +123,15 @@ object Mercurial : VersionControlSystem() {
                 pkg.vcsProcessed.revision
             } else {
                 log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
-                workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
-                    if (revision.isBlank()) {
-                        throw IOException("Unable to determine a revision to checkout.")
+                try {
+                    workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
+                        log.warn {
+                            "Using guessed $this revision '$revision' for version '${pkg.id.version}'. This might " +
+                                    "cause the downloaded source code to not match the package version."
+                        }
                     }
-
-                    log.warn {
-                        "Using guessed $this revision '$revision' for version '${pkg.id.version}'. This might cause " +
-                                "the downloaded source code to not match the package version."
-                    }
+                } catch (e: IOException) {
+                    throw IOException("Unable to determine a revision to checkout.", e)
                 }
             }
 

@@ -145,13 +145,13 @@ object Git : GitBase() {
         }
 
         log.info { "Trying to guess a $this revision for version '${pkg.id.version}' to fall back to." }
-        workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
-            if (revision.isNotBlank()) {
+        try {
+            workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
                 revisionCandidates.add(revision)
                 log.info { "Found $this revision '$revision' for version '${pkg.id.version}'." }
-            } else {
-                log.info { "No $this revision for version '${pkg.id.version}' found." }
             }
+        } catch (e: IOException) {
+            log.info { "No $this revision for version '${pkg.id.version}' found: ${e.message}" }
         }
 
         val revision = revisionCandidates.firstOrNull()
