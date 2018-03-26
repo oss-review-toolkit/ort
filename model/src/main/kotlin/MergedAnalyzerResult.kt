@@ -66,7 +66,16 @@ data class MergedAnalyzerResult(
          */
         @JsonDeserialize(keyUsing = IdentifierFromStringKeyDeserializer::class)
         val errors: SortedMap<Identifier, List<String>>
-)
+) {
+    /**
+     * Create the individual [AnalyzerResult]s this [MergedAnalyzerResult] was built from.
+     */
+    fun createAnalyzerResults() = projects.map { project ->
+            val allDependencies = project.collectAllDependencies()
+            val projectPackages = packages.filter { allDependencies.contains(it.id) }.toSortedSet()
+            AnalyzerResult(allowDynamicVersions, project, projectPackages, errors[project.id] ?: emptyList())
+        }
+}
 
 class MergedResultsBuilder(
         private val allowDynamicVersions: Boolean,
