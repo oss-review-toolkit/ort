@@ -50,7 +50,7 @@ data class Identifier(
          * The version of the package.
          */
         val version: String
-) {
+) : Comparable<Identifier> {
     companion object {
         /**
          * A constant for an [Identifier] where all properties are empty strings.
@@ -77,6 +77,8 @@ data class Identifier(
             )
         }
     }
+
+    override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
      * Returns true if this matches the other identifier. To match, both identifiers need to have the same
