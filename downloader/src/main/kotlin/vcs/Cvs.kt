@@ -160,16 +160,16 @@ object Cvs : VersionControlSystem() {
 
                 log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
 
-                workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also {
-                    if (it.isBlank()) {
-                        throw IOException("Unable to determine a revision to checkout.")
+                try {
+                    workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
+                        log.warn {
+                            "Using guessed $this revision '$revision' for version '${pkg.id.version}'. This might " +
+                                    "cause the downloaded source code to not match the package version."
+                        }
                     }
-
-                    log.warn {
-                        "Using guessed $this revision '$it' for version '${pkg.id.version}'. This might cause the " +
-                                "downloaded source code to not match the package version."
-                    }
-
+                } catch (e: IOException) {
+                    throw IOException("Unable to determine a revision to checkout.", e)
+                } finally {
                     // Clean the temporarily updated working tree again.
                     targetDir.listFiles().forEach {
                         if (it.isDirectory) {
