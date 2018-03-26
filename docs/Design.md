@@ -16,7 +16,8 @@ There are two major design goals of how the Analyzer should work:
    information, and to be able to download and scan the actual source code for license / copyright information instead
    of relying on declared information.
 
-Several existing similar tools have been looked at before developing the Analyzer. Please see the below table for an overview:
+Several existing similar tools have been looked at before developing the Analyzer. Please see the below table for an
+overview:
 
 | Tool | Works without modifications to the project to analyze | Looks at package manager meta-data | Looks at source code of dependencies |
 | ---- | ----------------------------------------------------- | ---------------------------------- | ------------------------------------ |
@@ -29,11 +30,15 @@ Several existing similar tools have been looked at before developing the Analyze
 
 - https://github.com/kennethreitz/pipenv
 
-  A new package manager designed around `Pipfile{.lock}` files. Claims to offer [import of requirements.txt files](http://docs.pipenv.org/en/latest/advanced.html#importing-from-requirements-txt) and [import of setup.py files](https://github.com/kennethreitz/pipenv/issues/592), but it does not actually work, or only in very simple cases.
+  A new package manager designed around `Pipfile{.lock}` files. Claims to offer
+  [import of requirements.txt files](http://docs.pipenv.org/en/latest/advanced.html#importing-from-requirements-txt) and
+  [import of setup.py files](https://github.com/kennethreitz/pipenv/issues/592), but it does not actually work, or only
+  in very simple cases.
 
 - https://github.com/pivotal/LicenseFinder/blob/b784114/lib/license_finder/package_managers/pip.rb
 
-  Uses a [helper script](https://github.com/pivotal/LicenseFinder/blob/3c073e7/bin/license_finder_pip.py) to parse only `requirements.txt` via the `pip.req.parse_requirements` API from Ruby code.
+  Uses a [helper script](https://github.com/pivotal/LicenseFinder/blob/3c073e7/bin/license_finder_pip.py) to parse only
+  `requirements.txt` via the `pip.req.parse_requirements` API from Ruby code.
 
 - https://github.com/librariesio/bibliothecary/blob/8704537/lib/bibliothecary/parsers/pypi.rb
 
@@ -45,7 +50,10 @@ Several existing similar tools have been looked at before developing the Analyze
 
 - https://github.com/sourcegraph/pydep
 
-  Uses `pip.req.parse_requirements` for `requirements.txt` files (see [this article](http://jelly.codes/articles/python-pip-module/)) and a `distutils.core.setup` replacement to parse `setup.py` files (similar to [this approach](https://stackoverflow.com/a/27790447/1127485)). Has JSON output, but outputs dependencies in a flat list as opposed to a tree.
+  Uses `pip.req.parse_requirements` for `requirements.txt` files (see 
+  [this article](http://jelly.codes/articles/python-pip-module/)) and a `distutils.core.setup` replacement to parse
+  `setup.py` files (similar to [this approach](https://stackoverflow.com/a/27790447/1127485)). Has JSON output, but
+  outputs dependencies in a flat list as opposed to a tree.
 
 - https://github.com/fossas/srclib-pip/
 
@@ -57,9 +65,12 @@ Several existing similar tools have been looked at before developing the Analyze
 
 ##### Conclusions
 
-While using `pip.req.parse_requirements` to parse `requirements.txt` files and using `distutils.core.setup` to parse `setup.py` files basically is an elegant solution, that approach cannot handle e.g. custom / extra index URLs defined as part of `requirements.txt` files like:
+While using `pip.req.parse_requirements` to parse `requirements.txt` files and using `distutils.core.setup` to parse
+`setup.py` files basically is an elegant solution, that approach cannot handle e.g. custom / extra index URLs defined as
+part of `requirements.txt` files like:
 
     # common requirements
     -i http://foo.bar.com/ptpi/devpi/dev/+simple/
 
-That is why calling `pip` and inspecting the output probably is the way to go to correctly determine the dependencies, even if that already downloads the dependencies at a stage where we would only need the dependency graph.
+That is why calling `pip` and inspecting the output probably is the way to go to correctly determine the dependencies,
+even if that already downloads the dependencies at a stage where we would only need the dependency graph.
