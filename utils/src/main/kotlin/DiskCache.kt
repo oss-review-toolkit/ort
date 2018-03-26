@@ -97,9 +97,10 @@ class DiskCache(
         val shortenedKey = mappedKey.chunkedSequence(MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH).first()
         for (index in 0 until KEY_INDEX_LIMIT) {
             val tryKey = "$shortenedKey-" + "$index".padStart(KEY_SUFFIX_LENGTH - 1, '0')
-            val entry = diskLruCache.get(tryKey)
-            if (entry == null || entry.getString(INDEX_FULL_KEY) == this) {
-                return tryKey
+            diskLruCache.get(tryKey).use { entry ->
+                if (entry == null || entry.getString(INDEX_FULL_KEY) == this) {
+                    return tryKey
+                }
             }
         }
 
