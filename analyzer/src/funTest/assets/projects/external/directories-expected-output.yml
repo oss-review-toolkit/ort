@@ -27,11 +27,7 @@ project:
         errors: []
       errors: []
 packages:
-- id:
-    provider: "Maven"
-    namespace: "junit"
-    name: "junit"
-    version: "4.12"
+- id: "Maven:junit:junit:4.12"
   declared_licenses:
   - "Eclipse Public License 1.0"
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
@@ -55,11 +51,7 @@ packages:
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
-- id:
-    provider: "Maven"
-    namespace: "org.hamcrest"
-    name: "hamcrest-core"
-    version: "1.3"
+- id: "Maven:org.hamcrest:hamcrest-core:1.3"
   declared_licenses:
   - "New BSD License"
   description: "This is the core API of hamcrest matcher framework to be used by third-party\

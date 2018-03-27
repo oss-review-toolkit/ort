@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.SortedSet
 
@@ -38,6 +40,8 @@ data class Package(
         /**
          * The unique identifier of this package.
          */
+        @JsonDeserialize(using = IdentifierFromStringDeserializer::class)
+        @JsonSerialize(using = IdentifierToStringSerializer::class)
         val id: Identifier,
 
         /**

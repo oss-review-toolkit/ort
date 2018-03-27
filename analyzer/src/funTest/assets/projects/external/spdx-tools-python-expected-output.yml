@@ -38,11 +38,7 @@ project:
       dependencies: []
       errors: []
 packages:
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "isodate"
-    version: "0.6.0"
+- id: "PyPI::isodate:0.6.0"
   declared_licenses:
   - "BSD"
   description: "An ISO 8601 date/time/duration parser and formatter"
@@ -65,11 +61,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "ply"
-    version: "3.11"
+- id: "PyPI::ply:3.11"
   declared_licenses:
   - "BSD"
   description: "Python Lex & Yacc"
@@ -92,11 +84,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "pyparsing"
-    version: "2.2.0"
+- id: "PyPI::pyparsing:2.2.0"
   declared_licenses:
   - "MIT"
   description: "Python parsing module"
@@ -119,11 +107,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "rdflib"
-    version: "4.2.2"
+- id: "PyPI::rdflib:4.2.2"
   declared_licenses:
   - "BSD"
   - "https://raw.github.com/RDFLib/rdflib/master/LICENSE"
@@ -148,11 +132,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "six"
-    version: "1.11.0"
+- id: "PyPI::six:1.11.0"
   declared_licenses:
   - "MIT"
   description: "Python 2 and 3 compatibility utilities"

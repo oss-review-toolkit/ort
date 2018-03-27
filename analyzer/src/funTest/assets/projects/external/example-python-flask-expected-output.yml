@@ -41,11 +41,7 @@ project:
       dependencies: []
       errors: []
 packages:
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "Flask"
-    version: "0.12"
+- id: "PyPI::Flask:0.12"
   declared_licenses:
   - "BSD"
   description: "A microframework based on Werkzeug, Jinja2 and good intentions"
@@ -68,11 +64,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "Jinja2"
-    version: "2.8.1"
+- id: "PyPI::Jinja2:2.8.1"
   declared_licenses:
   - "BSD"
   description: "A small but fast and easy to use stand-alone template engine written\
@@ -96,11 +88,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "MarkupSafe"
-    version: "1.0"
+- id: "PyPI::MarkupSafe:1.0"
   declared_licenses:
   - "BSD"
   description: "Implements a XML/HTML/XHTML Markup safe string for Python"
@@ -123,11 +111,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "Werkzeug"
-    version: "0.14.1"
+- id: "PyPI::Werkzeug:0.14.1"
   declared_licenses:
   - "BSD"
   description: "The comprehensive WSGI web application library."
@@ -150,11 +134,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "click"
-    version: "6.7"
+- id: "PyPI::click:6.7"
   declared_licenses:
   - "BSD"
   description: "A simple wrapper around optparse for powerful command line utilities."
@@ -177,11 +157,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "gunicorn"
-    version: "19.6.0"
+- id: "PyPI::gunicorn:19.6.0"
   declared_licenses:
   - "MIT"
   description: "WSGI HTTP Server for UNIX"
@@ -204,11 +180,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id:
-    provider: "PyPI"
-    namespace: ""
-    name: "itsdangerous"
-    version: "0.24"
+- id: "PyPI::itsdangerous:0.24"
   declared_licenses:
   - "BSD"
   description: "Various helpers to pass trusted data to untrusted environments and\
