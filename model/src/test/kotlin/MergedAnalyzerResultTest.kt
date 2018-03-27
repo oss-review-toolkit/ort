@@ -20,41 +20,43 @@
 package com.here.ort.model
 
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
-class MergedAnalyzerResultTest : StringSpec() {
+class MergedAnalyzerResultTest : WordSpec() {
     init {
-        "MergedResultsBuilder merges results from all files" {
-            val builder = MergedResultsBuilder(true, ScannedDirectoryDetails("test-project", "/some/path/test-project",
-                    VcsInfo.EMPTY))
-            val subProject1 = createTestSubProject(1)
-            val subProject2 = createTestSubProject(2)
+        "MergedResultsBuilder" should {
+            "merge results from all files" {
+                val builder = MergedResultsBuilder(true,
+                        ScannedDirectoryDetails("test-project", "/some/path/test-project", VcsInfo.EMPTY))
+                val subProject1 = createTestSubProject(1)
+                val subProject2 = createTestSubProject(2)
 
-            builder.addResult("/some/other/path/analyzer-results-1.yml",
-                    AnalyzerResult(
-                            true,
-                            subProject1,
-                            sortedSetOf(createTestDependencyPkg(1)),
-                            emptyList()
-                    )
-            )
-            builder.addResult("/some/other/path/analyzer-results-2.yml",
-                    AnalyzerResult(
-                            true,
-                            subProject2,
-                            sortedSetOf(createTestDependencyPkg(2), createTestDependencyPkg(1)),
-                            listOf("Some error that occurred.")
-                    )
-            )
+                builder.addResult("/some/other/path/analyzer-results-1.yml",
+                        AnalyzerResult(
+                                true,
+                                subProject1,
+                                sortedSetOf(createTestDependencyPkg(1)),
+                                emptyList()
+                        )
+                )
+                builder.addResult("/some/other/path/analyzer-results-2.yml",
+                        AnalyzerResult(
+                                true,
+                                subProject2,
+                                sortedSetOf(createTestDependencyPkg(2), createTestDependencyPkg(1)),
+                                listOf("Some error that occurred.")
+                        )
+                )
 
-            val mergedResults = builder.build()
+                val mergedResults = builder.build()
 
-            mergedResults.errors.size shouldBe 2
-            mergedResults.errors[subProject1.id]?.size shouldBe 0
-            mergedResults.errors[subProject2.id]?.size shouldBe 1
-            mergedResults.projectResultsFiles.size shouldBe 2
-            mergedResults.packages.size shouldBe 2
-            mergedResults.projects.size shouldBe 2
+                mergedResults.errors.size shouldBe 2
+                mergedResults.errors[subProject1.id]?.size shouldBe 0
+                mergedResults.errors[subProject2.id]?.size shouldBe 1
+                mergedResults.projectResultsFiles.size shouldBe 2
+                mergedResults.packages.size shouldBe 2
+                mergedResults.projects.size shouldBe 2
+            }
         }
     }
 
