@@ -20,8 +20,6 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 /**
  * This class assigns a [PackageCurationData] object to a [Package] identified by the [id].
@@ -30,8 +28,6 @@ data class PackageCuration(
         /**
          * The identifier of the package.
          */
-        @JsonDeserialize(using = IdentifierFromStringDeserializer::class)
-        @JsonSerialize(using = IdentifierToStringSerializer::class)
         val id: Identifier,
 
         /**
