@@ -49,6 +49,19 @@ class MergedAnalyzerResultTest : WordSpec() {
     val analyzerResult2 = AnalyzerResult(true, project2, sortedSetOf(package1, package2, package3), listOf("error-2"))
 
     init {
+        "MergedAnalyzerResult" should {
+            "create the correct AnalyzerResults" {
+                val builder = MergedResultsBuilder(true, directoryDetails)
+
+                builder.addResult("/analyzer-result-1.yml", analyzerResult1)
+                builder.addResult("/analyzer-result-2.yml", analyzerResult2)
+
+                val mergedResults = builder.build()
+
+                mergedResults.createAnalyzerResults() shouldBe listOf(analyzerResult1, analyzerResult2)
+            }
+        }
+
         "MergedResultsBuilder" should {
             "merge results from all files" {
                 val builder = MergedResultsBuilder(true, directoryDetails)
