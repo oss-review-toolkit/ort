@@ -33,7 +33,7 @@ import java.io.File
 
 object Licensee : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
-    override val resultFileExt = "yml"
+    override val resultFileExt = "json"
 
     override fun bootstrap(): File? {
         val gem = if (OS.isWindows) "gem.cmd" else "gem"
