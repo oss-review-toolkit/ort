@@ -71,7 +71,7 @@ data class Project(
     /**
      * A comparison function to sort projects by their identifier.
      */
-    override fun compareTo(other: Project) = compareValuesBy(this, other, { it.id.toString() })
+    override fun compareTo(other: Project) = id.compareTo(other.id)
 
     /**
      * Return a [Package] representation of this [Project].
