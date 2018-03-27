@@ -76,6 +76,22 @@ class UtilsTest : WordSpec({
             filterVersionNames(" ", names) shouldBe emptyList<String>()
         }
 
+        "return an empty list for empty names" {
+            val names = listOf("")
+
+            filterVersionNames("", names) shouldBe emptyList<String>()
+            filterVersionNames(" ", names) shouldBe emptyList<String>()
+            filterVersionNames("1.0", names) shouldBe emptyList<String>()
+        }
+
+        "return an empty list for blank names" {
+            val names = listOf(" ")
+
+            filterVersionNames("", names) shouldBe emptyList<String>()
+            filterVersionNames(" ", names) shouldBe emptyList<String>()
+            filterVersionNames("1.0", names) shouldBe emptyList<String>()
+        }
+
         "find names separated by underscores" {
             val names = listOf(
                     "A02",

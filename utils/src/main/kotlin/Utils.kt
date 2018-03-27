@@ -118,12 +118,12 @@ object OkHttpClientHelper {
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
  */
 fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
-    if (version.isBlank()) return emptyList()
+    if (version.isBlank() || names.isEmpty()) return emptyList()
 
     val normalizedSeparator = '_'
     val normalizedVersion = version.replace(Regex("(\\.|-)"), normalizedSeparator.toString()).toLowerCase()
 
-    val filteredByVersion = names.filter {
+    val filteredNames = names.filter {
         val normalizedName = it.replace(Regex("(\\.|-)"), normalizedSeparator.toString()).toLowerCase()
 
         when {
@@ -150,11 +150,12 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
         }
     }
 
-    return filteredByVersion.filter {
+    return filteredNames.filter {
         // startsWith("") returns "true" for any string, so we get an unfiltered list if "project" is "null".
         it.startsWith(project ?: "")
     }.let {
-        if (it.isEmpty()) filteredByVersion else it
+        // Fall back to the original list if filtering by project results in an empty list.
+        if (it.isEmpty()) filteredNames else it
     }
 }
 
