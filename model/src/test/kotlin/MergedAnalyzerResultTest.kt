@@ -27,23 +27,23 @@ class MergedAnalyzerResultTest : WordSpec() {
         "MergedResultsBuilder" should {
             "merge results from all files" {
                 val builder = MergedResultsBuilder(true,
-                        ScannedDirectoryDetails("test-project", "/some/path/test-project", VcsInfo.EMPTY))
-                val subProject1 = createTestSubProject(1)
-                val subProject2 = createTestSubProject(2)
+                        ScannedDirectoryDetails("name", "/absolute/path", VcsInfo.EMPTY))
+                val project1 = createTestProject(1)
+                val project2 = createTestProject(2)
 
-                builder.addResult("/some/other/path/analyzer-results-1.yml",
+                builder.addResult("/analyzer-results/project-1.yml",
                         AnalyzerResult(
                                 true,
-                                subProject1,
-                                sortedSetOf(createTestDependencyPkg(1)),
+                                project1,
+                                sortedSetOf(createTestPackage(1)),
                                 emptyList()
                         )
                 )
-                builder.addResult("/some/other/path/analyzer-results-2.yml",
+                builder.addResult("/analyzer-results/project-2.yml",
                         AnalyzerResult(
                                 true,
-                                subProject2,
-                                sortedSetOf(createTestDependencyPkg(2), createTestDependencyPkg(1)),
+                                project2,
+                                sortedSetOf(createTestPackage(2), createTestPackage(1)),
                                 listOf("Some error that occurred.")
                         )
                 )
@@ -51,8 +51,8 @@ class MergedAnalyzerResultTest : WordSpec() {
                 val mergedResults = builder.build()
 
                 mergedResults.errors.size shouldBe 2
-                mergedResults.errors[subProject1.id]?.size shouldBe 0
-                mergedResults.errors[subProject2.id]?.size shouldBe 1
+                mergedResults.errors[project1.id]?.size shouldBe 0
+                mergedResults.errors[project2.id]?.size shouldBe 1
                 mergedResults.projectResultsFiles.size shouldBe 2
                 mergedResults.packages.size shouldBe 2
                 mergedResults.projects.size shouldBe 2
@@ -60,12 +60,12 @@ class MergedAnalyzerResultTest : WordSpec() {
         }
     }
 
-    private fun createTestDependencyPkg(i: Int) = Package(
+    private fun createTestPackage(i: Int) = Package(
             id = Identifier(
-                    provider = "Maven",
-                    namespace = "",
-                    name = "dependency-$i",
-                    version = ""
+                    provider = "provider-$i",
+                    namespace = "namespace-$i",
+                    name = "package-$i",
+                    version = "$i"
             ),
             declaredLicenses = sortedSetOf(),
             description = "",
@@ -75,22 +75,22 @@ class MergedAnalyzerResultTest : WordSpec() {
             vcs = VcsInfo.EMPTY
     )
 
-    private fun createTestSubProject(i: Int) = Project(
+    private fun createTestProject(i: Int) = Project(
             id = Identifier(
-                    provider = "Maven",
-                    namespace = "",
-                    name = "sub-project-$i",
-                    version = ""),
-            declaredLicenses = sortedSetOf("MIT"),
+                    provider = "provider-$i",
+                    namespace = "namespace-$i",
+                    name = "project-$i",
+                    version = "$i"),
+            declaredLicenses = sortedSetOf("license-$i"),
             aliases = emptyList(),
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             homepageUrl = "",
             scopes = sortedSetOf(
                     Scope(
-                            "testScope$i",
+                            "scope-$i",
                             true,
-                            sortedSetOf(createTestDependencyPkg(i).toReference())
+                            sortedSetOf(createTestPackage(i).toReference())
                     )
             )
     )
