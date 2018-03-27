@@ -41,14 +41,20 @@ class AnalyzerResultTest : StringSpec({
                                             delivered = true,
                                             dependencies = sortedSetOf(
                                                     PackageReference(
-                                                            namespace = "namespace1",
-                                                            name = "name1",
-                                                            version = "version1",
+                                                            Identifier(
+                                                                    provider = "provider",
+                                                                    namespace = "namespace1",
+                                                                    name = "name1",
+                                                                    version = "version1"
+                                                            ),
                                                             dependencies = sortedSetOf(
                                                                     PackageReference(
-                                                                            namespace = "namespace2",
-                                                                            name = "name2",
-                                                                            version = "version2",
+                                                                            Identifier(
+                                                                                    provider = "provider2",
+                                                                                    namespace = "namespace2",
+                                                                                    name = "name2",
+                                                                                    version = "version2"
+                                                                            ),
                                                                             dependencies = sortedSetOf(),
                                                                             errors = listOf("2.1", "2.2")
                                                                     )
@@ -56,9 +62,12 @@ class AnalyzerResultTest : StringSpec({
                                                             errors = listOf("1.1", "1.2")
                                                     ),
                                                     PackageReference(
-                                                            namespace = "namespace3",
-                                                            name = "name3",
-                                                            version = "version3",
+                                                            Identifier(
+                                                                    provider = "provider3",
+                                                                    namespace = "namespace3",
+                                                                    name = "name3",
+                                                                    version = "version3"
+                                                            ),
                                                             dependencies = sortedSetOf(),
                                                             errors = listOf("3.1", "3.2")
                                                     )

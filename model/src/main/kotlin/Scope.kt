@@ -63,7 +63,7 @@ data class Scope(
     fun contains(pkgId: String): Boolean {
         return dependencies.find { pkgRef ->
             // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
-            pkgRef.identifier == pkgId.substringAfter(":") || pkgRef.dependsOn(pkgId)
+            pkgRef.id.toString() == pkgId || pkgRef.dependsOn(pkgId)
         } != null
     }
 }

@@ -20,6 +20,8 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.SortedSet
 
@@ -30,19 +32,11 @@ import java.util.SortedSet
 @JsonIgnoreProperties("normalizedName", "identifier")
 data class PackageReference(
         /**
-         * The namespace of the package, for example the group id in Maven or the scope in NPM.
+         * The identifier of the package.
          */
-        val namespace: String,
-
-        /**
-         * The name of the package.
-         */
-        val name: String,
-
-        /**
-         * The version of the package.
-         */
-        val version: String,
+        @JsonDeserialize(using = IdentifierFromStringDeserializer::class)
+        @JsonSerialize(using = IdentifierToStringSerializer::class)
+        val id: Identifier,
 
         /**
          * The list of references to packages this package depends on. Note that this list depends on the scope in
@@ -58,13 +52,7 @@ data class PackageReference(
     /**
      * A comparison function to sort package references by their identifier.
      */
-    override fun compareTo(other: PackageReference) = compareValuesBy(this, other, { it.identifier })
-
-    /**
-     * The minimum human readable information to identify the package referred to. As references are specific to the
-     * package manager, it is not explicitly included.
-     */
-    val identifier = "$namespace:$name:$version"
+    override fun compareTo(other: PackageReference) = id.compareTo(other.id)
 
     /**
      * Returns whether the given package is a (transitive) dependency of this reference.
@@ -77,7 +65,7 @@ data class PackageReference(
     fun dependsOn(pkgId: String): Boolean {
         return dependencies.find { pkgRef ->
             // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
-            pkgRef.identifier == pkgId.substringAfter(":") || pkgRef.dependsOn(pkgId)
+            pkgRef.id.toString() == pkgId || pkgRef.dependsOn(pkgId)
         } != null
     }
 }
