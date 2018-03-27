@@ -82,14 +82,20 @@ object Licensee : LocalScanner() {
         val errors = sortedSetOf<String>()
 
         if (resultsFile.isFile && resultsFile.length() > 0) {
-            val jsonResults = resultsFile.readText()
-            val scanOutput = jsonMapper.readTree(jsonResults)
+            val scanOutput = jsonMapper.readTree(resultsFile.readText())
+
+            val licenseSummary = scanOutput["licenses"]
             val matchedFiles = scanOutput["matched_files"]
 
             fileCount = matchedFiles.count()
 
             matchedFiles.forEach {
-                licenses.add(it["matched_license"].asText().capitalize())
+                val licenseKey = it["matched_license"].asText()
+                licenseSummary.find {
+                    it["key"].asText() == licenseKey
+                }?.let {
+                    licenses.add(it["spdx_id"].asText())
+                }
             }
         }
 
