@@ -84,7 +84,7 @@ data class Package(
     /**
      * A comparison function to sort packages by their identifier.
      */
-    override fun compareTo(other: Package) = compareValuesBy(this, other, { it.id.toString() })
+    override fun compareTo(other: Package) = id.compareTo(other.id)
 
     /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
