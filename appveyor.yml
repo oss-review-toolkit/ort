@@ -28,7 +28,7 @@ install:
   - refreshenv
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
   - set PATH=%PATH%;C:\msys64\usr\bin # For CVS.
-  - set PATH=C:\Ruby25\bin;%PATH% # For licensee.
+  - set PATH=C:\Ruby25\bin;%PATH%
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
