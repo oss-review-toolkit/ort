@@ -36,7 +36,8 @@ object Licensee : LocalScanner() {
     override val resultFileExt = "yml"
 
     override fun bootstrap(): File? {
-        ProcessCapture("gem", "install", "--user-install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
+        val gem = if (OS.isWindows) "gem.cmd" else "gem"
+        ProcessCapture(gem, "install", "--user-install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
         val ruby = ProcessCapture("ruby", "-rubygems", "-e", "puts Gem.user_dir").requireSuccess()
         val userDir = ruby.stdout().trimEnd()
         return File(userDir, "bin")
