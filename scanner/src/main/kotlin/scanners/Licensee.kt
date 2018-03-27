@@ -46,11 +46,20 @@ object Licensee : LocalScanner() {
     override fun getVersion(executable: String) = getCommandVersion(scannerPath.absolutePath, "version")
 
     override fun scanPath(path: File, resultsFile: File): Result {
+        // Licensee has issues with absolute Windows paths passed as an argument. Work around that by using the path to
+        // scan as the working directory.
+        val (parentPath, relativePath) = if (path.isDirectory) {
+            Pair(path, ".")
+        } else {
+            Pair(path.parentFile, path.name)
+        }
+
         val process = ProcessCapture(
+                parentPath,
                 scannerPath.absolutePath,
                 "detect",
                 "--json",
-                path.absolutePath
+                relativePath
         )
 
         if (process.stderr().isNotBlank()) {
