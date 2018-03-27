@@ -24,2687 +24,1613 @@ project:
   - name: "dependencies"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "babel-cli"
-      version: "6.26.0"
+    - id: "NPM::babel-cli:6.26.0"
       dependencies:
-      - namespace: ""
-        name: "babel-core"
-        version: "6.26.0"
+      - id: "NPM::babel-core:6.26.0"
         dependencies:
-        - namespace: ""
-          name: "babel-code-frame"
-          version: "6.26.0"
+        - id: "NPM::babel-code-frame:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "chalk"
-            version: "1.1.3"
+          - id: "NPM::chalk:1.1.3"
             dependencies:
-            - namespace: ""
-              name: "ansi-styles"
-              version: "2.2.1"
+            - id: "NPM::ansi-styles:2.2.1"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "escape-string-regexp"
-              version: "1.0.5"
+            - id: "NPM::escape-string-regexp:1.0.5"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "has-ansi"
-              version: "2.0.0"
+            - id: "NPM::has-ansi:2.0.0"
               dependencies:
-              - namespace: ""
-                name: "ansi-regex"
-                version: "2.1.1"
+              - id: "NPM::ansi-regex:2.1.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "strip-ansi"
-              version: "3.0.1"
+            - id: "NPM::strip-ansi:3.0.1"
               dependencies:
-              - namespace: ""
-                name: "ansi-regex"
-                version: "2.1.1"
+              - id: "NPM::ansi-regex:2.1.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "supports-color"
-              version: "2.0.0"
+            - id: "NPM::supports-color:2.0.0"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "esutils"
-            version: "2.0.2"
+          - id: "NPM::esutils:2.0.2"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "js-tokens"
-            version: "3.0.2"
+          - id: "NPM::js-tokens:3.0.2"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-generator"
-          version: "6.26.0"
+        - id: "NPM::babel-generator:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "babel-messages"
-            version: "6.23.0"
+          - id: "NPM::babel-messages:6.23.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-types"
-            version: "6.26.0"
+          - id: "NPM::babel-types:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "esutils"
-              version: "2.0.2"
+            - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "to-fast-properties"
-              version: "1.0.3"
+            - id: "NPM::to-fast-properties:1.0.3"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "detect-indent"
-            version: "4.0.0"
+          - id: "NPM::detect-indent:4.0.0"
             dependencies:
-            - namespace: ""
-              name: "repeating"
-              version: "2.0.1"
+            - id: "NPM::repeating:2.0.1"
               dependencies:
-              - namespace: ""
-                name: "is-finite"
-                version: "1.0.2"
+              - id: "NPM::is-finite:1.0.2"
                 dependencies:
-                - namespace: ""
-                  name: "number-is-nan"
-                  version: "1.0.1"
+                - id: "NPM::number-is-nan:1.0.1"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "jsesc"
-            version: "1.3.0"
+          - id: "NPM::jsesc:1.3.0"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "lodash"
-            version: "4.17.4"
+          - id: "NPM::lodash:4.17.4"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "source-map"
-            version: "0.5.7"
+          - id: "NPM::source-map:0.5.7"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "trim-right"
-            version: "1.0.1"
+          - id: "NPM::trim-right:1.0.1"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-helpers"
-          version: "6.24.1"
+        - id: "NPM::babel-helpers:6.24.1"
           dependencies:
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-template"
-            version: "6.26.0"
+          - id: "NPM::babel-template:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-traverse"
-              version: "6.26.0"
+            - id: "NPM::babel-traverse:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-code-frame"
-                version: "6.26.0"
+              - id: "NPM::babel-code-frame:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "chalk"
-                  version: "1.1.3"
+                - id: "NPM::chalk:1.1.3"
                   dependencies:
-                  - namespace: ""
-                    name: "ansi-styles"
-                    version: "2.2.1"
+                  - id: "NPM::ansi-styles:2.2.1"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "escape-string-regexp"
-                    version: "1.0.5"
+                  - id: "NPM::escape-string-regexp:1.0.5"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "has-ansi"
-                    version: "2.0.0"
+                  - id: "NPM::has-ansi:2.0.0"
                     dependencies:
-                    - namespace: ""
-                      name: "ansi-regex"
-                      version: "2.1.1"
+                    - id: "NPM::ansi-regex:2.1.1"
                       dependencies: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "strip-ansi"
-                    version: "3.0.1"
+                  - id: "NPM::strip-ansi:3.0.1"
                     dependencies:
-                    - namespace: ""
-                      name: "ansi-regex"
-                      version: "2.1.1"
+                    - id: "NPM::ansi-regex:2.1.1"
                       dependencies: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "supports-color"
-                    version: "2.0.0"
+                  - id: "NPM::supports-color:2.0.0"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "esutils"
-                  version: "2.0.2"
+                - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "js-tokens"
-                  version: "3.0.2"
+                - id: "NPM::js-tokens:3.0.2"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-messages"
-                version: "6.23.0"
+              - id: "NPM::babel-messages:6.23.0"
                 dependencies:
-                - namespace: ""
-                  name: "babel-runtime"
-                  version: "6.26.0"
+                - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "core-js"
-                    version: "2.5.2"
+                  - id: "NPM::core-js:2.5.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "regenerator-runtime"
-                    version: "0.11.1"
+                  - id: "NPM::regenerator-runtime:0.11.1"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-types"
-                version: "6.26.0"
+              - id: "NPM::babel-types:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "babel-runtime"
-                  version: "6.26.0"
+                - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "core-js"
-                    version: "2.5.2"
+                  - id: "NPM::core-js:2.5.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "regenerator-runtime"
-                    version: "0.11.1"
+                  - id: "NPM::regenerator-runtime:0.11.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "esutils"
-                  version: "2.0.2"
+                - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "lodash"
-                  version: "4.17.4"
+                - id: "NPM::lodash:4.17.4"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "to-fast-properties"
-                  version: "1.0.3"
+                - id: "NPM::to-fast-properties:1.0.3"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babylon"
-                version: "6.18.0"
+              - id: "NPM::babylon:6.18.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "debug"
-                version: "2.6.9"
+              - id: "NPM::debug:2.6.9"
                 dependencies:
-                - namespace: ""
-                  name: "ms"
-                  version: "2.0.0"
+                - id: "NPM::ms:2.0.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "globals"
-                version: "9.18.0"
+              - id: "NPM::globals:9.18.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "invariant"
-                version: "2.2.2"
+              - id: "NPM::invariant:2.2.2"
                 dependencies:
-                - namespace: ""
-                  name: "loose-envify"
-                  version: "1.3.1"
+                - id: "NPM::loose-envify:1.3.1"
                   dependencies:
-                  - namespace: ""
-                    name: "js-tokens"
-                    version: "3.0.2"
+                  - id: "NPM::js-tokens:3.0.2"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-types"
-              version: "6.26.0"
+            - id: "NPM::babel-types:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "esutils"
-                version: "2.0.2"
+              - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "to-fast-properties"
-                version: "1.0.3"
+              - id: "NPM::to-fast-properties:1.0.3"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babylon"
-              version: "6.18.0"
+            - id: "NPM::babylon:6.18.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-messages"
-          version: "6.23.0"
+        - id: "NPM::babel-messages:6.23.0"
           dependencies:
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-register"
-          version: "6.26.0"
+        - id: "NPM::babel-register:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "core-js"
-            version: "2.5.2"
+          - id: "NPM::core-js:2.5.2"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "home-or-tmp"
-            version: "2.0.0"
+          - id: "NPM::home-or-tmp:2.0.0"
             dependencies:
-            - namespace: ""
-              name: "os-homedir"
-              version: "1.0.2"
+            - id: "NPM::os-homedir:1.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "os-tmpdir"
-              version: "1.0.2"
+            - id: "NPM::os-tmpdir:1.0.2"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "lodash"
-            version: "4.17.4"
+          - id: "NPM::lodash:4.17.4"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "mkdirp"
-            version: "0.5.1"
+          - id: "NPM::mkdirp:0.5.1"
             dependencies:
-            - namespace: ""
-              name: "minimist"
-              version: "0.0.8"
+            - id: "NPM::minimist:0.0.8"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "source-map-support"
-            version: "0.4.18"
+          - id: "NPM::source-map-support:0.4.18"
             dependencies:
-            - namespace: ""
-              name: "source-map"
-              version: "0.5.7"
+            - id: "NPM::source-map:0.5.7"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-runtime"
-          version: "6.26.0"
+        - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "core-js"
-            version: "2.5.2"
+          - id: "NPM::core-js:2.5.2"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "regenerator-runtime"
-            version: "0.11.1"
+          - id: "NPM::regenerator-runtime:0.11.1"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-template"
-          version: "6.26.0"
+        - id: "NPM::babel-template:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-traverse"
-            version: "6.26.0"
+          - id: "NPM::babel-traverse:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-code-frame"
-              version: "6.26.0"
+            - id: "NPM::babel-code-frame:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "chalk"
-                version: "1.1.3"
+              - id: "NPM::chalk:1.1.3"
                 dependencies:
-                - namespace: ""
-                  name: "ansi-styles"
-                  version: "2.2.1"
+                - id: "NPM::ansi-styles:2.2.1"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "escape-string-regexp"
-                  version: "1.0.5"
+                - id: "NPM::escape-string-regexp:1.0.5"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "has-ansi"
-                  version: "2.0.0"
+                - id: "NPM::has-ansi:2.0.0"
                   dependencies:
-                  - namespace: ""
-                    name: "ansi-regex"
-                    version: "2.1.1"
+                  - id: "NPM::ansi-regex:2.1.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "strip-ansi"
-                  version: "3.0.1"
+                - id: "NPM::strip-ansi:3.0.1"
                   dependencies:
-                  - namespace: ""
-                    name: "ansi-regex"
-                    version: "2.1.1"
+                  - id: "NPM::ansi-regex:2.1.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "supports-color"
-                  version: "2.0.0"
+                - id: "NPM::supports-color:2.0.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "esutils"
-                version: "2.0.2"
+              - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "js-tokens"
-                version: "3.0.2"
+              - id: "NPM::js-tokens:3.0.2"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-messages"
-              version: "6.23.0"
+            - id: "NPM::babel-messages:6.23.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-types"
-              version: "6.26.0"
+            - id: "NPM::babel-types:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "esutils"
-                version: "2.0.2"
+              - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "to-fast-properties"
-                version: "1.0.3"
+              - id: "NPM::to-fast-properties:1.0.3"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babylon"
-              version: "6.18.0"
+            - id: "NPM::babylon:6.18.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "debug"
-              version: "2.6.9"
+            - id: "NPM::debug:2.6.9"
               dependencies:
-              - namespace: ""
-                name: "ms"
-                version: "2.0.0"
+              - id: "NPM::ms:2.0.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "globals"
-              version: "9.18.0"
+            - id: "NPM::globals:9.18.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "invariant"
-              version: "2.2.2"
+            - id: "NPM::invariant:2.2.2"
               dependencies:
-              - namespace: ""
-                name: "loose-envify"
-                version: "1.3.1"
+              - id: "NPM::loose-envify:1.3.1"
                 dependencies:
-                - namespace: ""
-                  name: "js-tokens"
-                  version: "3.0.2"
+                - id: "NPM::js-tokens:3.0.2"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-types"
-            version: "6.26.0"
+          - id: "NPM::babel-types:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "esutils"
-              version: "2.0.2"
+            - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "to-fast-properties"
-              version: "1.0.3"
+            - id: "NPM::to-fast-properties:1.0.3"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babylon"
-            version: "6.18.0"
+          - id: "NPM::babylon:6.18.0"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "lodash"
-            version: "4.17.4"
+          - id: "NPM::lodash:4.17.4"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-traverse"
-          version: "6.26.0"
+        - id: "NPM::babel-traverse:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "babel-code-frame"
-            version: "6.26.0"
+          - id: "NPM::babel-code-frame:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "chalk"
-              version: "1.1.3"
+            - id: "NPM::chalk:1.1.3"
               dependencies:
-              - namespace: ""
-                name: "ansi-styles"
-                version: "2.2.1"
+              - id: "NPM::ansi-styles:2.2.1"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "escape-string-regexp"
-                version: "1.0.5"
+              - id: "NPM::escape-string-regexp:1.0.5"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "has-ansi"
-                version: "2.0.0"
+              - id: "NPM::has-ansi:2.0.0"
                 dependencies:
-                - namespace: ""
-                  name: "ansi-regex"
-                  version: "2.1.1"
+                - id: "NPM::ansi-regex:2.1.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "strip-ansi"
-                version: "3.0.1"
+              - id: "NPM::strip-ansi:3.0.1"
                 dependencies:
-                - namespace: ""
-                  name: "ansi-regex"
-                  version: "2.1.1"
+                - id: "NPM::ansi-regex:2.1.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "supports-color"
-                version: "2.0.0"
+              - id: "NPM::supports-color:2.0.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "esutils"
-              version: "2.0.2"
+            - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "js-tokens"
-              version: "3.0.2"
+            - id: "NPM::js-tokens:3.0.2"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-messages"
-            version: "6.23.0"
+          - id: "NPM::babel-messages:6.23.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-types"
-            version: "6.26.0"
+          - id: "NPM::babel-types:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "esutils"
-              version: "2.0.2"
+            - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "to-fast-properties"
-              version: "1.0.3"
+            - id: "NPM::to-fast-properties:1.0.3"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babylon"
-            version: "6.18.0"
+          - id: "NPM::babylon:6.18.0"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "debug"
-            version: "2.6.9"
+          - id: "NPM::debug:2.6.9"
             dependencies:
-            - namespace: ""
-              name: "ms"
-              version: "2.0.0"
+            - id: "NPM::ms:2.0.0"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "globals"
-            version: "9.18.0"
+          - id: "NPM::globals:9.18.0"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "invariant"
-            version: "2.2.2"
+          - id: "NPM::invariant:2.2.2"
             dependencies:
-            - namespace: ""
-              name: "loose-envify"
-              version: "1.3.1"
+            - id: "NPM::loose-envify:1.3.1"
               dependencies:
-              - namespace: ""
-                name: "js-tokens"
-                version: "3.0.2"
+              - id: "NPM::js-tokens:3.0.2"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "lodash"
-            version: "4.17.4"
+          - id: "NPM::lodash:4.17.4"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-types"
-          version: "6.26.0"
+        - id: "NPM::babel-types:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "esutils"
-            version: "2.0.2"
+          - id: "NPM::esutils:2.0.2"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "lodash"
-            version: "4.17.4"
+          - id: "NPM::lodash:4.17.4"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "to-fast-properties"
-            version: "1.0.3"
+          - id: "NPM::to-fast-properties:1.0.3"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babylon"
-          version: "6.18.0"
+        - id: "NPM::babylon:6.18.0"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "convert-source-map"
-          version: "1.5.1"
+        - id: "NPM::convert-source-map:1.5.1"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "debug"
-          version: "2.6.9"
+        - id: "NPM::debug:2.6.9"
           dependencies:
-          - namespace: ""
-            name: "ms"
-            version: "2.0.0"
+          - id: "NPM::ms:2.0.0"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "json5"
-          version: "0.5.1"
+        - id: "NPM::json5:0.5.1"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "lodash"
-          version: "4.17.4"
+        - id: "NPM::lodash:4.17.4"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "minimatch"
-          version: "3.0.4"
+        - id: "NPM::minimatch:3.0.4"
           dependencies:
-          - namespace: ""
-            name: "brace-expansion"
-            version: "1.1.8"
+          - id: "NPM::brace-expansion:1.1.8"
             dependencies:
-            - namespace: ""
-              name: "balanced-match"
-              version: "1.0.0"
+            - id: "NPM::balanced-match:1.0.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "concat-map"
-              version: "0.0.1"
+            - id: "NPM::concat-map:0.0.1"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "path-is-absolute"
-          version: "1.0.1"
+        - id: "NPM::path-is-absolute:1.0.1"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "private"
-          version: "0.1.8"
+        - id: "NPM::private:0.1.8"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "slash"
-          version: "1.0.0"
+        - id: "NPM::slash:1.0.0"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "source-map"
-          version: "0.5.7"
+        - id: "NPM::source-map:0.5.7"
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "babel-polyfill"
-        version: "6.26.0"
+      - id: "NPM::babel-polyfill:6.26.0"
         dependencies:
-        - namespace: ""
-          name: "babel-runtime"
-          version: "6.26.0"
+        - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "core-js"
-            version: "2.5.2"
+          - id: "NPM::core-js:2.5.2"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "regenerator-runtime"
-            version: "0.11.1"
+          - id: "NPM::regenerator-runtime:0.11.1"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "core-js"
-          version: "2.5.2"
+        - id: "NPM::core-js:2.5.2"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "regenerator-runtime"
-          version: "0.10.5"
+        - id: "NPM::regenerator-runtime:0.10.5"
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "babel-register"
-        version: "6.26.0"
+      - id: "NPM::babel-register:6.26.0"
         dependencies:
-        - namespace: ""
-          name: "babel-core"
-          version: "6.26.0"
+        - id: "NPM::babel-core:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "babel-code-frame"
-            version: "6.26.0"
+          - id: "NPM::babel-code-frame:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "chalk"
-              version: "1.1.3"
+            - id: "NPM::chalk:1.1.3"
               dependencies:
-              - namespace: ""
-                name: "ansi-styles"
-                version: "2.2.1"
+              - id: "NPM::ansi-styles:2.2.1"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "escape-string-regexp"
-                version: "1.0.5"
+              - id: "NPM::escape-string-regexp:1.0.5"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "has-ansi"
-                version: "2.0.0"
+              - id: "NPM::has-ansi:2.0.0"
                 dependencies:
-                - namespace: ""
-                  name: "ansi-regex"
-                  version: "2.1.1"
+                - id: "NPM::ansi-regex:2.1.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "strip-ansi"
-                version: "3.0.1"
+              - id: "NPM::strip-ansi:3.0.1"
                 dependencies:
-                - namespace: ""
-                  name: "ansi-regex"
-                  version: "2.1.1"
+                - id: "NPM::ansi-regex:2.1.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "supports-color"
-                version: "2.0.0"
+              - id: "NPM::supports-color:2.0.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "esutils"
-              version: "2.0.2"
+            - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "js-tokens"
-              version: "3.0.2"
+            - id: "NPM::js-tokens:3.0.2"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-generator"
-            version: "6.26.0"
+          - id: "NPM::babel-generator:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-messages"
-              version: "6.23.0"
+            - id: "NPM::babel-messages:6.23.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-types"
-              version: "6.26.0"
+            - id: "NPM::babel-types:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "esutils"
-                version: "2.0.2"
+              - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "to-fast-properties"
-                version: "1.0.3"
+              - id: "NPM::to-fast-properties:1.0.3"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "detect-indent"
-              version: "4.0.0"
+            - id: "NPM::detect-indent:4.0.0"
               dependencies:
-              - namespace: ""
-                name: "repeating"
-                version: "2.0.1"
+              - id: "NPM::repeating:2.0.1"
                 dependencies:
-                - namespace: ""
-                  name: "is-finite"
-                  version: "1.0.2"
+                - id: "NPM::is-finite:1.0.2"
                   dependencies:
-                  - namespace: ""
-                    name: "number-is-nan"
-                    version: "1.0.1"
+                  - id: "NPM::number-is-nan:1.0.1"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "jsesc"
-              version: "1.3.0"
+            - id: "NPM::jsesc:1.3.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "source-map"
-              version: "0.5.7"
+            - id: "NPM::source-map:0.5.7"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "trim-right"
-              version: "1.0.1"
+            - id: "NPM::trim-right:1.0.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-helpers"
-            version: "6.24.1"
+          - id: "NPM::babel-helpers:6.24.1"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-template"
-              version: "6.26.0"
+            - id: "NPM::babel-template:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-traverse"
-                version: "6.26.0"
+              - id: "NPM::babel-traverse:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "babel-code-frame"
-                  version: "6.26.0"
+                - id: "NPM::babel-code-frame:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "chalk"
-                    version: "1.1.3"
+                  - id: "NPM::chalk:1.1.3"
                     dependencies:
-                    - namespace: ""
-                      name: "ansi-styles"
-                      version: "2.2.1"
+                    - id: "NPM::ansi-styles:2.2.1"
                       dependencies: []
                       errors: []
-                    - namespace: ""
-                      name: "escape-string-regexp"
-                      version: "1.0.5"
+                    - id: "NPM::escape-string-regexp:1.0.5"
                       dependencies: []
                       errors: []
-                    - namespace: ""
-                      name: "has-ansi"
-                      version: "2.0.0"
+                    - id: "NPM::has-ansi:2.0.0"
                       dependencies:
-                      - namespace: ""
-                        name: "ansi-regex"
-                        version: "2.1.1"
+                      - id: "NPM::ansi-regex:2.1.1"
                         dependencies: []
                         errors: []
                       errors: []
-                    - namespace: ""
-                      name: "strip-ansi"
-                      version: "3.0.1"
+                    - id: "NPM::strip-ansi:3.0.1"
                       dependencies:
-                      - namespace: ""
-                        name: "ansi-regex"
-                        version: "2.1.1"
+                      - id: "NPM::ansi-regex:2.1.1"
                         dependencies: []
                         errors: []
                       errors: []
-                    - namespace: ""
-                      name: "supports-color"
-                      version: "2.0.0"
+                    - id: "NPM::supports-color:2.0.0"
                       dependencies: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "esutils"
-                    version: "2.0.2"
+                  - id: "NPM::esutils:2.0.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "js-tokens"
-                    version: "3.0.2"
+                  - id: "NPM::js-tokens:3.0.2"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "babel-messages"
-                  version: "6.23.0"
+                - id: "NPM::babel-messages:6.23.0"
                   dependencies:
-                  - namespace: ""
-                    name: "babel-runtime"
-                    version: "6.26.0"
+                  - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
-                    - namespace: ""
-                      name: "core-js"
-                      version: "2.5.2"
+                    - id: "NPM::core-js:2.5.2"
                       dependencies: []
                       errors: []
-                    - namespace: ""
-                      name: "regenerator-runtime"
-                      version: "0.11.1"
+                    - id: "NPM::regenerator-runtime:0.11.1"
                       dependencies: []
                       errors: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "babel-runtime"
-                  version: "6.26.0"
+                - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "core-js"
-                    version: "2.5.2"
+                  - id: "NPM::core-js:2.5.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "regenerator-runtime"
-                    version: "0.11.1"
+                  - id: "NPM::regenerator-runtime:0.11.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "babel-types"
-                  version: "6.26.0"
+                - id: "NPM::babel-types:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "babel-runtime"
-                    version: "6.26.0"
+                  - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
-                    - namespace: ""
-                      name: "core-js"
-                      version: "2.5.2"
+                    - id: "NPM::core-js:2.5.2"
                       dependencies: []
                       errors: []
-                    - namespace: ""
-                      name: "regenerator-runtime"
-                      version: "0.11.1"
+                    - id: "NPM::regenerator-runtime:0.11.1"
                       dependencies: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "esutils"
-                    version: "2.0.2"
+                  - id: "NPM::esutils:2.0.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "lodash"
-                    version: "4.17.4"
+                  - id: "NPM::lodash:4.17.4"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "to-fast-properties"
-                    version: "1.0.3"
+                  - id: "NPM::to-fast-properties:1.0.3"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "babylon"
-                  version: "6.18.0"
+                - id: "NPM::babylon:6.18.0"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "debug"
-                  version: "2.6.9"
+                - id: "NPM::debug:2.6.9"
                   dependencies:
-                  - namespace: ""
-                    name: "ms"
-                    version: "2.0.0"
+                  - id: "NPM::ms:2.0.0"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "globals"
-                  version: "9.18.0"
+                - id: "NPM::globals:9.18.0"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "invariant"
-                  version: "2.2.2"
+                - id: "NPM::invariant:2.2.2"
                   dependencies:
-                  - namespace: ""
-                    name: "loose-envify"
-                    version: "1.3.1"
+                  - id: "NPM::loose-envify:1.3.1"
                     dependencies:
-                    - namespace: ""
-                      name: "js-tokens"
-                      version: "3.0.2"
+                    - id: "NPM::js-tokens:3.0.2"
                       dependencies: []
                       errors: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "lodash"
-                  version: "4.17.4"
+                - id: "NPM::lodash:4.17.4"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-types"
-                version: "6.26.0"
+              - id: "NPM::babel-types:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "babel-runtime"
-                  version: "6.26.0"
+                - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "core-js"
-                    version: "2.5.2"
+                  - id: "NPM::core-js:2.5.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "regenerator-runtime"
-                    version: "0.11.1"
+                  - id: "NPM::regenerator-runtime:0.11.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "esutils"
-                  version: "2.0.2"
+                - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "lodash"
-                  version: "4.17.4"
+                - id: "NPM::lodash:4.17.4"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "to-fast-properties"
-                  version: "1.0.3"
+                - id: "NPM::to-fast-properties:1.0.3"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babylon"
-                version: "6.18.0"
+              - id: "NPM::babylon:6.18.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-messages"
-            version: "6.23.0"
+          - id: "NPM::babel-messages:6.23.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-runtime"
-            version: "6.26.0"
+          - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "core-js"
-              version: "2.5.2"
+            - id: "NPM::core-js:2.5.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "regenerator-runtime"
-              version: "0.11.1"
+            - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-template"
-            version: "6.26.0"
+          - id: "NPM::babel-template:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-traverse"
-              version: "6.26.0"
+            - id: "NPM::babel-traverse:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-code-frame"
-                version: "6.26.0"
+              - id: "NPM::babel-code-frame:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "chalk"
-                  version: "1.1.3"
+                - id: "NPM::chalk:1.1.3"
                   dependencies:
-                  - namespace: ""
-                    name: "ansi-styles"
-                    version: "2.2.1"
+                  - id: "NPM::ansi-styles:2.2.1"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "escape-string-regexp"
-                    version: "1.0.5"
+                  - id: "NPM::escape-string-regexp:1.0.5"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "has-ansi"
-                    version: "2.0.0"
+                  - id: "NPM::has-ansi:2.0.0"
                     dependencies:
-                    - namespace: ""
-                      name: "ansi-regex"
-                      version: "2.1.1"
+                    - id: "NPM::ansi-regex:2.1.1"
                       dependencies: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "strip-ansi"
-                    version: "3.0.1"
+                  - id: "NPM::strip-ansi:3.0.1"
                     dependencies:
-                    - namespace: ""
-                      name: "ansi-regex"
-                      version: "2.1.1"
+                    - id: "NPM::ansi-regex:2.1.1"
                       dependencies: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "supports-color"
-                    version: "2.0.0"
+                  - id: "NPM::supports-color:2.0.0"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "esutils"
-                  version: "2.0.2"
+                - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "js-tokens"
-                  version: "3.0.2"
+                - id: "NPM::js-tokens:3.0.2"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-messages"
-                version: "6.23.0"
+              - id: "NPM::babel-messages:6.23.0"
                 dependencies:
-                - namespace: ""
-                  name: "babel-runtime"
-                  version: "6.26.0"
+                - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "core-js"
-                    version: "2.5.2"
+                  - id: "NPM::core-js:2.5.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "regenerator-runtime"
-                    version: "0.11.1"
+                  - id: "NPM::regenerator-runtime:0.11.1"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babel-types"
-                version: "6.26.0"
+              - id: "NPM::babel-types:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "babel-runtime"
-                  version: "6.26.0"
+                - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - namespace: ""
-                    name: "core-js"
-                    version: "2.5.2"
+                  - id: "NPM::core-js:2.5.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "regenerator-runtime"
-                    version: "0.11.1"
+                  - id: "NPM::regenerator-runtime:0.11.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "esutils"
-                  version: "2.0.2"
+                - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "lodash"
-                  version: "4.17.4"
+                - id: "NPM::lodash:4.17.4"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "to-fast-properties"
-                  version: "1.0.3"
+                - id: "NPM::to-fast-properties:1.0.3"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "babylon"
-                version: "6.18.0"
+              - id: "NPM::babylon:6.18.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "debug"
-                version: "2.6.9"
+              - id: "NPM::debug:2.6.9"
                 dependencies:
-                - namespace: ""
-                  name: "ms"
-                  version: "2.0.0"
+                - id: "NPM::ms:2.0.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "globals"
-                version: "9.18.0"
+              - id: "NPM::globals:9.18.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "invariant"
-                version: "2.2.2"
+              - id: "NPM::invariant:2.2.2"
                 dependencies:
-                - namespace: ""
-                  name: "loose-envify"
-                  version: "1.3.1"
+                - id: "NPM::loose-envify:1.3.1"
                   dependencies:
-                  - namespace: ""
-                    name: "js-tokens"
-                    version: "3.0.2"
+                  - id: "NPM::js-tokens:3.0.2"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-types"
-              version: "6.26.0"
+            - id: "NPM::babel-types:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "esutils"
-                version: "2.0.2"
+              - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "to-fast-properties"
-                version: "1.0.3"
+              - id: "NPM::to-fast-properties:1.0.3"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babylon"
-              version: "6.18.0"
+            - id: "NPM::babylon:6.18.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-traverse"
-            version: "6.26.0"
+          - id: "NPM::babel-traverse:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-code-frame"
-              version: "6.26.0"
+            - id: "NPM::babel-code-frame:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "chalk"
-                version: "1.1.3"
+              - id: "NPM::chalk:1.1.3"
                 dependencies:
-                - namespace: ""
-                  name: "ansi-styles"
-                  version: "2.2.1"
+                - id: "NPM::ansi-styles:2.2.1"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "escape-string-regexp"
-                  version: "1.0.5"
+                - id: "NPM::escape-string-regexp:1.0.5"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "has-ansi"
-                  version: "2.0.0"
+                - id: "NPM::has-ansi:2.0.0"
                   dependencies:
-                  - namespace: ""
-                    name: "ansi-regex"
-                    version: "2.1.1"
+                  - id: "NPM::ansi-regex:2.1.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "strip-ansi"
-                  version: "3.0.1"
+                - id: "NPM::strip-ansi:3.0.1"
                   dependencies:
-                  - namespace: ""
-                    name: "ansi-regex"
-                    version: "2.1.1"
+                  - id: "NPM::ansi-regex:2.1.1"
                     dependencies: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "supports-color"
-                  version: "2.0.0"
+                - id: "NPM::supports-color:2.0.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "esutils"
-                version: "2.0.2"
+              - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "js-tokens"
-                version: "3.0.2"
+              - id: "NPM::js-tokens:3.0.2"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-messages"
-              version: "6.23.0"
+            - id: "NPM::babel-messages:6.23.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babel-types"
-              version: "6.26.0"
+            - id: "NPM::babel-types:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "babel-runtime"
-                version: "6.26.0"
+              - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - namespace: ""
-                  name: "core-js"
-                  version: "2.5.2"
+                - id: "NPM::core-js:2.5.2"
                   dependencies: []
                   errors: []
-                - namespace: ""
-                  name: "regenerator-runtime"
-                  version: "0.11.1"
+                - id: "NPM::regenerator-runtime:0.11.1"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "esutils"
-                version: "2.0.2"
+              - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "lodash"
-                version: "4.17.4"
+              - id: "NPM::lodash:4.17.4"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "to-fast-properties"
-                version: "1.0.3"
+              - id: "NPM::to-fast-properties:1.0.3"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "babylon"
-              version: "6.18.0"
+            - id: "NPM::babylon:6.18.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "debug"
-              version: "2.6.9"
+            - id: "NPM::debug:2.6.9"
               dependencies:
-              - namespace: ""
-                name: "ms"
-                version: "2.0.0"
+              - id: "NPM::ms:2.0.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "globals"
-              version: "9.18.0"
+            - id: "NPM::globals:9.18.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "invariant"
-              version: "2.2.2"
+            - id: "NPM::invariant:2.2.2"
               dependencies:
-              - namespace: ""
-                name: "loose-envify"
-                version: "1.3.1"
+              - id: "NPM::loose-envify:1.3.1"
                 dependencies:
-                - namespace: ""
-                  name: "js-tokens"
-                  version: "3.0.2"
+                - id: "NPM::js-tokens:3.0.2"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babel-types"
-            version: "6.26.0"
+          - id: "NPM::babel-types:6.26.0"
             dependencies:
-            - namespace: ""
-              name: "babel-runtime"
-              version: "6.26.0"
+            - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - namespace: ""
-                name: "core-js"
-                version: "2.5.2"
+              - id: "NPM::core-js:2.5.2"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "regenerator-runtime"
-                version: "0.11.1"
+              - id: "NPM::regenerator-runtime:0.11.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "esutils"
-              version: "2.0.2"
+            - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "lodash"
-              version: "4.17.4"
+            - id: "NPM::lodash:4.17.4"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "to-fast-properties"
-              version: "1.0.3"
+            - id: "NPM::to-fast-properties:1.0.3"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "babylon"
-            version: "6.18.0"
+          - id: "NPM::babylon:6.18.0"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "convert-source-map"
-            version: "1.5.1"
+          - id: "NPM::convert-source-map:1.5.1"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "debug"
-            version: "2.6.9"
+          - id: "NPM::debug:2.6.9"
             dependencies:
-            - namespace: ""
-              name: "ms"
-              version: "2.0.0"
+            - id: "NPM::ms:2.0.0"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "json5"
-            version: "0.5.1"
+          - id: "NPM::json5:0.5.1"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "lodash"
-            version: "4.17.4"
+          - id: "NPM::lodash:4.17.4"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "minimatch"
-            version: "3.0.4"
+          - id: "NPM::minimatch:3.0.4"
             dependencies:
-            - namespace: ""
-              name: "brace-expansion"
-              version: "1.1.8"
+            - id: "NPM::brace-expansion:1.1.8"
               dependencies:
-              - namespace: ""
-                name: "balanced-match"
-                version: "1.0.0"
+              - id: "NPM::balanced-match:1.0.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "concat-map"
-                version: "0.0.1"
+              - id: "NPM::concat-map:0.0.1"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "path-is-absolute"
-            version: "1.0.1"
+          - id: "NPM::path-is-absolute:1.0.1"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "private"
-            version: "0.1.8"
+          - id: "NPM::private:0.1.8"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "slash"
-            version: "1.0.0"
+          - id: "NPM::slash:1.0.0"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "source-map"
-            version: "0.5.7"
+          - id: "NPM::source-map:0.5.7"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "babel-runtime"
-          version: "6.26.0"
+        - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - namespace: ""
-            name: "core-js"
-            version: "2.5.2"
+          - id: "NPM::core-js:2.5.2"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "regenerator-runtime"
-            version: "0.11.1"
+          - id: "NPM::regenerator-runtime:0.11.1"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "core-js"
-          version: "2.5.2"
+        - id: "NPM::core-js:2.5.2"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "home-or-tmp"
-          version: "2.0.0"
+        - id: "NPM::home-or-tmp:2.0.0"
           dependencies:
-          - namespace: ""
-            name: "os-homedir"
-            version: "1.0.2"
+          - id: "NPM::os-homedir:1.0.2"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "os-tmpdir"
-            version: "1.0.2"
+          - id: "NPM::os-tmpdir:1.0.2"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "lodash"
-          version: "4.17.4"
+        - id: "NPM::lodash:4.17.4"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "mkdirp"
-          version: "0.5.1"
+        - id: "NPM::mkdirp:0.5.1"
           dependencies:
-          - namespace: ""
-            name: "minimist"
-            version: "0.0.8"
+          - id: "NPM::minimist:0.0.8"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "source-map-support"
-          version: "0.4.18"
+        - id: "NPM::source-map-support:0.4.18"
           dependencies:
-          - namespace: ""
-            name: "source-map"
-            version: "0.5.7"
+          - id: "NPM::source-map:0.5.7"
             dependencies: []
             errors: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "babel-runtime"
-        version: "6.26.0"
+      - id: "NPM::babel-runtime:6.26.0"
         dependencies:
-        - namespace: ""
-          name: "core-js"
-          version: "2.5.2"
+        - id: "NPM::core-js:2.5.2"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "regenerator-runtime"
-          version: "0.11.1"
+        - id: "NPM::regenerator-runtime:0.11.1"
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "chokidar"
-        version: "1.7.0"
+      - id: "NPM::chokidar:1.7.0"
         dependencies:
-        - namespace: ""
-          name: "anymatch"
-          version: "1.3.2"
+        - id: "NPM::anymatch:1.3.2"
           dependencies:
-          - namespace: ""
-            name: "micromatch"
-            version: "2.3.11"
+          - id: "NPM::micromatch:2.3.11"
             dependencies:
-            - namespace: ""
-              name: "arr-diff"
-              version: "2.0.0"
+            - id: "NPM::arr-diff:2.0.0"
               dependencies:
-              - namespace: ""
-                name: "arr-flatten"
-                version: "1.1.0"
+              - id: "NPM::arr-flatten:1.1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "array-unique"
-              version: "0.2.1"
+            - id: "NPM::array-unique:0.2.1"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "braces"
-              version: "1.8.5"
+            - id: "NPM::braces:1.8.5"
               dependencies:
-              - namespace: ""
-                name: "expand-range"
-                version: "1.8.2"
+              - id: "NPM::expand-range:1.8.2"
                 dependencies:
-                - namespace: ""
-                  name: "fill-range"
-                  version: "2.2.3"
+                - id: "NPM::fill-range:2.2.3"
                   dependencies:
-                  - namespace: ""
-                    name: "is-number"
-                    version: "2.1.0"
+                  - id: "NPM::is-number:2.1.0"
                     dependencies:
-                    - namespace: ""
-                      name: "kind-of"
-                      version: "3.2.2"
+                    - id: "NPM::kind-of:3.2.2"
                       dependencies:
-                      - namespace: ""
-                        name: "is-buffer"
-                        version: "1.1.6"
+                      - id: "NPM::is-buffer:1.1.6"
                         dependencies: []
                         errors: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "isobject"
-                    version: "2.1.0"
+                  - id: "NPM::isobject:2.1.0"
                     dependencies:
-                    - namespace: ""
-                      name: "isarray"
-                      version: "1.0.0"
+                    - id: "NPM::isarray:1.0.0"
                       dependencies: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "randomatic"
-                    version: "1.1.7"
+                  - id: "NPM::randomatic:1.1.7"
                     dependencies:
-                    - namespace: ""
-                      name: "is-number"
-                      version: "3.0.0"
+                    - id: "NPM::is-number:3.0.0"
                       dependencies:
-                      - namespace: ""
-                        name: "kind-of"
-                        version: "3.2.2"
+                      - id: "NPM::kind-of:3.2.2"
                         dependencies:
-                        - namespace: ""
-                          name: "is-buffer"
-                          version: "1.1.6"
+                        - id: "NPM::is-buffer:1.1.6"
                           dependencies: []
                           errors: []
                         errors: []
                       errors: []
-                    - namespace: ""
-                      name: "kind-of"
-                      version: "4.0.0"
+                    - id: "NPM::kind-of:4.0.0"
                       dependencies:
-                      - namespace: ""
-                        name: "is-buffer"
-                        version: "1.1.6"
+                      - id: "NPM::is-buffer:1.1.6"
                         dependencies: []
                         errors: []
                       errors: []
                     errors: []
-                  - namespace: ""
-                    name: "repeat-element"
-                    version: "1.1.2"
+                  - id: "NPM::repeat-element:1.1.2"
                     dependencies: []
                     errors: []
-                  - namespace: ""
-                    name: "repeat-string"
-                    version: "1.6.1"
+                  - id: "NPM::repeat-string:1.6.1"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "preserve"
-                version: "0.2.0"
+              - id: "NPM::preserve:0.2.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "repeat-element"
-                version: "1.1.2"
+              - id: "NPM::repeat-element:1.1.2"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "expand-brackets"
-              version: "0.1.5"
+            - id: "NPM::expand-brackets:0.1.5"
               dependencies:
-              - namespace: ""
-                name: "is-posix-bracket"
-                version: "0.1.1"
+              - id: "NPM::is-posix-bracket:0.1.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "extglob"
-              version: "0.3.2"
+            - id: "NPM::extglob:0.3.2"
               dependencies:
-              - namespace: ""
-                name: "is-extglob"
-                version: "1.0.0"
+              - id: "NPM::is-extglob:1.0.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "filename-regex"
-              version: "2.0.1"
+            - id: "NPM::filename-regex:2.0.1"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "is-extglob"
-              version: "1.0.0"
+            - id: "NPM::is-extglob:1.0.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "is-glob"
-              version: "2.0.1"
+            - id: "NPM::is-glob:2.0.1"
               dependencies:
-              - namespace: ""
-                name: "is-extglob"
-                version: "1.0.0"
+              - id: "NPM::is-extglob:1.0.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "kind-of"
-              version: "3.2.2"
+            - id: "NPM::kind-of:3.2.2"
               dependencies:
-              - namespace: ""
-                name: "is-buffer"
-                version: "1.1.6"
+              - id: "NPM::is-buffer:1.1.6"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "normalize-path"
-              version: "2.1.1"
+            - id: "NPM::normalize-path:2.1.1"
               dependencies:
-              - namespace: ""
-                name: "remove-trailing-separator"
-                version: "1.1.0"
+              - id: "NPM::remove-trailing-separator:1.1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "object.omit"
-              version: "2.0.1"
+            - id: "NPM::object.omit:2.0.1"
               dependencies:
-              - namespace: ""
-                name: "for-own"
-                version: "0.1.5"
+              - id: "NPM::for-own:0.1.5"
                 dependencies:
-                - namespace: ""
-                  name: "for-in"
-                  version: "1.0.2"
+                - id: "NPM::for-in:1.0.2"
                   dependencies: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "is-extendable"
-                version: "0.1.1"
+              - id: "NPM::is-extendable:0.1.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "parse-glob"
-              version: "3.0.4"
+            - id: "NPM::parse-glob:3.0.4"
               dependencies:
-              - namespace: ""
-                name: "glob-base"
-                version: "0.3.0"
+              - id: "NPM::glob-base:0.3.0"
                 dependencies:
-                - namespace: ""
-                  name: "glob-parent"
-                  version: "2.0.0"
+                - id: "NPM::glob-parent:2.0.0"
                   dependencies:
-                  - namespace: ""
-                    name: "is-glob"
-                    version: "2.0.1"
+                  - id: "NPM::is-glob:2.0.1"
                     dependencies:
-                    - namespace: ""
-                      name: "is-extglob"
-                      version: "1.0.0"
+                    - id: "NPM::is-extglob:1.0.0"
                       dependencies: []
                       errors: []
                     errors: []
                   errors: []
-                - namespace: ""
-                  name: "is-glob"
-                  version: "2.0.1"
+                - id: "NPM::is-glob:2.0.1"
                   dependencies:
-                  - namespace: ""
-                    name: "is-extglob"
-                    version: "1.0.0"
+                  - id: "NPM::is-extglob:1.0.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - namespace: ""
-                name: "is-dotfile"
-                version: "1.0.3"
+              - id: "NPM::is-dotfile:1.0.3"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "is-extglob"
-                version: "1.0.0"
+              - id: "NPM::is-extglob:1.0.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "is-glob"
-                version: "2.0.1"
+              - id: "NPM::is-glob:2.0.1"
                 dependencies:
-                - namespace: ""
-                  name: "is-extglob"
-                  version: "1.0.0"
+                - id: "NPM::is-extglob:1.0.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "regex-cache"
-              version: "0.4.4"
+            - id: "NPM::regex-cache:0.4.4"
               dependencies:
-              - namespace: ""
-                name: "is-equal-shallow"
-                version: "0.1.3"
+              - id: "NPM::is-equal-shallow:0.1.3"
                 dependencies:
-                - namespace: ""
-                  name: "is-primitive"
-                  version: "2.0.0"
+                - id: "NPM::is-primitive:2.0.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "normalize-path"
-            version: "2.1.1"
+          - id: "NPM::normalize-path:2.1.1"
             dependencies:
-            - namespace: ""
-              name: "remove-trailing-separator"
-              version: "1.1.0"
+            - id: "NPM::remove-trailing-separator:1.1.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "async-each"
-          version: "1.0.1"
+        - id: "NPM::async-each:1.0.1"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "fsevents"
-          version: "unknown, package not installed"
+        - id: "NPM::fsevents:unknown, package not installed"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "glob-parent"
-          version: "2.0.0"
+        - id: "NPM::glob-parent:2.0.0"
           dependencies:
-          - namespace: ""
-            name: "is-glob"
-            version: "2.0.1"
+          - id: "NPM::is-glob:2.0.1"
             dependencies:
-            - namespace: ""
-              name: "is-extglob"
-              version: "1.0.0"
+            - id: "NPM::is-extglob:1.0.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "inherits"
-          version: "2.0.3"
+        - id: "NPM::inherits:2.0.3"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "is-binary-path"
-          version: "1.0.1"
+        - id: "NPM::is-binary-path:1.0.1"
           dependencies:
-          - namespace: ""
-            name: "binary-extensions"
-            version: "1.11.0"
+          - id: "NPM::binary-extensions:1.11.0"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "is-glob"
-          version: "2.0.1"
+        - id: "NPM::is-glob:2.0.1"
           dependencies:
-          - namespace: ""
-            name: "is-extglob"
-            version: "1.0.0"
+          - id: "NPM::is-extglob:1.0.0"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "path-is-absolute"
-          version: "1.0.1"
+        - id: "NPM::path-is-absolute:1.0.1"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "readdirp"
-          version: "2.1.0"
+        - id: "NPM::readdirp:2.1.0"
           dependencies:
-          - namespace: ""
-            name: "graceful-fs"
-            version: "4.1.11"
+          - id: "NPM::graceful-fs:4.1.11"
             dependencies: []
             errors: []
-          - namespace: ""
-            name: "minimatch"
-            version: "3.0.4"
+          - id: "NPM::minimatch:3.0.4"
             dependencies:
-            - namespace: ""
-              name: "brace-expansion"
-              version: "1.1.8"
+            - id: "NPM::brace-expansion:1.1.8"
               dependencies:
-              - namespace: ""
-                name: "balanced-match"
-                version: "1.0.0"
+              - id: "NPM::balanced-match:1.0.0"
                 dependencies: []
                 errors: []
-              - namespace: ""
-                name: "concat-map"
-                version: "0.0.1"
+              - id: "NPM::concat-map:0.0.1"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "readable-stream"
-            version: "2.3.3"
+          - id: "NPM::readable-stream:2.3.3"
             dependencies:
-            - namespace: ""
-              name: "core-util-is"
-              version: "1.0.2"
+            - id: "NPM::core-util-is:1.0.2"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "inherits"
-              version: "2.0.3"
+            - id: "NPM::inherits:2.0.3"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "isarray"
-              version: "1.0.0"
+            - id: "NPM::isarray:1.0.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "process-nextick-args"
-              version: "1.0.7"
+            - id: "NPM::process-nextick-args:1.0.7"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "safe-buffer"
-              version: "5.1.1"
+            - id: "NPM::safe-buffer:5.1.1"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "string_decoder"
-              version: "1.0.3"
+            - id: "NPM::string_decoder:1.0.3"
               dependencies:
-              - namespace: ""
-                name: "safe-buffer"
-                version: "5.1.1"
+              - id: "NPM::safe-buffer:5.1.1"
                 dependencies: []
                 errors: []
               errors: []
-            - namespace: ""
-              name: "util-deprecate"
-              version: "1.0.2"
+            - id: "NPM::util-deprecate:1.0.2"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "set-immediate-shim"
-            version: "1.0.1"
+          - id: "NPM::set-immediate-shim:1.0.1"
             dependencies: []
             errors: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "commander"
-        version: "2.12.2"
+      - id: "NPM::commander:2.12.2"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "convert-source-map"
-        version: "1.5.1"
+      - id: "NPM::convert-source-map:1.5.1"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "fs-readdir-recursive"
-        version: "1.1.0"
+      - id: "NPM::fs-readdir-recursive:1.1.0"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "glob"
-        version: "7.1.2"
+      - id: "NPM::glob:7.1.2"
         dependencies:
-        - namespace: ""
-          name: "fs.realpath"
-          version: "1.0.0"
+        - id: "NPM::fs.realpath:1.0.0"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "inflight"
-          version: "1.0.6"
+        - id: "NPM::inflight:1.0.6"
           dependencies:
-          - namespace: ""
-            name: "once"
-            version: "1.4.0"
+          - id: "NPM::once:1.4.0"
             dependencies:
-            - namespace: ""
-              name: "wrappy"
-              version: "1.0.2"
+            - id: "NPM::wrappy:1.0.2"
               dependencies: []
               errors: []
             errors: []
-          - namespace: ""
-            name: "wrappy"
-            version: "1.0.2"
+          - id: "NPM::wrappy:1.0.2"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "inherits"
-          version: "2.0.3"
+        - id: "NPM::inherits:2.0.3"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "minimatch"
-          version: "3.0.4"
+        - id: "NPM::minimatch:3.0.4"
           dependencies:
-          - namespace: ""
-            name: "brace-expansion"
-            version: "1.1.8"
+          - id: "NPM::brace-expansion:1.1.8"
             dependencies:
-            - namespace: ""
-              name: "balanced-match"
-              version: "1.0.0"
+            - id: "NPM::balanced-match:1.0.0"
               dependencies: []
               errors: []
-            - namespace: ""
-              name: "concat-map"
-              version: "0.0.1"
+            - id: "NPM::concat-map:0.0.1"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "once"
-          version: "1.4.0"
+        - id: "NPM::once:1.4.0"
           dependencies:
-          - namespace: ""
-            name: "wrappy"
-            version: "1.0.2"
+          - id: "NPM::wrappy:1.0.2"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "path-is-absolute"
-          version: "1.0.1"
+        - id: "NPM::path-is-absolute:1.0.1"
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "lodash"
-        version: "4.17.4"
+      - id: "NPM::lodash:4.17.4"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "output-file-sync"
-        version: "1.1.2"
+      - id: "NPM::output-file-sync:1.1.2"
         dependencies:
-        - namespace: ""
-          name: "graceful-fs"
-          version: "4.1.11"
+        - id: "NPM::graceful-fs:4.1.11"
           dependencies: []
           errors: []
-        - namespace: ""
-          name: "mkdirp"
-          version: "0.5.1"
+        - id: "NPM::mkdirp:0.5.1"
           dependencies:
-          - namespace: ""
-            name: "minimist"
-            version: "0.0.8"
+          - id: "NPM::minimist:0.0.8"
             dependencies: []
             errors: []
           errors: []
-        - namespace: ""
-          name: "object-assign"
-          version: "4.1.1"
+        - id: "NPM::object-assign:4.1.1"
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "path-is-absolute"
-        version: "1.0.1"
+      - id: "NPM::path-is-absolute:1.0.1"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "slash"
-        version: "1.0.0"
+      - id: "NPM::slash:1.0.0"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "source-map"
-        version: "0.5.7"
+      - id: "NPM::source-map:0.5.7"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "v8flags"
-        version: "2.1.1"
+      - id: "NPM::v8flags:2.1.1"
         dependencies:
-        - namespace: ""
-          name: "user-home"
-          version: "1.1.1"
+        - id: "NPM::user-home:1.1.1"
           dependencies: []
           errors: []
         errors: []

@@ -147,9 +147,8 @@ object Main {
     }
 
     private fun addDependency(parent: SingleNode, dependency: PackageReference) {
-        val identifier = "${dependency.namespace}:${dependency.name}:${dependency.version}"
         val dependencyNode = parent.graph.addNode<SingleNode>(UUID.randomUUID().toString())
-        dependencyNode.addAttribute("ui.label", identifier)
+        dependencyNode.addAttribute("ui.label", dependency.id.toString())
         parent.graph.addEdge<Edge>(UUID.randomUUID().toString(), parent, dependencyNode)
 
         dependency.dependencies.forEach {

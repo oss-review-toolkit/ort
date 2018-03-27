@@ -23,39 +23,25 @@ project:
   - name: "install"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "Flask"
-      version: "0.12"
+    - id: "PyPI::Flask:0.12"
       dependencies:
-      - namespace: ""
-        name: "Jinja2"
-        version: "2.8.1"
+      - id: "PyPI::Jinja2:2.8.1"
         dependencies:
-        - namespace: ""
-          name: "MarkupSafe"
-          version: "1.0"
+        - id: "PyPI::MarkupSafe:1.0"
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "Werkzeug"
-        version: "0.14.1"
+      - id: "PyPI::Werkzeug:0.14.1"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "click"
-        version: "6.7"
+      - id: "PyPI::click:6.7"
         dependencies: []
         errors: []
-      - namespace: ""
-        name: "itsdangerous"
-        version: "0.24"
+      - id: "PyPI::itsdangerous:0.24"
         dependencies: []
         errors: []
       errors: []
-    - namespace: ""
-      name: "gunicorn"
-      version: "19.6.0"
+    - id: "PyPI::gunicorn:19.6.0"
       dependencies: []
       errors: []
 packages:

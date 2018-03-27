@@ -29,9 +29,7 @@ project:
   - name: "compile"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
+    - id: "Maven::org.apache.commons:commons-text:1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -42,9 +40,7 @@ project:
   - name: "default"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
+    - id: "Maven::org.apache.commons:commons-text:1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -52,9 +48,7 @@ project:
   - name: "runtime"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
+    - id: "Maven::org.apache.commons:commons-text:1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -65,16 +59,12 @@ project:
   - name: "testCompile"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "junit:junit:4.12"
-      version: ""
+    - id: "Maven::junit:junit:4.12:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ junit:junit:4.12 because no repositories are defined."
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
+    - id: "Maven::org.apache.commons:commons-text:1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -85,16 +75,12 @@ project:
   - name: "testRuntime"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "junit:junit:4.12"
-      version: ""
+    - id: "Maven::junit:junit:4.12:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ junit:junit:4.12 because no repositories are defined."
-    - namespace: ""
-      name: "org.apache.commons:commons-text:1.1"
-      version: ""
+    - id: "Maven::org.apache.commons:commons-text:1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\

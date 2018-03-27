@@ -41,14 +41,20 @@ class AnalyzerResultTest : StringSpec({
                                             delivered = true,
                                             dependencies = sortedSetOf(
                                                     PackageReference(
-                                                            namespace = "namespace1",
-                                                            name = "name1",
-                                                            version = "version1",
+                                                            Identifier(
+                                                                    provider = "provider1",
+                                                                    namespace = "namespace1",
+                                                                    name = "name1",
+                                                                    version = "version1"
+                                                            ),
                                                             dependencies = sortedSetOf(
                                                                     PackageReference(
-                                                                            namespace = "namespace2",
-                                                                            name = "name2",
-                                                                            version = "version2",
+                                                                            Identifier(
+                                                                                    provider = "provider2",
+                                                                                    namespace = "namespace2",
+                                                                                    name = "name2",
+                                                                                    version = "version2"
+                                                                            ),
                                                                             dependencies = sortedSetOf(),
                                                                             errors = listOf("2.1", "2.2")
                                                                     )
@@ -56,9 +62,12 @@ class AnalyzerResultTest : StringSpec({
                                                             errors = listOf("1.1", "1.2")
                                                     ),
                                                     PackageReference(
-                                                            namespace = "namespace3",
-                                                            name = "name3",
-                                                            version = "version3",
+                                                            Identifier(
+                                                                    provider = "provider3",
+                                                                    namespace = "namespace3",
+                                                                    name = "name3",
+                                                                    version = "version3"
+                                                            ),
                                                             dependencies = sortedSetOf(),
                                                             errors = listOf("3.1", "3.2")
                                                     )
@@ -73,9 +82,9 @@ class AnalyzerResultTest : StringSpec({
             val errors = result.collectErrors()
             errors.size shouldBe 4
             errors["provider:namespace:name:version"] shouldBe listOf("a", "b")
-            errors["provider:namespace1:name1:version1"] shouldBe listOf("1.1", "1.2")
-            errors["provider:namespace2:name2:version2"] shouldBe listOf("2.1", "2.2")
-            errors["provider:namespace3:name3:version3"] shouldBe listOf("3.1", "3.2")
+            errors["provider1:namespace1:name1:version1"] shouldBe listOf("1.1", "1.2")
+            errors["provider2:namespace2:name2:version2"] shouldBe listOf("2.1", "2.2")
+            errors["provider3:namespace3:name3:version3"] shouldBe listOf("3.1", "3.2")
         }
     }
 })
