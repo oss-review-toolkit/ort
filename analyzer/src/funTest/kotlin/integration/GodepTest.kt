@@ -83,6 +83,17 @@ class GodepTest : FreeSpec() {
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
+
+            "import dependencies from godeps" {
+                val projectDir = File("src/funTest/assets/projects/external/godep")
+                val manifestFile = File(projectDir, "Godeps" + File.separator + "Godeps.json")
+                val godep = GoDep.create()
+
+                val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                val expectedResult = File(projectDir.parentFile, "godep-expected-output.yml").readText()
+
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
         }
     }
 }

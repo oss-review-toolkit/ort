@@ -1,0 +1,182 @@
+---
+allowDynamicVersions: false
+project:
+  id:
+    provider: "GoDep"
+    namespace: ""
+    name: "godep"
+    version: "ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
+  declared_licenses: []
+  aliases: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tools/godep.git"
+    revision: "ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
+    path: ""
+  homepage_url: ""
+  scopes:
+  - name: "default"
+    delivered: true
+    dependencies:
+    - namespace: ""
+      name: "github.com/kr/fs"
+      version: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "github.com/kr/pretty"
+      version: "f31442d60e51465c69811e2107ae978868dbea5c"
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "github.com/kr/text"
+      version: "6807e777504f54ad073ecef66747de158294b639"
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "github.com/pmezard/go-difflib"
+      version: "f78a839676152fd9f4863704f5d516195c18fc14"
+      dependencies: []
+      errors: []
+    - namespace: ""
+      name: "golang.org/x/tools"
+      version: "1f1b3322f67af76803c942fd237291538ec68262"
+      dependencies: []
+      errors: []
+packages:
+- id:
+    provider: "GoDep"
+    namespace: ""
+    name: "github.com/kr/fs"
+    version: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "GoDep"
+    url: "github.com/kr/fs"
+    revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kr/fs.git"
+    revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+    path: ""
+- id:
+    provider: "GoDep"
+    namespace: ""
+    name: "github.com/kr/pretty"
+    version: "f31442d60e51465c69811e2107ae978868dbea5c"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "GoDep"
+    url: "github.com/kr/pretty"
+    revision: "f31442d60e51465c69811e2107ae978868dbea5c"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kr/pretty.git"
+    revision: "f31442d60e51465c69811e2107ae978868dbea5c"
+    path: ""
+- id:
+    provider: "GoDep"
+    namespace: ""
+    name: "github.com/kr/text"
+    version: "6807e777504f54ad073ecef66747de158294b639"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "GoDep"
+    url: "github.com/kr/text"
+    revision: "6807e777504f54ad073ecef66747de158294b639"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kr/text.git"
+    revision: "6807e777504f54ad073ecef66747de158294b639"
+    path: ""
+- id:
+    provider: "GoDep"
+    namespace: ""
+    name: "github.com/pmezard/go-difflib"
+    version: "f78a839676152fd9f4863704f5d516195c18fc14"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "GoDep"
+    url: "github.com/pmezard/go-difflib"
+    revision: "f78a839676152fd9f4863704f5d516195c18fc14"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pmezard/go-difflib.git"
+    revision: "f78a839676152fd9f4863704f5d516195c18fc14"
+    path: ""
+- id:
+    provider: "GoDep"
+    namespace: ""
+    name: "golang.org/x/tools"
+    version: "1f1b3322f67af76803c942fd237291538ec68262"
+  declared_licenses: []
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  source_artifact:
+    url: ""
+    hash: ""
+    hash_algorithm: ""
+  vcs:
+    type: "GoDep"
+    url: "golang.org/x/tools"
+    revision: "1f1b3322f67af76803c942fd237291538ec68262"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://go.googlesource.com/tools"
+    revision: "1f1b3322f67af76803c942fd237291538ec68262"
+    path: ""
+errors: []
