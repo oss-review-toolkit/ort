@@ -19,11 +19,11 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.scanner.scanners.BoyterLc
+//import com.here.ort.scanner.scanners.BoyterLc
 import com.here.ort.scanner.scanners.Licensee
-import com.here.ort.scanner.scanners.ScanCode
-import com.here.ort.utils.ExpensiveTag
-import com.here.ort.utils.ScanCodeTag
+//import com.here.ort.scanner.scanners.ScanCode
+//import com.here.ort.utils.ExpensiveTag
+//import com.here.ort.utils.ScanCodeTag
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.matchers.shouldBe
@@ -48,22 +48,22 @@ class ScanPathTest : StringSpec() {
     }
 
     init {
-        "BoyterLc recognizes our own LICENSE" {
+        /*"BoyterLc recognizes our own LICENSE" {
             val result = BoyterLc.scan(File("../LICENSE"), outputDir)
             result.fileCount shouldBe 1
             result.licenses shouldBe setOf("Apache-2.0", "ECL-2.0")
-        }.config(tags = setOf(ExpensiveTag))
+        }.config(tags = setOf(ExpensiveTag))*/
 
         "Licensee recognizes our own LICENSE" {
             val result = Licensee.scan(File("../LICENSE"), outputDir)
             result.fileCount shouldBe 1
             result.licenses shouldBe setOf("Apache-2.0")
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "ScanCode recognizes our own LICENSE" {
+        /*"ScanCode recognizes our own LICENSE" {
             val result = ScanCode.scan(File("../LICENSE"), outputDir)
             result.fileCount shouldBe 1
             result.licenses shouldBe setOf("Apache-2.0")
-        }.config(tags = setOf(ExpensiveTag, ScanCodeTag))
+        }.config(tags = setOf(ExpensiveTag, ScanCodeTag))*/
     }
 }
