@@ -23,34 +23,22 @@ project:
   - name: "install"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "ply"
-      version: "3.11"
+    - id: "PyPI::ply:3.11"
       dependencies: []
       errors: []
-    - namespace: ""
-      name: "rdflib"
-      version: "4.2.2"
+    - id: "PyPI::rdflib:4.2.2"
       dependencies:
-      - namespace: ""
-        name: "isodate"
-        version: "0.6.0"
+      - id: "PyPI::isodate:0.6.0"
         dependencies:
-        - namespace: ""
-          name: "six"
-          version: "1.11.0"
+        - id: "PyPI::six:1.11.0"
           dependencies: []
           errors: []
         errors: []
-      - namespace: ""
-        name: "pyparsing"
-        version: "2.2.0"
+      - id: "PyPI::pyparsing:2.2.0"
         dependencies: []
         errors: []
       errors: []
-    - namespace: ""
-      name: "six"
-      version: "1.11.0"
+    - id: "PyPI::six:1.11.0"
       dependencies: []
       errors: []
 packages:

@@ -191,7 +191,7 @@ class Gradle : PackageManager() {
         }
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-        return PackageReference(dependency.groupId, dependency.artifactId, dependency.version,
+        return PackageReference(Identifier("Maven", dependency.groupId, dependency.artifactId, dependency.version),
                 transitiveDependencies.toSortedSet(), errors)
     }
 

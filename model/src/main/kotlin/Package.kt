@@ -91,7 +91,7 @@ data class Package(
      * dependencies still need to be filled out.
      */
     fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf()) =
-            PackageReference(id.namespace, id.name, id.version, dependencies)
+            PackageReference(id, dependencies)
 
     companion object {
         /**

@@ -183,9 +183,7 @@ class Maven : PackageManager() {
             }
 
             return PackageReference(
-                    namespace = node.artifact.groupId,
-                    name = node.artifact.artifactId,
-                    version = node.artifact.version,
+                    Identifier("Maven", node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
                     dependencies = sortedSetOf(),
                     errors = e.collectMessages()
             )

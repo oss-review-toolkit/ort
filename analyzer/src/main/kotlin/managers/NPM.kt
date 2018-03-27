@@ -403,7 +403,7 @@ class NPM : PackageManager() {
             return packageInfo.toReference(dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
-            return PackageReference("", name, "unknown, package not installed", sortedSetOf())
+            return PackageReference(Identifier("NPM", "", name, "unknown, package not installed"), sortedSetOf())
         } else {
             var parent = startDir.parentFile.parentFile
 
