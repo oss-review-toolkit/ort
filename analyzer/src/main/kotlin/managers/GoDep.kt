@@ -25,7 +25,14 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.*
+import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
+import com.here.ort.model.Package
+import com.here.ort.model.PackageReference
+import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
+import com.here.ort.model.Scope
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
