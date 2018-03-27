@@ -107,11 +107,7 @@ project:
         errors: []
       errors: []
 packages:
-- id:
-    provider: "Maven"
-    namespace: "com.here.ort.gradle.example"
-    name: "lib"
-    version: "1.0.0"
+- id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
   declared_licenses: []
   description: ""
   homepage_url: ""
@@ -133,11 +129,7 @@ packages:
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
-- id:
-    provider: "Maven"
-    namespace: "org.apache.commons"
-    name: "commons-lang3"
-    version: "3.5"
+- id: "Maven:org.apache.commons:commons-lang3:3.5"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
@@ -162,11 +154,7 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
     revision: "LANG_3_5"
     path: ""
-- id:
-    provider: "Maven"
-    namespace: "org.apache.commons"
-    name: "commons-text"
-    version: "1.1"
+- id: "Maven:org.apache.commons:commons-text:1.1"
   declared_licenses:
   - "Apache License, Version 2.0"
   description: "Apache Commons Text is a library focused on algorithms working on\
@@ -190,11 +178,7 @@ packages:
     url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
     revision: ""
     path: ""
-- id:
-    provider: "Maven"
-    namespace: "org.apache.struts"
-    name: "struts2-assembly"
-    version: "2.5.14.1"
+- id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   declared_licenses:
   - "The Apache Software License, Version 2.0"
   description: "Apache Struts 2"
