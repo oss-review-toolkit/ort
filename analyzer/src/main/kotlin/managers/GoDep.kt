@@ -47,19 +47,22 @@ class GoDep : PackageManager() {
             "https://golang.github.io/dep/",
             "Go",
             // FIXME DRY names of legacy manifest files
-            listOf("Gopkg.toml", "glide.yaml")
+            listOf("Gopkg.toml", "glide.yaml", "Godeps.json")
     ) {
-        // TODO Add remaining supported legacy manifest files.
-        private val LEGACY_MANIFESTS = mapOf("glide.yaml" to "glide.lock")
+        private val NO_LOCKFILE = "NO_LOCKFILE"
+
+        private val LEGACY_MANIFESTS = mapOf(
+                "glide.yaml" to "glide.lock",
+                "Godeps.json" to NO_LOCKFILE
+        )
+
         override fun create() = GoDep()
     }
 
     override fun command(workingDir: File) = "dep"
 
     override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
-        // Normalize the path to avoid using "." as the name of the project when the analyzer is run with "-i .".
-        val projectDir = definitionFile.parentFile.toPath().normalize().toFile()
-
+        val projectDir = resolveProjectRoot(definitionFile)
         val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
         val workingDir = setUpWorkspace(projectDir, gopath)
 
@@ -129,15 +132,24 @@ class GoDep : PackageManager() {
         )
     }
 
-    private fun importLegacyManifest(definitionFile: File, projectDir: File, workingDir: File, gopath: File) {
-        val lockFile = File(workingDir, LEGACY_MANIFESTS[definitionFile.name])
-
-        if (!lockFile.isFile && !Main.allowDynamicVersions) {
-            throw IllegalArgumentException(
-                    "No lockfile found in $projectDir, dependency versions are unstable.")
+    private fun resolveProjectRoot(definitionFile: File): File {
+        val projectDir = when (definitionFile.name) {
+            "Godeps.json" -> definitionFile.parentFile.parentFile
+            else -> definitionFile.parentFile
         }
 
-        log.debug { "Running \"dep init\" to import legacy manifest file ${definitionFile.name}" }
+        // Normalize the path to avoid using "." as the name of the project when the analyzer is run with "-i .".
+        return projectDir.toPath().normalize().toFile()
+    }
+
+    private fun importLegacyManifest(definitionFile: File, projectDir: File, workingDir: File, gopath: File) {
+        val lockfileName = LEGACY_MANIFESTS[definitionFile.name]
+
+        if (lockfileName != NO_LOCKFILE && !File(workingDir, lockfileName).isFile && !Main.allowDynamicVersions) {
+            throw IllegalArgumentException("No lockfile found in $projectDir, dependency versions are unstable.")
+        }
+
+        log.debug { "Running 'dep init' to import legacy manifest file ${definitionFile.name}" }
 
         val env = mapOf("GOPATH" to gopath.absolutePath)
         ProcessCapture(workingDir, env, "dep", "init").requireSuccess()
@@ -161,22 +173,22 @@ class GoDep : PackageManager() {
     }
 
     private fun parseProjects(workingDir: File, gopath: File): List<Map<String, String>> {
-        val lockFile = File(workingDir, "Gopkg.lock")
-        if (!lockFile.isFile) {
+        val lockfile = File(workingDir, "Gopkg.lock")
+        if (!lockfile.isFile) {
             if (!Main.allowDynamicVersions) {
                 throw IllegalArgumentException(
                         "No lockfile found in $workingDir, dependency versions are unstable.")
             }
 
-            log.debug { "Running \"dep ensure\" to generate missing lockfile in $workingDir" }
+            log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
 
             val env = mapOf("GOPATH" to gopath.absolutePath)
             ProcessCapture(workingDir, env, "dep", "ensure").requireSuccess()
         }
 
-        val entries = Toml().read(lockFile).toMap()["projects"]
+        val entries = Toml().read(lockfile).toMap()["projects"]
         if (entries == null) {
-            log.warn { "${lockFile.name} is missing any [[projects]] entries" }
+            log.warn { "${lockfile.name} is missing any [[projects]] entries" }
             return listOf()
         }
 
@@ -188,7 +200,7 @@ class GoDep : PackageManager() {
             val revision = project["revision"]
 
             if (name !is String || revision !is String) {
-                log.warn { "Invalid [[projects]] entry in $lockFile: $entry" }
+                log.warn { "Invalid [[projects]] entry in $lockfile: $entry" }
                 continue
             }
 

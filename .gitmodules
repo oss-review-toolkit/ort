@@ -26,3 +26,7 @@
 	path = analyzer/src/funTest/assets/projects/external/sprig
 	url = https://github.com/Masterminds/sprig.git
 	ignore = untracked
+[submodule "godep"]
+	path = analyzer/src/funTest/assets/projects/external/godep
+	url = https://github.com/tools/godep.git
+	ignore = untracked
