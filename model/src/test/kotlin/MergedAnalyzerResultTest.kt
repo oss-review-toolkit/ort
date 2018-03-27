@@ -22,7 +22,7 @@ package com.here.ort.model
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
-class MergedResultsBuilderTest : StringSpec() {
+class MergedAnalyzerResultTest : StringSpec() {
     init {
         "MergedResultsBuilder merges results from all files" {
             val builder = MergedResultsBuilder(true, ScannedDirectoryDetails("test-project", "/some/path/test-project",
