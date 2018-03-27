@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: true
 project:
-  id:
-    provider: "SBT"
-    namespace: "io.github.soc"
-    name: "directories"
-    version: "6"
+  id: "SBT:io.github.soc:directories:6"
   declared_licenses:
   - "Mozilla Public License 2.0"
   aliases: []

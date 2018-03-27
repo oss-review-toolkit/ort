@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: true
 project:
-  id:
-    provider: "Gradle"
-    namespace: ""
-    name: "Gradle-Example"
-    version: ""
+  id: "Gradle::Gradle-Example:"
   declared_licenses: []
   aliases: []
   vcs:

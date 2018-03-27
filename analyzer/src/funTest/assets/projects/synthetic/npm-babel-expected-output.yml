@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: false
 project:
-  id:
-    provider: "NPM"
-    namespace: ""
-    name: "npm-project-that-depends-on-babel"
-    version: "1.0.0"
+  id: "NPM::npm-project-that-depends-on-babel:1.0.0"
   declared_licenses:
   - "Apache-2.0"
   aliases: []

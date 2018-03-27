@@ -14,11 +14,7 @@ repository:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
 projects:
-- id:
-    provider: "Gradle"
-    namespace: ""
-    name: "Gradle-Example"
-    version: ""
+- id: "Gradle::Gradle-Example:"
   declared_licenses: []
   aliases: []
   vcs:
@@ -33,11 +29,7 @@ projects:
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   homepage_url: ""
   scopes: []
-- id:
-    provider: "Gradle"
-    namespace: "com.here.ort.gradle.example"
-    name: "app"
-    version: "1.0.0"
+- id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
@@ -142,11 +134,7 @@ projects:
         dependencies: []
         errors: []
       errors: []
-- id:
-    provider: "Gradle"
-    namespace: "com.here.ort.gradle.example"
-    name: "lib-without-repo"
-    version: "1.0.0"
+- id: "Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
@@ -226,11 +214,7 @@ projects:
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
-- id:
-    provider: "Gradle"
-    namespace: "com.here.ort.gradle.example"
-    name: "lib"
-    version: "1.0.0"
+- id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
