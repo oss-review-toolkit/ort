@@ -17,17 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
-
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.Identifier
-import com.here.ort.model.MergedResultsBuilder
-import com.here.ort.model.Package
-import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.ScannedDirectoryDetails
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
+package com.here.ort.model
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
