@@ -23,24 +23,7 @@ install:
   - sudo apt install -y cvs
 
 script:
-  - if git grep -L "Copyright" -- "*.kt"; then
-      echo "Please add Copyright statements to the above files.";
-      exit 1;
-    fi
-  - if ./ktlint | grep -Ev "(Wildcard import|Unexpected spacing before)"; then
-      echo "Please correct above lint issues.";
-      exit 1;
-    fi
-  - set -o pipefail
-  - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
-      ./gradlew -DexcludeTags=ScanCodeTag --stacktrace check | tee log.txt;
-    else
-      ./gradlew -DexcludeTags=ExpensiveTag --stacktrace check | tee log.txt;
-    fi
-  - if grep -A1 ".+Test.+STARTED$" log.txt | grep -q "^:"; then
-      echo "Some tests seemingly have been aborted.";
-      exit 1;
-    fi
+  - ./gradlew scanner:funTest --tests com.here.ort.scanner.ScanPathTest
 
 addons:
   artifacts:
