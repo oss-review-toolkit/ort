@@ -42,6 +42,10 @@ data class PackageReference(
          */
         val errors: List<String> = emptyList()
 ) : Comparable<PackageReference> {
+    fun collectAllDependencies(): SortedSet<Identifier> = dependencies.map { it.id }.toSortedSet().also { result ->
+        dependencies.forEach { result.addAll(it.collectAllDependencies()) }
+    }
+
     /**
      * A comparison function to sort package references by their identifier.
      */

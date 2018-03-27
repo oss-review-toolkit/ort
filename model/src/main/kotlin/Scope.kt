@@ -47,6 +47,10 @@ data class Scope(
          */
         val dependencies: SortedSet<PackageReference>
 ) : Comparable<Scope> {
+    fun collectAllDependencies(): SortedSet<Identifier> = dependencies.map { it.id }.toSortedSet().also { result ->
+        dependencies.forEach { result.addAll(it.collectAllDependencies()) }
+    }
+
     /**
      * A comparison function to sort scopes by their name.
      */

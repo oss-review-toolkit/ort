@@ -68,6 +68,10 @@ data class Project(
          */
         val scopes: SortedSet<Scope>
 ) : Comparable<Project> {
+    fun collectAllDependencies(): SortedSet<Identifier> = sortedSetOf<Identifier>().also { result ->
+        scopes.forEach { result.addAll(it.collectAllDependencies()) }
+    }
+
     /**
      * A comparison function to sort projects by their identifier.
      */
