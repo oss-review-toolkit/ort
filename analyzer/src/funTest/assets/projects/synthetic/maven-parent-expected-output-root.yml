@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: true
 project:
-  id:
-    provider: "Maven"
-    namespace: "com.here.ort.maven"
-    name: "maven-parent-project"
-    version: "1.0-SNAPSHOT"
+  id: "Maven:com.here.ort.maven:maven-parent-project:1.0-SNAPSHOT"
   declared_licenses:
   - "Apache License, Version 2.0"
   aliases: []

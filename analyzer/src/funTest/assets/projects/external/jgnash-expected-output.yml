@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: true
 project:
-  id:
-    provider: "Maven"
-    namespace: "jgnash"
-    name: "jgnash2"
-    version: "2.30.0"
+  id: "Maven:jgnash:jgnash2:2.30.0"
   declared_licenses: []
   aliases: []
   vcs:

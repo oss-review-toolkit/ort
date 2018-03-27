@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: true
 project:
-  id:
-    provider: "PIP"
-    namespace: ""
-    name: "spdx-tools"
-    version: "0.5.4"
+  id: "PIP::spdx-tools:0.5.4"
   declared_licenses: []
   aliases: []
   vcs:

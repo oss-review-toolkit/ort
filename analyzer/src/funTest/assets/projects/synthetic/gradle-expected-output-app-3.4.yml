@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: true
 project:
-  id:
-    provider: "Gradle"
-    namespace: "com.here.ort.gradle.example"
-    name: "app"
-    version: "1.0.0"
+  id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
   declared_licenses: []
   aliases: []
   vcs:

@@ -1,11 +1,7 @@
 ---
 allowDynamicVersions: true
 project:
-  id:
-    provider: "Gradle"
-    namespace: "com.here.ort.gradle.example"
-    name: "gradle-unsupported-version"
-    version: "1.0.0"
+  id: "Gradle:com.here.ort.gradle.example:gradle-unsupported-version:1.0.0"
   declared_licenses: []
   aliases: []
   vcs:
