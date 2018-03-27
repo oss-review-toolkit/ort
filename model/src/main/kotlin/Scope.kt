@@ -19,11 +19,13 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.util.SortedSet
 
 /**
  * The scope class puts package dependencies into context.
  */
+@JsonIgnoreProperties("allDependencies")
 data class Scope(
         /**
          * The respective package manager's native name for the scope, e.g. "compile", " provided" etc. for Maven, or
@@ -47,6 +49,11 @@ data class Scope(
          */
         val dependencies: SortedSet<PackageReference>
 ) : Comparable<Scope> {
+    val allDependencies
+        get() = dependencies.map { it.id }.toSortedSet().also { result ->
+            dependencies.forEach { result.addAll(it.allDependencies) }
+        }
+
     /**
      * A comparison function to sort scopes by their name.
      */

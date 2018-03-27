@@ -19,12 +19,15 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import java.util.SortedSet
 
 /**
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
  * references that are dependencies of the package.
  */
+@JsonIgnoreProperties("allDependencies")
 data class PackageReference(
         /**
          * The identifier of the package.
@@ -42,6 +45,11 @@ data class PackageReference(
          */
         val errors: List<String> = emptyList()
 ) : Comparable<PackageReference> {
+    val allDependencies: SortedSet<Identifier>
+        get() = dependencies.map { it.id }.toSortedSet().also { result ->
+            dependencies.forEach { result.addAll(it.allDependencies) }
+        }
+
     /**
      * A comparison function to sort package references by their identifier.
      */

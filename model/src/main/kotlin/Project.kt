@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.util.SortedSet
@@ -28,6 +29,7 @@ import java.util.SortedSet
  * meta-data like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
  * packages.
  */
+@JsonIgnoreProperties("allDependencies")
 data class Project(
         /**
          * The unique identifier of this project.
@@ -68,6 +70,11 @@ data class Project(
          */
         val scopes: SortedSet<Scope>
 ) : Comparable<Project> {
+    val allDependencies: SortedSet<Identifier>
+        get() = sortedSetOf<Identifier>().also { result ->
+            scopes.forEach { result.addAll(it.allDependencies) }
+        }
+
     /**
      * A comparison function to sort projects by their identifier.
      */
