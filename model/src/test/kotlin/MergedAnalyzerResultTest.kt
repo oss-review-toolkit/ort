@@ -24,7 +24,7 @@ import io.kotlintest.specs.WordSpec
 
 class MergedAnalyzerResultTest : WordSpec() {
 
-    val directoryDetails = ScannedDirectoryDetails("name", "/absolute/path", VcsInfo.EMPTY)
+    val directoryDetails = Repository("name", "/absolute/path", VcsInfo.EMPTY)
 
     val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "1.0"))
     val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "2.0"))

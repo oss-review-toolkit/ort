@@ -43,7 +43,7 @@ data class MergedAnalyzerResult(
         /**
          * Description of the scanned repository, with VCS information if available.
          */
-        val repository: ScannedDirectoryDetails,
+        val repository: Repository,
 
         /**
          * Sorted set of the projects, as they appear in the individual analyzer results.
@@ -77,7 +77,7 @@ data class MergedAnalyzerResult(
 
 class MergedResultsBuilder(
         private val allowDynamicVersions: Boolean,
-        private val directoryDetails: ScannedDirectoryDetails
+        private val directoryDetails: Repository
 ) {
     private val projects = sortedSetOf<Project>()
     private val projectResultsFiles = sortedMapOf<Identifier, String>()
@@ -96,7 +96,7 @@ class MergedResultsBuilder(
     }
 }
 
-data class ScannedDirectoryDetails(
+data class Repository(
         /**
          * Name of top level input directory
          */
