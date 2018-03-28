@@ -19,7 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.util.SortedSet
@@ -33,7 +32,6 @@ import java.util.SortedSet
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
-@JsonIgnoreProperties("normalizedName", "identifier", "normalizedVcsUrl")
 data class Package(
         /**
          * The unique identifier of this package.
