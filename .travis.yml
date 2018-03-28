@@ -24,6 +24,7 @@ env:
     - DEP_RELEASE_TAG="v0.4.1"
 
 install:
+  - gem update --system
   - npm install -g npm@5.5.1 yarn@1.3.2
   - sudo apt install -y cvs
   - eval "$(gimme)"
