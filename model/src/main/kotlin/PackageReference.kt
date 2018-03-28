@@ -19,15 +19,12 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
 import java.util.SortedSet
 
 /**
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
  * references that are dependencies of the package.
  */
-@JsonIgnoreProperties("normalizedName", "identifier")
 data class PackageReference(
         /**
          * The identifier of the package.
