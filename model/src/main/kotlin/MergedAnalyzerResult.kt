@@ -96,24 +96,27 @@ class MergedResultsBuilder(
     }
 }
 
+/**
+ * A representation of a locally cloned source code repository.
+ */
 data class Repository(
         /**
-         * Name of top level input directory
+         * The name of the directory this repository was cloned to.
          */
         val name: String,
 
         /**
-         * Full path of analyzed directory
+         * The absolute path of the local repository.
          */
         val path: String,
 
         /**
-         * Original VCS-related information as defined in the [Project]'s meta-data.
+         * The [VcsInfo] of the repository.
          */
         val vcs: VcsInfo,
 
         /**
-         * Normalized [VcsInfo] of the analyzed [Project].
+         * The normalized [VcsInfo] of the repository.
          */
         @JsonProperty("vcs_processed")
         val vcsProcessed: VcsInfo = vcs.normalize()
