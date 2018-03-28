@@ -33,7 +33,6 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.MergedResultsBuilder
 import com.here.ort.model.OutputFormat
-import com.here.ort.model.Repository
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -226,12 +225,8 @@ object Main {
         val failedAnalysis = sortedSetOf<String>()
 
         val mergedResultsBuilder = if (createMergedResult) {
-            val repoDetails = Repository(
-                    name = absoluteProjectPath.name,
-                    path = absoluteProjectPath.absolutePath.replace(File.separatorChar, '/'),
-                    vcs = vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY
-            )
-            MergedResultsBuilder(allowDynamicVersions, repoDetails)
+            MergedResultsBuilder(allowDynamicVersions, absoluteProjectPath,
+                    vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY)
         } else {
             null
         }
