@@ -21,10 +21,12 @@ package com.here.ort.model
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
+import java.io.File
 
 class MergedAnalyzerResultTest : WordSpec() {
 
-    val directoryDetails = Repository("name", "/absolute/path", VcsInfo.EMPTY)
+    val repositoryPath = File("/absolute/path")
+    val directoryDetails = Repository(repositoryPath.name, repositoryPath.absolutePath, VcsInfo.EMPTY)
 
     val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
     val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
@@ -51,7 +53,7 @@ class MergedAnalyzerResultTest : WordSpec() {
     init {
         "MergedAnalyzerResult" should {
             "create the correct AnalyzerResults" {
-                val builder = MergedResultsBuilder(true, directoryDetails)
+                val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
                 builder.addResult("/analyzer-result-1.yml", analyzerResult1)
                 builder.addResult("/analyzer-result-2.yml", analyzerResult2)
@@ -64,7 +66,7 @@ class MergedAnalyzerResultTest : WordSpec() {
 
         "MergedResultsBuilder" should {
             "merge results from all files" {
-                val builder = MergedResultsBuilder(true, directoryDetails)
+                val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
                 builder.addResult("/analyzer-result-1.yml", analyzerResult1)
                 builder.addResult("/analyzer-result-2.yml", analyzerResult2)

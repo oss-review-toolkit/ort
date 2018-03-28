@@ -22,6 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import java.io.File
 
 import java.util.SortedMap
 import java.util.SortedSet
@@ -79,16 +80,19 @@ data class MergedAnalyzerResult(
 
 class MergedResultsBuilder(
         private val allowDynamicVersions: Boolean,
-        private val directoryDetails: Repository
+        private val localRepository: File,
+        private val vcsInfo: VcsInfo
 ) {
     private val projects = sortedSetOf<Project>()
     private val projectResultsFiles = sortedMapOf<Identifier, String>()
     private val packages = sortedSetOf<Package>()
     private val errors = sortedMapOf<Identifier, List<String>>()
 
-    fun build(): MergedAnalyzerResult =
-            MergedAnalyzerResult(allowDynamicVersions, directoryDetails, projects, projectResultsFiles, packages,
-                    errors)
+    fun build(): MergedAnalyzerResult {
+        val repository = Repository(localRepository.name, localRepository.absolutePath, vcsInfo)
+        return MergedAnalyzerResult(allowDynamicVersions, repository, projects, projectResultsFiles, packages,
+                errors)
+    }
 
     fun addResult(analyzerResultPath: String, analyzerResult: AnalyzerResult) {
         projectResultsFiles[analyzerResult.project.id] = analyzerResultPath
