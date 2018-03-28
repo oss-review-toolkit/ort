@@ -19,6 +19,7 @@ cache:
     - $HOME/.ort/scanner/cache/http
 
 install:
+  - gem update --system
   - npm install -g npm@5.5.1 yarn@1.3.2
   - sudo apt install -y cvs
 
