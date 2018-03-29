@@ -157,28 +157,35 @@ object Git : GitBase() {
         val revision = revisionCandidates.firstOrNull()
                 ?: throw IOException("Unable to determine a revision to checkout.")
 
-        // To safe network bandwidth, first try to only fetch exactly the revision we want.
-        try {
-            log.info { "Trying to fetch only revision '$revision' with depth limited to $HISTORY_DEPTH." }
-            run(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
+        // To safe network bandwidth, first try to only fetch exactly the revision we want. Skip this optimization for
+        // SSH URLs to GitHub as GitHub does not have "allowReachableSHA1InWant" (nor "allowAnySHA1InWant") enabled and
+        // the SSH transport invokes "git-upload-pack" without the "--stateless-rpc" option, causing different
+        // reachability rules to kick in. Over HTTPS, the ref advertisement and the want/have negotiation happen over
+        // two separate connections so the later actually does a reachability check instead of relying on the advertised
+        // refs.
+        if (!pkg.vcsProcessed.url.startsWith("ssh://git@github.com/")) {
+            try {
+                log.info { "Trying to fetch only revision '$revision' with depth limited to $HISTORY_DEPTH." }
+                run(targetDir, "fetch", "--depth", HISTORY_DEPTH.toString(), "origin", revision)
 
-            // The documentation for git-fetch states that "By default, any tag that points into the histories being
-            // fetched is also fetched", but that is not true for shallow fetches of a tag; then the tag itself is not
-            // fetched. So create it manually afterwards.
-            if (revision in workingTree.listRemoteTags()) {
-                run(targetDir, "tag", revision, "FETCH_HEAD")
-            }
+                // The documentation for git-fetch states that "By default, any tag that points into the histories being
+                // fetched is also fetched", but that is not true for shallow fetches of a tag; then the tag itself is
+                // not fetched. So create it manually afterwards.
+                if (revision in workingTree.listRemoteTags()) {
+                    run(targetDir, "tag", revision, "FETCH_HEAD")
+                }
 
-            run(targetDir, "checkout", revision)
-            return workingTree
-        } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
+                run(targetDir, "checkout", revision)
+                return workingTree
+            } catch (e: IOException) {
+                if (com.here.ort.utils.printStackTrace) {
+                    e.printStackTrace()
+                }
 
-            log.warn {
-                "Could not fetch only revision '$revision': ${e.message}\n" +
-                        "Falling back to fetching all refs."
+                log.warn {
+                    "Could not fetch only revision '$revision': ${e.message}\n" +
+                            "Falling back to fetching all refs."
+                }
             }
         }
 
