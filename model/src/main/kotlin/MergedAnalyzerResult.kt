@@ -64,6 +64,7 @@ data class MergedAnalyzerResult(
         /**
          * The list of all errors.
          */
+        @JsonDeserialize(keyUsing = IdentifierFromStringKeyDeserializer::class)
         val errors: SortedMap<Identifier, List<String>>
 )
 
