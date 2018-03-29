@@ -22,6 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
+import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -80,7 +81,7 @@ class MergedResultsBuilder(
                     errors)
 
     fun addResult(analyzerResultPath: String, analyzerResult: AnalyzerResult) {
-        projectResultsFiles[analyzerResult.project.id] = analyzerResultPath
+        projectResultsFiles[analyzerResult.project.id] = analyzerResultPath.replace(File.separatorChar, '/')
         projects.add(analyzerResult.project)
         packages.addAll(analyzerResult.packages)
         errors[analyzerResult.project.id] = analyzerResult.errors

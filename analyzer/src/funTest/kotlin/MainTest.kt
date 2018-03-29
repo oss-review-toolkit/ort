@@ -61,13 +61,17 @@ class MainTest : StringSpec() {
         }
     }
 
-    private fun patchExpectedResult(filename: File) =
-            filename.readText()
-                    .replace("<REPLACE_URL>", vcsUrl)
-                    .replace("<REPLACE_REVISION>", vcsRevision)
-                    .replace("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(vcsUrl))
-                    .replace("<REPLACE_REPOSITORY_PATH>", System.getProperty("user.dir"))
-                    .replace("<REPLACE_PROJECT_PATH>", "${outputDir.absolutePath}/analyzer_results")
+    private fun patchExpectedResult(filename: File): String {
+        val rootPath = rootDir.absolutePath.replace(File.separatorChar, '/')
+        val outputPath = "${outputDir.absolutePath.replace(File.separatorChar, '/')}/analyzer_results"
+
+        return filename.readText()
+                .replace("<REPLACE_URL>", vcsUrl)
+                .replace("<REPLACE_REVISION>", vcsRevision)
+                .replace("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(vcsUrl))
+                .replace("<REPLACE_REPOSITORY_PATH>", rootPath)
+                .replace("<REPLACE_PROJECT_PATH>", outputPath)
+    }
 
     init {
         "Activating only Gradle works" {
