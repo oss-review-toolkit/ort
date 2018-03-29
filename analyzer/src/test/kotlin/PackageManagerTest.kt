@@ -21,6 +21,7 @@ package com.here.ort.util
 
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.managers.*
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldThrow
@@ -29,7 +30,8 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class PackageManagerTest : WordSpec({
-    val projectDir = File("src/funTest/assets/projects/synthetic/all-managers")
+    val rootDir = File(".").searchUpwardsForSubdirectory(".git")
+    val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/all-managers")
 
     "findManagedFiles" should {
         "find all managed files" {

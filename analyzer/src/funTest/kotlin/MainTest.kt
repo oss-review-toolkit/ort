@@ -25,6 +25,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.TestCaseContext
@@ -40,7 +41,8 @@ import java.io.PrintStream
  * A test for the main entry point of the application.
  */
 class MainTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic")
+    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
