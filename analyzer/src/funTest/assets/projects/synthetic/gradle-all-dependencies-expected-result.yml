@@ -2,7 +2,7 @@
 allow_dynamic_versions: false
 repository:
   name: "gradle"
-  path: "<REPLACE_REPOSITORY_PATH>/src/funTest/assets/projects/synthetic/gradle"
+  path: "<REPLACE_REPOSITORY_PATH>/analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs:
     type: "Git"
     url: "<REPLACE_URL>"

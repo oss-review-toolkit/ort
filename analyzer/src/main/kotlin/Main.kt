@@ -228,7 +228,7 @@ object Main {
         val mergedResultsBuilder = if (createMergedResult) {
             val repoDetails = ScannedDirectoryDetails(
                     name = absoluteProjectPath.name,
-                    path = absoluteProjectPath.absolutePath,
+                    path = absoluteProjectPath.absolutePath.replace(File.separatorChar, '/'),
                     vcs = vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY
             )
             MergedResultsBuilder(allowDynamicVersions, repoDetails)
