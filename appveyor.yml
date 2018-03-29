@@ -2,6 +2,7 @@ skip_branch_with_pr: true
 
 environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
+  GOVERSION: 1.10
 
 cache:
   - $(HOME)\.gradle\caches\build-cache-1
@@ -29,6 +30,14 @@ install:
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
   - set PATH=%PATH%;C:\msys64\usr\bin # For CVS.
   - set PATH=C:\Ruby25\bin;%PATH% # For licensee.
+  # install Go toolchain and dep
+  - rmdir c:\go /s /q
+  - appveyor DownloadFile https://storage.googleapis.com/golang/go%GOVERSION%.windows-amd64.msi
+  - msiexec /i go%GOVERSION%.windows-amd64.msi /q
+  - set Path=c:\go\bin;%Path%
+  - go version
+  - go env
+  - ps: Start-FileDownload  'https://github.com/golang/dep/releases/download/v0.4.1/dep-windows-amd64.exe' -FileName 'c:\go\bin\dep'
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
