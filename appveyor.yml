@@ -29,6 +29,18 @@ install:
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
   - set PATH=%PATH%;C:\msys64\usr\bin # For CVS.
   - set PATH=C:\Ruby25\bin;%PATH% # For licensee.
+  # install Go toolchain and dep
+  - rmdir c:\go /s /q
+  - ps: Start-FileDownload 'https://storage.googleapis.com/golang/go1.10.windows-amd64.msi'
+  - msiexec /i go1.10.windows-amd64.msi /q
+  - set Path=c:\go\bin;%Path%
+  - go version
+  - go env
+  - mkdir c:\gopath
+  - set GOPATH=c:\gopath
+  - set PATH=%PATH%;%GOPATH%\bin
+  - go get -u github.com/golang/dep/cmd/dep
+  - dep version
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
