@@ -36,7 +36,7 @@ object GitRepo : GitBase() {
 
     override val aliases = listOf("gitrepo", "git-repo", "repo")
 
-    override fun getWorkingTree(vcsDirectory: File) : WorkingTree {
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree {
         val repoRoot = vcsDirectory.searchUpwardsForSubdirectory(".repo")
 
         return if (repoRoot == null) {

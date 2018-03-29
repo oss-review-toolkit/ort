@@ -108,7 +108,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
     // The MavenSettingsBuilder class is deprecated but internally it uses its successor SettingsBuilder. Calling
     // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
     @Suppress("DEPRECATION")
-    private fun createMavenExecutionRequest() : MavenExecutionRequest {
+    private fun createMavenExecutionRequest(): MavenExecutionRequest {
         val request = DefaultMavenExecutionRequest()
 
         request.systemProperties["java.home"] = System.getProperty("java.home")
