@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.TestCaseContext
@@ -37,7 +38,8 @@ import io.kotlintest.specs.FreeSpec
 import java.io.File
 
 class NpmTest : FreeSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/npm")
+    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/npm")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -61,7 +63,7 @@ class NpmTest : FreeSpec() {
     }
 
     private fun patchExpectedResult(workingDir: File): String {
-        val vcsPath = "analyzer/" + workingDir.path.replace("\\", "/")
+        val vcsPath = workingDir.relativeTo(rootDir).path.replace(File.separatorChar, '/')
         return File(projectDir.parentFile, "npm-expected-output.yml").readText()
                 // project.name:
                 .replaceFirst("npm-project", "npm-${workingDir.name}")

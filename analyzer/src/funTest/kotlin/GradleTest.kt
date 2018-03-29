@@ -25,6 +25,7 @@ import com.here.ort.downloader.vcs.Git
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.Spec
@@ -39,11 +40,13 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class GradleTest : StringSpec() {
-    private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
-    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
+    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/gradle")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
+
+    private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 
     private fun patchExpectedResult(filename: String) =
             File(projectDir.parentFile, filename).readText()
