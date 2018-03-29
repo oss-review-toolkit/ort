@@ -85,7 +85,7 @@ abstract class GitBase : VersionControlSystem() {
         }
     }
 
-    override fun getWorkingTree(vcsDirectory: File) : WorkingTree = GitWorkingTree(vcsDirectory)
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory)
 }
 
 object Git : GitBase() {

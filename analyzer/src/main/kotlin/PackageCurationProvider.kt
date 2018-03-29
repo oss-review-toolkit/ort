@@ -29,5 +29,5 @@ interface PackageCurationProvider {
     /**
      * Get all available [PackageCuration]s for the provided [Identifier].
      */
-    fun getCurationsFor(identifier: Identifier) : List<PackageCuration>
+    fun getCurationsFor(identifier: Identifier): List<PackageCuration>
 }
