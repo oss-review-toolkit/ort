@@ -20,7 +20,9 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.GoDep
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.yamlMapper
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
@@ -94,6 +96,28 @@ class GoDepTest : FreeSpec() {
                 val expectedResult = File(projectDir.parentFile, "godep-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
+
+            "construct an import path from VCS info" {
+                val godep = GoDep.create()
+                val gopath = File("/tmp/gopath")
+                val projectDir = File("src/funTest/assets/projects/external/qmstr")
+                val vcs = VersionControlSystem.forDirectory(projectDir)!!.getInfo()
+
+                val expectedPath = File("/tmp/gopath/src/github.com/QMSTR/qmstr.git")
+
+                godep.deduceImportPath(projectDir, vcs, gopath) shouldBe expectedPath
+            }
+
+            "construct an import path for directories that are not repositories" {
+                val godep = GoDep.create()
+                val gopath = File("/tmp/gopath")
+                val projectDir = File("src/funTest/assets/projects/synthetic/godep/no-lockfile")
+                val vcs = VcsInfo.EMPTY
+
+                val expectedPath = File("/tmp/gopath/src/no-lockfile")
+
+                godep.deduceImportPath(projectDir, vcs, gopath) shouldBe expectedPath
             }
         }
     }
