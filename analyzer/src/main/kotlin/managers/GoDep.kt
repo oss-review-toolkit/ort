@@ -41,6 +41,7 @@ import com.moandjiezana.toml.Toml
 
 import java.io.File
 import java.io.IOException
+import java.net.URI
 
 class GoDep : PackageManager() {
     companion object : PackageManagerFactory<GoDep>(
@@ -63,8 +64,9 @@ class GoDep : PackageManager() {
 
     override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
+        val projectVcs = VersionControlSystem.forDirectory(projectDir)?.getInfo()?.normalize() ?: VcsInfo.EMPTY
         val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
-        val workingDir = setUpWorkspace(projectDir, gopath)
+        val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
         if (definitionFile.name in LEGACY_MANIFESTS.keys) {
             importLegacyManifest(definitionFile, projectDir, workingDir, gopath)
@@ -112,7 +114,6 @@ class GoDep : PackageManager() {
         }
 
         val scope = Scope("default", true, packageRefs.toSortedSet())
-        val vcsProcessed = VersionControlSystem.forDirectory(projectDir)?.getInfo()?.normalize() ?: VcsInfo.EMPTY
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively()
@@ -120,16 +121,26 @@ class GoDep : PackageManager() {
         return AnalyzerResult(
                 allowDynamicVersions = Main.allowDynamicVersions,
                 project = Project(
-                        id = Identifier(provider, "", projectDir.name, vcsProcessed.revision),
+                        id = Identifier(provider, "", projectDir.name, projectVcs.revision),
                         declaredLicenses = sortedSetOf(),
                         aliases = emptyList(),
                         vcs = VcsInfo.EMPTY,
-                        vcsProcessed = vcsProcessed,
+                        vcsProcessed = projectVcs,
                         homepageUrl = "",
                         scopes = sortedSetOf(scope)
                 ),
                 packages = packages.toSortedSet()
         )
+    }
+
+    fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File {
+        if (vcs == VcsInfo.EMPTY) {
+            return File(gopath, "src" + File.separator + projectDir.name)
+        }
+
+        val uri = URI(vcs.url)
+        val path = listOf("src", uri.host, uri.path).joinToString(File.separator)
+        return File(gopath, path).toPath().normalize().toFile()
     }
 
     private fun resolveProjectRoot(definitionFile: File): File {
@@ -155,8 +166,8 @@ class GoDep : PackageManager() {
         ProcessCapture(workingDir, env, "dep", "init").requireSuccess()
     }
 
-    private fun setUpWorkspace(projectDir: File, gopath: File): File {
-        val destination = File(gopath, "src" + File.separator + projectDir.name)
+    private fun setUpWorkspace(projectDir: File, vcs: VcsInfo, gopath: File): File {
+        val destination = deduceImportPath(projectDir, vcs, gopath)
 
         log.debug { "Copying $projectDir to temporary directory $destination" }
 
@@ -212,16 +223,24 @@ class GoDep : PackageManager() {
     }
 
     private fun resolveVcsInfo(vcs: VcsInfo, gopath: File): VcsInfo {
-        val name = if (vcs.url.endsWith("/...")) {
-            vcs.url
-        } else {
-            "${vcs.url}/..."
+        val importPath = vcs.url
+        val env = mapOf("GOPATH" to gopath.absolutePath)
+        val pc = ProcessCapture(null, env, "go", "get", "-d", importPath)
+
+        // HACK Some failure modes from "go get" can be ignored:
+        // 1. repositories that don't have .go files in the root directory
+        // 2. all files in the root directory have certain "build constraints" (like "// +build ignore")
+        if (pc.isError()) {
+            val msg = pc.stderr()
+
+            if (!msg.contains("no Go files in") &&
+                    !msg.contains("build constraints exclude all Go files in")) {
+
+                throw IOException(msg)
+            }
         }
 
-        val env = mapOf("GOPATH" to gopath.absolutePath)
-        ProcessCapture(null, env, "go", "get", "-d", name).requireSuccess()
-
-        val pkgPath = "src" + File.separator + vcs.url.replace('/', File.separatorChar)
+        val pkgPath = "src" + File.separator + importPath.replace('/', File.separatorChar)
         val repoRoot = File(gopath, pkgPath)
 
         val deducedVcs = VersionControlSystem.forDirectory(repoRoot)
