@@ -64,6 +64,9 @@ Currently, the following package managers / build systems can be detected and qu
 * [SBT](http://www.scala-sbt.org/)
 * [NPM](https://www.npmjs.com/)
 * [PIP](https://pip.pypa.io/)
+* [dep](https://golang.github.io/dep/)
+* [Glide](https://glide.sh/)
+* [Godep](https://github.com/tools/godep)
 
 ## Supported license scanners
 
