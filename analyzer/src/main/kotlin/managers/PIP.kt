@@ -66,7 +66,7 @@ class PIP : PackageManager() {
         private const val PIPDEPTREE_VERSION = "0.11.0"
         private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
-        private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
+        private const val PYDEP_REVISION = "bed0140080164e59e6161965d2944a4317784905"
     }
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
@@ -124,7 +124,7 @@ class PIP : PackageManager() {
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
-        val pydepUrl = "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION"
+        val pydepUrl = "git+https://github.com/haikoschol/pydep@$PYDEP_REVISION"
         val pip = if (OS.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
@@ -135,7 +135,12 @@ class PIP : PackageManager() {
         }
         pip.requireSuccess()
 
-        val (projectName, projectVersion, projectHomepage) = if (definitionFile.name == "setup.py") {
+        var projectName = definitionFile.parentFile.name
+        var projectVersion = ""
+        var projectHomepage = ""
+        var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
+
+        if (definitionFile.name == "setup.py") {
             val pydep = if (OS.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
                 runInVirtualEnv(virtualEnvDir, workingDir, "python",
@@ -150,11 +155,11 @@ class PIP : PackageManager() {
             // - "download_url", denoting the "location where the package may be downloaded".
             // So the best we can do is to map this the project's homepage URL.
             jsonMapper.readTree(pydep.stdout()).let {
-                listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
+                projectName = it["project_name"].asText()
+                projectVersion = it["version"].asText()
+                projectHomepage = it["repo_url"].asText()
+                declaredLicenses = getDeclaredLicenses(it)
             }
-        } else {
-            // In case of a requirements.txt file without meta-data, use the parent directory name as the project name.
-            listOf(definitionFile.parentFile.name, "", "")
         }
 
         val packages = sortedSetOf<Package>()
@@ -214,28 +219,11 @@ class PIP : PackageManager() {
                     try {
                         val pkgInfo = pkgData["info"]
                         val pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
-                        val declaredLicenses = sortedSetOf<String>()
-
-                        // Use the top-level license field as well as the license classifiers as the declared licenses.
-                        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-                            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
-                        }
-
-                        // Example license classifier:
-                        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-                        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-                            val classifier = it.asText().split(" :: ")
-                            if (classifier.first() == "License") {
-                                classifier.last().removeSuffix(" License")
-                            } else {
-                                null
-                            }
-                        }
 
                         // Amend package information with more details.
                         Package(
                                 id = pkg.id,
-                                declaredLicenses = declaredLicenses,
+                                declaredLicenses = getDeclaredLicenses(pkgInfo),
                                 description = pkgInfo["summary"]?.asText() ?: pkg.description,
                                 homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
                                 binaryArtifact = getBinaryArtifact(pkg, pkgReleases),
@@ -267,7 +255,7 @@ class PIP : PackageManager() {
                         name = projectName,
                         version = projectVersion
                 ),
-                declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
+                declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir),
@@ -309,6 +297,28 @@ class PIP : PackageManager() {
         val hash = pkgSource["md5_digest"]?.asText() ?: return RemoteArtifact.EMPTY
 
         return RemoteArtifact(url, hash, HashAlgorithm.MD5)
+    }
+
+    private fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
+        val declaredLicenses = sortedSetOf<String>()
+
+        // Use the top-level license field as well as the license classifiers as the declared licenses.
+        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
+            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+        }
+
+        // Example license classifier:
+        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
+            val classifier = it.asText().split(" :: ")
+            if (classifier.first() == "License") {
+                classifier.last().removeSuffix(" License")
+            } else {
+                null
+            }
+        }
+
+        return declaredLicenses
     }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
