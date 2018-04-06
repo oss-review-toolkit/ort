@@ -66,7 +66,7 @@ class PIP : PackageManager() {
         private const val PIPDEPTREE_VERSION = "0.11.0"
         private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
-        private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
+        private const val PYDEP_REVISION = "license-and-classifiers"
     }
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
@@ -124,7 +124,7 @@ class PIP : PackageManager() {
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
-        val pydepUrl = "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION"
+        val pydepUrl = "git+https://github.com/heremaps/pydep@$PYDEP_REVISION"
         val pip = if (OS.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
@@ -134,6 +134,8 @@ class PIP : PackageManager() {
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", pydepUrl)
         }
         pip.requireSuccess()
+
+        var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
 
         val (projectName, projectVersion, projectHomepage) = if (definitionFile.name == "setup.py") {
             val pydep = if (OS.isWindows) {
@@ -150,11 +152,11 @@ class PIP : PackageManager() {
             // - "download_url", denoting the "location where the package may be downloaded".
             // So the best we can do is to map this the project's homepage URL.
             jsonMapper.readTree(pydep.stdout()).let {
+                declaredLicenses = getDeclaredLicenses(it)
                 listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
             }
         } else {
-            // In case of a requirements.txt file without meta-data, use the parent directory name as the project name.
-            listOf(definitionFile.parentFile.name, "", "")
+            listOf(definitionFile.parentFile.name, "", "", "")
         }
 
         val packages = sortedSetOf<Package>()
@@ -250,7 +252,7 @@ class PIP : PackageManager() {
                         name = projectName,
                         version = projectVersion
                 ),
-                declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
+                declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir),
