@@ -78,6 +78,14 @@ data class Identifier(
         }
     }
 
+    init {
+        require(!provider.contains(":") && !namespace.contains(":") && !name.contains(":") && !version.contains(":")) {
+            "Properties of Identifier must not contain ':' because it is used as a separator in the String " +
+                    "representation of the Identifier: provider='$provider', namespace='$namespace', name='$name', " +
+                    "version='$version'"
+        }
+    }
+
     override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
