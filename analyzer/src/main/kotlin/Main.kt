@@ -34,8 +34,6 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.MergedResultsBuilder
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.yamlMapper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -187,10 +185,7 @@ object Main {
             exitProcess(1)
         }
 
-        mapper = when (outputFormat) {
-            OutputFormat.JSON -> jsonMapper
-            OutputFormat.YAML -> yamlMapper
-        }
+        mapper = outputFormat.mapper
 
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
