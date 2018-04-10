@@ -81,10 +81,10 @@ class AnalyzerResultTest : StringSpec({
 
             val errors = result.collectErrors()
             errors.size shouldBe 4
-            errors["provider:namespace:name:version"] shouldBe listOf("a", "b")
-            errors["provider1:namespace1:name1:version1"] shouldBe listOf("1.1", "1.2")
-            errors["provider2:namespace2:name2:version2"] shouldBe listOf("2.1", "2.2")
-            errors["provider3:namespace3:name3:version3"] shouldBe listOf("3.1", "3.2")
+            errors[Identifier.fromString("provider:namespace:name:version")] shouldBe listOf("a", "b")
+            errors[Identifier.fromString("provider1:namespace1:name1:version1")] shouldBe listOf("1.1", "1.2")
+            errors[Identifier.fromString("provider2:namespace2:name2:version2")] shouldBe listOf("2.1", "2.2")
+            errors[Identifier.fromString("provider3:namespace3:name3:version3")] shouldBe listOf("3.1", "3.2")
         }
     }
 })

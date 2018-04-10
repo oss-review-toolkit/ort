@@ -27,6 +27,7 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
@@ -54,7 +55,7 @@ class ScanSummary(
         val cacheStats: CacheStatistics,
         val scannedScopes: SortedSet<String>,
         val ignoredScopes: SortedSet<String>,
-        val analyzerErrors: SortedMap<String, List<String>>
+        val analyzerErrors: SortedMap<Identifier, List<String>>
 )
 
 typealias PackageSummary = MutableMap<String, SummaryEntry>
@@ -215,7 +216,7 @@ object Main {
 
         val includedScopes = sortedSetOf<Scope>()
         val excludedScopes = sortedSetOf<Scope>()
-        val analyzerErrors = sortedMapOf<String, List<String>>()
+        val analyzerErrors = sortedMapOf<Identifier, List<String>>()
 
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
