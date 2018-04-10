@@ -28,8 +28,8 @@ import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+import com.here.ort.utils.logStackTrace
 import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.printStackTrace
 
 import java.io.File
 import java.nio.file.FileVisitResult
@@ -172,9 +172,7 @@ abstract class PackageManager {
                         result[definitionFile] = it
                     }
                 } catch (e: Exception) {
-                    if (printStackTrace) {
-                        e.printStackTrace()
-                    }
+                    e.logStackTrace()
 
                     result[definitionFile] = AnalyzerResult(Main.allowDynamicVersions, Project.EMPTY,
                             sortedSetOf(), e.collectMessages())

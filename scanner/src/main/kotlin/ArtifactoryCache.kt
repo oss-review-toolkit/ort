@@ -24,7 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.Package
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.logStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -73,9 +73,7 @@ class ArtifactoryCache(
                 }
             }
         } catch (e: IOException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.logStackTrace()
 
             log.warn { "Could not get $cachePath from Artifactory cache: ${e.message}" }
 
@@ -108,9 +106,7 @@ class ArtifactoryCache(
                 }
             }
         } catch (e: IOException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.logStackTrace()
 
             log.warn { "Could not upload $cachePath to Artifactory cache: ${e.message}" }
 

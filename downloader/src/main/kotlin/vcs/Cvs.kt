@@ -27,7 +27,7 @@ import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.logStackTrace
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
@@ -187,9 +187,7 @@ object Cvs : VersionControlSystem() {
 
             return workingTree
         } catch (e: IOException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.logStackTrace()
 
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }

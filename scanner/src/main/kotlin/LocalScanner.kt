@@ -27,7 +27,7 @@ import com.here.ort.model.Package
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.logStackTrace
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
@@ -79,9 +79,7 @@ abstract class LocalScanner : Scanner() {
             try {
                 scan(it.value, outputDirectory, downloadDirectory)
             } catch (e: ScanException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.logStackTrace()
 
                 log.error { "Could not scan package '${it.key.id}': ${e.message}" }
 
@@ -130,9 +128,7 @@ abstract class LocalScanner : Scanner() {
         val downloadResult = try {
             Main.download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
         } catch (e: DownloadException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.logStackTrace()
 
             throw ScanException("Package '${pkg.id}' could not be scanned.", e)
         }

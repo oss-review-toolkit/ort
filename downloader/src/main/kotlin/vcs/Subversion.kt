@@ -33,7 +33,7 @@ import com.here.ort.model.xmlMapper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.logStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -222,9 +222,7 @@ object Subversion : VersionControlSystem() {
                 getWorkingTree(File(targetDir, tagPath))
             }
         } catch (e: IOException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.logStackTrace()
 
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }

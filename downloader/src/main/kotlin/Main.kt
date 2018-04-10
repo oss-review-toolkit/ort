@@ -45,6 +45,7 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.log
+import com.here.ort.utils.logStackTrace
 import com.here.ort.utils.packZip
 import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeDeleteRecursively
@@ -102,9 +103,7 @@ object Main {
             try {
                 return DataEntity.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.logStackTrace()
 
                 throw ParameterException("Data entities must be contained in ${DataEntity.ALL}.")
             }
@@ -269,9 +268,7 @@ object Main {
                         result.downloadDirectory.packZip(zipFile,
                                 "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
                     } catch (e: IllegalArgumentException) {
-                        if (printStackTrace) {
-                            e.printStackTrace()
-                        }
+                        e.logStackTrace()
 
                         log.error { "Could not archive '${pkg.id}': ${e.message}" }
                     } finally {
@@ -280,9 +277,7 @@ object Main {
                     }
                 }
             } catch (e: DownloadException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.logStackTrace()
 
                 log.error { "Could not download '${pkg.id}': ${e.message}" }
 
@@ -320,9 +315,7 @@ object Main {
             try {
                 return downloadFromVcs(target, targetDir)
             } catch (e: DownloadException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.logStackTrace()
 
                 log.info { "VCS download failed for '${target.id}': ${e.message}" }
 

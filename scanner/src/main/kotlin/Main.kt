@@ -41,6 +41,7 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+import com.here.ort.utils.logStackTrace
 import com.here.ort.utils.printStackTrace
 
 import java.io.File
@@ -79,9 +80,7 @@ object Main {
             try {
                 return OutputFormat.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.logStackTrace()
 
                 throw ParameterException("Summary formats must be contained in ${OutputFormat.ALL}.")
             }
@@ -293,9 +292,7 @@ object Main {
                             errors = result.errors.toMutableList()
                     )
                 } catch (e: ScanException) {
-                    if (printStackTrace) {
-                        e.printStackTrace()
-                    }
+                    e.logStackTrace()
 
                     log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
 

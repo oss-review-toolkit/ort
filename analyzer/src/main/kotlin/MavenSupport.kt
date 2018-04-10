@@ -31,7 +31,7 @@ import com.here.ort.utils.DiskCache
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.logStackTrace
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -201,9 +201,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             val repositoryLayout = try {
                 repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
             } catch (e: NoRepositoryLayoutException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.logStackTrace()
 
                 log.warn { "Could not search for '$artifact'in '$repository': ${e.message}" }
 
@@ -254,9 +252,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     // the first space.
                     tempFile.useLines { it.first().substringBefore(" ") }
                 } catch (e: Exception) {
-                    if (printStackTrace) {
-                        e.printStackTrace()
-                    }
+                    e.logStackTrace()
 
                     log.warn { "Could not get checksum for '$artifact': ${e.message}" }
 
