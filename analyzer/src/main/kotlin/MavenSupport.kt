@@ -34,6 +34,9 @@ import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
 
+import java.io.File
+import java.util.regex.Pattern
+
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
@@ -70,9 +73,6 @@ import org.eclipse.aether.spi.connector.transport.TransporterProvider
 import org.eclipse.aether.transfer.AbstractTransferListener
 import org.eclipse.aether.transfer.NoRepositoryLayoutException
 import org.eclipse.aether.transfer.TransferEvent
-
-import java.io.File
-import java.util.regex.Pattern
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 

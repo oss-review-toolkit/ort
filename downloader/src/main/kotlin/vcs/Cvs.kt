@@ -31,12 +31,12 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
 
-import org.apache.commons.codec.binary.Hex
-import org.apache.commons.codec.digest.DigestUtils
-
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
+
+import org.apache.commons.codec.binary.Hex
+import org.apache.commons.codec.digest.DigestUtils
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 

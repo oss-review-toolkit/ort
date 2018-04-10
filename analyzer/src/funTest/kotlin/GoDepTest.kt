@@ -24,11 +24,13 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
+
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.startWith
 import io.kotlintest.specs.FreeSpec
+
 import java.io.File
 
 class GoDepTest : FreeSpec() {

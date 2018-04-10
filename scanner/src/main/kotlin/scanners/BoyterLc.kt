@@ -32,13 +32,13 @@ import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.unpack
 
-import okhttp3.Request
-
-import okio.Okio
-
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+
+import okhttp3.Request
+
+import okio.Okio
 
 object BoyterLc : LocalScanner() {
     const val VERSION = "1.3.1"

@@ -41,6 +41,8 @@ import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
+import java.io.File
+
 import org.apache.maven.project.ProjectBuildingException
 
 import org.eclipse.aether.RepositorySystemSession
@@ -58,8 +60,6 @@ import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
 
 import org.gradle.tooling.GradleConnector
-
-import java.io.File
 
 class Gradle : PackageManager() {
     companion object : PackageManagerFactory<Gradle>(
