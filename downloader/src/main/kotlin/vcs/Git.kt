@@ -28,6 +28,7 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
+import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
@@ -107,7 +108,7 @@ object Git : GitBase() {
                 }
             }
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
+            if (printStackTrace) {
                 e.printStackTrace()
             }
 
@@ -178,7 +179,7 @@ object Git : GitBase() {
                 run(targetDir, "checkout", revision)
                 return workingTree
             } catch (e: IOException) {
-                if (com.here.ort.utils.printStackTrace) {
+                if (printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -196,7 +197,7 @@ object Git : GitBase() {
             run(targetDir, "checkout", revision)
             return workingTree
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
+            if (printStackTrace) {
                 e.printStackTrace()
             }
 
@@ -220,7 +221,7 @@ object Git : GitBase() {
                 run(targetDir, "checkout", candidate)
                 true
             } catch (e: IOException) {
-                if (com.here.ort.utils.printStackTrace) {
+                if (printStackTrace) {
                     e.printStackTrace()
                 }
 

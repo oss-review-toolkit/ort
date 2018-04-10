@@ -27,6 +27,7 @@ import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -145,7 +146,7 @@ object Mercurial : VersionControlSystem() {
 
             return workingTree
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
+            if (printStackTrace) {
                 e.printStackTrace()
             }
 
