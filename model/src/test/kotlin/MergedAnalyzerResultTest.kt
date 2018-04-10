@@ -64,6 +64,21 @@ class MergedAnalyzerResultTest : WordSpec() {
 
                 mergedResults.createAnalyzerResults() shouldBe listOf(analyzerResult1, analyzerResult2)
             }
+
+            "can be serialized and deserialized" {
+                val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
+
+                builder.addResult("/analyzer-result-1.yml", analyzerResult1)
+                builder.addResult("/analyzer-result-2.yml", analyzerResult2)
+
+                val mergedResults = builder.build()
+
+                val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
+                val deserializedMergedResults =
+                        yamlMapper.readValue(serializedMergedResults, MergedAnalyzerResult::class.java)
+
+                deserializedMergedResults shouldBe mergedResults
+            }
         }
 
         "MergedResultsBuilder" should {
