@@ -28,6 +28,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.filterVersionNames
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizedPath
 
 import com.vdurmont.semver4j.Semver
 
@@ -244,7 +245,7 @@ abstract class VersionControlSystem {
             val relativePath = path.absoluteFile.relativeTo(File(getRootPath())).toString()
 
             // Use Unix paths even on Windows for consistent output.
-            return relativePath.replace(File.separatorChar, '/')
+            return relativePath.normalizedPath
         }
     }
 

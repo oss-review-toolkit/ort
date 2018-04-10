@@ -27,6 +27,7 @@ import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizedPath
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
@@ -113,7 +114,7 @@ object Cvs : VersionControlSystem() {
 
                 override fun getRootPath(): String {
                     val rootDir = workingDir.searchUpwardsForSubdirectory("CVS")?.toString() ?: ""
-                    return rootDir.replace(File.separatorChar, '/')
+                    return rootDir.normalizedPath
                 }
 
                 override fun listRemoteTags(): List<String> {

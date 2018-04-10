@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import com.here.ort.utils.normalizedPath
+
 import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
@@ -85,14 +87,13 @@ class MergedResultsBuilder(
     private val errors = sortedMapOf<Identifier, List<String>>()
 
     fun build(): MergedAnalyzerResult {
-        val repository = Repository(localRepository.name, localRepository.absolutePath.replace(File.separatorChar, '/'),
-                vcsInfo)
+        val repository = Repository(localRepository.name, localRepository.normalizedPath, vcsInfo)
         return MergedAnalyzerResult(allowDynamicVersions, repository, projects, projectResultsFiles, packages,
                 errors)
     }
 
     fun addResult(analyzerResultPath: String, analyzerResult: AnalyzerResult) {
-        projectResultsFiles[analyzerResult.project.id] = analyzerResultPath.replace(File.separatorChar, '/')
+        projectResultsFiles[analyzerResult.project.id] = analyzerResultPath.normalizedPath
         projects.add(analyzerResult.project)
         packages.addAll(analyzerResult.packages)
         errors[analyzerResult.project.id] = analyzerResult.errors
