@@ -130,6 +130,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             return modelName == 'DependencyTreeModel'
         }
 
+        String normalizeName(String name) {
+            return name.replace('project :', 'project ').replace(':', '_')
+        }
+
         @Override
         Object buildAll(String modelName, Project project) {
 
@@ -239,14 +243,14 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             dependencyProject.version ?: '', '', '', dependencies, null, '',
                             dependencyProject.projectDir.absolutePath)
                 } else {
-                    return new DependencyImpl('', id.displayName.replace('project :', 'project '), '', '', '', dependencies,
+                    return new DependencyImpl('', normalizeName(id.displayName), '', '', '', dependencies,
                             "Unknown id type: ${id.getClass().simpleName}".toString(), '', null)
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
-                return new DependencyImpl('', dependencyResult.attempted.displayName.replace('project :', 'project '), '', '', '', [],
+                return new DependencyImpl('', normalizeName(dependencyResult.attempted.displayName), '', '', '', [],
                         "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), '', null)
             } else {
-                return new DependencyImpl('', dependencyResult.requested.displayName.replace('project :', 'project '), '', '', '', [],
+                return new DependencyImpl('', normalizeName(dependencyResult.requested.displayName), '', '', '', [],
                         "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), '', null)
             }
         }
