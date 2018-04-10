@@ -26,13 +26,13 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.yamlMapper
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem

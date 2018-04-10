@@ -20,7 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.PIP
-import com.here.ort.utils.yamlMapper
+import com.here.ort.model.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec

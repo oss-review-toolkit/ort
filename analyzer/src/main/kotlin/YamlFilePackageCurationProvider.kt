@@ -21,7 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.model.Identifier
 import com.here.ort.model.PackageCuration
-import com.here.ort.utils.yamlMapper
+import com.here.ort.model.yamlMapper
 
 import java.io.File
 
