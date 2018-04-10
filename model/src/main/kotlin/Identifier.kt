@@ -24,16 +24,12 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 /**
  * A unique identifier for a software package.
  */
-@JsonDeserialize(using = IdentifierFromStringDeserializer::class)
-@JsonSerialize(using = IdentifierToStringSerializer::class)
 data class Identifier(
         /**
          * The name of the provider that hosts this package, for example Maven or NPM.

@@ -20,10 +20,25 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-val jsonMapper = ObjectMapper().registerKotlinModule()
-val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
-val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
+val ortModelModule = SimpleModule("OrtModelModule").apply {
+    addDeserializer(Identifier::class.java, IdentifierFromStringDeserializer())
+    addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
+
+    addSerializer(Identifier::class.java, IdentifierToStringSerializer())
+
+    addKeyDeserializer(Identifier::class.java, IdentifierFromStringKeyDeserializer())
+}
+
+val mapperConfig: ObjectMapper.() -> Unit = {
+    registerKotlinModule()
+    registerModule(ortModelModule)
+}
+
+val jsonMapper = ObjectMapper().apply(mapperConfig)
+val xmlMapper = ObjectMapper(XmlFactory()).apply(mapperConfig)
+val yamlMapper = ObjectMapper(YAMLFactory()).apply(mapperConfig)
