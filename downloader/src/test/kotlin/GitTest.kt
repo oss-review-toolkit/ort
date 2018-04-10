@@ -19,9 +19,9 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.utils.unpack
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.unpack
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe

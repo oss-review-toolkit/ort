@@ -31,15 +31,15 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
 
-import org.graphstream.graph.Edge
-import org.graphstream.graph.implementations.SingleGraph
-import org.graphstream.graph.implementations.SingleNode
-import org.graphstream.ui.layout.springbox.implementations.SpringBox
-
 import java.io.File
 import java.util.UUID
 
 import kotlin.system.exitProcess
+
+import org.graphstream.graph.Edge
+import org.graphstream.graph.implementations.SingleGraph
+import org.graphstream.graph.implementations.SingleNode
+import org.graphstream.ui.layout.springbox.implementations.SpringBox
 
 /**
  * The main entry point of the application.
