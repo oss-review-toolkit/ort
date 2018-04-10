@@ -49,6 +49,7 @@ import com.here.ort.utils.packZip
 import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.unpack
 
 import java.io.File
@@ -102,9 +103,7 @@ object Main {
             try {
                 return DataEntity.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 throw ParameterException("Data entities must be contained in ${DataEntity.ALL}.")
             }
@@ -269,9 +268,7 @@ object Main {
                         result.downloadDirectory.packZip(zipFile,
                                 "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
                     } catch (e: IllegalArgumentException) {
-                        if (printStackTrace) {
-                            e.printStackTrace()
-                        }
+                        e.showStackTrace()
 
                         log.error { "Could not archive '${pkg.id}': ${e.message}" }
                     } finally {
@@ -280,9 +277,7 @@ object Main {
                     }
                 }
             } catch (e: DownloadException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 log.error { "Could not download '${pkg.id}': ${e.message}" }
 
@@ -320,9 +315,7 @@ object Main {
             try {
                 return downloadFromVcs(target, targetDir)
             } catch (e: DownloadException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 log.info { "VCS download failed for '${target.id}': ${e.message}" }
 

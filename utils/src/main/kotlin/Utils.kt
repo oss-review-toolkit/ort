@@ -381,3 +381,10 @@ fun String.fileSystemEncode() =
 fun String.fileSystemDecode(): String =
         // URLDecoder does decode "." and "*".
         java.net.URLDecoder.decode(this, "UTF-8")
+
+/**
+ * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
+ */
+fun Throwable.showStackTrace() {
+    if (printStackTrace) printStackTrace()
+}

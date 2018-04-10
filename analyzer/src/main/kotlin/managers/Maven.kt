@@ -33,8 +33,8 @@ import com.here.ort.model.Project
 import com.here.ort.model.Scope
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.searchUpwardsForSubdirectory
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
@@ -92,9 +92,7 @@ class Maven : PackageManager() {
         val projectBuildingResults = try {
             projectBuilder.build(definitionFiles, false, projectBuildingRequest)
         } catch (e: ProjectBuildingException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             log.warn {
                 "There have been issues building the Maven project models, this could lead to errors during " +
@@ -175,9 +173,7 @@ class Maven : PackageManager() {
 
             return pkg.toReference(dependencies)
         } catch (e: ProjectBuildingException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             log.error {
                 "Could not get package information for dependency '${node.artifact.identifier()}': ${e.message}"
