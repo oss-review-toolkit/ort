@@ -19,19 +19,21 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.databind.ObjectMapper
+
 /**
  * An enumeration of supported output file formats and their [fileExtension] (not including the dot).
  */
-enum class OutputFormat(val fileExtension: String) {
+enum class OutputFormat(val fileExtension: String, val mapper: ObjectMapper) {
     /**
      * Specifies the [JSON](http://www.json.org/) format.
      */
-    JSON("json"),
+    JSON("json", jsonMapper),
 
     /**
      * Specifies the [YAML](http://yaml.org/) format.
      */
-    YAML("yml");
+    YAML("yml", yamlMapper);
 
     companion object {
         /**
