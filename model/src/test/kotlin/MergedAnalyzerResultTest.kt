@@ -26,31 +26,35 @@ import java.io.File
 
 class MergedAnalyzerResultTest : WordSpec() {
 
-    val repositoryPath = File("/absolute/path")
-    val directoryDetails = Repository(repositoryPath.name, repositoryPath.absolutePath.replace(File.separatorChar, '/'),
-            VcsInfo.EMPTY)
+    private val repositoryPath = File("/absolute/path")
+    private val directoryDetails = Repository(
+        repositoryPath.name,
+        repositoryPath.absolutePath.replace(File.separatorChar, '/'),
+        VcsInfo.EMPTY
+    )
 
-    val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
-    val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
-    val package3 = Package.EMPTY.copy(id = Identifier("provider-3", "namespace-3", "package-3", "version-3"))
+    private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
+    private val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
+    private val package3 = Package.EMPTY.copy(id = Identifier("provider-3", "namespace-3", "package-3", "version-3"))
 
-    val pkgRef1 = package1.toReference()
-    val pkgRef2 = package2.toReference(sortedSetOf(package3.toReference()))
+    private val pkgRef1 = package1.toReference()
+    private val pkgRef2 = package2.toReference(sortedSetOf(package3.toReference()))
 
-    val scope1 = Scope("scope-1", true, sortedSetOf(pkgRef1))
-    val scope2 = Scope("scope-2", true, sortedSetOf(pkgRef2))
+    private val scope1 = Scope("scope-1", true, sortedSetOf(pkgRef1))
+    private val scope2 = Scope("scope-2", true, sortedSetOf(pkgRef2))
 
-    val project1 = Project.EMPTY.copy(
+    private val project1 = Project.EMPTY.copy(
             id = Identifier("provider-1", "namespace-1", "project-1", "version-1"),
             scopes = sortedSetOf(scope1)
     )
-    val project2 = Project.EMPTY.copy(
+    private val project2 = Project.EMPTY.copy(
             id = Identifier("provider-2", "namespace-2", "project-2", "version-2"),
             scopes = sortedSetOf(scope1, scope2)
     )
 
-    val analyzerResult1 = AnalyzerResult(true, project1, sortedSetOf(package1), listOf("error-1", "error-2"))
-    val analyzerResult2 = AnalyzerResult(true, project2, sortedSetOf(package1, package2, package3), listOf("error-2"))
+    private val analyzerResult1 = AnalyzerResult(true, project1, sortedSetOf(package1), listOf("error-1", "error-2"))
+    private val analyzerResult2 =
+            AnalyzerResult(true, project2, sortedSetOf(package1, package2, package3), listOf("error-2"))
 
     init {
         "MergedAnalyzerResult" should {
