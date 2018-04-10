@@ -276,6 +276,16 @@ fun Exception.collectMessages(): List<String> {
 }
 
 /**
+ * Assume that the String contains a file path and replace all occurences of [File.separatorChar] with '/'.
+ */
+fun String.normalizePath() = replace(File.separatorChar, '/')
+
+/**
+ * Returns the [File.getAbsolutePath] with all occurences of [File.separatorChar] replaced with '/'.
+ */
+fun File.normalizedPath() = absolutePath.normalizePath()
+
+/**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
  *
  * @throws IOException if the directory could not be deleted.

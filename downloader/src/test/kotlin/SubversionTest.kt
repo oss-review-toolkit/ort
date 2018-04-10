@@ -21,6 +21,7 @@ package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Subversion
 import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.normalizePath
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
@@ -75,7 +76,7 @@ class SubversionTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code/trunk/docutils"
             workingTree.getRevision() shouldBe "8207"
-            workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
+            workingTree.getRootPath() shouldBe zipContentDir.path.normalizePath()
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
         }.config(enabled = Subversion.isInPath())
 

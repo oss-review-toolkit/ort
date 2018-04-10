@@ -21,6 +21,7 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.utils.unpack
 import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.normalizePath
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.Spec
@@ -76,7 +77,7 @@ class GitTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://github.com/naiquevin/pipdeptree.git"
             workingTree.getRevision() shouldBe "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c"
-            workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
+            workingTree.getRootPath() shouldBe zipContentDir.path.normalizePath()
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
 

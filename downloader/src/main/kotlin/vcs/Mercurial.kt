@@ -28,6 +28,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.logStackTrace
+import com.here.ort.utils.normalizePath
 
 import java.io.File
 import java.io.IOException
@@ -75,8 +76,7 @@ object Mercurial : VersionControlSystem() {
                 override fun getRevision() =
                         run(workingDir, "--debug", "id", "-i").stdout().trimEnd()
 
-                override fun getRootPath() = run(workingDir, "root").stdout().trimEnd()
-                        .replace(File.separatorChar, '/')
+                override fun getRootPath() = run(workingDir, "root").stdout().trimEnd().normalizePath()
 
                 override fun listRemoteTags(): List<String> {
                     // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per

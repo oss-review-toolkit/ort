@@ -21,6 +21,7 @@ package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Mercurial
 import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.normalizePath
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
@@ -77,7 +78,7 @@ class MercurialTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://bitbucket.org/facebook/lz4revlog"
             workingTree.getRevision() shouldBe "422ca71c35132f1f55d20a13355708aec7669b50"
-            workingTree.getRootPath() shouldBe zipContentDir.path.replace(File.separatorChar, '/')
+            workingTree.getRootPath() shouldBe zipContentDir.path.normalizePath()
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }.config(enabled = Mercurial.isInPath())
 
