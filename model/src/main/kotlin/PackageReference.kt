@@ -47,7 +47,8 @@ data class PackageReference(
     }
 
     /**
-     * A comparison function to sort package references by their identifier.
+     * A comparison function to sort package references by their identifier. This function ignores all other properties
+     * except for [id].
      */
     override fun compareTo(other: PackageReference) = id.compareTo(other.id)
 
