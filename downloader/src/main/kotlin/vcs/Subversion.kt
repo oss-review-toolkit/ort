@@ -33,6 +33,7 @@ import com.here.ort.model.xmlMapper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -221,7 +222,7 @@ object Subversion : VersionControlSystem() {
                 getWorkingTree(File(targetDir, tagPath))
             }
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
+            if (printStackTrace) {
                 e.printStackTrace()
             }
 

@@ -130,7 +130,7 @@ abstract class LocalScanner : Scanner() {
         val downloadResult = try {
             Main.download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
         } catch (e: DownloadException) {
-            if (com.here.ort.utils.printStackTrace) {
+            if (printStackTrace) {
                 e.printStackTrace()
             }
 

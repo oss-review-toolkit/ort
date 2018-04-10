@@ -254,7 +254,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     // the first space.
                     tempFile.useLines { it.first().substringBefore(" ") }
                 } catch (e: Exception) {
-                    if (com.here.ort.utils.printStackTrace) {
+                    if (printStackTrace) {
                         e.printStackTrace()
                     }
 

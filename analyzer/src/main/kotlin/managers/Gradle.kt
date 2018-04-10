@@ -39,6 +39,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OS
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -169,7 +170,7 @@ class Gradle : PackageManager() {
                     try {
                         maven.parsePackage(artifact, repositories)
                     } catch (e: ProjectBuildingException) {
-                        if (com.here.ort.utils.printStackTrace) {
+                        if (printStackTrace) {
                             e.printStackTrace()
                         }
 
