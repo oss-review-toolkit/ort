@@ -36,20 +36,20 @@ import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.jsonMapper
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.fileSystemEncode
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
 import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.unpack
-import com.here.ort.utils.yamlMapper
 
 import java.io.File
 import java.io.IOException

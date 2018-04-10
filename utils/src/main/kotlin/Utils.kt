@@ -20,10 +20,6 @@
 package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlFactory
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 import java.io.IOException
@@ -52,10 +48,6 @@ val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.clas
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
  */
 var printStackTrace = false
-
-val jsonMapper = ObjectMapper().registerKotlinModule()
-val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
-val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
 /**
  * Ordinal for mandatory program parameters.

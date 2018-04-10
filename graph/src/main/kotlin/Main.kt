@@ -25,12 +25,12 @@ import com.beust.jcommander.Parameter
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.PackageReference
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.jsonMapper
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
-import com.here.ort.utils.yamlMapper
 
 import org.graphstream.graph.Edge
 import org.graphstream.graph.implementations.SingleGraph

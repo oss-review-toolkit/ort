@@ -23,7 +23,7 @@ import com.here.ort.analyzer.managers.GoDep
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.yamlMapper
+import com.here.ort.model.yamlMapper
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe

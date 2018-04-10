@@ -19,7 +19,7 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.utils.yamlMapper
+import com.here.ort.model.yamlMapper
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.matchers.shouldNotBe
