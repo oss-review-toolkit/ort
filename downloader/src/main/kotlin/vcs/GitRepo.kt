@@ -25,8 +25,8 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.searchUpwardsForSubdirectory
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -87,9 +87,7 @@ object GitRepo : GitBase() {
 
             return getWorkingTree(targetDir)
         } catch (e: IOException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             throw DownloadException("Could not clone from ${pkg.vcsProcessed.url} using manifest '$manifestPath'.", e)
         }

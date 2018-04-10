@@ -39,7 +39,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OS
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.showStackTrace
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -170,9 +170,7 @@ class Gradle : PackageManager() {
                     try {
                         maven.parsePackage(artifact, repositories)
                     } catch (e: ProjectBuildingException) {
-                        if (printStackTrace) {
-                            e.printStackTrace()
-                        }
+                        e.showStackTrace()
 
                         log.error {
                             "Could not get package information for dependency '$identifier': ${e.message}"
