@@ -55,15 +55,15 @@ data class PackageReference(
     /**
      * Returns whether the given package is a (transitive) dependency of this reference.
      */
-    fun dependsOn(pkg: Package) = dependsOn(pkg.id.toString())
+    fun dependsOn(pkg: Package) = dependsOn(pkg.id)
 
     /**
      * Returns whether the package identified by [pkgId] is a (transitive) dependency of this reference.
      */
-    fun dependsOn(pkgId: String): Boolean {
+    fun dependsOn(pkgId: Identifier): Boolean {
         return dependencies.find { pkgRef ->
             // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
-            pkgRef.id.toString() == pkgId || pkgRef.dependsOn(pkgId)
+            pkgRef.id == pkgId || pkgRef.dependsOn(pkgId)
         } != null
     }
 }
