@@ -64,10 +64,8 @@ data class Scope(
     /**
      * Returns whether the package identified by [pkgId] is contained as a (transitive) dependency in this scope.
      */
-    fun contains(pkgId: String): Boolean {
-        return dependencies.find { pkgRef ->
-            // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
-            pkgRef.id.toString() == pkgId || pkgRef.dependsOn(pkgId)
-        } != null
-    }
+    fun contains(pkgId: String) = dependencies.find { pkgRef ->
+        // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
+        pkgRef.id.toString() == pkgId || pkgRef.dependsOn(pkgId)
+    } != null
 }
