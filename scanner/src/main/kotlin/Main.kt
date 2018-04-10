@@ -33,6 +33,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
 import com.here.ort.model.jsonMapper
+import com.here.ort.model.mapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -222,11 +223,7 @@ object Main {
                 "Provided path is not a file: ${dependenciesFile.absolutePath}"
             }
 
-            val mapper = when (dependenciesFile.extension) {
-                OutputFormat.JSON.fileExtension -> jsonMapper
-                OutputFormat.YAML.fileExtension -> yamlMapper
-                else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
-            }
+            val mapper = dependenciesFile.mapper()
 
             val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
             analyzerErrors.putAll(analyzerResult.collectErrors())

@@ -22,11 +22,9 @@ package com.here.ort.graph
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.here.ort.model.OutputFormat
 import com.here.ort.model.PackageReference
 import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.yamlMapper
+import com.here.ort.model.mapper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -108,11 +106,7 @@ object Main {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
 
-        val mapper = when (dependenciesFile.extension) {
-            OutputFormat.JSON.fileExtension -> jsonMapper
-            OutputFormat.YAML.fileExtension -> yamlMapper
-            else -> throw IllegalArgumentException("Provided input file is neither JSON or YAML.")
-        }
+        val mapper = dependenciesFile.mapper()
 
         showGraph(mapper.readValue(dependenciesFile, AnalyzerResult::class.java))
     }
