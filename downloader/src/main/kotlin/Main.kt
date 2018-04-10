@@ -32,12 +32,10 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.MergedAnalyzerResult
-import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.yamlMapper
+import com.here.ort.model.mapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -202,11 +200,7 @@ object Main {
                 "Provided path is not a file: ${it.absolutePath}"
             }
 
-            val mapper = when (it.extension) {
-                OutputFormat.JSON.fileExtension -> jsonMapper
-                OutputFormat.YAML.fileExtension -> yamlMapper
-                else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
-            }
+            val mapper = it.mapper()
 
             // Read packages assuming the dependencies file contains an AnalyzerResult.
             try {

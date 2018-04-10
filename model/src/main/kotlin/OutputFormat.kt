@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.File
 
 /**
  * An enumeration of supported output file formats and their [fileExtension] (not including the dot).
@@ -42,4 +43,20 @@ enum class OutputFormat(val fileExtension: String, val mapper: ObjectMapper) {
         @JvmField
         val ALL = OutputFormat.values().asList()
     }
+}
+
+/**
+ * Get the Jackson [ObjectMapper] for this file based on the file extension configured in [OutputFormat.mapper].
+ *
+ * @throws IllegalArgumentException If no matching OutputFormat for the [File.extension] can be found.
+ */
+fun File.mapper(): ObjectMapper {
+    OutputFormat.values().forEach {
+        if (extension == it.fileExtension) {
+            return it.mapper
+        }
+    }
+    throw IllegalArgumentException(
+            "No matching ObjectMapper found for file extension '$extension' of file '$absolutePath'."
+    )
 }
