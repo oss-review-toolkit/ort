@@ -21,12 +21,12 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 
 import java.io.File

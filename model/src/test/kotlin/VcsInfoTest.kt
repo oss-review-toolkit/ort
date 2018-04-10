@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.here.ort.utils.yamlMapper
-
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec

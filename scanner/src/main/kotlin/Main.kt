@@ -31,15 +31,15 @@ import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
+import com.here.ort.model.jsonMapper
+import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessages
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
-import com.here.ort.utils.yamlMapper
 
 import java.io.File
 import java.util.SortedMap
