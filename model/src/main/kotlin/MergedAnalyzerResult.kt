@@ -20,7 +20,6 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
 import java.io.File
 import java.util.SortedMap
@@ -53,7 +52,6 @@ data class MergedAnalyzerResult(
          * Map holding paths to the individual analyzer results for each project.
          */
         @JsonProperty("project_id_result_file_path_map")
-        @JsonDeserialize(keyUsing = IdentifierFromStringKeyDeserializer::class)
         val projectResultsFiles: SortedMap<Identifier, String>,
 
         /**
@@ -64,7 +62,6 @@ data class MergedAnalyzerResult(
         /**
          * The list of all errors.
          */
-        @JsonDeserialize(keyUsing = IdentifierFromStringKeyDeserializer::class)
         val errors: SortedMap<Identifier, List<String>>
 ) {
     /**
