@@ -21,6 +21,7 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.debug
 import ch.frankel.slf4k.warn
+
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory

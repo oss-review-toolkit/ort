@@ -20,6 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.model.Identifier
+
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
