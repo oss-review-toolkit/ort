@@ -25,7 +25,7 @@ project:
   - name: "compile"
     delivered: true
     dependencies:
-    - id: "Maven::org.apache.commons:commons-text:1.1:"
+    - id: "Maven::org.apache.commons_commons-text_1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -36,7 +36,7 @@ project:
   - name: "default"
     delivered: true
     dependencies:
-    - id: "Maven::org.apache.commons:commons-text:1.1:"
+    - id: "Maven::org.apache.commons_commons-text_1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -44,7 +44,7 @@ project:
   - name: "runtime"
     delivered: true
     dependencies:
-    - id: "Maven::org.apache.commons:commons-text:1.1:"
+    - id: "Maven::org.apache.commons_commons-text_1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -55,12 +55,12 @@ project:
   - name: "testCompile"
     delivered: true
     dependencies:
-    - id: "Maven::junit:junit:4.12:"
+    - id: "Maven::junit_junit_4.12:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ junit:junit:4.12 because no repositories are defined."
-    - id: "Maven::org.apache.commons:commons-text:1.1:"
+    - id: "Maven::org.apache.commons_commons-text_1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
@@ -71,12 +71,12 @@ project:
   - name: "testRuntime"
     delivered: true
     dependencies:
-    - id: "Maven::junit:junit:4.12:"
+    - id: "Maven::junit_junit_4.12:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ junit:junit:4.12 because no repositories are defined."
-    - id: "Maven::org.apache.commons:commons-text:1.1:"
+    - id: "Maven::org.apache.commons_commons-text_1.1:"
       dependencies: []
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
