@@ -31,6 +31,7 @@ import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 
 import org.graphstream.graph.Edge
 import org.graphstream.graph.implementations.SingleGraph
@@ -101,7 +102,7 @@ object Main {
         }
 
         // Make the parameter globally available.
-        com.here.ort.utils.printStackTrace = stacktrace
+        printStackTrace = stacktrace
 
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"

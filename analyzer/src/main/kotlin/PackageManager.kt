@@ -29,6 +29,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.printStackTrace
 
 import java.io.File
 import java.nio.file.FileVisitResult
@@ -171,7 +172,7 @@ abstract class PackageManager {
                         result[definitionFile] = it
                     }
                 } catch (e: Exception) {
-                    if (com.here.ort.utils.printStackTrace) {
+                    if (printStackTrace) {
                         e.printStackTrace()
                     }
 

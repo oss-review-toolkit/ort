@@ -40,6 +40,7 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 
 import java.io.File
 import java.util.SortedMap
@@ -77,7 +78,7 @@ object Main {
             try {
                 return OutputFormat.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (com.here.ort.utils.printStackTrace) {
+                if (printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -188,7 +189,7 @@ object Main {
         }
 
         // Make the parameter globally available.
-        com.here.ort.utils.printStackTrace = stacktrace
+        printStackTrace = stacktrace
 
         if ((dependenciesFile != null) == (inputPath != null)) {
             throw IllegalArgumentException("Either --dependencies-file or --input-path must be specified.")
@@ -291,7 +292,7 @@ object Main {
                             errors = result.errors.toMutableList()
                     )
                 } catch (e: ScanException) {
-                    if (com.here.ort.utils.printStackTrace) {
+                    if (printStackTrace) {
                         e.printStackTrace()
                     }
 

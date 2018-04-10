@@ -102,7 +102,7 @@ object Main {
             try {
                 return DataEntity.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (com.here.ort.utils.printStackTrace) {
+                if (printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -191,7 +191,7 @@ object Main {
         }
 
         // Make the parameter globally available.
-        com.here.ort.utils.printStackTrace = stacktrace
+        printStackTrace = stacktrace
 
         if (dependenciesFile != null && projectUrl != null) {
             throw IllegalArgumentException(
@@ -269,7 +269,7 @@ object Main {
                         result.downloadDirectory.packZip(zipFile,
                                 "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
                     } catch (e: IllegalArgumentException) {
-                        if (com.here.ort.utils.printStackTrace) {
+                        if (printStackTrace) {
                             e.printStackTrace()
                         }
 
@@ -280,7 +280,7 @@ object Main {
                     }
                 }
             } catch (e: DownloadException) {
-                if (com.here.ort.utils.printStackTrace) {
+                if (printStackTrace) {
                     e.printStackTrace()
                 }
 
@@ -320,7 +320,7 @@ object Main {
             try {
                 return downloadFromVcs(target, targetDir)
             } catch (e: DownloadException) {
-                if (com.here.ort.utils.printStackTrace) {
+                if (printStackTrace) {
                     e.printStackTrace()
                 }
 

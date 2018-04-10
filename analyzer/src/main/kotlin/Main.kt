@@ -41,6 +41,7 @@ import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
@@ -178,7 +179,7 @@ object Main {
         }
 
         // Make the parameter globally available.
-        com.here.ort.utils.printStackTrace = stacktrace
+        printStackTrace = stacktrace
 
         val absoluteOutputPath = outputDir.absoluteFile
         if (absoluteOutputPath.exists()) {
