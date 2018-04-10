@@ -214,28 +214,11 @@ class PIP : PackageManager() {
                     try {
                         val pkgInfo = pkgData["info"]
                         val pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
-                        val declaredLicenses = sortedSetOf<String>()
-
-                        // Use the top-level license field as well as the license classifiers as the declared licenses.
-                        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-                            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
-                        }
-
-                        // Example license classifier:
-                        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-                        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-                            val classifier = it.asText().split(" :: ")
-                            if (classifier.first() == "License") {
-                                classifier.last().removeSuffix(" License")
-                            } else {
-                                null
-                            }
-                        }
 
                         // Amend package information with more details.
                         Package(
                                 id = pkg.id,
-                                declaredLicenses = declaredLicenses,
+                                declaredLicenses = getDeclaredLicenses(pkgInfo),
                                 description = pkgInfo["summary"]?.asText() ?: pkg.description,
                                 homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
                                 binaryArtifact = getBinaryArtifact(pkg, pkgReleases),
@@ -309,6 +292,28 @@ class PIP : PackageManager() {
         val hash = pkgSource["md5_digest"]?.asText() ?: return RemoteArtifact.EMPTY
 
         return RemoteArtifact(url, hash, HashAlgorithm.MD5)
+    }
+
+    private fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
+        val declaredLicenses = sortedSetOf<String>()
+
+        // Use the top-level license field as well as the license classifiers as the declared licenses.
+        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
+            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+        }
+
+        // Example license classifier:
+        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
+            val classifier = it.asText().split(" :: ")
+            if (classifier.first() == "License") {
+                classifier.last().removeSuffix(" License")
+            } else {
+                null
+            }
+        }
+
+        return declaredLicenses
     }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
