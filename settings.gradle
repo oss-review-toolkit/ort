@@ -1,12 +1,3 @@
-pluginManagement {
-    repositories {
-        // jcenter needs to come before gradlePluginPortal because of a broken dokka POM in the plugin portal:
-        // https://github.com/Kotlin/dokka/issues/146#issuecomment-349091680
-        jcenter()
-        gradlePluginPortal()
-    }
-}
-
 rootProject.name = 'oss-review-toolkit'
 
 include 'analyzer'
