@@ -41,7 +41,7 @@ import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
-import com.here.ort.utils.fileSystemEncode
+import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
 import com.here.ort.utils.printStackTrace
@@ -437,6 +437,4 @@ object Main {
             throw DownloadException("Calculated $hashAlgorithm hash '$digest' differs from expected hash '$hash'.")
         }
     }
-
-    private fun String.encodeOrUnknown() = this.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
 }
