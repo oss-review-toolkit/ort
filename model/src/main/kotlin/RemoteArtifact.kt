@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.*
 
 /**
  * Bundles information about a remote artifact.

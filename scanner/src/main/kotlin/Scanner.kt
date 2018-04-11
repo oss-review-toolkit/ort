@@ -19,7 +19,10 @@
 
 package com.here.ort.scanner
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.here.ort.model.Package
+import com.here.ort.model.ScanResult
 import com.here.ort.scanner.scanners.*
 
 import java.io.File
@@ -40,10 +43,22 @@ abstract class Scanner {
         }
     }
 
-    data class Result(val fileCount: Int, val licenses: SortedSet<String>, val errors: SortedSet<String>)
+    data class Result(val fileCount: Int, val licenses: SortedSet<String>, val errors: SortedSet<String>,
+                      val rawResult: JsonNode)
 
+    /**
+     * Scan the [packages] using this [Scanner].
+     *
+     * @param packages The packages to scan.
+     * @param outputDirectory Where to store the scan results.
+     * @param downloadDirectory Where to store the downloaded source code. If null the source code is downloaded to the
+     *                          outputDirectory.
+     *
+     * @return The scan results by identifier. It can contain multiple results for one identifier if the
+     *         cache contains more than one result for the specification of this scanner.
+     */
     abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null)
-            : Map<Package, Result>
+            : Map<Package, List<ScanResult>>
 
     /**
      * Return the Java class name as a simple way to refer to the scanner.
