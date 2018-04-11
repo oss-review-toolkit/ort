@@ -125,13 +125,28 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
     }
 
     private static class DependencyTreeModelBuilder implements ToolingModelBuilder {
+        static DependencyImpl dependencyFromDisplayName(String displayName, List<Dependency> dependencies,
+                                                        String error) {
+            if (displayName.startsWith('project :')) {
+                def coordinates = displayName.split(':', 2)
+                return new DependencyImpl(groupId: '<project>', artifactId: coordinates[1], dependencies: dependencies,
+                        error: error.toString())
+            }
+
+            def coordinates = displayName.split(':')
+
+            if (coordinates.length == 3) {
+                return new DependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
+                        dependencies: dependencies, error: error.toString())
+            }
+
+            return new DependencyImpl(groupId: '<unknown>', artifactId: displayName.replace(':', '_'),
+                    dependencies: dependencies, error: error.toString())
+        }
+
         @Override
         boolean canBuild(String modelName) {
             return modelName == 'DependencyTreeModel'
-        }
-
-        String normalizeName(String name) {
-            return name.replace('project :', 'project ').replace(':', '_')
         }
 
         @Override
@@ -243,15 +258,15 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             dependencyProject.version ?: '', '', '', dependencies, null, '',
                             dependencyProject.projectDir.absolutePath)
                 } else {
-                    return new DependencyImpl('', normalizeName(id.displayName), '', '', '', dependencies,
-                            "Unknown id type: ${id.getClass().simpleName}".toString(), '', null)
+                    return dependencyFromDisplayName(id.displayName, dependencies,
+                            "Unknown id type: ${id.getClass().simpleName}")
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
-                return new DependencyImpl('', normalizeName(dependencyResult.attempted.displayName), '', '', '', [],
-                        "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), '', null)
+                return dependencyFromDisplayName(dependencyResult.attempted.displayName, [],
+                        "Unresolved: ${collectCauses(dependencyResult.failure)}")
             } else {
-                return new DependencyImpl('', normalizeName(dependencyResult.requested.displayName), '', '', '', [],
-                        "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), '', null)
+                return dependencyFromDisplayName(dependencyResult.requested.displayName, [],
+                        "Unknown result type: ${dependencyResult.getClass().simpleName}")
             }
         }
 
