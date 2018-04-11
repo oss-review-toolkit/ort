@@ -31,6 +31,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
+import com.here.ort.model.ScanResults
 import com.here.ort.model.Scope
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.mapper
@@ -255,11 +256,15 @@ object Main {
 
             val results = scanner.scan(packages, outputDir, downloadDir)
             results.forEach { pkg, result ->
+                // TODO: Make output format configurable.
+                val resultsFile = File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.yml")
+                yamlMapper.writeValue(resultsFile, ScanResults(pkg.id, result))
+
                 val entry = SummaryEntry(
                         scopes = findScopesForPackage(pkg, analyzerResult.project).toSortedSet(),
                         declaredLicenses = pkg.declaredLicenses,
-                        detectedLicenses = result.licenses,
-                        errors = result.errors.toMutableList()
+                        detectedLicenses = result.flatMap { it.summary.licenses }.toSortedSet(),
+                        errors = result.flatMap { it.summary.errors }.toMutableList()
                 )
 
                 pkgSummary[pkg.id.toString()] = entry
@@ -282,11 +287,12 @@ object Main {
                 val entry = try {
                     val result = localScanner.scan(inputPath, outputDir)
 
-                    println("Detected licenses for path '${inputPath.absolutePath}': ${result.licenses.joinToString()}")
+                    println("Detected licenses for path '${inputPath.absolutePath}': " +
+                            result.summary.licenses.joinToString())
 
                     SummaryEntry(
-                            detectedLicenses = result.licenses,
-                            errors = result.errors.toMutableList()
+                            detectedLicenses = result.summary.licenses,
+                            errors = result.summary.errors.toMutableList()
                     )
                 } catch (e: ScanException) {
                     e.showStackTrace()

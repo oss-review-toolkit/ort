@@ -21,6 +21,11 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.EMPTY_NODE
+import com.here.ort.model.Provenance
+import com.here.ort.model.ScanResult
+import com.here.ort.model.ScanSummary
+import com.here.ort.model.ScannerSpecification
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.Main
@@ -35,6 +40,7 @@ import com.here.ort.utils.unpack
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.time.Instant
 
 import okhttp3.Request
 
@@ -45,6 +51,11 @@ object BoyterLc : LocalScanner() {
 
     override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
     override val resultFileExt = "json"
+
+    val configuration = listOf(
+            "--confidence", "0.95", // Cut-off value to only get most relevant matches.
+            "--format", "json"
+    )
 
     override fun bootstrap(): File? {
         val url = if (OS.isWindows) {
@@ -87,20 +98,26 @@ object BoyterLc : LocalScanner() {
         }
     }
 
+    override fun getConfiguration() = configuration.joinToString(" ")
+
     override fun getVersion(executable: String) =
             getCommandVersion(scannerPath.absolutePath, transform = {
                 // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
                 it.substringAfter("licensechecker version ")
             })
 
-    override fun scanPath(path: File, resultsFile: File): Result {
+    override fun scanPath(path: File, resultsFile: File, provenance: Provenance, specification: ScannerSpecification)
+            : ScanResult {
+        val startTime = Instant.now()
+
         val process = ProcessCapture(
                 scannerPath.absolutePath,
-                "--confidence", "0.95", // Cut-off value to only get most relevant matches.
-                "--format", "json",
+                *configuration.toTypedArray(),
                 "--output", resultsFile.absolutePath,
                 path.absolutePath
         )
+
+        val endTime = Instant.now()
 
         if (process.stderr().isNotBlank()) {
             log.debug { process.stderr() }
@@ -108,7 +125,9 @@ object BoyterLc : LocalScanner() {
 
         with(process) {
             if (isSuccess()) {
-                return getResult(resultsFile)
+                val result = getResult(resultsFile)
+                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
+                return ScanResult(provenance, specification, summary, result.rawResult)
             } else {
                 throw ScanException(failMessage)
             }
@@ -120,18 +139,20 @@ object BoyterLc : LocalScanner() {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
-        if (resultsFile.isFile && resultsFile.length() > 0) {
-            val json = jsonMapper.readTree(resultsFile)
+        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
+            jsonMapper.readTree(resultsFile).also {
+                fileCount = it.count()
 
-            fileCount = json.count()
-
-            json.forEach { file ->
-                licenses.addAll(file["LicenseGuesses"].map { license ->
-                    license["LicenseId"].asText()
-                })
+                it.forEach { file ->
+                    licenses.addAll(file["LicenseGuesses"].map { license ->
+                        license["LicenseId"].asText()
+                    })
+                }
             }
+        } else {
+            EMPTY_NODE
         }
 
-        return Result(fileCount, licenses, errors)
+        return Result(fileCount, licenses, errors, json)
     }
 }

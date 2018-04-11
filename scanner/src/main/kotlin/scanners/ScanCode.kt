@@ -22,6 +22,11 @@ package com.here.ort.scanner.scanners
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
+import com.here.ort.model.EMPTY_NODE
+import com.here.ort.model.Provenance
+import com.here.ort.model.ScanResult
+import com.here.ort.model.ScanSummary
+import com.here.ort.model.ScannerSpecification
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
@@ -32,6 +37,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import java.io.File
+import java.time.Instant
 import java.util.regex.Pattern
 
 object ScanCode : LocalScanner() {
@@ -43,18 +49,26 @@ object ScanCode : LocalScanner() {
             "--license",
             "--license-text",
             "--info",
-            "--strip-root"
+            "--strip-root",
+            "--timeout", TIMEOUT.toString(),
+            "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
     )
+
+    private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
+        "--$OUTPUT_FORMAT"
+    } else {
+        "--output-$OUTPUT_FORMAT"
+    }
 
     // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
     private val UNKNOWN_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-            "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+                    "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
             Pattern.DOTALL)
 
     private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
+                    "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
     override val resultFileExt = "json"
@@ -72,6 +86,11 @@ object ScanCode : LocalScanner() {
         return scancodeDir
     }
 
+    override fun getConfiguration() = DEFAULT_OPTIONS.toMutableList().run {
+        add(OUTPUT_FORMAT_OPTION)
+        joinToString(" ")
+    }
+
     override fun getVersion(executable: String) =
             getCommandVersion(scannerPath.absolutePath, transform = {
                 // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
@@ -79,27 +98,26 @@ object ScanCode : LocalScanner() {
                 it.substringAfter("ScanCode version ")
             })
 
-    override fun scanPath(path: File, resultsFile: File): Result {
+    override fun scanPath(path: File, resultsFile: File, provenance: Provenance, specification: ScannerSpecification)
+            : ScanResult {
         val options = DEFAULT_OPTIONS.toMutableList()
+
         if (log.isEnabledFor(Level.DEBUG)) {
             options.add("--license-diag")
             options.add("--verbose")
         }
 
-        val outputFormatOption = if (OUTPUT_FORMAT.startsWith("json")) {
-            "--$OUTPUT_FORMAT"
-        } else {
-            "--output-$OUTPUT_FORMAT"
-        }
+        val startTime = Instant.now()
 
         val process = ProcessCapture(
                 scannerPath.absolutePath,
                 *options.toTypedArray(),
-                "--timeout", TIMEOUT.toString(),
-                "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString(),
                 path.absolutePath,
-                outputFormatOption, resultsFile.absolutePath
+                OUTPUT_FORMAT_OPTION,
+                resultsFile.absolutePath
         )
+
+        val endTime = Instant.now()
 
         if (process.stderr().isNotBlank()) {
             log.debug { process.stderr() }
@@ -112,7 +130,8 @@ object ScanCode : LocalScanner() {
 
         with(process) {
             if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return result
+                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
+                return ScanResult(provenance, specification, summary, result.rawResult)
             } else {
                 throw ScanException(failMessage)
             }
@@ -128,27 +147,29 @@ object ScanCode : LocalScanner() {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
-        if (resultsFile.isFile && resultsFile.length() > 0) {
-            val json = jsonMapper.readTree(resultsFile)
+        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
+            jsonMapper.readTree(resultsFile).also {
+                fileCount = it["files_count"].intValue()
 
-            fileCount = json["files_count"].intValue()
-
-            json["files"]?.forEach { file ->
-                file["licenses"]?.forEach { license ->
-                    var name = license["spdx_license_key"].asText()
-                    if (name.isNullOrBlank()) {
-                        val key = license["key"].asText()
-                        name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+                it["files"]?.forEach { file ->
+                    file["licenses"]?.forEach { license ->
+                        var name = license["spdx_license_key"].asText()
+                        if (name.isNullOrBlank()) {
+                            val key = license["key"].asText()
+                            name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+                        }
+                        licenses.add(name)
                     }
-                    licenses.add(name)
-                }
 
-                val path = file["path"].asText()
-                errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
+                    val path = file["path"].asText()
+                    errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
+                }
             }
+        } else {
+            EMPTY_NODE
         }
 
-        return Result(fileCount, licenses, errors)
+        return Result(fileCount, licenses, errors, json)
     }
 
     override fun getResult(resultsFile: File) =
