@@ -25,38 +25,34 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotlintest.shouldBe
+import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class PipTest : WordSpec({
+class PipTest : StringSpec({
     val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects")
 
-    "setup.py dependencies" should {
-        "be resolved correctly for spdx-tools-python" {
-            val definitionFile = File(projectDir, "external/spdx-tools-python/setup.py")
+    "setup.py dependencies should be resolved correctly for spdx-tools-python" {
+        val definitionFile = File(projectDir, "external/spdx-tools-python/setup.py")
 
-            val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val expectedResult = File(projectDir, "external/spdx-tools-python-expected-output.yml").readText()
+        val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+        val expectedResult = File(projectDir, "external/spdx-tools-python-expected-output.yml").readText()
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
+        yamlMapper.writeValueAsString(result) shouldBe expectedResult
     }
 
-    "requirements.txt dependencies" should {
-        "be resolved correctly for example-python-flask" {
-            val definitionFile = File(projectDir, "external/example-python-flask/requirements.txt")
+    "requirements.txt dependencies should be resolved correctly for example-python-flask" {
+        val definitionFile = File(projectDir, "external/example-python-flask/requirements.txt")
 
-            val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val expectedResult = File(projectDir, "external/example-python-flask-expected-output.yml").readText()
+        val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+        val expectedResult = File(projectDir, "external/example-python-flask-expected-output.yml").readText()
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
+        yamlMapper.writeValueAsString(result) shouldBe expectedResult
     }
 
-    "capture metadata from setup.py, even when requirements.txt is present" {
+    "metadata should be captured from setup.py even if requirements.txt is present" {
         val definitionFile = File(projectDir, "synthetic/pip/requirements.txt")
         val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
         val vcsUrl = vcsDir.getRemoteUrl()

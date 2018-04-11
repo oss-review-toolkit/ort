@@ -28,9 +28,8 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
-import io.kotlintest.matchers.should
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.matchers.startWith
 import io.kotlintest.specs.WordSpec
 
@@ -45,7 +44,7 @@ class BundlerTest : WordSpec() {
 
     init {
         "Bundler" should {
-            "resolve dependencies correctly" {
+            "resolve dependencies correctly".config(tags = setOf(ExpensiveTag)) {
                 val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
                 try {
@@ -57,9 +56,9 @@ class BundlerTest : WordSpec() {
                 } finally {
                     File(definitionFile.parentFile, ".bundle").safeDeleteRecursively()
                 }
-            }.config(tags = setOf(ExpensiveTag))
+            }
 
-            "show error if no lockfile is present" {
+            "show error if no lockfile is present".config(tags = setOf(ExpensiveTag)) {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
 
                 val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
@@ -69,9 +68,9 @@ class BundlerTest : WordSpec() {
                 actualResult.packages.size shouldBe 0
                 actualResult.errors.size shouldBe 1
                 actualResult.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
-            }.config(tags = setOf(ExpensiveTag))
+            }
 
-            "resolve dependencies correctly when the project is a Gem" {
+            "resolve dependencies correctly when the project is a Gem".config(tags = setOf(ExpensiveTag)) {
                 val definitionFile = File(projectsDir, "gemspec/Gemfile")
 
                 try {
@@ -83,7 +82,7 @@ class BundlerTest : WordSpec() {
                 } finally {
                     File(definitionFile.parentFile, ".bundle").safeDeleteRecursively()
                 }
-            }.config(tags = setOf(ExpensiveTag))
+            }
         }
     }
 

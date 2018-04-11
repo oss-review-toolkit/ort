@@ -25,8 +25,9 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.Description
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -41,20 +42,16 @@ private const val REPO_PATH_FOR_VERSION = "Resources"
 class MercurialDownloadTest : StringSpec() {
     private lateinit var outputDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+    override fun beforeTest(description: Description) {
         outputDir = createTempDir()
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterTest(description: Description, result: TestResult) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {
-        "Mercurial can download a given revision" {
+        "Mercurial can download a given revision".config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".hg",
@@ -74,9 +71,11 @@ class MercurialDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag))
+        }
 
-        "Mercurial can download only a single path" {
+        "Mercurial can download only a single path"
+                .config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"),
+                        tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
@@ -102,9 +101,9 @@ class MercurialDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
+        }
 
-        "Mercurial can download based on a version" {
+        "Mercurial can download based on a version".config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
                     vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
@@ -114,9 +113,11 @@ class MercurialDownloadTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-        }.config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag))
+        }
 
-        "Mercurial can download only a single path based on a version" {
+        "Mercurial can download only a single path based on a version"
+                .config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"),
+                        tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
                     vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
@@ -146,6 +147,6 @@ class MercurialDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag))
+        }
     }
 }

@@ -21,9 +21,9 @@ package com.here.ort.utils
 
 import com.here.ort.utils.spdx.calculatePackageVerificationCode
 
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
-import io.kotlintest.matchers.shouldThrow
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
@@ -72,24 +72,24 @@ class UtilsTest : WordSpec({
         "return an empty list for a blank version" {
             val names = listOf("dummy")
 
-            filterVersionNames("", names) shouldBe emptyList<String>()
-            filterVersionNames(" ", names) shouldBe emptyList<String>()
+            filterVersionNames("", names) shouldBe emptyList()
+            filterVersionNames(" ", names) shouldBe emptyList()
         }
 
         "return an empty list for empty names" {
             val names = listOf("")
 
-            filterVersionNames("", names) shouldBe emptyList<String>()
-            filterVersionNames(" ", names) shouldBe emptyList<String>()
-            filterVersionNames("1.0", names) shouldBe emptyList<String>()
+            filterVersionNames("", names) shouldBe emptyList()
+            filterVersionNames(" ", names) shouldBe emptyList()
+            filterVersionNames("1.0", names) shouldBe emptyList()
         }
 
         "return an empty list for blank names" {
             val names = listOf(" ")
 
-            filterVersionNames("", names) shouldBe emptyList<String>()
-            filterVersionNames(" ", names) shouldBe emptyList<String>()
-            filterVersionNames("1.0", names) shouldBe emptyList<String>()
+            filterVersionNames("", names) shouldBe emptyList()
+            filterVersionNames(" ", names) shouldBe emptyList()
+            filterVersionNames("1.0", names) shouldBe emptyList()
         }
 
         "find names separated by underscores" {
@@ -217,7 +217,7 @@ class UtilsTest : WordSpec({
     }
 
     "getPathFromEnvironment" should {
-        "find system executables on Windows" {
+        "find system executables on Windows".config(enabled = OS.isWindows) {
             val winverPath = File(System.getenv("SYSTEMROOT"), "system32/winver.exe")
 
             getPathFromEnvironment("winver") shouldNotBe null
@@ -229,15 +229,15 @@ class UtilsTest : WordSpec({
             getPathFromEnvironment("") shouldBe null
             getPathFromEnvironment("*") shouldBe null
             getPathFromEnvironment("nul") shouldBe null
-        }.config(enabled = OS.isWindows)
+        }
 
-        "find system executables on non-Windows" {
+        "find system executables on non-Windows".config(enabled = !OS.isWindows) {
             getPathFromEnvironment("sh") shouldNotBe null
             getPathFromEnvironment("sh") shouldBe File("/bin/sh")
 
             getPathFromEnvironment("") shouldBe null
             getPathFromEnvironment("/") shouldBe null
-        }.config(enabled = !OS.isWindows)
+        }
     }
 
     "normalizeVcsUrl" should {

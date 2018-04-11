@@ -27,12 +27,13 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
-import io.kotlintest.TestCaseContext
+import io.kotlintest.Description
+import io.kotlintest.TestResult
 import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.should
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.matchers.startWith
+import io.kotlintest.should
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.FreeSpec
 
 import java.io.File
@@ -44,19 +45,15 @@ class NpmTest : FreeSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
-            // from failing tests.
-            projectDir.listFiles().forEach {
-                if (it.isDirectory) {
-                    val nodeModulesDir = File(it, "node_modules")
-                    val gitKeepFile = File(nodeModulesDir, ".gitkeep")
-                    if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
-                        nodeModulesDir.safeDeleteRecursively()
-                    }
+    override fun afterTest(description: Description, result: TestResult) {
+        // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
+        // from failing tests.
+        projectDir.listFiles().forEach {
+            if (it.isDirectory) {
+                val nodeModulesDir = File(it, "node_modules")
+                val gitKeepFile = File(nodeModulesDir, ".gitkeep")
+                if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
+                    nodeModulesDir.safeDeleteRecursively()
                 }
             }
         }

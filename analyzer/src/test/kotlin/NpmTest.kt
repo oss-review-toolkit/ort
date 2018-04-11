@@ -21,7 +21,7 @@ package com.here.ort.utils
 
 import com.here.ort.analyzer.managers.NPM
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class NpmTest : WordSpec({

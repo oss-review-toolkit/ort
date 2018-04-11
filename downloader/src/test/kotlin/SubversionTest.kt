@@ -25,9 +25,10 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.unpack
 
+import io.kotlintest.Description
 import io.kotlintest.Spec
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -35,10 +36,7 @@ import java.io.File
 class SubversionTest : StringSpec() {
     private lateinit var zipContentDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptSpec(context: Spec, spec: () -> Unit) {
+    override fun beforeSpec(description: Description, spec: Spec) {
         val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
         val zipFile = File(rootDir, "downloader/src/test/assets/docutils-2018-01-03-svn-trunk.zip")
 
@@ -46,31 +44,29 @@ class SubversionTest : StringSpec() {
 
         println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)
+    }
 
-        try {
-            super.interceptSpec(context, spec)
-        } finally {
-            zipContentDir.safeDeleteRecursively()
-        }
+    override fun afterSpec(description: Description, spec: Spec) {
+        zipContentDir.safeDeleteRecursively()
     }
 
     init {
-        "Detected Subversion version is not empty" {
+        "Detected Subversion version is not empty".config(enabled = Subversion.isInPath()) {
             val version = Subversion.getVersion()
             println("Subversion version $version detected.")
             version shouldNotBe ""
-        }.config(enabled = Subversion.isInPath())
+        }
 
-        "Subversion detects non-working-trees" {
+        "Subversion detects non-working-trees".config(enabled = Subversion.isInPath()) {
             Subversion.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
-        }.config(enabled = Subversion.isInPath())
+        }
 
-        "Subversion correctly detects URLs to remote repositories" {
+        "Subversion correctly detects URLs to remote repositories".config(enabled = Subversion.isInPath()) {
             Subversion.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe true
             Subversion.isApplicableUrl("https://bitbucket.org/facebook/lz4revlog") shouldBe false
-        }.config(enabled = Subversion.isInPath())
+        }
 
-        "Detected Subversion working tree information is correct" {
+        "Detected Subversion working tree information is correct".config(enabled = Subversion.isInPath()) {
             val workingTree = Subversion.getWorkingTree(zipContentDir)
 
             workingTree.getType() shouldBe "Subversion"
@@ -79,9 +75,9 @@ class SubversionTest : StringSpec() {
             workingTree.getRevision() shouldBe "8207"
             workingTree.getRootPath() shouldBe zipContentDir
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
-        }.config(enabled = Subversion.isInPath())
+        }
 
-        "Subversion correctly lists remote branches" {
+        "Subversion correctly lists remote branches".config(enabled = Subversion.isInPath()) {
             val expectedBranches = listOf(
                     "address-rendering",
                     "index-bug",
@@ -93,9 +89,9 @@ class SubversionTest : StringSpec() {
 
             val workingTree = Subversion.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
-        }.config(enabled = Subversion.isInPath())
+        }
 
-        "Subversion correctly lists remote tags" {
+        "Subversion correctly lists remote tags".config(enabled = Subversion.isInPath()) {
             val expectedTags = listOf(
                     "docutils-0.10",
                     "docutils-0.11",
@@ -125,6 +121,6 @@ class SubversionTest : StringSpec() {
 
             val workingTree = Subversion.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
-        }.config(enabled = Subversion.isInPath())
+        }
     }
 }

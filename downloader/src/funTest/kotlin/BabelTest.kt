@@ -27,9 +27,10 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.Description
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -37,16 +38,12 @@ import java.io.File
 class BabelTest : StringSpec() {
     private lateinit var outputDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+    override fun beforeTest(description: Description) {
         outputDir = createTempDir()
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterTest(description: Description, result: TestResult) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {

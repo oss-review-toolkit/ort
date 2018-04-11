@@ -53,7 +53,7 @@ test_script:
   - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
       gradlew --stacktrace check
     ) else (
-      gradlew -DexcludeTags=ExpensiveTag --stacktrace check
+      gradlew -Dkotlintest.tags.exclude=ExpensiveTag --stacktrace check
     )
 
 on_finish:

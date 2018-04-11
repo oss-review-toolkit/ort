@@ -24,9 +24,10 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.unpack
 
+import io.kotlintest.Description
 import io.kotlintest.Spec
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -34,10 +35,7 @@ import java.io.File
 class GitTest : StringSpec() {
     private lateinit var zipContentDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptSpec(context: Spec, spec: () -> Unit) {
+    override fun beforeSpec(description: Description, spec: Spec) {
         val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
         val zipFile = File(rootDir, "downloader/src/test/assets/pipdeptree-2018-01-03-git.zip")
 
@@ -45,12 +43,10 @@ class GitTest : StringSpec() {
 
         println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)
+    }
 
-        try {
-            super.interceptSpec(context, spec)
-        } finally {
-            zipContentDir.safeDeleteRecursively()
-        }
+    override fun afterSpec(description: Description, spec: Spec) {
+        zipContentDir.safeDeleteRecursively()
     }
 
     init {

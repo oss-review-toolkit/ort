@@ -25,8 +25,9 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.Description
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -40,20 +41,16 @@ private const val REPO_PATH_FOR_VERSION = "xmlenc/build.xml"
 class CvsDownloadTest : StringSpec() {
     private lateinit var outputDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+    override fun beforeTest(description: Description) {
         outputDir = createTempDir()
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterTest(description: Description, result: TestResult) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {
-        "CVS can download a given revision" {
+        "CVS can download a given revision".config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     "CVS",
@@ -72,9 +69,9 @@ class CvsDownloadTest : StringSpec() {
 
             // Only tag "RELEASE_0_52" has revision 1.159 of "xmlenc/build.xml".
             buildXmlStatus.stdout().contains("Working revision:\t1.159") shouldBe true
-        }.config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag))
+        }
 
-        "CVS can download only a single path" {
+        "CVS can download only a single path".config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                     File(REPO_PATH, "changes.xml")
@@ -89,9 +86,9 @@ class CvsDownloadTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag))
+        }
 
-        "CVS can download based on a version" {
+        "CVS can download based on a version".config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
                     vcsProcessed = VcsInfo("CVS", REPO_URL, "")
@@ -107,9 +104,10 @@ class CvsDownloadTest : StringSpec() {
 
             // Only tag "RELEASE_0_52" has revision 1.159 of "xmlenc/build.xml".
             buildXmlStatus.stdout().contains("Working revision:\t1.159") shouldBe true
-        }.config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag))
+        }
 
-        "CVS can download only a single path based on a version" {
+        "CVS can download only a single path based on a version"
+                .config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
                     vcsProcessed = VcsInfo("CVS", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
@@ -127,6 +125,6 @@ class CvsDownloadTest : StringSpec() {
 
             workingTree.isValid() shouldBe true
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }.config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag))
+        }
     }
 }

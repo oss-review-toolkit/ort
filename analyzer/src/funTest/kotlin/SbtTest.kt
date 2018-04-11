@@ -24,7 +24,7 @@ import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
 
 import java.io.File

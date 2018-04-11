@@ -23,8 +23,8 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.managers.*
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldThrow
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 import java.io.File

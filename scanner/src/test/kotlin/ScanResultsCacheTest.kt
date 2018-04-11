@@ -21,9 +21,9 @@ package com.here.ort.scanner
 
 import com.here.ort.model.yamlMapper
 
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
-import io.kotlintest.matchers.shouldThrow
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 @Suppress("UnsafeCallOnNullableType", "UnsafeCast")

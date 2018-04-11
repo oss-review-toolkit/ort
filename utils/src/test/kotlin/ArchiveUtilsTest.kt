@@ -19,8 +19,9 @@
 
 package com.here.ort.utils
 
-import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.Description
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -29,16 +30,12 @@ class ArchiveUtilsTest : StringSpec() {
     private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     private lateinit var outputDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+    override fun beforeTest(description: Description) {
         outputDir = createTempDir()
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterTest(description: Description, result: TestResult) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {

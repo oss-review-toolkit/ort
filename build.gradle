@@ -54,7 +54,9 @@ subprojects {
     dependencies {
         compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.41'
 
-        testCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+        testCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
+        testCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
+        testCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
         testCompile project(':utils-test')
 
         funTestCompile sourceSets.main.output
@@ -62,7 +64,9 @@ subprojects {
         funTestCompile configurations.testCompile
         funTestRuntime configurations.testRuntime
 
-        funTestCompile "io.kotlintest:kotlintest:$kotlintestVersion"
+        funTestCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
+        funTestCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
+        funTestCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
         funTestCompile project(':utils-test')
     }
 
@@ -97,7 +101,10 @@ subprojects {
         }
     }
 
+    // Further configure the default test task.
     test {
+        useJUnitPlatform()
+
         testLogging {
             events 'started', 'passed', 'skipped', 'failed'
             exceptionFormat 'full'
@@ -112,9 +119,11 @@ subprojects {
         testClassesDirs = sourceSets.funTest.output.classesDirs
 
         systemProperties = [
-                includeTags: System.getProperty("includeTags"),
-                excludeTags: System.getProperty("excludeTags")
+                "kotlintest.tags.include": System.getProperty("kotlintest.tags.include"),
+                "kotlintest.tags.exclude": System.getProperty("kotlintest.tags.exclude")
         ]
+
+        useJUnitPlatform()
 
         testLogging {
             events 'started', 'passed', 'skipped', 'failed'

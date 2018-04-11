@@ -28,8 +28,9 @@ import com.here.ort.utils.ScanCodeTag
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.TestCaseContext
+import io.kotlintest.Description
+import io.kotlintest.shouldBe
+import io.kotlintest.TestResult
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -38,41 +39,37 @@ class ScanPathTest : StringSpec() {
     private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     private lateinit var outputDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+    override fun beforeTest(description: Description) {
         outputDir = createTempDir()
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterTest(description: Description, result: TestResult) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {
-        "Askalono recognizes our own LICENSE" {
+        "Askalono recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
             val result = Askalono.scanPath(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "BoyterLc recognizes our own LICENSE" {
+        "BoyterLc recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
             val result = BoyterLc.scanPath(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0", "ECL-2.0")
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "Licensee recognizes our own LICENSE" {
+        "Licensee recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
             val result = Licensee.scanPath(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "ScanCode recognizes our own LICENSE" {
+        "ScanCode recognizes our own LICENSE".config(tags = setOf(ExpensiveTag, ScanCodeTag)) {
             val result = ScanCode.scanPath(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
-        }.config(tags = setOf(ExpensiveTag, ScanCodeTag))
+        }
     }
 }
