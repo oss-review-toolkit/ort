@@ -395,6 +395,11 @@ fun String.fileSystemDecode(): String =
         java.net.URLDecoder.decode(this, "UTF-8")
 
 /**
+ * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
+ */
+fun String.encodeOrUnknown(): String = this.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+
+/**
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
  */
 fun Throwable.showStackTrace() {
