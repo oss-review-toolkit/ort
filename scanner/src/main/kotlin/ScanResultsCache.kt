@@ -23,10 +23,11 @@ import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.model.Package
+import com.here.ort.model.Identifier
+import com.here.ort.model.ScanResult
+import com.here.ort.model.ScanResultContainer
+import com.here.ort.model.ScannerDetails
 import com.here.ort.utils.log
-
-import java.io.File
 
 data class CacheStatistics(
         var numReads: Int = 0,
@@ -36,26 +37,41 @@ data class CacheStatistics(
 interface ScanResultsCache {
 
     /**
-     * Read a scan results file from the cache.
+     * Read all [ScanResult]s for this [id] from the cache.
      *
-     * @param pkg The package the scan results belong to.
-     * @param target The local file to store the scan results in.
+     * @param id The [Identifier] of the scanned [Package].
+     *
+     * @return The [ScanResultContainer] for this [id].
      */
-    fun read(pkg: Package, target: File): Boolean
+    fun read(id: Identifier): ScanResultContainer
 
     /**
-     * Write a scan results file to the cache.
+     * Read the [ScanResult]s matching this [id] and [scannerDetails] from the cache.
      *
-     * @param pkg The package the scan results belong to.
-     * @param source The local file containing the scan results.
+     * TODO: This method should support a version range for the scanner in case minor version differences do not matter.
+     *
+     * @param id The [Identifier] of the scanned [Package].
+     * @param scannerDetails Details about the scanner that was used to scan the [Package].
+     *
+     * @return The [ScanResultContainer] matching this [id] and [scannerDetails].
      */
-    fun write(pkg: Package, source: File): Boolean
+    fun read(id: Identifier, scannerDetails: ScannerDetails): ScanResultContainer
+
+    /**
+     * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
+     *
+     * @param id The [Identifier] of the scanned [Package].
+     * @param scanResult The [ScanResult].
+     *
+     * @return If the [ScanResult] could be written to the cache.
+     */
+    fun add(id: Identifier, scanResult: ScanResult): Boolean
 
     companion object : ScanResultsCache {
-
         var cache = object : ScanResultsCache {
-            override fun read(pkg: Package, target: File) = false
-            override fun write(pkg: Package, source: File) = false
+            override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
+            override fun read(id: Identifier, scannerDetails: ScannerDetails) = ScanResultContainer(id, emptyList())
+            override fun add(id: Identifier, scanResult: ScanResult) = false
         }
             private set
 
@@ -82,13 +98,21 @@ interface ScanResultsCache {
             }
         }
 
-        override fun read(pkg: Package, target: File) = cache.read(pkg, target).also {
+        override fun read(id: Identifier) = cache.read(id).also {
             ++stats.numReads
-            if (it) {
+            if (it.results.isNotEmpty()) {
                 ++stats.numHits
             }
         }
 
-        override fun write(pkg: Package, source: File) = cache.write(pkg, source)
+        override fun read(id: Identifier, scannerDetails: ScannerDetails) =
+                cache.read(id, scannerDetails).also {
+                    ++stats.numReads
+                    if (it.results.isNotEmpty()) {
+                        ++stats.numHits
+                    }
+                }
+
+        override fun add(id: Identifier, scanResult: ScanResult) = cache.add(id, scanResult)
     }
 }
