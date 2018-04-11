@@ -21,6 +21,11 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.Provenance
+import com.here.ort.model.ScanResult
+import com.here.ort.model.ScanSummary
+import com.here.ort.model.ScannerDetails
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
@@ -30,10 +35,13 @@ import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 
 import java.io.File
+import java.time.Instant
 
 object Licensee : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
     override val resultFileExt = "json"
+
+    val CONFIGURATION_OPTIONS = listOf("--json")
 
     override fun bootstrap(): File? {
         val gem = if (OS.isWindows) "gem.cmd" else "gem"
@@ -43,9 +51,12 @@ object Licensee : LocalScanner() {
         return File(userDir, "bin")
     }
 
+    override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
+
     override fun getVersion() = getCommandVersion(scannerPath.absolutePath, "version")
 
-    override fun scanPath(path: File, resultsFile: File): Result {
+    override fun scanPath(path: File, resultsFile: File, provenance: Provenance, scannerDetails: ScannerDetails)
+            : ScanResult {
         // Licensee has issues with absolute Windows paths passed as an argument. Work around that by using the path to
         // scan as the working directory.
         val (parentPath, relativePath) = if (path.isDirectory) {
@@ -54,13 +65,17 @@ object Licensee : LocalScanner() {
             Pair(path.parentFile, path.name)
         }
 
+        val startTime = Instant.now()
+
         val process = ProcessCapture(
                 parentPath,
                 scannerPath.absolutePath,
                 "detect",
-                "--json",
+                *CONFIGURATION_OPTIONS.toTypedArray(),
                 relativePath
         )
+
+        val endTime = Instant.now()
 
         if (process.stderr().isNotBlank()) {
             log.debug { process.stderr() }
@@ -69,7 +84,9 @@ object Licensee : LocalScanner() {
         with(process) {
             if (isSuccess()) {
                 stdoutFile.copyTo(resultsFile)
-                return getResult(resultsFile)
+                val result = BoyterLc.getResult(resultsFile)
+                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
+                return ScanResult(provenance, scannerDetails, summary, result.rawResult)
             } else {
                 throw ScanException(failMessage)
             }
@@ -81,24 +98,26 @@ object Licensee : LocalScanner() {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
-        if (resultsFile.isFile && resultsFile.length() > 0) {
-            val scanOutput = jsonMapper.readTree(resultsFile.readText())
+        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
+            jsonMapper.readTree(resultsFile.readText()).also {
+                val licenseSummary = it["licenses"]
+                val matchedFiles = it["matched_files"]
 
-            val licenseSummary = scanOutput["licenses"]
-            val matchedFiles = scanOutput["matched_files"]
+                fileCount = matchedFiles.count()
 
-            fileCount = matchedFiles.count()
-
-            matchedFiles.forEach {
-                val licenseKey = it["matched_license"].asText()
-                licenseSummary.find {
-                    it["key"].asText() == licenseKey
-                }?.let {
-                    licenses.add(it["spdx_id"].asText())
+                matchedFiles.forEach {
+                    val licenseKey = it["matched_license"].asText()
+                    licenseSummary.find {
+                        it["key"].asText() == licenseKey
+                    }?.let {
+                        licenses.add(it["spdx_id"].asText())
+                    }
                 }
             }
+        } else {
+            EMPTY_JSON_NODE
         }
 
-        return Result(fileCount, licenses, errors)
+        return Result(fileCount, licenses, errors, json)
     }
 }
