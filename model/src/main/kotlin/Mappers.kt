@@ -20,9 +20,11 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 val ortModelModule = SimpleModule("OrtModelModule").apply {
@@ -39,6 +41,10 @@ val ortModelModule = SimpleModule("OrtModelModule").apply {
  */
 private val mapperConfig: ObjectMapper.() -> Unit = {
     registerKotlinModule()
+
+    registerModule(JavaTimeModule())
+    disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
     registerModule(ortModelModule)
 }
 
