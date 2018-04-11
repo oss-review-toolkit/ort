@@ -25,6 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.Package
 import com.here.ort.utils.collectMessages
+import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -111,7 +112,7 @@ abstract class LocalScanner : Scanner() {
         val pkgRevision = pkg.id.version.takeUnless { it.isBlank() } ?: pkg.vcsProcessed.revision.take(7)
 
         val resultsFile = File(scanResultsDirectory,
-                "${pkg.id.name}-${pkgRevision}_$scannerName.$resultFileExt")
+                "${pkg.id.name.encodeOrUnknown()}-${pkgRevision}_$scannerName.$resultFileExt")
 
         if (ScanResultsCache.read(pkg, resultsFile)) {
             val results = getResult(resultsFile)
