@@ -27,12 +27,15 @@ import com.here.ort.model.Package
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNot
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.Description
 import io.kotlintest.Spec
+import io.kotlintest.matchers.beEmpty
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNot
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
+
+import java.io.File
 
 abstract class AbstractIntegrationSpec : StringSpec() {
     /**
@@ -52,28 +55,26 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     protected open val definitionFilesForTest by lazy { expectedDefinitionFiles }
 
     /**
+     * The temporary parent directory for downloads.
+     */
+    private lateinit var outputDir: File
+
+    /**
      * The directory where the source code of [pkg] was downloaded to.
      */
     protected lateinit var downloadResult: Main.DownloadResult
 
-    /**
-     * The instance needs to be shared between tests because otherwise the source code of [pkg] would have to be
-     * downloaded once per test.
-     */
-    override val oneInstancePerTest = false
-
-    override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        val outputDir = createTempDir()
+    override fun beforeSpec(description: Description, spec: Spec) {
+        outputDir = createTempDir()
         downloadResult = Main.download(pkg, outputDir)
-        try {
-            super.interceptSpec(context, spec)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterSpec(description: Description, spec: Spec) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {
-        "Source code was downloaded successfully" {
+        "Source code was downloaded successfully".config(tags = setOf(ExpensiveTag)) {
             val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
@@ -81,9 +82,9 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             downloadResult.sourceArtifact shouldBe null
             downloadResult.vcsInfo shouldNotBe null
             downloadResult.vcsInfo!!.type shouldBe workingTree.getType()
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "All package manager definition files are found" {
+        "All package manager definition files are found".config(tags = setOf(ExpensiveTag)) {
             val definitionFiles = PackageManager.findManagedFiles(downloadResult.downloadDirectory)
 
             definitionFiles.size shouldBe expectedDefinitionFiles.size
@@ -95,9 +96,9 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                 expectedFiles shouldNotBe null
                 files.sorted().joinToString("\n") shouldBe expectedFiles!!.sorted().joinToString("\n")
             }
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "Analyzer creates one non-empty result per definition file" {
+        "Analyzer creates one non-empty result per definition file".config(tags = setOf(ExpensiveTag)) {
             definitionFilesForTest.forEach { manager, files ->
                 println("Resolving $manager dependencies in $files.")
                 val results = manager.create().resolveDependencies(files)
@@ -112,6 +113,6 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     result.hasErrors() shouldBe false
                 }
             }
-        }.config(tags = setOf(ExpensiveTag))
+        }
     }
 }

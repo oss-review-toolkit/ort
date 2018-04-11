@@ -28,14 +28,15 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
+import io.kotlintest.Description
 import io.kotlintest.Spec
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
-import io.kotlintest.properties.forAll
-import io.kotlintest.properties.headers
-import io.kotlintest.properties.row
-import io.kotlintest.properties.table
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
+import io.kotlintest.tables.forAll
+import io.kotlintest.tables.headers
+import io.kotlintest.tables.row
+import io.kotlintest.tables.table
 
 import java.io.File
 
@@ -54,13 +55,9 @@ class GradleTest : StringSpec() {
                     .replace("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
                     .replace("<REPLACE_REVISION>", vcsRevision)
 
-    override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        try {
-            super.interceptSpec(context, spec)
-        } finally {
-            // Reset the Gradle version in the test project to clean up after the tests.
-            Git.run(projectDir, "checkout", ".")
-        }
+    override fun afterSpec(description: Description, spec: Spec) {
+        // Reset the Gradle version in the test project to clean up after the tests.
+        Git.run(projectDir, "checkout", ".")
     }
 
     init {
@@ -71,7 +68,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe listOf<String>()
+            result!!.errors shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -82,7 +79,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe listOf<String>()
+            result!!.errors shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -93,7 +90,7 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe listOf<String>()
+            result!!.errors shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -104,11 +101,11 @@ class GradleTest : StringSpec() {
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe listOf<String>()
+            result!!.errors shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
-        "Fails nicely for Gradle version < 2.14" {
+        "Fails nicely for Gradle version < 2.14".config(enabled = false) {
             val packageFile = File(projectDir.parentFile, "gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult("gradle-expected-output-unsupported-version.yml")
 
@@ -116,9 +113,9 @@ class GradleTest : StringSpec() {
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }.config(enabled = false)
+        }
 
-        "Is compatible with Gradle >= 2.14" {
+        "Is compatible with Gradle >= 2.14".config(tags = setOf(ExpensiveTag), enabled = false) {
             // See https://blog.gradle.org/java-9-support-update.
             val gradleVersionsThatSupportJava9 = arrayOf(
                     row("4.6", ""),
@@ -167,10 +164,10 @@ class GradleTest : StringSpec() {
                 val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
-                result!!.errors shouldBe listOf<String>()
+                result!!.errors shouldBe emptyList()
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
-        }.config(tags = setOf(ExpensiveTag), enabled = false)
+        }
     }
 
     private fun gradleWrapper(version: String) {

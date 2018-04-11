@@ -27,10 +27,11 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
-import io.kotlintest.matchers.shouldThrow
+import io.kotlintest.Description
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -38,20 +39,16 @@ import java.io.File
 class DownloaderTest : StringSpec() {
     private lateinit var outputDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+    override fun beforeTest(description: Description) {
         outputDir = createTempDir()
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterTest(description: Description, result: TestResult) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {
-        "Downloads and unpacks JAR source package" {
+        "Downloads and unpacks JAR source package".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
                     id = Identifier(
                             provider = "Maven",
@@ -83,9 +80,9 @@ class DownloaderTest : StringSpec() {
             licenseFile.length() shouldBe 11376L
 
             downloadResult.downloadDirectory.walkTopDown().count() shouldBe 234
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "Download of JAR source package fails when hash is incorrect" {
+        "Download of JAR source package fails when hash is incorrect".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
                     id = Identifier(
                             provider = "Maven",
@@ -111,9 +108,9 @@ class DownloaderTest : StringSpec() {
 
             exception.message shouldBe "Calculated SHA-1 hash 'a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa' differs " +
                     "from expected hash '0123456789abcdef0123456789abcdef01234567'."
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "Falls back to downloading source package when download from VCS fails" {
+        "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
                     id = Identifier(
                             provider = "Maven",
@@ -149,9 +146,9 @@ class DownloaderTest : StringSpec() {
             licenseFile.length() shouldBe 11376L
 
             downloadResult.downloadDirectory.walkTopDown().count() shouldBe 234
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
-        "Can download source artifact from SourceForce" {
+        "Can download source artifact from SourceForce".config(tags = setOf(ExpensiveTag)) {
             val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
             val pkg = Package(
                     id = Identifier(
@@ -183,6 +180,6 @@ class DownloaderTest : StringSpec() {
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walkTopDown().count() shouldBe 409
-        }.config(tags = setOf(ExpensiveTag))
+        }
     }
 }

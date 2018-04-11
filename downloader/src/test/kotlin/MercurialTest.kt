@@ -25,9 +25,10 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.unpack
 
+import io.kotlintest.Description
 import io.kotlintest.Spec
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -35,10 +36,7 @@ import java.io.File
 class MercurialTest : StringSpec() {
     private lateinit var zipContentDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptSpec(context: Spec, spec: () -> Unit) {
+    override fun beforeSpec(description: Description, spec: Spec) {
         val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
         val zipFile = File(rootDir, "downloader/src/test/assets/lz4revlog-2018-01-03-hg.zip")
 
@@ -46,33 +44,31 @@ class MercurialTest : StringSpec() {
 
         println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)
+    }
 
-        try {
-            super.interceptSpec(context, spec)
-        } finally {
-            zipContentDir.safeDeleteRecursively()
-        }
+    override fun afterSpec(description: Description, spec: Spec) {
+        zipContentDir.safeDeleteRecursively()
     }
 
     init {
-        "Detected Mercurial version is not empty" {
+        "Detected Mercurial version is not empty".config(enabled = Mercurial.isInPath()) {
             val version = Mercurial.getVersion()
             println("Mercurial version $version detected.")
             version shouldNotBe ""
-        }.config(enabled = Mercurial.isInPath())
+        }
 
-        "Mercurial detects non-working-trees" {
+        "Mercurial detects non-working-trees".config(enabled = Mercurial.isInPath()) {
             Mercurial.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
-        }.config(enabled = Mercurial.isInPath())
+        }
 
-        "Mercurial correctly detects URLs to remote repositories" {
+        "Mercurial correctly detects URLs to remote repositories".config(enabled = Mercurial.isInPath()) {
             Mercurial.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
 
             // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
             Mercurial.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
-        }.config(enabled = Mercurial.isInPath())
+        }
 
-        "Detected Mercurial working tree information is correct" {
+        "Detected Mercurial working tree information is correct".config(enabled = Mercurial.isInPath()) {
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
 
             workingTree.getType() shouldBe "Mercurial"
@@ -81,18 +77,18 @@ class MercurialTest : StringSpec() {
             workingTree.getRevision() shouldBe "422ca71c35132f1f55d20a13355708aec7669b50"
             workingTree.getRootPath() shouldBe zipContentDir
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
-        }.config(enabled = Mercurial.isInPath())
+        }
 
-        "Mercurial correctly lists remote branches" {
+        "Mercurial correctly lists remote branches".config(enabled = Mercurial.isInPath()) {
             val expectedBranches = listOf(
                     "default"
             )
 
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
-        }.config(enabled = Mercurial.isInPath())
+        }
 
-        "Mercurial correctly lists remote tags" {
+        "Mercurial correctly lists remote tags".config(enabled = Mercurial.isInPath()) {
             val expectedTags = listOf(
                     "1.0",
                     "1.0.1",
@@ -101,6 +97,6 @@ class MercurialTest : StringSpec() {
 
             val workingTree = Mercurial.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
-        }.config(enabled = Mercurial.isInPath())
+        }
     }
 }

@@ -35,11 +35,12 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
 
+import io.kotlintest.Description
 import io.kotlintest.specs.StringSpec
-import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.contain
-import io.kotlintest.matchers.should
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.TestResult
+import io.kotlintest.matchers.collections.contain
+import io.kotlintest.should
+import io.kotlintest.shouldBe
 
 import java.net.HttpURLConnection
 import java.net.InetAddress
@@ -50,6 +51,8 @@ import java.time.Instant
 class HttpCacheTest : StringSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
     private val port = 8888
+
+    private lateinit var server: HttpServer
 
     private class MyHttpHandler : HttpHandler {
         val requests = mutableMapOf<String, String>()
@@ -68,19 +71,16 @@ class HttpCacheTest : StringSpec() {
         }
     }
 
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
-        val server = HttpServer.create(InetSocketAddress(loopback, port), 0)
+    override fun beforeTest(description: Description) {
+        // Start the local HTTP server.
+        server = HttpServer.create(InetSocketAddress(loopback, port), 0)
+        server.createContext("/", MyHttpHandler())
+        server.start()
+    }
 
-        try {
-            // Start the local HTTP server.
-            server.createContext("/", MyHttpHandler())
-            server.start()
-
-            super.interceptTestCase(context, test)
-        } finally {
-            // Ensure the server is properly stopped even in case of exceptions.
-            server.stop(0)
-        }
+    override fun afterTest(description: Description, result: TestResult) {
+        // Ensure the server is properly stopped even in case of exceptions.
+        server.stop(0)
     }
 
     private val id = Identifier("provider", "namespace", "name", "version")

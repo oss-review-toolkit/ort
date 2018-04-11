@@ -19,73 +19,70 @@
 
 package com.here.ort.model
 
-import io.kotlintest.matchers.should
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 class ProjectAnalyzerResultTest : StringSpec({
-    "collectErrors" should {
-        "find all errors" {
-            val result = ProjectAnalyzerResult(
-                    allowDynamicVersions = true,
-                    project = Project(
-                            id = Identifier("provider", "namespace", "name", "version"),
-                            definitionFilePath = "definitionFilePath",
-                            declaredLicenses = sortedSetOf(),
-                            aliases = listOf(),
-                            vcs = VcsInfo.EMPTY,
-                            vcsProcessed = VcsInfo.EMPTY,
-                            homepageUrl = "",
-                            scopes = sortedSetOf(
-                                    Scope(
-                                            name = "scope 1",
-                                            delivered = true,
-                                            dependencies = sortedSetOf(
-                                                    PackageReference(
-                                                            Identifier(
-                                                                    provider = "provider1",
-                                                                    namespace = "namespace1",
-                                                                    name = "name1",
-                                                                    version = "version1"
-                                                            ),
-                                                            dependencies = sortedSetOf(
-                                                                    PackageReference(
-                                                                            Identifier(
-                                                                                    provider = "provider2",
-                                                                                    namespace = "namespace2",
-                                                                                    name = "name2",
-                                                                                    version = "version2"
-                                                                            ),
-                                                                            dependencies = sortedSetOf(),
-                                                                            errors = listOf("2.1", "2.2")
-                                                                    )
-                                                            ),
-                                                            errors = listOf("1.1", "1.2")
-                                                    ),
-                                                    PackageReference(
-                                                            Identifier(
-                                                                    provider = "provider3",
-                                                                    namespace = "namespace3",
-                                                                    name = "name3",
-                                                                    version = "version3"
-                                                            ),
-                                                            dependencies = sortedSetOf(),
-                                                            errors = listOf("3.1", "3.2")
-                                                    )
-                                            )
-                                    )
-                            )
-                    ),
-                    packages = sortedSetOf(),
-                    errors = listOf("a", "b")
-            )
+    "collectErrors should find all errors" {
+        val result = ProjectAnalyzerResult(
+                allowDynamicVersions = true,
+                project = Project(
+                        id = Identifier("provider", "namespace", "name", "version"),
+                        definitionFilePath = "definitionFilePath",
+                        declaredLicenses = sortedSetOf(),
+                        aliases = listOf(),
+                        vcs = VcsInfo.EMPTY,
+                        vcsProcessed = VcsInfo.EMPTY,
+                        homepageUrl = "",
+                        scopes = sortedSetOf(
+                                Scope(
+                                        name = "scope 1",
+                                        delivered = true,
+                                        dependencies = sortedSetOf(
+                                                PackageReference(
+                                                        Identifier(
+                                                                provider = "provider1",
+                                                                namespace = "namespace1",
+                                                                name = "name1",
+                                                                version = "version1"
+                                                        ),
+                                                        dependencies = sortedSetOf(
+                                                                PackageReference(
+                                                                        Identifier(
+                                                                                provider = "provider2",
+                                                                                namespace = "namespace2",
+                                                                                name = "name2",
+                                                                                version = "version2"
+                                                                        ),
+                                                                        dependencies = sortedSetOf(),
+                                                                        errors = listOf("2.1", "2.2")
+                                                                )
+                                                        ),
+                                                        errors = listOf("1.1", "1.2")
+                                                ),
+                                                PackageReference(
+                                                        Identifier(
+                                                                provider = "provider3",
+                                                                namespace = "namespace3",
+                                                                name = "name3",
+                                                                version = "version3"
+                                                        ),
+                                                        dependencies = sortedSetOf(),
+                                                        errors = listOf("3.1", "3.2")
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                packages = sortedSetOf(),
+                errors = listOf("a", "b")
+        )
 
-            val errors = result.collectErrors()
-            errors.size shouldBe 4
-            errors[Identifier.fromString("provider:namespace:name:version")] shouldBe listOf("a", "b")
-            errors[Identifier.fromString("provider1:namespace1:name1:version1")] shouldBe listOf("1.1", "1.2")
-            errors[Identifier.fromString("provider2:namespace2:name2:version2")] shouldBe listOf("2.1", "2.2")
-            errors[Identifier.fromString("provider3:namespace3:name3:version3")] shouldBe listOf("3.1", "3.2")
-        }
+        val errors = result.collectErrors()
+        errors.size shouldBe 4
+        errors[Identifier.fromString("provider:namespace:name:version")] shouldBe listOf("a", "b")
+        errors[Identifier.fromString("provider1:namespace1:name1:version1")] shouldBe listOf("1.1", "1.2")
+        errors[Identifier.fromString("provider2:namespace2:name2:version2")] shouldBe listOf("2.1", "2.2")
+        errors[Identifier.fromString("provider3:namespace3:name3:version3")] shouldBe listOf("3.1", "3.2")
     }
 })

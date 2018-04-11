@@ -22,7 +22,7 @@ package com.here.ort.downloader
 import com.here.ort.downloader.vcs.Mercurial
 import com.here.ort.model.VcsInfo
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
@@ -65,7 +65,7 @@ class VersionControlSystemTest : WordSpec({
     }
 
     "splitUrl for Bitbucket" should {
-        "not modify URLs without a path" {
+        "not modify URLs without a path".config(enabled = Mercurial.isInPath()) {
             val actual = VersionControlSystem.splitUrl(
                     "https://bitbucket.org/paniq/masagin"
             )
@@ -75,7 +75,7 @@ class VersionControlSystemTest : WordSpec({
                     revision = ""
             )
             actual shouldBe expected
-        }.config(enabled = Mercurial.isInPath())
+        }
 
         "split tree URLs" {
             val actual = VersionControlSystem.splitUrl(

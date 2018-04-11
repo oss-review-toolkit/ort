@@ -26,9 +26,10 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.TestCaseContext
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.Description
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -36,20 +37,16 @@ import java.io.File
 class BeanUtilsTest : StringSpec() {
     private lateinit var outputDir: File
 
-    // Required to make lateinit of outputDir work.
-    override val oneInstancePerTest = false
-
-    override fun interceptTestCase(context: TestCaseContext, test: () -> Unit) {
+    override fun beforeTest(description: Description) {
         outputDir = createTempDir()
-        try {
-            super.interceptTestCase(context, test)
-        } finally {
-            outputDir.safeDeleteRecursively()
-        }
+    }
+
+    override fun afterTest(description: Description, result: TestResult) {
+        outputDir.safeDeleteRecursively()
     }
 
     init {
-        "BeanUtils SVN tag should be correctly downloaded" {
+        "BeanUtils SVN tag should be correctly downloaded".config(enabled = Subversion.isInPath()) {
             val vcsFromCuration = VcsInfo(
                     type = "svn",
                     url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",
@@ -89,6 +86,6 @@ class BeanUtilsTest : StringSpec() {
             val tagsBeanUtils183Dir = File(downloadResult.downloadDirectory, "tags/BEANUTILS_1_8_3")
             tagsBeanUtils183Dir.isDirectory shouldBe true
             tagsBeanUtils183Dir.walkTopDown().count() shouldBe 302
-        }.config(enabled = Subversion.isInPath())
+        }
     }
 }
