@@ -297,12 +297,7 @@ object Main {
     fun download(target: Package, outputDirectory: File): DownloadResult {
         log.info { "Trying to download source code for '${target.id}'." }
 
-        val provider = target.id.provider.encodeOrUnknown()
-        val namespace = target.id.namespace.encodeOrUnknown()
-        val name = target.id.name.encodeOrUnknown()
-        val version = target.id.version.encodeOrUnknown()
-
-        val targetDir = File(outputDirectory, "$provider/$namespace/$name/$version").apply { safeMkdirs() }
+        val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
 
         if (target.vcsProcessed.url.isBlank()) {
             log.info { "No VCS URL provided for '${target.id}'." }
