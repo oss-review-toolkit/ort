@@ -52,6 +52,7 @@ import com.here.ort.utils.unpack
 
 import java.io.File
 import java.io.IOException
+import java.time.Instant
 
 import kotlin.system.exitProcess
 
@@ -82,13 +83,14 @@ object Main {
     }
 
     /**
-     * This class describes what was downloaded by [download] or if any exception occured. Either [sourceArtifact] or
-     * [vcsInfo] is set to a non-null value.
+     * This class describes what was downloaded by [download] to the [downloadDirectory] or if any exception occured.
+     * Either [sourceArtifact] or [vcsInfo] is set to a non-null value. The download was started at [dateTime].
      */
     data class DownloadResult(
-        val downloadDirectory: File,
-        val sourceArtifact: RemoteArtifact? = null,
-        val vcsInfo: VcsInfo? = null
+            val dateTime: Instant,
+            val downloadDirectory: File,
+            val sourceArtifact: RemoteArtifact? = null,
+            val vcsInfo: VcsInfo? = null
     ) {
         init {
             require((sourceArtifact == null) != (vcsInfo == null)) {
@@ -358,6 +360,7 @@ object Main {
             throw DownloadException("Could not find an applicable VCS type.")
         }
 
+        val startTime = Instant.now()
         val workingTree = applicableVcs.download(target, outputDirectory, allowMovingRevisions)
         val revision = workingTree.getRevision()
 
@@ -369,7 +372,7 @@ object Main {
                 revision = revision,
                 path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
         )
-        return DownloadResult(outputDirectory, vcsInfo = vcsInfo)
+        return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo)
     }
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
@@ -383,6 +386,7 @@ object Main {
 
         val request = Request.Builder().get().url(target.sourceArtifact.url).build()
 
+        val startTime = Instant.now()
         val response = OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
         val body = response.body()
         if (!response.isSuccessful || body == null) {
@@ -409,7 +413,7 @@ object Main {
             "Successfully downloaded source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
         }
 
-        return DownloadResult(outputDirectory, sourceArtifact = target.sourceArtifact)
+        return DownloadResult(startTime, outputDirectory, sourceArtifact = target.sourceArtifact)
     }
 
     private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {
