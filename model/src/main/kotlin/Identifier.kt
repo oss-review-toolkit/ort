@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
+import com.here.ort.utils.encodeOrUnknown
+
 /**
  * A unique identifier for a software package.
  */
@@ -116,6 +118,11 @@ data class Identifier(
 
         return nameMatches && versionMatches
     }
+
+    /**
+     * Create a path based on the properties of the [Identifier]. All properties are encoded using [encodeOrUnknown].
+     */
+    fun toPath() = listOf(provider, namespace, name, version).joinToString("/") { it.encodeOrUnknown() }
 
     // TODO: Consider using a PURL here, see https://github.com/package-url/purl-spec#purl.
     override fun toString() = "$provider:$namespace:$name:$version"
