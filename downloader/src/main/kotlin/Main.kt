@@ -52,6 +52,7 @@ import com.here.ort.utils.unpack
 
 import java.io.File
 import java.io.IOException
+import java.time.Instant
 
 import kotlin.system.exitProcess
 
@@ -86,6 +87,7 @@ object Main {
      * [vcsInfo] is set to a non-null value.
      */
     data class DownloadResult(
+        val dateTime: Instant,
         val downloadDirectory: File,
         val sourceArtifact: RemoteArtifact? = null,
         val vcsInfo: VcsInfo? = null
@@ -369,7 +371,7 @@ object Main {
                 revision = revision,
                 path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
         )
-        return DownloadResult(outputDirectory, vcsInfo = vcsInfo)
+        return DownloadResult(Instant.now(), outputDirectory, vcsInfo = vcsInfo)
     }
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
@@ -409,7 +411,7 @@ object Main {
             "Successfully downloaded source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
         }
 
-        return DownloadResult(outputDirectory, sourceArtifact = target.sourceArtifact)
+        return DownloadResult(Instant.now(), outputDirectory, sourceArtifact = target.sourceArtifact)
     }
 
     private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {
