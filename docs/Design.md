@@ -50,7 +50,7 @@ overview:
 
 - https://github.com/sourcegraph/pydep
 
-  Uses `pip.req.parse_requirements` for `requirements.txt` files (see 
+  Uses `pip.req.parse_requirements` for `requirements.txt` files (see
   [this article](http://jelly.codes/articles/python-pip-module/)) and a `distutils.core.setup` replacement to parse
   `setup.py` files (similar to [this approach](https://stackoverflow.com/a/27790447/1127485)). Has JSON output, but
   outputs dependencies in a flat list as opposed to a tree.
