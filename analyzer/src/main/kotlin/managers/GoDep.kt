@@ -51,7 +51,7 @@ class GoDep : PackageManager() {
             // FIXME DRY names of legacy manifest files
             listOf("Gopkg.toml", "glide.yaml", "Godeps.json")
     ) {
-        private val NO_LOCKFILE = "NO_LOCKFILE"
+        private const val NO_LOCKFILE = "NO_LOCKFILE"
 
         private val LEGACY_MANIFESTS = mapOf(
                 "glide.yaml" to "glide.lock",
