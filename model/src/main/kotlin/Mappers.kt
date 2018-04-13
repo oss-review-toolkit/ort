@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
@@ -51,3 +52,5 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
 val jsonMapper = ObjectMapper().apply(mapperConfig)
 val xmlMapper = ObjectMapper(XmlFactory()).apply(mapperConfig)
 val yamlMapper = ObjectMapper(YAMLFactory()).apply(mapperConfig)
+
+val EMPTY_JSON_NODE: JsonNode = jsonMapper.readTree("{}")
