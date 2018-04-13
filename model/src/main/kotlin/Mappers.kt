@@ -51,3 +51,5 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
 val jsonMapper = ObjectMapper().apply(mapperConfig)
 val xmlMapper = ObjectMapper(XmlFactory()).apply(mapperConfig)
 val yamlMapper = ObjectMapper(YAMLFactory()).apply(mapperConfig)
+
+val EMPTY_NODE = jsonMapper.readTree("{}")
