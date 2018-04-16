@@ -115,7 +115,8 @@ object Mercurial : VersionControlSystem() {
 
             if (extensionsList.contains(EXTENSION_SPARSE)) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
-                run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**")
+                run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
+                        "-I", "LICENSE*", "-I", "LICENCE*")
             }
 
             val workingTree = getWorkingTree(targetDir)

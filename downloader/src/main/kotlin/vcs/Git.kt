@@ -127,7 +127,8 @@ object Git : GitBase() {
             log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
             run(targetDir, "config", "core.sparseCheckout", "true")
             val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path)
+            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path +
+                    "\nLICENSE*\nLICENCE*")
         }
 
         val workingTree = getWorkingTree(targetDir)
