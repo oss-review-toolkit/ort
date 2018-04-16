@@ -72,7 +72,7 @@ object ScanCode : LocalScanner() {
         return scancodeDir
     }
 
-    override fun getVersion(executable: String) =
+    override fun getVersion() =
             getCommandVersion(scannerPath.absolutePath, transform = {
                 // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
                 // the prefix.

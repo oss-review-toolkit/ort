@@ -43,7 +43,7 @@ object Licensee : LocalScanner() {
         return File(userDir, "bin")
     }
 
-    override fun getVersion(executable: String) = getCommandVersion(scannerPath.absolutePath, "version")
+    override fun getVersion() = getCommandVersion(scannerPath.absolutePath, "version")
 
     override fun scanPath(path: File, resultsFile: File): Result {
         // Licensee has issues with absolute Windows paths passed as an argument. Work around that by using the path to
