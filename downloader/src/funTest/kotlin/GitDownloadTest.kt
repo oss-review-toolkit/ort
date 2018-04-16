@@ -78,6 +78,7 @@ class GitDownloadTest : StringSpec() {
         "Git can download only a single path" {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, REPO_PATH))
             val expectedFiles = listOf(
+                    File("LICENSE"),
                     File(REPO_PATH, "dep_graph.js"),
                     File(REPO_PATH, "index.d.ts")
             )
@@ -112,6 +113,7 @@ class GitDownloadTest : StringSpec() {
                     vcsProcessed = VcsInfo("Git", REPO_URL, "", REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
+                    File("LICENSE"),
                     File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 
