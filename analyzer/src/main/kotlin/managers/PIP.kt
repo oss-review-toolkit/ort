@@ -63,6 +63,8 @@ class PIP : PackageManager() {
     ) {
         override fun create() = PIP()
 
+        private const val PIP_VERSION = "9.0.3"
+
         private const val PIPDEPTREE_VERSION = "0.11.0"
         private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
@@ -327,6 +329,17 @@ class PIP : PackageManager() {
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
 
         var pip: ProcessCapture
+
+        // Ensure to have installed a version of pip that is know to work for us.
+        pip = if (OS.isWindows) {
+            // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
+            // https://github.com/pypa/pip/issues/1299.
+            runInVirtualEnv(virtualEnvDir, workingDir, "python", "-m", command(workingDir),
+                    *TRUSTED_HOSTS, "install", "pip==$PIP_VERSION")
+        } else {
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pip==$PIP_VERSION")
+        }
+        pip.requireSuccess()
 
         // Install pipdeptree inside the virtualenv as that's the only way to make it report only the project's
         // dependencies instead of those of all (globally) installed packages, see
