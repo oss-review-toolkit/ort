@@ -119,7 +119,7 @@ class PIP : PackageManager() {
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
         // List all packages installed locally in the virtualenv.
-        val pipdeptreeJsonTree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
+        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
 
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
@@ -162,8 +162,8 @@ class PIP : PackageManager() {
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
 
-        if (pipdeptreeJsonTree.isSuccess()) {
-            val fullDependencyTree = jsonMapper.readTree(pipdeptreeJsonTree.stdout())
+        if (pipdeptree.isSuccess()) {
+            val fullDependencyTree = jsonMapper.readTree(pipdeptree.stdout())
 
             val projectDependencies = if (definitionFile.name == "setup.py") {
                 // The tree contains a root node for the project itself and pipdeptree's dependencies are also at the
