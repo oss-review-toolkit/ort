@@ -76,16 +76,18 @@ abstract class LocalScanner : Scanner() {
     abstract fun getVersion(executable: String): String
 
     override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File?): Map<Package, Result> {
-        return packages.associateBy { it }.mapValues {
-            try {
-                scan(it.value, outputDirectory, downloadDirectory)
+        return packages.associate { pkg ->
+            val result = try {
+                scan(pkg, outputDirectory, downloadDirectory)
             } catch (e: ScanException) {
                 e.showStackTrace()
 
-                log.error { "Could not scan package '${it.key.id}': ${e.message}" }
+                log.error { "Could not scan package '${pkg.id}': ${e.message}" }
 
                 Result(fileCount = 0, licenses = sortedSetOf(), errors = e.collectMessages().toSortedSet())
             }
+
+            Pair(pkg, result)
         }
     }
 
