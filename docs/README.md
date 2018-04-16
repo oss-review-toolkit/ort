@@ -84,35 +84,35 @@ For reusing already known scan results, ORT can currently use one of the followi
 
 ## Usage
 
-### [analyzer](./analyzer/src/main/kotlin)
+### [analyzer](../analyzer/src/main/kotlin)
 
 The Analyzer determines the dependencies of software projects inside the specified input directory (`-i`). It does so by
-querying whatever [supported package manager](./analyzer/src/main/kotlin/managers) is found. No modifications to your
+querying whatever [supported package manager](../analyzer/src/main/kotlin/managers) is found. No modifications to your
 existing project source code, or especially to the build system, are necessary for that to work. The tree of transitive
 dependencies per project is written out as [ABCD](https://github.com/nexB/aboutcode/tree/master/aboutcode-data)-style
 YAML (or JSON, see `-f`) files to the specified output directory (`-o`) whose inner structure mirrors the one from the
 input directory. The output files exactly document the status quo of all package-related meta-data. They can and
 probably need to be further processed or manually edited before passing them to one of the other tools.
 
-### [graph](./graph/src/main/kotlin)
+### [graph](../graph/src/main/kotlin)
 
 In order to quickly visualize dependency information from an analysis the Graph tool can be used. Given a dependencies
 file (`-d`) it diplays a simple representation of the dependency graph in a GUI. The graph is interactive in the sense
 that nodes can be dragged & dropped with the mouse to rearrange them for a better overview.
 
-### [downloader](./downloader/src/main/kotlin)
+### [downloader](../downloader/src/main/kotlin)
 
 Taking a single ABCD-syle dependencies file as the input (`-d`), the Downloader retrieves the source code of all
 contained packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs
-and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
+and using the [appropriate VCS tool](../downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
-### [scanner](./scanner/src/main/kotlin)
+### [scanner](../scanner/src/main/kotlin)
 
 This tool wraps underlying license / copyright scanners with a common API. This way all supported scanners can be used
 in the same way to easily run them and compare their results. If passed a dependencies analysis file (`-d`), the Scanner
 will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In order to not
 download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote cache, hosted
-e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented). Using the example of
+e.g. on [Artifactory](../scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented). Using the example of
 configuring an Artifactory cache, the YAML-based configuration file would look like:
 
 ```yaml
@@ -147,4 +147,4 @@ The most important root project Gradle tasks are listed in the table below.
 
 Copyright (c) 2017-2018 HERE Europe B.V.
 
-See the [LICENSE](./LICENSE) file in the root of this project for license details.
+See the [LICENSE](../LICENSE) file in the root of this project for license details.
