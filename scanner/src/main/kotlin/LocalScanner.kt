@@ -71,9 +71,9 @@ abstract class LocalScanner : Scanner() {
     protected open fun bootstrap(): File? = null
 
     /**
-     * Return the version of the specified scanner [executable], or an empty string in case of failure.
+     * Return the version of the scanner, or an empty string in case of failure.
      */
-    abstract fun getVersion(executable: String): String
+    abstract fun getVersion(): String
 
     override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File?): Map<Package, Result> {
         return packages.associate { pkg ->
@@ -136,8 +136,8 @@ abstract class LocalScanner : Scanner() {
             throw ScanException("Package '${pkg.id}' could not be scanned.", e)
         }
 
-        val version = getVersion(scannerPath.absolutePath)
-        println("Running $this version $version on directory '${downloadResult.downloadDirectory.canonicalPath}'.")
+        println("Running $this version ${getVersion()} on directory " +
+                "'${downloadResult.downloadDirectory.canonicalPath}'.")
 
         return scanPath(downloadResult.downloadDirectory, resultsFile).also {
             println("Stored $this results in '${resultsFile.absolutePath}'.")
@@ -171,8 +171,7 @@ abstract class LocalScanner : Scanner() {
         val resultsFile = File(scanResultsDirectory,
                 "${path.nameWithoutExtension}_$scannerName.$resultFileExt")
 
-        val version = getVersion(scannerPath.absolutePath)
-        println("Running $this version $version on path '${path.canonicalPath}'.")
+        println("Running $this version ${getVersion()} on path '${path.canonicalPath}'.")
 
         return scanPath(path, resultsFile).also {
             println("Stored $this results in '${resultsFile.absolutePath}'.")
