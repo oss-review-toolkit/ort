@@ -237,7 +237,9 @@ class PIP : PackageManager() {
                 }
             }
         } else {
-            log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
+            log.error {
+                "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr()}"
+            }
         }
 
         // TODO: Handle "extras" and "tests" dependencies.
