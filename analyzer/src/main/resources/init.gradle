@@ -222,14 +222,17 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
                 ComponentIdentifier id = dependencyResult.selected.id
                 if (id instanceof ModuleComponentIdentifier) {
-                    def result = project.dependencies.createArtifactResolutionQuery()
+                    def resolvedComponents = project.dependencies.createArtifactResolutionQuery()
                             .forComponents(id)
                             .withArtifacts(MavenModule, MavenPomArtifact)
                             .execute()
-                            .resolvedComponents.first()
-                            .getArtifacts(MavenPomArtifact).first()
+                            .resolvedComponents
+
+                    def result = resolvedComponents?.find { true }?.getArtifacts(MavenPomArtifact)?.find { true }
+
                     String error = null
                     String pomFile = null
+
                     if (result instanceof ResolvedArtifactResult) {
                         pomFile = result.file.absolutePath
                     } else if (result instanceof UnresolvedArtifactResult) {
@@ -237,6 +240,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     } else {
                         error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }
+
                     def artifact = resolvedArtifacts.find {
                         // Cannot use instanceof because the classes below do not exist in all Gradle versions.
                         if (it.owner.getClass().name == 'org.gradle.api.internal.artifacts.DefaultModuleVersionIdentifier') {
@@ -248,8 +252,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             false
                         }
                     }
+
                     def classifier = artifact?.classifier ?: ''
                     def extension = artifact?.extension ?: ''
+
                     return new DependencyImpl(id.group, id.module, id.version, classifier, extension, dependencies,
                             error, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
