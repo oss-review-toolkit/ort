@@ -301,8 +301,11 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = createProjectBuildingRequest(true)
 
-        projectBuildingRequest.remoteRepositories = repositories.map {
-            mavenRepositorySystem.createRepository(it.url, it.id, true, null, true, null, null)
+        projectBuildingRequest.remoteRepositories = repositories.map { repo ->
+            // As the ID might be used as the key when generating a metadata file name, avoid the URL being used as the
+            // ID as the URL is likely to contain characters like ":" which not all file systems support.
+            val id = repo.id.takeUnless { it == repo.url } ?: repo.host
+            mavenRepositorySystem.createRepository(repo.url, id, true, null, true, null, null)
         }
 
         val localProject = localProjects[artifact.identifier()]
