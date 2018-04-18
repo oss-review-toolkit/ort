@@ -51,4 +51,11 @@ data class Provenance(
                     "which was used."
         }
     }
+
+    /**
+     * True if [sourceArtifact] matches the [packages source artifact][Package.sourceArtifact], or if [vcsInfo] matches
+     * either [the packages vcs][Package.vcs] or [the packages vcsProcessed][Package.vcsProcessed].
+     */
+    fun matches(pkg: Package) =
+            sourceArtifact == pkg.sourceArtifact || vcsInfo == pkg.vcs || vcsInfo == pkg.vcsProcessed
 }
