@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.vdurmont.semver4j.Semver
 
+import java.util.EnumSet
+
 /**
  * Details about the used source code scanner.
  */
@@ -40,10 +42,7 @@ data class ScannerDetails(
          */
         val configuration: String
 ) {
-    private val incompatibleVersionDiffs = listOf(
-            Semver.VersionDiff.MAJOR,
-            Semver.VersionDiff.MINOR
-    )
+    private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)
 
     /**
      * True if the [other] scanner has the same name and configuration, and the [Semver] version differs only in other
@@ -52,6 +51,5 @@ data class ScannerDetails(
      * the scanners.
      */
     fun isCompatible(other: ScannerDetails) =
-            Semver(version, Semver.SemverType.LOOSE).diff(Semver(other.version, Semver.SemverType.LOOSE)) !in
-                    incompatibleVersionDiffs
+            Semver(version, Semver.SemverType.LOOSE).diff(other.version) !in MAJOR_MINOR
 }
