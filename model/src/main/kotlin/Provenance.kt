@@ -51,4 +51,25 @@ data class Provenance(
                     "which was used."
         }
     }
+
+    /**
+     * True if this [Provenance] refers to the same source code as [pkg], assuming that it belongs to the package id.
+     */
+    fun matches(pkg: Package): Boolean {
+        // TODO: Only comparing the hashes of the source artifacts might be sufficient.
+        if (sourceArtifact == pkg.sourceArtifact) {
+            return true
+        }
+
+        // If vcsInfo does not have a resolved revision it means that there was an issu
+        if (vcsInfo?.resolvedRevision == null) {
+            return false
+        }
+
+        return listOf(pkg.vcs, pkg.vcsProcessed).any {
+            it.resolvedRevision?.let {
+                vcsInfo.resolvedRevision == it
+            } ?: vcsInfo.resolvedRevision == it.revision || vcsInfo.revision == it.revision
+        }
+    }
 }
