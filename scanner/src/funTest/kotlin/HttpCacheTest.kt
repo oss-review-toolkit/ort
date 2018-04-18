@@ -98,8 +98,11 @@ class HttpCacheTest : StringSpec() {
     )
     private val provenanceEmpty = Provenance(downloadTime3)
 
-    private val scannerDetails1 = ScannerDetails("name 1", "version 1", "config 1")
-    private val scannerDetails2 = ScannerDetails("name 2", "version 2", "config 2")
+    private val scannerDetails1 = ScannerDetails("name 1", "1.0.0", "config 1")
+    private val scannerDetails2 = ScannerDetails("name 2", "2.0.0", "config 2")
+    private val scannerDetailsCompatibleVersion1 = ScannerDetails("name 1", "1.0.1", "config 1")
+    private val scannerDetailsCompatibleVersion2 = ScannerDetails("name 1", "1.0.0-alpha.1", "config 1")
+    private val scannerDetailsIncompatibleVersion = ScannerDetails("name 1", "1.1.0", "config 1")
 
     private val scannerStartTime1 = downloadTime1 + Duration.ofMinutes(1)
     private val scannerEndTime1 = scannerStartTime1 + Duration.ofMinutes(1)
@@ -203,6 +206,33 @@ class HttpCacheTest : StringSpec() {
             cachedResults.results.size shouldBe 2
             cachedResults.results should contain(scanResult1)
             cachedResults.results should contain(scanResult2)
+        }
+
+        "Can retrieve all scan results for compatible scanners from cache" {
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
+                    rawResultWithContent)
+            val scanResultCompatible1 = ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1,
+                    scanSummaryWithFiles, rawResultWithContent)
+            val scanResultCompatible2 = ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2,
+                    scanSummaryWithFiles, rawResultWithContent)
+            val scanResultIncompatible = ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion,
+                    scanSummaryWithFiles, rawResultWithContent)
+
+            val result = cache.add(id, scanResult)
+            val resultCompatible1 = cache.add(id, scanResultCompatible1)
+            val resultCompatible2 = cache.add(id, scanResultCompatible2)
+            val resultIncompatible = cache.add(id, scanResultIncompatible)
+            val cachedResults = cache.read(id, scannerDetails1)
+
+            result shouldBe true
+            resultCompatible1 shouldBe true
+            resultCompatible2 shouldBe true
+            resultIncompatible shouldBe true
+            cachedResults.results.size shouldBe 3
+            cachedResults.results should contain(scanResult)
+            cachedResults.results should contain(scanResultCompatible1)
+            cachedResults.results should contain(scanResultCompatible2)
         }
     }
 }

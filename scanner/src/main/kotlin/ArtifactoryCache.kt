@@ -90,7 +90,7 @@ class ArtifactoryCache(
     override fun read(id: Identifier, scannerDetails: ScannerDetails): ScanResultContainer {
         val scanResults = read(id)
         val filteredResults = scanResults.results.filter {
-            it.scanner == scannerDetails
+            scannerDetails.isCompatible(it.scanner)
         }
 
         if (filteredResults.isEmpty() && scanResults.results.isNotEmpty()) {
