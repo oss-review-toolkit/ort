@@ -46,9 +46,8 @@ interface ScanResultsCache {
     fun read(id: Identifier): ScanResultContainer
 
     /**
-     * Read the [ScanResult]s matching this [id] and [scannerDetails] from the cache.
-     *
-     * TODO: This method should support a version range for the scanner in case minor version differences do not matter.
+     * Read the [ScanResult]s matching this [id] and [scannerDetails] from the cache. [ScannerDetails.isCompatible] is
+     * used to check if the results are compatible with the provided [scannerDetails].
      *
      * @param id The [Identifier] of the scanned [Package].
      * @param scannerDetails Details about the scanner that was used to scan the [Package].

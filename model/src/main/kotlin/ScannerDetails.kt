@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.vdurmont.semver4j.Semver
+
 /**
  * Details about the used source code scanner.
  */
@@ -37,4 +39,21 @@ data class ScannerDetails(
          * The configuration of the scanner, could be command line arguments for example.
          */
         val configuration: String
-)
+) {
+    private val compatibleVersionDiffs = listOf(
+            Semver.VersionDiff.NONE,
+            Semver.VersionDiff.PATCH,
+            Semver.VersionDiff.SUFFIX,
+            Semver.VersionDiff.BUILD
+    )
+
+    /**
+     * True if the [other] scanner has the same name and configuration, and the [Semver] version differs only in the
+     * [patch][Semver.VersionDiff.PATCH], [suffix][Semver.VersionDiff.SUFFIX], or [build][Semver.VersionDiff.BUILD]
+     * part. For the comparison the [loose][Semver.SemverType.LOOSE] Semver type is used for maximum compatibility with
+     * the versions returned from the scanners.
+     */
+    fun isCompatible(other: ScannerDetails) =
+            Semver(version, Semver.SemverType.LOOSE).diff(Semver(other.version, Semver.SemverType.LOOSE)) in
+                    compatibleVersionDiffs
+}
