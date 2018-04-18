@@ -139,7 +139,7 @@ abstract class LocalScanner : Scanner() {
         val scanResultsForPackageDirectory = File(scanResultsDirectory, pkg.id.toPath()).apply { safeMkdirs() }
         val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${details.name}.$resultFileExt")
 
-        val cachedResults = ScanResultsCache.read(pkg.id, details)
+        val cachedResults = ScanResultsCache.read(pkg, details)
 
         if (cachedResults.results.isNotEmpty()) {
             // Some external tools rely on the raw results filer to be written to the scan results directory, so write

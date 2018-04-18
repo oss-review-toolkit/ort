@@ -22,6 +22,7 @@ package com.here.ort.scanner
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
+import com.here.ort.model.Package
 import com.here.ort.model.Provenance
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.ScanResult
@@ -84,17 +85,31 @@ class HttpCacheTest : StringSpec() {
 
     private val id = Identifier("provider", "namespace", "name", "version")
 
+    private val sourceArtifact = RemoteArtifact(
+            "url",
+            "0123456789abcdef0123456789abcdef01234567",
+            HashAlgorithm.SHA1)
+
+    private val vcs = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
+
+    private val pkg = Package.EMPTY.copy(
+            id = id,
+            sourceArtifact = sourceArtifact,
+            vcs = vcs,
+            vcsProcessed = vcs.normalize()
+    )
+
     private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
     private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)
     private val downloadTime3 = Instant.EPOCH + Duration.ofDays(3)
 
     private val provenanceWithSourceArtifact = Provenance(
             downloadTime = downloadTime1,
-            sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1)
+            sourceArtifact = sourceArtifact
     )
     private val provenanceWithVcsInfo = Provenance(
             downloadTime = downloadTime2,
-            vcsInfo = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
+            vcsInfo = vcs
     )
     private val provenanceEmpty = Provenance(downloadTime3)
 
@@ -198,7 +213,7 @@ class HttpCacheTest : StringSpec() {
             val result1 = cache.add(id, scanResult1)
             val result2 = cache.add(id, scanResult2)
             val result3 = cache.add(id, scanResult3)
-            val cachedResults = cache.read(id, scannerDetails1)
+            val cachedResults = cache.read(pkg, scannerDetails1)
 
             result1 shouldBe true
             result2 shouldBe true
@@ -223,7 +238,7 @@ class HttpCacheTest : StringSpec() {
             val resultCompatible1 = cache.add(id, scanResultCompatible1)
             val resultCompatible2 = cache.add(id, scanResultCompatible2)
             val resultIncompatible = cache.add(id, scanResultIncompatible)
-            val cachedResults = cache.read(id, scannerDetails1)
+            val cachedResults = cache.read(pkg, scannerDetails1)
 
             result shouldBe true
             resultCompatible1 shouldBe true
@@ -233,6 +248,36 @@ class HttpCacheTest : StringSpec() {
             cachedResults.results should contain(scanResult)
             cachedResults.results should contain(scanResultCompatible1)
             cachedResults.results should contain(scanResultCompatible2)
+        }
+
+        "Returns only packages with matching provenance" {
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val scanResultSourceArtifactMatching = ScanResult(provenanceWithSourceArtifact, scannerDetails1,
+                    scanSummaryWithFiles, rawResultWithContent)
+            val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles,
+                    rawResultWithContent)
+            val provenanceSourceArtifactNonMatching = provenanceWithSourceArtifact.copy(
+                    sourceArtifact = sourceArtifact.copy(url = "url2"))
+            val scanResultSourceArtifactNonMatching = ScanResult(provenanceSourceArtifactNonMatching, scannerDetails1,
+                    scanSummaryWithFiles, rawResultWithContent)
+            val provenanceVcsInfoNonMatching = provenanceWithVcsInfo.copy(
+                    vcsInfo = vcs.copy(revision = "revision2", resolvedRevision = "resolvedRevision2"))
+            val scanResultVcsInfoNonMatching = ScanResult(provenanceVcsInfoNonMatching, scannerDetails1,
+                    scanSummaryWithFiles, rawResultWithContent)
+
+            val result1 = cache.add(id, scanResultSourceArtifactMatching)
+            val result2 = cache.add(id, scanResultVcsMatching)
+            val result3 = cache.add(id, scanResultSourceArtifactNonMatching)
+            val result4 = cache.add(id, scanResultVcsInfoNonMatching)
+            val cachedResults = cache.read(pkg, scannerDetails1)
+
+            result1 shouldBe true
+            result2 shouldBe true
+            result3 shouldBe true
+            result4 shouldBe true
+            cachedResults.results.size shouldBe 2
+            cachedResults.results should contain(scanResultSourceArtifactMatching)
+            cachedResults.results should contain(scanResultVcsMatching)
         }
     }
 }

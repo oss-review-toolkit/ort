@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.Identifier
+import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
@@ -47,14 +48,17 @@ interface ScanResultsCache {
 
     /**
      * Read the [ScanResult]s matching this [id] and [scannerDetails] from the cache. [ScannerDetails.isCompatible] is
-     * used to check if the results are compatible with the provided [scannerDetails].
+     * used to check if the results are compatible with the provided [scannerDetails]. Also [Package.sourceArtifact],
+     * [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches the expected source code
+     * location. This is important to find the correct results when different revisions of a package using the same
+     * version name are used (e.g. multiple scans of 1.0-SNAPSHOT during development).
      *
-     * @param id The [Identifier] of the scanned [Package].
+     * @param pkg The [Package] to look up results for.
      * @param scannerDetails Details about the scanner that was used to scan the [Package].
      *
      * @return The [ScanResultContainer] matching this [id] and [scannerDetails].
      */
-    fun read(id: Identifier, scannerDetails: ScannerDetails): ScanResultContainer
+    fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
 
     /**
      * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
@@ -69,7 +73,7 @@ interface ScanResultsCache {
     companion object : ScanResultsCache {
         var cache = object : ScanResultsCache {
             override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
-            override fun read(id: Identifier, scannerDetails: ScannerDetails) = ScanResultContainer(id, emptyList())
+            override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
             override fun add(id: Identifier, scanResult: ScanResult) = false
         }
             private set
@@ -104,8 +108,8 @@ interface ScanResultsCache {
             }
         }
 
-        override fun read(id: Identifier, scannerDetails: ScannerDetails) =
-                cache.read(id, scannerDetails).also {
+        override fun read(pkg: Package, scannerDetails: ScannerDetails) =
+                cache.read(pkg, scannerDetails).also {
                     ++stats.numReads
                     if (it.results.isNotEmpty()) {
                         ++stats.numHits

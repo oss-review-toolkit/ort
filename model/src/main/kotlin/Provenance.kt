@@ -51,4 +51,28 @@ data class Provenance(
                     "which was used."
         }
     }
+
+    /**
+     * True if this [Provenance] refers to the same source code as [pkg], assuming that it belongs to the package id.
+     */
+    fun matches(pkg: Package): Boolean {
+        // TODO: Only comparing the hashes of the source artifacts might be sufficient.
+        if (sourceArtifact != null) {
+            // Note that pkg.sourceArtifact is non-nullable.
+            return sourceArtifact == pkg.sourceArtifact
+        }
+
+        // If vcsInfo does not have a resolved revision it means that there was an issue with downloading the code.
+        if (vcsInfo?.resolvedRevision == null) {
+            return false
+        }
+
+        return listOf(pkg.vcs, pkg.vcsProcessed).any {
+            // If "it" has a resolved revision it must be equal to the resolved revision of vcsInfo, otherwise the
+            // revision of "it" has to equal either the revision or the resolved revision of vcsInfo.
+            it.type == vcsInfo.type && it.url == vcsInfo.url && it.path == vcsInfo.path && it.resolvedRevision?.let {
+                vcsInfo.resolvedRevision == it
+            } ?: vcsInfo.resolvedRevision == it.revision || vcsInfo.revision == it.revision
+        }
+    }
 }
