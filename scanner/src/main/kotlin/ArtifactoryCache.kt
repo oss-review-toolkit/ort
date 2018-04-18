@@ -22,6 +22,7 @@ package com.here.ort.scanner
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.Identifier
+import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
@@ -87,10 +88,10 @@ class ArtifactoryCache(
         return ScanResultContainer(id, emptyList())
     }
 
-    override fun read(id: Identifier, scannerDetails: ScannerDetails): ScanResultContainer {
-        val scanResults = read(id)
+    override fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
+        val scanResults = read(pkg.id)
         val filteredResults = scanResults.results.filter {
-            scannerDetails.isCompatible(it.scanner)
+            scannerDetails.isCompatible(it.scanner) && it.provenance.matches(pkg)
         }
 
         if (filteredResults.isEmpty() && scanResults.results.isNotEmpty()) {
@@ -100,7 +101,7 @@ class ArtifactoryCache(
             log.info { "Found ${filteredResults.size} cached scan results for scanner '$scannerDetails'." }
         }
 
-        return ScanResultContainer(id, filteredResults)
+        return ScanResultContainer(pkg.id, filteredResults)
     }
 
     override fun add(id: Identifier, scanResult: ScanResult): Boolean {
