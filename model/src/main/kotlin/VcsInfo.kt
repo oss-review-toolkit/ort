@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
@@ -45,6 +46,13 @@ data class VcsInfo(
          * The VCS-specific revision (tag, branch, SHA1) that the version of the package maps to.
          */
         val revision: String,
+
+        /**
+         * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
+         * contain symbolic names like branches or tags.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val resolvedRevision: String? = null,
 
         /**
          * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
@@ -98,12 +106,17 @@ data class VcsInfo(
             revision = other.revision
         }
 
+        var resolvedRevision = this.resolvedRevision
+        if (resolvedRevision == null && other.resolvedRevision != null) {
+            resolvedRevision = other.resolvedRevision
+        }
+
         var path = this.path
         if (path.isBlank() && other.path.isNotBlank()) {
             path = other.path
         }
 
-        return VcsInfo(type, url, revision, path)
+        return VcsInfo(type, url, revision, resolvedRevision, path)
     }
 
     /**
@@ -118,7 +131,8 @@ class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
         val type = node.get("type").asTextOrEmpty()
         val url = node.get("url").asTextOrEmpty()
         val revision = node.get("revision").asTextOrEmpty()
+        val resolvedRevision = node.get("resolvedRevision")?.asTextOrEmpty()
         val path = node.get("path").asTextOrEmpty()
-        return VcsInfo(type, url, revision, path)
+        return VcsInfo(type, url, revision, resolvedRevision, path)
     }
 }
