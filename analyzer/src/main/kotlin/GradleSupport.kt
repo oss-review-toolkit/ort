@@ -39,8 +39,8 @@ interface Dependency {
     val groupId: String
     val artifactId: String
     val version: String
-    val extension: String
     val classifier: String
+    val extension: String
     val dependencies: List<Dependency>
     val error: String?
     val pomFile: String
