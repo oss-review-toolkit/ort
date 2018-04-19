@@ -38,6 +38,7 @@ if (AbstractDependencyTreePlugin.isCompatibleGradleVersion(gradle.gradleVersion)
     apply plugin: LegacyDependencyTreePlugin
 }
 
+// This needs to be kept in sync with the same interface in "GradleSupport.kt".
 interface DependencyTreeModel {
     String getGroup()
     String getName()
@@ -57,6 +58,7 @@ class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
     List<String> errors
 }
 
+// This needs to be kept in sync with the same interface in "GradleSupport.kt".
 interface Configuration {
     String getName()
     List<Dependency> getDependencies()
@@ -68,6 +70,7 @@ class ConfigurationImpl implements Configuration, Serializable {
     List<Dependency> dependencies
 }
 
+// This needs to be kept in sync with the same interface in "GradleSupport.kt".
 interface Dependency {
     String getGroupId()
     String getArtifactId()
