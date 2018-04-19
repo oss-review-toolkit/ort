@@ -369,7 +369,8 @@ object Main {
         val vcsInfo = VcsInfo(
                 type = applicableVcs.javaClass.simpleName,
                 url = target.vcsProcessed.url,
-                revision = revision,
+                revision = target.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
+                resolvedRevision = revision,
                 path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
         )
         return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo)
