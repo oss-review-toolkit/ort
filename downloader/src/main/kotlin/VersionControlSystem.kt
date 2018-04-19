@@ -128,7 +128,7 @@ abstract class VersionControlSystem {
                         url += ".git"
                     }
 
-                    VcsInfo(type, url, revision, path)
+                    VcsInfo(type, url, revision, path = path)
                 }
 
                 uri.host.endsWith("gitlab.com") || uri.host.endsWith("github.com") -> {
@@ -162,7 +162,7 @@ abstract class VersionControlSystem {
                         }
                     }
 
-                    VcsInfo("Git", url, revision, path)
+                    VcsInfo("Git", url, revision, path = path)
                 }
 
                 else -> VcsInfo("", vcsUrl, "")
@@ -189,7 +189,7 @@ abstract class VersionControlSystem {
          * Conveniently return all VCS information, optionally for a given [path] in the working tree.
          */
         fun getInfo(path: File? = null) =
-                VcsInfo(getType(), getRemoteUrl(), getRevision(), path?.let { getPathToRoot(it) } ?: "" )
+                VcsInfo(getType(), getRemoteUrl(), getRevision(), path = path?.let { getPathToRoot(it) } ?: "" )
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.

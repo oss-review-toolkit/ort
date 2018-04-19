@@ -28,6 +28,7 @@ results:
       type: "type"
       url: "url"
       revision: "revision"
+      resolvedRevision: "resolvedRevision"
       path: "path"
   scanner:
     name: "name 2"

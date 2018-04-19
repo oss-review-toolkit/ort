@@ -77,7 +77,7 @@ class MercurialDownloadTest : StringSpec() {
         }.config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag))
 
         "Mercurial can download only a single path" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, REPO_PATH))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
                     File(".hgsubstate"),
@@ -119,7 +119,7 @@ class MercurialDownloadTest : StringSpec() {
         "Mercurial can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.

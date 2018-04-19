@@ -94,7 +94,7 @@ class HttpCacheTest : StringSpec() {
     )
     private val provenanceWithVcsInfo = Provenance(
             downloadTime = downloadTime2,
-            vcsInfo = VcsInfo("type", "url", "revision", "path")
+            vcsInfo = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
     )
     private val provenanceEmpty = Provenance(downloadTime3)
 
