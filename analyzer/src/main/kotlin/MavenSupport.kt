@@ -405,6 +405,6 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
         }
 
-        return VcsInfo(type, url, tag, "")
+        return VcsInfo(type, url, tag)
     }
 }

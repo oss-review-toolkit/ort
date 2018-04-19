@@ -95,11 +95,11 @@ abstract class VersionControlSystem {
                 URI(vcsUrl)
             } catch (e: URISyntaxException) {
                 // Fall back to returning just the original URL.
-                return VcsInfo("", vcsUrl, "", "")
+                return VcsInfo("", vcsUrl, "")
             }
 
             return when {
-                uri.host == null -> VcsInfo("", vcsUrl, "", "")
+                uri.host == null -> VcsInfo("", vcsUrl, "")
 
                 uri.host.endsWith("bitbucket.org") -> {
                     var url = uri.scheme + "://" + uri.authority
@@ -165,7 +165,7 @@ abstract class VersionControlSystem {
                     VcsInfo("Git", url, revision, path)
                 }
 
-                else -> VcsInfo("", vcsUrl, "", "")
+                else -> VcsInfo("", vcsUrl, "")
             }
         }
     }

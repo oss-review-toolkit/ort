@@ -57,7 +57,7 @@ class SubversionDownloadTest : StringSpec() {
 
     init {
         "Subversion can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".svn",
                     "branches",
@@ -116,7 +116,7 @@ class SubversionDownloadTest : StringSpec() {
         "Subversion can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "")
             )
 
             val workingTree = Subversion.download(pkg, outputDir)

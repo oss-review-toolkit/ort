@@ -53,8 +53,7 @@ class BeanUtilsTest : StringSpec() {
             val vcsFromCuration = VcsInfo(
                     type = "svn",
                     url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             val pkg = Package(

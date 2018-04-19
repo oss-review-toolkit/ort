@@ -72,8 +72,7 @@ class VersionControlSystemTest : WordSpec({
             val expected = VcsInfo(
                     type = "Mercurial",
                     url = "https://bitbucket.org/paniq/masagin",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
             actual shouldBe expected
         }.config(enabled = Mercurial.isInPath())
@@ -113,8 +112,7 @@ class VersionControlSystemTest : WordSpec({
             val expected = VcsInfo(
                     type = "Git",
                     url = "https://github.com/heremaps/oss-review-toolkit.git",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
             actual shouldBe expected
         }
@@ -126,8 +124,7 @@ class VersionControlSystemTest : WordSpec({
             val expected = VcsInfo(
                     type = "Git",
                     url = "https://github.com/blob/tree.git",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
             actual shouldBe expected
         }
@@ -180,8 +177,7 @@ class VersionControlSystemTest : WordSpec({
             val expected = VcsInfo(
                     type = "Git",
                     url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
             actual shouldBe expected
         }

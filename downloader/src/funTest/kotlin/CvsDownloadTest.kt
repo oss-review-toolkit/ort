@@ -54,7 +54,7 @@ class CvsDownloadTest : StringSpec() {
 
     init {
         "CVS can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     "CVS",
                     "xmlenc"
@@ -94,7 +94,7 @@ class CvsDownloadTest : StringSpec() {
         "CVS can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("CVS", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("CVS", REPO_URL, "")
             )
 
             val workingTree = Cvs.download(pkg, outputDir)

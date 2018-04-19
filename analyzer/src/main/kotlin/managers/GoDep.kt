@@ -84,7 +84,7 @@ class GoDep : PackageManager() {
             val revision = project["revision"]!!
             val version = project["version"]!!
 
-            val vcs = VcsInfo(provider, name, revision, "")
+            val vcs = VcsInfo(provider, name, revision)
             var vcsProcessed = VcsInfo.EMPTY
             val errors: MutableList<String> = mutableListOf()
 
