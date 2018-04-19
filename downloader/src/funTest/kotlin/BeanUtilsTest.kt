@@ -77,6 +77,7 @@ class BeanUtilsTest : StringSpec() {
             downloadResult.vcsInfo!!.type shouldBe "Subversion"
             downloadResult.vcsInfo!!.url shouldBe vcsFromCuration.url
             downloadResult.vcsInfo!!.revision shouldBe "928490"
+            downloadResult.vcsInfo!!.resolvedRevision shouldBe "928490"
             downloadResult.vcsInfo!!.path shouldBe vcsFromCuration.path
 
             val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
