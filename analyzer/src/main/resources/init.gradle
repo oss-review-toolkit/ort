@@ -85,12 +85,12 @@ interface Dependency {
 
 @Immutable
 class DependencyImpl implements Dependency, Serializable {
-    String groupId
-    String artifactId
+    String groupId = ''
+    String artifactId = ''
     String version = ''
     String classifier = ''
     String extension = ''
-    List<Dependency> dependencies
+    List<Dependency> dependencies = []
     String error
     String pomFile = ''
     String localPath
