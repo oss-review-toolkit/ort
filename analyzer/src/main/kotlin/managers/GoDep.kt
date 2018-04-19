@@ -248,6 +248,6 @@ class GoDep : PackageManager() {
                 ?.getInfo()?.normalize() ?: return VcsInfo.EMPTY
 
         // We want the revision recorded in Gopkg.lock, not the one "go get" fetched.
-        return VcsInfo(deducedVcs.type, deducedVcs.url, vcs.revision, deducedVcs.path)
+        return VcsInfo(deducedVcs.type, deducedVcs.url, vcs.revision, path = deducedVcs.path)
     }
 }

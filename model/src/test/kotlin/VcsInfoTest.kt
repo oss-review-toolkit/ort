@@ -85,6 +85,7 @@ class VcsInfoTest : StringSpec({
                     type = "type",
                     url = "url",
                     revision = "revision",
+                    resolvedRevision = "resolvedRevision",
                     path = "path"
             )
 
@@ -92,6 +93,7 @@ class VcsInfoTest : StringSpec({
                     type = "type",
                     url = "url",
                     revision = "revision",
+                    resolvedRevision = "resolvedRevision",
                     path = "path"
             )
 

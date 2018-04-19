@@ -78,6 +78,7 @@ data class PackageCurationData(
                     type = vcs.type.takeUnless { it.isBlank() } ?: pkg.vcs.type,
                     url = vcs.url.takeUnless { it.isBlank() } ?: pkg.vcs.url,
                     revision = vcs.revision.takeUnless { it.isBlank() } ?: pkg.vcs.revision,
+                    resolvedRevision = vcs.resolvedRevision.takeUnless { it == null } ?: pkg.vcs.resolvedRevision,
                     path = vcs.path.takeUnless { it.isBlank() } ?: pkg.vcs.path
             )
         } else {
