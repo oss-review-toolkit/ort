@@ -85,14 +85,16 @@ class VcsInfoTest : StringSpec({
                     type = "type",
                     url = "url",
                     revision = "revision",
-                    path = "path"
+                    path = "path",
+                    resolvedRevision = "resolvedRevision"
             )
 
             val output = VcsInfo(
                     type = "type",
                     url = "url",
                     revision = "revision",
-                    path = "path"
+                    path = "path",
+                    resolvedRevision = "resolvedRevision"
             )
 
             inputA.merge(inputB) shouldBe output

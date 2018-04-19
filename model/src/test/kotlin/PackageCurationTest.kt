@@ -60,7 +60,8 @@ class PackageCurationTest : StringSpec() {
                                     type = "git",
                                     url = "http://url.git",
                                     revision = "revision",
-                                    path = "path"
+                                    path = "path",
+                                    resolvedRevision = "resolvedRevision"
                             )
                     )
             )
@@ -95,7 +96,8 @@ class PackageCurationTest : StringSpec() {
                             type = "git",
                             url = "http://url.git",
                             revision = "revision",
-                            path = "path"
+                            path = "path",
+                            resolvedRevision = "resolvedRevision"
                     )
             )
             val curation = PackageCuration(
@@ -123,7 +125,8 @@ class PackageCurationTest : StringSpec() {
                         type = pkg.vcs.type,
                         url = curation.data.vcs!!.url,
                         revision = pkg.vcs.revision,
-                        path = pkg.vcs.path
+                        path = pkg.vcs.path,
+                        resolvedRevision = pkg.vcs.resolvedRevision
                 )
             }
         }

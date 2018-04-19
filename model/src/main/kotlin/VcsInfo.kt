@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
@@ -51,7 +52,14 @@ data class VcsInfo(
          * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
          * interpreted as the path to the manifest file.
          */
-        val path: String = ""
+        val path: String = "",
+
+        /**
+         * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
+         * contain symbolic names like branches or tags.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val resolvedRevision: String? = null
 ) {
     companion object {
         /**
@@ -103,7 +111,12 @@ data class VcsInfo(
             path = other.path
         }
 
-        return VcsInfo(type, url, revision, path)
+        var resolvedRevision = this.resolvedRevision
+        if (resolvedRevision == null && other.resolvedRevision != null) {
+            resolvedRevision = other.resolvedRevision
+        }
+
+        return VcsInfo(type, url, revision, path, resolvedRevision)
     }
 
     /**
@@ -119,6 +132,7 @@ class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
         val url = node.get("url").asTextOrEmpty()
         val revision = node.get("revision").asTextOrEmpty()
         val path = node.get("path").asTextOrEmpty()
-        return VcsInfo(type, url, revision, path)
+        val resolvedRevision = node.get("resolvedRevision")?.asTextOrEmpty()
+        return VcsInfo(type, url, revision, path, resolvedRevision)
     }
 }
