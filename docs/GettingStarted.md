@@ -26,6 +26,8 @@ For some of the supported package managers and SCMs additional tools need to be 
 * SBT
 * Subversion
 * Yarn 1.3.2
+* Go (tested with 1.10)
+* [dep](https://github.com/golang/dep) 0.4.1
 
 ## 2. Download & Install ORT
 
