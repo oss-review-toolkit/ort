@@ -21,6 +21,8 @@ To run ORT the following tools are required:
 For some of the supported package managers and SCMs additional tools need to be installed:
 
 * CVS
+* [dep](https://github.com/golang/dep) 0.4.1
+* Go (tested with 1.10)
 * Mercurial
 * NPM 5.5.1 and Node.js 8.x (required for this tutorial because we scan `mime-types` which is an NPM project)
 * SBT
