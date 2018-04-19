@@ -105,8 +105,7 @@ class PackageCurationTest : StringSpec() {
                             vcs = VcsInfo(
                                     type = "",
                                     url = "http://url.git",
-                                    revision = "",
-                                    path = ""
+                                    revision = ""
                             )
                     )
             )
@@ -156,8 +155,7 @@ class PackageCurationTest : StringSpec() {
                             vcs = VcsInfo(
                                     type = "",
                                     url = "http://url.git",
-                                    revision = "",
-                                    path = ""
+                                    revision = ""
                             )
                     )
             )

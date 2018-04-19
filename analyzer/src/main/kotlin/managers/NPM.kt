@@ -356,8 +356,8 @@ class NPM : PackageManager() {
         return node["repository"]?.let { repo ->
             val type = repo["type"].asTextOrEmpty()
             val url = repo.textValue() ?: repo["url"].asTextOrEmpty()
-            VcsInfo(type, expandShortcutURL(url), head, "")
-        } ?: VcsInfo("", "", head, "")
+            VcsInfo(type, expandShortcutURL(url), head)
+        } ?: VcsInfo("", "", head)
     }
 
     private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>,

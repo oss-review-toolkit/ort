@@ -55,7 +55,7 @@ class GitDownloadTest : StringSpec() {
 
     init {
         "Git can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".git",
                     ".gitignore",
@@ -98,7 +98,7 @@ class GitDownloadTest : StringSpec() {
         "Git can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Git", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("Git", REPO_URL, "")
             )
 
             val workingTree = Git.download(pkg, outputDir)

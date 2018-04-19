@@ -62,7 +62,7 @@ class DirectoryTest : StringSpec() {
                     homepageUrl = "",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo("Git", "", "", "")
+                    vcs = VcsInfo("Git", "", "")
             )
 
             // No download source specified, we expect exception in this case.

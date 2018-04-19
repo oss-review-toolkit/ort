@@ -51,7 +51,7 @@ data class VcsInfo(
          * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
          * interpreted as the path to the manifest file.
          */
-        val path: String
+        val path: String = ""
 ) {
     companion object {
         /**
@@ -61,8 +61,7 @@ data class VcsInfo(
         val EMPTY = VcsInfo(
                 type = "",
                 url = "",
-                revision = "",
-                path = ""
+                revision = ""
         )
     }
 

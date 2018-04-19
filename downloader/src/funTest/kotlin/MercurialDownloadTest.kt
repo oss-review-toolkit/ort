@@ -55,7 +55,7 @@ class MercurialDownloadTest : StringSpec() {
 
     init {
         "Mercurial can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".hg",
                     ".hgsub",
@@ -107,7 +107,7 @@ class MercurialDownloadTest : StringSpec() {
         "Mercurial can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
             )
 
             val workingTree = Mercurial.download(pkg, outputDir)

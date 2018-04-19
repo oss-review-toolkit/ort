@@ -54,8 +54,7 @@ class BabelTest : StringSpec() {
             val vcsFromPackage = VcsInfo(
                     type = "git",
                     url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
             val vcsFromUrl = VersionControlSystem.splitUrl(normalizeVcsUrl(vcsFromPackage.url))
             val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
