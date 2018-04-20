@@ -84,7 +84,7 @@ object Licensee : LocalScanner() {
         with(process) {
             if (isSuccess()) {
                 stdoutFile.copyTo(resultsFile)
-                val result = BoyterLc.getResult(resultsFile)
+                val result = getResult(resultsFile)
                 val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
                 return ScanResult(provenance, scannerDetails, summary, result.rawResult)
             } else {
