@@ -144,6 +144,13 @@ subprojects {
         }
     }
 
+    task jacocoReport {
+        description = 'Generates code coverage reports for all test tasks.'
+        group = 'Reporting'
+
+        dependsOn tasks.withType(JacocoReport)
+    }
+
     check.dependsOn detektCheck
     check.dependsOn funTest
 
