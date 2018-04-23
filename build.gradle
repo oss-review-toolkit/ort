@@ -131,6 +131,13 @@ subprojects {
         }
     }
 
+    jacocoTestReport {
+        reports {
+            // Enable XML in addition to HTML for CI integration.
+            xml.enabled true
+        }
+    }
+
     task jacocoFunTestReport(type: JacocoReport) {
         description = 'Generates code coverage report for the funTest task.'
         group = 'Reporting'
