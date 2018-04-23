@@ -122,10 +122,6 @@ subprojects {
         }
     }
 
-    jacoco {
-        toolVersion = '0.8.0'
-    }
-
     gradle.taskGraph.whenReady { graph ->
         def enabled = graph.allTasks.any { it instanceof JacocoReport }
         tasks.withType(Test) {
