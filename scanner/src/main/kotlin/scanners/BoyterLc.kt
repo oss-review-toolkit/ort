@@ -21,6 +21,12 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.Provenance
+import com.here.ort.model.ScanResult
+import com.here.ort.model.ScanSummary
+import com.here.ort.model.ScannerDetails
+import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.Main
 import com.here.ort.scanner.ScanException
@@ -28,23 +34,28 @@ import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.unpack
-
-import okhttp3.Request
-
-import okio.Okio
 
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.time.Instant
+
+import okhttp3.Request
+
+import okio.Okio
 
 object BoyterLc : LocalScanner() {
     const val VERSION = "1.3.1"
 
     override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
     override val resultFileExt = "json"
+
+    val CONFIGURATION_OPTIONS = listOf(
+            "--confidence", "0.95", // Cut-off value to only get most relevant matches.
+            "--format", "json"
+    )
 
     override fun bootstrap(): File? {
         val url = if (OS.isWindows) {
@@ -87,20 +98,26 @@ object BoyterLc : LocalScanner() {
         }
     }
 
-    override fun getVersion(executable: String) =
+    override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
+
+    override fun getVersion() =
             getCommandVersion(scannerPath.absolutePath, transform = {
                 // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
                 it.substringAfter("licensechecker version ")
             })
 
-    override fun scanPath(path: File, resultsFile: File): Result {
+    override fun scanPath(path: File, resultsFile: File, provenance: Provenance, scannerDetails: ScannerDetails)
+            : ScanResult {
+        val startTime = Instant.now()
+
         val process = ProcessCapture(
                 scannerPath.absolutePath,
-                "--confidence", "0.95", // Cut-off value to only get most relevant matches.
-                "--format", "json",
+                *CONFIGURATION_OPTIONS.toTypedArray(),
                 "--output", resultsFile.absolutePath,
                 path.absolutePath
         )
+
+        val endTime = Instant.now()
 
         if (process.stderr().isNotBlank()) {
             log.debug { process.stderr() }
@@ -108,7 +125,9 @@ object BoyterLc : LocalScanner() {
 
         with(process) {
             if (isSuccess()) {
-                return getResult(resultsFile)
+                val result = getResult(resultsFile)
+                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
+                return ScanResult(provenance, scannerDetails, summary, result.rawResult)
             } else {
                 throw ScanException(failMessage)
             }
@@ -120,18 +139,20 @@ object BoyterLc : LocalScanner() {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
-        if (resultsFile.isFile && resultsFile.length() > 0) {
-            val json = jsonMapper.readTree(resultsFile)
+        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
+            jsonMapper.readTree(resultsFile).also {
+                fileCount = it.count()
 
-            fileCount = json.count()
-
-            json.forEach { file ->
-                licenses.addAll(file["LicenseGuesses"].map { license ->
-                    license["LicenseId"].asText()
-                })
+                it.forEach { file ->
+                    licenses.addAll(file["LicenseGuesses"].map { license ->
+                        license["LicenseId"].asText()
+                    })
+                }
             }
+        } else {
+            EMPTY_JSON_NODE
         }
 
-        return Result(fileCount, licenses, errors)
+        return Result(fileCount, licenses, errors, json)
     }
 }

@@ -24,16 +24,14 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
+
+import com.here.ort.utils.encodeOrUnknown
 
 /**
  * A unique identifier for a software package.
  */
-@JsonDeserialize(using = IdentifierFromStringDeserializer::class)
-@JsonSerialize(using = IdentifierToStringSerializer::class)
 data class Identifier(
         /**
          * The name of the provider that hosts this package, for example Maven or NPM.
@@ -82,6 +80,14 @@ data class Identifier(
         }
     }
 
+    init {
+        require(listOf(provider, namespace, name, version).none { it.contains(":") }) {
+            "Properties of Identifier must not contain ':' because it is used as a separator in the String " +
+                    "representation of the Identifier: provider='$provider', namespace='$namespace', name='$name', " +
+                    "version='$version'"
+        }
+    }
+
     override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
@@ -112,6 +118,11 @@ data class Identifier(
 
         return nameMatches && versionMatches
     }
+
+    /**
+     * Create a path based on the properties of the [Identifier]. All properties are encoded using [encodeOrUnknown].
+     */
+    fun toPath() = listOf(provider, namespace, name, version).joinToString("/") { it.encodeOrUnknown() }
 
     // TODO: Consider using a PURL here, see https://github.com/package-url/purl-spec#purl.
     override fun toString() = "$provider:$namespace:$name:$version"

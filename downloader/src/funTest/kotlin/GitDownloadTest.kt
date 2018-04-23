@@ -55,7 +55,7 @@ class GitDownloadTest : StringSpec() {
 
     init {
         "Git can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".git",
                     ".gitignore",
@@ -76,8 +76,9 @@ class GitDownloadTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
 
         "Git can download only a single path" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, REPO_PATH))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
+                    File("LICENSE"),
                     File(REPO_PATH, "dep_graph.js"),
                     File(REPO_PATH, "index.d.ts")
             )
@@ -97,7 +98,7 @@ class GitDownloadTest : StringSpec() {
         "Git can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Git", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("Git", REPO_URL, "")
             )
 
             val workingTree = Git.download(pkg, outputDir)
@@ -109,9 +110,10 @@ class GitDownloadTest : StringSpec() {
         "Git can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Git", REPO_URL, "", REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo("Git", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
+                    File("LICENSE"),
                     File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 

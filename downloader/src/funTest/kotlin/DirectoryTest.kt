@@ -52,17 +52,17 @@ class DirectoryTest : StringSpec() {
         "Creates directories for Gradle submodules" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
-                            namespace = "",
-                            name = "project :model",
-                            version = ""
+                            provider = "provider",
+                            namespace = "namespace",
+                            name = "name",
+                            version = "version"
                     ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo("Git", "", "", "")
+                    vcs = VcsInfo("Git", "", "")
             )
 
             // No download source specified, we expect exception in this case.
@@ -75,7 +75,7 @@ class DirectoryTest : StringSpec() {
 
             val namespaceDir = File(outputDir, outputDir.list().first())
             namespaceDir.list().size shouldBe 1
-            namespaceDir.list().first() shouldBe "unknown"
+            namespaceDir.list().first() shouldBe pkg.id.namespace.fileSystemEncode()
 
             val nameDir = File(namespaceDir, namespaceDir.list().first())
             nameDir.list().size shouldBe 1
@@ -83,7 +83,7 @@ class DirectoryTest : StringSpec() {
 
             val versionDir = File(nameDir, nameDir.list().first())
             versionDir.list().size shouldBe 1
-            versionDir.list().first() shouldBe "unknown"
+            versionDir.list().first() shouldBe pkg.id.version.fileSystemEncode()
         }
     }
 }

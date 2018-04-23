@@ -1,0 +1,47 @@
+---
+id: "provider:namespace:name:version"
+results:
+- provenance:
+    downloadTime: "1970-01-02T00:00:00Z"
+    sourceArtifact:
+      url: "url"
+      hash: "hash"
+      hash_algorithm: "SHA-1"
+  scanner:
+    name: "name 1"
+    version: "version 1"
+    configuration: "config 1"
+  summary:
+    startTime: "1970-01-02T00:01:00Z"
+    endTime: "1970-01-02T00:02:00Z"
+    fileCount: 1
+    licenses:
+    - "license 1.1"
+    - "license 1.2"
+    errors:
+    - "error 1.1"
+    - "error 1.2"
+  rawResult: "key 1"
+- provenance:
+    downloadTime: "1970-01-03T00:00:00Z"
+    vcsInfo:
+      type: "type"
+      url: "url"
+      revision: "revision"
+      resolvedRevision: "resolvedRevision"
+      path: "path"
+  scanner:
+    name: "name 2"
+    version: "version 2"
+    configuration: "config 2"
+  summary:
+    startTime: "1970-01-03T00:01:00Z"
+    endTime: "1970-01-03T00:02:00Z"
+    fileCount: 2
+    licenses:
+    - "license 2.1"
+    - "license 2.2"
+    errors:
+    - "error 2.1"
+    - "error 2.2"
+  rawResult: "key 2"

@@ -46,8 +46,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
             vcs = VcsInfo(
                     type = "Git",
                     url = "https://github.com/vuejs/vue.git",
-                    revision = "v2.5.10",
-                    path = ""
+                    revision = "v2.5.10"
             )
     )
 

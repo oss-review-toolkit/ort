@@ -47,22 +47,23 @@ data class PackageReference(
     }
 
     /**
-     * A comparison function to sort package references by their identifier.
+     * A comparison function to sort package references by their identifier. This function ignores all other properties
+     * except for [id].
      */
     override fun compareTo(other: PackageReference) = id.compareTo(other.id)
 
     /**
      * Returns whether the given package is a (transitive) dependency of this reference.
      */
-    fun dependsOn(pkg: Package) = dependsOn(pkg.id.toString())
+    fun dependsOn(pkg: Package) = dependsOn(pkg.id)
 
     /**
      * Returns whether the package identified by [pkgId] is a (transitive) dependency of this reference.
      */
-    fun dependsOn(pkgId: String): Boolean {
+    fun dependsOn(pkgId: Identifier): Boolean {
         return dependencies.find { pkgRef ->
             // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
-            pkgRef.id.toString() == pkgId || pkgRef.dependsOn(pkgId)
+            pkgRef.id == pkgId || pkgRef.dependsOn(pkgId)
         } != null
     }
 }

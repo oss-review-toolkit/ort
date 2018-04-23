@@ -27,19 +27,24 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
+import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.Scope
+import com.here.ort.model.jsonMapper
+import com.here.ort.model.mapper
+import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessages
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
-import com.here.ort.utils.yamlMapper
+import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.util.SortedMap
@@ -53,7 +58,7 @@ class ScanSummary(
         val cacheStats: CacheStatistics,
         val scannedScopes: SortedSet<String>,
         val ignoredScopes: SortedSet<String>,
-        val analyzerErrors: SortedMap<String, List<String>>
+        val analyzerErrors: SortedMap<Identifier, List<String>>
 )
 
 typealias PackageSummary = MutableMap<String, SummaryEntry>
@@ -77,9 +82,7 @@ object Main {
             try {
                 return OutputFormat.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 throw ParameterException("Summary formats must be contained in ${OutputFormat.ALL}.")
             }
@@ -188,7 +191,7 @@ object Main {
         }
 
         // Make the parameter globally available.
-        com.here.ort.utils.printStackTrace = stacktrace
+        printStackTrace = stacktrace
 
         if ((dependenciesFile != null) == (inputPath != null)) {
             throw IllegalArgumentException("Either --dependencies-file or --input-path must be specified.")
@@ -214,18 +217,14 @@ object Main {
 
         val includedScopes = sortedSetOf<Scope>()
         val excludedScopes = sortedSetOf<Scope>()
-        val analyzerErrors = sortedMapOf<String, List<String>>()
+        val analyzerErrors = sortedMapOf<Identifier, List<String>>()
 
         dependenciesFile?.let { dependenciesFile ->
             require(dependenciesFile.isFile) {
                 "Provided path is not a file: ${dependenciesFile.absolutePath}"
             }
 
-            val mapper = when (dependenciesFile.extension) {
-                OutputFormat.JSON.fileExtension -> jsonMapper
-                OutputFormat.YAML.fileExtension -> yamlMapper
-                else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
-            }
+            val mapper = dependenciesFile.mapper()
 
             val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
             analyzerErrors.putAll(analyzerResult.collectErrors())
@@ -257,11 +256,16 @@ object Main {
 
             val results = scanner.scan(packages, outputDir, downloadDir)
             results.forEach { pkg, result ->
+                // TODO: Make output format configurable.
+                File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.yml").also {
+                    yamlMapper.writeValue(it, ScanResultContainer(pkg.id, result))
+                }
+
                 val entry = SummaryEntry(
                         scopes = findScopesForPackage(pkg, analyzerResult.project).toSortedSet(),
                         declaredLicenses = pkg.declaredLicenses,
-                        detectedLicenses = result.licenses,
-                        errors = result.errors.toMutableList()
+                        detectedLicenses = result.flatMap { it.summary.licenses }.toSortedSet(),
+                        errors = result.flatMap { it.summary.errors }.toMutableList()
                 )
 
                 pkgSummary[pkg.id.toString()] = entry
@@ -284,16 +288,15 @@ object Main {
                 val entry = try {
                     val result = localScanner.scan(inputPath, outputDir)
 
-                    println("Detected licenses for path '${inputPath.absolutePath}': ${result.licenses.joinToString()}")
+                    println("Detected licenses for path '${inputPath.absolutePath}': " +
+                            result.summary.licenses.joinToString())
 
                     SummaryEntry(
-                            detectedLicenses = result.licenses,
-                            errors = result.errors.toMutableList()
+                            detectedLicenses = result.summary.licenses,
+                            errors = result.summary.errors.toMutableList()
                     )
                 } catch (e: ScanException) {
-                    if (com.here.ort.utils.printStackTrace) {
-                        e.printStackTrace()
-                    }
+                    e.showStackTrace()
 
                     log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
 

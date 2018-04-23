@@ -38,10 +38,9 @@ import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
+import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeMkdirs
-import com.here.ort.utils.yamlMapper
 
 import java.io.File
 
@@ -178,7 +177,7 @@ object Main {
         }
 
         // Make the parameter globally available.
-        com.here.ort.utils.printStackTrace = stacktrace
+        printStackTrace = stacktrace
 
         val absoluteOutputPath = outputDir.absoluteFile
         if (absoluteOutputPath.exists()) {
@@ -186,10 +185,7 @@ object Main {
             exitProcess(1)
         }
 
-        mapper = when (outputFormat) {
-            OutputFormat.JSON -> jsonMapper
-            OutputFormat.YAML -> yamlMapper
-        }
+        mapper = outputFormat.mapper
 
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
@@ -208,7 +204,9 @@ object Main {
 
         val vcs = VersionControlSystem.forDirectory(absoluteProjectPath)
 
-        val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any { it.parentFile == inputDir }
+        val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any {
+            it.parentFile.absoluteFile == absoluteProjectPath
+        }
 
         if (managedDefinitionFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
             managedDefinitionFiles[Unmanaged] = listOf(absoluteProjectPath)

@@ -47,8 +47,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
             vcs = VcsInfo(
                     type = "Git",
                     url = "https://github.com/gradle/gradle.git",
-                    revision = "v4.4.0",
-                    path = ""
+                    revision = "v4.4.0"
             )
     )
 

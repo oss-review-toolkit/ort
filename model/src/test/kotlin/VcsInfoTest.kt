@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.here.ort.utils.yamlMapper
-
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -80,14 +78,14 @@ class VcsInfoTest : StringSpec({
             val inputA = VcsInfo(
                     type = "",
                     url = "",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             val inputB = VcsInfo(
                     type = "type",
                     url = "url",
                     revision = "revision",
+                    resolvedRevision = "resolvedRevision",
                     path = "path"
             )
 
@@ -95,6 +93,7 @@ class VcsInfoTest : StringSpec({
                     type = "type",
                     url = "url",
                     revision = "revision",
+                    resolvedRevision = "resolvedRevision",
                     path = "path"
             )
 
@@ -105,15 +104,13 @@ class VcsInfoTest : StringSpec({
             val inputA = VcsInfo(
                     type = "Git",
                     url = "",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             val inputB = VcsInfo(
                     type = "git",
                     url = "",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             inputA.merge(inputB).type shouldBe "Git"
@@ -131,8 +128,7 @@ class VcsInfoTest : StringSpec({
             val inputB = VcsInfo(
                     type = "git",
                     url = "https://github.com/babel/babel/tree/master/packages/babel-cli.git",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             val output = VcsInfo(
@@ -149,22 +145,19 @@ class VcsInfoTest : StringSpec({
             val inputA = VcsInfo(
                     type = "",
                     url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             val inputB = VcsInfo(
                     type = "git",
                     url = "git+https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = "9928a569351a80c2f7dc065f61085954daed5312",
-                    path = ""
+                    revision = "9928a569351a80c2f7dc065f61085954daed5312"
             )
 
             val output = VcsInfo(
                     type = "git",
                     url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = "9928a569351a80c2f7dc065f61085954daed5312",
-                    path = ""
+                    revision = "9928a569351a80c2f7dc065f61085954daed5312"
             )
 
             inputA.merge(inputB) shouldBe output
@@ -174,22 +167,19 @@ class VcsInfoTest : StringSpec({
             val inputA = VcsInfo(
                     type = "Git",
                     url = "https://github.com/chalk/ansi-regex.git",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             val inputB = VcsInfo(
                     type = "git",
                     url = "git+https://github.com/chalk/ansi-regex.git",
-                    revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85",
-                    path = ""
+                    revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
             )
 
             val output = VcsInfo(
                     type = "Git",
                     url = "https://github.com/chalk/ansi-regex.git",
-                    revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85",
-                    path = ""
+                    revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
             )
 
             inputA.merge(inputB) shouldBe output
@@ -206,8 +196,7 @@ class VcsInfoTest : StringSpec({
             val inputB = VcsInfo(
                     type = "git",
                     url = "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded",
-                    revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5",
-                    path = ""
+                    revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5"
             )
 
             val output = VcsInfo(

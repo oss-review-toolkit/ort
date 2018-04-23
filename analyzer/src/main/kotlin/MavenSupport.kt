@@ -26,13 +26,16 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.yamlMapper
+import com.here.ort.utils.showStackTrace
+
+import java.io.File
+import java.util.regex.Pattern
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
@@ -70,9 +73,6 @@ import org.eclipse.aether.spi.connector.transport.TransporterProvider
 import org.eclipse.aether.transfer.AbstractTransferListener
 import org.eclipse.aether.transfer.NoRepositoryLayoutException
 import org.eclipse.aether.transfer.TransferEvent
-
-import java.io.File
-import java.util.regex.Pattern
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
@@ -201,9 +201,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             val repositoryLayout = try {
                 repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
             } catch (e: NoRepositoryLayoutException) {
-                if (printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 log.warn { "Could not search for '$artifact'in '$repository': ${e.message}" }
 
@@ -254,9 +252,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     // the first space.
                     tempFile.useLines { it.first().substringBefore(" ") }
                 } catch (e: Exception) {
-                    if (com.here.ort.utils.printStackTrace) {
-                        e.printStackTrace()
-                    }
+                    e.showStackTrace()
 
                     log.warn { "Could not get checksum for '$artifact': ${e.message}" }
 
@@ -305,8 +301,11 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = createProjectBuildingRequest(true)
 
-        projectBuildingRequest.remoteRepositories = repositories.map {
-            mavenRepositorySystem.createRepository(it.url, it.id, true, null, true, null, null)
+        projectBuildingRequest.remoteRepositories = repositories.map { repo ->
+            // As the ID might be used as the key when generating a metadata file name, avoid the URL being used as the
+            // ID as the URL is likely to contain characters like ":" which not all file systems support.
+            val id = repo.id.takeUnless { it == repo.url } ?: repo.host
+            mavenRepositorySystem.createRepository(repo.url, id, true, null, true, null, null)
         }
 
         val localProject = localProjects[artifact.identifier()]
@@ -406,6 +405,6 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
         }
 
-        return VcsInfo(type, url, tag, "")
+        return VcsInfo(type, url, tag)
     }
 }

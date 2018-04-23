@@ -57,7 +57,7 @@ class SubversionDownloadTest : StringSpec() {
 
     init {
         "Subversion can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".svn",
                     "branches",
@@ -75,7 +75,7 @@ class SubversionDownloadTest : StringSpec() {
         }.config(enabled = Subversion.isInPath(), tags = setOf(ExpensiveTag))
 
         "Subversion can download only a single path" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, REPO_PATH))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                     "SendMessage.sln",
                     "default.build",
@@ -96,7 +96,7 @@ class SubversionDownloadTest : StringSpec() {
         }.config(enabled = Subversion.isInPath(), tags = setOf(ExpensiveTag))
 
         "Subversion can download a given tag" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, "", REPO_TAG))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_TAG))
             val expectedFiles = listOf(
                     "SendMessage.proj",
                     "SendMessage.sln",
@@ -116,7 +116,7 @@ class SubversionDownloadTest : StringSpec() {
         "Subversion can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "")
             )
 
             val workingTree = Subversion.download(pkg, outputDir)
@@ -128,7 +128,7 @@ class SubversionDownloadTest : StringSpec() {
         "Subversion can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "", REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
                     "SendMessage.ico",

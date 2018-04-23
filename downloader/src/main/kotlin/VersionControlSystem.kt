@@ -28,6 +28,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.filterVersionNames
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizedPath
 
 import com.vdurmont.semver4j.Semver
 
@@ -94,11 +95,11 @@ abstract class VersionControlSystem {
                 URI(vcsUrl)
             } catch (e: URISyntaxException) {
                 // Fall back to returning just the original URL.
-                return VcsInfo("", vcsUrl, "", "")
+                return VcsInfo("", vcsUrl, "")
             }
 
             return when {
-                uri.host == null -> VcsInfo("", vcsUrl, "", "")
+                uri.host == null -> VcsInfo("", vcsUrl, "")
 
                 uri.host.endsWith("bitbucket.org") -> {
                     var url = uri.scheme + "://" + uri.authority
@@ -127,7 +128,7 @@ abstract class VersionControlSystem {
                         url += ".git"
                     }
 
-                    VcsInfo(type, url, revision, path)
+                    VcsInfo(type, url, revision, path = path)
                 }
 
                 uri.host.endsWith("gitlab.com") || uri.host.endsWith("github.com") -> {
@@ -161,10 +162,10 @@ abstract class VersionControlSystem {
                         }
                     }
 
-                    VcsInfo("Git", url, revision, path)
+                    VcsInfo("Git", url, revision, path = path)
                 }
 
-                else -> VcsInfo("", vcsUrl, "", "")
+                else -> VcsInfo("", vcsUrl, "")
             }
         }
     }
@@ -188,7 +189,7 @@ abstract class VersionControlSystem {
          * Conveniently return all VCS information, optionally for a given [path] in the working tree.
          */
         fun getInfo(path: File? = null) =
-                VcsInfo(getType(), getRemoteUrl(), getRevision(), path?.let { getPathToRoot(it) } ?: "" )
+                VcsInfo(getType(), getRemoteUrl(), getRevision(), path = path?.let { getPathToRoot(it) } ?: "" )
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.
@@ -244,7 +245,7 @@ abstract class VersionControlSystem {
             val relativePath = path.absoluteFile.relativeTo(File(getRootPath())).toString()
 
             // Use Unix paths even on Windows for consistent output.
-            return relativePath.replace(File.separatorChar, '/')
+            return relativePath.normalizedPath
         }
     }
 

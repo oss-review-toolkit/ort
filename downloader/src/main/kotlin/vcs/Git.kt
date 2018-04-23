@@ -29,6 +29,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -107,9 +108,7 @@ object Git : GitBase() {
                 }
             }
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
@@ -128,7 +127,8 @@ object Git : GitBase() {
             log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
             run(targetDir, "config", "core.sparseCheckout", "true")
             val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path)
+            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path +
+                    "\nLICENSE*\nLICENCE*")
         }
 
         val workingTree = getWorkingTree(targetDir)
@@ -178,9 +178,7 @@ object Git : GitBase() {
                 run(targetDir, "checkout", revision)
                 return workingTree
             } catch (e: IOException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 log.warn {
                     "Could not fetch only revision '$revision': ${e.message}\n" +
@@ -196,9 +194,7 @@ object Git : GitBase() {
             run(targetDir, "checkout", revision)
             return workingTree
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             log.warn {
                 "Could not fetch with only a depth of $HISTORY_DEPTH: ${e.message}\n" +
@@ -220,9 +216,7 @@ object Git : GitBase() {
                 run(targetDir, "checkout", candidate)
                 true
             } catch (e: IOException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 log.info { "Failed to checkout revision '$candidate'. Trying next candidate, if any." }
 

@@ -55,7 +55,7 @@ class MercurialDownloadTest : StringSpec() {
 
     init {
         "Mercurial can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".hg",
                     ".hgsub",
@@ -77,12 +77,13 @@ class MercurialDownloadTest : StringSpec() {
         }.config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag))
 
         "Mercurial can download only a single path" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, REPO_PATH))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
                     File(".hgsubstate"),
                     File(REPO_PATH, "MercurialPlugin.h"),
                     File(REPO_PATH, "MercurialPlugin.m"),
+                    File("LICENCE.md"),
                     File("Script", "README"), // As a submodule, "Script" is always included.
                     File("Script", "git.py"),
                     File("Script", "gpl-2.0.txt"),
@@ -106,7 +107,7 @@ class MercurialDownloadTest : StringSpec() {
         "Mercurial can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
             )
 
             val workingTree = Mercurial.download(pkg, outputDir)
@@ -118,11 +119,12 @@ class MercurialDownloadTest : StringSpec() {
         "Mercurial can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
                     File(".hgsubstate"),
+                    File("LICENCE.md"),
                     File(REPO_PATH_FOR_VERSION, "Info.plist"),
                     File(REPO_PATH_FOR_VERSION, "icon.icns"),
                     File(REPO_PATH_FOR_VERSION, "icon_blank.icns"),

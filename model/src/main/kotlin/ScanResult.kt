@@ -17,21 +17,31 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package com.here.ort.model
 
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.fasterxml.jackson.databind.JsonNode
 
-import java.io.File
+/**
+ * The result of a single scan of a package.
+ */
+data class ScanResult(
+        /**
+         * Provenance information about the scanned source code.
+         */
+        val provenance: Provenance,
 
-class Godep : PackageManager() {
-    companion object : PackageManagerFactory<Godep>(
-            "https://godoc.org/github.com/tools/godep",
-            "Go",
-            listOf("Godeps/Godeps.json")
-    ) {
-        override fun create() = Godep()
-    }
+        /**
+         * Details about the used scanner.
+         */
+        val scanner: ScannerDetails,
 
-    override fun command(workingDir: File) = "godep"
-}
+        /**
+         * A summary of the scan results.
+         */
+        val summary: ScanSummary,
+
+        /**
+         * The raw output of the scanner.
+         */
+        val rawResult: JsonNode
+)

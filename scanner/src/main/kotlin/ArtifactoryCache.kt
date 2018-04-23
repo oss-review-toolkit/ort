@@ -21,28 +21,32 @@ package com.here.ort.scanner
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.Package
+import com.here.ort.model.Identifier
+import com.here.ort.model.ScanResult
+import com.here.ort.model.ScanResultContainer
+import com.here.ort.model.ScannerDetails
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.log
-import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.showStackTrace
 
-import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit
 
 import okhttp3.CacheControl
 import okhttp3.Request
+
 import okio.Okio
 
 class ArtifactoryCache(
         private val url: String,
         private val apiToken: String
 ) : ScanResultsCache {
-    override fun read(pkg: Package, target: File): Boolean {
-        val cachePath = cachePath(pkg, target)
+    override fun read(id: Identifier): ScanResultContainer {
+        val cachePath = cachePath(id)
 
-        log.info { "Trying to read scan results from Artifactory cache: $cachePath" }
+        log.info { "Trying to read scan results for '$id' from Artifactory cache: $cachePath" }
 
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
@@ -51,46 +55,83 @@ class ArtifactoryCache(
                 .url("$url/$cachePath")
                 .build()
 
-        try {
-            return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
-                (response.code() == HttpURLConnection.HTTP_OK).also {
-                    val message = if (it) {
-                        response.body()?.let { body ->
-                            Okio.buffer(Okio.sink(target)).use { it.writeAll(body.source()) }
-                        }
+        val tempFile = createTempFile("scan-results-")
 
-                        if (response.cacheResponse() != null) {
-                            "Retrieved $cachePath from local cache."
-                        } else {
-                            "Downloaded $cachePath from Artifactory cache."
-                        }
+        try {
+            OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+                if (response.code() == HttpURLConnection.HTTP_OK) {
+                    response.body()?.let { body ->
+                        Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
+                    }
+
+                    if (response.cacheResponse() != null) {
+                        log.info { "Retrieved $cachePath from local cache." }
                     } else {
+                        log.info { "Downloaded $cachePath from Artifactory cache." }
+                    }
+
+                    return yamlMapper.readValue(tempFile, ScanResultContainer::class.java)
+                } else {
+                    log.info {
                         "Could not get $cachePath from Artifactory cache: ${response.code()} - " +
                                 response.message()
                     }
-
-                    log.info { message }
                 }
             }
         } catch (e: IOException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             log.warn { "Could not get $cachePath from Artifactory cache: ${e.message}" }
+        }
+
+        return ScanResultContainer(id, emptyList())
+    }
+
+    override fun read(id: Identifier, scannerDetails: ScannerDetails): ScanResultContainer {
+        val scanResults = read(id)
+        val filteredResults = scanResults.results.filter {
+            scannerDetails.isCompatible(it.scanner)
+        }
+
+        if (filteredResults.isEmpty() && scanResults.results.isNotEmpty()) {
+            log.info { "No cached scan results found for '$scannerDetails', ignoring cached scan results for " +
+                    "scanners: ${scanResults.results.map { it.scanner }}" }
+        } else {
+            log.info { "Found ${filteredResults.size} cached scan results for scanner '$scannerDetails'." }
+        }
+
+        return ScanResultContainer(id, filteredResults)
+    }
+
+    override fun add(id: Identifier, scanResult: ScanResult): Boolean {
+        // Do not cache empty scan results. It is likely that something went wrong when they were created, and if not,
+        // it is cheap to re-create them.
+        if (scanResult.summary.fileCount == 0) {
+            log.info { "Not caching scan result for '$id' because no files were scanned." }
 
             return false
         }
-    }
 
-    override fun write(pkg: Package, source: File): Boolean {
-        val cachePath = cachePath(pkg, source)
+        // Do not cache scan results without provenance information, because they cannot be assigned to the revision of
+        // the package source code later.
+        if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
+            log.info { "Not caching scan result for '$id' because no provenance information is available." }
 
-        log.info { "Writing scan results to Artifactory cache: $cachePath" }
+            return false
+        }
+
+        val scanResults = read(id).let { ScanResultContainer(id, it.results + scanResult) }
+
+        val tempFile = createTempFile("scan-results-")
+        yamlMapper.writeValue(tempFile, scanResults)
+
+        val cachePath = cachePath(id)
+
+        log.info { "Writing scan results for '$id' to Artifactory cache: $cachePath" }
 
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
-                .put(OkHttpClientHelper.createRequestBody(source))
+                .put(OkHttpClientHelper.createRequestBody(tempFile))
                 .url("$url/$cachePath")
                 .build()
 
@@ -108,9 +149,7 @@ class ArtifactoryCache(
                 }
             }
         } catch (e: IOException) {
-            if (printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             log.warn { "Could not upload $cachePath to Artifactory cache: ${e.message}" }
 
@@ -118,13 +157,5 @@ class ArtifactoryCache(
         }
     }
 
-    private fun cachePath(pkg: Package, resultsFile: File) =
-            "scan-results/" +
-                    "${pkg.id.provider.valueOrUnderscore()}/" +
-                    "${pkg.id.namespace.valueOrUnderscore()}/" +
-                    "${pkg.id.name.valueOrUnderscore()}/" +
-                    "${pkg.id.version.valueOrUnderscore()}/" +
-                    resultsFile.name
-
-    private fun String?.valueOrUnderscore() = this?.takeUnless { it.isEmpty() } ?: "_"
+    private fun cachePath(id: Identifier) = "scan-results/${id.toPath()}/scan-results.yml"
 }

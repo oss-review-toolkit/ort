@@ -27,6 +27,8 @@ import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizedPath
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -74,8 +76,7 @@ object Mercurial : VersionControlSystem() {
                 override fun getRevision() =
                         run(workingDir, "--debug", "id", "-i").stdout().trimEnd()
 
-                override fun getRootPath() = run(workingDir, "root").stdout().trimEnd()
-                        .replace(File.separatorChar, '/')
+                override fun getRootPath() = run(workingDir, "root").stdout().trimEnd().normalizedPath
 
                 override fun listRemoteTags(): List<String> {
                     // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
@@ -114,7 +115,8 @@ object Mercurial : VersionControlSystem() {
 
             if (extensionsList.contains(EXTENSION_SPARSE)) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
-                run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**")
+                run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
+                        "-I", "LICENSE*", "-I", "LICENCE*")
             }
 
             val workingTree = getWorkingTree(targetDir)
@@ -145,9 +147,7 @@ object Mercurial : VersionControlSystem() {
 
             return workingTree
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }

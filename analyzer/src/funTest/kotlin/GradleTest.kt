@@ -22,11 +22,11 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.Git
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.shouldBe
@@ -141,13 +141,13 @@ class GradleTest : StringSpec() {
                     row("3.5", "-3.4"),
                     row("3.4.1", "-3.4"),
                     row("3.4", "-3.4"),
-                    row("3.3", "-3.3"),
-                    row("3.2.1", "-3.3"),
-                    row("3.2", "-3.3"),
-                    row("3.1", "-3.3"),
-                    row("3.0", "-3.3"),
-                    row("2.14.1", "-3.3"),
-                    row("2.14", "-3.3")
+                    row("3.3", "-2.14"),
+                    row("3.2.1", "-2.14"),
+                    row("3.2", "-2.14"),
+                    row("3.1", "-2.14"),
+                    row("3.0", "-2.14"),
+                    row("2.14.1", "-2.14"),
+                    row("2.14", "-2.14")
             )
 
             val gradleVersions = if (isJava9OrAbove) {

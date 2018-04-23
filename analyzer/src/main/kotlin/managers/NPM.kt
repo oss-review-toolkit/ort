@@ -36,12 +36,12 @@ import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.asTextOrEmpty
 import com.here.ort.utils.checkCommandVersion
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 
@@ -356,8 +356,8 @@ class NPM : PackageManager() {
         return node["repository"]?.let { repo ->
             val type = repo["type"].asTextOrEmpty()
             val url = repo.textValue() ?: repo["url"].asTextOrEmpty()
-            VcsInfo(type, expandShortcutURL(url), head, "")
-        } ?: VcsInfo("", "", head, "")
+            VcsInfo(type, expandShortcutURL(url), head)
+        } ?: VcsInfo("", "", head)
     }
 
     private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>,

@@ -32,31 +32,32 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.MergedAnalyzerResult
-import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.mapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
-import com.here.ort.utils.fileSystemEncode
-import com.here.ort.utils.jsonMapper
+import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
 import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.unpack
-import com.here.ort.utils.yamlMapper
 
 import java.io.File
 import java.io.IOException
+import java.time.Instant
 
 import kotlin.system.exitProcess
 
 import okhttp3.Request
+
 import okio.Okio
 
 import org.apache.commons.codec.digest.DigestUtils
@@ -82,13 +83,14 @@ object Main {
     }
 
     /**
-     * This class describes what was downloaded by [download] or if any exception occured. Either [sourceArtifact] or
-     * [vcsInfo] is set to a non-null value.
+     * This class describes what was downloaded by [download] to the [downloadDirectory] or if any exception occured.
+     * Either [sourceArtifact] or [vcsInfo] is set to a non-null value. The download was started at [dateTime].
      */
     data class DownloadResult(
-        val downloadDirectory: File,
-        val sourceArtifact: RemoteArtifact? = null,
-        val vcsInfo: VcsInfo? = null
+            val dateTime: Instant,
+            val downloadDirectory: File,
+            val sourceArtifact: RemoteArtifact? = null,
+            val vcsInfo: VcsInfo? = null
     ) {
         init {
             require((sourceArtifact == null) != (vcsInfo == null)) {
@@ -102,9 +104,7 @@ object Main {
             try {
                 return DataEntity.valueOf(name.toUpperCase())
             } catch (e: IllegalArgumentException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 throw ParameterException("Data entities must be contained in ${DataEntity.ALL}.")
             }
@@ -191,7 +191,7 @@ object Main {
         }
 
         // Make the parameter globally available.
-        com.here.ort.utils.printStackTrace = stacktrace
+        printStackTrace = stacktrace
 
         if (dependenciesFile != null && projectUrl != null) {
             throw IllegalArgumentException(
@@ -203,11 +203,7 @@ object Main {
                 "Provided path is not a file: ${it.absolutePath}"
             }
 
-            val mapper = when (it.extension) {
-                OutputFormat.JSON.fileExtension -> jsonMapper
-                OutputFormat.YAML.fileExtension -> yamlMapper
-                else -> throw IllegalArgumentException("Provided input file is neither JSON nor YAML.")
-            }
+            val mapper = it.mapper()
 
             // Read packages assuming the dependencies file contains an AnalyzerResult.
             try {
@@ -269,9 +265,7 @@ object Main {
                         result.downloadDirectory.packZip(zipFile,
                                 "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
                     } catch (e: IllegalArgumentException) {
-                        if (com.here.ort.utils.printStackTrace) {
-                            e.printStackTrace()
-                        }
+                        e.showStackTrace()
 
                         log.error { "Could not archive '${pkg.id}': ${e.message}" }
                     } finally {
@@ -280,9 +274,7 @@ object Main {
                     }
                 }
             } catch (e: DownloadException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 log.error { "Could not download '${pkg.id}': ${e.message}" }
 
@@ -307,12 +299,7 @@ object Main {
     fun download(target: Package, outputDirectory: File): DownloadResult {
         log.info { "Trying to download source code for '${target.id}'." }
 
-        val provider = target.id.provider.encodeOrUnknown()
-        val namespace = target.id.namespace.encodeOrUnknown()
-        val name = target.id.name.encodeOrUnknown()
-        val version = target.id.version.encodeOrUnknown()
-
-        val targetDir = File(outputDirectory, "$provider/$namespace/$name/$version").apply { safeMkdirs() }
+        val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
 
         if (target.vcsProcessed.url.isBlank()) {
             log.info { "No VCS URL provided for '${target.id}'." }
@@ -320,9 +307,7 @@ object Main {
             try {
                 return downloadFromVcs(target, targetDir)
             } catch (e: DownloadException) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
+                e.showStackTrace()
 
                 log.info { "VCS download failed for '${target.id}': ${e.message}" }
 
@@ -375,6 +360,7 @@ object Main {
             throw DownloadException("Could not find an applicable VCS type.")
         }
 
+        val startTime = Instant.now()
         val workingTree = applicableVcs.download(target, outputDirectory, allowMovingRevisions)
         val revision = workingTree.getRevision()
 
@@ -383,10 +369,11 @@ object Main {
         val vcsInfo = VcsInfo(
                 type = applicableVcs.javaClass.simpleName,
                 url = target.vcsProcessed.url,
-                revision = revision,
+                revision = target.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
+                resolvedRevision = revision,
                 path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
         )
-        return DownloadResult(outputDirectory, vcsInfo = vcsInfo)
+        return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo)
     }
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
@@ -400,6 +387,7 @@ object Main {
 
         val request = Request.Builder().get().url(target.sourceArtifact.url).build()
 
+        val startTime = Instant.now()
         val response = OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
         val body = response.body()
         if (!response.isSuccessful || body == null) {
@@ -426,7 +414,7 @@ object Main {
             "Successfully downloaded source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
         }
 
-        return DownloadResult(outputDirectory, sourceArtifact = target.sourceArtifact)
+        return DownloadResult(startTime, outputDirectory, sourceArtifact = target.sourceArtifact)
     }
 
     private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {
@@ -449,6 +437,4 @@ object Main {
             throw DownloadException("Calculated $hashAlgorithm hash '$digest' differs from expected hash '$hash'.")
         }
     }
-
-    private fun String.encodeOrUnknown() = this.fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
 }

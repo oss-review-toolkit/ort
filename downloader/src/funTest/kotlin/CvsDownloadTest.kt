@@ -54,7 +54,7 @@ class CvsDownloadTest : StringSpec() {
 
     init {
         "CVS can download a given revision" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, ""))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     "CVS",
                     "xmlenc"
@@ -75,7 +75,7 @@ class CvsDownloadTest : StringSpec() {
         }.config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag))
 
         "CVS can download only a single path" {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, REPO_PATH))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                     File(REPO_PATH, "changes.xml")
             )
@@ -94,7 +94,7 @@ class CvsDownloadTest : StringSpec() {
         "CVS can download based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("CVS", REPO_URL, "", "")
+                    vcsProcessed = VcsInfo("CVS", REPO_URL, "")
             )
 
             val workingTree = Cvs.download(pkg, outputDir)
@@ -112,7 +112,7 @@ class CvsDownloadTest : StringSpec() {
         "CVS can download only a single path based on a version" {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
-                    vcsProcessed = VcsInfo("CVS", REPO_URL, "", REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo("CVS", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
                     File(REPO_PATH_FOR_VERSION)

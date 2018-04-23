@@ -60,6 +60,7 @@ class PackageCurationTest : StringSpec() {
                                     type = "git",
                                     url = "http://url.git",
                                     revision = "revision",
+                                    resolvedRevision = "resolvedRevision",
                                     path = "path"
                             )
                     )
@@ -95,6 +96,7 @@ class PackageCurationTest : StringSpec() {
                             type = "git",
                             url = "http://url.git",
                             revision = "revision",
+                            resolvedRevision = "resolvedRevision",
                             path = "path"
                     )
             )
@@ -105,8 +107,7 @@ class PackageCurationTest : StringSpec() {
                             vcs = VcsInfo(
                                     type = "",
                                     url = "http://url.git",
-                                    revision = "",
-                                    path = ""
+                                    revision = ""
                             )
                     )
             )
@@ -124,6 +125,7 @@ class PackageCurationTest : StringSpec() {
                         type = pkg.vcs.type,
                         url = curation.data.vcs!!.url,
                         revision = pkg.vcs.revision,
+                        resolvedRevision = pkg.vcs.resolvedRevision,
                         path = pkg.vcs.path
                 )
             }
@@ -156,8 +158,7 @@ class PackageCurationTest : StringSpec() {
                             vcs = VcsInfo(
                                     type = "",
                                     url = "http://url.git",
-                                    revision = "",
-                                    path = ""
+                                    revision = ""
                             )
                     )
             )

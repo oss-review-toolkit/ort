@@ -21,40 +21,74 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
-import com.here.ort.scanner.LocalScanner
 
+import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.Provenance
+import com.here.ort.model.ScanResult
+import com.here.ort.model.ScanSummary
+import com.here.ort.model.ScannerDetails
+import com.here.ort.model.jsonMapper
+import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import java.io.File
+import java.time.Instant
 import java.util.regex.Pattern
 
 object ScanCode : LocalScanner() {
     private const val OUTPUT_FORMAT = "json-pp"
     private const val TIMEOUT = 300
 
-    private val DEFAULT_OPTIONS = listOf(
+    /**
+     * Configuration options that are relevant for [getConfiguration] because they change the result file.
+     */
+    private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
             "--copyright",
             "--license",
             "--license-text",
             "--info",
-            "--strip-root"
+            "--strip-root",
+            "--timeout", TIMEOUT.toString()
     )
+
+    /**
+     * Configuration options that are not relevant for [getConfiguration] because they do not change the result file.
+     */
+    private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
+            "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
+    )
+
+    /**
+     * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
+     */
+    private val DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
+
+    /**
+     * Debug configuration options that are not relevant for [getConfiguration] because they do not change the result
+     * file.
+     */
+    private val DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
+
+    private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
+        "--$OUTPUT_FORMAT"
+    } else {
+        "--output-$OUTPUT_FORMAT"
+    }
 
     // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
     private val UNKNOWN_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-            "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+                    "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
             Pattern.DOTALL)
 
     private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
+                    "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
     override val resultFileExt = "json"
@@ -72,34 +106,41 @@ object ScanCode : LocalScanner() {
         return scancodeDir
     }
 
-    override fun getVersion(executable: String) =
+    override fun getConfiguration() = DEFAULT_CONFIGURATION_OPTIONS.toMutableList().run {
+        add(OUTPUT_FORMAT_OPTION)
+        if (log.isEnabledFor(Level.DEBUG)) {
+            addAll(DEBUG_CONFIGURATION_OPTIONS)
+        }
+        joinToString(" ")
+    }
+
+    override fun getVersion() =
             getCommandVersion(scannerPath.absolutePath, transform = {
                 // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
                 // the prefix.
                 it.substringAfter("ScanCode version ")
             })
 
-    override fun scanPath(path: File, resultsFile: File): Result {
-        val options = DEFAULT_OPTIONS.toMutableList()
+    override fun scanPath(path: File, resultsFile: File, provenance: Provenance, scannerDetails: ScannerDetails)
+            : ScanResult {
+        val options = (DEFAULT_CONFIGURATION_OPTIONS + DEFAULT_NON_CONFIGURATION_OPTIONS).toMutableList()
+
         if (log.isEnabledFor(Level.DEBUG)) {
-            options.add("--license-diag")
-            options.add("--verbose")
+            options += DEBUG_CONFIGURATION_OPTIONS
+            options += DEBUG_NON_CONFIGURATION_OPTIONS
         }
 
-        val outputFormatOption = if (OUTPUT_FORMAT.startsWith("json")) {
-            "--$OUTPUT_FORMAT"
-        } else {
-            "--output-$OUTPUT_FORMAT"
-        }
+        val startTime = Instant.now()
 
         val process = ProcessCapture(
                 scannerPath.absolutePath,
                 *options.toTypedArray(),
-                "--timeout", TIMEOUT.toString(),
-                "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString(),
                 path.absolutePath,
-                outputFormatOption, resultsFile.absolutePath
+                OUTPUT_FORMAT_OPTION,
+                resultsFile.absolutePath
         )
+
+        val endTime = Instant.now()
 
         if (process.stderr().isNotBlank()) {
             log.debug { process.stderr() }
@@ -112,7 +153,8 @@ object ScanCode : LocalScanner() {
 
         with(process) {
             if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return result
+                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
+                return ScanResult(provenance, scannerDetails, summary, result.rawResult)
             } else {
                 throw ScanException(failMessage)
             }
@@ -128,27 +170,29 @@ object ScanCode : LocalScanner() {
         val licenses = sortedSetOf<String>()
         val errors = sortedSetOf<String>()
 
-        if (resultsFile.isFile && resultsFile.length() > 0) {
-            val json = jsonMapper.readTree(resultsFile)
+        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
+            jsonMapper.readTree(resultsFile).also {
+                fileCount = it["files_count"].intValue()
 
-            fileCount = json["files_count"].intValue()
-
-            json["files"]?.forEach { file ->
-                file["licenses"]?.forEach { license ->
-                    var name = license["spdx_license_key"].asText()
-                    if (name.isNullOrBlank()) {
-                        val key = license["key"].asText()
-                        name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+                it["files"]?.forEach { file ->
+                    file["licenses"]?.forEach { license ->
+                        var name = license["spdx_license_key"].asText()
+                        if (name.isNullOrBlank()) {
+                            val key = license["key"].asText()
+                            name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+                        }
+                        licenses.add(name)
                     }
-                    licenses.add(name)
-                }
 
-                val path = file["path"].asText()
-                errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
+                    val path = file["path"].asText()
+                    errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
+                }
             }
+        } else {
+            EMPTY_JSON_NODE
         }
 
-        return Result(fileCount, licenses, errors)
+        return Result(fileCount, licenses, errors, json)
     }
 
     override fun getResult(resultsFile: File) =

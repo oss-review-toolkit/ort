@@ -20,10 +20,6 @@
 package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.xml.XmlFactory
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 import java.io.IOException
@@ -52,10 +48,6 @@ val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.clas
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
  */
 var printStackTrace = false
-
-val jsonMapper = ObjectMapper().registerKotlinModule()
-val xmlMapper = ObjectMapper(XmlFactory()).registerKotlinModule()
-val yamlMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
 
 /**
  * Ordinal for mandatory program parameters.
@@ -284,6 +276,18 @@ fun Exception.collectMessages(): List<String> {
 }
 
 /**
+ * The [String] with all occurences of [File.separatorChar] with '/', assuming it contains a file path.
+ */
+val String.normalizedPath: String
+    get() = replace(File.separatorChar, '/')
+
+/**
+ * The [File.getAbsolutePath] with all occurences of [File.separatorChar] replaced with '/'.
+ */
+val File.normalizedPath: String
+    get() = absolutePath.normalizedPath
+
+/**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
  *
  * @throws IOException if the directory could not be deleted.
@@ -389,3 +393,15 @@ fun String.fileSystemEncode() =
 fun String.fileSystemDecode(): String =
         // URLDecoder does decode "." and "*".
         java.net.URLDecoder.decode(this, "UTF-8")
+
+/**
+ * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
+ */
+fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+
+/**
+ * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
+ */
+fun Throwable.showStackTrace() {
+    if (printStackTrace) printStackTrace()
+}

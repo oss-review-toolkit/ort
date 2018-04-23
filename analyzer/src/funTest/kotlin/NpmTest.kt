@@ -22,10 +22,11 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
+import com.here.ort.model.yamlMapper
+import com.here.ort.utils.normalizedPath
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.endWith
@@ -63,7 +64,7 @@ class NpmTest : FreeSpec() {
     }
 
     private fun patchExpectedResult(workingDir: File): String {
-        val vcsPath = workingDir.relativeTo(rootDir).path.replace(File.separatorChar, '/')
+        val vcsPath = workingDir.relativeTo(rootDir).path.normalizedPath
         return File(projectDir.parentFile, "npm-expected-output.yml").readText()
                 // project.name:
                 .replaceFirst("npm-project", "npm-${workingDir.name}")

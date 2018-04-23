@@ -27,15 +27,17 @@ import com.here.ort.model.Package
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizedPath
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
-
-import org.apache.commons.codec.binary.Hex
-import org.apache.commons.codec.digest.DigestUtils
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
+
+import org.apache.commons.codec.binary.Hex
+import org.apache.commons.codec.digest.DigestUtils
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 
@@ -112,7 +114,7 @@ object Cvs : VersionControlSystem() {
 
                 override fun getRootPath(): String {
                     val rootDir = workingDir.searchUpwardsForSubdirectory("CVS")?.toString() ?: ""
-                    return rootDir.replace(File.separatorChar, '/')
+                    return rootDir.normalizedPath
                 }
 
                 override fun listRemoteTags(): List<String> {
@@ -186,9 +188,7 @@ object Cvs : VersionControlSystem() {
 
             return workingTree
         } catch (e: IOException) {
-            if (com.here.ort.utils.printStackTrace) {
-                e.printStackTrace()
-            }
+            e.showStackTrace()
 
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }

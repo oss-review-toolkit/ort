@@ -22,11 +22,11 @@ package com.here.ort.analyzer
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
-import com.here.ort.utils.ExpensiveTag
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.normalizedPath
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.yamlMapper
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
@@ -62,8 +62,8 @@ class MainTest : StringSpec() {
     }
 
     private fun patchExpectedResult(filename: File): String {
-        val rootPath = rootDir.absolutePath.replace(File.separatorChar, '/')
-        val outputPath = "${outputDir.absolutePath.replace(File.separatorChar, '/')}/analyzer_results"
+        val rootPath = rootDir.normalizedPath
+        val outputPath = "${outputDir.normalizedPath}/analyzer_results"
 
         return filename.readText()
                 .replace("<REPLACE_URL>", vcsUrl)
@@ -139,7 +139,7 @@ class MainTest : StringSpec() {
             val result = File(outputAnalyzerDir, "all-dependencies.yml").readText()
 
             result shouldBe expectedResult
-        }.config(tags = setOf(ExpensiveTag))
+        }
 
         "Package curation data file is applied correctly" {
             val inputDir = File(projectDir, "gradle")

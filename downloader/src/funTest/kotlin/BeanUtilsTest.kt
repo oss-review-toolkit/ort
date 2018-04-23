@@ -53,8 +53,7 @@ class BeanUtilsTest : StringSpec() {
             val vcsFromCuration = VcsInfo(
                     type = "svn",
                     url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",
-                    revision = "",
-                    path = ""
+                    revision = ""
             )
 
             val pkg = Package(
@@ -78,6 +77,7 @@ class BeanUtilsTest : StringSpec() {
             downloadResult.vcsInfo!!.type shouldBe "Subversion"
             downloadResult.vcsInfo!!.url shouldBe vcsFromCuration.url
             downloadResult.vcsInfo!!.revision shouldBe "928490"
+            downloadResult.vcsInfo!!.resolvedRevision shouldBe "928490"
             downloadResult.vcsInfo!!.path shouldBe vcsFromCuration.path
 
             val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)

@@ -36,11 +36,11 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.checkCommandVersion
-import com.here.ort.utils.jsonMapper
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 
@@ -63,10 +63,12 @@ class PIP : PackageManager() {
     ) {
         override fun create() = PIP()
 
+        private const val PIP_VERSION = "9.0.3"
+
         private const val PIPDEPTREE_VERSION = "0.11.0"
         private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
-        private const val PYDEP_REVISION = "ea18b40fca03438a0fb362e552c26df2d29fc19f"
+        private const val PYDEP_REVISION = "license-and-classifiers"
     }
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
@@ -119,12 +121,12 @@ class PIP : PackageManager() {
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
 
         // List all packages installed locally in the virtualenv.
-        val pipdeptreeJsonTree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
+        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
 
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
-        val pydepUrl = "git+https://github.com/sourcegraph/pydep@$PYDEP_REVISION"
+        val pydepUrl = "git+https://github.com/heremaps/pydep@$PYDEP_REVISION"
         val pip = if (OS.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
@@ -134,6 +136,8 @@ class PIP : PackageManager() {
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", pydepUrl)
         }
         pip.requireSuccess()
+
+        var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
 
         val (projectName, projectVersion, projectHomepage) = if (definitionFile.name == "setup.py") {
             val pydep = if (OS.isWindows) {
@@ -150,18 +154,18 @@ class PIP : PackageManager() {
             // - "download_url", denoting the "location where the package may be downloaded".
             // So the best we can do is to map this the project's homepage URL.
             jsonMapper.readTree(pydep.stdout()).let {
+                declaredLicenses = getDeclaredLicenses(it)
                 listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
             }
         } else {
-            // In case of a requirements.txt file without meta-data, use the parent directory name as the project name.
-            listOf(definitionFile.parentFile.name, "", "")
+            listOf(definitionFile.parentFile.name, "", "", "")
         }
 
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
 
-        if (pipdeptreeJsonTree.isSuccess()) {
-            val fullDependencyTree = jsonMapper.readTree(pipdeptreeJsonTree.stdout())
+        if (pipdeptree.isSuccess()) {
+            val fullDependencyTree = jsonMapper.readTree(pipdeptree.stdout())
 
             val projectDependencies = if (definitionFile.name == "setup.py") {
                 // The tree contains a root node for the project itself and pipdeptree's dependencies are also at the
@@ -214,28 +218,11 @@ class PIP : PackageManager() {
                     try {
                         val pkgInfo = pkgData["info"]
                         val pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
-                        val declaredLicenses = sortedSetOf<String>()
-
-                        // Use the top-level license field as well as the license classifiers as the declared licenses.
-                        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-                            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
-                        }
-
-                        // Example license classifier:
-                        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-                        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-                            val classifier = it.asText().split(" :: ")
-                            if (classifier.first() == "License") {
-                                classifier.last().removeSuffix(" License")
-                            } else {
-                                null
-                            }
-                        }
 
                         // Amend package information with more details.
                         Package(
                                 id = pkg.id,
-                                declaredLicenses = declaredLicenses,
+                                declaredLicenses = getDeclaredLicenses(pkgInfo),
                                 description = pkgInfo["summary"]?.asText() ?: pkg.description,
                                 homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
                                 binaryArtifact = getBinaryArtifact(pkg, pkgReleases),
@@ -252,7 +239,9 @@ class PIP : PackageManager() {
                 }
             }
         } else {
-            log.error { "Unable to determine dependencies for project in directory '$workingDir'." }
+            log.error {
+                "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr()}"
+            }
         }
 
         // TODO: Handle "extras" and "tests" dependencies.
@@ -267,7 +256,7 @@ class PIP : PackageManager() {
                         name = projectName,
                         version = projectVersion
                 ),
-                declaredLicenses = sortedSetOf(), // TODO: Get the licenses for local projects.
+                declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir),
@@ -311,6 +300,28 @@ class PIP : PackageManager() {
         return RemoteArtifact(url, hash, HashAlgorithm.MD5)
     }
 
+    private fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
+        val declaredLicenses = sortedSetOf<String>()
+
+        // Use the top-level license field as well as the license classifiers as the declared licenses.
+        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
+            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+        }
+
+        // Example license classifier:
+        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
+            val classifier = it.asText().split(" :: ")
+            if (classifier.first() == "License") {
+                classifier.last().removeSuffix(" License")
+            } else {
+                null
+            }
+        }
+
+        return declaredLicenses
+    }
+
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
         println("Creating a virtualenv for the '${workingDir.name}' project directory...")
@@ -318,6 +329,17 @@ class PIP : PackageManager() {
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
 
         var pip: ProcessCapture
+
+        // Ensure to have installed a version of pip that is know to work for us.
+        pip = if (OS.isWindows) {
+            // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
+            // https://github.com/pypa/pip/issues/1299.
+            runInVirtualEnv(virtualEnvDir, workingDir, "python", "-m", command(workingDir),
+                    *TRUSTED_HOSTS, "install", "pip==$PIP_VERSION")
+        } else {
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pip==$PIP_VERSION")
+        }
+        pip.requireSuccess()
 
         // Install pipdeptree inside the virtualenv as that's the only way to make it report only the project's
         // dependencies instead of those of all (globally) installed packages, see

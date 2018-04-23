@@ -38,6 +38,7 @@ if (AbstractDependencyTreePlugin.isCompatibleGradleVersion(gradle.gradleVersion)
     apply plugin: LegacyDependencyTreePlugin
 }
 
+// This needs to be kept in sync with the same interface in "GradleSupport.kt".
 interface DependencyTreeModel {
     String getGroup()
     String getName()
@@ -57,6 +58,7 @@ class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
     List<String> errors
 }
 
+// This needs to be kept in sync with the same interface in "GradleSupport.kt".
 interface Configuration {
     String getName()
     List<Dependency> getDependencies()
@@ -68,6 +70,7 @@ class ConfigurationImpl implements Configuration, Serializable {
     List<Dependency> dependencies
 }
 
+// This needs to be kept in sync with the same interface in "GradleSupport.kt".
 interface Dependency {
     String getGroupId()
     String getArtifactId()
@@ -82,14 +85,14 @@ interface Dependency {
 
 @Immutable
 class DependencyImpl implements Dependency, Serializable {
-    String groupId
-    String artifactId
-    String version
-    String classifier
-    String extension
-    List<Dependency> dependencies
+    String groupId = ''
+    String artifactId = ''
+    String version = ''
+    String classifier = ''
+    String extension = ''
+    List<Dependency> dependencies = []
     String error
-    String pomFile
+    String pomFile = ''
     String localPath
 }
 
@@ -125,6 +128,25 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
     }
 
     private static class DependencyTreeModelBuilder implements ToolingModelBuilder {
+        static DependencyImpl dependencyFromDisplayName(String displayName, List<Dependency> dependencies,
+                                                        String error) {
+            if (displayName.startsWith('project :')) {
+                def coordinates = displayName.split(':', 2)
+                return new DependencyImpl(groupId: '<project>', artifactId: coordinates[1], dependencies: dependencies,
+                        error: error.toString())
+            }
+
+            def coordinates = displayName.split(':')
+
+            if (coordinates.length == 3) {
+                return new DependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
+                        dependencies: dependencies, error: error.toString())
+            }
+
+            return new DependencyImpl(groupId: '<unknown>', artifactId: displayName.replace(':', '_'),
+                    dependencies: dependencies, error: error.toString())
+        }
+
         @Override
         boolean canBuild(String modelName) {
             return modelName == 'DependencyTreeModel'
@@ -203,14 +225,17 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
                 ComponentIdentifier id = dependencyResult.selected.id
                 if (id instanceof ModuleComponentIdentifier) {
-                    def result = project.dependencies.createArtifactResolutionQuery()
+                    def resolvedComponents = project.dependencies.createArtifactResolutionQuery()
                             .forComponents(id)
                             .withArtifacts(MavenModule, MavenPomArtifact)
                             .execute()
-                            .resolvedComponents.first()
-                            .getArtifacts(MavenPomArtifact).first()
+                            .resolvedComponents
+
+                    def result = resolvedComponents?.find { true }?.getArtifacts(MavenPomArtifact)?.find { true }
+
                     String error = null
                     String pomFile = null
+
                     if (result instanceof ResolvedArtifactResult) {
                         pomFile = result.file.absolutePath
                     } else if (result instanceof UnresolvedArtifactResult) {
@@ -218,6 +243,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     } else {
                         error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }
+
                     def artifact = resolvedArtifacts.find {
                         // Cannot use instanceof because the classes below do not exist in all Gradle versions.
                         if (it.owner.getClass().name == 'org.gradle.api.internal.artifacts.DefaultModuleVersionIdentifier') {
@@ -229,8 +255,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             false
                         }
                     }
+
                     def classifier = artifact?.classifier ?: ''
                     def extension = artifact?.extension ?: ''
+
                     return new DependencyImpl(id.group, id.module, id.version, classifier, extension, dependencies,
                             error, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
@@ -239,15 +267,15 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             dependencyProject.version ?: '', '', '', dependencies, null, '',
                             dependencyProject.projectDir.absolutePath)
                 } else {
-                    return new DependencyImpl('', id.displayName.replace('project :', 'project '), '', '', '', dependencies,
-                            "Unknown id type: ${id.getClass().simpleName}".toString(), '', null)
+                    return dependencyFromDisplayName(id.displayName, dependencies,
+                            "Unknown id type: ${id.getClass().simpleName}")
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
-                return new DependencyImpl('', dependencyResult.attempted.displayName.replace('project :', 'project '), '', '', '', [],
-                        "Unresolved: ${collectCauses(dependencyResult.failure)}".toString(), '', null)
+                return dependencyFromDisplayName(dependencyResult.attempted.displayName, [],
+                        "Unresolved: ${collectCauses(dependencyResult.failure)}")
             } else {
-                return new DependencyImpl('', dependencyResult.requested.displayName.replace('project :', 'project '), '', '', '', [],
-                        "Unknown result type: ${dependencyResult.getClass().simpleName}".toString(), '', null)
+                return dependencyFromDisplayName(dependencyResult.requested.displayName, [],
+                        "Unknown result type: ${dependencyResult.getClass().simpleName}")
             }
         }
 
