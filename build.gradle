@@ -131,8 +131,8 @@ subprojects {
         }
     }
 
-    task funTestCoverage(type: JacocoReport, dependsOn: funTest) {
-        description = 'Generates the code coverage report for the functional tests.'
+    task jacocoFunTestReport(type: JacocoReport, dependsOn: funTest) {
+        description = 'Generates code coverage report for the funTest task.'
         group = 'Reporting'
 
         executionData funTest
