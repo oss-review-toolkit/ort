@@ -122,6 +122,8 @@ subprojects {
         }
     }
 
+    // Enable JaCoCo only if a JacocoReport task is in the graph as JaCoCo
+    // is using "append = true" which disables Gradle's build cache.
     gradle.taskGraph.whenReady { graph ->
         def enabled = graph.allTasks.any { it instanceof JacocoReport }
         tasks.withType(Test) {
