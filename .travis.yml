@@ -40,14 +40,17 @@ script:
     fi
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
-      ./gradlew -DexcludeTags=ScanCodeTag --stacktrace check | tee log.txt;
+      ./gradlew -DexcludeTags=ScanCodeTag --stacktrace detectCheck classes testClasses jacocoReport | tee log.txt;
     else
-      ./gradlew -DexcludeTags=ExpensiveTag --stacktrace check | tee log.txt;
+      ./gradlew -DexcludeTags=ExpensiveTag --stacktrace detectCheck classes testClasses jacocoReport | tee log.txt;
     fi
   - if grep -A1 ".+Test.+STARTED$" log.txt | grep -q "^:"; then
       echo "Some tests seemingly have been aborted.";
       exit 1;
     fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 addons:
   artifacts:
