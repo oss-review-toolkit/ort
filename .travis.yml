@@ -50,7 +50,7 @@ script:
     fi
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -X gcov -f './*/build/reports/jacoco/**/*.xml'
 
 addons:
   artifacts:
