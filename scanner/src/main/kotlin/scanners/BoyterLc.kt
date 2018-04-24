@@ -47,9 +47,8 @@ import okhttp3.Request
 import okio.Okio
 
 object BoyterLc : LocalScanner() {
-    const val VERSION = "1.3.1"
-
     override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
+    override val scannerVersion = "1.3.1"
     override val resultFileExt = "json"
 
     val CONFIGURATION_OPTIONS = listOf(
@@ -58,11 +57,13 @@ object BoyterLc : LocalScanner() {
     )
 
     override fun bootstrap(): File? {
-        val url = if (OS.isWindows) {
-            "https://github.com/boyter/lc/releases/download/v$VERSION/lc-$VERSION-x86_64-pc-windows.zip"
+        val platform = if (OS.isWindows) {
+            "x86_64-pc-windows"
         } else {
-            "https://github.com/boyter/lc/releases/download/v$VERSION/lc-$VERSION-x86_64-unknown-linux.zip"
+            "x86_64-unknown-linux"
         }
+
+        val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/lc-$scannerVersion-$platform.zip"
 
         log.info { "Downloading $this from '$url'... " }
 

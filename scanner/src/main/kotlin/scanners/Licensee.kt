@@ -40,6 +40,7 @@ import java.time.Instant
 
 object Licensee : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
+    override val scannerVersion = "9.9.0.beta.3"
     override val resultFileExt = "json"
 
     val CONFIGURATION_OPTIONS = listOf("--json")
@@ -52,10 +53,10 @@ object Licensee : LocalScanner() {
         // TODO: Use toBoolean() here once https://github.com/JetBrains/kotlin/pull/1644 is merged.
         val isTravisCi = listOf("TRAVIS", "CI").all { java.lang.Boolean.parseBoolean(System.getenv(it)) }
         return if (isTravisCi) {
-            ProcessCapture(gem, "install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
+            ProcessCapture(gem, "install", "licensee", "-v", scannerVersion).requireSuccess()
             getPathFromEnvironment(scannerExe)?.parentFile
         } else {
-            ProcessCapture(gem, "install", "--user-install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
+            ProcessCapture(gem, "install", "--user-install", "licensee", "-v", scannerVersion).requireSuccess()
 
             val ruby = ProcessCapture("ruby", "-rubygems", "-e", "puts Gem.user_dir").requireSuccess()
             val userDir = ruby.stdout().trimEnd()
