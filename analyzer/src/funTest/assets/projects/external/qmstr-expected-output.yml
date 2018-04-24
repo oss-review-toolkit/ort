@@ -56,268 +56,292 @@ project:
       dependencies: []
       errors: []
 packages:
-- id: "GoDep::github.com/dgraph-io/dgo:939c270eac93a70e63162abd53f78dbc9e928ff6"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/dgraph-io/dgo"
-    revision: "939c270eac93a70e63162abd53f78dbc9e928ff6"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/dgraph-io/dgo.git"
-    revision: "939c270eac93a70e63162abd53f78dbc9e928ff6"
-    path: ""
-- id: "GoDep::github.com/gogo/protobuf:v0.5"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/gogo/protobuf"
-    revision: "342cbe0a04158f6dcb03ca0079991a51a4248c02"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/gogo/protobuf.git"
-    revision: "342cbe0a04158f6dcb03ca0079991a51a4248c02"
-    path: ""
-- id: "GoDep::github.com/golang/protobuf:v1.0.0"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/golang/protobuf"
-    revision: "925541529c1fa6821df4e44ce2723319eb2be768"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/golang/protobuf.git"
-    revision: "925541529c1fa6821df4e44ce2723319eb2be768"
-    path: ""
-- id: "GoDep::github.com/inconshreveable/mousetrap:v1.0"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/inconshreveable/mousetrap"
-    revision: "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/inconshreveable/mousetrap.git"
-    revision: "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
-    path: ""
-- id: "GoDep::github.com/pkg/errors:v0.8.0"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/pkg/errors"
-    revision: "645ef00459ed84a119197bfb8d8205042c6df63d"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/pkg/errors.git"
-    revision: "645ef00459ed84a119197bfb8d8205042c6df63d"
-    path: ""
-- id: "GoDep::github.com/spf13/cobra:v0.0.1"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/spf13/cobra"
-    revision: "7b2c5ac9fc04fc5efafb60700713d4fa609b777b"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/spf13/cobra.git"
-    revision: "7b2c5ac9fc04fc5efafb60700713d4fa609b777b"
-    path: ""
-- id: "GoDep::github.com/spf13/pflag:v1.0.0"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/spf13/pflag"
-    revision: "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/spf13/pflag.git"
-    revision: "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
-    path: ""
-- id: "GoDep::golang.org/x/net:b417086c80e91bfa321ef761574721644b8b9f61"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "golang.org/x/net"
-    revision: "b417086c80e91bfa321ef761574721644b8b9f61"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://go.googlesource.com/net"
-    revision: "b417086c80e91bfa321ef761574721644b8b9f61"
-    path: ""
-- id: "GoDep::golang.org/x/text:e19ae1496984b1c655b8044a65c0300a3c878dd3"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "golang.org/x/text"
-    revision: "e19ae1496984b1c655b8044a65c0300a3c878dd3"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://go.googlesource.com/text"
-    revision: "e19ae1496984b1c655b8044a65c0300a3c878dd3"
-    path: ""
-- id: "GoDep::google.golang.org/genproto:4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "google.golang.org/genproto"
-    revision: "4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/google/go-genproto.git"
-    revision: "4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
-    path: ""
-- id: "GoDep::google.golang.org/grpc:v1.9.2"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "google.golang.org/grpc"
-    revision: "6b51017f791ae1cfbec89c52efdf444b13b550ef"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/grpc/grpc-go.git"
-    revision: "6b51017f791ae1cfbec89c52efdf444b13b550ef"
-    path: ""
-- id: "GoDep::gopkg.in/yaml.v2:d670f9405373e636a5a2765eea47fac0c9bc91a4"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "gopkg.in/yaml.v2"
-    revision: "d670f9405373e636a5a2765eea47fac0c9bc91a4"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://gopkg.in/yaml.v2"
-    revision: "d670f9405373e636a5a2765eea47fac0c9bc91a4"
-    path: ""
+- pkg:
+    id: "GoDep::github.com/dgraph-io/dgo:939c270eac93a70e63162abd53f78dbc9e928ff6"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/dgraph-io/dgo"
+      revision: "939c270eac93a70e63162abd53f78dbc9e928ff6"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/dgraph-io/dgo.git"
+      revision: "939c270eac93a70e63162abd53f78dbc9e928ff6"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::github.com/gogo/protobuf:v0.5"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/gogo/protobuf"
+      revision: "342cbe0a04158f6dcb03ca0079991a51a4248c02"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/gogo/protobuf.git"
+      revision: "342cbe0a04158f6dcb03ca0079991a51a4248c02"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::github.com/golang/protobuf:v1.0.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/golang/protobuf"
+      revision: "925541529c1fa6821df4e44ce2723319eb2be768"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/golang/protobuf.git"
+      revision: "925541529c1fa6821df4e44ce2723319eb2be768"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::github.com/inconshreveable/mousetrap:v1.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/inconshreveable/mousetrap"
+      revision: "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/inconshreveable/mousetrap.git"
+      revision: "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::github.com/pkg/errors:v0.8.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/pkg/errors"
+      revision: "645ef00459ed84a119197bfb8d8205042c6df63d"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/pkg/errors.git"
+      revision: "645ef00459ed84a119197bfb8d8205042c6df63d"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::github.com/spf13/cobra:v0.0.1"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/spf13/cobra"
+      revision: "7b2c5ac9fc04fc5efafb60700713d4fa609b777b"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/spf13/cobra.git"
+      revision: "7b2c5ac9fc04fc5efafb60700713d4fa609b777b"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::github.com/spf13/pflag:v1.0.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/spf13/pflag"
+      revision: "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/spf13/pflag.git"
+      revision: "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::golang.org/x/net:b417086c80e91bfa321ef761574721644b8b9f61"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "golang.org/x/net"
+      revision: "b417086c80e91bfa321ef761574721644b8b9f61"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://go.googlesource.com/net"
+      revision: "b417086c80e91bfa321ef761574721644b8b9f61"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::golang.org/x/text:e19ae1496984b1c655b8044a65c0300a3c878dd3"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "golang.org/x/text"
+      revision: "e19ae1496984b1c655b8044a65c0300a3c878dd3"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://go.googlesource.com/text"
+      revision: "e19ae1496984b1c655b8044a65c0300a3c878dd3"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::google.golang.org/genproto:4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "google.golang.org/genproto"
+      revision: "4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/google/go-genproto.git"
+      revision: "4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::google.golang.org/grpc:v1.9.2"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "google.golang.org/grpc"
+      revision: "6b51017f791ae1cfbec89c52efdf444b13b550ef"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/grpc/grpc-go.git"
+      revision: "6b51017f791ae1cfbec89c52efdf444b13b550ef"
+      path: ""
+  curations: []
+- pkg:
+    id: "GoDep::gopkg.in/yaml.v2:d670f9405373e636a5a2765eea47fac0c9bc91a4"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "gopkg.in/yaml.v2"
+      revision: "d670f9405373e636a5a2765eea47fac0c9bc91a4"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://gopkg.in/yaml.v2"
+      revision: "d670f9405373e636a5a2765eea47fac0c9bc91a4"
+      path: ""
+  curations: []
 errors: []

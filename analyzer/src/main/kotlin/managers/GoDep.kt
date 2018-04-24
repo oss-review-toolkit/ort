@@ -130,7 +130,7 @@ class GoDep : PackageManager() {
                         homepageUrl = "",
                         scopes = sortedSetOf(scope)
                 ),
-                packages = packages.toSortedSet()
+                packages = packages.map { it.toCuratedPackage() }.toSortedSet()
         )
     }
 

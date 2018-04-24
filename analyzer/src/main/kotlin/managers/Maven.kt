@@ -159,7 +159,7 @@ class Maven : PackageManager() {
                 scopes = scopes.values.toSortedSet()
         )
 
-        return AnalyzerResult(true, project, packages.values.toSortedSet())
+        return AnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
