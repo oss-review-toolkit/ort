@@ -77,9 +77,9 @@ abstract class LocalScanner : Scanner() {
     /**
      * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.
      *
-     * @return The directory the scanner is installed in, or null if the scanner was not bootstrapped.
+     * @return The directory the scanner is installed in.
      */
-    protected open fun bootstrap(): File? = null
+    protected open fun bootstrap(): File = throw NotImplementedError()
 
     /**
      * Return the configuration of this [LocalScanner].
