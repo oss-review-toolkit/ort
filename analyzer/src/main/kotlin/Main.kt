@@ -243,11 +243,11 @@ object Main {
                             errors = entry.value.errors,
                             packages = entry.value.packages.map { pkg ->
                                 val curations = provider.getCurationsFor(pkg.id)
-                                curations.fold(pkg) { cur, packageCuration ->
+                                curations.fold(CuratedPackage(pkg, emptyList())) { cur, packageCuration ->
                                     log.debug { "Applying curation '$packageCuration' to package '${pkg.id}'." }
                                     packageCuration.apply(cur)
                                 }
-                            }.toSortedSet()
+                            }.map { it.pkg }.toSortedSet()
                     )
                 }
             } ?: results

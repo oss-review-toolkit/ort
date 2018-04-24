@@ -66,9 +66,9 @@ class PackageCurationTest : StringSpec() {
                     )
             )
 
-            val curatedPkg = curation.apply(pkg)
+            val curatedPkg = curation.apply(CuratedPackage(pkg, emptyList()))
 
-            curatedPkg.apply {
+            curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
                 declaredLicenses shouldBe curation.data.declaredLicenses
                 description shouldBe curation.data.description
@@ -77,6 +77,10 @@ class PackageCurationTest : StringSpec() {
                 sourceArtifact shouldBe curation.data.sourceArtifact
                 vcs shouldBe curation.data.vcs
             }
+
+            curatedPkg.curations.size shouldBe 1
+            curatedPkg.curations.first().before shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first().curation shouldBe curation.data
         }
 
         "apply changes only curated fields" {
@@ -112,9 +116,9 @@ class PackageCurationTest : StringSpec() {
                     )
             )
 
-            val curatedPkg = curation.apply(pkg)
+            val curatedPkg = curation.apply(CuratedPackage(pkg, emptyList()))
 
-            curatedPkg.apply {
+            curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
                 declaredLicenses shouldBe pkg.declaredLicenses
                 description shouldBe pkg.description
@@ -129,6 +133,10 @@ class PackageCurationTest : StringSpec() {
                         path = pkg.vcs.path
                 )
             }
+
+            curatedPkg.curations.size shouldBe 1
+            curatedPkg.curations.first().before shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first().curation shouldBe curation.data
         }
 
         "applying curation fails when identifiers do not match" {
@@ -164,7 +172,7 @@ class PackageCurationTest : StringSpec() {
             )
 
             shouldThrow<IllegalArgumentException> {
-                curation.apply(pkg)
+                curation.apply(CuratedPackage(pkg, emptyList()))
             }
         }
     }

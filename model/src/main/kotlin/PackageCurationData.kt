@@ -78,27 +78,31 @@ data class PackageCurationData(
      *
      * @return The curated package.
      */
-    fun apply(pkg: Package): Package {
+    fun apply(before: CuratedPackage): CuratedPackage {
         val curatedVcs = if (vcs != null) {
             VcsInfo(
-                    type = vcs.type.takeUnless { it.isBlank() } ?: pkg.vcs.type,
-                    url = vcs.url.takeUnless { it.isBlank() } ?: pkg.vcs.url,
-                    revision = vcs.revision.takeUnless { it.isBlank() } ?: pkg.vcs.revision,
-                    resolvedRevision = vcs.resolvedRevision ?: pkg.vcs.resolvedRevision,
-                    path = vcs.path.takeUnless { it.isBlank() } ?: pkg.vcs.path
+                    type = vcs.type.takeUnless { it.isBlank() } ?: before.pkg.vcs.type,
+                    url = vcs.url.takeUnless { it.isBlank() } ?: before.pkg.vcs.url,
+                    revision = vcs.revision.takeUnless { it.isBlank() } ?: before.pkg.vcs.revision,
+                    resolvedRevision = vcs.resolvedRevision ?: before.pkg.vcs.resolvedRevision,
+                    path = vcs.path.takeUnless { it.isBlank() } ?: before.pkg.vcs.path
             )
         } else {
-            pkg.vcs
+            before.pkg.vcs
         }
 
-        return Package(
-                id = pkg.id,
-                declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
-                description = description ?: pkg.description,
-                homepageUrl = homepageUrl ?: pkg.homepageUrl,
-                binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
-                sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
-                vcs = curatedVcs
-        )
+        val after = before.pkg.let { pkg ->
+            Package(
+                    id = pkg.id,
+                    declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
+                    description = description ?: pkg.description,
+                    homepageUrl = homepageUrl ?: pkg.homepageUrl,
+                    binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
+                    sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
+                    vcs = curatedVcs
+            )
+        }
+
+        return CuratedPackage(after, before.curations + PackageCurationResult(before.pkg.diff(after), this))
     }
 }
