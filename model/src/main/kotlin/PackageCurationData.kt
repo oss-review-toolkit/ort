@@ -74,31 +74,35 @@ data class PackageCurationData(
      * Apply the curation data to the provided package, by overriding all values of the original package with non-null
      * values of the curation data.
      *
-     * @param pkg The package to curate.
+     * @param base The package to curate.
      *
      * @return The curated package.
      */
-    fun apply(pkg: Package): Package {
+    fun apply(base: CuratedPackage): CuratedPackage {
         val curatedVcs = if (vcs != null) {
             VcsInfo(
-                    type = vcs.type.takeUnless { it.isBlank() } ?: pkg.vcs.type,
-                    url = vcs.url.takeUnless { it.isBlank() } ?: pkg.vcs.url,
-                    revision = vcs.revision.takeUnless { it.isBlank() } ?: pkg.vcs.revision,
-                    resolvedRevision = vcs.resolvedRevision ?: pkg.vcs.resolvedRevision,
-                    path = vcs.path.takeUnless { it.isBlank() } ?: pkg.vcs.path
+                    type = vcs.type.takeUnless { it.isBlank() } ?: base.pkg.vcs.type,
+                    url = vcs.url.takeUnless { it.isBlank() } ?: base.pkg.vcs.url,
+                    revision = vcs.revision.takeUnless { it.isBlank() } ?: base.pkg.vcs.revision,
+                    resolvedRevision = vcs.resolvedRevision ?: base.pkg.vcs.resolvedRevision,
+                    path = vcs.path.takeUnless { it.isBlank() } ?: base.pkg.vcs.path
             )
         } else {
-            pkg.vcs
+            base.pkg.vcs
         }
 
-        return Package(
-                id = pkg.id,
-                declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
-                description = description ?: pkg.description,
-                homepageUrl = homepageUrl ?: pkg.homepageUrl,
-                binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
-                sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
-                vcs = curatedVcs
-        )
+        val curated = base.pkg.let { pkg ->
+            Package(
+                    id = pkg.id,
+                    declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
+                    description = description ?: pkg.description,
+                    homepageUrl = homepageUrl ?: pkg.homepageUrl,
+                    binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
+                    sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
+                    vcs = curatedVcs
+            )
+        }
+
+        return CuratedPackage(curated, base.curations + PackageCurationResult(base.pkg.diff(curated), this))
     }
 }

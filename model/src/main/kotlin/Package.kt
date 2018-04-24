@@ -85,6 +85,24 @@ data class Package(
     override fun compareTo(other: Package) = id.compareTo(other.id)
 
     /**
+     * Compares this package with [other] and creates a [PackageCurationData] containing the values from this package
+     * which are different in [other]. All equal values are set to null. Only the fields present in
+     * [PackageCurationData] are compared.
+     */
+    fun diff(other: Package): PackageCurationData {
+        require(id == other.id) { "Cannot diff packages with different ids: '$id' vs '${other.id}'" }
+
+        return PackageCurationData(
+                declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },
+                description = description.takeIf { it != other.description },
+                homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
+                binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
+                sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
+                vcs = vcs.takeIf { it != other.vcs }
+        )
+    }
+
+    /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
      * dependencies still need to be filled out.
      */
