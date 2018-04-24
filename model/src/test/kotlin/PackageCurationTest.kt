@@ -66,7 +66,7 @@ class PackageCurationTest : StringSpec() {
                     )
             )
 
-            val curatedPkg = curation.apply(CuratedPackage(pkg, emptyList()))
+            val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
@@ -116,7 +116,7 @@ class PackageCurationTest : StringSpec() {
                     )
             )
 
-            val curatedPkg = curation.apply(CuratedPackage(pkg, emptyList()))
+            val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
@@ -172,7 +172,7 @@ class PackageCurationTest : StringSpec() {
             )
 
             shouldThrow<IllegalArgumentException> {
-                curation.apply(CuratedPackage(pkg, emptyList()))
+                curation.apply(pkg.toCuratedPackage())
             }
         }
 
@@ -183,7 +183,7 @@ class PackageCurationTest : StringSpec() {
             val curation2 = PackageCuration(id, PackageCurationData(description = "description 2"))
             val curation3 = PackageCuration(id, PackageCurationData(description = "description 3"))
 
-            val result1 = curation1.apply(CuratedPackage(pkg, emptyList()))
+            val result1 = curation1.apply(pkg.toCuratedPackage())
             val result2 = curation2.apply(result1)
             val result3 = curation3.apply(result2)
 
