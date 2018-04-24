@@ -1,8 +1,8 @@
-The [OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) gratefully accepts contributions via
+The team behind the [OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) gratefully accepts contributions via
 [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the
 [GitHub project](https://github.com/heremaps/oss-review-toolkit/pulls). As part of filing a pull request we ask you to
 accept our [Contributor License Agreement](https://gist.github.com/heremaps-bot/dcb932a07b424f8ed68341054e7e3a53) (CLA)
-to grant us proper rights for your contribution.
+to grant us rights to your contribution.
 
 In order to maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 
@@ -11,12 +11,12 @@ In order to maintain a high software quality standard, we strongly prefer contri
   [the Git project itself](https://github.com/git/git/blob/master/Documentation/SubmittingPatches):
 
   - [Make separate commits for logically separate changes.](https://github.com/git/git/blob/e6932248fcb41fb94a0be484050881e03c7eb298/Documentation/SubmittingPatches#L43)
-    For example, pure formatting changes that do not change any behavior do usually not belong into the same commit as
-    changes to logic.
+    For example, pure formatting changes that do not affect software behavior usually do not belong in the same commit as
+    changes to program logic.
   - [Describe your changes well.](https://github.com/git/git/blob/e6932248fcb41fb94a0be484050881e03c7eb298/Documentation/SubmittingPatches#L101)
     Do not just repeat in prose what is "obvious" from the code, but provide a rationale explaining *why* you believe
-    your change is a good one.
-  - [Describe your changes in imperative mood.](https://github.com/git/git/blob/e6932248fcb41fb94a0be484050881e03c7eb298/Documentation/SubmittingPatches#L133)
+    your change is necessary.
+  - [Describe your changes in the imperative.](https://github.com/git/git/blob/e6932248fcb41fb94a0be484050881e03c7eb298/Documentation/SubmittingPatches#L133)
     Instead of writing "Fixes an issue with encoding" prefer "Fix an encoding issue". Think about it like the commit
     only does something *if* it is applied. This usually results in more concise commit messages.
   - [We are picky about whitespaces.](https://github.com/git/git/blob/e6932248fcb41fb94a0be484050881e03c7eb298/Documentation/SubmittingPatches#L95)
