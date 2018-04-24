@@ -242,16 +242,16 @@ object Main {
 
                 if (includedScopes.isNotEmpty()) {
                     packages.addAll(
-                            analyzerResult.packages.filter { pkg ->
-                                includedScopes.any { scope -> scope.contains(pkg) }
-                            }
+                            analyzerResult.packages.filter { curatedPackage ->
+                                includedScopes.any { scope -> scope.contains(curatedPackage.pkg) }
+                            }.map { it.pkg }
                     )
                 } else {
                     println("No scopes found for given scopes $scopesToScan.")
                 }
             } else {
                 includedScopes.addAll(analyzerResult.project.scopes)
-                packages.addAll(analyzerResult.packages)
+                packages.addAll(analyzerResult.packages.map { it.pkg })
             }
 
             val results = scanner.scan(packages, outputDir, downloadDir)

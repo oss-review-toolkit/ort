@@ -464,7 +464,7 @@ class NPM : PackageManager() {
                 scopes = scopes
         )
 
-        return AnalyzerResult(Main.allowDynamicVersions, project, packages)
+        return AnalyzerResult(Main.allowDynamicVersions, project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     /**

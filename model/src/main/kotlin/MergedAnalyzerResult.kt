@@ -59,7 +59,7 @@ data class MergedAnalyzerResult(
         /**
          * The set of identified packages for all projects.
          */
-        val packages: SortedSet<Package>,
+        val packages: SortedSet<CuratedPackage>,
 
         /**
          * The list of all errors.
@@ -71,7 +71,7 @@ data class MergedAnalyzerResult(
      */
     fun createAnalyzerResults() = projects.map { project ->
             val allDependencies = project.collectAllDependencies()
-            val projectPackages = packages.filter { allDependencies.contains(it.id) }.toSortedSet()
+            val projectPackages = packages.filter { allDependencies.contains(it.pkg.id) }.toSortedSet()
             AnalyzerResult(allowDynamicVersions, project, projectPackages, errors[project.id] ?: emptyList())
         }
 }
@@ -83,7 +83,7 @@ class MergedResultsBuilder(
 ) {
     private val projects = sortedSetOf<Project>()
     private val projectResultsFiles = sortedMapOf<Identifier, String>()
-    private val packages = sortedSetOf<Package>()
+    private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<String>>()
 
     fun build(): MergedAnalyzerResult {
