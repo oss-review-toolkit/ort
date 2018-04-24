@@ -37,6 +37,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import java.io.File
+import java.io.IOException
 import java.time.Instant
 import java.util.regex.Pattern
 
@@ -94,10 +95,10 @@ object ScanCode : LocalScanner() {
     override val scannerVersion = "2.2.1.post277.4d68f9377"
     override val resultFileExt = "json"
 
-    override fun bootstrap(): File? {
+    override fun bootstrap(): File {
         val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
         val scancodeDir = File(gitRoot, "scanner/src/funTest/assets/scanners/scancode-toolkit")
-        if (!scancodeDir.isDirectory) return null
+        if (!scancodeDir.isDirectory) throw IOException("Directory '$scancodeDir' not found.")
 
         val configureExe = if (OS.isWindows) "configure.bat" else "configure"
         val configurePath = File(scancodeDir, configureExe)

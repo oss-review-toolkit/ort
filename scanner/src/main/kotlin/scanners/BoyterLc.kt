@@ -56,7 +56,7 @@ object BoyterLc : LocalScanner() {
             "--format", "json"
     )
 
-    override fun bootstrap(): File? {
+    override fun bootstrap(): File {
         val platform = when {
             OS.isMac -> "x86_64-apple-darwin"
             OS.isWindows -> "x86_64-pc-windows"

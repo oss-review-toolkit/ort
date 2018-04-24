@@ -36,6 +36,7 @@ import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 
 import java.io.File
+import java.io.IOException
 import java.time.Instant
 
 object Licensee : LocalScanner() {
@@ -45,7 +46,7 @@ object Licensee : LocalScanner() {
 
     val CONFIGURATION_OPTIONS = listOf("--json")
 
-    override fun bootstrap(): File? {
+    override fun bootstrap(): File {
         val gem = if (OS.isWindows) "gem.cmd" else "gem"
 
         // Work around Travis CI not being able to handle gem user installs, see
@@ -55,6 +56,7 @@ object Licensee : LocalScanner() {
         return if (isTravisCi) {
             ProcessCapture(gem, "install", "licensee", "-v", scannerVersion).requireSuccess()
             getPathFromEnvironment(scannerExe)?.parentFile
+                    ?: throw IOException("Install directory for licensee not found.")
         } else {
             ProcessCapture(gem, "install", "--user-install", "licensee", "-v", scannerVersion).requireSuccess()
 
