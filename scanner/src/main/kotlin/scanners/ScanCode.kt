@@ -91,6 +91,7 @@ object ScanCode : LocalScanner() {
                     "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
 
     override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
+    override val scannerVersion = "2.2.1.post277.4d68f9377"
     override val resultFileExt = "json"
 
     override fun bootstrap(): File? {

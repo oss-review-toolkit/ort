@@ -65,6 +65,11 @@ abstract class LocalScanner : Scanner() {
     protected abstract val scannerExe: String
 
     /**
+     * The expected version of the scanner. This is also the version that would get bootstrapped.
+     */
+    protected abstract val scannerVersion: String
+
+    /**
      * The full path to the scanner executable.
      */
     protected val scannerPath by lazy { File(scannerDir, scannerExe) }
@@ -92,7 +97,7 @@ abstract class LocalScanner : Scanner() {
     private fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
 
     /**
-     * Return the version of the scanner, or an empty string in case of failure.
+     * Return the actual version of the scanner, or an empty string in case of failure.
      */
     abstract fun getVersion(): String
 
