@@ -31,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.CuratedPackage
 import com.here.ort.model.MergedResultsBuilder
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.VcsInfo

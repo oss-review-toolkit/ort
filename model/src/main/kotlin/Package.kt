@@ -103,6 +103,11 @@ data class Package(
     }
 
     /**
+     * Create a [CuratedPackage] from this package with an empty list of applied curations.
+     */
+    fun toCuratedPackage() = CuratedPackage(this, emptyList())
+
+    /**
      * Return a template [PackageReference] to refer to this [Package]. It is only a template because e.g. the
      * dependencies still need to be filled out.
      */
