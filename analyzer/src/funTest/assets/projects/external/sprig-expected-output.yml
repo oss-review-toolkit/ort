@@ -47,202 +47,220 @@ project:
       dependencies: []
       errors: []
 packages:
-- id: "GoDep::github.com/Masterminds/semver:v1.2.2"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/Masterminds/semver"
-    revision: "59c29afe1a994eacb71c833025ca7acf874bb1da"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/Masterminds/semver.git"
-    revision: "59c29afe1a994eacb71c833025ca7acf874bb1da"
-    path: ""
-- id: "GoDep::github.com/aokoli/goutils:9c37978a95bd5c709a15883b6242714ea6709e64"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/aokoli/goutils"
-    revision: "9c37978a95bd5c709a15883b6242714ea6709e64"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/aokoli/goutils.git"
-    revision: "9c37978a95bd5c709a15883b6242714ea6709e64"
-    path: ""
-- id: "GoDep::github.com/davecgh/go-spew:5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/davecgh/go-spew"
-    revision: "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/davecgh/go-spew.git"
-    revision: "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
-    path: ""
-- id: "GoDep::github.com/huandu/xstrings:3959339b333561bf62a38b424fd41517c2c90f40"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/huandu/xstrings"
-    revision: "3959339b333561bf62a38b424fd41517c2c90f40"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/huandu/xstrings.git"
-    revision: "3959339b333561bf62a38b424fd41517c2c90f40"
-    path: ""
-- id: "GoDep::github.com/imdario/mergo:0.2.2"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/imdario/mergo"
-    revision: "3e95a51e0639b4cf372f2ccf74c86749d747fbdc"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/imdario/mergo.git"
-    revision: "3e95a51e0639b4cf372f2ccf74c86749d747fbdc"
-    path: ""
-- id: "GoDep::github.com/pmezard/go-difflib:d8ed2627bdf02c080bf22230dbb337003b7aba2d"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/pmezard/go-difflib"
-    revision: "d8ed2627bdf02c080bf22230dbb337003b7aba2d"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/pmezard/go-difflib.git"
-    revision: "d8ed2627bdf02c080bf22230dbb337003b7aba2d"
-    path: ""
-- id: "GoDep::github.com/satori/go.uuid:v1.1.0"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/satori/go.uuid"
-    revision: "879c5887cd475cd7864858769793b2ceb0d44feb"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/satori/go.uuid.git"
-    revision: "879c5887cd475cd7864858769793b2ceb0d44feb"
-    path: ""
-- id: "GoDep::github.com/stretchr/testify:e3a8ff8ce36581f87a15341206f205b1da467059"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/stretchr/testify"
-    revision: "e3a8ff8ce36581f87a15341206f205b1da467059"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/stretchr/testify.git"
-    revision: "e3a8ff8ce36581f87a15341206f205b1da467059"
-    path: ""
-- id: "GoDep::golang.org/x/crypto:d172538b2cfce0c13cee31e647d0367aa8cd2486"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "golang.org/x/crypto"
-    revision: "d172538b2cfce0c13cee31e647d0367aa8cd2486"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://go.googlesource.com/crypto"
-    revision: "d172538b2cfce0c13cee31e647d0367aa8cd2486"
-    path: ""
+- package:
+    id: "GoDep::github.com/Masterminds/semver:v1.2.2"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/Masterminds/semver"
+      revision: "59c29afe1a994eacb71c833025ca7acf874bb1da"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/Masterminds/semver.git"
+      revision: "59c29afe1a994eacb71c833025ca7acf874bb1da"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/aokoli/goutils:9c37978a95bd5c709a15883b6242714ea6709e64"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/aokoli/goutils"
+      revision: "9c37978a95bd5c709a15883b6242714ea6709e64"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/aokoli/goutils.git"
+      revision: "9c37978a95bd5c709a15883b6242714ea6709e64"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/davecgh/go-spew:5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/davecgh/go-spew"
+      revision: "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/davecgh/go-spew.git"
+      revision: "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/huandu/xstrings:3959339b333561bf62a38b424fd41517c2c90f40"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/huandu/xstrings"
+      revision: "3959339b333561bf62a38b424fd41517c2c90f40"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/huandu/xstrings.git"
+      revision: "3959339b333561bf62a38b424fd41517c2c90f40"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/imdario/mergo:0.2.2"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/imdario/mergo"
+      revision: "3e95a51e0639b4cf372f2ccf74c86749d747fbdc"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/imdario/mergo.git"
+      revision: "3e95a51e0639b4cf372f2ccf74c86749d747fbdc"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/pmezard/go-difflib:d8ed2627bdf02c080bf22230dbb337003b7aba2d"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/pmezard/go-difflib"
+      revision: "d8ed2627bdf02c080bf22230dbb337003b7aba2d"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/pmezard/go-difflib.git"
+      revision: "d8ed2627bdf02c080bf22230dbb337003b7aba2d"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/satori/go.uuid:v1.1.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/satori/go.uuid"
+      revision: "879c5887cd475cd7864858769793b2ceb0d44feb"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/satori/go.uuid.git"
+      revision: "879c5887cd475cd7864858769793b2ceb0d44feb"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/stretchr/testify:e3a8ff8ce36581f87a15341206f205b1da467059"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/stretchr/testify"
+      revision: "e3a8ff8ce36581f87a15341206f205b1da467059"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/stretchr/testify.git"
+      revision: "e3a8ff8ce36581f87a15341206f205b1da467059"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::golang.org/x/crypto:d172538b2cfce0c13cee31e647d0367aa8cd2486"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "golang.org/x/crypto"
+      revision: "d172538b2cfce0c13cee31e647d0367aa8cd2486"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://go.googlesource.com/crypto"
+      revision: "d172538b2cfce0c13cee31e647d0367aa8cd2486"
+      path: ""
+  curations: []
 errors: []

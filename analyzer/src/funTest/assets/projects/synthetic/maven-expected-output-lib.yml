@@ -38,125 +38,135 @@ project:
       dependencies: []
       errors: []
 packages:
-- id: "Maven:junit:junit:3.8.1"
-  declared_licenses:
-  - "Common Public License Version 1.0"
-  description: "JUnit is a regression testing framework written by Erich Gamma and\
-    \ Kent Beck. It is used by the developer who implements unit tests in Java."
-  homepage_url: "http://junit.org"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/junit/junit/3.8.1/junit-3.8.1.jar"
-    hash: "99129f16442844f6a4a11ae22fbbee40b14d774f"
-    hash_algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/junit/junit/3.8.1/junit-3.8.1-sources.jar"
-    hash: "0525753763e53f6f76da052b316d0f2e3bfa4d73"
-    hash_algorithm: "SHA-1"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "Maven:org.apache.beam:beam-parent:2.3.0"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  description: "Apache Beam provides a simple, Java-based interface\n  for processing\
-    \ virtually any size data. This artifact includes the parent POM\n  for other\
-    \ Beam artifacts."
-  homepage_url: "http://beam.apache.org/"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/beam/beam-parent/2.3.0/beam-parent-2.3.0.pom"
-    hash: "9e1ed0d1f714b13d0625fc9feb1410a7a2250424"
-    hash_algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/beam/beam-parent/2.3.0/beam-parent-2.3.0.pom"
-    hash: "9e1ed0d1f714b13d0625fc9feb1410a7a2250424"
-    hash_algorithm: "SHA-1"
-  vcs:
-    type: "git"
-    url: "https://gitbox.apache.org/repos/asf/beam.git"
-    revision: "v2.3.0-RC3"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://gitbox.apache.org/repos/asf/beam.git"
-    revision: "v2.3.0-RC3"
-    path: ""
-- id: "Maven:org.apache.commons:commons-lang3:3.5"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  description: "Apache Commons Lang, a package of Java utility classes for the\n \
-    \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
-    \ as to justify existence in java.lang."
-  homepage_url: "http://commons.apache.org/proper/commons-lang/"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
-    hash: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
-    hash_algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
-    hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
-    hash_algorithm: "SHA-1"
-  vcs:
-    type: "git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
-    revision: "LANG_3_5"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
-    revision: "LANG_3_5"
-    path: ""
-- id: "Maven:org.apache.commons:commons-text:1.1"
-  declared_licenses:
-  - "Apache License, Version 2.0"
-  description: "Apache Commons Text is a library focused on algorithms working on\
-    \ strings."
-  homepage_url: "http://commons.apache.org/proper/commons-text/"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
-    hash: "c336bf600f44b88af356c8a85eef4af822b06a4d"
-    hash_algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
-    hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
-    hash_algorithm: "SHA-1"
-  vcs:
-    type: "git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
-    revision: ""
-    path: ""
-- id: "Maven:org.jenkins-ci:version-number:1.4"
-  declared_licenses:
-  - "MIT License"
-  description: ""
-  homepage_url: "http://jenkins-ci.org/version-number/"
-  binary_artifact:
-    url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4.jar"
-    hash: "5d0f2ea16514c0ec8de86c102ce61a7837e45eb8"
-    hash_algorithm: "SHA-1"
-  source_artifact:
-    url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4-sources.jar"
-    hash: "ab4e04d731d43157f66d80e4a5daef33ce24f0c2"
-    hash_algorithm: "SHA-1"
-  vcs:
-    type: "git"
-    url: "git://github.com/jenkinsci/lib-version-number.git"
-    revision: "version-number-1.4"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/jenkinsci/lib-version-number.git"
-    revision: "version-number-1.4"
-    path: ""
+- package:
+    id: "Maven:junit:junit:3.8.1"
+    declared_licenses:
+    - "Common Public License Version 1.0"
+    description: "JUnit is a regression testing framework written by Erich Gamma and\
+      \ Kent Beck. It is used by the developer who implements unit tests in Java."
+    homepage_url: "http://junit.org"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/junit/junit/3.8.1/junit-3.8.1.jar"
+      hash: "99129f16442844f6a4a11ae22fbbee40b14d774f"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/junit/junit/3.8.1/junit-3.8.1-sources.jar"
+      hash: "0525753763e53f6f76da052b316d0f2e3bfa4d73"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.beam:beam-parent:2.3.0"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    description: "Apache Beam provides a simple, Java-based interface\n  for processing\
+      \ virtually any size data. This artifact includes the parent POM\n  for other\
+      \ Beam artifacts."
+    homepage_url: "http://beam.apache.org/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/beam/beam-parent/2.3.0/beam-parent-2.3.0.pom"
+      hash: "9e1ed0d1f714b13d0625fc9feb1410a7a2250424"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/beam/beam-parent/2.3.0/beam-parent-2.3.0.pom"
+      hash: "9e1ed0d1f714b13d0625fc9feb1410a7a2250424"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://gitbox.apache.org/repos/asf/beam.git"
+      revision: "v2.3.0-RC3"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://gitbox.apache.org/repos/asf/beam.git"
+      revision: "v2.3.0-RC3"
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-lang3:3.5"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    description: "Apache Commons Lang, a package of Java utility classes for the\n\
+      \  classes that are in java.lang's hierarchy, or are considered to be so\n \
+      \ standard as to justify existence in java.lang."
+    homepage_url: "http://commons.apache.org/proper/commons-lang/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
+      hash: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+      hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+      revision: "LANG_3_5"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+      revision: "LANG_3_5"
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-text:1.1"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    description: "Apache Commons Text is a library focused on algorithms working on\
+      \ strings."
+    homepage_url: "http://commons.apache.org/proper/commons-text/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
+      hash: "c336bf600f44b88af356c8a85eef4af822b06a4d"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+      hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.jenkins-ci:version-number:1.4"
+    declared_licenses:
+    - "MIT License"
+    description: ""
+    homepage_url: "http://jenkins-ci.org/version-number/"
+    binary_artifact:
+      url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4.jar"
+      hash: "5d0f2ea16514c0ec8de86c102ce61a7837e45eb8"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "http://repo.jenkins-ci.org/public/org/jenkins-ci/version-number/1.4/version-number-1.4-sources.jar"
+      hash: "ab4e04d731d43157f66d80e4a5daef33ce24f0c2"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "git://github.com/jenkinsci/lib-version-number.git"
+      revision: "version-number-1.4"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/jenkinsci/lib-version-number.git"
+      revision: "version-number-1.4"
+      path: ""
+  curations: []
 errors: []

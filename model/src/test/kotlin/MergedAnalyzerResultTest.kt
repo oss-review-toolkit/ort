@@ -50,9 +50,11 @@ class MergedAnalyzerResultTest : WordSpec() {
             scopes = sortedSetOf(scope1, scope2)
     )
 
-    private val analyzerResult1 = AnalyzerResult(true, project1, sortedSetOf(package1), listOf("error-1", "error-2"))
-    private val analyzerResult2 =
-            AnalyzerResult(true, project2, sortedSetOf(package1, package2, package3), listOf("error-2"))
+    private val analyzerResult1 = AnalyzerResult(true, project1, sortedSetOf(package1.toCuratedPackage()),
+            listOf("error-1", "error-2"))
+    private val analyzerResult2 = AnalyzerResult(true, project2,
+            sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
+            listOf("error-2"))
 
     init {
         "MergedAnalyzerResult" should {
@@ -97,7 +99,8 @@ class MergedAnalyzerResultTest : WordSpec() {
                 mergedResults.projects shouldBe sortedSetOf(project1, project2)
                 mergedResults.projectResultsFiles shouldBe
                         sortedMapOf(project1.id to "/analyzer-result-1.yml", project2.id to "/analyzer-result-2.yml")
-                mergedResults.packages shouldBe sortedSetOf(package1, package2, package3)
+                mergedResults.packages shouldBe sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(),
+                        package3.toCuratedPackage())
                 mergedResults.errors shouldBe
                         sortedMapOf(project1.id to analyzerResult1.errors, project2.id to analyzerResult2.errors)
             }

@@ -35,114 +35,124 @@ project:
       dependencies: []
       errors: []
 packages:
-- id: "GoDep::github.com/kr/fs:2788f0dbd16903de03cb8186e5c7d97b69ad387b"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/kr/fs"
-    revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/kr/fs.git"
-    revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
-    path: ""
-- id: "GoDep::github.com/kr/pretty:f31442d60e51465c69811e2107ae978868dbea5c"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/kr/pretty"
-    revision: "f31442d60e51465c69811e2107ae978868dbea5c"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/kr/pretty.git"
-    revision: "f31442d60e51465c69811e2107ae978868dbea5c"
-    path: ""
-- id: "GoDep::github.com/kr/text:6807e777504f54ad073ecef66747de158294b639"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/kr/text"
-    revision: "6807e777504f54ad073ecef66747de158294b639"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/kr/text.git"
-    revision: "6807e777504f54ad073ecef66747de158294b639"
-    path: ""
-- id: "GoDep::github.com/pmezard/go-difflib:f78a839676152fd9f4863704f5d516195c18fc14"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "github.com/pmezard/go-difflib"
-    revision: "f78a839676152fd9f4863704f5d516195c18fc14"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://github.com/pmezard/go-difflib.git"
-    revision: "f78a839676152fd9f4863704f5d516195c18fc14"
-    path: ""
-- id: "GoDep::golang.org/x/tools:1f1b3322f67af76803c942fd237291538ec68262"
-  declared_licenses: []
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "GoDep"
-    url: "golang.org/x/tools"
-    revision: "1f1b3322f67af76803c942fd237291538ec68262"
-    path: ""
-  vcs_processed:
-    type: "git"
-    url: "https://go.googlesource.com/tools"
-    revision: "1f1b3322f67af76803c942fd237291538ec68262"
-    path: ""
+- package:
+    id: "GoDep::github.com/kr/fs:2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/kr/fs"
+      revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/kr/fs.git"
+      revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/kr/pretty:f31442d60e51465c69811e2107ae978868dbea5c"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/kr/pretty"
+      revision: "f31442d60e51465c69811e2107ae978868dbea5c"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/kr/pretty.git"
+      revision: "f31442d60e51465c69811e2107ae978868dbea5c"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/kr/text:6807e777504f54ad073ecef66747de158294b639"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/kr/text"
+      revision: "6807e777504f54ad073ecef66747de158294b639"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/kr/text.git"
+      revision: "6807e777504f54ad073ecef66747de158294b639"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::github.com/pmezard/go-difflib:f78a839676152fd9f4863704f5d516195c18fc14"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "github.com/pmezard/go-difflib"
+      revision: "f78a839676152fd9f4863704f5d516195c18fc14"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/pmezard/go-difflib.git"
+      revision: "f78a839676152fd9f4863704f5d516195c18fc14"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::golang.org/x/tools:1f1b3322f67af76803c942fd237291538ec68262"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "GoDep"
+      url: "golang.org/x/tools"
+      revision: "1f1b3322f67af76803c942fd237291538ec68262"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://go.googlesource.com/tools"
+      revision: "1f1b3322f67af76803c942fd237291538ec68262"
+      path: ""
+  curations: []
 errors: []
