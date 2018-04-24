@@ -175,5 +175,38 @@ class PackageCurationTest : StringSpec() {
                 curation.apply(CuratedPackage(pkg, emptyList()))
             }
         }
+
+        "applying multiple curations in a row adds curation results to the curated package" {
+            val id = Identifier("provider", "namespace", "name", "version")
+            val pkg = Package.EMPTY.copy(id = id)
+            val curation1 = PackageCuration(id, PackageCurationData(description = "description 1"))
+            val curation2 = PackageCuration(id, PackageCurationData(description = "description 2"))
+            val curation3 = PackageCuration(id, PackageCurationData(description = "description 3"))
+
+            val result1 = curation1.apply(CuratedPackage(pkg, emptyList()))
+            val result2 = curation2.apply(result1)
+            val result3 = curation3.apply(result2)
+
+            result1.pkg.description shouldBe "description 1"
+            result1.curations.size shouldBe 1
+            result1.curations[0].before shouldBe PackageCurationData(description = "")
+            result1.curations[0].curation shouldBe curation1.data
+
+            result2.pkg.description shouldBe "description 2"
+            result2.curations.size shouldBe 2
+            result2.curations[0].before shouldBe PackageCurationData(description = "")
+            result2.curations[0].curation shouldBe curation1.data
+            result2.curations[1].before shouldBe PackageCurationData(description = "description 1")
+            result2.curations[1].curation shouldBe curation2.data
+
+            result3.pkg.description shouldBe "description 3"
+            result3.curations.size shouldBe 3
+            result3.curations[0].before shouldBe PackageCurationData(description = "")
+            result3.curations[0].curation shouldBe curation1.data
+            result3.curations[1].before shouldBe PackageCurationData(description = "description 1")
+            result3.curations[1].curation shouldBe curation2.data
+            result3.curations[2].before shouldBe PackageCurationData(description = "description 2")
+            result3.curations[2].curation shouldBe curation3.data
+        }
     }
 }
