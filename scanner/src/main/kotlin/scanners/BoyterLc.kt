@@ -101,8 +101,8 @@ object BoyterLc : LocalScanner() {
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override fun getVersion() =
-            getCommandVersion(scannerPath.absolutePath, transform = {
+    override fun getVersion(dir: File) =
+            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
                 // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
                 it.substringAfter("licensechecker version ")
             })

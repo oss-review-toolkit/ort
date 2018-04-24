@@ -69,7 +69,7 @@ object Licensee : LocalScanner() {
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override fun getVersion() = getCommandVersion(scannerPath.absolutePath, "version")
+    override fun getVersion(dir: File) = getCommandVersion(dir.resolve(scannerExe).absolutePath, "version")
 
     override fun scanPath(path: File, resultsFile: File, provenance: Provenance, scannerDetails: ScannerDetails)
             : ScanResult {
