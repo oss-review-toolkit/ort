@@ -73,7 +73,8 @@ class PIP : PackageManager() {
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
     private val TRUSTED_HOSTS = listOf(
-            "pypi.python.org"
+            "pypi.org",
+            "pypi.python.org" // Legacy
     ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
 
     override fun command(workingDir: File) = "pip"
@@ -190,7 +191,7 @@ class PIP : PackageManager() {
                 // See https://wiki.python.org/moin/PyPIJSON.
                 val pkgRequest = Request.Builder()
                         .get()
-                        .url("https://pypi.python.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
+                        .url("https://pypi.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
                         .build()
 
                 OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, pkgRequest).use { response ->
