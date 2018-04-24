@@ -216,7 +216,7 @@ object Main {
                     }
 
                     if (entities.contains(DataEntity.PACKAGES)) {
-                        addAll(analyzerResult.packages)
+                        addAll(analyzerResult.packages.map { it.pkg })
                     }
                 }
             } catch (e: JsonMappingException) {
@@ -229,7 +229,7 @@ object Main {
                     }
 
                     if (entities.contains(DataEntity.PACKAGES)) {
-                        addAll(mergedAnalyzerResult.packages)
+                        addAll(mergedAnalyzerResult.packages.map { it.pkg })
                     }
                 }
             }

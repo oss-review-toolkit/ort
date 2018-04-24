@@ -131,7 +131,7 @@ class Gradle : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
-            return AnalyzerResult(true, project, packages.values.toSortedSet(),
+            return AnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet(),
                     dependencyTreeModel.errors)
         } finally {
             connection.close()

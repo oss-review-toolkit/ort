@@ -241,13 +241,15 @@ object Main {
                             allowDynamicVersions = entry.value.allowDynamicVersions,
                             project = entry.value.project,
                             errors = entry.value.errors,
-                            packages = entry.value.packages.map { pkg ->
-                                val curations = provider.getCurationsFor(pkg.id)
-                                curations.fold(CuratedPackage(pkg, emptyList())) { cur, packageCuration ->
-                                    log.debug { "Applying curation '$packageCuration' to package '${pkg.id}'." }
+                            packages = entry.value.packages.map { curatedPackage ->
+                                val curations = provider.getCurationsFor(curatedPackage.pkg.id)
+                                curations.fold(curatedPackage) { cur, packageCuration ->
+                                    log.debug {
+                                        "Applying curation '$packageCuration' to package '${curatedPackage.pkg.id}'."
+                                    }
                                     packageCuration.apply(cur)
                                 }
-                            }.map { it.pkg }.toSortedSet()
+                            }.toSortedSet()
                     )
                 }
             } ?: results
