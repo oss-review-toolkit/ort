@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.CuratedPackage
 import com.here.ort.model.MergedResultsBuilder
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.VcsInfo
@@ -243,11 +244,11 @@ object Main {
                             errors = entry.value.errors,
                             packages = entry.value.packages.map { pkg ->
                                 val curations = provider.getCurationsFor(pkg.id)
-                                curations.fold(pkg) { cur, packageCuration ->
+                                curations.fold(CuratedPackage(pkg, emptyList())) { cur, packageCuration ->
                                     log.debug { "Applying curation '$packageCuration' to package '${pkg.id}'." }
                                     packageCuration.apply(cur)
                                 }
-                            }.toSortedSet()
+                            }.map { it.pkg }.toSortedSet()
                     )
                 }
             } ?: results
