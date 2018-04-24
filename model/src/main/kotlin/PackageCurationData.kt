@@ -62,7 +62,13 @@ data class PackageCurationData(
         /**
          * VCS-related information.
          */
-        val vcs: VcsInfo? = null
+        val vcs: VcsInfo? = null,
+
+        /**
+         * A plain-text comment about this curation. Should contain information about how and why the curation was
+         * created.
+         */
+        val comment: String? = null
 ) {
     /**
      * Apply the curation data to the provided package, by overriding all values of the original package with non-null
