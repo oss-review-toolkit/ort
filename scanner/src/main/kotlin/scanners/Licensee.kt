@@ -32,6 +32,7 @@ import com.here.ort.scanner.ScanException
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
+import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 
 import java.io.File
@@ -45,10 +46,22 @@ object Licensee : LocalScanner() {
 
     override fun bootstrap(): File? {
         val gem = if (OS.isWindows) "gem.cmd" else "gem"
-        ProcessCapture(gem, "install", "--user-install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
-        val ruby = ProcessCapture("ruby", "-rubygems", "-e", "puts Gem.user_dir").requireSuccess()
-        val userDir = ruby.stdout().trimEnd()
-        return File(userDir, "bin")
+
+        // Work around Travis CI not being able to handle gem user installs, see
+        // https://github.com/travis-ci/travis-ci/issues/9412.
+        // TODO: Use toBoolean() here once https://github.com/JetBrains/kotlin/pull/1644 is merged.
+        val isTravisCi = listOf("TRAVIS", "CI").all { java.lang.Boolean.parseBoolean(System.getenv(it)) }
+        return if (isTravisCi) {
+            ProcessCapture(gem, "install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
+            getPathFromEnvironment(scannerExe)?.parentFile
+        } else {
+            ProcessCapture(gem, "install", "--user-install", "licensee", "-v", "9.9.0.beta.3").requireSuccess()
+
+            val ruby = ProcessCapture("ruby", "-rubygems", "-e", "puts Gem.user_dir").requireSuccess()
+            val userDir = ruby.stdout().trimEnd()
+
+            File(userDir, "bin")
+        }
     }
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
