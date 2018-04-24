@@ -19,8 +19,6 @@
 
 package com.here.ort.scanner
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.EMPTY_JSON_NODE
@@ -32,7 +30,6 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.mapper
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getPathFromEnvironment
-import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
@@ -53,8 +50,10 @@ abstract class LocalScanner : Scanner() {
      * The directory the scanner was bootstrapped to, if so.
      */
     protected val scannerDir by lazy {
-        getPathFromEnvironment(scannerExe)?.parentFile ?: run {
-            log.info { "Bootstrapping scanner '$this' as it was not found in PATH." }
+        getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
+            getVersion(it) == scannerVersion
+        } ?: run {
+            println("Bootstrapping scanner '$this' as version $scannerVersion was not found in PATH.")
             bootstrap()
         }
     }
@@ -99,7 +98,7 @@ abstract class LocalScanner : Scanner() {
     /**
      * Return the actual version of the scanner, or an empty string in case of failure.
      */
-    abstract fun getVersion(): String
+    abstract fun getVersion(dir: File = scannerDir): String
 
     override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File?) =
             packages.associate { pkg ->

@@ -116,8 +116,8 @@ object ScanCode : LocalScanner() {
         joinToString(" ")
     }
 
-    override fun getVersion() =
-            getCommandVersion(scannerPath.absolutePath, transform = {
+    override fun getVersion(dir: File) =
+            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
                 // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
                 // the prefix.
                 it.substringAfter("ScanCode version ")
