@@ -1,13 +1,16 @@
 # OSS Review Toolkit
 
-| Linux (OpenJDK 8)            | Windows (Oracle JDK 9)          |
-| :--------------------------- | :------------------------------ |
-[ ![Linux build status][1]][2] | [![Windows build status][3]][4] |
+| Linux (OpenJDK 8)              | Windows (Oracle JDK 9)          |
+| :----------------------------- | :------------------------------ |
+| [![Linux build status][1]][2]  | [![Windows build status][3]][4] |
+| [![Linux code coverage][5]][6] |                                 |
 
 [1]: https://travis-ci.org/heremaps/oss-review-toolkit.svg?branch=master
 [2]: https://travis-ci.org/heremaps/oss-review-toolkit
 [3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
 [4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
+[5]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
+[6]: https://codecov.io/gh/heremaps/oss-review-toolkit/
 
 The OSS Review Toolkit (ORT for short) is a suite of tools to assist with reviewing Free and Open Source Software
 dependencies in your software. At a high level, it works by analyzing your source code for dependencies, downloading the
