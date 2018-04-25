@@ -21,7 +21,6 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.PackageManager
@@ -151,34 +150,32 @@ class Bundler : PackageManager() {
         log.debug("parseDependency: $gemName")
         try {
 
-            val (_, version, homepageUrl, declaredLicenses, description, dependencies, vcs) = getGemspec(gemName,
-                    workingDir)
+            val gemSpec = getGemspec(gemName, workingDir)
+
             packages.add(Package(
                     id = Identifier(
                             provider = javaClass.simpleName,
                             namespace = "",
-                            name = gemName,
-                            version = version
+                            name = gemSpec.name,
+                            version = gemSpec.version
                     ),
-                    declaredLicenses = declaredLicenses,
-                    description = description,
-                    homepageUrl = homepageUrl,
+                    declaredLicenses = gemSpec.declaredLicenses,
+                    description = gemSpec.description,
+                    homepageUrl = gemSpec.homepageUrl,
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcs))
-            val nonDevelDeps = dependencies.filter {
-                it["type"].asText() != ":development"
-            }
+                    vcs = gemSpec.vcs))
+
             val dependencyDependants = mutableSetOf<PackageReference>()
-            nonDevelDeps.forEach {
-                parseDependency(workingDir, it["name"].asText(), packages, dependencyDependants, errors)
+            gemSpec.runtimeDependencies.forEach {
+                parseDependency(workingDir, it, packages, dependencyDependants, errors)
             }
             scopeDependencies.add(PackageReference(
                     id = Identifier(
                             provider = javaClass.simpleName,
                             namespace = "",
-                            name = gemName,
-                            version = version
+                            name = gemSpec.name,
+                            version = gemSpec.version
                     ),
                     dependencies = dependencyDependants.toSortedSet()))
         } catch (e: Exception) {
@@ -191,16 +188,6 @@ class Bundler : PackageManager() {
             errors.add(errorMsg)
         }
     }
-
-    // Gems tend to have github url set as homepage. Seems like it's the only way to get any vcs information out of
-    // gemspec files.
-    private fun parseVcs(homepageUrl: String): VcsInfo =
-            if (Regex("https*:\\/\\/github.com\\/(?<owner>[\\w-]+)\\/(?<repo>[\\w-]+)").matches(homepageUrl)) {
-                log.debug("$homepageUrl is a github url")
-                VcsInfo("Git", "$homepageUrl.git", "", "")
-            } else {
-                VcsInfo.EMPTY
-            }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
         val scriptFile = createDepsListRubyScript(workingDir)
@@ -236,17 +223,10 @@ class Bundler : PackageManager() {
     }
 
     private fun getGemspec(gemName: String, workingDir: File): GemSpec {
-        val gemSpecString = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
+        val spec = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
                 gemName).requireSuccess().stdout()
 
-        val gemSpecTree = yamlMapper.readTree(gemSpecString)
-
-        return GemSpec(gemSpecTree["name"].asText(), gemSpecTree["version"]["version"].asText(),
-                gemSpecTree["homepage"].asText(),
-                gemSpecTree["licenses"].asIterable().map { it.asText() }.toSortedSet(),
-                gemSpecTree["description"].asText(),
-                gemSpecTree["dependencies"].toSet(),
-                parseVcs(gemSpecTree["homepage"].asText()))
+        return GemSpec.createFromYaml(spec)
     }
 
     private fun getGemspecFile(workingDir: File) =
@@ -257,9 +237,47 @@ class Bundler : PackageManager() {
     }
 }
 
-data class GemSpec(val name: String, val version: String, val homepageUrl: String,
-                   val declaredLicenses: SortedSet<String>, val description: String,
-                   val dependencies: Set<JsonNode>, val vcs: VcsInfo) {
+data class GemSpec(
+        val name: String,
+        val version: String,
+        val homepageUrl: String,
+        val declaredLicenses: SortedSet<String>,
+        val description: String,
+        val runtimeDependencies: Set<String>,
+        val vcs: VcsInfo
+) {
+    companion object Factory {
+        fun createFromYaml(spec: String): GemSpec {
+            val gemSpecTree = yamlMapper.readTree(spec)
+
+            val runtimeDependencies = gemSpecTree["dependencies"]?.asIterable()?.mapNotNull {
+                if (it["type"]?.asText() == ":runtime")
+                    it["name"]?.asText()
+                else
+                    null
+            }?.toSet()
+
+            return GemSpec(
+                    gemSpecTree["name"].asText(),
+                    gemSpecTree["version"]["version"].asText(),
+                    gemSpecTree["homepage"].asText(),
+                    gemSpecTree["licenses"].asIterable().map { it.asText() }.toSortedSet(),
+                    gemSpecTree["description"].asText(),
+                    runtimeDependencies ?: emptySet(),
+                    parseVcs(gemSpecTree["homepage"].asText())
+            )
+        }
+
+        // Gems tend to have github url set as homepage. Seems like it's the only way to get any vcs information out of
+        // gemspec files.
+        private fun parseVcs(homepage: String): VcsInfo =
+                if (Regex("https*:\\/\\/github.com\\/(?<owner>[\\w-]+)\\/(?<repo>[\\w-]+)").matches(homepage)) {
+                    log.debug("$homepage is a github url")
+                    VcsInfo("Git", "$homepage.git", "", "")
+                } else {
+                    VcsInfo.EMPTY
+                }
+    }
 
     fun merge(that: GemSpec): GemSpec {
         if (this.name != that.name || this.version != that.version) {
@@ -270,7 +288,7 @@ data class GemSpec(val name: String, val version: String, val homepageUrl: Strin
                 if (this.homepageUrl.isEmpty()) that.homepageUrl else this.homepageUrl,
                 if (this.declaredLicenses.isEmpty()) that.declaredLicenses else this.declaredLicenses,
                 if (this.description.isEmpty()) that.description else this.description,
-                if (this.dependencies.isEmpty()) that.dependencies else this.dependencies,
+                if (this.runtimeDependencies.isEmpty()) that.runtimeDependencies else this.runtimeDependencies,
                 if (this.vcs == VcsInfo.EMPTY) that.vcs else this.vcs)
     }
 }
