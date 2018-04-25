@@ -43,7 +43,17 @@ data class Provenance(
          * The VCS repository that was downloaded, or null.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val vcsInfo: VcsInfo? = null
+        val vcsInfo: VcsInfo? = null,
+
+        /**
+         * The original [VcsInfo] that was used to download the source code. It can be different to [vcsInfo] if any
+         * automatic detection took place. For example if the original [VcsInfo] does not contain any revision and the
+         * revision was automatically detected by searching for a tag that matches the version of the package there
+         * would be no way to match the package to the [Provenance] without downloading the source code and searching
+         * for the tag again.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val originalVcsInfo: VcsInfo? = null
 ) {
     init {
         require(sourceArtifact == null || vcsInfo == null) {
@@ -65,6 +75,12 @@ data class Provenance(
         // If vcsInfo does not have a resolved revision it means that there was an issue with downloading the code.
         if (vcsInfo?.resolvedRevision == null) {
             return false
+        }
+
+        // If pkg.vcsProcessed equals originalVcsInfo or vcsInfo this provenance was definitely created when downloading
+        // this package.
+        if (pkg.vcsProcessed == originalVcsInfo || pkg.vcsProcessed == vcsInfo) {
+            return true
         }
 
         return listOf(pkg.vcs, pkg.vcsProcessed).any {
