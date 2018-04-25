@@ -29,7 +29,7 @@ project:
       dependencies: []
       errors: []
   - name: "test"
-    delivered: true
+    delivered: false
     dependencies:
     - id: "Bundler::rspec:3.7.0"
       dependencies:
