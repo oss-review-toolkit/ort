@@ -22,6 +22,7 @@ package com.here.ort.analyzer.managers
 import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.here.ort.analyzer.Main
 
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
@@ -36,11 +37,14 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+import okhttp3.Request
 
 import java.io.File
 import java.io.IOException
+import java.net.HttpURLConnection
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
@@ -149,8 +153,10 @@ class Bundler : PackageManager() {
                                 scopeDependencies: MutableSet<PackageReference>, errors: MutableList<String>) {
         log.debug("parseDependency: $gemName")
         try {
-
-            val gemSpec = getGemspec(gemName, workingDir)
+            val localGemSpec = getGemspec(gemName, workingDir)
+            val gemSpec = queryRubygems(localGemSpec.name, localGemSpec.version).let {
+                it?.merge(localGemSpec) ?: localGemSpec
+            }
 
             packages.add(Package(
                     id = Identifier(
@@ -235,6 +241,32 @@ class Bundler : PackageManager() {
     private fun installDependencies(workingDir: File) {
         ProcessCapture(workingDir, command(workingDir), "install", "--path", "vendor/bundle").requireSuccess()
     }
+
+    private fun queryRubygems(name: String, version: String): GemSpec? {
+        return try {
+            // See http://guides.rubygems.org/rubygems-org-api-v2/.
+            val request = Request.Builder()
+                    .get()
+                    .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
+                    .build()
+
+            OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+                val body = response.body()?.string()?.trim()
+
+                if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
+                    log.warn { "Unable to retrieve rubygems.org meta-data for gem '$name'." }
+                    if (body != null) {
+                        log.warn { "Response was '$body'." }
+                    }
+                    return null
+                }
+                return GemSpec.createFromJson(body!!)
+            }
+        } catch (e: IOException) {
+            log.warn { "Unable to parse rubygems.org meta-data for gem '$name': ${e.message}" }
+            null
+        }
+    }
 }
 
 data class GemSpec(
@@ -248,9 +280,9 @@ data class GemSpec(
 ) {
     companion object Factory {
         fun createFromYaml(spec: String): GemSpec {
-            val gemSpecTree = yamlMapper.readTree(spec)
+            val yaml = yamlMapper.readTree(spec)!!
 
-            val runtimeDependencies = gemSpecTree["dependencies"]?.asIterable()?.mapNotNull {
+            val runtimeDependencies = yaml["dependencies"]?.asIterable()?.mapNotNull {
                 if (it["type"]?.asText() == ":runtime")
                     it["name"]?.asText()
                 else
@@ -258,13 +290,36 @@ data class GemSpec(
             }?.toSet()
 
             return GemSpec(
-                    gemSpecTree["name"].asText(),
-                    gemSpecTree["version"]["version"].asText(),
-                    gemSpecTree["homepage"].asText(),
-                    gemSpecTree["licenses"].asIterable().map { it.asText() }.toSortedSet(),
-                    gemSpecTree["description"].asText(),
+                    yaml["name"].asText(),
+                    yaml["version"]["version"].asText(),
+                    yaml["homepage"]?.asText() ?: "",
+                    yaml["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
+                    yaml["description"]?.asText() ?: "",
                     runtimeDependencies ?: emptySet(),
-                    parseVcs(gemSpecTree["homepage"].asText())
+                    parseVcs(yaml["homepage"].asText())
+            )
+        }
+
+        fun createFromJson(spec: String): GemSpec {
+            val json = jsonMapper.readTree(spec)!!
+
+            val vcsUrl = json["source_code_uri"]?.asText()
+            val vcs: VcsInfo = if (vcsUrl.isNullOrBlank() || vcsUrl == "null") {  // FIXME
+                VcsInfo.EMPTY
+            } else {
+                VersionControlSystem.splitUrl(vcsUrl!!)
+            }
+
+            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { it["name"]?.asText() }?.toSet()
+
+            return GemSpec(
+                    json["name"].asText(),
+                    json["version"].asText(),
+                    json["homepage_uri"]?.asText() ?: "",
+                    json["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
+                    json["description"]?.asText() ?: "",
+                    runtimeDependencies ?: emptySet(),
+                    vcs
             )
         }
 
