@@ -19,11 +19,11 @@
 
 package com.here.ort.analyzer.managers
 
-import ch.frankel.slf4k.error
-import ch.frankel.slf4k.info
-import ch.frankel.slf4k.warn
+import ch.frankel.slf4k.*
+
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
@@ -39,6 +39,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -87,11 +88,10 @@ class Bundler : PackageManager() {
             val scopes = mutableSetOf<Scope>()
             val packages = mutableSetOf<Package>()
             val errors = mutableListOf<String>()
-            val vcsDir = VersionControlSystem.forDirectory(workingDir)
 
             installDependencies(workingDir)
 
-            val (projectName, version, projectHomepageUrl, declaredLicenses) = parseProject(workingDir)
+            val (projectName, version, homepageUrl, declaredLicenses) = parseProject(workingDir)
             val groupedDeps = getDependencyGroups(workingDir)
 
             for ((groupName, dependencyList) in groupedDeps) {
@@ -107,8 +107,8 @@ class Bundler : PackageManager() {
                     ),
                     declaredLicenses = declaredLicenses.toSortedSet(),
                     aliases = emptyList(),
-                    vcs = vcsDir?.getInfo(workingDir) ?: VcsInfo.EMPTY,
-                    homepageUrl = projectHomepageUrl,
+                    vcs = VersionControlSystem.forDirectory(workingDir)?.getInfo(workingDir) ?: VcsInfo.EMPTY,
+                    homepageUrl = homepageUrl,
                     scopes = scopes.toSortedSet()
             )
             return AnalyzerResult(
@@ -151,7 +151,7 @@ class Bundler : PackageManager() {
         log.debug("Parsing dependency: $gemName")
         try {
 
-            val (_, version, homepageUrl, declaredLicenses, description, dependencies) = getGemDetails(gemName,
+            val (_, version, homepageUrl, declaredLicenses, description, dependencies, vcs) = getGemspec(gemName,
                     workingDir)
             packages.add(Package(
                     id = Identifier(
@@ -165,7 +165,7 @@ class Bundler : PackageManager() {
                     homepageUrl = homepageUrl,
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = parseVcs(homepageUrl))
+                    vcs = vcs)
             )
             val nonDevelDeps = dependencies.filter {
                 it["type"].asText() != ":development"
@@ -194,7 +194,8 @@ class Bundler : PackageManager() {
         }
     }
 
-    // Gems tend to have github url set as homepage. Seems like it's the only way to get any vcs information.
+    // Gems tend to have github url set as homepage. Seems like it's the only way to get any vcs information out of
+    // gemspec files.
     private fun parseVcs(homepageUrl: String): VcsInfo =
             if (Regex("https*:\\/\\/github.com\\/(?<owner>[\\w-]+)\\/(?<repo>[\\w-]+)").matches(homepageUrl)) {
                 log.debug("$homepageUrl is a GitHub url")
@@ -225,29 +226,32 @@ class Bundler : PackageManager() {
         return depsScript
     }
 
-    private fun parseProject(workingDir: File): GemDetails {
-        val gemspecFile = getGemspec(workingDir)
+    private fun parseProject(workingDir: File): GemSpec {
+        val gemspecFile = getGemspecFile(workingDir)
         return if (gemspecFile != null) {
             // Project is a Gem
-            getGemDetails(gemspecFile.name.substringBefore("."), workingDir)
+            getGemspec(gemspecFile.name.substringBefore("."), workingDir)
         } else {
-            GemDetails(workingDir.name, "", "", sortedSetOf(), "", emptySet())
+            GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY)
         }
     }
 
-    private fun getGemDetails(gemName: String, workingDir: File): GemDetails {
+    private fun getGemspec(gemName: String, workingDir: File): GemSpec {
         val gemSpecString = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
                 gemName).requireSuccess().stdout()
+
         val gemSpecTree = yamlMapper.readTree(gemSpecString)
-        return GemDetails(gemSpecTree["name"].asText(), gemSpecTree["version"]["version"].asText(),
+
+        return GemSpec(gemSpecTree["name"].asText(), gemSpecTree["version"]["version"].asText(),
                 gemSpecTree["homepage"].asText(),
                 gemSpecTree["licenses"].asIterable().map { it.asText() }.toSortedSet(),
                 gemSpecTree["description"].asText(),
-                gemSpecTree["dependencies"].toSet()
+                gemSpecTree["dependencies"].toSet(),
+                parseVcs(gemSpecTree["homepage"].asText())
         )
     }
 
-    private fun getGemspec(workingDir: File) =
+    private fun getGemspecFile(workingDir: File) =
             workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
@@ -255,10 +259,25 @@ class Bundler : PackageManager() {
     }
 }
 
-data class GemDetails(val name: String,
-                      val version: String,
-                      val homepageUrl: String,
-                      val declaredLicenses: SortedSet<String>,
-                      val desc: String,
-                      val dependencies: Set<JsonNode>
-)
+data class GemSpec(val name: String,
+                   val version: String,
+                   val homepageUrl: String,
+                   val declaredLicenses: SortedSet<String>,
+                   val description: String,
+                   val dependencies: Set<JsonNode>,
+                   val vcs: VcsInfo
+) {
+    fun merge(that: GemSpec): GemSpec {
+        if (this.name != that.name || this.version != that.version) {
+            throw IllegalArgumentException("Cannot merge info for two different gems")
+        }
+
+        return GemSpec(name, version,
+                this.homepageUrl.takeUnless { it.isEmpty() } ?: that.homepageUrl,
+                this.declaredLicenses.takeUnless { it.isEmpty() } ?: that.declaredLicenses,
+                this.description.takeUnless { it.isEmpty() } ?: that.description,
+                this.dependencies.takeUnless { it.isEmpty() } ?: that.dependencies,
+                this.vcs.takeUnless { it == VcsInfo.EMPTY } ?: that.vcs
+        )
+    }
+}
