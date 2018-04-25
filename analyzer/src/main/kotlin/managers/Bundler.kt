@@ -97,7 +97,7 @@ class Bundler : PackageManager() {
 
             installDependencies(workingDir)
 
-            val (projectName, version, projectHomepageUrl, declaredLicenses) = parseProject(workingDir)
+            val (projectName, version, homepageUrl, declaredLicenses) = parseProject(workingDir)
             val groupedDeps = getDependencyGroups(workingDir)
 
             for ((groupName, dependencyList) in groupedDeps) {
@@ -115,7 +115,7 @@ class Bundler : PackageManager() {
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(workingDir),
-                    homepageUrl = projectHomepageUrl,
+                    homepageUrl = homepageUrl,
                     scopes = scopes.toSortedSet()
             )
 
@@ -160,9 +160,8 @@ class Bundler : PackageManager() {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
-            val (_, version, homepageUrl, declaredLicenses, description, dependencies) = getGemDetails(gemName,
+            val (_, version, homepageUrl, declaredLicenses, description, dependencies, vcs) = getGemspec(gemName,
                     workingDir)
-            val vcsFromPackage = parseVcs(homepageUrl)
 
             packages.add(Package(
                     id = Identifier(
@@ -176,8 +175,8 @@ class Bundler : PackageManager() {
                     homepageUrl = homepageUrl,
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage))
+                    vcs = vcs,
+                    vcsProcessed = processPackageVcs(vcs))
             )
 
             val nonDevelDeps = dependencies.filter {
@@ -240,40 +239,58 @@ class Bundler : PackageManager() {
         return depsScript
     }
 
-    private fun parseProject(workingDir: File): GemDetails {
-        val gemspecFile = getGemspec(workingDir)
+    private fun parseProject(workingDir: File): GemSpec {
+        val gemspecFile = getGemspecFile(workingDir)
         return if (gemspecFile != null) {
             // Project is a Gem
-            getGemDetails(gemspecFile.name.substringBefore("."), workingDir)
+            getGemspec(gemspecFile.name.substringBefore("."), workingDir)
         } else {
-            GemDetails(workingDir.name, "", "", sortedSetOf(), "", emptySet())
+            GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY)
         }
     }
 
-    private fun getGemDetails(gemName: String, workingDir: File): GemDetails {
+    private fun getGemspec(gemName: String, workingDir: File): GemSpec {
         val gemSpecString = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
                 gemName).requireSuccess().stdout()
+
         val gemSpecTree = yamlMapper.readTree(gemSpecString)
-        return GemDetails(gemSpecTree["name"].asText(), gemSpecTree["version"]["version"].asText(),
+
+        return GemSpec(gemSpecTree["name"].asText(), gemSpecTree["version"]["version"].asText(),
                 gemSpecTree["homepage"].asText(),
                 gemSpecTree["licenses"].asIterable().map { it.asText() }.toSortedSet(),
                 gemSpecTree["description"].asText(),
-                gemSpecTree["dependencies"].toSet()
+                gemSpecTree["dependencies"].toSet(),
+                parseVcs(gemSpecTree["homepage"].asText())
         )
     }
 
-    private fun getGemspec(workingDir: File) =
+    private fun getGemspecFile(workingDir: File) =
             workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
 
     private fun installDependencies(workingDir: File) =
             ProcessCapture(workingDir, command(workingDir), "install", "--path", "vendor/bundle").requireSuccess()
 }
 
-data class GemDetails(
+data class GemSpec(
         val name: String,
         val version: String,
         val homepageUrl: String,
         val declaredLicenses: SortedSet<String>,
-        val desc: String,
-        val dependencies: Set<JsonNode>
-)
+        val description: String,
+        val dependencies: Set<JsonNode>,
+        val vcs: VcsInfo
+) {
+    fun merge(other: GemSpec): GemSpec {
+        require(name == other.name && version == other.version) {
+            "Cannot merge specs for different gems."
+        }
+
+        return GemSpec(name, version,
+                homepageUrl.takeUnless { it.isEmpty() } ?: other.homepageUrl,
+                declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
+                description.takeUnless { it.isEmpty() } ?: other.description,
+                dependencies.takeUnless { it.isEmpty() } ?: other.dependencies,
+                vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs
+        )
+    }
+}
