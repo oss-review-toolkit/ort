@@ -10,7 +10,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/deis/example-python-flask.git"
     revision: "0773991e36a4c69b121cdb05146d6140347d4065"
     path: ""
