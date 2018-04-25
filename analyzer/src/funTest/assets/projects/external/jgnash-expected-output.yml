@@ -10,7 +10,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/ccavanaugh/jgnash.git"
     revision: "2aa4cce7d7fd46164030f2b4d244c4b89e77f722"
     path: ""
@@ -46,7 +46,7 @@ packages:
     revision: "r4.12"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -70,7 +70,7 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""

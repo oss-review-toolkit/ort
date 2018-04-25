@@ -120,9 +120,10 @@ data class VcsInfo(
     }
 
     /**
-     * Returns this [VcsInfo] in normalized form. Currently, this only applies [normalizeVcsUrl] to the [url].
+     * Returns this [VcsInfo] in normalized form. This transforms the [type] to a lower case string and applies
+     * [normalizeVcsUrl] to the [url].
      */
-    fun normalize() = copy(url = normalizeVcsUrl(url))
+    fun normalize() = copy(type = type.toLowerCase(), url = normalizeVcsUrl(url))
 }
 
 class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {

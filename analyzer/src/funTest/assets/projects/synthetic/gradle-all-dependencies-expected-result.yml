@@ -9,7 +9,7 @@ repository:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -23,7 +23,7 @@ projects:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -38,7 +38,7 @@ projects:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
@@ -143,7 +143,7 @@ projects:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
@@ -223,7 +223,7 @@ projects:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
@@ -340,7 +340,7 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
@@ -364,7 +364,7 @@ packages:
     revision: "r4.12"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -461,7 +461,7 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""

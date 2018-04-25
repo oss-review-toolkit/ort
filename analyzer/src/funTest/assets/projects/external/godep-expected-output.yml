@@ -10,7 +10,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/tools/godep.git"
     revision: "ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
     path: ""
@@ -53,7 +53,7 @@ packages:
     revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/kr/fs.git"
     revision: "2788f0dbd16903de03cb8186e5c7d97b69ad387b"
     path: ""
@@ -75,7 +75,7 @@ packages:
     revision: "f31442d60e51465c69811e2107ae978868dbea5c"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/kr/pretty.git"
     revision: "f31442d60e51465c69811e2107ae978868dbea5c"
     path: ""
@@ -97,7 +97,7 @@ packages:
     revision: "6807e777504f54ad073ecef66747de158294b639"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/kr/text.git"
     revision: "6807e777504f54ad073ecef66747de158294b639"
     path: ""
@@ -119,7 +119,7 @@ packages:
     revision: "f78a839676152fd9f4863704f5d516195c18fc14"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/pmezard/go-difflib.git"
     revision: "f78a839676152fd9f4863704f5d516195c18fc14"
     path: ""
@@ -141,7 +141,7 @@ packages:
     revision: "1f1b3322f67af76803c942fd237291538ec68262"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://go.googlesource.com/tools"
     revision: "1f1b3322f67af76803c942fd237291538ec68262"
     path: ""

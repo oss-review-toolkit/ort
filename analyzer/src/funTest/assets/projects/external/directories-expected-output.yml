@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/soc/directories.git"
     revision: "ed193b425d5c184029481e2330baaf5628bbefac"
     path: ""
@@ -47,7 +47,7 @@ packages:
     revision: "r4.12"
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/junit-team/junit.git"
     revision: "r4.12"
     path: ""
@@ -72,7 +72,7 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
     revision: ""
     path: ""

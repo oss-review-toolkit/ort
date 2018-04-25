@@ -12,7 +12,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
+    type: "git"
     url: "https://github.com/spdx/tools-python.git"
     revision: "a48022e65a8897d0e4f2e93d8e53695d2c13ea23"
     path: ""
