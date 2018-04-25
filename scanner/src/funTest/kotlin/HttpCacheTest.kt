@@ -91,6 +91,7 @@ class HttpCacheTest : StringSpec() {
             HashAlgorithm.SHA1)
 
     private val vcs = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
+    private val vcsWithoutRevision = VcsInfo("type", "url", "", "")
 
     private val pkg = Package.EMPTY.copy(
             id = id,
@@ -98,6 +99,7 @@ class HttpCacheTest : StringSpec() {
             vcs = vcs,
             vcsProcessed = vcs.normalize()
     )
+    private val pkgWithoutRevision = pkg.copy(vcs = vcsWithoutRevision, vcsProcessed = vcsWithoutRevision.normalize())
 
     private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
     private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)
@@ -110,6 +112,11 @@ class HttpCacheTest : StringSpec() {
     private val provenanceWithVcsInfo = Provenance(
             downloadTime = downloadTime2,
             vcsInfo = vcs
+    )
+    private val provenanceWithOriginalVcsInfo = Provenance(
+            downloadTime = downloadTime2,
+            vcsInfo = vcs,
+            originalVcsInfo = pkgWithoutRevision.vcsProcessed
     )
     private val provenanceEmpty = Provenance(downloadTime3)
 
@@ -278,6 +285,19 @@ class HttpCacheTest : StringSpec() {
             cachedResults.results.size shouldBe 2
             cachedResults.results should contain(scanResultSourceArtifactMatching)
             cachedResults.results should contain(scanResultVcsMatching)
+        }
+
+        "Cached result is found if revision was detected from version" {
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles,
+                    rawResultWithContent)
+
+            val result = cache.add(id, scanResult)
+            val cachedResults = cache.read(pkgWithoutRevision, scannerDetails1)
+
+            result shouldBe true
+            cachedResults.results.size shouldBe 1
+            cachedResults.results should contain(scanResult)
         }
     }
 }

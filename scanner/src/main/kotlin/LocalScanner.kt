@@ -173,7 +173,8 @@ abstract class LocalScanner : Scanner() {
         println("Running $this version ${getVersion()} on directory " +
                 "'${downloadResult.downloadDirectory.canonicalPath}'.")
 
-        val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo)
+        val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
+                downloadResult.originalVcsInfo)
         val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile, provenance, details)
 
         ScanResultsCache.add(pkg.id, scanResult)
