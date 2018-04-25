@@ -82,16 +82,14 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "Git"
+      type: "git"
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
     vcs_processed:
-      type: "Git"
+      type: "git"
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
   curations: []
 - package:
@@ -139,13 +137,13 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/sparklemotion/nokogiri.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/sparklemotion/nokogiri.git"
       revision: ""
       path: ""
   curations: []
@@ -168,13 +166,13 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: ""
-      url: ""
+      type: "git"
+      url: "http://github.com/rack/rack.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/rack/rack.git"
       revision: ""
       path: ""
   curations: []
@@ -193,16 +191,14 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-core.git"
+      type: "git"
+      url: "http://github.com/rspec/rspec-core.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
     vcs_processed:
-      type: "Git"
+      type: "git"
       url: "https://github.com/rspec/rspec-core.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
   curations: []
 - package:
@@ -221,16 +217,14 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-expectations.git"
+      type: "git"
+      url: "http://github.com/rspec/rspec-expectations.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
     vcs_processed:
-      type: "Git"
+      type: "git"
       url: "https://github.com/rspec/rspec-expectations.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
   curations: []
 - package:
@@ -248,16 +242,14 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-mocks.git"
+      type: "git"
+      url: "http://github.com/rspec/rspec-mocks.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
     vcs_processed:
-      type: "Git"
+      type: "git"
       url: "https://github.com/rspec/rspec-mocks.git"
       revision: ""
-      resolvedRevision: ""
       path: ""
   curations: []
 - package:
@@ -302,13 +294,13 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: ""
-      url: ""
+      type: "git"
+      url: "http://github.com/rspec/rspec.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/rspec/rspec.git"
       revision: ""
       path: ""
   curations: []
