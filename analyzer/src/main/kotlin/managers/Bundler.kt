@@ -141,7 +141,9 @@ class Bundler : PackageManager() {
         dependencyList.forEach {
             parseDependency(workingDir, it, packages, scopeDependencies, errors)
         }
-        scopes.add(Scope(groupName, true, scopeDependencies.toSortedSet()))
+
+        val delivered = !listOf("development", "test").contains(groupName.toLowerCase())
+        scopes.add(Scope(groupName, delivered, scopeDependencies.toSortedSet()))
     }
 
     private fun parseDependency(workingDir: File, gemName: String, packages: MutableSet<Package>,
