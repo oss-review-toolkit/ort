@@ -159,40 +159,36 @@ class Bundler : PackageManager() {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
-            val (_, version, homepageUrl, declaredLicenses, description, dependencies, vcs) = getGemspec(gemName,
-                    workingDir)
+            val gemSpec = getGemspec(gemName, workingDir)
 
             packages.add(Package(
                     id = Identifier(
                             provider = javaClass.simpleName,
                             namespace = "",
-                            name = gemName,
-                            version = version
+                            name = gemSpec.name,
+                            version = gemSpec.version
                     ),
-                    declaredLicenses = declaredLicenses,
-                    description = description,
-                    homepageUrl = homepageUrl,
+                    declaredLicenses = gemSpec.declaredLicenses,
+                    description = gemSpec.description,
+                    homepageUrl = gemSpec.homepageUrl,
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcs)
+                    vcs = gemSpec.vcs)
             )
 
-            val nonDevelDeps = dependencies.filter {
-                it["type"].asText() != ":development"
-            }
 
             val transitiveDependencies = mutableSetOf<PackageReference>()
 
-            nonDevelDeps.forEach {
-                parseDependency(workingDir, it["name"].asText(), packages, transitiveDependencies, errors)
+            gemSpec.runtimeDependencies.forEach {
+                parseDependency(workingDir, it, packages, transitiveDependencies, errors)
             }
 
             scopeDependencies.add(PackageReference(
                     id = Identifier(
                             provider = javaClass.simpleName,
                             namespace = "",
-                            name = gemName,
-                            version = version
+                            name = gemSpec.name,
+                            version = gemSpec.version
                     ),
                     dependencies = transitiveDependencies.toSortedSet())
             )
@@ -204,16 +200,6 @@ class Bundler : PackageManager() {
             errors.add(errorMsg)
         }
     }
-
-    // Gems tend to have GitHub URL set as homepage. Seems like it is the only way to get any VCS information out of
-    // gemspec files.
-    private fun parseVcs(homepageUrl: String): VcsInfo =
-            if (Regex("https*:\\/\\/github.com\\/(?<owner>[\\w-]+)\\/(?<repo>[\\w-]+)").matches(homepageUrl)) {
-                log.debug { "$homepageUrl is a GitHub URL." }
-                VcsInfo("Git", "$homepageUrl.git", "", "")
-            } else {
-                VcsInfo.EMPTY
-            }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
         val scriptFile = createDepsListRubyScript(workingDir)
@@ -248,18 +234,10 @@ class Bundler : PackageManager() {
     }
 
     private fun getGemspec(gemName: String, workingDir: File): GemSpec {
-        val gemSpecString = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
+        val spec = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
                 gemName).requireSuccess().stdout()
 
-        val gemSpecTree = yamlMapper.readTree(gemSpecString)
-
-        return GemSpec(gemSpecTree["name"].asText(), gemSpecTree["version"]["version"].asText(),
-                gemSpecTree["homepage"].asText(),
-                gemSpecTree["licenses"].asIterable().map { it.asText() }.toSortedSet(),
-                gemSpecTree["description"].asText(),
-                gemSpecTree["dependencies"].toSet(),
-                parseVcs(gemSpecTree["homepage"].asText())
-        )
+        return GemSpec.createFromYaml(spec)
     }
 
     private fun getGemspecFile(workingDir: File) =
@@ -275,9 +253,42 @@ data class GemSpec(
         val homepageUrl: String,
         val declaredLicenses: SortedSet<String>,
         val description: String,
-        val dependencies: Set<JsonNode>,
+        val runtimeDependencies: Set<String>,
         val vcs: VcsInfo
 ) {
+    companion object Factory {
+        fun createFromYaml(spec: String): GemSpec {
+            val gemSpecTree = yamlMapper.readTree(spec)
+
+            val runtimeDependencies = gemSpecTree["dependencies"]?.asIterable()?.mapNotNull {
+                if (it["type"]?.asText() == ":runtime")
+                    it["name"]?.asText()
+                else
+                    null
+            }?.toSet()
+
+            return GemSpec(
+                    gemSpecTree["name"].asText(),
+                    gemSpecTree["version"]["version"].asText(),
+                    gemSpecTree["homepage"].asText(),
+                    gemSpecTree["licenses"].asIterable().map { it.asText() }.toSortedSet(),
+                    gemSpecTree["description"].asText(),
+                    runtimeDependencies ?: emptySet(),
+                    parseVcs(gemSpecTree["homepage"].asText())
+            )
+        }
+
+        // Gems tend to have GitHub URL set as homepage. Seems like it is the only way to get any VCS information out of
+        // gemspec files.
+        private fun parseVcs(homepageUrl: String): VcsInfo =
+                if (Regex("https*:\\/\\/github.com\\/(?<owner>[\\w-]+)\\/(?<repo>[\\w-]+)").matches(homepageUrl)) {
+                    log.debug { "$homepageUrl is a GitHub URL." }
+                    VcsInfo("Git", "$homepageUrl.git", "", "")
+                } else {
+                    VcsInfo.EMPTY
+                }
+    }
+
     fun merge(other: GemSpec): GemSpec {
         require(name == other.name && version == other.version) {
             "Cannot merge specs for different gems."
@@ -287,7 +298,7 @@ data class GemSpec(
                 homepageUrl.takeUnless { it.isEmpty() } ?: other.homepageUrl,
                 declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
                 description.takeUnless { it.isEmpty() } ?: other.description,
-                dependencies.takeUnless { it.isEmpty() } ?: other.dependencies,
+                runtimeDependencies.takeUnless { it.isEmpty() } ?: other.runtimeDependencies,
                 vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs
         )
     }
