@@ -74,6 +74,8 @@ class Bundler : PackageManager() {
         override fun create() = Bundler()
     }
 
+    private val DEVELOPMENT_SCOPES = listOf("development", "test")
+
     override fun command(workingDir: File) = if (OS.isWindows) "bundle.bat" else "bundle"
 
     override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
@@ -149,7 +151,8 @@ class Bundler : PackageManager() {
             parseDependency(workingDir, it, packages, scopeDependencies, errors)
         }
 
-        scopes.add(Scope(groupName, true, scopeDependencies.toSortedSet()))
+        val delivered = groupName.toLowerCase() !in DEVELOPMENT_SCOPES
+        scopes.add(Scope(groupName, delivered, scopeDependencies.toSortedSet()))
     }
 
     private fun parseDependency(workingDir: File, gemName: String, packages: MutableSet<Package>,
