@@ -90,7 +90,8 @@ object Main {
             val dateTime: Instant,
             val downloadDirectory: File,
             val sourceArtifact: RemoteArtifact? = null,
-            val vcsInfo: VcsInfo? = null
+            val vcsInfo: VcsInfo? = null,
+            val originalVcsInfo: VcsInfo? = null
     ) {
         init {
             require((sourceArtifact == null) != (vcsInfo == null)) {
@@ -373,7 +374,8 @@ object Main {
                 resolvedRevision = revision,
                 path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
         )
-        return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo)
+        return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo,
+                originalVcsInfo = target.vcsProcessed.takeIf { it != vcsInfo })
     }
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
