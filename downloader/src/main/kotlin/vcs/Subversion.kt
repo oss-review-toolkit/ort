@@ -128,7 +128,8 @@ object Subversion : VersionControlSystem() {
 
                 override fun getRevision() = runSvnInfoCommand()?.commit?.revision ?: ""
 
-                override fun getRootPath() = runSvnInfoCommand()?.workingCopy?.absolutePath ?: ""
+                override fun getRootPath() =
+                        runSvnInfoCommand()?.workingCopy?.absolutePath?.let { File(it) } ?: workingDir
 
                 override fun listRemoteTags(): List<String> {
                     val remoteUrl = getRemoteUrl()

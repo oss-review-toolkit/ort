@@ -28,7 +28,6 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.filterVersionNames
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
-import com.here.ort.utils.normalizedPath
 
 import com.vdurmont.semver4j.Semver
 
@@ -214,7 +213,7 @@ abstract class VersionControlSystem {
         /**
          * Return the root directory of this working tree.
          */
-        abstract fun getRootPath(): String
+        abstract fun getRootPath(): File
 
         /**
          * Return the list of tags available in the remote repository.
@@ -242,10 +241,10 @@ abstract class VersionControlSystem {
          * Return the relative path to [path] with respect to the VCS root.
          */
         open fun getPathToRoot(path: File): String {
-            val relativePath = path.absoluteFile.relativeTo(File(getRootPath())).toString()
+            val relativePath = path.absoluteFile.relativeTo(getRootPath())
 
             // Use Unix paths even on Windows for consistent output.
-            return relativePath.normalizedPath
+            return relativePath.invariantSeparatorsPath
         }
     }
 

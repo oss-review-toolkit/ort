@@ -47,7 +47,7 @@ object GitRepo : GitBase() {
         } else {
             object : GitWorkingTree(File(repoRoot, ".repo/manifests")) {
                 // Return the directory in which "repo init" was run (that directory in not managed with Git).
-                override fun getRootPath() = workingDir.parentFile.parent
+                override fun getRootPath() = workingDir.parentFile.parentFile
 
                 override fun getPathToRoot(path: File): String {
                     // GitRepo is special in that the path to the root is supposed to constantly return the path to the

@@ -43,6 +43,7 @@ import com.moandjiezana.toml.Toml
 import java.io.File
 import java.io.IOException
 import java.net.URI
+import java.nio.file.Paths
 
 class GoDep : PackageManager() {
     companion object : PackageManagerFactory<GoDep>(
@@ -136,12 +137,11 @@ class GoDep : PackageManager() {
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File {
         if (vcs == VcsInfo.EMPTY) {
-            return File(gopath, "src" + File.separator + projectDir.name)
+            return Paths.get(gopath.path, "src", projectDir.name).toFile().canonicalFile
         }
 
         val uri = URI(vcs.url)
-        val path = listOf("src", uri.host, uri.path).joinToString(File.separator)
-        return File(gopath, path).toPath().normalize().toFile()
+        return Paths.get(gopath.path, "src", uri.host, uri.path).toFile().canonicalFile
     }
 
     private fun resolveProjectRoot(definitionFile: File): File {
@@ -241,9 +241,7 @@ class GoDep : PackageManager() {
             }
         }
 
-        val pkgPath = "src" + File.separator + importPath.replace('/', File.separatorChar)
-        val repoRoot = File(gopath, pkgPath)
-
+        val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()
         val deducedVcs = VersionControlSystem.forDirectory(repoRoot)
                 ?.getInfo()?.normalize() ?: return VcsInfo.EMPTY
 
