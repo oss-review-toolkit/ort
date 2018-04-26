@@ -1,19 +1,19 @@
 ---
-allowDynamicVersions: true
+allowDynamicVersions: false
 project:
-  id: "Bundler::bundler:"
+  id: "Bundler::lockfile:"
   declared_licenses: []
   aliases: []
   vcs:
     type: "Git"
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/bundler"
+    path: "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile"
   vcs_processed:
     type: "Git"
     url: ""
     revision: ""
-    path: "analyzer/src/funTest/assets/projects/synthetic/bundler"
+    path: "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile"
   homepage_url: ""
   scopes:
   - name: "default"
