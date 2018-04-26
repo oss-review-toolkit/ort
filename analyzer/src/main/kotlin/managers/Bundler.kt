@@ -27,16 +27,7 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.Identifier
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.yamlMapper
+import com.here.ort.model.*
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -168,7 +159,7 @@ class Bundler : PackageManager() {
                     declaredLicenses = gemSpec.declaredLicenses,
                     description = gemSpec.description,
                     homepageUrl = gemSpec.homepageUrl,
-                    binaryArtifact = RemoteArtifact.EMPTY,
+                    binaryArtifact = gemSpec.binaryArtifact,
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = gemSpec.vcs))
 
@@ -224,7 +215,7 @@ class Bundler : PackageManager() {
             getGemspec(gemspecFile.name.substringBefore("."), workingDir)
         } else {
             GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(),
-                    VcsInfo.EMPTY)
+                    VcsInfo.EMPTY, RemoteArtifact.EMPTY)
         }
     }
 
@@ -276,7 +267,8 @@ data class GemSpec(
         val declaredLicenses: SortedSet<String>,
         val description: String,
         val runtimeDependencies: Set<String>,
-        val vcs: VcsInfo
+        val vcs: VcsInfo,
+        val binaryArtifact: RemoteArtifact
 ) {
     companion object Factory {
         fun createFromYaml(spec: String): GemSpec {
@@ -296,21 +288,26 @@ data class GemSpec(
                     yaml["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
                     yaml["description"]?.asText() ?: "",
                     runtimeDependencies ?: emptySet(),
-                    parseVcs(yaml["homepage"].asText())
+                    parseVcs(yaml["homepage"].asText()),
+                    RemoteArtifact.EMPTY
             )
         }
 
         fun createFromJson(spec: String): GemSpec {
             val json = jsonMapper.readTree(spec)!!
+            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { it["name"]?.asText() }?.toSet()
 
-            val vcsUrl = json["source_code_uri"]?.asText()
-            val vcs: VcsInfo = if (vcsUrl.isNullOrBlank() || vcsUrl == "null") {  // FIXME
-                VcsInfo.EMPTY
+            val vcs = if (json.hasNonNull("source_code_uri")) {
+                VersionControlSystem.splitUrl(json["source_code_uri"].asText())
             } else {
-                VersionControlSystem.splitUrl(vcsUrl!!)
+                VcsInfo.EMPTY
             }
 
-            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { it["name"]?.asText() }?.toSet()
+            val binaryArtifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
+                RemoteArtifact(json["gem_uri"].asText(), json["sha"].asText(), HashAlgorithm.SHA256)
+            } else {
+                RemoteArtifact.EMPTY
+            }
 
             return GemSpec(
                     json["name"].asText(),
@@ -319,7 +316,8 @@ data class GemSpec(
                     json["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
                     json["description"]?.asText() ?: "",
                     runtimeDependencies ?: emptySet(),
-                    vcs
+                    vcs,
+                    binaryArtifact
             )
         }
 
@@ -344,6 +342,8 @@ data class GemSpec(
                 if (this.declaredLicenses.isEmpty()) that.declaredLicenses else this.declaredLicenses,
                 if (this.description.isEmpty()) that.description else this.description,
                 if (this.runtimeDependencies.isEmpty()) that.runtimeDependencies else this.runtimeDependencies,
-                if (this.vcs == VcsInfo.EMPTY) that.vcs else this.vcs)
+                if (this.vcs == VcsInfo.EMPTY) that.vcs else this.vcs,
+                if (this.binaryArtifact == RemoteArtifact.EMPTY) that.binaryArtifact else this.binaryArtifact
+        )
     }
 }
