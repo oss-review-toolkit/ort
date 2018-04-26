@@ -21,43 +21,59 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Bundler
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
+import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.matchers.shouldNotBe
+import io.kotlintest.matchers.startWith
+import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class BundlerTest : StringSpec() {
+class BundlerTest : WordSpec() {
     private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    private val vcsDir = VersionControlSystem.forDirectory(rootDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
 
     init {
-        "Project dependencies are detected correctly" {
-            try {
+        "Bundler" should {
+            "resolve dependencies correctly" {
+                val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile")
                 val packageFile = File(projectDir, "Gemfile")
 
                 val actualResult = Bundler.create().resolveDependencies(listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(File(projectDir.parentFile, "bundler-expected-output.yml")
-                        .readText())
+                val expectedResult = patchExpectedResult(projectDir,
+                        File(projectDir.parentFile, "lockfile-expected-output.yml").readText())
 
                 yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
-            } finally {
-                File(projectDir, "Gemfile.lock").delete()
+
                 File(projectDir, ".bundle").safeDeleteRecursively()
-            }
-        }.config(tags = setOf(ExpensiveTag))
+            }.config(tags = setOf(ExpensiveTag))
+
+            "show error if no lockfile is present" {
+                val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile")
+                val packageFile = File(projectDir, "Gemfile")
+
+                val actualResult = Bundler.create().resolveDependencies(listOf(packageFile))[packageFile]
+
+                actualResult shouldNotBe null
+                actualResult!!.project shouldBe Project.EMPTY
+                actualResult.packages.size shouldBe 0
+                actualResult.errors.size shouldBe 1
+                actualResult.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
+            }.config(tags = setOf(ExpensiveTag))
+        }
     }
 
-    private fun patchExpectedResult(result: String): String {
-        val vcsPath = projectDir.relativeTo(rootDir).invariantSeparatorsPath
+    private fun patchExpectedResult(workingDir: File, result: String): String {
+        val vcsPath = workingDir.relativeTo(rootDir).invariantSeparatorsPath
 
         return result
                 // vcs_processed:
