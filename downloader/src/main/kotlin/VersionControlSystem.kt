@@ -319,6 +319,6 @@ abstract class VersionControlSystem {
      */
     fun isAtLeastVersion(expectedVersion: String): Boolean {
         val actualVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
-        return actualVersion.isGreaterThanOrEqualTo(Semver(expectedVersion, Semver.SemverType.LOOSE))
+        return actualVersion.isGreaterThanOrEqualTo(expectedVersion)
     }
 }
