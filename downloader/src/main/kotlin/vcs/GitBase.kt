@@ -67,12 +67,16 @@ abstract class GitBase : VersionControlSystem() {
         override fun getRootPath() =
                 File(run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/'))
 
-        override fun listRemoteTags(): List<String> {
-            val tags = run(workingDir, "ls-remote", "--refs", "origin", "refs/tags/*").stdout().trimEnd()
+        private fun listRemoteRefs(namespace: String): List<String> {
+            val tags = run(workingDir, "ls-remote", "--refs", "origin", "refs/$namespace/*").stdout().trimEnd()
             return tags.lines().map {
-                it.split('\t').last().removePrefix("refs/tags/")
+                it.split('\t').last().removePrefix("refs/$namespace/")
             }
         }
+
+        override fun listRemoteBranches() = listRemoteRefs("heads")
+
+        override fun listRemoteTags() = listRemoteRefs("tags")
     }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory)

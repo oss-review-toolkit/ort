@@ -216,6 +216,11 @@ abstract class VersionControlSystem {
         abstract fun getRootPath(): File
 
         /**
+         * Return the list of branches available in the remote repository.
+         */
+        abstract fun listRemoteBranches(): List<String>
+
+        /**
          * Return the list of tags available in the remote repository.
          */
         abstract fun listRemoteTags(): List<String>

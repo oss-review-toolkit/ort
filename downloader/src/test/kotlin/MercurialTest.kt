@@ -81,6 +81,15 @@ class MercurialTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }.config(enabled = Mercurial.isInPath())
 
+        "Mercurial correctly lists remote branches" {
+            val expectedBranches = listOf(
+                    "default"
+            )
+
+            val workingTree = Mercurial.getWorkingTree(zipContentDir)
+            workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+        }.config(enabled = Mercurial.isInPath())
+
         "Mercurial correctly lists remote tags" {
             val expectedTags = listOf(
                     "1.0",

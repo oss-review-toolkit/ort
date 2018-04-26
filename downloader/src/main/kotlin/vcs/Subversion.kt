@@ -75,7 +75,7 @@ data class SubversionInfoEntry(
         val commit: SubversionInfoCommit)
 
 @JsonRootName("entry")
-data class SubversionTagsEntry(
+data class SubversionPathEntry(
         @JacksonXmlProperty(isAttribute = true)
         val kind: String,
         @JacksonXmlProperty(isAttribute = true)
@@ -131,7 +131,7 @@ object Subversion : VersionControlSystem() {
                 override fun getRootPath() =
                         runSvnInfoCommand()?.workingCopy?.absolutePath?.let { File(it) } ?: workingDir
 
-                override fun listRemoteTags(): List<String> {
+                private fun listRemoteRefs(namespace: String): List<String> {
                     val remoteUrl = getRemoteUrl()
 
                     val projectRoot = if (directoryNamespaces.any { remoteUrl.contains("/$it/") }) {
@@ -140,14 +140,18 @@ object Subversion : VersionControlSystem() {
                         remoteUrl
                     }
 
-                    val svnInfoTags = run(workingDir, "info", "--xml", "--depth=immediates", "$projectRoot/tags")
+                    val svnPathInfo = run(workingDir, "info", "--xml", "--depth=immediates", "$projectRoot/$namespace")
                     val valueType = xmlMapper.typeFactory
-                            .constructCollectionType(List::class.java, SubversionTagsEntry::class.java)
-                    val tagsEntries: List<SubversionTagsEntry> = xmlMapper.readValue(svnInfoTags.stdout(), valueType)
+                            .constructCollectionType(List::class.java, SubversionPathEntry::class.java)
+                    val pathEntries: List<SubversionPathEntry> = xmlMapper.readValue(svnPathInfo.stdout(), valueType)
 
-                    // As the "immediates" depth includes the "tags" parent, drop it.
-                    return tagsEntries.drop(1).map { it.path }.sorted()
+                    // As the "immediates" depth includes the parent namespace itself, too, drop it.
+                    return pathEntries.drop(1).map { it.path }.sorted()
                 }
+
+                override fun listRemoteBranches() = listRemoteRefs("branches")
+
+                override fun listRemoteTags() = listRemoteRefs("tags")
 
                 private fun runSvnInfoCommand(): SubversionInfoEntry? {
                     val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
