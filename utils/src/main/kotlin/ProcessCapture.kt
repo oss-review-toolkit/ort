@@ -64,8 +64,10 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
         }
 
     init {
-        val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
-        log.info { "Running '$commandLine' in '$usedWorkingDir'..." }
+        log.info {
+            val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
+            "Running '$commandLine' in '$usedWorkingDir'..."
+        }
 
         if (log.isDebugEnabled) {
             // No need to use curly-braces-syntax for logging here as the log level check is already done above.
