@@ -28,6 +28,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -180,7 +181,7 @@ class Bundler : PackageManager() {
                     declaredLicenses = gemSpec.declaredLicenses,
                     description = gemSpec.description,
                     homepageUrl = gemSpec.homepageUrl,
-                    binaryArtifact = RemoteArtifact.EMPTY,
+                    binaryArtifact = gemSpec.binaryArtifact,
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = gemSpec.vcs,
                     vcsProcessed = processPackageVcs(gemSpec.vcs))
@@ -238,7 +239,7 @@ class Bundler : PackageManager() {
             // Project is a Gem
             getGemspec(gemspecFile.name.substringBefore("."), workingDir)
         } else {
-            GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY)
+            GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY, RemoteArtifact.EMPTY)
         }
     }
 
@@ -289,7 +290,8 @@ data class GemSpec(
         val declaredLicenses: SortedSet<String>,
         val description: String,
         val runtimeDependencies: Set<String>,
-        val vcs: VcsInfo
+        val vcs: VcsInfo,
+        val binaryArtifact: RemoteArtifact
 ) {
     companion object Factory {
         fun createFromYaml(spec: String): GemSpec {
@@ -306,21 +308,26 @@ data class GemSpec(
                     yaml["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
                     yaml["description"].asTextOrEmpty(),
                     runtimeDependencies ?: emptySet(),
-                    parseVcs(yaml["homepage"].asText())
+                    parseVcs(yaml["homepage"].asText()),
+                    RemoteArtifact.EMPTY
             )
         }
 
         fun createFromJson(spec: String): GemSpec {
             val json = jsonMapper.readTree(spec)!!
+            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { it["name"]?.asText() }?.toSet()
 
-            val vcsUrl = json["source_code_uri"]?.asText()
-            val vcs: VcsInfo = if (vcsUrl.isNullOrBlank() || vcsUrl == "null") {  // FIXME
-                VcsInfo.EMPTY
+            val vcs = if (json.hasNonNull("source_code_uri")) {
+                VersionControlSystem.splitUrl(json["source_code_uri"].asText())
             } else {
-                VersionControlSystem.splitUrl(vcsUrl!!)
+                VcsInfo.EMPTY
             }
 
-            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { it["name"]?.asText() }?.toSet()
+            val binaryArtifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
+                RemoteArtifact(json["gem_uri"].asText(), json["sha"].asText(), HashAlgorithm.SHA256)
+            } else {
+                RemoteArtifact.EMPTY
+            }
 
             return GemSpec(
                     json["name"].asText(),
@@ -329,7 +336,8 @@ data class GemSpec(
                     json["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
                     json["description"].asTextOrEmpty(),
                     runtimeDependencies ?: emptySet(),
-                    vcs
+                    vcs,
+                    binaryArtifact
             )
         }
 
@@ -354,7 +362,8 @@ data class GemSpec(
                 declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
                 description.takeUnless { it.isEmpty() } ?: other.description,
                 runtimeDependencies.takeUnless { it.isEmpty() } ?: other.runtimeDependencies,
-                vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs
+                vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
+                binaryArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.binaryArtifact
         )
     }
 }
