@@ -58,13 +58,14 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
      */
     val failMessage
         get(): String {
-            val workingDir = builder.directory() ?: System.getProperty("user.dir")
+            val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
             val message = stderr().takeUnless { it.isBlank() } ?: stdout()
-            return "Running '$commandLine' in directory '$workingDir' failed with exit code ${exitValue()}:\n$message"
+            return "Running '$commandLine' in '$usedWorkingDir' failed with exit code ${exitValue()}:\n$message"
         }
 
     init {
-        log.info { "Running '$commandLine'..." }
+        val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
+        log.info { "Running '$commandLine' in '$usedWorkingDir'..." }
 
         if (log.isDebugEnabled) {
             // No need to use curly-braces-syntax for logging here as the log level check is already done above.
