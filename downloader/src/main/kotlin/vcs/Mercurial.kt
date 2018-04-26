@@ -75,6 +75,13 @@ object Mercurial : VersionControlSystem() {
 
                 override fun getRootPath() = File(run(workingDir, "root").stdout().trimEnd())
 
+                override fun listRemoteBranches(): List<String> {
+                    val branches = run(workingDir, "branches").stdout().trimEnd()
+                    return branches.lines().map {
+                        it.split(' ').first()
+                    }.sorted()
+                }
+
                 override fun listRemoteTags(): List<String> {
                     // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
                     // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.

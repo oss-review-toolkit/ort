@@ -80,6 +80,19 @@ class GitTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
 
+        "Git correctly lists remote branches" {
+            val expectedBranches = listOf(
+                    "debug-test-failures",
+                    "drop-py2.6",
+                    "master",
+                    "release-0.10.1",
+                    "reverse-mode"
+            )
+
+            val workingTree = Git.getWorkingTree(zipContentDir)
+            workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+        }
+
         "Git correctly lists remote tags" {
             val expectedTags = listOf(
                     "0.10.0",

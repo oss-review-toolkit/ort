@@ -79,6 +79,20 @@ class SubversionTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
         }.config(enabled = Subversion.isInPath())
 
+        "Subversion correctly lists remote branches" {
+            val expectedBranches = listOf(
+                    "address-rendering",
+                    "index-bug",
+                    "lossless-rst-writer",
+                    "nesting",
+                    "plugins",
+                    "subdocs"
+            )
+
+            val workingTree = Subversion.getWorkingTree(zipContentDir)
+            workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+        }.config(enabled = Subversion.isInPath())
+
         "Subversion correctly lists remote tags" {
             val expectedTags = listOf(
                     "docutils-0.10",

@@ -116,14 +116,16 @@ object Cvs : VersionControlSystem() {
                     return rootDir ?: workingDir
                 }
 
-                override fun listRemoteTags(): List<String> {
+                private fun listSymbolicNames(): Map<String, String> {
                     val cvsLog = run(workingDir, "log", "-h")
                     var tagsSectionStarted = false
 
-                    val tagsList = cvsLog.stdout().lines().mapNotNull {
+                    return cvsLog.stdout().lines().mapNotNull {
                         if (tagsSectionStarted) {
                             if (it.startsWith('\t')) {
-                                it.split(':').map { it.trim() }.firstOrNull()
+                                it.split(':', limit = 2).let {
+                                    Pair(it.first().trim(), it.last().trim())
+                                }
                             } else {
                                 tagsSectionStarted = false
                                 null
@@ -134,9 +136,31 @@ object Cvs : VersionControlSystem() {
                             }
                             null
                         }
-                    }
+                    }.toMap().toSortedMap()
+                }
 
-                    return tagsList.toSortedSet().toList()
+                private fun isBranchVersion(version: String): Boolean {
+                    // See http://cvsgui.sourceforge.net/howto/cvsdoc/cvs_5.html#SEC59.
+                    val decimals = version.split('.')
+
+                    // "Externally, branch numbers consist of an odd number of dot-separated decimal
+                    // integers."
+                    return decimals.count() % 2 != 0 ||
+                            // "That is not the whole truth, however. For efficiency reasons CVS sometimes inserts
+                            // an extra 0 in the second rightmost position."
+                            decimals.dropLast(1).last() == "0"
+                }
+
+                override fun listRemoteBranches(): List<String> {
+                    return listSymbolicNames().mapNotNull { (name, version) ->
+                        if (isBranchVersion(version)) name else null
+                    }
+                }
+
+                override fun listRemoteTags(): List<String> {
+                    return listSymbolicNames().mapNotNull { (name, version) ->
+                        if (isBranchVersion(version)) null else name
+                    }
                 }
             }
 
