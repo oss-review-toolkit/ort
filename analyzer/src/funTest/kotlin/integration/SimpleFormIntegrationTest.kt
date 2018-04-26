@@ -54,7 +54,7 @@ class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
                 Bundler as PackageManagerFactory<PackageManager> to listOf(
-                        File(downloadDir, "Gemfile.lock")
+                        File(downloadDir, "Gemfile")
                 )
         )
     }

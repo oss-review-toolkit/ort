@@ -1,7 +1,7 @@
 ---
-allowDynamicVersions: true
+allowDynamicVersions: false
 project:
-  id: "Bundler::bundler:"
+  id: "Bundler::lockfile:"
   declared_licenses: []
   aliases: []
   vcs:
