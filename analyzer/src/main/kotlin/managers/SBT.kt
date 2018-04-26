@@ -76,28 +76,57 @@ class SBT : PackageManager() {
     }
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
+        if (definitionFiles.isEmpty()) return emptyList()
+
+        // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
+        // https://stackoverflow.com/a/20337575/1127485.
+        var workingDir = definitionFiles.first().parentFile
+
         // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated form
         // "make-pom" and to support declaring Maven-style repositories, see
         // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-        if (definitionFiles.isNotEmpty()) {
-            // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
-            // https://stackoverflow.com/a/20337575/1127485.
-            val workingDir = definitionFiles.first().parentFile
-
-            checkCommandVersion(
-                    command(workingDir),
-                    Requirement.buildIvy("[0.13.0,)"),
-                    versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
-                    workingDir = workingDir,
-                    ignoreActualVersion = Main.ignoreVersions,
-                    transform = this::extractLowestSbtVersion
-            )
-        }
+        checkCommandVersion(
+                command(workingDir),
+                Requirement.buildIvy("[0.13.0,)"),
+                versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
+                workingDir = workingDir,
+                ignoreActualVersion = Main.ignoreVersions,
+                transform = this::extractLowestSbtVersion
+        )
 
         val pomFiles = sortedSetOf<File>()
 
+        if (definitionFiles.count() > 1) {
+            // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
+            // project's root directory. In order to determine the root directory, use the common prefix of all definition
+            // file paths.
+            val projectRoot = definitionFiles.map {
+                it.absolutePath
+            }.reduce { prefix, path ->
+                prefix.commonPrefixWith(path)
+            }
+
+            workingDir = File(projectRoot)
+
+            val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
+            if (sbt.isSuccess()) {
+                // Get the list of POM files created by parsing stdout. A single call might create multiple POM
+                // files in case of sub-projects.
+                val makePomFiles = sbt.stdout().lines().mapNotNull {
+                    POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+                }
+
+                pomFiles.addAll(makePomFiles)
+            } else {
+                log.warn {
+                    "Running '${sbt.commandLine}' in the determined project root directory '$workingDir' failed. " +
+                            "This might be acceptable if this is not actually the root of an SBT project."
+                }
+            }
+        }
+
         definitionFiles.forEach { definitionFile ->
-            val workingDir = definitionFile.parentFile
+            workingDir = definitionFile.parentFile
 
             // Check if a POM was already generated if this is a sub-project in a multi-project.
             val targetDir = File(workingDir, "target")
@@ -120,7 +149,7 @@ class SBT : PackageManager() {
                         throw IOException(sbt.failMessage)
                     } else {
                         log.warn {
-                            "A subsequent call to '${sbt.commandLine}' in directory '$workingDir' failed. " +
+                            "A subsequent run of '${sbt.commandLine}' in directory '$workingDir' failed. " +
                                     "This might be acceptable if this is a sub-project in a multi-project " +
                                     "that does not publish any artifacts."
                         }
