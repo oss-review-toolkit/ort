@@ -75,7 +75,7 @@ class Bundler : PackageManager() {
             "http://bundler.io/",
             "Ruby",
             // See http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
-            listOf("Gemfile.lock", "Gemfile")
+            listOf("Gemfile")
     ) {
         override fun create() = Bundler()
     }
@@ -125,7 +125,7 @@ class Bundler : PackageManager() {
             )
 
             return AnalyzerResult(
-                    true,
+                    Main.allowDynamicVersions,
                     project,
                     packages.map { it.toCuratedPackage() }.toSortedSet(),
                     errors
@@ -253,8 +253,13 @@ class Bundler : PackageManager() {
     private fun getGemspecFile(workingDir: File) =
             workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
 
-    private fun installDependencies(workingDir: File) =
-            ProcessCapture(workingDir, command(workingDir), "install", "--path", "vendor/bundle").requireSuccess()
+    private fun installDependencies(workingDir: File) {
+        if (!Main.allowDynamicVersions && !File(workingDir, "Gemfile.lock").isFile) {
+            throw IllegalArgumentException("No lockfile found in $workingDir, dependency versions are unstable.")
+        }
+
+        ProcessCapture(workingDir, command(workingDir), "install", "--path", "vendor/bundle").requireSuccess()
+    }
 
     private fun queryRubygems(name: String, version: String): GemSpec? {
         return try {
