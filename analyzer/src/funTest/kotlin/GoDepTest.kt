@@ -106,7 +106,7 @@ class GoDepTest : FreeSpec() {
                 val projectDir = File("src/funTest/assets/projects/external/qmstr")
                 val vcs = VersionControlSystem.forDirectory(projectDir)!!.getInfo()
 
-                val expectedPath = File("/tmp/gopath/src/github.com/QMSTR/qmstr.git")
+                val expectedPath = File("/tmp/gopath/src/github.com/QMSTR/qmstr.git").absoluteFile
 
                 godep.deduceImportPath(projectDir, vcs, gopath) shouldBe expectedPath
             }
@@ -117,7 +117,7 @@ class GoDepTest : FreeSpec() {
                 val projectDir = File("src/funTest/assets/projects/synthetic/godep/no-lockfile")
                 val vcs = VcsInfo.EMPTY
 
-                val expectedPath = File("/tmp/gopath/src/no-lockfile")
+                val expectedPath = File("/tmp/gopath/src/no-lockfile").absoluteFile
 
                 godep.deduceImportPath(projectDir, vcs, gopath) shouldBe expectedPath
             }

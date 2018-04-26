@@ -21,7 +21,6 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.utils.unpack
 import com.here.ort.utils.getUserConfigDirectory
-import com.here.ort.utils.normalizedPath
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.Spec
@@ -76,7 +75,7 @@ class CvsTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe ":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex"
             workingTree.getRevision() shouldBe "8707a14c78c6e77ffc59e685360fa20071c1afb6"
-            workingTree.getRootPath() shouldBe zipContentDir.path.normalizedPath
+            workingTree.getRootPath() shouldBe zipContentDir
             workingTree.getPathToRoot(File(zipContentDir, "tomcat")) shouldBe "tomcat"
         }.config(enabled = false)
 

@@ -76,7 +76,7 @@ abstract class GitBase : VersionControlSystem() {
                 run(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
 
         override fun getRootPath() =
-                run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/')
+                File(run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/'))
 
         override fun listRemoteTags(): List<String> {
             val tags = run(workingDir, "ls-remote", "--refs", "origin", "refs/tags/*").stdout().trimEnd()

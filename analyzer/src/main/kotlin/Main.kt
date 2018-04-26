@@ -255,7 +255,7 @@ object Main {
             curatedResults.forEach { definitionFile, analyzerResult ->
                 val resultFile = writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath,
                         analyzerResult)
-                mergedResultsBuilder?.addResult(resultFile.absolutePath, analyzerResult)
+                mergedResultsBuilder?.addResult(resultFile, analyzerResult)
                 if (analyzerResult.hasErrors()) {
                     failedAnalysis.add(definitionFile.absolutePath)
                 }

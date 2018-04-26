@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.here.ort.utils.normalizedPath
-
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -29,7 +27,8 @@ import java.io.File
 class MergedAnalyzerResultTest : WordSpec() {
 
     private val repositoryPath = File("/absolute/path")
-    private val directoryDetails = Repository(repositoryPath.name, repositoryPath.normalizedPath, VcsInfo.EMPTY)
+    private val directoryDetails = Repository(repositoryPath.name, repositoryPath.invariantSeparatorsPath,
+            VcsInfo.EMPTY)
 
     private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
@@ -59,8 +58,8 @@ class MergedAnalyzerResultTest : WordSpec() {
             "create the correct AnalyzerResults" {
                 val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
-                builder.addResult("/analyzer-result-1.yml", analyzerResult1)
-                builder.addResult("/analyzer-result-2.yml", analyzerResult2)
+                builder.addResult(File("/analyzer-result-1.yml"), analyzerResult1)
+                builder.addResult(File("/analyzer-result-2.yml"), analyzerResult2)
 
                 val mergedResults = builder.build()
 
@@ -70,8 +69,8 @@ class MergedAnalyzerResultTest : WordSpec() {
             "can be serialized and deserialized" {
                 val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
-                builder.addResult("/analyzer-result-1.yml", analyzerResult1)
-                builder.addResult("/analyzer-result-2.yml", analyzerResult2)
+                builder.addResult(File("/analyzer-result-1.yml"), analyzerResult1)
+                builder.addResult(File("/analyzer-result-2.yml"), analyzerResult2)
 
                 val mergedResults = builder.build()
 
@@ -87,8 +86,8 @@ class MergedAnalyzerResultTest : WordSpec() {
             "merge results from all files" {
                 val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
-                builder.addResult("/analyzer-result-1.yml", analyzerResult1)
-                builder.addResult("/analyzer-result-2.yml", analyzerResult2)
+                builder.addResult(File("/analyzer-result-1.yml"), analyzerResult1)
+                builder.addResult(File("/analyzer-result-2.yml"), analyzerResult2)
 
                 val mergedResults = builder.build()
 
