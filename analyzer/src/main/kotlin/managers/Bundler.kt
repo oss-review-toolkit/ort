@@ -31,6 +31,7 @@ import com.here.ort.model.*
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+import com.here.ort.utils.safeDeleteRecursively
 import okhttp3.Request
 
 import java.io.File
@@ -113,9 +114,8 @@ class Bundler : PackageManager() {
             )
         } finally {
             // Delete vendor folder to not pollute the scan.
-            if (!vendorDir.deleteRecursively()) {
-                throw IOException("Unable to delete the '$vendorDir' directory.")
-            }
+            log.info { "Deleting temporary '$vendorDir'..." }
+            vendorDir.safeDeleteRecursively()
 
             // Restore any previously existing "vendor" directory.
             if (tempVendorDir != null) {
