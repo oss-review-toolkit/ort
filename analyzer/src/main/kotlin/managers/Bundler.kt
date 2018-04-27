@@ -42,9 +42,12 @@ import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
+
+import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
@@ -78,11 +81,26 @@ class Bundler : PackageManager() {
             listOf("Gemfile")
     ) {
         override fun create() = Bundler()
+
+        val bundle = if (OS.isWindows) "bundle.bat" else "bundle"
     }
 
     private val DEVELOPMENT_SCOPES = listOf("development", "test")
 
-    override fun command(workingDir: File) = if (OS.isWindows) "bundle.bat" else "bundle"
+    override fun command(workingDir: File) = bundle
+
+    override fun prepareResolution(definitionFiles: List<File>): List<File> {
+        // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
+        // fixed versions to be sure to get consistent results.
+        checkCommandVersion(
+                bundle,
+                Requirement.buildStrict("1.16.1"),
+                ignoreActualVersion = Main.ignoreVersions,
+                transform = { it.substringAfter("Bundler version ") }
+        )
+
+        return definitionFiles
+    }
 
     override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
         val workingDir = definitionFile.parentFile
