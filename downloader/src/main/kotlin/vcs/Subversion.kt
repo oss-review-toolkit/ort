@@ -92,7 +92,7 @@ data class SubversionPathEntry(
 object Subversion : VersionControlSystem() {
     override val aliases = listOf("subversion", "svn")
     override val commandName = "svn"
-    override val movingRevisionNames = listOf("HEAD")
+    override val latestRevisionNames = listOf("HEAD")
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
@@ -175,11 +175,12 @@ object Subversion : VersionControlSystem() {
 
             var revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: "HEAD"
 
-            return if (allowMovingRevisions || isFixedRevision(revision)) {
+            val workingTree = getWorkingTree(targetDir)
+            return if (allowMovingRevisions || isFixedRevision(workingTree, revision)) {
                 if (pkg.vcsProcessed.path.isBlank()) {
                     // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
                     run(targetDir, "update", "-r", revision, "--set-depth", "infinity")
-                    getWorkingTree(targetDir)
+                    workingTree
                 } else {
                     // Deepen only the given path.
                     run(targetDir, "update", "-r", revision, "--depth", "infinity", "--parents",

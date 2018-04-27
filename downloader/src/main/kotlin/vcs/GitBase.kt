@@ -28,7 +28,7 @@ import java.util.regex.Pattern
 
 abstract class GitBase : VersionControlSystem() {
     override val commandName = "git"
-    override val movingRevisionNames = listOf("HEAD", "master")
+    override val latestRevisionNames = listOf("HEAD", "@")
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")

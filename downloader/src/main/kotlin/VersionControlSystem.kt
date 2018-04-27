@@ -264,9 +264,9 @@ abstract class VersionControlSystem {
     protected abstract val commandName: String
 
     /**
-     * A fixed list of named revisions that usually move as new revisions are created.
+     * A list of symbolic names that point to the latest revision.
      */
-    protected abstract val movingRevisionNames: List<String>
+    protected abstract val latestRevisionNames: List<String>
 
     /**
      * Return whether the command for this VCS implementation is available in the system PATH.
@@ -316,7 +316,8 @@ abstract class VersionControlSystem {
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
      */
-    fun isFixedRevision(revision: String) = revision.isNotBlank() && revision !in movingRevisionNames
+    fun isFixedRevision(workingTree: WorkingTree, revision: String) =
+            revision.isNotBlank() && revision !in latestRevisionNames && revision !in workingTree.listRemoteBranches()
 
     /**
      * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.

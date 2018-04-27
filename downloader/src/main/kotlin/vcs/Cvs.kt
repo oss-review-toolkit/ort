@@ -43,7 +43,7 @@ typealias CvsFileRevisions = List<Pair<String, String>>
 object Cvs : VersionControlSystem() {
     override val aliases = listOf("cvs")
     override val commandName = "cvs"
-    override val movingRevisionNames = emptyList<String>()
+    override val latestRevisionNames = emptyList<String>()
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
@@ -177,7 +177,7 @@ object Cvs : VersionControlSystem() {
             run(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
             val workingTree = getWorkingTree(targetDir)
 
-            val revision = if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+            val revision = if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
                 pkg.vcsProcessed.revision
             } else {
                 // Create all working tree directories in order to be able to query the log.
