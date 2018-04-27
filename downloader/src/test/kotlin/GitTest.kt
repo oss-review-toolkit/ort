@@ -21,6 +21,7 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.unpack
 
 import io.kotlintest.Spec
@@ -37,7 +38,8 @@ class GitTest : StringSpec() {
     override val oneInstancePerTest = false
 
     override fun interceptSpec(context: Spec, spec: () -> Unit) {
-        val zipFile = File("src/test/assets/pipdeptree-2018-01-03-git.zip")
+        val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+        val zipFile = File(rootDir, "downloader/src/test/assets/pipdeptree-2018-01-03-git.zip")
 
         zipContentDir = createTempDir()
 
