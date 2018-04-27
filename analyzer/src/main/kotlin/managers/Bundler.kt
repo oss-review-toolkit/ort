@@ -40,6 +40,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.asTextOrEmpty
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -315,9 +316,9 @@ data class GemSpec(
             return GemSpec(
                     yaml["name"].asText(),
                     yaml["version"]["version"].asText(),
-                    yaml["homepage"]?.asText() ?: "",
+                    yaml["homepage"].asTextOrEmpty(),
                     yaml["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
-                    yaml["description"]?.asText() ?: "",
+                    yaml["description"].asTextOrEmpty(),
                     runtimeDependencies ?: emptySet(),
                     parseVcs(yaml["homepage"].asText()),
                     RemoteArtifact.EMPTY
@@ -343,9 +344,9 @@ data class GemSpec(
             return GemSpec(
                     json["name"].asText(),
                     json["version"].asText(),
-                    json["homepage_uri"]?.asText() ?: "",
+                    json["homepage_uri"].asTextOrEmpty(),
                     json["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
-                    json["description"]?.asText() ?: "",
+                    json["description"].asTextOrEmpty(),
                     runtimeDependencies ?: emptySet(),
                     vcs,
                     binaryArtifact
