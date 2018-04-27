@@ -28,7 +28,6 @@ import io.kotlintest.specs.WordSpec
 
 @Suppress("UnsafeCallOnNullableType", "UnsafeCast")
 class ScanResultsCacheTest : WordSpec() {
-
     private fun ArtifactoryCache.getStringField(name: String): String {
         javaClass.getDeclaredField(name).let {
             it.isAccessible = true

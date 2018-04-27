@@ -69,11 +69,9 @@ abstract class GitBase : VersionControlSystem() {
             return File(dotGitDir, "shallow").isFile
         }
 
-        override fun getRemoteUrl() =
-                run(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
+        override fun getRemoteUrl() = run(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
 
-        override fun getRevision() =
-                run(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
+        override fun getRevision() = run(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
 
         override fun getRootPath() =
                 File(run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/'))

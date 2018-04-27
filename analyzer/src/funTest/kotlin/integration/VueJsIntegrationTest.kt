@@ -30,7 +30,6 @@ import com.here.ort.model.VcsInfo
 import java.io.File
 
 class VueJsIntegrationTest : AbstractIntegrationSpec() {
-
     override val pkg: Package = Package(
             id = Identifier(
                     provider = "NPM",

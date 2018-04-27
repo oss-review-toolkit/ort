@@ -69,11 +69,9 @@ object Mercurial : VersionControlSystem() {
 
                 override fun isShallow() = false
 
-                override fun getRemoteUrl() =
-                        run(workingDir, "paths", "default").stdout().trimEnd()
+                override fun getRemoteUrl() = run(workingDir, "paths", "default").stdout().trimEnd()
 
-                override fun getRevision() =
-                        run(workingDir, "--debug", "id", "-i").stdout().trimEnd()
+                override fun getRevision() = run(workingDir, "--debug", "id", "-i").stdout().trimEnd()
 
                 override fun getRootPath() = File(run(workingDir, "root").stdout().trimEnd())
 

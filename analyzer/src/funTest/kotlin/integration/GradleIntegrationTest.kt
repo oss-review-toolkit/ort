@@ -31,7 +31,6 @@ import com.here.ort.model.VcsInfo
 import java.io.File
 
 class GradleIntegrationTest : AbstractIntegrationSpec() {
-
     override val pkg: Package = Package(
             id = Identifier(
                     provider = "Maven",
