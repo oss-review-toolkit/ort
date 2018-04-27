@@ -38,30 +38,31 @@ import java.io.File
 
 class BundlerTest : WordSpec() {
     private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val vcsDir = VersionControlSystem.forDirectory(rootDir)!!
+    private val projectsDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler")
+    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
 
     init {
         "Bundler" should {
             "resolve dependencies correctly" {
-                val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile")
-                val packageFile = File(projectDir, "Gemfile")
+                val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
-                val actualResult = Bundler.create().resolveDependencies(listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(projectDir,
-                        File(projectDir.parentFile, "lockfile-expected-output.yml").readText())
+                try {
+                    val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+                    val expectedResult = patchExpectedResult(definitionFile.parentFile, File(projectsDir.parentFile,
+                            "bundler-expected-output.yml").readText())
 
-                yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
-
-                File(projectDir, ".bundle").safeDeleteRecursively()
+                    yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
+                } finally {
+                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively()
+                }
             }.config(tags = setOf(ExpensiveTag))
 
             "show error if no lockfile is present" {
-                val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile")
-                val packageFile = File(projectDir, "Gemfile")
+                val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
 
-                val actualResult = Bundler.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
                 actualResult!!.project shouldBe Project.EMPTY
