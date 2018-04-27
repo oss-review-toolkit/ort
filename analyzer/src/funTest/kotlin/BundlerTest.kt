@@ -38,34 +38,26 @@ import java.io.File
 
 class BundlerTest : StringSpec() {
     private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val vcsDir = VersionControlSystem.forDirectory(rootDir)!!
-    private val vcsRevision = vcsDir.getRevision()
-    private val vcsUrl = vcsDir.getRemoteUrl()
+    private val projectsDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler")
 
     init {
         "Bundler should" {
-            "recognise a Ruby project" {
-                val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile")
-                val result = PackageManager.findManagedFiles(projectDir, listOf(Bundler))
-                result[Bundler]?.isEmpty() shouldBe false
-            }
-
             "resolve dependencies correctly" {
-                val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile")
-                val packageFile = File(projectDir, "Gemfile")
-                val result = Bundler.create().resolveDependencies(listOf(packageFile))[packageFile]
-                val expectedResults = patchExpectedResult(File(projectDir.parentFile, "lockfile-expected-output.yml")
-                        .readText())
+                val definitionFile = File(projectsDir, "lockfile/Gemfile")
+                val result = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+
+                val expectedResults = patchExpectedResult(File(projectsDir.parentFile,
+                        "bundler-expected-output.yml").readText())
+
                 yamlMapper.writeValueAsString(result) shouldBe expectedResults
 
-                File(projectDir, ".bundle").safeDeleteRecursively()
+                File(definitionFile.parentFile, ".bundle").safeDeleteRecursively()
             }
 
             "show error if no lockfile is present" {
-                val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile")
-                val packageFile = File(projectDir, "Gemfile")
+                val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
 
-                val result = Bundler.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
 
                 result shouldNotBe null
                 result!!.project shouldBe Project.EMPTY
@@ -76,11 +68,15 @@ class BundlerTest : StringSpec() {
         }.config(tags = setOf(ExpensiveTag))
     }
 
-    private fun patchExpectedResult(result: String) =
-            //vcs:
-            result.replaceFirst("url: \"\"", "url: \"$vcsUrl\"")
-                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
-                    // vcs_processed:
-                    .replaceFirst("url: \"\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
-                    .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
+    private fun patchExpectedResult(result: String): String {
+        val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
+        val vcsRevision = vcsDir.getRevision()
+        val vcsUrl = vcsDir.getRemoteUrl()
+
+        return result.replaceFirst("url: \"\"", "url: \"$vcsUrl\"")
+                .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
+                // vcs_processed:
+                .replaceFirst("url: \"\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
+                .replaceFirst("revision: \"\"", "revision: \"$vcsRevision\"")
+    }
 }
