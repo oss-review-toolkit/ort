@@ -20,16 +20,12 @@
 package com.here.ort.analyzer
 
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.Identifier
-import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.TestCaseContext
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.ByteArrayOutputStream
@@ -60,9 +56,9 @@ class MainTest : StringSpec() {
         }
     }
 
-    private fun patchExpectedResult(filename: File): String {
+    private fun patchExpectedResult(filename: File, outputDirName: String): String {
         val rootPath = rootDir.invariantSeparatorsPath
-        val outputPath = "${outputDir.invariantSeparatorsPath}/analyzer_results"
+        val outputPath = "${outputDir.invariantSeparatorsPath}/$outputDirName"
 
         return filename.readText()
                 .replace("<REPLACE_URL>", vcsUrl)
@@ -124,43 +120,42 @@ class MainTest : StringSpec() {
         }
 
         "Merging into single results file creates correct output" {
-            val outputAnalyzerDir = File(outputDir, "analyzer_results")
+            val analyzerOutputDir = File(outputDir, "merged-results")
 
-            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"))
+            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"),
+                    "merged-results")
 
             Main.main(arrayOf(
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
-                    "-o", outputAnalyzerDir.path,
+                    "-o", analyzerOutputDir.path,
                     "--merge-results"
             ))
 
-            val result = File(outputAnalyzerDir, "all-dependencies.yml").readText()
+            val result = File(analyzerOutputDir, "all-dependencies.yml").readText()
 
             result shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
-            val inputDir = File(projectDir, "gradle")
-            val curationsOutputDir = File(outputDir, "curations")
+            val analyzerOutputDir = File(outputDir, "curations")
 
+            val expectedResult = patchExpectedResult(
+                    File(projectDir, "gradle-all-dependencies-expected-result-with-curations.yml"), "curations")
+
+            // The command below should include the "--merge-results" option, but setting this option here would disable
+            // the feature because JCommander just switches the value of boolean options, and the option was already set
+            // to true by the test before. See: https://github.com/cbeust/jcommander/issues/378
             Main.main(arrayOf(
                     "-m", "Gradle",
-                    "-i", inputDir.path,
-                    "-o", curationsOutputDir.path,
+                    "-i", File(projectDir, "gradle").absolutePath,
+                    "-o", analyzerOutputDir.path,
                     "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
             ))
 
-            val resultsFile = File(curationsOutputDir, "lib/build-gradle-dependencies.yml")
-            val analyzerResult = yamlMapper.readValue(resultsFile, AnalyzerResult::class.java)
-            val hamcrestCorePackage = analyzerResult.packages.find {
-                it.pkg.id == Identifier("Maven", "org.hamcrest", "hamcrest-core", "1.3")
-            }?.pkg
+            val result = File(analyzerOutputDir, "all-dependencies.yml").readText()
 
-            hamcrestCorePackage shouldNotBe null
-            hamcrestCorePackage!!.homepageUrl shouldBe "http://hamcrest.org/JavaHamcrest/"
-            hamcrestCorePackage.description shouldBe "Curated description."
-            hamcrestCorePackage.declaredLicenses shouldBe sortedSetOf("curated license a", "curated license b")
+            result shouldBe expectedResult
         }
     }
 }
