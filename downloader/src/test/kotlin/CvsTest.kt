@@ -79,7 +79,7 @@ class CvsTest : StringSpec() {
             workingTree.getRevision() shouldBe "8707a14c78c6e77ffc59e685360fa20071c1afb6"
             workingTree.getRootPath() shouldBe zipContentDir
             workingTree.getPathToRoot(File(zipContentDir, "tomcat")) shouldBe "tomcat"
-        }.config(enabled = false)
+        }.config(enabled = Cvs.isInPath())
 
         "CVS correctly lists remote branches" {
             val expectedBranches = listOf(
@@ -88,7 +88,7 @@ class CvsTest : StringSpec() {
 
             val workingTree = Cvs.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
-        }.config(enabled = false)
+        }.config(enabled = Cvs.isInPath())
 
         "CVS correctly lists remote tags" {
             val expectedTags = listOf(
@@ -107,6 +107,6 @@ class CvsTest : StringSpec() {
 
             val workingTree = Cvs.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
-        }.config(enabled = false)
+        }.config(enabled = Cvs.isInPath())
     }
 }
