@@ -78,7 +78,7 @@ object Git : GitBase() {
 
         val revisionCandidates = mutableListOf<String>()
 
-        if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+        if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
             revisionCandidates.add(pkg.vcsProcessed.revision)
         } else {
             log.warn {
