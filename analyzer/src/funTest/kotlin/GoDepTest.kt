@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
@@ -34,10 +35,13 @@ import io.kotlintest.specs.FreeSpec
 import java.io.File
 
 class GoDepTest : FreeSpec() {
+    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects")
+
     init {
         "GoDep should" - {
             "resolve dependencies from a lockfile correctly" {
-                val projectDir = File("src/funTest/assets/projects/external/qmstr")
+                val projectDir = File("$projectDir/external/qmstr")
                 val manifestFile = File(projectDir, "Gopkg.toml")
                 val godep = GoDep.create()
 
@@ -48,7 +52,7 @@ class GoDepTest : FreeSpec() {
             }
 
             "show error if no lockfile is present" {
-                val projectDir = File("src/funTest/assets/projects/synthetic/godep/no-lockfile")
+                val projectDir = File("$projectDir/synthetic/godep/no-lockfile")
                 val manifestFile = File(projectDir, "Gopkg.toml")
                 val godep = GoDep.create()
 
@@ -62,7 +66,7 @@ class GoDepTest : FreeSpec() {
             }
 
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
-                val projectDir = File("src/funTest/assets/projects/synthetic/godep/no-lockfile")
+                val projectDir = File("$projectDir/synthetic/godep/no-lockfile")
                 val manifestFile = File(projectDir, "Gopkg.toml")
                 val godep = GoDep.create()
 
@@ -78,7 +82,7 @@ class GoDepTest : FreeSpec() {
             }
 
             "import dependencies from Glide" {
-                val projectDir = File("src/funTest/assets/projects/external/sprig")
+                val projectDir = File("$projectDir/external/sprig")
                 val manifestFile = File(projectDir, "glide.yaml")
                 val godep = GoDep.create()
 
@@ -89,7 +93,7 @@ class GoDepTest : FreeSpec() {
             }
 
             "import dependencies from godeps" {
-                val projectDir = File("src/funTest/assets/projects/external/godep")
+                val projectDir = File("$projectDir/external/godep")
                 val manifestFile = File(projectDir, "Godeps" + File.separator + "Godeps.json")
                 val godep = GoDep.create()
 
@@ -102,7 +106,7 @@ class GoDepTest : FreeSpec() {
             "construct an import path from VCS info" {
                 val godep = GoDep.create()
                 val gopath = File("/tmp/gopath")
-                val projectDir = File("src/funTest/assets/projects/external/qmstr")
+                val projectDir = File("$projectDir/external/qmstr")
                 val vcs = VersionControlSystem.forDirectory(projectDir)!!.getInfo()
 
                 val expectedPath = File("/tmp/gopath/src/github.com/QMSTR/qmstr.git").absoluteFile
@@ -113,7 +117,7 @@ class GoDepTest : FreeSpec() {
             "construct an import path for directories that are not repositories" {
                 val godep = GoDep.create()
                 val gopath = File("/tmp/gopath")
-                val projectDir = File("src/funTest/assets/projects/synthetic/godep/no-lockfile")
+                val projectDir = File("$projectDir/synthetic/godep/no-lockfile")
                 val vcs = VcsInfo.EMPTY
 
                 val expectedPath = File("/tmp/gopath/src/no-lockfile").absoluteFile

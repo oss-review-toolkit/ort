@@ -25,6 +25,7 @@ import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.ScanCodeTag
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.TestCaseContext
@@ -33,6 +34,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class ScanPathTest : StringSpec() {
+    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     private lateinit var outputDir: File
 
     // Required to make lateinit of outputDir work.
@@ -49,19 +51,19 @@ class ScanPathTest : StringSpec() {
 
     init {
         "BoyterLc recognizes our own LICENSE" {
-            val result = BoyterLc.scan(File("../LICENSE"), outputDir)
+            val result = BoyterLc.scan(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0", "ECL-2.0")
         }.config(tags = setOf(ExpensiveTag))
 
         "Licensee recognizes our own LICENSE" {
-            val result = Licensee.scan(File("../LICENSE"), outputDir)
+            val result = Licensee.scan(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
         }.config(tags = setOf(ExpensiveTag))
 
         "ScanCode recognizes our own LICENSE" {
-            val result = ScanCode.scan(File("../LICENSE"), outputDir)
+            val result = ScanCode.scan(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
         }.config(tags = setOf(ExpensiveTag, ScanCodeTag))

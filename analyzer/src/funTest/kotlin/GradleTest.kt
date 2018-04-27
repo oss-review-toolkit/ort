@@ -109,7 +109,7 @@ class GradleTest : StringSpec() {
         }
 
         "Fails nicely for Gradle version < 2.14" {
-            val packageFile = File("src/funTest/assets/projects/synthetic/gradle-unsupported-version/build.gradle")
+            val packageFile = File(projectDir, "../gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult("gradle-expected-output-unsupported-version.yml")
 
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
