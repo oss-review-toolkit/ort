@@ -39,7 +39,7 @@ object Mercurial : VersionControlSystem() {
 
     override val aliases = listOf("mercurial", "hg")
     override val commandName = "hg"
-    override val movingRevisionNames = listOf("tip", "default")
+    override val latestRevisionNames = listOf("tip")
 
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
@@ -125,7 +125,7 @@ object Mercurial : VersionControlSystem() {
 
             val workingTree = getWorkingTree(targetDir)
 
-            val revision = if (allowMovingRevisions || isFixedRevision(pkg.vcsProcessed.revision)) {
+            val revision = if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
                 pkg.vcsProcessed.revision
             } else {
                 log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
