@@ -19,12 +19,16 @@
 
 package com.here.ort.model
 
+import com.here.ort.utils.searchUpwardsForSubdirectory
+
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
 class ProjectTest : StringSpec() {
+    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+
     init {
         "collectAllDependencies contains all dependencies" {
             val expectedDependencies = listOf(
@@ -36,7 +40,7 @@ class ProjectTest : StringSpec() {
             ).map { Identifier.fromString(it) }.toSortedSet()
 
             val analyzerResultsFile =
-                    File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
+                    File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = yamlMapper.readValue(analyzerResultsFile, AnalyzerResult::class.java).project
 
             project.collectAllDependencies() shouldBe expectedDependencies

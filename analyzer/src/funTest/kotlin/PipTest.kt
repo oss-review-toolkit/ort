@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.PIP
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -28,15 +29,15 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class PipTest : WordSpec({
-    val workingDir = File("src/funTest/assets/projects/external")
+    val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+    val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/external")
 
     "setup.py dependencies" should {
         "be resolved correctly for spdx-tools-python" {
-            val projectDir = File(workingDir, "spdx-tools-python")
-            val definitionFile = File(projectDir, "setup.py")
+            val definitionFile = File(projectDir, "spdx-tools-python/setup.py")
 
             val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val expectedResult = File(workingDir, "spdx-tools-python-expected-output.yml").readText()
+            val expectedResult = File(projectDir, "spdx-tools-python-expected-output.yml").readText()
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -44,11 +45,10 @@ class PipTest : WordSpec({
 
     "requirements.txt dependencies" should {
         "be resolved correctly for example-python-flask" {
-            val projectDir = File(workingDir, "example-python-flask")
-            val definitionFile = File(projectDir, "requirements.txt")
+            val definitionFile = File(projectDir, "example-python-flask/requirements.txt")
 
             val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val expectedResult = File(workingDir, "example-python-flask-expected-output.yml").readText()
+            val expectedResult = File(projectDir, "example-python-flask-expected-output.yml").readText()
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
