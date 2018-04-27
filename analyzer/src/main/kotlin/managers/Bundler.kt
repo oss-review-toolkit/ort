@@ -27,12 +27,24 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.*
+import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Identifier
+import com.here.ort.model.Package
+import com.here.ort.model.PackageReference
+import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
+import com.here.ort.model.Scope
+import com.here.ort.model.VcsInfo
+import com.here.ort.model.jsonMapper
+import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
-import okhttp3.Request
+
+import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
@@ -40,6 +52,8 @@ import java.net.HttpURLConnection
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
+
+import okhttp3.Request
 
 const val DEPS_LIST_RUBY = """#!/usr/bin/ruby
 require 'bundler'
@@ -67,6 +81,19 @@ class Bundler : PackageManager() {
     }
 
     override fun command(workingDir: File) = "bundle"
+
+    override fun prepareResolution(definitionFiles: List<File>): List<File> {
+        // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
+        // stick to fixed versions to be sure to get consistent results.
+        checkCommandVersion(
+                "bundle",
+                Requirement.buildStrict("1.16.1"),
+                ignoreActualVersion = Main.ignoreVersions,
+                transform = { s -> s.replace("Bundler version ", "") }
+        )
+
+        return definitionFiles
+    }
 
     override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
         val workingDir = definitionFile.parentFile
