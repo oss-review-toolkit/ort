@@ -35,7 +35,6 @@ import io.kotlintest.Spec
 import io.kotlintest.specs.StringSpec
 
 abstract class AbstractIntegrationSpec : StringSpec() {
-
     /**
      * The software package to download.
      */

@@ -25,7 +25,6 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class MergedAnalyzerResultTest : WordSpec() {
-
     private val repositoryPath = File("/absolute/path")
     private val directoryDetails = Repository(repositoryPath.name, repositoryPath.invariantSeparatorsPath,
             VcsInfo.EMPTY)

@@ -111,7 +111,6 @@ class LegacyDependencyTreePlugin extends AbstractDependencyTreePlugin<Project> {
 }
 
 class AbstractDependencyTreePlugin<T> implements Plugin<T> {
-
     static boolean isCompatibleGradleVersion(String gradleVersion) {
         def array = gradleVersion.split('\\.')
         return array[0].toInteger() > 2 || (array[0].toInteger() == 2 && array[1].toInteger() >= 14)

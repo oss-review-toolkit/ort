@@ -236,7 +236,6 @@ class GoDep : PackageManager() {
 
             if (!msg.contains("no Go files in") &&
                     !msg.contains("build constraints exclude all Go files in")) {
-
                 throw IOException(msg)
             }
         }

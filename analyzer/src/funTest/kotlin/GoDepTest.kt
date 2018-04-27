@@ -34,7 +34,6 @@ import io.kotlintest.specs.FreeSpec
 import java.io.File
 
 class GoDepTest : FreeSpec() {
-
     init {
         "GoDep should" - {
             "resolve dependencies from a lockfile correctly" {

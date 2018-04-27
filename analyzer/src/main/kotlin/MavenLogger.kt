@@ -42,7 +42,6 @@ fun toPlexusLoggerLevel(level: Level) = when (level) {
  * log levels.
  */
 class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), log.name) {
-
     override fun getChildLogger(name: String?) = this
 
     override fun debug(message: String?, throwable: Throwable?) = log.debug(message, throwable)
