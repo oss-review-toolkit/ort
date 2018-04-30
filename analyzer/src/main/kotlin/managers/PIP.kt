@@ -140,7 +140,7 @@ class PIP : PackageManager() {
 
         var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
 
-        val (projectName, projectVersion, projectHomepage) = if (definitionFile.name == "setup.py") {
+        val (projectName, projectVersion, projectHomepage) = if (File(workingDir, "setup.py").isFile) {
             val pydep = if (OS.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
                 runInVirtualEnv(virtualEnvDir, workingDir, "python",
