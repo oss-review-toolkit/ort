@@ -1,0 +1,194 @@
+---
+allowDynamicVersions: true
+project:
+  id: "PIP::Example-App:2.4.0"
+  declared_licenses:
+  - "MIT"
+  aliases: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://example.org/app"
+  scopes:
+  - name: "install"
+    delivered: true
+    dependencies:
+    - id: "PyPI::Flask:0.12.4"
+      dependencies:
+      - id: "PyPI::Jinja2:2.10"
+        dependencies:
+        - id: "PyPI::MarkupSafe:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "PyPI::Werkzeug:0.14.1"
+        dependencies: []
+        errors: []
+      - id: "PyPI::click:6.7"
+        dependencies: []
+        errors: []
+      - id: "PyPI::itsdangerous:0.24"
+        dependencies: []
+        errors: []
+      errors: []
+packages:
+- package:
+    id: "PyPI::Flask:0.12.4"
+    declared_licenses:
+    - "BSD"
+    description: "A microframework based on Werkzeug, Jinja2 and good intentions"
+    homepage_url: "http://github.com/pallets/flask/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/2e/48/f1936dadac2326b3d73f2fe0a964a87d16be16eb9d7fc56f09c1bea3d17c/Flask-0.12.4-py2.py3-none-any.whl"
+      hash: "3b498df2add69ee16b228e8bdd581bce"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/1b/72/ffc594a6832337ace475f939e61c34a44cbb150cde9589f98c482b407dd8/Flask-0.12.4.tar.gz"
+      hash: "f885afe6dd25e8d48d5ba23f2857687e"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::Jinja2:2.10"
+    declared_licenses:
+    - "BSD"
+    description: "A small but fast and easy to use stand-alone template engine written\
+      \ in pure python."
+    homepage_url: "http://jinja.pocoo.org/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl"
+      hash: "cb679acd14423aef56dfff61d6a988f8"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47/Jinja2-2.10.tar.gz"
+      hash: "61ef1117f945486472850819b8d1eb3d"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::MarkupSafe:1.0"
+    declared_licenses:
+    - "BSD"
+    description: "Implements a XML/HTML/XHTML Markup safe string for Python"
+    homepage_url: "http://github.com/pallets/markupsafe"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
+      hash: "2fcedc9284d50e577b5192e8e3578355"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
+      hash: "2fcedc9284d50e577b5192e8e3578355"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::Werkzeug:0.14.1"
+    declared_licenses:
+    - "BSD"
+    description: "The comprehensive WSGI web application library."
+    homepage_url: "https://www.palletsprojects.org/p/werkzeug/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/20/c4/12e3e56473e52375aa29c4764e70d1b8f3efa6682bef8d0aae04fe335243/Werkzeug-0.14.1-py2.py3-none-any.whl"
+      hash: "11f469d64429cc75f995cf6be5662133"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/9f/08/a3bb1c045ec602dc680906fc0261c267bed6b3bb4609430aff92c3888ec8/Werkzeug-0.14.1.tar.gz"
+      hash: "6d20b5be2d245be4ac7706cc390d130c"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::click:6.7"
+    declared_licenses:
+    - "BSD"
+    description: "A simple wrapper around optparse for powerful command line utilities."
+    homepage_url: "http://github.com/mitsuhiko/click"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
+      hash: "5e7a4e296b3212da2ff11017675d7a4d"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
+      hash: "fc4cc00c4863833230d3af92af48abd4"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::itsdangerous:0.24"
+    declared_licenses:
+    - "BSD"
+    description: "Various helpers to pass trusted data to untrusted environments and\
+      \ back."
+    homepage_url: "http://github.com/mitsuhiko/itsdangerous"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
+      hash: "a3d55aa79369aef5345c036a8a26307f"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
+      hash: "a3d55aa79369aef5345c036a8a26307f"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+errors: []
