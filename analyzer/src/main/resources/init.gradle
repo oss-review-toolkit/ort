@@ -239,6 +239,8 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                         pomFile = result.file.absolutePath
                     } else if (result instanceof UnresolvedArtifactResult) {
                         error = collectCauses(result.failure).toString()
+                    } else if (result == null) {
+                        error = 'Resolution did not return any artifacts'
                     } else {
                         error = "Unknown ArtifactResult type: ${result.getClass().name}".toString()
                     }
