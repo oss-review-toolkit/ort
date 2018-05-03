@@ -23,17 +23,13 @@ import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import com.here.ort.model.CacheStatistics
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.utils.log
-
-data class CacheStatistics(
-        var numReads: Int = 0,
-        var numHits: Int = 0
-)
 
 interface ScanResultsCache {
 
