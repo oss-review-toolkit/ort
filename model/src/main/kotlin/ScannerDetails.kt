@@ -41,7 +41,7 @@ data class ScannerDetails(
          * The configuration of the scanner, could be command line arguments for example.
          */
         val configuration: String
-) {
+) : CustomData() {
     private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)
 
     /**

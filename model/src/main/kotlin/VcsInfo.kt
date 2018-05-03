@@ -60,7 +60,7 @@ data class VcsInfo(
          * interpreted as the path to the manifest file.
          */
         val path: String = ""
-) {
+) : CustomData() {
     companion object {
         /**
          * A constant for a [VcsInfo] where all properties are empty strings.

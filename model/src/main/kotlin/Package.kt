@@ -78,7 +78,7 @@ data class Package(
          */
         @JsonProperty("vcs_processed")
         val vcsProcessed: VcsInfo = vcs.normalize()
-) : Comparable<Package> {
+) : CustomData(), Comparable<Package> {
     /**
      * A comparison function to sort packages by their identifier.
      */

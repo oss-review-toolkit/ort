@@ -62,7 +62,7 @@ data class AnalyzerResult(
          * The list of all errors.
          */
         val errors: SortedMap<Identifier, List<String>>
-) {
+) : CustomData() {
     /**
      * Create the individual [ProjectAnalyzerResult]s this [AnalyzerResult] was built from.
      */
