@@ -59,8 +59,8 @@ class MergedAnalyzerResultTest : WordSpec() {
             "create the correct AnalyzerResults" {
                 val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
-                builder.addResult(File("/analyzer-result-1.yml"), analyzerResult1)
-                builder.addResult(File("/analyzer-result-2.yml"), analyzerResult2)
+                builder.addResult(analyzerResult1)
+                builder.addResult(analyzerResult2)
 
                 val mergedResults = builder.build()
 
@@ -70,8 +70,8 @@ class MergedAnalyzerResultTest : WordSpec() {
             "can be serialized and deserialized" {
                 val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
-                builder.addResult(File("/analyzer-result-1.yml"), analyzerResult1)
-                builder.addResult(File("/analyzer-result-2.yml"), analyzerResult2)
+                builder.addResult(analyzerResult1)
+                builder.addResult(analyzerResult2)
 
                 val mergedResults = builder.build()
 
@@ -87,16 +87,14 @@ class MergedAnalyzerResultTest : WordSpec() {
             "merge results from all files" {
                 val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
 
-                builder.addResult(File("/analyzer-result-1.yml"), analyzerResult1)
-                builder.addResult(File("/analyzer-result-2.yml"), analyzerResult2)
+                builder.addResult(analyzerResult1)
+                builder.addResult(analyzerResult2)
 
                 val mergedResults = builder.build()
 
                 mergedResults.allowDynamicVersions shouldBe true
                 mergedResults.repository shouldBe directoryDetails
                 mergedResults.projects shouldBe sortedSetOf(project1, project2)
-                mergedResults.projectResultsFiles shouldBe
-                        sortedMapOf(project1.id to "/analyzer-result-1.yml", project2.id to "/analyzer-result-2.yml")
                 mergedResults.packages shouldBe sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(),
                         package3.toCuratedPackage())
                 mergedResults.errors shouldBe

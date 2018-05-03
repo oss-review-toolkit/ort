@@ -49,12 +49,6 @@ data class MergedAnalyzerResult(
         val projects: SortedSet<Project>,
 
         /**
-         * Map holding paths to the individual analyzer results for each project.
-         */
-        @JsonProperty("project_id_result_file_path_map")
-        val projectResultsFiles: SortedMap<Identifier, String>,
-
-        /**
          * The set of identified packages for all projects.
          */
         val packages: SortedSet<CuratedPackage>,
@@ -80,18 +74,16 @@ class MergedResultsBuilder(
         private val vcsInfo: VcsInfo
 ) {
     private val projects = sortedSetOf<Project>()
-    private val projectResultsFiles = sortedMapOf<Identifier, String>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<String>>()
 
     fun build(): MergedAnalyzerResult {
         val repository = Repository(localRepository.name, localRepository.invariantSeparatorsPath, vcsInfo)
-        return MergedAnalyzerResult(allowDynamicVersions, repository, projects, projectResultsFiles, packages,
+        return MergedAnalyzerResult(allowDynamicVersions, repository, projects, packages,
                 errors)
     }
 
-    fun addResult(analyzerResultPath: File, analyzerResult: AnalyzerResult) {
-        projectResultsFiles[analyzerResult.project.id] = analyzerResultPath.invariantSeparatorsPath
+    fun addResult(analyzerResult: AnalyzerResult) {
         projects.add(analyzerResult.project)
         packages.addAll(analyzerResult.packages)
         errors[analyzerResult.project.id] = analyzerResult.errors
