@@ -187,17 +187,17 @@ abstract class LocalScanner : Scanner() {
     }
 
     /**
-     * Scan the provided [path] for license information, writing results to [outputDirectory]. Note that no caching will
-     * be used in this mode.
+     * Scan the provided [path] for license information, writing results to [outputDirectory] using the scanner's native
+     * output file format. Note that no scan results cache is used by this function.
      *
      * @param path The directory or file to scan.
      * @param outputDirectory The base directory to store scan results in.
      *
-     * @return The set of found licenses.
+     * @return The [ScanResult] with empty [Provenance] except for the download time.
      *
-     * @throws ScanException In case the package could not be scanned.
+     * @throws ScanException In case the path could not be scanned.
      */
-    fun scan(path: File, outputDirectory: File): ScanResult {
+    fun scanPath(path: File, outputDirectory: File): ScanResult {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scannerName = toString().toLowerCase()
         val resultsFile = File(scanResultsDirectory,
@@ -210,7 +210,17 @@ abstract class LocalScanner : Scanner() {
     }
 
     /**
-     * Scan the provided [path] for license information, writing results to [resultsFile].
+     * Scan the provided [path] for license information, writing results to [resultsFile] using the scanner's native
+     * output file format. Note that no scan results cache is used by this function.
+     *
+     * @param path The directory or file to scan.
+     * @param resultsFile The file to store scan results in.
+     * @param provenance [Provenance] information about the files in [path].
+     * @param scannerDetails The [ScannerDetails] of the current scanner.
+     *
+     * @return The [ScanResult], containing the provided [provenance] and [scannerDetails].
+     *
+     * @throws ScanException In case the path could not be scanned.
      */
     protected abstract fun scanPath(path: File, resultsFile: File, provenance: Provenance,
                                     scannerDetails: ScannerDetails): ScanResult
