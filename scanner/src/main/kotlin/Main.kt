@@ -280,33 +280,31 @@ object Main {
                 "Provided path does not exist: ${inputPath.absolutePath}"
             }
 
-            val localScanner = scanner as? LocalScanner
-
-            if (localScanner != null) {
-                println("Scanning path '${inputPath.absolutePath}'...")
-
-                val entry = try {
-                    val result = localScanner.scanPath(inputPath, outputDir)
-
-                    println("Detected licenses for path '${inputPath.absolutePath}': " +
-                            result.summary.licenses.joinToString())
-
-                    SummaryEntry(
-                            detectedLicenses = result.summary.licenses,
-                            errors = result.summary.errors.toMutableList()
-                    )
-                } catch (e: ScanException) {
-                    e.showStackTrace()
-
-                    log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
-
-                    SummaryEntry(errors = e.collectMessages().toMutableList())
-                }
-
-                pkgSummary[inputPath.absolutePath] = entry
-            } else {
-                throw IllegalArgumentException("To scan local files the chosen scanner must be a local scanner.")
+            require(scanner is LocalScanner) {
+                "To scan local files the chosen scanner must be a local scanner."
             }
+
+            println("Scanning path '${inputPath.absolutePath}'...")
+
+            val entry = try {
+                val result = (scanner as LocalScanner).scanPath(inputPath, outputDir)
+
+                println("Detected licenses for path '${inputPath.absolutePath}': " +
+                        result.summary.licenses.joinToString())
+
+                SummaryEntry(
+                        detectedLicenses = result.summary.licenses,
+                        errors = result.summary.errors.toMutableList()
+                )
+            } catch (e: ScanException) {
+                e.showStackTrace()
+
+                log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
+
+                SummaryEntry(errors = e.collectMessages().toMutableList())
+            }
+
+            pkgSummary[inputPath.absolutePath] = entry
         }
 
         val scannedScopes = includedScopes.map { it.name }.toSortedSet()
