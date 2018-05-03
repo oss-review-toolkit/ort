@@ -32,4 +32,9 @@ data class ScanResultContainer(
          * The list of [ScanResult]s.
          */
         val results: List<ScanResult>
-)
+) : Comparable<ScanResultContainer> {
+    /**
+     * A comparison function to sort scan result containers by their identifier.
+     */
+    override fun compareTo(other: ScanResultContainer) = id.compareTo(other.id)
+}
