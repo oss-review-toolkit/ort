@@ -316,11 +316,6 @@ projects:
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       dependencies: []
       errors: []
-project_id_result_file_path_map:
-  'Gradle::Gradle-Example:': "<REPLACE_PROJECT_PATH>/build-gradle-dependencies.yml"
-  Gradle:com.here.ort.gradle.example:app:1.0.0: "<REPLACE_PROJECT_PATH>/app/build-gradle-dependencies.yml"
-  Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0: "<REPLACE_PROJECT_PATH>/lib-without-repo/build-gradle-dependencies.yml"
-  Gradle:com.here.ort.gradle.example:lib:1.0.0: "<REPLACE_PROJECT_PATH>/lib/build-gradle-dependencies.yml"
 packages:
 - package:
     id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
