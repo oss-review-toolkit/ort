@@ -32,4 +32,4 @@ data class ScanResultContainer(
          * The list of [ScanResult]s.
          */
         val results: List<ScanResult>
-)
+) : CustomData()

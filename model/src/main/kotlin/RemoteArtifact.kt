@@ -40,7 +40,7 @@ data class RemoteArtifact(
          */
         @JsonProperty("hash_algorithm")
         val hashAlgorithm: HashAlgorithm
-) {
+) : CustomData() {
     companion object {
         /**
          * A constant for a [RemoteArtifact] where all properties are empty strings.

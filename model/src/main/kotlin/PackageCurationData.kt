@@ -77,7 +77,7 @@ data class PackageCurationData(
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val comment: String? = null
-) {
+) : CustomData() {
     /**
      * Apply the curation data to the provided package, by overriding all values of the original package with non-null
      * values of the curation data.

@@ -47,4 +47,4 @@ data class ScanResult(
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val rawResult: JsonNode? = null
-)
+) : CustomData()

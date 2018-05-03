@@ -41,7 +41,7 @@ data class PackageReference(
          * A list of errors that occurred handling this [PackageReference].
          */
         val errors: List<String> = emptyList()
-) : Comparable<PackageReference> {
+) : CustomData(), Comparable<PackageReference> {
     fun collectAllDependencies(): SortedSet<Identifier> = dependencies.map { it.id }.toSortedSet().also { result ->
         dependencies.forEach { result.addAll(it.collectAllDependencies()) }
     }

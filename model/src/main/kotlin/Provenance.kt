@@ -54,7 +54,7 @@ data class Provenance(
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val originalVcsInfo: VcsInfo? = null
-) {
+) : CustomData() {
     init {
         require(sourceArtifact == null || vcsInfo == null) {
             "Provenance does not allow both 'sourceArtifact' and 'vcsInfo' to be set, otherwise it is ambiguous " +
