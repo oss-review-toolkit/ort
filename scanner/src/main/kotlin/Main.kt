@@ -26,11 +26,12 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.here.ort.model.ProjectAnalyzerResult
+import com.here.ort.model.CacheStatistics
 import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
 import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.Scope
 import com.here.ort.model.jsonMapper
