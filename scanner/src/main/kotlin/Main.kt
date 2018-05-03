@@ -213,104 +213,118 @@ object Main {
 
         println("Using scanner '$scanner'.")
 
+        val scanSummary: ScanSummary = dependenciesFile?.let {
+            scanDependenciesFile(it)
+        } ?: inputPath!!.let {
+            scanInputPath(it)
+        }
+
+        writeSummary(outputDir, scanSummary)
+    }
+
+    private fun scanDependenciesFile(dependenciesFile: File): ScanSummary {
+        require(dependenciesFile.isFile) {
+            "Provided path is not a file: ${dependenciesFile.absolutePath}"
+        }
+
         val pkgSummary: PackageSummary = mutableMapOf()
 
         val includedScopes = sortedSetOf<Scope>()
         val excludedScopes = sortedSetOf<Scope>()
         val analyzerErrors = sortedMapOf<Identifier, List<String>>()
 
-        dependenciesFile?.let { dependenciesFile ->
-            require(dependenciesFile.isFile) {
-                "Provided path is not a file: ${dependenciesFile.absolutePath}"
+        val mapper = dependenciesFile.mapper()
+
+        val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+        analyzerErrors.putAll(analyzerResult.collectErrors())
+
+        // Add the project itself also as a "package" to scan.
+        val packages = mutableListOf(analyzerResult.project.toPackage())
+
+        if (scopesToScan.isNotEmpty()) {
+            println("Limiting scan to scopes $scopesToScan")
+
+            analyzerResult.project.scopes.partition { scopesToScan.contains(it.name) }.let {
+                includedScopes.addAll(it.first)
+                excludedScopes.addAll(it.second)
             }
 
-            val mapper = dependenciesFile.mapper()
-
-            val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
-            analyzerErrors.putAll(analyzerResult.collectErrors())
-
-            // Add the project itself also as a "package" to scan.
-            val packages = mutableListOf(analyzerResult.project.toPackage())
-
-            if (scopesToScan.isNotEmpty()) {
-                println("Limiting scan to scopes $scopesToScan")
-
-                analyzerResult.project.scopes.partition { scopesToScan.contains(it.name) }.let {
-                    includedScopes.addAll(it.first)
-                    excludedScopes.addAll(it.second)
-                }
-
-                if (includedScopes.isNotEmpty()) {
-                    packages.addAll(
-                            analyzerResult.packages.filter { curatedPackage ->
-                                includedScopes.any { scope -> scope.contains(curatedPackage.pkg) }
-                            }.map { it.pkg }
-                    )
-                } else {
-                    println("No scopes found for given scopes $scopesToScan.")
-                }
-            } else {
-                includedScopes.addAll(analyzerResult.project.scopes)
-                packages.addAll(analyzerResult.packages.map { it.pkg })
-            }
-
-            val results = scanner.scan(packages, outputDir, downloadDir)
-            results.forEach { pkg, result ->
-                // TODO: Make output format configurable.
-                File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.yml").also {
-                    yamlMapper.writeValue(it, ScanResultContainer(pkg.id, result))
-                }
-
-                val entry = SummaryEntry(
-                        scopes = findScopesForPackage(pkg, analyzerResult.project).toSortedSet(),
-                        declaredLicenses = pkg.declaredLicenses,
-                        detectedLicenses = result.flatMap { it.summary.licenses }.toSortedSet(),
-                        errors = result.flatMap { it.summary.errors }.toMutableList()
+            if (includedScopes.isNotEmpty()) {
+                packages.addAll(
+                        analyzerResult.packages.filter { curatedPackage ->
+                            includedScopes.any { scope -> scope.contains(curatedPackage.pkg) }
+                        }.map { it.pkg }
                 )
-
-                pkgSummary[pkg.id.toString()] = entry
-
-                println("Declared licenses for '${pkg.id}': ${entry.declaredLicenses.joinToString()}")
-                println("Detected licenses for '${pkg.id}': ${entry.detectedLicenses.joinToString()}")
+            } else {
+                println("No scopes found for given scopes $scopesToScan.")
             }
+        } else {
+            includedScopes.addAll(analyzerResult.project.scopes)
+            packages.addAll(analyzerResult.packages.map { it.pkg })
         }
 
-        inputPath?.let { inputPath ->
-            require(inputPath.exists()) {
-                "Provided path does not exist: ${inputPath.absolutePath}"
+        val results = scanner.scan(packages, outputDir, downloadDir)
+        results.forEach { pkg, result ->
+            // TODO: Make output format configurable.
+            File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.yml").also {
+                yamlMapper.writeValue(it, ScanResultContainer(pkg.id, result))
             }
 
-            require(scanner is LocalScanner) {
-                "To scan local files the chosen scanner must be a local scanner."
-            }
+            val entry = SummaryEntry(
+                    scopes = findScopesForPackage(pkg, analyzerResult.project).toSortedSet(),
+                    declaredLicenses = pkg.declaredLicenses,
+                    detectedLicenses = result.flatMap { it.summary.licenses }.toSortedSet(),
+                    errors = result.flatMap { it.summary.errors }.toMutableList()
+            )
 
-            println("Scanning path '${inputPath.absolutePath}'...")
+            pkgSummary[pkg.id.toString()] = entry
 
-            val entry = try {
-                val result = (scanner as LocalScanner).scanPath(inputPath, outputDir)
-
-                println("Detected licenses for path '${inputPath.absolutePath}': " +
-                        result.summary.licenses.joinToString())
-
-                SummaryEntry(
-                        detectedLicenses = result.summary.licenses,
-                        errors = result.summary.errors.toMutableList()
-                )
-            } catch (e: ScanException) {
-                e.showStackTrace()
-
-                log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
-
-                SummaryEntry(errors = e.collectMessages().toMutableList())
-            }
-
-            pkgSummary[inputPath.absolutePath] = entry
+            println("Declared licenses for '${pkg.id}': ${entry.declaredLicenses.joinToString()}")
+            println("Detected licenses for '${pkg.id}': ${entry.detectedLicenses.joinToString()}")
         }
 
         val scannedScopes = includedScopes.map { it.name }.toSortedSet()
         val ignoredScopes = excludedScopes.map { it.name }.toSortedSet()
-        writeSummary(outputDir, ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopes, ignoredScopes,
-                analyzerErrors))
+
+        return ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopes, ignoredScopes, analyzerErrors)
+    }
+
+    private fun scanInputPath(inputPath: File): ScanSummary {
+        require(inputPath.exists()) {
+            "Provided path does not exist: ${inputPath.absolutePath}"
+        }
+
+        require(scanner is LocalScanner) {
+            "To scan local files the chosen scanner must be a local scanner."
+        }
+
+        println("Scanning path '${inputPath.absolutePath}'...")
+
+        val entry = try {
+            val result = (scanner as LocalScanner).scanPath(inputPath, outputDir)
+
+            println("Detected licenses for path '${inputPath.absolutePath}': " +
+                    result.summary.licenses.joinToString())
+
+            SummaryEntry(
+                    detectedLicenses = result.summary.licenses,
+                    errors = result.summary.errors.toMutableList()
+            )
+        } catch (e: ScanException) {
+            e.showStackTrace()
+
+            log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
+
+            SummaryEntry(errors = e.collectMessages().toMutableList())
+        }
+
+        return ScanSummary(
+                pkgSummary = mutableMapOf(inputPath.absolutePath to entry),
+                cacheStats = ScanResultsCache.stats,
+                scannedScopes = sortedSetOf(),
+                ignoredScopes = sortedSetOf(),
+                analyzerErrors = sortedMapOf()
+        )
     }
 
     private fun findScopesForPackage(pkg: Package, project: Project) =
