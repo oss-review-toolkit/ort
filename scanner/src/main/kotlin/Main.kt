@@ -286,7 +286,7 @@ object Main {
                 println("Scanning path '${inputPath.absolutePath}'...")
 
                 val entry = try {
-                    val result = localScanner.scan(inputPath, outputDir)
+                    val result = localScanner.scanPath(inputPath, outputDir)
 
                     println("Detected licenses for path '${inputPath.absolutePath}': " +
                             result.summary.licenses.joinToString())
