@@ -193,8 +193,8 @@ object Main {
         // Make the parameter globally available.
         printStackTrace = stacktrace
 
-        if ((dependenciesFile != null) == (inputPath != null)) {
-            throw IllegalArgumentException("Either --dependencies-file or --input-path must be specified.")
+        require((dependenciesFile == null) != (inputPath == null)) {
+            "Either --dependencies-file or --input-path must be specified."
         }
 
         require(!outputDir.exists()) {
