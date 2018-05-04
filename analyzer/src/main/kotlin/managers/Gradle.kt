@@ -28,6 +28,7 @@ import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -123,6 +124,7 @@ class Gradle : PackageManager() {
                             name = dependencyTreeModel.name,
                             version = dependencyTreeModel.version
                     ),
+                    definitionFilePath = VersionControlSystem.pathToRoot(definitionFile) ?: "",
                     declaredLicenses = sortedSetOf(),
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,

@@ -67,6 +67,8 @@ class NpmTest : FreeSpec() {
         return File(projectDir.parentFile, "npm-expected-output.yml").readText()
                 // project.name:
                 .replaceFirst("npm-project", "npm-${workingDir.name}")
+                // project.definitionFilePath
+                .replaceFirst("<REPLACE_DEFINITION_FILE_PATH>", "$vcsPath/package.json")
                 // project.vcs_processed:
                 .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
                 .replaceFirst("<REPLACE_REVISION>", vcsRevision)

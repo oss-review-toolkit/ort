@@ -83,6 +83,12 @@ abstract class VersionControlSystem {
                 }
 
         /**
+         * Return the relative path to [file] with respect to the VCS root or null if [file] is not in a VCS repository.
+         */
+        fun pathToRoot(file: File) = VersionControlSystem.forDirectory(file.takeIf { it.isDirectory }
+                ?: file.parentFile)?.getPathToRoot(file)
+
+        /**
          * Decompose a [vcsUrl] into any contained VCS information.
          */
         fun splitUrl(vcsUrl: String): VcsInfo {

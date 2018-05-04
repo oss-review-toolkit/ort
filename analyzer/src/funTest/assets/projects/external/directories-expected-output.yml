@@ -2,6 +2,7 @@
 allowDynamicVersions: true
 project:
   id: "SBT:io.github.soc:directories:6"
+  definition_file_path: "target/directories-6.pom"
   declared_licenses:
   - "Mozilla Public License 2.0"
   aliases: []
