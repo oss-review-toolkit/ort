@@ -25,6 +25,7 @@ import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -151,6 +152,7 @@ class Maven : PackageManager() {
                         name = mavenProject.artifactId,
                         version = mavenProject.version
                 ),
+                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 aliases = emptyList(),
                 vcs = vcsFromPackage,

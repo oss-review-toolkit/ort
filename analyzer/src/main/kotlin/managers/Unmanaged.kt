@@ -22,6 +22,7 @@ package com.here.ort.analyzer.managers
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
@@ -53,6 +54,7 @@ class Unmanaged : PackageManager() {
                         name = definitionFile.name,
                         version = ""
                 ),
+                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                 declaredLicenses = sortedSetOf(),
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,

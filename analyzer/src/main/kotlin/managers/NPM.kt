@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
@@ -457,6 +458,7 @@ class NPM : PackageManager() {
                         version = version
                 ),
                 declaredLicenses = declaredLicenses,
+                definitionFilePath = VersionControlSystem.getPathToRoot(packageJson) ?: "",
                 aliases = emptyList(),
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage),
