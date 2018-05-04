@@ -56,17 +56,11 @@ class MainTest : StringSpec() {
         }
     }
 
-    private fun patchExpectedResult(filename: File, outputDirName: String): String {
-        val rootPath = rootDir.invariantSeparatorsPath
-        val outputPath = "${outputDir.invariantSeparatorsPath}/$outputDirName"
-
-        return filename.readText()
-                .replace("<REPLACE_URL>", vcsUrl)
-                .replace("<REPLACE_REVISION>", vcsRevision)
-                .replace("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(vcsUrl))
-                .replace("<REPLACE_REPOSITORY_PATH>", rootPath)
-                .replace("<REPLACE_PROJECT_PATH>", outputPath)
-    }
+    private fun patchExpectedResult(filename: File) =
+            filename.readText()
+                    .replace("<REPLACE_URL>", vcsUrl)
+                    .replace("<REPLACE_REVISION>", vcsRevision)
+                    .replace("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(vcsUrl))
 
     init {
         "Activating only Gradle works" {
@@ -122,8 +116,7 @@ class MainTest : StringSpec() {
         "Merging into single results file creates correct output" {
             val analyzerOutputDir = File(outputDir, "merged-results")
 
-            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"),
-                    "merged-results")
+            val expectedResult = patchExpectedResult(File(projectDir, "gradle-all-dependencies-expected-result.yml"))
 
             Main.main(arrayOf(
                     "-m", "Gradle",
@@ -141,7 +134,7 @@ class MainTest : StringSpec() {
             val analyzerOutputDir = File(outputDir, "curations")
 
             val expectedResult = patchExpectedResult(
-                    File(projectDir, "gradle-all-dependencies-expected-result-with-curations.yml"), "curations")
+                    File(projectDir, "gradle-all-dependencies-expected-result-with-curations.yml"))
 
             // The command below should include the "--merge-results" option, but setting this option here would disable
             // the feature because JCommander just switches the value of boolean options, and the option was already set

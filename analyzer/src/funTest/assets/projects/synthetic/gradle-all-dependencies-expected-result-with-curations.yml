@@ -1,18 +1,15 @@
 ---
 allow_dynamic_versions: false
-repository:
-  name: "gradle"
-  path: "<REPLACE_REPOSITORY_PATH>/analyzer/src/funTest/assets/projects/synthetic/gradle"
-  vcs:
-    type: "Git"
-    url: "<REPLACE_URL>"
-    revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
-  vcs_processed:
-    type: "git"
-    url: "<REPLACE_URL_PROCESSED>"
-    revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+vcs:
+  type: "Git"
+  url: "<REPLACE_URL>"
+  revision: "<REPLACE_REVISION>"
+  path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+vcs_processed:
+  type: "git"
+  url: "<REPLACE_URL_PROCESSED>"
+  revision: "<REPLACE_REVISION>"
+  path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
 projects:
 - id: "Gradle::Gradle-Example:"
   declared_licenses: []

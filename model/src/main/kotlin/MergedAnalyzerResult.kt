@@ -21,7 +21,6 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -39,9 +38,15 @@ data class MergedAnalyzerResult(
         val allowDynamicVersions: Boolean,
 
         /**
-         * Description of the scanned repository, with VCS information if available.
+         * The [VcsInfo] of the analyzed repository.
          */
-        val repository: Repository,
+        val vcs: VcsInfo,
+
+        /**
+         * The normalized [VcsInfo] of the analyzed repository.
+         */
+        @JsonProperty("vcs_processed")
+        val vcsProcessed: VcsInfo,
 
         /**
          * Sorted set of the projects, as they appear in the individual analyzer results.
@@ -70,7 +75,6 @@ data class MergedAnalyzerResult(
 
 class MergedResultsBuilder(
         private val allowDynamicVersions: Boolean,
-        private val localRepository: File,
         private val vcsInfo: VcsInfo
 ) {
     private val projects = sortedSetOf<Project>()
@@ -78,9 +82,7 @@ class MergedResultsBuilder(
     private val errors = sortedMapOf<Identifier, List<String>>()
 
     fun build(): MergedAnalyzerResult {
-        val repository = Repository(localRepository.name, localRepository.invariantSeparatorsPath, vcsInfo)
-        return MergedAnalyzerResult(allowDynamicVersions, repository, projects, packages,
-                errors)
+        return MergedAnalyzerResult(allowDynamicVersions, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
     }
 
     fun addResult(analyzerResult: AnalyzerResult) {
@@ -89,29 +91,3 @@ class MergedResultsBuilder(
         errors[analyzerResult.project.id] = analyzerResult.errors
     }
 }
-
-/**
- * A representation of a locally cloned source code repository.
- */
-data class Repository(
-        /**
-         * The name of the directory this repository was cloned to.
-         */
-        val name: String,
-
-        /**
-         * The absolute path of the local repository.
-         */
-        val path: String,
-
-        /**
-         * The [VcsInfo] of the repository.
-         */
-        val vcs: VcsInfo,
-
-        /**
-         * The normalized [VcsInfo] of the repository.
-         */
-        @JsonProperty("vcs_processed")
-        val vcsProcessed: VcsInfo = vcs.normalize()
-)
