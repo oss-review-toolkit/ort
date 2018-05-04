@@ -2,6 +2,7 @@
 allowDynamicVersions: false
 project:
   id: "NPM::npm-project:2.0.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"
   aliases: []

@@ -2,6 +2,7 @@
 allowDynamicVersions: true
 project:
   id: "Maven:com.here.ort.maven:maven-parent-project:1.0-SNAPSHOT"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven-parent/pom.xml"
   declared_licenses:
   - "Apache License, Version 2.0"
   aliases: []

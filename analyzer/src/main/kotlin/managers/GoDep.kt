@@ -124,6 +124,7 @@ class GoDep : PackageManager() {
                 allowDynamicVersions = Main.allowDynamicVersions,
                 project = Project(
                         id = Identifier(provider, "", projectDir.name, projectVcs.revision),
+                        definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                         declaredLicenses = sortedSetOf(),
                         aliases = emptyList(),
                         vcs = VcsInfo.EMPTY,

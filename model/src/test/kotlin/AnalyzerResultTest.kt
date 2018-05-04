@@ -30,6 +30,7 @@ class AnalyzerResultTest : StringSpec({
                     allowDynamicVersions = true,
                     project = Project(
                             id = Identifier("provider", "namespace", "name", "version"),
+                            definitionFilePath = "definitionFilePath",
                             declaredLicenses = sortedSetOf(),
                             aliases = listOf(),
                             vcs = VcsInfo.EMPTY,

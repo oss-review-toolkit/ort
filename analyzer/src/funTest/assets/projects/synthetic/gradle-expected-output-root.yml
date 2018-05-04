@@ -2,6 +2,7 @@
 allowDynamicVersions: true
 project:
   id: "Gradle::Gradle-Example:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/build.gradle"
   declared_licenses: []
   aliases: []
   vcs:

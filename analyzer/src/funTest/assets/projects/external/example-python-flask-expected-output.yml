@@ -2,6 +2,7 @@
 allowDynamicVersions: true
 project:
   id: "PIP::example-python-flask:"
+  definition_file_path: "requirements.txt"
   declared_licenses: []
   aliases: []
   vcs:

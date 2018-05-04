@@ -12,6 +12,7 @@ vcs_processed:
   path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
 projects:
 - id: "Gradle::Gradle-Example:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/build.gradle"
   declared_licenses: []
   aliases: []
   vcs:
@@ -27,6 +28,7 @@ projects:
   homepage_url: ""
   scopes: []
 - id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"
   declared_licenses: []
   aliases: []
   vcs:
@@ -132,6 +134,7 @@ projects:
         errors: []
       errors: []
 - id: "Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
   declared_licenses: []
   aliases: []
   vcs:
@@ -212,6 +215,7 @@ projects:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
 - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
   declared_licenses: []
   aliases: []
   vcs:

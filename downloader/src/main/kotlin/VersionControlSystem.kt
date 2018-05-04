@@ -83,6 +83,14 @@ abstract class VersionControlSystem {
                 }
 
         /**
+         * Return the relative path to [file] with respect to the VCS root or null if [file] is not in a VCS repository.
+         * This is a convenience wrapper around [WorkingTree.getPathToRoot] that creates a temporary working tree based
+         * on [file].
+         */
+        fun getPathToRoot(file: File) = forDirectory(file.takeIf { it.isDirectory } ?: file.parentFile)
+                ?.getPathToRoot(file)
+
+        /**
          * Decompose a [vcsUrl] into any contained VCS information.
          */
         fun splitUrl(vcsUrl: String): VcsInfo {

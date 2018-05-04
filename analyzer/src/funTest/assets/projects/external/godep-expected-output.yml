@@ -2,6 +2,7 @@
 allowDynamicVersions: false
 project:
   id: "GoDep::godep:ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
+  definition_file_path: "Godeps/Godeps.json"
   declared_licenses: []
   aliases: []
   vcs:
