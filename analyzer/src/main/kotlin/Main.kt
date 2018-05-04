@@ -223,8 +223,7 @@ object Main {
         val failedAnalysis = sortedSetOf<String>()
 
         val mergedResultsBuilder = if (createMergedResult) {
-            MergedResultsBuilder(allowDynamicVersions, absoluteProjectPath,
-                    vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY)
+            MergedResultsBuilder(allowDynamicVersions, vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY)
         } else {
             null
         }

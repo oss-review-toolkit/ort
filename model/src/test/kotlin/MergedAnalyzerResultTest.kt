@@ -22,12 +22,8 @@ package com.here.ort.model
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
-import java.io.File
-
 class MergedAnalyzerResultTest : WordSpec() {
-    private val repositoryPath = File("/absolute/path")
-    private val directoryDetails = Repository(repositoryPath.name, repositoryPath.invariantSeparatorsPath,
-            VcsInfo.EMPTY)
+    private val vcs = VcsInfo("type", "url", "revision", "path")
 
     private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
@@ -57,7 +53,7 @@ class MergedAnalyzerResultTest : WordSpec() {
     init {
         "MergedAnalyzerResult" should {
             "create the correct AnalyzerResults" {
-                val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
+                val builder = MergedResultsBuilder(true, vcs)
 
                 builder.addResult(analyzerResult1)
                 builder.addResult(analyzerResult2)
@@ -68,7 +64,7 @@ class MergedAnalyzerResultTest : WordSpec() {
             }
 
             "can be serialized and deserialized" {
-                val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
+                val builder = MergedResultsBuilder(true, vcs)
 
                 builder.addResult(analyzerResult1)
                 builder.addResult(analyzerResult2)
@@ -85,7 +81,7 @@ class MergedAnalyzerResultTest : WordSpec() {
 
         "MergedResultsBuilder" should {
             "merge results from all files" {
-                val builder = MergedResultsBuilder(true, repositoryPath, VcsInfo.EMPTY)
+                val builder = MergedResultsBuilder(true, vcs)
 
                 builder.addResult(analyzerResult1)
                 builder.addResult(analyzerResult2)
@@ -93,7 +89,8 @@ class MergedAnalyzerResultTest : WordSpec() {
                 val mergedResults = builder.build()
 
                 mergedResults.allowDynamicVersions shouldBe true
-                mergedResults.repository shouldBe directoryDetails
+                mergedResults.vcs shouldBe vcs
+                mergedResults.vcsProcessed shouldBe vcs.normalize()
                 mergedResults.projects shouldBe sortedSetOf(project1, project2)
                 mergedResults.packages shouldBe sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(),
                         package3.toCuratedPackage())
