@@ -28,7 +28,6 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
-import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
@@ -134,8 +133,9 @@ abstract class PackageManager {
          * Merge the [VcsInfo] read from the package with [VcsInfo] deduced from the VCS URL.
          */
         fun processPackageVcs(vcsFromPackage: VcsInfo): VcsInfo {
-            val vcsFromUrl = VersionControlSystem.splitUrl(normalizeVcsUrl(vcsFromPackage.url))
-            return vcsFromUrl.merge(vcsFromPackage)
+            val normalizedVcsFromPackage = vcsFromPackage.normalize()
+            val vcsFromUrl = VersionControlSystem.splitUrl(normalizedVcsFromPackage.url)
+            return vcsFromUrl.merge(normalizedVcsFromPackage)
         }
 
         /**
