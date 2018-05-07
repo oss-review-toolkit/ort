@@ -87,7 +87,7 @@ class Gradle : PackageManager() {
                 .connect()
 
         try {
-            val initScriptFile = File.createTempFile("init", "gradle")
+            val initScriptFile = File.createTempFile("init", ".gradle")
             initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
 
             val dependencyTreeModel = connection
