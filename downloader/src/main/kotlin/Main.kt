@@ -221,15 +221,15 @@ object Main {
                 }
             } catch (e: JsonMappingException) {
                 // Read packages assuming the dependencies file contains a AnalyzerResult.
-                val mergedAnalyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+                val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
 
                 mutableListOf<Package>().apply {
                     if (entities.contains(DataEntity.PROJECT)) {
-                        addAll(mergedAnalyzerResult.projects.map { it.toPackage() })
+                        addAll(analyzerResult.projects.map { it.toPackage() })
                     }
 
                     if (entities.contains(DataEntity.PACKAGES)) {
-                        addAll(mergedAnalyzerResult.packages.map { it.pkg })
+                        addAll(analyzerResult.packages.map { it.pkg })
                     }
                 }
             }
