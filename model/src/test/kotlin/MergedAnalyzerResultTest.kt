@@ -44,15 +44,15 @@ class MergedAnalyzerResultTest : WordSpec() {
             scopes = sortedSetOf(scope1, scope2)
     )
 
-    private val analyzerResult1 = AnalyzerResult(true, project1, sortedSetOf(package1.toCuratedPackage()),
+    private val analyzerResult1 = ProjectAnalyzerResult(true, project1, sortedSetOf(package1.toCuratedPackage()),
             listOf("error-1", "error-2"))
-    private val analyzerResult2 = AnalyzerResult(true, project2,
+    private val analyzerResult2 = ProjectAnalyzerResult(true, project2,
             sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
             listOf("error-2"))
 
     init {
         "MergedAnalyzerResult" should {
-            "create the correct AnalyzerResults" {
+            "create the correct ProjectAnalyzerResults" {
                 val builder = MergedResultsBuilder(true, vcs)
 
                 builder.addResult(analyzerResult1)
@@ -60,7 +60,7 @@ class MergedAnalyzerResultTest : WordSpec() {
 
                 val mergedResults = builder.build()
 
-                mergedResults.createAnalyzerResults() shouldBe listOf(analyzerResult1, analyzerResult2)
+                mergedResults.createProjectAnalyzerResults() shouldBe listOf(analyzerResult1, analyzerResult2)
             }
 
             "can be serialized and deserialized" {

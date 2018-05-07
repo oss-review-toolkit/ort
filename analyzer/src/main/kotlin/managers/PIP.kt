@@ -28,12 +28,12 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.HashAlgorithm
-import com.here.ort.model.Identifier
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
@@ -112,7 +112,7 @@ class PIP : PackageManager() {
         return definitionFiles
     }
 
-    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
         // 2. Get meta-data about the local project via pydep (only for setup.py-based projects).
@@ -270,7 +270,7 @@ class PIP : PackageManager() {
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.safeDeleteRecursively()
 
-        return AnalyzerResult(true, project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(true, project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {

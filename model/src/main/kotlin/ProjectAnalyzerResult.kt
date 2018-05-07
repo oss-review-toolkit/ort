@@ -24,7 +24,7 @@ import java.util.SortedSet
 /**
  * A class that bundles all information generated during an analysis.
  */
-data class AnalyzerResult(
+data class ProjectAnalyzerResult(
         /**
          * If dynamic versions were allowed during the dependency resolution. If true it means that the dependency tree
          * might change with another scan if any of the (transitive) dependencies is declared with a version range and

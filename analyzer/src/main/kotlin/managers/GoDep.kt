@@ -26,11 +26,11 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
@@ -64,7 +64,7 @@ class GoDep : PackageManager() {
 
     override fun command(workingDir: File) = "dep"
 
-    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = VersionControlSystem.forDirectory(projectDir)?.getInfo()?.normalize() ?: VcsInfo.EMPTY
         val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
@@ -120,7 +120,7 @@ class GoDep : PackageManager() {
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively()
 
-        return AnalyzerResult(
+        return ProjectAnalyzerResult(
                 allowDynamicVersions = Main.allowDynamicVersions,
                 project = Project(
                         id = Identifier(provider, "", projectDir.name, projectVcs.revision),

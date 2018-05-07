@@ -26,7 +26,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.Package
@@ -231,7 +231,7 @@ object Main {
 
         val mapper = dependenciesFile.mapper()
 
-        val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+        val analyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
         analyzerErrors.putAll(analyzerResult.collectErrors())
 
         // Add the project itself also as a "package" to scan.

@@ -28,11 +28,11 @@ import com.beust.jcommander.ParameterException
 
 import com.fasterxml.jackson.databind.JsonMappingException
 
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.MergedAnalyzerResult
 import com.here.ort.model.Package
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.mapper
@@ -206,9 +206,9 @@ object Main {
 
             val mapper = it.mapper()
 
-            // Read packages assuming the dependencies file contains an AnalyzerResult.
+            // Read packages assuming the dependencies file contains an ProjectAnalyzerResult.
             try {
-                val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
+                val analyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
 
                 mutableListOf<Package>().apply {
                     if (entities.contains(DataEntity.PROJECT)) {
