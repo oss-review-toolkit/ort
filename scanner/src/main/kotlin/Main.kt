@@ -26,14 +26,19 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.here.ort.model.CacheStatistics
+import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
-import com.here.ort.model.Package
-import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
+import com.here.ort.model.ProjectScanScopes
+import com.here.ort.model.Provenance
+import com.here.ort.model.ScanRecord
+import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
+import com.here.ort.model.ScanSummary
 import com.here.ort.model.Scope
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.mapper
 import com.here.ort.model.yamlMapper
@@ -48,28 +53,9 @@ import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
-import java.util.SortedMap
-import java.util.SortedSet
+import java.time.Instant
 
 import kotlin.system.exitProcess
-
-@Suppress("unused") // The class is only used to serialize data.
-class ScanSummary(
-        val pkgSummary: PackageSummary,
-        val cacheStats: CacheStatistics,
-        val scannedScopes: SortedSet<String>,
-        val ignoredScopes: SortedSet<String>,
-        val analyzerErrors: SortedMap<Identifier, List<String>>
-)
-
-typealias PackageSummary = MutableMap<String, SummaryEntry>
-
-class SummaryEntry(
-        val scopes: SortedSet<String> = sortedSetOf(),
-        val declaredLicenses: SortedSet<String> = sortedSetOf(),
-        val detectedLicenses: SortedSet<String> = sortedSetOf(),
-        val errors: MutableList<String> = mutableListOf()
-)
 
 /**
  * The main entry point of the application.
@@ -214,17 +200,15 @@ object Main {
 
         println("Using scanner '$scanner'.")
 
-        val scanSummary = dependenciesFile?.let { scanDependenciesFile(it) } ?: scanInputPath(inputPath!!)
+        val scanRecord = dependenciesFile?.let { scanDependenciesFile(it) } ?: scanInputPath(inputPath!!)
 
-        writeSummary(outputDir, scanSummary)
+        writeScanRecord(outputDir, scanRecord)
     }
 
-    private fun scanDependenciesFile(dependenciesFile: File): ScanSummary {
+    private fun scanDependenciesFile(dependenciesFile: File): ScanRecord {
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
-
-        val pkgSummary: PackageSummary = mutableMapOf()
 
         val includedScopes = sortedSetOf<Scope>()
         val excludedScopes = sortedSetOf<Scope>()
@@ -267,26 +251,27 @@ object Main {
                 yamlMapper.writeValue(it, ScanResultContainer(pkg.id, result))
             }
 
-            val entry = SummaryEntry(
-                    scopes = findScopesForPackage(pkg, projectAnalyzerResult.project).toSortedSet(),
-                    declaredLicenses = pkg.declaredLicenses,
-                    detectedLicenses = result.flatMap { it.summary.licenses }.toSortedSet(),
-                    errors = result.flatMap { it.summary.errors }.toMutableList()
-            )
-
-            pkgSummary[pkg.id.toString()] = entry
-
-            println("Declared licenses for '${pkg.id}': ${entry.declaredLicenses.joinToString()}")
-            println("Detected licenses for '${pkg.id}': ${entry.detectedLicenses.joinToString()}")
+            println("Declared licenses for '${pkg.id}': ${pkg.declaredLicenses.joinToString()}")
+            println("Detected licenses for '${pkg.id}': ${result.flatMap { it.summary.errors }.joinToString()}")
         }
 
         val scannedScopes = includedScopes.map { it.name }.toSortedSet()
         val ignoredScopes = excludedScopes.map { it.name }.toSortedSet()
+        val projectScanResult = ProjectScanScopes(projectAnalyzerResult.project.id, scannedScopes, ignoredScopes)
 
-        return ScanSummary(pkgSummary, ScanResultsCache.stats, scannedScopes, ignoredScopes, analyzerErrors)
+        val analyzerResult = AnalyzerResultBuilder(projectAnalyzerResult.allowDynamicVersions,
+                projectAnalyzerResult.project.vcsProcessed).addResult(projectAnalyzerResult).build()
+
+        val resultContainers = results.map { (pkg, results) ->
+            // Remove the raw results from the scan results to reduce the size of the scan result.
+            // TODO: Consider adding an option to keep the raw results.
+            ScanResultContainer(pkg.id, results.map { it.copy(rawResult = null) })
+        }.toSortedSet()
+
+        return ScanRecord(analyzerResult, sortedSetOf(projectScanResult), resultContainers, ScanResultsCache.stats)
     }
 
-    private fun scanInputPath(inputPath: File): ScanSummary {
+    private fun scanInputPath(inputPath: File): ScanRecord {
         require(inputPath.exists()) {
             "Provided path does not exist: ${inputPath.absolutePath}"
         }
@@ -295,47 +280,42 @@ object Main {
             "To scan local files the chosen scanner must be a local scanner."
         }
 
+        val localScanner = scanner as LocalScanner
+
         println("Scanning path '${inputPath.absolutePath}'...")
 
-        val entry = try {
-            val result = (scanner as LocalScanner).scanPath(inputPath, outputDir)
-
-            println("Detected licenses for path '${inputPath.absolutePath}': " +
-                    result.summary.licenses.joinToString())
-
-            SummaryEntry(
-                    detectedLicenses = result.summary.licenses,
-                    errors = result.summary.errors.toMutableList()
-            )
+        val result = try {
+            localScanner.scanPath(inputPath, outputDir).also {
+                println("Detected licenses for path '${inputPath.absolutePath}': ${it.summary.licenses.joinToString()}")
+            }
         } catch (e: ScanException) {
             e.showStackTrace()
 
             log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
 
-            SummaryEntry(errors = e.collectMessages().toMutableList())
+            val now = Instant.now()
+            val summary = ScanSummary(now, now, 0, sortedSetOf(), e.collectMessages().toSortedSet())
+            ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 
-        return ScanSummary(
-                pkgSummary = mutableMapOf(inputPath.absolutePath to entry),
-                cacheStats = ScanResultsCache.stats,
-                scannedScopes = sortedSetOf(),
-                ignoredScopes = sortedSetOf(),
-                analyzerErrors = sortedMapOf()
-        )
+        val vcsInfo = VersionControlSystem.forDirectory(inputPath.takeIf { it.isDirectory }
+                ?: inputPath.parentFile)?.getInfo(inputPath) ?: VcsInfo.EMPTY
+        val analyzerResult = AnalyzerResultBuilder(true, vcsInfo).build()
+
+        val scanResultContainer = ScanResultContainer(Identifier("", "", inputPath.absolutePath, ""), listOf(result))
+
+        return ScanRecord(analyzerResult, sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
     }
 
-    private fun findScopesForPackage(pkg: Package, project: Project) =
-            project.scopes.filter { it.contains(pkg) }.map { it.name }
-
-    private fun writeSummary(outputDirectory: File, scanSummary: ScanSummary) {
+    private fun writeScanRecord(outputDirectory: File, scanRecord: ScanRecord) {
         summaryFormats.forEach { format ->
-            val summaryFile = File(outputDirectory, "scan-summary.${format.fileExtension}")
+            val scanRecordFile = File(outputDirectory, "scan-record.${format.fileExtension}")
             val mapper = when (format) {
                 OutputFormat.JSON -> jsonMapper
                 OutputFormat.YAML -> yamlMapper
             }
-            println("Writing scan summary to ${summaryFile.absolutePath}.")
-            mapper.writerWithDefaultPrettyPrinter().writeValue(summaryFile, scanSummary)
+            println("Writing scan record to ${scanRecordFile.absolutePath}.")
+            mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, scanRecord)
         }
     }
 }
