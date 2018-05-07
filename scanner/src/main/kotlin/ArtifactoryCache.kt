@@ -113,6 +113,14 @@ class ArtifactoryCache(
             return false
         }
 
+        // Do not cache scan results without raw result. The raw result can be set to null for other usages, but in the
+        // cache it must never be null.
+        if (scanResult.rawResult == null) {
+            log.info { "Not caching scan result for '$id' because the raw result is null." }
+
+            return false
+        }
+
         // Do not cache scan results without provenance information, because they cannot be assigned to the revision of
         // the package source code later.
         if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {

@@ -164,6 +164,18 @@ class HttpCacheTest : StringSpec() {
             cachedResults.results[0] shouldBe scanResult
         }
 
+        "Does not add scan result without raw result to cache" {
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles)
+
+            val result = cache.add(id, scanResult)
+            val cachedResults = cache.read(id)
+
+            result shouldBe false
+            cachedResults.id shouldBe id
+            cachedResults.results.size shouldBe 0
+        }
+
         "Does not add scan result with fileCount 0 to cache" {
             val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles,
