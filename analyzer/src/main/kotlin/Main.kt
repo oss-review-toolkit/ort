@@ -30,9 +30,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.MergedResultsBuilder
 import com.here.ort.model.OutputFormat
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -138,7 +138,8 @@ object Main {
             order = PARAMETER_ORDER_HELP)
     private var help = false
 
-    private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: AnalyzerResult): File {
+    private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: ProjectAnalyzerResult)
+            : File {
         // Mirror the directory structure from the project in the output.
         val currentDir = if (currentPath.isFile) currentPath.parentFile else currentPath
         val outputDir = File(outputRoot, currentDir.toRelativeString(projectRoot)).apply { safeMkdirs() }
@@ -236,7 +237,7 @@ object Main {
             val curatedResults = packageCurationsFile?.let {
                 val provider = YamlFilePackageCurationProvider(it)
                 results.mapValues { entry ->
-                    AnalyzerResult(
+                    ProjectAnalyzerResult(
                             allowDynamicVersions = entry.value.allowDynamicVersions,
                             project = entry.value.project,
                             errors = entry.value.errors,

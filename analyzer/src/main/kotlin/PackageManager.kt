@@ -23,8 +23,8 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.managers.*
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
@@ -42,7 +42,7 @@ import java.nio.file.attribute.BasicFileAttributes
 import kotlin.system.measureTimeMillis
 
 typealias ManagedProjectFiles = Map<PackageManagerFactory<PackageManager>, List<File>>
-typealias ResolutionResult = MutableMap<File, AnalyzerResult>
+typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
 
 /**
  * A class representing a package manager that handles software dependencies.
@@ -161,7 +161,7 @@ abstract class PackageManager {
      * for each provided path.
      */
     open fun resolveDependencies(definitionFiles: List<File>): ResolutionResult {
-        val result = mutableMapOf<File, AnalyzerResult>()
+        val result = mutableMapOf<File, ProjectAnalyzerResult>()
 
         prepareResolution(definitionFiles).forEach { definitionFile ->
             println("Resolving ${javaClass.simpleName} dependencies for '$definitionFile'...")
@@ -174,7 +174,7 @@ abstract class PackageManager {
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    result[definitionFile] = AnalyzerResult(Main.allowDynamicVersions, Project.EMPTY,
+                    result[definitionFile] = ProjectAnalyzerResult(Main.allowDynamicVersions, Project.EMPTY,
                             sortedSetOf(), e.collectMessages())
 
                     log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
@@ -196,9 +196,9 @@ abstract class PackageManager {
     protected open fun prepareResolution(definitionFiles: List<File>): List<File> = definitionFiles
 
     /**
-     * Resolve dependencies for a single [definitionFile], returning the [AnalyzerResult].
+     * Resolve dependencies for a single [definitionFile], returning the [ProjectAnalyzerResult].
      */
-    protected open fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+    protected open fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

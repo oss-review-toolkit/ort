@@ -41,7 +41,7 @@ class ProjectTest : StringSpec() {
 
             val analyzerResultsFile =
                     File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
-            val project = yamlMapper.readValue(analyzerResultsFile, AnalyzerResult::class.java).project
+            val project = yamlMapper.readValue(analyzerResultsFile, ProjectAnalyzerResult::class.java).project
 
             project.collectAllDependencies() shouldBe expectedDependencies
         }

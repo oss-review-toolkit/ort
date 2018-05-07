@@ -26,11 +26,11 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
@@ -119,7 +119,7 @@ class Maven : PackageManager() {
         return definitionFiles
     }
 
-    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
         val projectBuildingResult = maven.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
@@ -161,7 +161,7 @@ class Maven : PackageManager() {
                 scopes = scopes.values.toSortedSet()
         )
 
-        return AnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {

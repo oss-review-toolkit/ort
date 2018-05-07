@@ -27,12 +27,12 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
@@ -87,7 +87,7 @@ class Bundler : PackageManager() {
         return definitionFiles
     }
 
-    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
         val vendorDir = File(workingDir, "vendor")
         var tempVendorDir: File? = null
@@ -129,7 +129,7 @@ class Bundler : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
-            return AnalyzerResult(
+            return ProjectAnalyzerResult(
                     Main.allowDynamicVersions,
                     project,
                     packages.map { it.toCuratedPackage() }.toSortedSet(),

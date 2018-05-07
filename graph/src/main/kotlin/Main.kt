@@ -23,7 +23,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
 import com.here.ort.model.PackageReference
-import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.mapper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -108,13 +108,13 @@ object Main {
 
         val mapper = dependenciesFile.mapper()
 
-        showGraph(mapper.readValue(dependenciesFile, AnalyzerResult::class.java))
+        showGraph(mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java))
     }
 
-    private fun showGraph(analyzerResult: AnalyzerResult) {
+    private fun showGraph(projectAnalyzerResult: ProjectAnalyzerResult) {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer")
 
-        val project = analyzerResult.project
+        val project = projectAnalyzerResult.project
         val graph = SingleGraph(project.id.name).apply {
             isStrict = true
             setAutoCreate(true)

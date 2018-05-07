@@ -64,12 +64,12 @@ data class MergedAnalyzerResult(
         val errors: SortedMap<Identifier, List<String>>
 ) {
     /**
-     * Create the individual [AnalyzerResult]s this [MergedAnalyzerResult] was built from.
+     * Create the individual [ProjectAnalyzerResult]s this [MergedAnalyzerResult] was built from.
      */
-    fun createAnalyzerResults() = projects.map { project ->
+    fun createProjectAnalyzerResults() = projects.map { project ->
             val allDependencies = project.collectAllDependencies()
             val projectPackages = packages.filter { allDependencies.contains(it.pkg.id) }.toSortedSet()
-            AnalyzerResult(allowDynamicVersions, project, projectPackages, errors[project.id] ?: emptyList())
+            ProjectAnalyzerResult(allowDynamicVersions, project, projectPackages, errors[project.id] ?: emptyList())
         }
 }
 
@@ -85,9 +85,9 @@ class MergedResultsBuilder(
         return MergedAnalyzerResult(allowDynamicVersions, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
     }
 
-    fun addResult(analyzerResult: AnalyzerResult) {
-        projects.add(analyzerResult.project)
-        packages.addAll(analyzerResult.packages)
-        errors[analyzerResult.project.id] = analyzerResult.errors
+    fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) {
+        projects.add(projectAnalyzerResult.project)
+        packages.addAll(projectAnalyzerResult.packages)
+        errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
     }
 }

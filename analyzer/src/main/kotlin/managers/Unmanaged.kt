@@ -23,9 +23,9 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 
 import java.io.File
@@ -41,12 +41,12 @@ class Unmanaged : PackageManager() {
     override fun command(workingDir: File) = throw NotImplementedError()
 
     /**
-     * Returns an [AnalyzerResult] containing a [Project] for the passed [definitionFile], but does not perform any
-     * dependency resolution.
+     * Returns an [ProjectAnalyzerResult] containing a [Project] for the passed [definitionFile], but does not perform
+     * any dependency resolution.
      *
      * @param definitionFile The directory to create the project for.
      */
-    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val project = Project(
                 id = Identifier(
                         provider = "Unmanaged",
@@ -63,6 +63,6 @@ class Unmanaged : PackageManager() {
                 scopes = sortedSetOf()
         )
 
-        return AnalyzerResult(Main.allowDynamicVersions, project, sortedSetOf())
+        return ProjectAnalyzerResult(Main.allowDynamicVersions, project, sortedSetOf())
     }
 }

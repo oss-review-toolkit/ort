@@ -23,10 +23,10 @@ import io.kotlintest.matchers.should
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
-class AnalyzerResultTest : StringSpec({
+class ProjectAnalyzerResultTest : StringSpec({
     "collectErrors" should {
         "find all errors" {
-            val result = AnalyzerResult(
+            val result = ProjectAnalyzerResult(
                     allowDynamicVersions = true,
                     project = Project(
                             id = Identifier("provider", "namespace", "name", "version"),

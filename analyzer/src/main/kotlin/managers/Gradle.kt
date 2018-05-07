@@ -29,11 +29,11 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
@@ -80,7 +80,7 @@ class Gradle : PackageManager() {
 
     override fun command(workingDir: File) = if (File(workingDir, wrapper).isFile) wrapper else gradle
 
-    override fun resolveDependencies(definitionFile: File): AnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val connection = GradleConnector
                 .newConnector()
                 .forProjectDirectory(definitionFile.parentFile)
@@ -133,8 +133,8 @@ class Gradle : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
-            return AnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet(),
-                    dependencyTreeModel.errors)
+            return ProjectAnalyzerResult(true, project,
+                    packages.values.map { it.toCuratedPackage() }.toSortedSet(), dependencyTreeModel.errors)
         } finally {
             connection.close()
         }
