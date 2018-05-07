@@ -232,23 +232,23 @@ object Main {
 
         val mapper = dependenciesFile.mapper()
 
-        val analyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
-        analyzerErrors.putAll(analyzerResult.collectErrors())
+        val projectAnalyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
+        analyzerErrors.putAll(projectAnalyzerResult.collectErrors())
 
         // Add the project itself also as a "package" to scan.
-        val packages = mutableListOf(analyzerResult.project.toPackage())
+        val packages = mutableListOf(projectAnalyzerResult.project.toPackage())
 
         if (scopesToScan.isNotEmpty()) {
             println("Limiting scan to scopes $scopesToScan")
 
-            analyzerResult.project.scopes.partition { scopesToScan.contains(it.name) }.let {
+            projectAnalyzerResult.project.scopes.partition { scopesToScan.contains(it.name) }.let {
                 includedScopes.addAll(it.first)
                 excludedScopes.addAll(it.second)
             }
 
             if (includedScopes.isNotEmpty()) {
                 packages.addAll(
-                        analyzerResult.packages.filter { curatedPackage ->
+                        projectAnalyzerResult.packages.filter { curatedPackage ->
                             includedScopes.any { scope -> scope.contains(curatedPackage.pkg) }
                         }.map { it.pkg }
                 )
@@ -256,8 +256,8 @@ object Main {
                 println("No scopes found for given scopes $scopesToScan.")
             }
         } else {
-            includedScopes.addAll(analyzerResult.project.scopes)
-            packages.addAll(analyzerResult.packages.map { it.pkg })
+            includedScopes.addAll(projectAnalyzerResult.project.scopes)
+            packages.addAll(projectAnalyzerResult.packages.map { it.pkg })
         }
 
         val results = scanner.scan(packages, outputDir, downloadDir)
@@ -268,7 +268,7 @@ object Main {
             }
 
             val entry = SummaryEntry(
-                    scopes = findScopesForPackage(pkg, analyzerResult.project).toSortedSet(),
+                    scopes = findScopesForPackage(pkg, projectAnalyzerResult.project).toSortedSet(),
                     declaredLicenses = pkg.declaredLicenses,
                     detectedLicenses = result.flatMap { it.summary.licenses }.toSortedSet(),
                     errors = result.flatMap { it.summary.errors }.toMutableList()
