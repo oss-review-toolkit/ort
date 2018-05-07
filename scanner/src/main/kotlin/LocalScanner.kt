@@ -93,7 +93,7 @@ abstract class LocalScanner : Scanner() {
     /**
      * Return the [ScannerDetails] of this [LocalScanner].
      */
-    private fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
+    fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
 
     /**
      * Return the actual version of the scanner, or an empty string in case of failure.
