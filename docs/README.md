@@ -62,14 +62,14 @@ the output of external tools.
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
 
-* [Gradle](https://gradle.org/)
-* [Maven](http://maven.apache.org/)
-* [SBT](http://www.scala-sbt.org/)
-* [NPM](https://www.npmjs.com/) / [Yarn](https://yarnpkg.com/)
-* [PIP](https://pip.pypa.io/)
 * [dep](https://golang.github.io/dep/)
 * [Glide](https://glide.sh/)
 * [Godep](https://github.com/tools/godep)
+* [Gradle](https://gradle.org/)
+* [Maven](http://maven.apache.org/)
+* [NPM](https://www.npmjs.com/) / [Yarn](https://yarnpkg.com/)
+* [PIP](https://pip.pypa.io/)
+* [SBT](http://www.scala-sbt.org/)
 
 ## Supported license scanners
 
