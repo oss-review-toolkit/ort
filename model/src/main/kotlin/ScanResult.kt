@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
 /**
@@ -41,7 +42,9 @@ data class ScanResult(
         val summary: ScanSummary,
 
         /**
-         * The raw output of the scanner.
+         * The raw output of the scanner. Can be null if the raw result shall not be included. If the raw result is
+         * empty it must not be null but [EMPTY_JSON_NODE].
          */
-        val rawResult: JsonNode
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val rawResult: JsonNode? = null
 )
