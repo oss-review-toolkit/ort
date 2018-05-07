@@ -64,7 +64,7 @@ interface ScanResultsCache {
      * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
      *
      * @param id The [Identifier] of the scanned [Package].
-     * @param scanResult The [ScanResult].
+     * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
      *
      * @return If the [ScanResult] could be written to the cache.
      */
