@@ -58,9 +58,10 @@ object BoyterLc : LocalScanner() {
 
     override fun bootstrap(): File {
         val platform = when {
+            OS.isLinux -> "x86_64-unknown-linux"
             OS.isMac -> "x86_64-apple-darwin"
             OS.isWindows -> "x86_64-pc-windows"
-            else -> "x86_64-unknown-linux"
+            else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
         val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/lc-$scannerVersion-$platform.zip"
