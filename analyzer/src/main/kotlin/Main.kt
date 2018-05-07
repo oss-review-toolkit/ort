@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.MergedResultsBuilder
+import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
@@ -224,7 +224,7 @@ object Main {
         val failedAnalysis = sortedSetOf<String>()
 
         val mergedResultsBuilder = if (createMergedResult) {
-            MergedResultsBuilder(allowDynamicVersions, vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY)
+            AnalyzerResultBuilder(allowDynamicVersions, vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY)
         } else {
             null
         }

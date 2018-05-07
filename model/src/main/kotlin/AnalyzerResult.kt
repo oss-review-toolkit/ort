@@ -27,7 +27,7 @@ import java.util.SortedSet
 /**
  * A class that merges all information from individual AnalyzerResults created for each found build file
  */
-data class MergedAnalyzerResult(
+data class AnalyzerResult(
         /**
          * If dynamic versions were allowed during the dependency resolution. If true it means that the dependency tree
          * might change with another scan if any of the (transitive) dependencies is declared with a version range and
@@ -64,7 +64,7 @@ data class MergedAnalyzerResult(
         val errors: SortedMap<Identifier, List<String>>
 ) {
     /**
-     * Create the individual [ProjectAnalyzerResult]s this [MergedAnalyzerResult] was built from.
+     * Create the individual [ProjectAnalyzerResult]s this [AnalyzerResult] was built from.
      */
     fun createProjectAnalyzerResults() = projects.map { project ->
             val allDependencies = project.collectAllDependencies()
@@ -73,7 +73,7 @@ data class MergedAnalyzerResult(
         }
 }
 
-class MergedResultsBuilder(
+class AnalyzerResultBuilder(
         private val allowDynamicVersions: Boolean,
         private val vcsInfo: VcsInfo
 ) {
@@ -81,8 +81,8 @@ class MergedResultsBuilder(
     private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<String>>()
 
-    fun build(): MergedAnalyzerResult {
-        return MergedAnalyzerResult(allowDynamicVersions, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
+    fun build(): AnalyzerResult {
+        return AnalyzerResult(allowDynamicVersions, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) {
