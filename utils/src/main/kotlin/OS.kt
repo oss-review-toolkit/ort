@@ -25,6 +25,7 @@ package com.here.ort.utils
 object OS {
     private val OS_NAME = System.getProperty("os.name").toLowerCase()
 
+    val isLinux = OS_NAME.contains("linux")
     val isMac = OS_NAME.contains("mac")
     val isWindows = OS_NAME.contains("windows")
 }
