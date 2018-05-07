@@ -53,23 +53,19 @@ class AnalyzerResultTest : WordSpec() {
     init {
         "AnalyzerResult" should {
             "create the correct ProjectAnalyzerResults" {
-                val builder = AnalyzerResultBuilder(true, vcs)
-
-                builder.addResult(analyzerResult1)
-                builder.addResult(analyzerResult2)
-
-                val mergedResults = builder.build()
+                val mergedResults = AnalyzerResultBuilder(true, vcs)
+                        .addResult(analyzerResult1)
+                        .addResult(analyzerResult2)
+                        .build()
 
                 mergedResults.createProjectAnalyzerResults() shouldBe listOf(analyzerResult1, analyzerResult2)
             }
 
             "can be serialized and deserialized" {
-                val builder = AnalyzerResultBuilder(true, vcs)
-
-                builder.addResult(analyzerResult1)
-                builder.addResult(analyzerResult2)
-
-                val mergedResults = builder.build()
+                val mergedResults = AnalyzerResultBuilder(true, vcs)
+                        .addResult(analyzerResult1)
+                        .addResult(analyzerResult2)
+                        .build()
 
                 val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
                 val deserializedMergedResults =
@@ -81,12 +77,10 @@ class AnalyzerResultTest : WordSpec() {
 
         "AnalyzerResultBuilder" should {
             "merge results from all files" {
-                val builder = AnalyzerResultBuilder(true, vcs)
-
-                builder.addResult(analyzerResult1)
-                builder.addResult(analyzerResult2)
-
-                val mergedResults = builder.build()
+                val mergedResults = AnalyzerResultBuilder(true, vcs)
+                        .addResult(analyzerResult1)
+                        .addResult(analyzerResult2)
+                        .build()
 
                 mergedResults.allowDynamicVersions shouldBe true
                 mergedResults.vcs shouldBe vcs
