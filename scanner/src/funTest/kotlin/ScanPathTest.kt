@@ -19,6 +19,7 @@
 
 package com.here.ort.scanner
 
+import com.here.ort.scanner.scanners.Askalono
 import com.here.ort.scanner.scanners.BoyterLc
 import com.here.ort.scanner.scanners.Licensee
 import com.here.ort.scanner.scanners.ScanCode
@@ -50,6 +51,12 @@ class ScanPathTest : StringSpec() {
     }
 
     init {
+        "Askalono recognizes our own LICENSE" {
+            val result = Askalono.scanPath(File(rootDir, "LICENSE"), outputDir)
+            result.summary.fileCount shouldBe 1
+            result.summary.licenses shouldBe setOf("Apache-2.0")
+        }.config(tags = setOf(ExpensiveTag))
+
         "BoyterLc recognizes our own LICENSE" {
             val result = BoyterLc.scanPath(File(rootDir, "LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
