@@ -22,7 +22,7 @@ package com.here.ort.model
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.WordSpec
 
-class MergedAnalyzerResultTest : WordSpec() {
+class AnalyzerResultTest : WordSpec() {
     private val vcs = VcsInfo("type", "url", "revision", "path")
 
     private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
@@ -51,9 +51,9 @@ class MergedAnalyzerResultTest : WordSpec() {
             listOf("error-2"))
 
     init {
-        "MergedAnalyzerResult" should {
+        "AnalyzerResult" should {
             "create the correct ProjectAnalyzerResults" {
-                val builder = MergedResultsBuilder(true, vcs)
+                val builder = AnalyzerResultBuilder(true, vcs)
 
                 builder.addResult(analyzerResult1)
                 builder.addResult(analyzerResult2)
@@ -64,7 +64,7 @@ class MergedAnalyzerResultTest : WordSpec() {
             }
 
             "can be serialized and deserialized" {
-                val builder = MergedResultsBuilder(true, vcs)
+                val builder = AnalyzerResultBuilder(true, vcs)
 
                 builder.addResult(analyzerResult1)
                 builder.addResult(analyzerResult2)
@@ -73,15 +73,15 @@ class MergedAnalyzerResultTest : WordSpec() {
 
                 val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
                 val deserializedMergedResults =
-                        yamlMapper.readValue(serializedMergedResults, MergedAnalyzerResult::class.java)
+                        yamlMapper.readValue(serializedMergedResults, AnalyzerResult::class.java)
 
                 deserializedMergedResults shouldBe mergedResults
             }
         }
 
-        "MergedResultsBuilder" should {
+        "AnalyzerResultBuilder" should {
             "merge results from all files" {
-                val builder = MergedResultsBuilder(true, vcs)
+                val builder = AnalyzerResultBuilder(true, vcs)
 
                 builder.addResult(analyzerResult1)
                 builder.addResult(analyzerResult2)

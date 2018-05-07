@@ -28,9 +28,9 @@ import com.beust.jcommander.ParameterException
 
 import com.fasterxml.jackson.databind.JsonMappingException
 
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
-import com.here.ort.model.MergedAnalyzerResult
 import com.here.ort.model.Package
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
@@ -220,8 +220,8 @@ object Main {
                     }
                 }
             } catch (e: JsonMappingException) {
-                // Read packages assuming the dependencies file contains a MergedAnalyzerResult.
-                val mergedAnalyzerResult = mapper.readValue(dependenciesFile, MergedAnalyzerResult::class.java)
+                // Read packages assuming the dependencies file contains a AnalyzerResult.
+                val mergedAnalyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
 
                 mutableListOf<Package>().apply {
                     if (entities.contains(DataEntity.PROJECT)) {
