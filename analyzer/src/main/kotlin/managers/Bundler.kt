@@ -58,21 +58,6 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-const val DEPS_LIST_RUBY = """#!/usr/bin/ruby
-require 'bundler'
-require 'json'
-
-groups = {}
-
-Bundler.load.current_dependencies.each do |dep|
-    dep.groups.each do |group|
-        (groups[group] ||= []) << dep.name
-    end
-end
-
-puts JSON.generate(groups)
-"""
-
 class Bundler : PackageManager() {
     companion object : PackageManagerFactory<Bundler>(
             "http://bundler.io/",
@@ -231,25 +216,16 @@ class Bundler : PackageManager() {
     }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
-        val scriptFile = createDepsListRubyScript(workingDir)
-        val scriptCmd = ProcessCapture(workingDir, command(workingDir), "exec", "ruby", scriptFile.name)
+        val scriptFile = File.createTempFile("bundler_dependencies", ".rb")
+        scriptFile.writeBytes(javaClass.classLoader.getResource("bundler_dependencies.rb").readBytes())
+
+        val scriptCmd = ProcessCapture(workingDir, command(workingDir), "exec", "ruby", scriptFile.absolutePath)
 
         try {
             return jsonMapper.readValue(scriptCmd.requireSuccess().stdout())
         } finally {
             scriptFile.delete()
         }
-    }
-
-    /**
-     * Creates a simple ruby script that produces top level dependencies list with group information. No bundle
-     * command except 'bundle viz' seem to produce dependency list with corresponding groups.
-     * Parsing dot/svg `bundle viz` output seemed to be overhead.
-     */
-    private fun createDepsListRubyScript(workingDir: File): File {
-        val depsScript = File(workingDir, "list-deps.rb")
-        depsScript.writeText(DEPS_LIST_RUBY)
-        return depsScript
     }
 
     private fun parseProject(workingDir: File): GemSpec {
