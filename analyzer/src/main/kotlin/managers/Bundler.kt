@@ -224,7 +224,9 @@ class Bundler : PackageManager() {
         try {
             return jsonMapper.readValue(scriptCmd.requireSuccess().stdout())
         } finally {
-            scriptFile.delete()
+            if (!scriptFile.delete()) {
+                log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+            }
         }
     }
 
