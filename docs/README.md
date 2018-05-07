@@ -76,6 +76,7 @@ Currently, the following package managers / build systems can be detected and qu
 
 ORT comes with some example implementations for wrappers around license / copyright scanners:
 
+* [Askalono](https://github.com/amzn/askalono)
 * [lc](https://github.com/boyter/lc)
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
