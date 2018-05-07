@@ -85,7 +85,7 @@ class AnalyzerResultBuilder(
         return AnalyzerResult(allowDynamicVersions, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
     }
 
-    fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) {
+    fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = this.apply {
         projects.add(projectAnalyzerResult.project)
         packages.addAll(projectAnalyzerResult.packages)
         errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
