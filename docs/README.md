@@ -62,6 +62,7 @@ the output of external tools.
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
 
+* [Bundler](http://bundler.io/)
 * [dep](https://golang.github.io/dep/)
 * [Glide](https://glide.sh/)
 * [Godep](https://github.com/tools/godep)
