@@ -135,6 +135,7 @@ class Bundler : PackageManager() {
                             name = projectName,
                             version = version
                     ),
+                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                     declaredLicenses = declaredLicenses.toSortedSet(),
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
