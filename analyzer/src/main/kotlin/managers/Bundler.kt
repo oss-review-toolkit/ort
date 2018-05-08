@@ -350,7 +350,7 @@ data class GemSpec(
         private fun parseVcs(homepageUrl: String): VcsInfo =
                 if (GITHUB_REGEX.matches(homepageUrl)) {
                     log.debug { "$homepageUrl is a GitHub URL." }
-                    VcsInfo("Git", "$homepageUrl.git", "", "")
+                    VcsInfo("git", "$homepageUrl.git", "", "")
                 } else {
                     VcsInfo.EMPTY
                 }
