@@ -110,13 +110,13 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "Git"
+      type: "git"
       url: "http://github.com/flavorjones/mini_portile.git"
       revision: ""
       resolvedRevision: ""
       path: ""
     vcs_processed:
-      type: "Git"
+      type: "git"
       url: "https://github.com/flavorjones/mini_portile.git"
       revision: ""
       resolvedRevision: ""
@@ -268,13 +268,13 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "Git"
+      type: "git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolvedRevision: ""
       path: ""
     vcs_processed:
-      type: "Git"
+      type: "git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolvedRevision: ""
