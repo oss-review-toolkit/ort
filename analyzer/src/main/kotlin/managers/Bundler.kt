@@ -343,10 +343,12 @@ data class GemSpec(
             )
         }
 
+        private val GITHUB_REGEX = Regex("https*:\\/\\/github.com\\/(?<owner>[\\w-]+)\\/(?<repo>[\\w-]+)")
+
         // Gems tend to have GitHub URL set as homepage. Seems like it is the only way to get any VCS information out of
         // gemspec files.
         private fun parseVcs(homepageUrl: String): VcsInfo =
-                if (Regex("https*:\\/\\/github.com\\/(?<owner>[\\w-]+)\\/(?<repo>[\\w-]+)").matches(homepageUrl)) {
+                if (GITHUB_REGEX.matches(homepageUrl)) {
                     log.debug { "$homepageUrl is a GitHub URL." }
                     VcsInfo("Git", "$homepageUrl.git", "", "")
                 } else {
