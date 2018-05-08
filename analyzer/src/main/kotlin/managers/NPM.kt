@@ -488,7 +488,7 @@ class NPM : PackageManager() {
         }
 
         val managerCommand = command(workingDir)
-        log.debug { "Using '$managerCommand' to install ${javaClass.simpleName} dependencies." }
+        log.debug { "Using '$managerCommand' to install $NPM dependencies." }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         ProcessCapture(workingDir, managerCommand, "install", "--ignore-scripts").requireSuccess()
