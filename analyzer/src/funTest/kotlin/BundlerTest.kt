@@ -51,7 +51,7 @@ class BundlerTest : WordSpec() {
                 try {
                     val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(definitionFile.parentFile, File(projectsDir.parentFile,
-                            "bundler-expected-output.yml").readText())
+                            "bundler-expected-output-lockfile.yml").readText())
 
                     yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
                 } finally {
@@ -69,6 +69,20 @@ class BundlerTest : WordSpec() {
                 actualResult.packages.size shouldBe 0
                 actualResult.errors.size shouldBe 1
                 actualResult.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
+            }.config(tags = setOf(ExpensiveTag))
+
+            "resolve dependencies correctly when the project is a Gem" {
+                val definitionFile = File(projectsDir, "gemspec/Gemfile")
+
+                try {
+                    val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+                    val expectedResult = patchExpectedResult(definitionFile.parentFile, File(projectsDir.parentFile,
+                            "bundler-expected-output-gemspec.yml").readText())
+
+                    yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
+                } finally {
+                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively()
+                }
             }.config(tags = setOf(ExpensiveTag))
         }
     }
