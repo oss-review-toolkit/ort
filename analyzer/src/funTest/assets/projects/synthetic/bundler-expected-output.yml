@@ -2,6 +2,7 @@
 allowDynamicVersions: false
 project:
   id: "Bundler::lockfile:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile/Gemfile"
   declared_licenses: []
   aliases: []
   vcs:
