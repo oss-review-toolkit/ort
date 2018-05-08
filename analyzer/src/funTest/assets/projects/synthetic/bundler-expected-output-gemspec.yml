@@ -20,11 +20,8 @@ project:
   - name: "default"
     delivered: true
     dependencies:
-    - id: "Bundler::test-project:1.0.0"
-      dependencies:
-      - id: "Bundler::rack:1.6.10"
-        dependencies: []
-        errors: []
+    - id: "Bundler::rack:1.6.10"
+      dependencies: []
       errors: []
   - name: "development"
     delivered: false
@@ -244,30 +241,6 @@ packages:
     vcs_processed:
       type: "git"
       url: "https://github.com/rspec/rspec.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::test-project:1.0.0"
-    declared_licenses: []
-    description: "null"
-    homepage_url: "null"
-    binary_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    source_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
       revision: ""
       path: ""
   curations: []
