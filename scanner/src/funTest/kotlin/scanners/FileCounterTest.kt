@@ -19,7 +19,9 @@
 
 package com.here.ort.scanner.scanners
 
+import com.here.ort.model.CacheStatistics
 import com.here.ort.scanner.Main
+import com.here.ort.scanner.ScanResultsCache
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
@@ -44,6 +46,7 @@ class FileCounterTest : StringSpec() {
 
     override fun afterTest(description: Description, result: TestResult) {
         outputRootDir.safeDeleteRecursively()
+        ScanResultsCache.stats = CacheStatistics()
     }
 
     private val timeRegex = Regex("(download|end|start)Time: \".*\"")
@@ -54,9 +57,25 @@ class FileCounterTest : StringSpec() {
             .replace(urlRegex, "url: \"<REPLACE_URL>\"")
 
     init {
-        "Gradle project scan results are correct" {
+        "Gradle project scan results from analyzer result file are correct" {
+            val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
+            val expectedResult = File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml").readText()
+
+            Main.main(arrayOf(
+                    "-d", analyzerResultFile.path,
+                    "-o", outputDir.path,
+                    "-s", "FileCounter"
+            ))
+
+            val result = File(outputDir, "scan-record.yml").readText()
+
+            patchResult(result) shouldBe expectedResult
+        }
+
+        "Gradle project scan results from project analyzer result file are correct" {
             val analyzerResultFile = File(assetsDir, "project-analyzer-result.yml")
-            val expectedResult = File(assetsDir, "file-counter-expected-result.yml").readText()
+            val expectedResult = File(assetsDir, "file-counter-expected-output-for-project-analyzer-result.yml")
+                    .readText()
 
             Main.main(arrayOf(
                     "-d", analyzerResultFile.path,
