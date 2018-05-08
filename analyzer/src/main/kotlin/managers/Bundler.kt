@@ -107,19 +107,15 @@ class Bundler : PackageManager() {
             installDependencies(workingDir)
 
             val (projectName, version, homepageUrl, declaredLicenses) = parseProject(workingDir)
+            val projectId = Identifier(Bundler.toString(), "", projectName, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
             for ((groupName, dependencyList) in groupedDeps) {
-                parseScope(workingDir, groupName, dependencyList, scopes, packages, errors)
+                parseScope(workingDir, projectId, groupName, dependencyList, scopes, packages, errors)
             }
 
             val project = Project(
-                    id = Identifier(
-                            provider = Bundler.toString(),
-                            namespace = "",
-                            name = projectName,
-                            version = version
-                    ),
+                    id = projectId,
                     definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                     declaredLicenses = declaredLicenses.toSortedSet(),
                     aliases = emptyList(),
@@ -151,61 +147,59 @@ class Bundler : PackageManager() {
         }
     }
 
-    private fun parseScope(workingDir: File, groupName: String, dependencyList: List<String>, scopes: MutableSet<Scope>,
-                           packages: MutableSet<Package>, errors: MutableList<String>) {
+    private fun parseScope(workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
+                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<String>) {
         log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
 
         dependencyList.forEach {
-            parseDependency(workingDir, it, packages, scopeDependencies, errors)
+            parseDependency(workingDir, projectId, it, packages, scopeDependencies, errors)
         }
 
         val delivered = groupName.toLowerCase() !in DEVELOPMENT_SCOPES
         scopes.add(Scope(groupName, delivered, scopeDependencies.toSortedSet()))
     }
 
-    private fun parseDependency(workingDir: File, gemName: String, packages: MutableSet<Package>,
+    private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
                                 scopeDependencies: MutableSet<PackageReference>, errors: MutableList<String>) {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
-            val localGemSpec = getGemspec(gemName, workingDir)
-            val gemSpec = queryRubygems(localGemSpec.name, localGemSpec.version).let {
-                it?.merge(localGemSpec) ?: localGemSpec
+            var gemSpec = getGemspec(gemName, workingDir)
+            val gemId = Identifier(Bundler.toString(), "", gemSpec.name, gemSpec.version)
+
+            // The project itself can be listed as a dependency if the project is a Gem (i.e. there is a .gemspec file
+            // for it, and the Gemfile refers to it). In that case, skip querying Rubygems and adding Package and
+            // PackageReference objects and continue with the projects dependencies.
+            if (gemId == projectId) {
+                gemSpec.runtimeDependencies.forEach {
+                    parseDependency(workingDir, projectId, it, packages, scopeDependencies, errors)
+                }
+            } else {
+                queryRubygems(gemId.name, gemId.version)?.apply {
+                    gemSpec = merge(gemSpec)
+                }
+
+                packages.add(Package(
+                        id = gemId,
+                        declaredLicenses = gemSpec.declaredLicenses,
+                        description = gemSpec.description,
+                        homepageUrl = gemSpec.homepageUrl,
+                        binaryArtifact = gemSpec.binaryArtifact,
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = gemSpec.vcs,
+                        vcsProcessed = processPackageVcs(gemSpec.vcs))
+                )
+
+                val transitiveDependencies = mutableSetOf<PackageReference>()
+
+                gemSpec.runtimeDependencies.forEach {
+                    parseDependency(workingDir, projectId, it, packages, transitiveDependencies, errors)
+                }
+
+                scopeDependencies.add(PackageReference(gemId, transitiveDependencies.toSortedSet()))
             }
-
-            packages.add(Package(
-                    id = Identifier(
-                            provider = Bundler.toString(),
-                            namespace = "",
-                            name = gemSpec.name,
-                            version = gemSpec.version
-                    ),
-                    declaredLicenses = gemSpec.declaredLicenses,
-                    description = gemSpec.description,
-                    homepageUrl = gemSpec.homepageUrl,
-                    binaryArtifact = gemSpec.binaryArtifact,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = gemSpec.vcs,
-                    vcsProcessed = processPackageVcs(gemSpec.vcs))
-            )
-
-            val transitiveDependencies = mutableSetOf<PackageReference>()
-
-            gemSpec.runtimeDependencies.forEach {
-                parseDependency(workingDir, it, packages, transitiveDependencies, errors)
-            }
-
-            scopeDependencies.add(PackageReference(
-                    id = Identifier(
-                            provider = Bundler.toString(),
-                            namespace = "",
-                            name = gemSpec.name,
-                            version = gemSpec.version
-                    ),
-                    dependencies = transitiveDependencies.toSortedSet())
-            )
         } catch (e: Exception) {
             e.showStackTrace()
 
