@@ -26,7 +26,10 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.fasterxml.jackson.databind.JsonMappingException
+
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
@@ -37,7 +40,6 @@ import com.here.ort.model.ScanRecord
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
-import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.mapper
@@ -210,41 +212,43 @@ object Main {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
 
-        val includedScopes = sortedSetOf<Scope>()
-        val excludedScopes = sortedSetOf<Scope>()
-        val analyzerErrors = sortedMapOf<Identifier, List<String>>()
-
         val mapper = dependenciesFile.mapper()
 
-        val projectAnalyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
-        analyzerErrors.putAll(projectAnalyzerResult.collectErrors())
-
-        // Add the project itself also as a "package" to scan.
-        val packages = mutableListOf(projectAnalyzerResult.project.toPackage())
-
-        if (scopesToScan.isNotEmpty()) {
-            println("Limiting scan to scopes $scopesToScan")
-
-            projectAnalyzerResult.project.scopes.partition { scopesToScan.contains(it.name) }.let {
-                includedScopes.addAll(it.first)
-                excludedScopes.addAll(it.second)
-            }
-
-            if (includedScopes.isNotEmpty()) {
-                packages.addAll(
-                        projectAnalyzerResult.packages.filter { curatedPackage ->
-                            includedScopes.any { scope -> scope.contains(curatedPackage.pkg) }
-                        }.map { it.pkg }
-                )
-            } else {
-                println("No scopes found for given scopes $scopesToScan.")
-            }
-        } else {
-            includedScopes.addAll(projectAnalyzerResult.project.scopes)
-            packages.addAll(projectAnalyzerResult.packages.map { it.pkg })
+        val analyzerResult = try {
+            val projectAnalyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
+            AnalyzerResultBuilder(projectAnalyzerResult.allowDynamicVersions,
+                    projectAnalyzerResult.project.vcsProcessed).addResult(projectAnalyzerResult).build()
+        } catch (e: JsonMappingException) {
+            mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
         }
 
-        val results = scanner.scan(packages, outputDir, downloadDir)
+        // Add the projects as packages to scan.
+        val projectPackages = analyzerResult.projects.map { it.toPackage().toCuratedPackage() }
+
+        val projectScanScopes = if (scopesToScan.isNotEmpty()) {
+            println("Limiting scan to scopes: $scopesToScan")
+
+            analyzerResult.projects.map { project ->
+                project.scopes.map { it.name }.partition { it in scopesToScan }.let {
+                    ProjectScanScopes(project.id, it.first.toSortedSet(), it.second.toSortedSet())
+                }
+            }
+        } else {
+            analyzerResult.projects.map {
+                val scopes = it.scopes.map { it.name }
+                ProjectScanScopes(it.id, scopes.toSortedSet(), sortedSetOf())
+            }
+        }.toSortedSet()
+
+        val packagesToScan = if (scopesToScan.isNotEmpty()) {
+            projectPackages + analyzerResult.packages.filter { pkg ->
+                analyzerResult.projects.any { it.scopes.any { it.name in scopesToScan && it.contains(pkg.pkg) } }
+            }
+        } else {
+            projectPackages + analyzerResult.packages
+        }.toSortedSet()
+
+        val results = scanner.scan(packagesToScan.map { it.pkg }, outputDir, downloadDir)
         results.forEach { pkg, result ->
             // TODO: Make output format configurable.
             File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.yml").also {
@@ -255,20 +259,13 @@ object Main {
             println("Detected licenses for '${pkg.id}': ${result.flatMap { it.summary.errors }.joinToString()}")
         }
 
-        val scannedScopes = includedScopes.map { it.name }.toSortedSet()
-        val ignoredScopes = excludedScopes.map { it.name }.toSortedSet()
-        val projectScanResult = ProjectScanScopes(projectAnalyzerResult.project.id, scannedScopes, ignoredScopes)
-
-        val analyzerResult = AnalyzerResultBuilder(projectAnalyzerResult.allowDynamicVersions,
-                projectAnalyzerResult.project.vcsProcessed).addResult(projectAnalyzerResult).build()
-
         val resultContainers = results.map { (pkg, results) ->
             // Remove the raw results from the scan results to reduce the size of the scan result.
             // TODO: Consider adding an option to keep the raw results.
             ScanResultContainer(pkg.id, results.map { it.copy(rawResult = null) })
         }.toSortedSet()
 
-        return ScanRecord(analyzerResult, sortedSetOf(projectScanResult), resultContainers, ScanResultsCache.stats)
+        return ScanRecord(analyzerResult, projectScanScopes, resultContainers, ScanResultsCache.stats)
     }
 
     private fun scanInputPath(inputPath: File): ScanRecord {
