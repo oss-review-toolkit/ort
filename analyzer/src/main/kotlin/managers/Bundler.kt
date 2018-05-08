@@ -115,7 +115,7 @@ class Bundler : PackageManager() {
 
             val project = Project(
                     id = Identifier(
-                            provider = javaClass.simpleName,
+                            provider = Bundler.toString(),
                             namespace = "",
                             name = projectName,
                             version = version
@@ -177,7 +177,7 @@ class Bundler : PackageManager() {
 
             packages.add(Package(
                     id = Identifier(
-                            provider = javaClass.simpleName,
+                            provider = Bundler.toString(),
                             namespace = "",
                             name = gemSpec.name,
                             version = gemSpec.version
@@ -199,7 +199,7 @@ class Bundler : PackageManager() {
 
             scopeDependencies.add(PackageReference(
                     id = Identifier(
-                            provider = javaClass.simpleName,
+                            provider = Bundler.toString(),
                             namespace = "",
                             name = gemSpec.name,
                             version = gemSpec.version

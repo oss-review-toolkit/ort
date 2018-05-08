@@ -368,7 +368,7 @@ object Main {
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
 
         val vcsInfo = VcsInfo(
-                type = applicableVcs.javaClass.simpleName,
+                type = applicableVcs.toString(),
                 url = target.vcsProcessed.url,
                 revision = target.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
                 resolvedRevision = revision,
