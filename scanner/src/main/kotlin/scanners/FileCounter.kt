@@ -41,6 +41,8 @@ object FileCounter : LocalScanner() {
     override val scannerExe = ""
     override val scannerVersion = "1.0"
 
+    override fun bootstrap(): File = File("")
+
     override fun getConfiguration() = ""
 
     override fun getVersion(dir: File) = scannerVersion
