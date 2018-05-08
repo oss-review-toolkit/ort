@@ -199,9 +199,8 @@ abstract class LocalScanner : Scanner() {
      */
     fun scanPath(path: File, outputDirectory: File): ScanResult {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scannerName = toString().toLowerCase()
         val resultsFile = File(scanResultsDirectory,
-                "${path.nameWithoutExtension}_$scannerName.$resultFileExt")
+                "${path.nameWithoutExtension}_${getName()}.$resultFileExt")
 
         println("Running $this version ${getVersion()} on path '${path.canonicalPath}'.")
 
