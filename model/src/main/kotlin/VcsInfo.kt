@@ -83,17 +83,8 @@ data class VcsInfo(
         }
 
         var type = this.type
-        if (type.isBlank()) {
-            if (other.type.isNotBlank()) {
-                type = other.type
-            }
-        } else {
-            if (type.equals(other.type, true)) {
-                // Prefer the other type only if its spelling matches the VCS class names.
-                if (other.type.toLowerCase().capitalize() == other.type) {
-                    type = other.type
-                }
-            }
+        if (type.isBlank() && other.type.isNotBlank()) {
+            type = other.type
         }
 
         var url = this.url
