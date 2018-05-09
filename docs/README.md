@@ -5,8 +5,8 @@
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] |
 | [![Linux code coverage][5]][6] |                                 |
 
-[1]: https://travis-ci.org/heremaps/oss-review-toolkit.svg?branch=master
-[2]: https://travis-ci.org/heremaps/oss-review-toolkit
+[1]: https://travis-ci.com/heremaps/oss-review-toolkit.svg?branch=master
+[2]: https://travis-ci.com/heremaps/oss-review-toolkit
 [3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
 [4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
 [5]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
