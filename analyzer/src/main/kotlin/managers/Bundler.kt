@@ -297,14 +297,16 @@ data class GemSpec(
                 dependency["name"]?.asText()?.takeIf { dependency["type"]?.asText() == ":runtime" }
             }?.toSet()
 
+            val homepage = yaml["homepage"].asTextOrEmpty()
+
             return GemSpec(
                     yaml["name"].asText(),
                     yaml["version"]["version"].asText(),
-                    yaml["homepage"].asTextOrEmpty(),
+                    homepage,
                     yaml["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
                     yaml["description"].asTextOrEmpty(),
                     runtimeDependencies ?: emptySet(),
-                    parseVcs(yaml["homepage"].asText()),
+                    parseVcs(homepage),
                     RemoteArtifact.EMPTY
             )
         }
