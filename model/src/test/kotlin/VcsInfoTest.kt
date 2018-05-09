@@ -100,23 +100,6 @@ class VcsInfoTest : StringSpec({
             inputA.merge(inputB) shouldBe output
         }
 
-        "prefer type spelling that matches VCS class names" {
-            val inputA = VcsInfo(
-                    type = "Git",
-                    url = "",
-                    revision = ""
-            )
-
-            val inputB = VcsInfo(
-                    type = "git",
-                    url = "",
-                    revision = ""
-            )
-
-            inputA.merge(inputB).type shouldBe "Git"
-            inputB.merge(inputA).type shouldBe "Git"
-        }
-
         "prefer more complete information for GitHub" {
             val inputA = VcsInfo(
                     type = "Git",
