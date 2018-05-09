@@ -235,8 +235,13 @@ class GoDep : PackageManager() {
         if (pc.isError()) {
             val msg = pc.stderr()
 
-            if (!msg.contains("no Go files in") &&
-                    !msg.contains("build constraints exclude all Go files in")) {
+            val errorMessagesToIgnore = listOf(
+                    "no Go files in",
+                    "no buildable Go source files in",
+                    "build constraints exclude all Go files in"
+            )
+
+            if (!errorMessagesToIgnore.any { msg.contains(it) }) {
                 throw IOException(msg)
             }
         }
