@@ -314,11 +314,12 @@ data class GemSpec(
         fun createFromJson(spec: String): GemSpec {
             val json = jsonMapper.readTree(spec)!!
             val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { it["name"]?.asText() }?.toSet()
+            val homepage = json["homepage_uri"].asTextOrEmpty()
 
             val vcs = if (json.hasNonNull("source_code_uri")) {
                 VersionControlSystem.splitUrl(json["source_code_uri"].asText())
             } else {
-                VcsInfo.EMPTY
+                parseVcs(homepage)
             }
 
             val binaryArtifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
@@ -330,7 +331,7 @@ data class GemSpec(
             return GemSpec(
                     json["name"].asText(),
                     json["version"].asText(),
-                    json["homepage_uri"].asTextOrEmpty(),
+                    homepage,
                     json["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
                     json["description"].asTextOrEmpty(),
                     runtimeDependencies ?: emptySet(),
