@@ -1,0 +1,11 @@
+// Apply core plugins.
+apply plugin: 'application'
+
+applicationName = 'reporter'
+mainClassName = 'com.here.ort.reporter.Main'
+
+dependencies {
+    compile project(':model')
+
+    compile "com.beust:jcommander:$jcommanderVersion"
+}
