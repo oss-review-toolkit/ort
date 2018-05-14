@@ -45,7 +45,7 @@ class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
             vcs = VcsInfo(
                     type = "Git",
                     url = "https://github.com/plataformatec/simple_form.git",
-                    revision = "5b43d10a0867cc01d2430213b8bb92a3827de0e9",
+                    revision = "516e31ce8f3eb32c5bac9d2a4902fba0783363fb",
                     path = ""
             )
     )
