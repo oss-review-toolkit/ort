@@ -118,8 +118,8 @@ subprojects {
             jacoco.enabled = enabled
 
             systemProperties = [
-                    "kotlintest.tags.include": System.getProperty("kotlintest.tags.include"),
-                    "kotlintest.tags.exclude": System.getProperty("kotlintest.tags.exclude")
+                    'kotlintest.tags.include': System.getProperty('kotlintest.tags.include'),
+                    'kotlintest.tags.exclude': System.getProperty('kotlintest.tags.exclude')
             ]
 
             testLogging {
