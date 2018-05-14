@@ -53,8 +53,13 @@ abstract class LocalScanner : Scanner() {
         getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
             getVersion(it) == scannerVersion
         } ?: run {
-            println("Bootstrapping scanner '$this' as version $scannerVersion was not found in PATH.")
-            bootstrap()
+            if (scannerExe.isNotEmpty()) {
+                println("Bootstrapping scanner '$this' as version $scannerVersion was not found in PATH.")
+                bootstrap()
+            } else {
+                println("Skipping to bootstrap scanner '$this' as it has no executable.")
+                File("")
+            }
         }
     }
 
