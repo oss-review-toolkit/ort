@@ -66,7 +66,7 @@ class PIP : PackageManager() {
 
         private const val PIP_VERSION = "9.0.3"
 
-        private const val PIPDEPTREE_VERSION = "0.11.0"
+        private const val PIPDEPTREE_VERSION = "0.12.1"
         private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
         private const val PYDEP_REVISION = "license-and-classifiers"
