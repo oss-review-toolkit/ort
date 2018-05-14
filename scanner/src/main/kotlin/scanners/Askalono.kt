@@ -46,24 +46,19 @@ import okhttp3.Request
 import okio.Okio
 
 object Askalono : LocalScanner() {
-    private val platform = when {
+    private val extension = when {
         OS.isLinux -> "linux"
-        OS.isMac -> "mac"
+        OS.isMac -> "osx"
         OS.isWindows -> "exe"
         else -> throw IllegalArgumentException("Unsupported operating system.")
     }
 
-    override val scannerExe = "askalono.$platform"
-    override val scannerVersion = "0.2.0-beta.1"
+    override val scannerExe = "askalono.$extension"
+    override val scannerVersion = "0.2.0"
     override val resultFileExt = "txt"
 
     override fun bootstrap(): File {
-        val url = when {
-            OS.isWindows ->
-                // See https://github.com/amzn/askalono/issues/23.
-                "https://ci.appveyor.com/api/buildjobs/fsnas6tqv3bmkbvx/artifacts/target/release/$scannerExe"
-            else -> "https://github.com/amzn/askalono/releases/download/$scannerVersion/$scannerExe"
-        }
+        val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$scannerExe"
 
         log.info { "Downloading $this from '$url'... " }
 
