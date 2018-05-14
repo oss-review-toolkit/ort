@@ -101,42 +101,33 @@ subprojects {
         }
     }
 
-    // Further configure the default test task.
-    test {
-        useJUnitPlatform()
-
-        testLogging {
-            events 'started', 'passed', 'skipped', 'failed'
-            exceptionFormat 'full'
-        }
-    }
-
     task funTest(type: Test) {
         description = 'Runs the functional tests.'
         group = 'Verification'
 
         classpath = sourceSets.funTest.runtimeClasspath
         testClassesDirs = sourceSets.funTest.output.classesDirs
-
-        systemProperties = [
-                "kotlintest.tags.include": System.getProperty("kotlintest.tags.include"),
-                "kotlintest.tags.exclude": System.getProperty("kotlintest.tags.exclude")
-        ]
-
-        useJUnitPlatform()
-
-        testLogging {
-            events 'started', 'passed', 'skipped', 'failed'
-            exceptionFormat 'full'
-        }
     }
 
     // Enable JaCoCo only if a JacocoReport task is in the graph as JaCoCo
     // is using "append = true" which disables Gradle's build cache.
     gradle.taskGraph.whenReady { graph ->
         def enabled = graph.allTasks.any { it instanceof JacocoReport }
+
         tasks.withType(Test) {
             jacoco.enabled = enabled
+
+            systemProperties = [
+                    "kotlintest.tags.include": System.getProperty("kotlintest.tags.include"),
+                    "kotlintest.tags.exclude": System.getProperty("kotlintest.tags.exclude")
+            ]
+
+            testLogging {
+                events 'started', 'passed', 'skipped', 'failed'
+                exceptionFormat 'full'
+            }
+
+            useJUnitPlatform()
         }
     }
 
