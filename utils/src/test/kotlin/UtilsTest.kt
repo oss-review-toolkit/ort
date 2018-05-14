@@ -226,6 +226,7 @@ class UtilsTest : WordSpec({
             getPathFromEnvironment("winver.exe") shouldNotBe null
             getPathFromEnvironment("winver.exe") shouldBe winverPath
 
+            getPathFromEnvironment("") shouldBe null
             getPathFromEnvironment("*") shouldBe null
             getPathFromEnvironment("nul") shouldBe null
         }.config(enabled = OS.isWindows)
@@ -234,6 +235,7 @@ class UtilsTest : WordSpec({
             getPathFromEnvironment("sh") shouldNotBe null
             getPathFromEnvironment("sh") shouldBe File("/bin/sh")
 
+            getPathFromEnvironment("") shouldBe null
             getPathFromEnvironment("/") shouldBe null
         }.config(enabled = !OS.isWindows)
     }
