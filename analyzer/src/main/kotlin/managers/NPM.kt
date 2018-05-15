@@ -280,7 +280,7 @@ class NPM : PackageManager() {
                     ),
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage)
+                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
             )
 
             require(module.id.name.isNotEmpty()) {
@@ -470,7 +470,7 @@ class NPM : PackageManager() {
                 definitionFilePath = VersionControlSystem.getPathToRoot(packageJson) ?: "",
                 aliases = emptyList(),
                 vcs = vcsFromPackage,
-                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage),
+                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
