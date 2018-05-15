@@ -95,10 +95,10 @@ class ArtifactoryCache(
         }
 
         if (filteredResults.isEmpty() && scanResults.results.isNotEmpty()) {
-            log.info { "No cached scan results found for '$scannerDetails', ignoring cached scan results for " +
+            log.info { "No cached scan results found for $scannerDetails, ignoring cached scan results for " +
                     "scanners: ${scanResults.results.map { it.scanner }}" }
         } else {
-            log.info { "Found ${filteredResults.size} cached scan results for scanner '$scannerDetails'." }
+            log.info { "Found ${filteredResults.size} cached scan results for $scannerDetails." }
         }
 
         return ScanResultContainer(pkg.id, filteredResults)
