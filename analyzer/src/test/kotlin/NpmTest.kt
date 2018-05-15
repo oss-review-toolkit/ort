@@ -46,5 +46,18 @@ class NpmTest : WordSpec({
                 NPM.expandShortcutURL(actualUrl) shouldBe expectedUrl
             }
         }
+
+        "not mess with crazy URLs" {
+            val packages = mapOf(
+                    "git@github.com/cisco/node-jose.git"
+                            to "git@github.com/cisco/node-jose.git",
+                    "https://git@github.com:hacksparrow/node-easyimage.git"
+                            to "https://git@github.com:hacksparrow/node-easyimage.git"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                NPM.expandShortcutURL(actualUrl) shouldBe expectedUrl
+            }
+        }
     }
 })

@@ -97,6 +97,10 @@ class NPM : PackageManager() {
             }
 
             val path = uri.schemeSpecificPart
+
+            // Do not mess with crazy URLs.
+            if (path.startsWith("git@")) return url
+
             return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query, uri.fragment).all { it == null }) {
                 // See https://docs.npmjs.com/files/package.json#repository.
                 when (uri.scheme) {
