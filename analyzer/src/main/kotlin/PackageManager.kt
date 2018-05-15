@@ -28,6 +28,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
@@ -130,23 +131,43 @@ abstract class PackageManager {
         }
 
         /**
-         * Merge the [VcsInfo] read from the package with [VcsInfo] deduced from the VCS URL.
+         * Enrich a package's VCS information with information deduced from the package's VCS URL or an optional
+         * homepage URL.
+         *
+         * @param vcsFromPackage The [VcsInfo] of a [Package].
+         * @param homepageUrl The URL to the homepage of a [Package], if any.
          */
-        fun processPackageVcs(vcsFromPackage: VcsInfo): VcsInfo {
+        fun processPackageVcs(vcsFromPackage: VcsInfo, homepageUrl: String = ""): VcsInfo {
             val normalizedVcsFromPackage = vcsFromPackage.normalize()
-            val vcsFromUrl = VersionControlSystem.splitUrl(normalizedVcsFromPackage.url)
+
+            val normalizedUrl = normalizedVcsFromPackage.url.takeIf {
+                it.isNotEmpty()
+            } ?: run {
+                normalizeVcsUrl(homepageUrl).takeIf { VersionControlSystem.forUrl(it) != null } ?: ""
+            }
+
+            val vcsFromUrl = VersionControlSystem.splitUrl(normalizedUrl)
+
             return vcsFromUrl.merge(normalizedVcsFromPackage)
         }
 
         /**
          * Merge the [VcsInfo] read from the project with [VcsInfo] deduced from the VCS URL and from the working
          * directory.
+         *
+         * Get a project's VCS information from the working tree and optionally enrich it with VCS information from
+         * another source (like meta-data) or a homepage URL.
+         *
+         * @param projectDir The working tree directory of the [Project].
+         * @param vcsFromProject The project's [VcsInfo], if any.
+         * @param homepageUrl The URL to the homepage of the [Project], if any.
          */
-        fun processProjectVcs(projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY): VcsInfo {
+        fun processProjectVcs(projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY,
+                              homepageUrl: String = ""): VcsInfo {
             val vcsFromWorkingTree = VersionControlSystem.forDirectory(projectDir)
                     ?.getInfo(projectDir)?.normalize() ?: VcsInfo.EMPTY
 
-            return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject))
+            return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, homepageUrl))
         }
     }
 
