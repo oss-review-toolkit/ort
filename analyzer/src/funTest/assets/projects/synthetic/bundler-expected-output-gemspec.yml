@@ -451,8 +451,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/google/signet.git"
       revision: ""
       path: ""
   curations: []
