@@ -306,7 +306,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             // ID as the URL is likely to contain characters like ":" which not all file systems support.
             val id = repo.id.takeUnless { it == repo.url } ?: repo.host
             mavenRepositorySystem.createRepository(repo.url, id, true, null, true, null, null)
-        }
+        } + projectBuildingRequest.remoteRepositories
 
         val localProject = localProjects[artifact.identifier()]
 
