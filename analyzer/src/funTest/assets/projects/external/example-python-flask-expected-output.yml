@@ -62,8 +62,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/pallets/flask.git"
       revision: ""
       path: ""
   curations: []
@@ -113,8 +113,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/pallets/markupsafe.git"
       revision: ""
       path: ""
   curations: []
@@ -163,8 +163,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/mitsuhiko/click.git"
       revision: ""
       path: ""
   curations: []
@@ -214,8 +214,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/mitsuhiko/itsdangerous.git"
       revision: ""
       path: ""
   curations: []
