@@ -66,7 +66,7 @@ class GoDep : PackageManager() {
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
-        val projectVcs = VersionControlSystem.forDirectory(projectDir)?.getInfo()?.normalize() ?: VcsInfo.EMPTY
+        val projectVcs = processProjectVcs(projectDir)
         val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
@@ -247,10 +247,8 @@ class GoDep : PackageManager() {
         }
 
         val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()
-        val deducedVcs = VersionControlSystem.forDirectory(repoRoot)
-                ?.getInfo()?.normalize() ?: return VcsInfo.EMPTY
 
         // We want the revision recorded in Gopkg.lock, not the one "go get" fetched.
-        return VcsInfo(deducedVcs.type, deducedVcs.url, vcs.revision, path = deducedVcs.path)
+        return processProjectVcs(repoRoot, vcs)
     }
 }
