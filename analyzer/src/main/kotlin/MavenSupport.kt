@@ -338,6 +338,12 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
         }
 
+        val homepageUrl = mavenProject.url ?: ""
+
+        val vcsProcessed = localDirectory?.let {
+            PackageManager.processProjectVcs(it, vcsFromPackage, homepageUrl)
+        } ?: PackageManager.processPackageVcs(vcsFromPackage, homepageUrl)
+
         return Package(
                 id = Identifier(
                         provider = "Maven",
@@ -347,12 +353,11 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 ),
                 declaredLicenses = parseLicenses(mavenProject),
                 description = mavenProject.description ?: "",
-                homepageUrl = mavenProject.url ?: "",
+                homepageUrl = homepageUrl,
                 binaryArtifact = binaryRemoteArtifact,
                 sourceArtifact = sourceRemoteArtifact,
                 vcs = vcsFromPackage,
-                vcsProcessed = localDirectory?.let { PackageManager.processProjectVcs(it, vcsFromPackage) }
-                        ?: PackageManager.processPackageVcs(vcsFromPackage)
+                vcsProcessed = vcsProcessed
         )
     }
 
