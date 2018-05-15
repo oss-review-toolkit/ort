@@ -120,7 +120,7 @@ class Bundler : PackageManager() {
                     declaredLicenses = declaredLicenses.toSortedSet(),
                     aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(workingDir),
+                    vcsProcessed = processProjectVcs(workingDir, homepageUrl = homepageUrl),
                     homepageUrl = homepageUrl,
                     scopes = scopes.toSortedSet()
             )
@@ -181,15 +181,17 @@ class Bundler : PackageManager() {
                     gemSpec = merge(gemSpec)
                 }
 
-                packages.add(Package(
-                        id = gemId,
-                        declaredLicenses = gemSpec.declaredLicenses,
-                        description = gemSpec.description,
-                        homepageUrl = gemSpec.homepageUrl,
-                        binaryArtifact = gemSpec.binaryArtifact,
-                        sourceArtifact = RemoteArtifact.EMPTY,
-                        vcs = gemSpec.vcs,
-                        vcsProcessed = processPackageVcs(gemSpec.vcs))
+                packages.add(
+                        Package(
+                                id = gemId,
+                                declaredLicenses = gemSpec.declaredLicenses,
+                                description = gemSpec.description,
+                                homepageUrl = gemSpec.homepageUrl,
+                                binaryArtifact = gemSpec.binaryArtifact,
+                                sourceArtifact = RemoteArtifact.EMPTY,
+                                vcs = gemSpec.vcs,
+                                vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
+                        )
                 )
 
                 val transitiveDependencies = mutableSetOf<PackageReference>()
