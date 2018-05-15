@@ -189,8 +189,7 @@ fun getPathFromEnvironment(executable: String): File? {
 }
 
 /**
- * Normalize a VCS URL by converting it to a common pattern. For example NPM defines some shortcuts for GitHub or GitLab
- * URLs which are converted to full URLs so that they can be used in a common way.
+ * Normalize a VCS URL by converting it to a common pattern.
  *
  * @param vcsUrl The URL to normalize.
  */

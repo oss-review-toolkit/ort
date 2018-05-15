@@ -84,6 +84,11 @@ class NPM : PackageManager() {
             }
         }
 
+        /**
+         * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
+         *
+         * @param url The URL to expand.
+         */
         fun expandShortcutURL(url: String): String {
             // A hierarchical URI looks like
             //     [scheme:][//authority][path][?query][#fragment]
