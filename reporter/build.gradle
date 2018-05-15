@@ -8,4 +8,6 @@ dependencies {
     compile project(':model')
 
     compile "com.beust:jcommander:$jcommanderVersion"
+    compile 'org.apache.poi:ooxml-schemas:1.3'
+    compile 'org.apache.poi:poi-ooxml:3.17'
 }
