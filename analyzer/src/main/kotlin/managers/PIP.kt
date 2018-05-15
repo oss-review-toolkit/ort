@@ -219,18 +219,21 @@ class PIP : PackageManager() {
 
                     try {
                         val pkgInfo = pkgData["info"]
+
+                        val pkgDescription = pkgInfo["summary"]?.asText() ?: pkg.description
+                        val pkgHomepage = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl
                         val pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
 
                         // Amend package information with more details.
                         Package(
                                 id = pkg.id,
                                 declaredLicenses = getDeclaredLicenses(pkgInfo),
-                                description = pkgInfo["summary"]?.asText() ?: pkg.description,
-                                homepageUrl = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl,
+                                description = pkgDescription,
+                                homepageUrl = pkgHomepage,
                                 binaryArtifact = getBinaryArtifact(pkg, pkgReleases),
                                 sourceArtifact = getSourceArtifact(pkgReleases),
                                 vcs = pkg.vcs,
-                                vcsProcessed = processPackageVcs(pkg.vcs)
+                                vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
                         )
                     } catch (e: NullPointerException) {
                         log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
@@ -262,7 +265,7 @@ class PIP : PackageManager() {
                 declaredLicenses = declaredLicenses,
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir),
+                vcsProcessed = processProjectVcs(projectDir = workingDir, homepageUrl = projectHomepage),
                 homepageUrl = projectHomepage,
                 scopes = scopes
         )
