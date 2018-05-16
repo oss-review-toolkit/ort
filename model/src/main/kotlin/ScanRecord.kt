@@ -50,4 +50,11 @@ data class ScanRecord(
          */
         @JsonProperty("cache_stats")
         val cacheStats: CacheStatistics
-) : CustomData()
+) : CustomData() {
+    /**
+     * True if the [analyzerResult] or any of the [scanResults] contain errors.
+     */
+    @JsonProperty("has_errors")
+    val hasErrors = analyzerResult.createProjectAnalyzerResults().any { it.hasErrors() }
+            || scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
+}
