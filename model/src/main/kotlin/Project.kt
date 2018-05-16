@@ -80,6 +80,25 @@ data class Project(
     }
 
     /**
+     * Returns a de-duplicated list of all errors for the provided [id].
+     */
+    fun collectErrors(id: Identifier): List<String> {
+        val collectedErrors = mutableListOf<String>()
+
+        fun addErrors(pkgRef: PackageReference) {
+            if (pkgRef.id == id) {
+                collectedErrors += pkgRef.errors
+            }
+
+            pkgRef.dependencies.forEach { addErrors(it) }
+        }
+
+        scopes.forEach { it.dependencies.forEach { addErrors(it) } }
+
+        return collectedErrors.distinct()
+    }
+
+    /**
      * A comparison function to sort projects by their identifier.
      */
     override fun compareTo(other: Project) = id.compareTo(other.id)
