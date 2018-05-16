@@ -34,6 +34,7 @@ import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.io.IOException
 import java.time.Instant
 
 /**
@@ -55,7 +56,13 @@ abstract class LocalScanner : Scanner() {
         } ?: run {
             if (scannerExe.isNotEmpty()) {
                 println("Bootstrapping scanner '$this' as version $scannerVersion was not found in PATH.")
-                bootstrap()
+                bootstrap().also {
+                    val actualScannerVersion = getVersion(it)
+                    if (actualScannerVersion != scannerVersion) {
+                        throw IOException("Bootstrapped scanner version $actualScannerVersion " +
+                                "does not match expected version $scannerVersion.")
+                    }
+                }
             } else {
                 println("Skipping to bootstrap scanner '$this' as it has no executable.")
                 File("")
