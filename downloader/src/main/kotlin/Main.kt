@@ -396,19 +396,34 @@ object Main {
             throw DownloadException("Failed to download source artifact: $response")
         }
 
-        val tempFile = createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/"))
-        Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
+        val sourceArchive = createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/"))
+        Okio.buffer(Okio.sink(sourceArchive)).use { it.writeAll(body.source()) }
 
-        verifyChecksum(tempFile, target.sourceArtifact.hash, target.sourceArtifact.hashAlgorithm)
+        verifyChecksum(sourceArchive, target.sourceArtifact.hash, target.sourceArtifact.hashAlgorithm)
 
         try {
-            tempFile.unpack(outputDirectory)
+            if (sourceArchive.extension == "gem") {
+                // Unpack the nested data archive for Ruby Gems.
+                val gemDirectory = createTempDir()
+                val dataFile = File(gemDirectory, "data.tar.gz")
+
+                try {
+                    sourceArchive.unpack(gemDirectory)
+                    dataFile.unpack(outputDirectory)
+                } finally {
+                    if (!gemDirectory.deleteRecursively()) {
+                        log.warn { "Unable to delete temporary directory '$gemDirectory'." }
+                    }
+                }
+            } else {
+                sourceArchive.unpack(outputDirectory)
+            }
         } catch (e: IOException) {
-            log.error { "Could not unpack source artifact '${tempFile.absolutePath}': ${e.message}" }
+            log.error { "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.message}" }
             throw DownloadException(e)
         } finally {
-            if (!tempFile.delete()) {
-                log.warn { "Unable to delete temporary file '$tempFile'." }
+            if (!sourceArchive.delete()) {
+                log.warn { "Unable to delete temporary file '$sourceArchive'." }
             }
         }
 
