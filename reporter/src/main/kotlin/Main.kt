@@ -27,6 +27,7 @@ import com.beust.jcommander.ParameterException
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.mapper
 import com.here.ort.reporter.reporters.ExcelReporter
+import com.here.ort.reporter.reporters.StaticHtmlReporter
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -46,7 +47,8 @@ object Main {
     const val TOOL_NAME = "reporter"
 
     private enum class ReportFormat {
-        EXCEL;
+        EXCEL,
+        STATIC_HTML;
 
         companion object {
             /**
@@ -150,6 +152,7 @@ object Main {
         reportFormats.forEach {
             when (it) {
                 ReportFormat.EXCEL -> ExcelReporter().generateReport(scanRecord, outputDir)
+                ReportFormat.STATIC_HTML -> StaticHtmlReporter().generateReport(scanRecord, outputDir)
             }
         }
     }
