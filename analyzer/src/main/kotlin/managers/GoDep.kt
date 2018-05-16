@@ -109,7 +109,7 @@ class GoDep : PackageManager() {
             packages.add(pkg)
 
             packageRefs.add(PackageReference(
-                    id = Identifier("", "", pkg.id.name, pkg.id.version),
+                    id = Identifier(provider, "", pkg.id.name, pkg.id.version),
                     dependencies = sortedSetOf(),
                     errors = errors)
             )

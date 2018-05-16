@@ -20,40 +20,40 @@ project:
   - name: "default"
     delivered: true
     dependencies:
-    - id: "::github.com/dgraph-io/dgo:939c270eac93a70e63162abd53f78dbc9e928ff6"
+    - id: "GoDep::github.com/dgraph-io/dgo:939c270eac93a70e63162abd53f78dbc9e928ff6"
       dependencies: []
       errors: []
-    - id: "::github.com/gogo/protobuf:v0.5"
+    - id: "GoDep::github.com/gogo/protobuf:v0.5"
       dependencies: []
       errors: []
-    - id: "::github.com/golang/protobuf:v1.0.0"
+    - id: "GoDep::github.com/golang/protobuf:v1.0.0"
       dependencies: []
       errors: []
-    - id: "::github.com/inconshreveable/mousetrap:v1.0"
+    - id: "GoDep::github.com/inconshreveable/mousetrap:v1.0"
       dependencies: []
       errors: []
-    - id: "::github.com/pkg/errors:v0.8.0"
+    - id: "GoDep::github.com/pkg/errors:v0.8.0"
       dependencies: []
       errors: []
-    - id: "::github.com/spf13/cobra:v0.0.1"
+    - id: "GoDep::github.com/spf13/cobra:v0.0.1"
       dependencies: []
       errors: []
-    - id: "::github.com/spf13/pflag:v1.0.0"
+    - id: "GoDep::github.com/spf13/pflag:v1.0.0"
       dependencies: []
       errors: []
-    - id: "::golang.org/x/net:b417086c80e91bfa321ef761574721644b8b9f61"
+    - id: "GoDep::golang.org/x/net:b417086c80e91bfa321ef761574721644b8b9f61"
       dependencies: []
       errors: []
-    - id: "::golang.org/x/text:e19ae1496984b1c655b8044a65c0300a3c878dd3"
+    - id: "GoDep::golang.org/x/text:e19ae1496984b1c655b8044a65c0300a3c878dd3"
       dependencies: []
       errors: []
-    - id: "::google.golang.org/genproto:4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
+    - id: "GoDep::google.golang.org/genproto:4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
       dependencies: []
       errors: []
-    - id: "::google.golang.org/grpc:v1.9.2"
+    - id: "GoDep::google.golang.org/grpc:v1.9.2"
       dependencies: []
       errors: []
-    - id: "::gopkg.in/yaml.v2:d670f9405373e636a5a2765eea47fac0c9bc91a4"
+    - id: "GoDep::gopkg.in/yaml.v2:d670f9405373e636a5a2765eea47fac0c9bc91a4"
       dependencies: []
       errors: []
 packages:
