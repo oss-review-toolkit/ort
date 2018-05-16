@@ -89,19 +89,33 @@ class ArtifactoryCache(
     }
 
     override fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
-        val scanResults = read(pkg.id)
-        val filteredResults = scanResults.results.filter {
-            scannerDetails.isCompatible(it.scanner) && it.provenance.matches(pkg)
+        val scanResults = read(pkg.id).results.toMutableList()
+
+        if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
+
+        scanResults.retainAll { it.provenance.matches(pkg) }
+        if (scanResults.isEmpty()) {
+            log.info {
+                "No cached scan results found for $pkg. The following entries with non-matching provenance have " +
+                        "been ignored: ${scanResults.map { it.provenance }}"
+            }
+            return ScanResultContainer(pkg.id, scanResults)
         }
 
-        if (filteredResults.isEmpty() && scanResults.results.isNotEmpty()) {
-            log.info { "No cached scan results found for $scannerDetails, ignoring cached scan results for " +
-                    "scanners: ${scanResults.results.map { it.scanner }}" }
-        } else {
-            log.info { "Found ${filteredResults.size} cached scan results for $scannerDetails." }
+        scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
+        if (scanResults.isEmpty()) {
+            log.info {
+                "No cached scan results found for $scannerDetails. The following entries with incompatible scanners " +
+                        "have been ignored: ${scanResults.map { it.scanner }}"
+            }
+            return ScanResultContainer(pkg.id, scanResults)
         }
 
-        return ScanResultContainer(pkg.id, filteredResults)
+        log.info {
+            "Found ${scanResults.size} cached scan result(s) for $pkg that are compatible with $scannerDetails."
+        }
+
+        return ScanResultContainer(pkg.id, scanResults)
     }
 
     override fun add(id: Identifier, scanResult: ScanResult): Boolean {
