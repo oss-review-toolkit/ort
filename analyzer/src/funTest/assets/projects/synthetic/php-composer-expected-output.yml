@@ -4,8 +4,8 @@ project:
   id: "PhpComposer::ort/composer-test-project:0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/composer.json"
   declared_licenses:
-  - "Apache License 2.0 (Apache-2.0) (OSI approved) https://spdx.org/licenses/Apache-2.0.html#licenseText"
-  - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+  - "Apache-2.0"
+  - "MIT"
   aliases: []
   vcs:
     type: ""
@@ -19,194 +19,1173 @@ project:
     path: "analyzer/src/funTest/assets/projects/synthetic/php-composer"
   homepage_url: "https://github.com/heremaps/oss-review-toolkit"
   scopes:
-  - name: "requires"
+  - name: "require"
     delivered: true
     dependencies:
     - id: "PhpComposer::mailgun/mailgun-php:v2.4.0"
       dependencies:
-      - id: "PhpComposer::php-http/client-common:^1.1"
+      - id: "PhpComposer::php-http/client-common:1.7.0"
+        dependencies:
+        - id: "PhpComposer::php-http/httplug:v1.1.0"
+          dependencies:
+          - id: "PhpComposer::php-http/promise:v1.0.0"
+            dependencies: []
+            errors: []
+          - id: "PhpComposer::psr/http-message:1.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "PhpComposer::php-http/message-factory:v1.0.2"
+          dependencies:
+          - id: "PhpComposer::psr/http-message:1.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "PhpComposer::php-http/message:1.6.0"
+          dependencies:
+          - id: "PhpComposer::clue/stream-filter:v1.4.0"
+            dependencies: []
+            errors: []
+          - id: "PhpComposer::php-http/message-factory:v1.0.2"
+            dependencies:
+            - id: "PhpComposer::psr/http-message:1.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "PhpComposer::psr/http-message:1.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "PhpComposer::symfony/options-resolver:v4.0.2"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "PhpComposer::php-http/discovery:1.3.0"
         dependencies: []
         errors: []
-      - id: "PhpComposer::php-http/discovery:^1.0"
-        dependencies: []
+      - id: "PhpComposer::php-http/httplug:v1.1.0"
+        dependencies:
+        - id: "PhpComposer::php-http/promise:v1.0.0"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::psr/http-message:1.0.1"
+          dependencies: []
+          errors: []
         errors: []
-      - id: "PhpComposer::php-http/httplug:^1.0"
-        dependencies: []
+      - id: "PhpComposer::php-http/message:1.6.0"
+        dependencies:
+        - id: "PhpComposer::clue/stream-filter:v1.4.0"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::php-http/message-factory:v1.0.2"
+          dependencies:
+          - id: "PhpComposer::psr/http-message:1.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "PhpComposer::psr/http-message:1.0.1"
+          dependencies: []
+          errors: []
         errors: []
-      - id: "PhpComposer::php-http/message:^1.0"
-        dependencies: []
+      - id: "PhpComposer::php-http/multipart-stream-builder:1.0.0"
+        dependencies:
+        - id: "PhpComposer::php-http/discovery:1.3.0"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::php-http/message-factory:v1.0.2"
+          dependencies:
+          - id: "PhpComposer::psr/http-message:1.0.1"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "PhpComposer::psr/http-message:1.0.1"
+          dependencies: []
+          errors: []
         errors: []
-      - id: "PhpComposer::php-http/multipart-stream-builder:^1.0"
-        dependencies: []
-        errors: []
-      - id: "PhpComposer::php:^5.5|^7.0"
-        dependencies: []
-        errors: []
-      - id: "PhpComposer::webmozart/assert:^1.2"
+      - id: "PhpComposer::webmozart/assert:1.2.0"
         dependencies: []
         errors: []
       errors: []
     - id: "PhpComposer::monolog/monolog:1.0.2"
-      dependencies:
-      - id: "PhpComposer::php:>=5.3.0"
-        dependencies: []
-        errors: []
+      dependencies: []
       errors: []
-  - name: "requires (dev)"
+  - name: "require-dev"
     delivered: false
     dependencies:
     - id: "PhpComposer::guzzlehttp/psr7:1.4.0"
       dependencies:
-      - id: "PhpComposer::phpunit/phpunit:~4.0"
+      - id: "PhpComposer::psr/http-message:1.0.1"
         dependencies: []
         errors: []
       errors: []
     - id: "PhpComposer::php-http/guzzle6-adapter:v1.0.0"
       dependencies:
-      - id: "PhpComposer::ext-curl:*"
-        dependencies: []
+      - id: "PhpComposer::guzzlehttp/guzzle:6.3.0"
+        dependencies:
+        - id: "PhpComposer::guzzlehttp/promises:v1.3.1"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::guzzlehttp/psr7:1.4.0"
+          dependencies:
+          - id: "PhpComposer::psr/http-message:1.0.1"
+            dependencies: []
+            errors: []
+          errors: []
         errors: []
-      - id: "PhpComposer::php-http/adapter-integration-tests:^0.3"
-        dependencies: []
+      - id: "PhpComposer::php-http/httplug:v1.1.0"
+        dependencies:
+        - id: "PhpComposer::php-http/promise:v1.0.0"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::psr/http-message:1.0.1"
+          dependencies: []
+          errors: []
         errors: []
       errors: []
     - id: "PhpComposer::phpunit/phpunit:4.8.0"
-      dependencies: []
+      dependencies:
+      - id: "PhpComposer::phpspec/prophecy:1.7.3"
+        dependencies:
+        - id: "PhpComposer::doctrine/instantiator:1.1.0"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::phpdocumentor/reflection-docblock:4.2.0"
+          dependencies:
+          - id: "PhpComposer::phpdocumentor/reflection-common:1.0.1"
+            dependencies: []
+            errors: []
+          - id: "PhpComposer::phpdocumentor/type-resolver:0.4.0"
+            dependencies:
+            - id: "PhpComposer::phpdocumentor/reflection-common:1.0.1"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "PhpComposer::webmozart/assert:1.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "PhpComposer::sebastian/comparator:1.2.4"
+          dependencies:
+          - id: "PhpComposer::sebastian/diff:1.4.3"
+            dependencies: []
+            errors: []
+          - id: "PhpComposer::sebastian/exporter:1.2.2"
+            dependencies:
+            - id: "PhpComposer::sebastian/recursion-context:1.0.5"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "PhpComposer::sebastian/recursion-context:1.0.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "PhpComposer::phpunit/php-code-coverage:2.2.4"
+        dependencies:
+        - id: "PhpComposer::phpunit/php-file-iterator:1.4.5"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::phpunit/php-text-template:1.2.1"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::phpunit/php-token-stream:1.4.12"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::sebastian/environment:1.3.8"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::sebastian/version:1.0.6"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "PhpComposer::phpunit/php-file-iterator:1.4.5"
+        dependencies: []
+        errors: []
+      - id: "PhpComposer::phpunit/php-text-template:1.2.1"
+        dependencies: []
+        errors: []
+      - id: "PhpComposer::phpunit/php-timer:1.0.9"
+        dependencies: []
+        errors: []
+      - id: "PhpComposer::phpunit/phpunit-mock-objects:2.3.8"
+        dependencies:
+        - id: "PhpComposer::doctrine/instantiator:1.1.0"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::phpunit/php-text-template:1.2.1"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::sebastian/exporter:1.2.2"
+          dependencies:
+          - id: "PhpComposer::sebastian/recursion-context:1.0.5"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "PhpComposer::sebastian/comparator:1.2.4"
+        dependencies:
+        - id: "PhpComposer::sebastian/diff:1.4.3"
+          dependencies: []
+          errors: []
+        - id: "PhpComposer::sebastian/exporter:1.2.2"
+          dependencies:
+          - id: "PhpComposer::sebastian/recursion-context:1.0.5"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "PhpComposer::sebastian/diff:1.4.3"
+        dependencies: []
+        errors: []
+      - id: "PhpComposer::sebastian/environment:1.3.8"
+        dependencies: []
+        errors: []
+      - id: "PhpComposer::sebastian/exporter:1.2.2"
+        dependencies:
+        - id: "PhpComposer::sebastian/recursion-context:1.0.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "PhpComposer::sebastian/global-state:1.1.1"
+        dependencies: []
+        errors: []
+      - id: "PhpComposer::sebastian/version:1.0.6"
+        dependencies: []
+        errors: []
+      - id: "PhpComposer::symfony/yaml:v3.4.2"
+        dependencies: []
+        errors: []
       errors: []
 packages:
 - package:
-    id: "PhpComposer::guzzlehttp/psr7:1.4.0"
+    id: "PhpComposer::clue/stream-filter:v1.4.0"
     declared_licenses:
-    - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
-    description: "PSR-7 message implementation that also provides common utility methods"
-    homepage_url: "https://github.com/guzzle/psr7.git"
+    - "MIT"
+    description: "A simple and modern approach to stream filtering in PHP"
+    homepage_url: "https://github.com/clue/php-stream-filter"
     binary_artifact:
-      url: ""
+      url: "https://api.github.com/repos/clue/php-stream-filter/zipball/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
       hash: ""
       hash_algorithm: ""
     source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/clue/php-stream-filter.git"
+      revision: "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/clue/php-stream-filter.git"
+      revision: "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::doctrine/instantiator:1.1.0"
+    declared_licenses:
+    - "MIT"
+    description: "A small, lightweight utility to instantiate objects in PHP without\
+      \ invoking their constructors"
+    homepage_url: "https://github.com/doctrine/instantiator"
+    binary_artifact:
+      url: "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/doctrine/instantiator.git"
+      revision: "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/doctrine/instantiator.git"
+      revision: "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::guzzlehttp/guzzle:6.3.0"
+    declared_licenses:
+    - "MIT"
+    description: "Guzzle is a PHP HTTP client library"
+    homepage_url: "http://guzzlephp.org/"
+    binary_artifact:
+      url: "https://api.github.com/repos/guzzle/guzzle/zipball/f4db5a78a5ea468d4831de7f0bf9d9415e348699"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/guzzle/guzzle.git"
+      revision: "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/guzzle/guzzle.git"
+      revision: "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::guzzlehttp/promises:v1.3.1"
+    declared_licenses:
+    - "MIT"
+    description: "Guzzle promises library"
+    homepage_url: ""
+    binary_artifact:
+      url: "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/guzzle/promises.git"
+      revision: "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/guzzle/promises.git"
+      revision: "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::guzzlehttp/psr7:1.4.0"
+    declared_licenses:
+    - "MIT"
+    description: "PSR-7 message implementation that also provides common utility methods"
+    homepage_url: ""
+    binary_artifact:
       url: "https://api.github.com/repos/guzzle/psr7/zipball/04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
-      hash: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
-      hash_algorithm: "SHA-1"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/guzzle/psr7.git"
       revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
-      resolvedRevision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/guzzle/psr7.git"
       revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
-      resolvedRevision: ""
       path: ""
   curations: []
 - package:
     id: "PhpComposer::mailgun/mailgun-php:v2.4.0"
     declared_licenses:
-    - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+    - "MIT"
     description: "The Mailgun SDK provides methods for all API functions."
-    homepage_url: "https://github.com/mailgun/mailgun-php.git"
+    homepage_url: ""
     binary_artifact:
-      url: ""
+      url: "https://api.github.com/repos/mailgun/mailgun-php/zipball/20783215042b181b0dec92c9e01947b93cb5d085"
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://api.github.com/repos/mailgun/mailgun-php/zipball/20783215042b181b0dec92c9e01947b93cb5d085"
-      hash: "20783215042b181b0dec92c9e01947b93cb5d085"
-      hash_algorithm: "SHA-1"
+      url: ""
+      hash: ""
+      hash_algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/mailgun/mailgun-php.git"
       revision: "20783215042b181b0dec92c9e01947b93cb5d085"
-      resolvedRevision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/mailgun/mailgun-php.git"
       revision: "20783215042b181b0dec92c9e01947b93cb5d085"
-      resolvedRevision: ""
       path: ""
   curations: []
 - package:
     id: "PhpComposer::monolog/monolog:1.0.2"
     declared_licenses:
-    - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+    - "MIT"
     description: "Logging for PHP 5.3"
     homepage_url: "http://github.com/Seldaek/monolog"
     binary_artifact:
-      url: ""
+      url: "https://api.github.com/repos/Seldaek/monolog/zipball/b704c49a3051536f67f2d39f13568f74615b9922"
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://api.github.com/repos/Seldaek/monolog/zipball/b704c49a3051536f67f2d39f13568f74615b9922"
-      hash: "b704c49a3051536f67f2d39f13568f74615b9922"
-      hash_algorithm: "SHA-1"
+      url: ""
+      hash: ""
+      hash_algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/Seldaek/monolog.git"
       revision: "b704c49a3051536f67f2d39f13568f74615b9922"
-      resolvedRevision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/Seldaek/monolog.git"
       revision: "b704c49a3051536f67f2d39f13568f74615b9922"
-      resolvedRevision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::php-http/client-common:1.7.0"
+    declared_licenses:
+    - "MIT"
+    description: "Common HTTP Client implementations and tools for HTTPlug"
+    homepage_url: "http://httplug.io"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-http/client-common/zipball/9accb4a082eb06403747c0ffd444112eda41a0fd"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-http/client-common.git"
+      revision: "9accb4a082eb06403747c0ffd444112eda41a0fd"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-http/client-common.git"
+      revision: "9accb4a082eb06403747c0ffd444112eda41a0fd"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::php-http/discovery:1.3.0"
+    declared_licenses:
+    - "MIT"
+    description: "Finds installed HTTPlug implementations and PSR-7 message factories"
+    homepage_url: "http://php-http.org"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-http/discovery/zipball/7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-http/discovery.git"
+      revision: "7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-http/discovery.git"
+      revision: "7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
       path: ""
   curations: []
 - package:
     id: "PhpComposer::php-http/guzzle6-adapter:v1.0.0"
     declared_licenses:
-    - "MIT License (MIT) (OSI approved) https://spdx.org/licenses/MIT.html#licenseText"
+    - "MIT"
     description: "Guzzle 6 HTTP Adapter"
     homepage_url: "http://httplug.io"
     binary_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/guzzle6-adapter/zipball/e884cf6dae5235fffd2a07f761e0066b9ebef170"
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://api.github.com/repos/php-http/guzzle6-adapter/zipball/e884cf6dae5235fffd2a07f761e0066b9ebef170"
-      hash: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
-      hash_algorithm: "SHA-1"
+      url: ""
+      hash: ""
+      hash_algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/php-http/guzzle6-adapter.git"
       revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
-      resolvedRevision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/php-http/guzzle6-adapter.git"
       revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
-      resolvedRevision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::php-http/httplug:v1.1.0"
+    declared_licenses:
+    - "MIT"
+    description: "HTTPlug, the HTTP client abstraction for PHP"
+    homepage_url: "http://httplug.io"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-http/httplug/zipball/1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-http/httplug.git"
+      revision: "1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-http/httplug.git"
+      revision: "1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::php-http/message-factory:v1.0.2"
+    declared_licenses:
+    - "MIT"
+    description: "Factory interfaces for PSR-7 HTTP Message"
+    homepage_url: "http://php-http.org"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-http/message-factory/zipball/a478cb11f66a6ac48d8954216cfed9aa06a501a1"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-http/message-factory.git"
+      revision: "a478cb11f66a6ac48d8954216cfed9aa06a501a1"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-http/message-factory.git"
+      revision: "a478cb11f66a6ac48d8954216cfed9aa06a501a1"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::php-http/message:1.6.0"
+    declared_licenses:
+    - "MIT"
+    description: "HTTP Message related tools"
+    homepage_url: "http://php-http.org"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-http/message/zipball/2edd63bae5f52f79363c5f18904b05ce3a4b7253"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-http/message.git"
+      revision: "2edd63bae5f52f79363c5f18904b05ce3a4b7253"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-http/message.git"
+      revision: "2edd63bae5f52f79363c5f18904b05ce3a4b7253"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::php-http/multipart-stream-builder:1.0.0"
+    declared_licenses:
+    - "MIT"
+    description: "A builder class that help you create a multipart stream"
+    homepage_url: "http://php-http.org"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/1fa3c623fc813a43b39494b2a1612174e36e0fb0"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-http/multipart-stream-builder.git"
+      revision: "1fa3c623fc813a43b39494b2a1612174e36e0fb0"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-http/multipart-stream-builder.git"
+      revision: "1fa3c623fc813a43b39494b2a1612174e36e0fb0"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::php-http/promise:v1.0.0"
+    declared_licenses:
+    - "MIT"
+    description: "Promise used for asynchronous HTTP requests"
+    homepage_url: "http://httplug.io"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-http/promise/zipball/dc494cdc9d7160b9a09bd5573272195242ce7980"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-http/promise.git"
+      revision: "dc494cdc9d7160b9a09bd5573272195242ce7980"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-http/promise.git"
+      revision: "dc494cdc9d7160b9a09bd5573272195242ce7980"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpdocumentor/reflection-common:1.0.1"
+    declared_licenses:
+    - "MIT"
+    description: "Common reflection classes used by phpdocumentor to reflect the code\
+      \ structure"
+    homepage_url: "http://www.phpdoc.org"
+    binary_artifact:
+      url: "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/phpDocumentor/ReflectionCommon.git"
+      revision: "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/phpDocumentor/ReflectionCommon.git"
+      revision: "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpdocumentor/reflection-docblock:4.2.0"
+    declared_licenses:
+    - "MIT"
+    description: "With this component, a library can provide support for annotations\
+      \ via DocBlocks or otherwise retrieve information that is embedded in a DocBlock."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/66465776cfc249844bde6d117abff1d22e06c2da"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/phpDocumentor/ReflectionDocBlock.git"
+      revision: "66465776cfc249844bde6d117abff1d22e06c2da"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/phpDocumentor/ReflectionDocBlock.git"
+      revision: "66465776cfc249844bde6d117abff1d22e06c2da"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpdocumentor/type-resolver:0.4.0"
+    declared_licenses:
+    - "MIT"
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/9c977708995954784726e25d0cd1dddf4e65b0f7"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/phpDocumentor/TypeResolver.git"
+      revision: "9c977708995954784726e25d0cd1dddf4e65b0f7"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/phpDocumentor/TypeResolver.git"
+      revision: "9c977708995954784726e25d0cd1dddf4e65b0f7"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpspec/prophecy:1.7.3"
+    declared_licenses:
+    - "MIT"
+    description: "Highly opinionated mocking framework for PHP 5.3+"
+    homepage_url: "https://github.com/phpspec/prophecy"
+    binary_artifact:
+      url: "https://api.github.com/repos/phpspec/prophecy/zipball/e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/phpspec/prophecy.git"
+      revision: "e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/phpspec/prophecy.git"
+      revision: "e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpunit/php-code-coverage:2.2.4"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Library that provides collection, processing, and rendering functionality\
+      \ for PHP code coverage information."
+    homepage_url: "https://github.com/sebastianbergmann/php-code-coverage"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-code-coverage.git"
+      revision: "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-code-coverage.git"
+      revision: "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpunit/php-file-iterator:1.4.5"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "FilterIterator implementation that filters files based on a list\
+      \ of suffixes."
+    homepage_url: "https://github.com/sebastianbergmann/php-file-iterator/"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/730b01bc3e867237eaac355e06a36b85dd93a8b4"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-file-iterator.git"
+      revision: "730b01bc3e867237eaac355e06a36b85dd93a8b4"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-file-iterator.git"
+      revision: "730b01bc3e867237eaac355e06a36b85dd93a8b4"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpunit/php-text-template:1.2.1"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Simple template engine."
+    homepage_url: "https://github.com/sebastianbergmann/php-text-template/"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-text-template.git"
+      revision: "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-text-template.git"
+      revision: "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpunit/php-timer:1.0.9"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Utility class for timing"
+    homepage_url: "https://github.com/sebastianbergmann/php-timer/"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/3dcf38ca72b158baf0bc245e9184d3fdffa9c46f"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-timer.git"
+      revision: "3dcf38ca72b158baf0bc245e9184d3fdffa9c46f"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-timer.git"
+      revision: "3dcf38ca72b158baf0bc245e9184d3fdffa9c46f"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpunit/php-token-stream:1.4.12"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Wrapper around PHP's tokenizer extension."
+    homepage_url: "https://github.com/sebastianbergmann/php-token-stream/"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/1ce90ba27c42e4e44e6d8458241466380b51fa16"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-token-stream.git"
+      revision: "1ce90ba27c42e4e44e6d8458241466380b51fa16"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/php-token-stream.git"
+      revision: "1ce90ba27c42e4e44e6d8458241466380b51fa16"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::phpunit/phpunit-mock-objects:2.3.8"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Mock Object library for PHPUnit"
+    homepage_url: "https://github.com/sebastianbergmann/phpunit-mock-objects/"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ac8e7a3db35738d56ee9a76e78a4e03d97628983"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/phpunit-mock-objects.git"
+      revision: "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/phpunit-mock-objects.git"
+      revision: "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
       path: ""
   curations: []
 - package:
     id: "PhpComposer::phpunit/phpunit:4.8.0"
     declared_licenses:
-    - "BSD 3-clause \"New\" or \"Revised\" License (BSD-3-Clause) (OSI approved) https://spdx.org/licenses/BSD-3-Clause.html#licenseText"
+    - "BSD-3-Clause"
     description: "The PHP Unit Testing framework."
     homepage_url: "https://phpunit.de/"
     binary_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/283111a903eb9225aedb95e846bef876e006a688"
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/283111a903eb9225aedb95e846bef876e006a688"
-      hash: "283111a903eb9225aedb95e846bef876e006a688"
-      hash_algorithm: "SHA-1"
+      url: ""
+      hash: ""
+      hash_algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/sebastianbergmann/phpunit.git"
       revision: "283111a903eb9225aedb95e846bef876e006a688"
-      resolvedRevision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/sebastianbergmann/phpunit.git"
       revision: "283111a903eb9225aedb95e846bef876e006a688"
-      resolvedRevision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::psr/http-message:1.0.1"
+    declared_licenses:
+    - "MIT"
+    description: "Common interface for HTTP messages"
+    homepage_url: "https://github.com/php-fig/http-message"
+    binary_artifact:
+      url: "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/php-fig/http-message.git"
+      revision: "f6561bf28d520154e4b0ec72be95418abe6d9363"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/php-fig/http-message.git"
+      revision: "f6561bf28d520154e4b0ec72be95418abe6d9363"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::sebastian/comparator:1.2.4"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Provides the functionality to compare PHP values for equality"
+    homepage_url: "http://www.github.com/sebastianbergmann/comparator"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/comparator.git"
+      revision: "2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/comparator.git"
+      revision: "2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::sebastian/diff:1.4.3"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Diff implementation"
+    homepage_url: "https://github.com/sebastianbergmann/diff"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/diff/zipball/7f066a26a962dbe58ddea9f72a4e82874a3975a4"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/diff.git"
+      revision: "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/diff.git"
+      revision: "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::sebastian/environment:1.3.8"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Provides functionality to handle HHVM/PHP environments"
+    homepage_url: "http://www.github.com/sebastianbergmann/environment"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/environment/zipball/be2c607e43ce4c89ecd60e75c6a85c126e754aea"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/environment.git"
+      revision: "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/environment.git"
+      revision: "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::sebastian/exporter:1.2.2"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Provides the functionality to export PHP variables for visualization"
+    homepage_url: "http://www.github.com/sebastianbergmann/exporter"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/exporter/zipball/42c4c2eec485ee3e159ec9884f95b431287edde4"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/exporter.git"
+      revision: "42c4c2eec485ee3e159ec9884f95b431287edde4"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/exporter.git"
+      revision: "42c4c2eec485ee3e159ec9884f95b431287edde4"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::sebastian/global-state:1.1.1"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Snapshotting of global state"
+    homepage_url: "http://www.github.com/sebastianbergmann/global-state"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/global-state/zipball/bc37d50fea7d017d3d340f230811c9f1d7280af4"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/global-state.git"
+      revision: "bc37d50fea7d017d3d340f230811c9f1d7280af4"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/global-state.git"
+      revision: "bc37d50fea7d017d3d340f230811c9f1d7280af4"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::sebastian/recursion-context:1.0.5"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Provides functionality to recursively process PHP variables"
+    homepage_url: "http://www.github.com/sebastianbergmann/recursion-context"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/recursion-context.git"
+      revision: "b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/recursion-context.git"
+      revision: "b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::sebastian/version:1.0.6"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Library that helps with managing the version number of Git-hosted\
+      \ PHP projects"
+    homepage_url: "https://github.com/sebastianbergmann/version"
+    binary_artifact:
+      url: "https://api.github.com/repos/sebastianbergmann/version/zipball/58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/version.git"
+      revision: "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/sebastianbergmann/version.git"
+      revision: "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::symfony/options-resolver:v4.0.2"
+    declared_licenses:
+    - "MIT"
+    description: "Symfony OptionsResolver Component"
+    homepage_url: "https://symfony.com"
+    binary_artifact:
+      url: "https://api.github.com/repos/symfony/options-resolver/zipball/75fdda335eb0adbd464089e8a0184c61097808e0"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/symfony/options-resolver.git"
+      revision: "75fdda335eb0adbd464089e8a0184c61097808e0"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/symfony/options-resolver.git"
+      revision: "75fdda335eb0adbd464089e8a0184c61097808e0"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::symfony/yaml:v3.4.2"
+    declared_licenses:
+    - "MIT"
+    description: "Symfony Yaml Component"
+    homepage_url: "https://symfony.com"
+    binary_artifact:
+      url: "https://api.github.com/repos/symfony/yaml/zipball/afe0cd38486505c9703707707d91450cfc1bd536"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/symfony/yaml.git"
+      revision: "afe0cd38486505c9703707707d91450cfc1bd536"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/symfony/yaml.git"
+      revision: "afe0cd38486505c9703707707d91450cfc1bd536"
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer::webmozart/assert:1.2.0"
+    declared_licenses:
+    - "MIT"
+    description: "Assertions to validate method input/output with nice error messages."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://api.github.com/repos/webmozart/assert/zipball/2db61e59ff05fe5126d152bd0655c9ea113e550f"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/webmozart/assert.git"
+      revision: "2db61e59ff05fe5126d152bd0655c9ea113e550f"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/webmozart/assert.git"
+      revision: "2db61e59ff05fe5126d152bd0655c9ea113e550f"
       path: ""
   curations: []
 errors: []

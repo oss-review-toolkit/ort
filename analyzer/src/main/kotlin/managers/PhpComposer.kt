@@ -21,6 +21,9 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
@@ -34,20 +37,25 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
+import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
-import java.util.regex.Pattern
+import java.util.SortedSet
 
 const val COMPOSER_BINARY = "composer.phar"
 const val COMPOSER_GLOBAL_SCRIPT_FILE_NAME = "composer"
 const val COMPOSER_GLOBAL_SCRIPT_FILE_NAME_WINDOWS = "composer.bat"
+const val COMPOSER_LOCK_FILE_NAME = "composer.lock"
 
 class PhpComposer : PackageManager() {
     companion object : PackageManagerFactory<PhpComposer>(
@@ -55,11 +63,6 @@ class PhpComposer : PackageManager() {
             "PHP",
             listOf("composer.json")
     ) {
-        val VCS_REGEX = Pattern.compile(
-                "\\[(?<vcs>git|svn|fossil|hg)\\]\\s+(?<url>[\\w.:\\/-]+)\\s+(?<revision>\\w*)")!!
-
-        val DIST_REGEX = Pattern.compile("\\[(?<type>zip|tar)\\]\\s+(?<url>[\\w.:\\/-]+)\\s+(?<hash>\\w+)")!!
-
         override fun create() = PhpComposer()
     }
 
@@ -87,52 +90,28 @@ class PhpComposer : PackageManager() {
                 Files.move(vendorDir.toPath(), tempVendorDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
             }
 
-            val scopes = mutableSetOf<Scope>()
-            val packages = mutableSetOf<Package>()
-            val errors = mutableListOf<String>()
-            val projectDetails = showPackage(workingDir).stdout()
-            val projectPkg = parsePackageDetails(projectDetails, workingDir)
-
-            // Currently single 'composer install' is performed on top level of project, which enables composer to
-            // produce results for top level dependencies and their dependencies. If we need deeper dependency
-            // analysis, recursive installing and parsing of dependencies should be implemented (probably with
-            // controlled recursion depth)
             installDependencies(workingDir)
 
-            try {
-                parseScope(projectDetails, "requires", scopes, packages, errors, workingDir)
-                parseScope(projectDetails, "requires (dev)", scopes, packages, errors, workingDir)
-            } catch (e: Exception) {
-                if (com.here.ort.utils.printStackTrace) {
-                    e.printStackTrace()
-                }
+            log.info { "Reading $COMPOSER_LOCK_FILE_NAME file in ${workingDir.absolutePath}..." }
+            val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE_NAME))
+            val packages = parseInstalledPackages(lockFile)
 
-                log.error { "Could not analyze '${definitionFile.absolutePath}': ${e.message}" }
-                return null
-            }
+            log.info { "Reading ${definitionFile.name} file in ${workingDir.absolutePath}..." }
+            val manifest = jsonMapper.readTree(definitionFile)
 
-            val project = Project(
-                    id = projectPkg.id,
-                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
-                    declaredLicenses = projectPkg.declaredLicenses,
-                    aliases = emptyList(),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(workingDir),
-                    homepageUrl = projectPkg.homepageUrl,
-                    scopes = scopes.toSortedSet()
+            val scopes = sortedSetOf(
+                    parseScope("require", true, manifest, lockFile, packages),
+                    parseScope("require-dev", false, manifest, lockFile, packages)
             )
 
-            return ProjectAnalyzerResult(
-                    true,
-                    project,
-                    packages.map { it.toCuratedPackage() }.toSortedSet(),
-                    errors
-            )
+            val project = parseProject(definitionFile, scopes)
+
+            return ProjectAnalyzerResult(true, project,
+                    packages.values.map { it.toCuratedPackage() }.toSortedSet())
         } finally {
             // Delete vendor folder to not pollute the scan.
-            if (!vendorDir.deleteRecursively()) {
-                throw IOException("Unable to delete the '$vendorDir' directory.")
-            }
+            log.info { "Deleting temporary '$vendorDir'..." }
+            vendorDir.safeDeleteRecursively()
 
             // Restore any previously existing "vendor" directory.
             if (tempVendorDir != null) {
@@ -145,163 +124,131 @@ class PhpComposer : PackageManager() {
         }
     }
 
-    private fun parseScope(projectDetails: String, scopeName: String, scopes: MutableSet<Scope>,
-            packages: MutableSet<Package>, errors: MutableList<String>, workingDir: File) {
-        log.info { "Parsing dependencies for $scopeName" }
-        try {
-            val dependantPackageRefs = parseDependencies(projectDetails, scopeName) {
-                val scopeDependencyPkgName = it.split(Regex("\\s")).first()
-                val dependencies2ndLevel = mutableSetOf<PackageReference>()
-                val parsedPackage = parseDependencyPackage(workingDir, scopeDependencyPkgName, dependencies2ndLevel,
-                        scopeName, errors)
-                if (parsedPackage != null) {
-                    packages.add(parsedPackage)
-                    PackageReference(
-                            id = Identifier(
-                                    provider = PhpComposer.toString(),
-                                    namespace = "",
-                                    name = parsedPackage.id.name,
-                                    version = parsedPackage.id.version
-                            ),
-                            dependencies = dependencies2ndLevel.toSortedSet())
-                } else {
-                    null
+    private fun parseScope(scopeName: String, delivered: Boolean, manifest: JsonNode, lockFile: JsonNode,
+                           packages: Map<String, Package>): Scope {
+        val requiredPackages = manifest[scopeName]?.fieldNames() ?: listOf<String>().iterator()
+        val dependencies = buildDependencyTree(requiredPackages, lockFile, packages)
+        return Scope(scopeName, delivered, dependencies)
+    }
+
+    private fun buildDependencyTree(dependencies: Iterator<String>, lockFile: JsonNode,
+                                    packages: Map<String, Package>): SortedSet<PackageReference> {
+        val packageReferences = mutableSetOf<PackageReference>()
+
+        dependencies.forEach { packageName ->
+            // Composer allows declaring the required PHP version including any extensions, such as "ext-curl". Language
+            // implementations are not included in the results from other analyzer modules, so we want to skip them here
+            // as well.
+            if (packageName != "php" && !packageName.startsWith("ext-")) {
+                val packageInfo = packages[packageName]
+                        ?: throw IOException("Could not find package info for $packageName")
+                try {
+                    val transitiveDependencies = getRuntimeDependencies(packageName, lockFile)
+                    packageReferences.add(packageInfo.toReference(
+                            buildDependencyTree(transitiveDependencies, lockFile, packages)))
+                } catch (e: Exception) {
+                    e.showStackTrace()
+                    PackageReference(packageInfo.id, sortedSetOf<PackageReference>(), e.collectMessages())
                 }
             }
-
-            if (dependantPackageRefs.count() > 0) {
-                scopes.add(Scope(name = scopeName,
-                        delivered = scopeName == "requires",
-                        dependencies = dependantPackageRefs.toSortedSet()))
-            }
-        } catch (e: Exception) {
-            e.showStackTrace()
-
-            val errorMsg = "Failed to parse scope $scopeName: ${e.message}"
-            log.error { errorMsg }
-            errors.add(errorMsg)
         }
+        return packageReferences.toSortedSet()
     }
 
-    private fun parseDependencyPackage(workingDir: File, packageName: String,
-            dependencies: MutableSet<PackageReference>,
-            scopeName: String, errors: MutableList<String>): Package? {
-        log.info { "Parsing package $packageName" }
-        if (packageName == "php" || packageName.startsWith("ext-")) {
-            // Skip PHP itself along with PHP Extensions
-            return null
-        }
+    private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
+        val json = jsonMapper.readTree(definitionFile)
+        val homepageUrl = json["homepage"].asTextOrEmpty()
+        val vcs = parseVcsInfo(json)
 
-        return try {
-            val pkgDetailLines = showPackage(workingDir, packageName).stdout().trim()
-            val dependenciesLines = parseDependencies(pkgDetailLines, scopeName) { it }
-            dependencies.addAll(dependenciesLines.map {
-                val (scopeDependencyPkgName, scopeDependencyVersionConstraint) = it.split(Regex("\\s"))
-                PackageReference(
-                        id = Identifier(
-                                provider = PhpComposer.toString(),
-                                namespace = "",
-                                name = scopeDependencyPkgName,
-                                version = scopeDependencyVersionConstraint
-                        ),
-                        dependencies = sortedSetOf())
-            })
-            parsePackageDetails(pkgDetailLines, workingDir)
-        } catch (e: Exception) {
-            e.showStackTrace()
-
-            val errorMsg = "Failed to parse package $packageName: ${e.message}"
-            log.error { errorMsg }
-            errors.add(errorMsg)
-            null
-        }
-    }
-
-    private fun <T : Any> parseDependencies(pkgDetailLines: String, scopeName: String, transform: (String) -> T?):
-            Iterable<T> {
-        var endScopeSection = false
-        return pkgDetailLines.substringAfter(scopeName, "").trim().lines().mapNotNull {
-            endScopeSection = it.isBlank() || endScopeSection
-            if (endScopeSection) {
-                null
-            } else {
-                transform(it)
-            }
-        }
-    }
-
-    private fun parsePackageDetails(pkgShowCommandOutput: String, workingDir: File): Package {
-        val pkgDetailsLines = pkgShowCommandOutput.lineSequence()
-        val map = pkgDetailsLines.groupBy({ it.substringBefore(":").trim() }, { it.substringAfter(":").trim() })
-        val pkgName = map["name"]?.first() ?: ""
-        val version = map["versions"]?.first()?.replace("* ", "") ?: ""
-        val licenses = map["license"]?.toSortedSet() ?: sortedSetOf()
-        val desc = map["descrip."]?.first() ?: ""
-        val source = map["source"]?.first() ?: ""
-        val dist = map["dist"]?.first() ?: ""
-
-        val homepage = showHomepage(workingDir, pkgName).stdout().trim()
-        val vcs = parseVcs(source)
-        val sourceArtifact = parseSourceArtifact(dist)
-
-        return Package(
+        return Project(
                 id = Identifier(
                         provider = PhpComposer.toString(),
                         namespace = "",
-                        name = pkgName,
-                        version = version
+                        name = json["name"].asText(),
+                        version = json["version"].asTextOrEmpty()
                 ),
-                declaredLicenses = licenses,
-                description = desc,
-                homepageUrl = homepage,
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = sourceArtifact,
-                vcs = vcs
+                declaredLicenses = parseDeclaredLicenses(json),
+                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                aliases = emptyList(),
+                vcs = vcs,
+                vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
+                homepageUrl = homepageUrl,
+                scopes = scopes
         )
     }
 
+    private fun parseInstalledPackages(json: JsonNode): Map<String, Package> {
+        val packages = mutableMapOf<String, Package>()
+
+        listOf("packages", "packages-dev").forEach {
+            json[it]?.forEach { pkgInfo ->
+                val name = pkgInfo["name"].asText()
+                val version = pkgInfo["version"].asTextOrEmpty()
+                val homepageUrl = pkgInfo["homepage"].asTextOrEmpty()
+                val vcsFromPackage = parseVcsInfo(pkgInfo)
+
+                // I could not find documentation on the schema of composer.lock, but there is a schema for
+                // composer.json at https://getcomposer.org/schema.json and it does not include the "version" field in
+                // the list of required properties.
+                if (version.isEmpty()) {
+                    log.warn { "No version information found for package $name." }
+                }
+
+                packages[name] = Package(
+                        id = Identifier(
+                                provider = PhpComposer.toString(),
+                                namespace = "",
+                                name = name,
+                                version = version
+                        ),
+                        declaredLicenses = parseDeclaredLicenses(pkgInfo),
+                        description = pkgInfo["description"].asTextOrEmpty(),
+                        homepageUrl = homepageUrl,
+                        binaryArtifact = parseBinaryArtifact(pkgInfo),
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = vcsFromPackage,
+                        vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                )
+            }
+        }
+        return packages
+    }
+
+    private fun parseDeclaredLicenses(packageInfo: JsonNode) =
+            packageInfo["license"]?.mapNotNull { it?.asText() }?.toSortedSet() ?: sortedSetOf<String>()
+
+    private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo {
+        return packageInfo["source"]?.let {
+            VcsInfo(it["type"].asTextOrEmpty(), it["url"].asTextOrEmpty(), it["reference"].asTextOrEmpty())
+        } ?: VcsInfo.EMPTY
+    }
+
+    private fun parseBinaryArtifact(packageInfo: JsonNode): RemoteArtifact {
+        return packageInfo["dist"]?.let {
+            val sha = it["shasum"].asTextOrEmpty()
+            // "shasum" is SHA-1: https://github.com/composer/composer/blob/ \
+            // 285ff274accb24f45ffb070c2b9cfc0722c31af4/src/Composer/Repository/ArtifactRepository.php#L149
+            val algo = if (sha.isEmpty()) HashAlgorithm.UNKNOWN else HashAlgorithm.SHA1
+            RemoteArtifact(it["url"].asTextOrEmpty(), sha, algo)
+        } ?: RemoteArtifact.EMPTY
+    }
+
+    private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Iterator<String> {
+        listOf("packages", "packages-dev").forEach {
+            lockFile[it]?.forEach { packageInfo ->
+                if (packageInfo["name"].asTextOrEmpty() == packageName) {
+                    val requiredPackages = packageInfo["require"]
+                    if (requiredPackages != null && requiredPackages.isObject) {
+                        return (requiredPackages as ObjectNode).fieldNames()
+                    }
+                }
+            }
+        }
+
+        return emptyList<String>().iterator()
+    }
+
     private fun installDependencies(workingDir: File): ProcessCapture =
-            ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), "install").requireSuccess()
-
-    /**
-     * Show package details for given [pkgName] ("--self" used by default for project details on top of [workingDir])
-     */
-    private fun showPackage(workingDir: File, pkgName: String = "--self"): ProcessCapture =
-            ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), "show", pkgName).requireSuccess()
-
-    private fun showHomepage(workingDir: File, pkgName: String): ProcessCapture {
-        val homeResult = ProcessCapture(workingDir, *command(workingDir).split(" ")
-                .toTypedArray(), "home", "-s", "-H", pkgName)
-        return if (homeResult.exitValue() != 0) {
-            log.warn { "Could not get homepage url for '$pkgName': ${homeResult.stderr()} trying get repository url" }
-            ProcessCapture(workingDir, *command(workingDir).split(" ")
-                    .toTypedArray(), "home", "-s", pkgName).requireSuccess()
-        } else {
-            homeResult
-        }
-    }
-
-    private fun parseVcs(sourceLine: String): VcsInfo {
-        VCS_REGEX.matcher(sourceLine).let {
-            return if (it.matches()) {
-                val vcs = it.group("vcs")
-                val url = it.group("url")
-                val rev = it.group("revision")
-
-                VcsInfo(vcs, url, rev, "")
-            } else {
-                VcsInfo.EMPTY
-            }
-        }
-    }
-
-    private fun parseSourceArtifact(dist: String): RemoteArtifact {
-        DIST_REGEX.matcher(dist).let {
-            return if (it.matches()) {
-                RemoteArtifact(it.group("url"), it.group("hash"), HashAlgorithm.SHA1)
-            } else {
-                RemoteArtifact.EMPTY
-            }
-        }
-    }
+            ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), "install")
+                    .requireSuccess()
 }
