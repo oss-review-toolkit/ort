@@ -36,7 +36,7 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 
 private val UNCOMPRESSED_EXTENSIONS = listOf(".pom")
-private val TAR_EXTENSIONS = listOf(".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2")
+private val TAR_EXTENSIONS = listOf(".gem", ".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2")
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
 
 fun File.unpack(targetDirectory: File) {
@@ -61,7 +61,7 @@ fun File.unpackTar(targetDirectory: File) {
     val inputStream = when (lowerExtension) {
         "gz", "tgz" -> GzipCompressorInputStream(inputStream())
         "bz2", "tbz2" -> BZip2CompressorInputStream(inputStream())
-        "tar" -> inputStream()
+        "gem", "tar" -> inputStream()
         else -> throw IOException("Unknown compression scheme for tar file '$absolutePath'.")
     }
 
