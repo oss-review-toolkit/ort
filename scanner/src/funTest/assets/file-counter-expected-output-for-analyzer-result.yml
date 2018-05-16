@@ -260,3 +260,4 @@ scan_results:
 cache_stats:
   num_reads: 5
   num_hits: 0
+has_errors: true
