@@ -41,10 +41,13 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
+
+import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
@@ -76,6 +79,27 @@ class PhpComposer : PackageManager() {
                     COMPOSER_GLOBAL_SCRIPT_FILE_NAME
                 }
             }
+
+    override fun prepareResolution(definitionFiles: List<File>): List<File> {
+        // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
+        // required and hence we skip the version check.
+        if (definitionFiles.all { File(it.parentFile, COMPOSER_BINARY).isFile }) {
+            return definitionFiles
+        }
+
+        var workingDir = definitionFiles.first().parentFile
+
+        // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
+        // fixed versions to be sure to get consistent results.
+        checkCommandVersion(
+                command(workingDir),
+                Requirement.buildStrict("1.6.5"),
+                ignoreActualVersion = Main.ignoreVersions,
+                transform = { it.substringAfter("Composer version ").substringBefore(" ") }
+        )
+
+        return definitionFiles
+    }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
