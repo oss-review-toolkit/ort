@@ -19,6 +19,8 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.utils.isValidUrl
+
 import java.io.File
 
 class StaticHtmlReporter : TableReporter() {
@@ -53,6 +55,10 @@ class StaticHtmlReporter : TableReporter() {
                         text-align: left;
                     }
 
+                    tr:nth-child(even) {
+                        background-color: WhiteSmoke;
+                    }
+
                     tr:hover {
                         outline: 2px solid SteelBlue;
                         outline-offset: -1px;
@@ -73,6 +79,19 @@ class StaticHtmlReporter : TableReporter() {
 
     private fun createContent(tabularScanRecord: TabularScanRecord) =
             buildString {
+                if (tabularScanRecord.metadata.isNotEmpty()) {
+                    append("<h2>Metadata</h2>")
+                    append("<table>")
+                    tabularScanRecord.metadata.forEach { (key, value) ->
+                        append("""
+                        <tr>
+                            <td>$key</td>
+                            <td>${if (value.isValidUrl()) "<a href=\"$value\">$value</a>" else value}</td>
+                        </tr>
+                        """.trimIndent())
+                    }
+                    append("</table>")
+                }
                 append(createTable("Summary", tabularScanRecord.summary))
                 tabularScanRecord.projectDependencies.forEach { project, entry ->
                     append(createTable("${project.id} (${project.definitionFilePath})", entry))
