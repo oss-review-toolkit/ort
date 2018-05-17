@@ -106,7 +106,7 @@ class PhpComposer : PackageManager() {
 
             val project = parseProject(definitionFile, scopes)
 
-            return ProjectAnalyzerResult(true, project,
+            return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
                     packages.values.map { it.toCuratedPackage() }.toSortedSet())
         } finally {
             // Delete vendor folder to not pollute the scan.
@@ -248,7 +248,12 @@ class PhpComposer : PackageManager() {
         return emptyList<String>().iterator()
     }
 
-    private fun installDependencies(workingDir: File): ProcessCapture =
-            ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), "install")
-                    .requireSuccess()
+    private fun installDependencies(workingDir: File) {
+        require(Main.allowDynamicVersions || File(workingDir, COMPOSER_LOCK_FILE_NAME).isFile) {
+            "No lock file found in $workingDir, dependency versions are unstable."
+        }
+
+        ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), "install")
+                .requireSuccess()
+    }
 }

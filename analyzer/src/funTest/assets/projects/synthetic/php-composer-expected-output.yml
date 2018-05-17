@@ -1,8 +1,8 @@
 ---
-allowDynamicVersions: true
+allowDynamicVersions: false
 project:
   id: "PhpComposer::ort/composer-test-project:0.1.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/composer.json"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/lockfile/composer.json"
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
@@ -16,7 +16,7 @@ project:
     type: "git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/php-composer"
+    path: "<REPLACE_PATH>"
   homepage_url: "https://github.com/heremaps/oss-review-toolkit"
   scopes:
   - name: "require"
