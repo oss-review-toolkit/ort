@@ -71,7 +71,7 @@ object Licensee : LocalScanner() {
 
     override fun getVersion(dir: File) = getCommandVersion(dir.resolve(scannerExe).canonicalPath, "version")
 
-    override fun scanPath(path: File, resultsFile: File, provenance: Provenance, scannerDetails: ScannerDetails)
+    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {
         // Licensee has issues with absolute Windows paths passed as an argument. Work around that by using the path to
         // scan as the working directory.
