@@ -21,11 +21,15 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.PhpComposer
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
+import io.kotlintest.matchers.startWith
+import io.kotlintest.should
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -39,15 +43,35 @@ class PhpComposerTest : StringSpec() {
 
     init {
         "Project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "composer.json")
-            val result = PhpComposer.create().resolveDependencies(listOf(packageFile))[packageFile]
-            val expectedResults = patchExpectedResult(File(projectDir.parentFile, "php-composer-expected-output.yml")
-                    .readText())
+            val definitionFile = File(projectDir, "lockfile/composer.json")
+
+            val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val f = File(projectDir.parentFile, "php-composer-expected-output.yml")
+            val expectedResults = patchExpectedResult(definitionFile.parentFile,
+                    f.readText())
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
+        }
+
+        "Error is shown when no lock file is present" {
+            val definitionFile = File(projectDir, "no-lockfile/composer.json")
+
+            val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+
+            result shouldNotBe null
+            result!!.project shouldBe Project.EMPTY
+            result.packages.size shouldBe 0
+            result.errors.size shouldBe 1
+            result.errors.first() should startWith("IllegalArgumentException: No lock file found in")
         }
     }
 
-    private fun patchExpectedResult(result: String) =
-            result.replaceFirst("url: \"<REPLACE_URL>\"", "url: \"${normalizeVcsUrl(vcsUrl)}\"")
-                    .replaceFirst("revision: \"<REPLACE_REVISION>\"", "revision: \"$vcsRevision\"")
+    private fun patchExpectedResult(workingDir: File, result: String): String {
+        val vcsPath = workingDir.relativeTo(rootDir).invariantSeparatorsPath
+
+        return result
+                // project.vcs_processed:
+                .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
+                .replaceFirst("<REPLACE_REVISION>", vcsRevision)
+                .replaceFirst("<REPLACE_PATH>", vcsPath)
+    }
 }
