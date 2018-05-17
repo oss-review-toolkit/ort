@@ -60,13 +60,13 @@ class CvsTest : StringSpec() {
             Cvs.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
         }
 
-        "CVS correctly detects URLs to remote repositories".config(enabled = Cvs.isInPath()) {
+        "CVS correctly detects URLs to remote repositories".config(enabled = Cvs.isInPath() && false) {
             Cvs.isApplicableUrl(":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
             Cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
             Cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
         }
 
-        "Detected CVS working tree information is correct".config(enabled = Cvs.isInPath()) {
+        "Detected CVS working tree information is correct".config(enabled = Cvs.isInPath() && false) {
             val workingTree = Cvs.getWorkingTree(zipContentDir)
 
             workingTree.getType() shouldBe "Cvs"
@@ -77,7 +77,7 @@ class CvsTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tomcat")) shouldBe "tomcat"
         }
 
-        "CVS correctly lists remote branches".config(enabled = Cvs.isInPath()) {
+        "CVS correctly lists remote branches".config(enabled = Cvs.isInPath() && false) {
             val expectedBranches = listOf(
                     "Exoffice"
             )
@@ -86,7 +86,7 @@ class CvsTest : StringSpec() {
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "CVS correctly lists remote tags".config(enabled = Cvs.isInPath()) {
+        "CVS correctly lists remote tags".config(enabled = Cvs.isInPath() && false) {
             val expectedTags = listOf(
                     "A02",
                     "A03",
