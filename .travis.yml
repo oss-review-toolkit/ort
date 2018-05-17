@@ -50,7 +50,7 @@ script:
     fi
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*'
+  - bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*' -d
 
 addons:
   artifacts:
