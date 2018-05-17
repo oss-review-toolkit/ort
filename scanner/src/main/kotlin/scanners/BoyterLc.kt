@@ -108,7 +108,7 @@ object BoyterLc : LocalScanner() {
                 it.substringAfter("licensechecker version ")
             })
 
-    override fun scanPath(path: File, resultsFile: File, provenance: Provenance, scannerDetails: ScannerDetails)
+    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {
         val startTime = Instant.now()
 

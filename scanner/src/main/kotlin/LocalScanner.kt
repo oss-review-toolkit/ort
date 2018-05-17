@@ -196,7 +196,7 @@ abstract class LocalScanner : Scanner() {
 
         val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
                 downloadResult.originalVcsInfo)
-        val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile, provenance, scannerDetails)
+        val scanResult = scanPath(scannerDetails, downloadResult.downloadDirectory, provenance, resultsFile)
 
         ScanResultsCache.add(pkg.id, scanResult)
 
@@ -222,7 +222,7 @@ abstract class LocalScanner : Scanner() {
 
         println("Running $this version ${scannerDetails.version} on path '${path.canonicalPath}'.")
 
-        return scanPath(path, resultsFile, Provenance(downloadTime = Instant.now()), scannerDetails)
+        return scanPath(scannerDetails, path, Provenance(downloadTime = Instant.now()), resultsFile)
                 .also { println("Stored $this results in '${resultsFile.absolutePath}'.") }
     }
 
@@ -230,17 +230,17 @@ abstract class LocalScanner : Scanner() {
      * Scan the provided [path] for license information, writing results to [resultsFile] using the scanner's native
      * output file format. Note that no scan results cache is used by this function.
      *
-     * @param path The directory or file to scan.
-     * @param resultsFile The file to store scan results in.
-     * @param provenance [Provenance] information about the files in [path].
      * @param scannerDetails The [ScannerDetails] of the current scanner.
+     * @param path The directory or file to scan.
+     * @param provenance [Provenance] information about the files in [path].
+     * @param resultsFile The file to store scan results in.
      *
      * @return The [ScanResult], containing the provided [provenance] and [scannerDetails].
      *
      * @throws ScanException In case the path could not be scanned.
      */
-    protected abstract fun scanPath(path: File, resultsFile: File, provenance: Provenance,
-                                    scannerDetails: ScannerDetails): ScanResult
+    protected abstract fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance,
+                                    resultsFile: File): ScanResult
 
     internal abstract fun getResult(resultsFile: File): Result
 }
