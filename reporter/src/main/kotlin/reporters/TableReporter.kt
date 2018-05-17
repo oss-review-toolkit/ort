@@ -40,7 +40,12 @@ abstract class TableReporter : Reporter {
             /**
              * The [Table]s containing the dependencies for each [Project].
              */
-            val projectDependencies: SortedMap<Project, Table>
+            val projectDependencies: SortedMap<Project, Table>,
+
+            /**
+             * Additional metadata read from the "reporter.metadata" field in [ScanRecord.data].
+             */
+            val metadata: Map<String, String>
     )
 
     data class Table(
@@ -129,7 +134,15 @@ abstract class TableReporter : Reporter {
 
         val summaryTable = Table(summaryEntries.values.toList().sortedBy { it.id })
 
-        generateReport(TabularScanRecord(summaryTable, projectTables), outputDir)
+        val metadata = scanRecord.data["reporter.metadata"]?.let {
+            if (it is Map<*, *>) {
+                it.entries.associate { (key, value) -> key.toString() to value.toString() }
+            } else {
+                null
+            }
+        } ?: mapOf()
+
+        generateReport(TabularScanRecord(summaryTable, projectTables, metadata), outputDir)
     }
 
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File)
