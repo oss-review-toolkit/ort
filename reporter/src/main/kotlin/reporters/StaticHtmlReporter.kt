@@ -39,6 +39,9 @@ class StaticHtmlReporter : TableReporter() {
 
                     table {
                         border-collapse: collapse;
+                    }
+
+                    table.dependencies {
                         width: 100%;
                     }
 
@@ -56,7 +59,19 @@ class StaticHtmlReporter : TableReporter() {
                         text-align: left;
                     }
 
-                    tr:nth-child(even) {
+                    .error {
+                        background-color: LightCoral;
+                    }
+
+                    .warning {
+                        background-color: LightYellow;
+                    }
+
+                    .success {
+                        background-color: LightBlue;
+                    }
+
+                    .data tr:nth-child(even) {
                         background-color: WhiteSmoke;
                     }
 
@@ -82,7 +97,7 @@ class StaticHtmlReporter : TableReporter() {
             buildString {
                 if (tabularScanRecord.metadata.isNotEmpty()) {
                     append("<h2>Metadata</h2>")
-                    append("<table>")
+                    append("<table class=\"data\">")
                     tabularScanRecord.metadata.forEach { (key, value) ->
                         append("""
                         <tr>
@@ -104,7 +119,7 @@ class StaticHtmlReporter : TableReporter() {
                 append("""
                     <h2>$title</h2>
                     <h3>VCS Info</h3>
-                    <table class="vcs">
+                    <table class="data">
                         <tr>
                             <td>Type</td>
                             <td>${vcsInfo.type}</td>
@@ -123,7 +138,7 @@ class StaticHtmlReporter : TableReporter() {
                         </tr>
                     </table>
                     <h3>Dependencies</h3>
-                    <table>
+                    <table class="dependencies">
                     <tr>
                         <th>Package</th>
                         <th>Scopes</th>
@@ -135,14 +150,14 @@ class StaticHtmlReporter : TableReporter() {
                     """.trimIndent())
 
                 summary.entries.forEach { entry ->
-                    val color = when {
-                        entry.analyzerErrors.isNotEmpty() || entry.scanErrors.isNotEmpty() -> "LightCoral"
-                        entry.declaredLicenses.isEmpty() && entry.detectedLicenses.isEmpty() -> "LightYellow"
-                        else -> "LightBlue"
+                    val cssClass = when {
+                        entry.analyzerErrors.isNotEmpty() || entry.scanErrors.isNotEmpty() -> "error"
+                        entry.declaredLicenses.isEmpty() && entry.detectedLicenses.isEmpty() -> "warning"
+                        else -> "success"
                     }
 
                     append("""
-                        <tr style="background-color: $color">
+                        <tr class="$cssClass">
                             <td>${entry.id}</td>
                             <td>${entry.scopes.joinToString(separator = "<br/>")}</td>
                             <td>${entry.declaredLicenses.joinToString(separator = "<br/>")}</td>
