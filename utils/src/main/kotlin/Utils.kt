@@ -35,6 +35,8 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
+import java.net.MalformedURLException
+import java.net.URL
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
@@ -385,6 +387,17 @@ fun String.fileSystemDecode(): String =
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
  */
 fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+
+/**
+ * True if the string is a valid URL, false otherwise.
+ */
+fun String.isValidUrl() =
+        try {
+            URL(this).toURI()
+            true
+        } catch (e: MalformedURLException) {
+            false
+        }
 
 /**
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
