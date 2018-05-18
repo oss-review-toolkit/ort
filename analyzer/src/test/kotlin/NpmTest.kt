@@ -52,7 +52,9 @@ class NpmTest : WordSpec({
                     "git@github.com/cisco/node-jose.git"
                             to "git@github.com/cisco/node-jose.git",
                     "https://git@github.com:hacksparrow/node-easyimage.git"
-                            to "https://git@github.com:hacksparrow/node-easyimage.git"
+                            to "https://git@github.com:hacksparrow/node-easyimage.git",
+                    "github.com/improbable-eng/grpc-web"
+                            to "github.com/improbable-eng/grpc-web"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
