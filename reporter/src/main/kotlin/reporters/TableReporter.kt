@@ -39,6 +39,11 @@ abstract class TableReporter : Reporter {
             val vcsInfo: VcsInfo,
 
             /**
+             * A [Table] containing all dependencies that caused errors.
+             */
+            val errorSummary: Table,
+
+            /**
              * A [Table] containing the dependencies of all [Project]s.
              */
             val summary: Table,
@@ -101,6 +106,7 @@ abstract class TableReporter : Reporter {
     }
 
     override fun generateReport(scanRecord: ScanRecord, outputDir: File) {
+        val errorSummaryEntries = mutableMapOf<Identifier, TableEntry>()
         val summaryEntries = mutableMapOf<Identifier, TableEntry>()
 
         val projectTables = scanRecord.analyzerResult.projects.associate { project ->
@@ -132,12 +138,16 @@ abstract class TableReporter : Reporter {
                         scanErrors = scanErrors
                 ).also { entry ->
                     summaryEntries[entry.id] = summaryEntries[entry.id]?.let { it.merge(entry) } ?: entry
+                    if (entry.analyzerErrors.isNotEmpty() || entry.scanErrors.isNotEmpty()) {
+                        errorSummaryEntries[entry.id] = errorSummaryEntries[entry.id]?.let { it.merge(entry) } ?: entry
+                    }
                 }
             }
 
             Pair(project, Table(tableEntries))
         }.toSortedMap()
 
+        val errorSummaryTable = Table(errorSummaryEntries.values.toList().sortedBy { it.id })
         val summaryTable = Table(summaryEntries.values.toList().sortedBy { it.id })
 
         val metadata = scanRecord.data["reporter.metadata"]?.let {
@@ -148,8 +158,8 @@ abstract class TableReporter : Reporter {
             }
         } ?: mapOf()
 
-        generateReport(TabularScanRecord(scanRecord.analyzerResult.vcsProcessed, summaryTable, projectTables, metadata),
-                outputDir)
+        generateReport(TabularScanRecord(scanRecord.analyzerResult.vcsProcessed, errorSummaryTable, summaryTable,
+                projectTables, metadata), outputDir)
     }
 
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File)
