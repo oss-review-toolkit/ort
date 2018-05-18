@@ -108,16 +108,29 @@ class StaticHtmlReporter : TableReporter() {
                     }
                     append("</table>")
                 }
-                append(createTable("Summary", tabularScanRecord.vcsInfo, tabularScanRecord.summary))
+
+                append("<h3>Index</h3>")
+                append("<ul>")
+                append("<li><a href=\"#summary\">Summary</a></li>")
+                tabularScanRecord.projectDependencies.keys.forEachIndexed { index, project ->
+                    append("<li><a href=\"#$index\">${project.id}</a></li>")
+                }
+                append("</ul>")
+
+                append(createTable("Summary", tabularScanRecord.vcsInfo, tabularScanRecord.summary, "summary"))
+
+                var index = 0
                 tabularScanRecord.projectDependencies.forEach { project, entry ->
-                    append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, entry))
+                    append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, entry,
+                            index.toString()))
+                    ++index
                 }
             }
 
-    private fun createTable(title: String, vcsInfo: VcsInfo, summary: TableReporter.Table) =
+    private fun createTable(title: String, vcsInfo: VcsInfo, summary: TableReporter.Table, anchor: String) =
             buildString {
                 append("""
-                    <h2>$title</h2>
+                    <h2><a id="$anchor"></a>$title</h2>
                     <h3>VCS Info</h3>
                     <table class="data">
                         <tr>
