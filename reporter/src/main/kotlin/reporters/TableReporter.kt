@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
+import com.here.ort.model.VcsInfo
 
 import java.io.File
 import java.util.SortedMap
@@ -32,6 +33,11 @@ import java.util.SortedSet
  */
 abstract class TableReporter : Reporter {
     data class TabularScanRecord(
+            /**
+             * The [VcsInfo] for the scanned project.
+             */
+            val vcsInfo: VcsInfo,
+
             /**
              * A [Table] containing the dependencies of all [Project]s.
              */
@@ -142,7 +148,8 @@ abstract class TableReporter : Reporter {
             }
         } ?: emptyMap()
 
-        generateReport(TabularScanRecord(summaryTable, projectTables, metadata), outputDir)
+        generateReport(TabularScanRecord(scanRecord.analyzerResult.vcsProcessed, summaryTable, projectTables, metadata),
+                outputDir)
     }
 
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File)

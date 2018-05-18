@@ -19,6 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.isValidUrl
 
 import java.io.File
@@ -92,16 +93,36 @@ class StaticHtmlReporter : TableReporter() {
                     }
                     append("</table>")
                 }
-                append(createTable("Summary", tabularScanRecord.summary))
+                append(createTable("Summary", tabularScanRecord.vcsInfo, tabularScanRecord.summary))
                 tabularScanRecord.projectDependencies.forEach { project, entry ->
-                    append(createTable("${project.id} (${project.definitionFilePath})", entry))
+                    append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, entry))
                 }
             }
 
-    private fun createTable(title: String, summary: TableReporter.Table) =
+    private fun createTable(title: String, vcsInfo: VcsInfo, summary: TableReporter.Table) =
             buildString {
                 append("""
                     <h2>$title</h2>
+                    <h3>VCS Info</h3>
+                    <table class="vcs">
+                        <tr>
+                            <td>Type</td>
+                            <td>${vcsInfo.type}</td>
+                        </tr>
+                        <tr>
+                            <td>URL</td>
+                            <td>${vcsInfo.url}</td>
+                        </tr>
+                        <tr>
+                            <td>Path</td>
+                            <td>${vcsInfo.path}</td>
+                        </tr>
+                        <tr>
+                            <td>Revision</td>
+                            <td>${vcsInfo.revision}</td>
+                        </tr>
+                    </table>
+                    <h3>Dependencies</h3>
                     <table>
                     <tr>
                         <th>Package</th>
