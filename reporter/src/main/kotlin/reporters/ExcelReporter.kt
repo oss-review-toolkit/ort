@@ -44,6 +44,8 @@ import java.io.File
  * for each project in [ScanRecord.analyzerResult] and an additional sheet that summarizes all dependencies.
  */
 class ExcelReporter : TableReporter() {
+    val DEFAULT_COLUMNS = 5
+
     val borderColor = XSSFColor(Color(211, 211, 211))
     val errorColor = XSSFColor(Color(240, 128, 128))
     val successColor = XSSFColor(Color(173, 216, 230))
@@ -97,9 +99,11 @@ class ExcelReporter : TableReporter() {
 
         creationHelper = workbook.creationHelper
 
-        createSheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.metadata)
+        createSheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.metadata,
+                tabularScanRecord.extraColumns)
         tabularScanRecord.projectDependencies.forEach { project, table ->
-            createSheet(workbook, project.id.toString(), project.definitionFilePath, table, tabularScanRecord.metadata)
+            createSheet(workbook, project.id.toString(), project.definitionFilePath, table, tabularScanRecord.metadata,
+                    tabularScanRecord.extraColumns)
         }
 
         val outputFile = File(outputDir, "scan-report.xlsx")
@@ -109,7 +113,8 @@ class ExcelReporter : TableReporter() {
         }
     }
 
-    fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, metadata: Map<String, String>) {
+    fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, metadata: Map<String, String>,
+                    extraColumns: List<String>) {
         var sheetName = WorkbookUtil.createSafeSheetName(name).let {
             var uniqueName = it
             var i = 0
@@ -123,7 +128,7 @@ class ExcelReporter : TableReporter() {
 
         val sheet = workbook.createSheet(sheetName)
 
-        val headerRows = createHeader(sheet, name, file, metadata)
+        val headerRows = createHeader(sheet, name, file, metadata, extraColumns)
         var currentRow = headerRows
 
         table.entries.forEach { entry ->
@@ -148,21 +153,23 @@ class ExcelReporter : TableReporter() {
             ++currentRow
         }
 
-        sheet.finalize(headerRows, currentRow)
+        sheet.finalize(headerRows, currentRow, DEFAULT_COLUMNS + extraColumns.size)
     }
 
-    private fun createHeader(sheet: XSSFSheet, name: String, file: String, metadata: Map<String, String>): Int {
+    private fun createHeader(sheet: XSSFSheet, name: String, file: String, metadata: Map<String, String>, extraColumns: List<String>): Int {
+        val columns = DEFAULT_COLUMNS + extraColumns.size
+
         sheet.createRow(0).apply {
             CellUtil.createCell(this, 0, "Project:", headerStyle)
             CellUtil.createCell(this, 1, name, headerStyle)
         }
-        sheet.addMergedRegion(CellRangeAddress(0, 0, 1, 5))
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 1, columns))
 
         sheet.createRow(1).apply {
             CellUtil.createCell(this, 0, "File:", headerStyle)
             CellUtil.createCell(this, 1, file, headerStyle)
         }
-        sheet.addMergedRegion(CellRangeAddress(1, 1, 1, 5))
+        sheet.addMergedRegion(CellRangeAddress(1, 1, 1, columns))
 
         var rows = 2
 
@@ -181,7 +188,7 @@ class ExcelReporter : TableReporter() {
                             }
                         }
                     }
-                    sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, 5))
+                    sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, columns))
                 }
             }
 
@@ -195,6 +202,10 @@ class ExcelReporter : TableReporter() {
             CellUtil.createCell(this, 3, "Detected Licenses", headerStyle)
             CellUtil.createCell(this, 4, "Analyzer Errors", headerStyle)
             CellUtil.createCell(this, 5, "Scan Errors", headerStyle)
+
+            extraColumns.forEachIndexed { index, column ->
+                CellUtil.createCell(this, 6 + index, column, headerStyle)
+            }
         }
 
         return ++rows
@@ -215,10 +226,10 @@ private fun XSSFCellStyle.setBorderColor(borderColor: XSSFColor) {
     setLeftBorderColor(borderColor)
 }
 
-private fun XSSFSheet.finalize(headerRows: Int, totalRows: Int) {
+private fun XSSFSheet.finalize(headerRows: Int, totalRows: Int, totalColumns: Int) {
     createFreezePane(1, headerRows)
-    (0..5).forEach { autoSizeColumn(it) }
-    setAutoFilter(CellRangeAddress(headerRows - 1, totalRows - 1, 0, 5))
+    (0..totalColumns).forEach { autoSizeColumn(it) }
+    setAutoFilter(CellRangeAddress(headerRows - 1, totalRows - 1, 0, totalColumns))
 }
 
 private val ELLIPSIS = "[...]"
