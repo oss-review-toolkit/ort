@@ -20,6 +20,7 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.ScanRecord
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.isValidUrl
 
 import org.apache.poi.common.usermodel.HyperlinkType
@@ -99,11 +100,11 @@ class ExcelReporter : TableReporter() {
 
         creationHelper = workbook.creationHelper
 
-        createSheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.metadata,
-                tabularScanRecord.extraColumns)
+        createSheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
+                tabularScanRecord.metadata, tabularScanRecord.extraColumns)
         tabularScanRecord.projectDependencies.forEach { project, table ->
-            createSheet(workbook, project.id.toString(), project.definitionFilePath, table, tabularScanRecord.metadata,
-                    tabularScanRecord.extraColumns)
+            createSheet(workbook, project.id.toString(), project.definitionFilePath, table, project.vcsProcessed,
+                    tabularScanRecord.metadata, tabularScanRecord.extraColumns)
         }
 
         val outputFile = File(outputDir, "scan-report.xlsx")
@@ -113,8 +114,8 @@ class ExcelReporter : TableReporter() {
         }
     }
 
-    fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, metadata: Map<String, String>,
-                    extraColumns: List<String>) {
+    fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, vcsInfo: VcsInfo,
+                    metadata: Map<String, String>, extraColumns: List<String>) {
         var sheetName = WorkbookUtil.createSafeSheetName(name).let {
             var uniqueName = it
             var i = 0
@@ -128,7 +129,7 @@ class ExcelReporter : TableReporter() {
 
         val sheet = workbook.createSheet(sheetName)
 
-        val headerRows = createHeader(sheet, name, file, metadata, extraColumns)
+        val headerRows = createHeader(sheet, name, file, vcsInfo, metadata, extraColumns)
         var currentRow = headerRows
 
         table.entries.forEach { entry ->
@@ -156,7 +157,8 @@ class ExcelReporter : TableReporter() {
         sheet.finalize(headerRows, currentRow, DEFAULT_COLUMNS + extraColumns.size)
     }
 
-    private fun createHeader(sheet: XSSFSheet, name: String, file: String, metadata: Map<String, String>, extraColumns: List<String>): Int {
+    private fun createHeader(sheet: XSSFSheet, name: String, file: String, vcsInfo: VcsInfo,
+                             metadata: Map<String, String>, extraColumns: List<String>): Int {
         val columns = DEFAULT_COLUMNS + extraColumns.size
 
         sheet.createRow(0).apply {
@@ -194,6 +196,36 @@ class ExcelReporter : TableReporter() {
 
             ++rows
         }
+
+        sheet.createRow(++rows).apply {
+            CellUtil.createCell(this, 0, "VCS", headerStyle)
+        }
+
+        sheet.createRow(++rows).apply {
+            CellUtil.createCell(this, 0, "Type:", defaultStyle)
+            CellUtil.createCell(this, 1, vcsInfo.type, defaultStyle)
+        }
+        sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, columns))
+
+        sheet.createRow(++rows).apply {
+            CellUtil.createCell(this, 0, "URL:", defaultStyle)
+            CellUtil.createCell(this, 1, vcsInfo.url, defaultStyle)
+        }
+        sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, columns))
+
+        sheet.createRow(++rows).apply {
+            CellUtil.createCell(this, 0, "Path:", defaultStyle)
+            CellUtil.createCell(this, 1, vcsInfo.path, defaultStyle)
+        }
+        sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, columns))
+
+        sheet.createRow(++rows).apply {
+            CellUtil.createCell(this, 0, "Revision:", defaultStyle)
+            CellUtil.createCell(this, 1, vcsInfo.revision, defaultStyle)
+        }
+        sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, columns))
+
+        ++rows
 
         sheet.createRow(++rows).apply {
             CellUtil.createCell(this, 0, "Package", headerStyle)
