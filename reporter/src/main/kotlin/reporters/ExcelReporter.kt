@@ -116,16 +116,7 @@ class ExcelReporter : TableReporter() {
 
     fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, vcsInfo: VcsInfo,
                     metadata: Map<String, String>, extraColumns: List<String>) {
-        var sheetName = WorkbookUtil.createSafeSheetName(name).let {
-            var uniqueName = it
-            var i = 0
-
-            while (uniqueName in Sequence { workbook.sheetIterator() }.map { it.sheetName }) {
-                var suffix = "-${++i}"
-                uniqueName = uniqueName.dropLast(suffix.length) + suffix
-            }
-            uniqueName
-        }
+        var sheetName = createUniqueSheetName(workbook, name)
 
         val sheet = workbook.createSheet(sheetName)
 
@@ -243,6 +234,18 @@ class ExcelReporter : TableReporter() {
         return ++rows
     }
 }
+
+private fun createUniqueSheetName(workbook: XSSFWorkbook, name: String) =
+        WorkbookUtil.createSafeSheetName(name).let {
+            var uniqueName = it
+            var i = 0
+
+            while (uniqueName in Sequence { workbook.sheetIterator() }.map { it.sheetName }) {
+                var suffix = "-${++i}"
+                uniqueName = uniqueName.dropLast(suffix.length) + suffix
+            }
+            uniqueName
+        }
 
 private fun XSSFCellStyle.setBorder(borderStyle: BorderStyle) {
     setBorderTop(borderStyle)
