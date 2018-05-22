@@ -100,11 +100,15 @@ class ExcelReporter : TableReporter() {
 
         creationHelper = workbook.creationHelper
 
+        if (tabularScanRecord.metadata.isNotEmpty()) {
+            createMetadataSheet(workbook, tabularScanRecord.metadata)
+        }
+
         createSheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
-                tabularScanRecord.metadata, tabularScanRecord.extraColumns)
+                tabularScanRecord.extraColumns)
         tabularScanRecord.projectDependencies.forEach { project, table ->
             createSheet(workbook, project.id.toString(), project.definitionFilePath, table, project.vcsProcessed,
-                    tabularScanRecord.metadata, tabularScanRecord.extraColumns)
+                    tabularScanRecord.extraColumns)
         }
 
         val outputFile = File(outputDir, "scan-report.xlsx")
@@ -114,13 +118,40 @@ class ExcelReporter : TableReporter() {
         }
     }
 
+    fun createMetadataSheet(workbook: XSSFWorkbook, metadata: Map<String, String>) {
+        var sheetName = createUniqueSheetName(workbook, "Metadata")
+
+        val sheet = workbook.createSheet(sheetName)
+
+        var currentRow = 0
+
+        sheet.createRow(currentRow).apply {
+            CellUtil.createCell(this, 0, "Metadata", headerStyle)
+        }
+
+        metadata.forEach { (key, value) ->
+            sheet.createRow(++currentRow).apply {
+                CellUtil.createCell(this, 0, "$key:", defaultStyle)
+                CellUtil.createCell(this, 1, value, defaultStyle).apply {
+                    if (value.isValidUrl()) {
+                        hyperlink = creationHelper.createHyperlink(HyperlinkType.URL).apply {
+                            address = value
+                        }
+                    }
+                }
+            }
+        }
+
+        (0..1).forEach { sheet.autoSizeColumn(it) }
+    }
+
     fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, vcsInfo: VcsInfo,
-                    metadata: Map<String, String>, extraColumns: List<String>) {
+                    extraColumns: List<String>) {
         var sheetName = createUniqueSheetName(workbook, name)
 
         val sheet = workbook.createSheet(sheetName)
 
-        val headerRows = createHeader(sheet, name, file, vcsInfo, metadata, extraColumns)
+        val headerRows = createHeader(sheet, name, file, vcsInfo, extraColumns)
         var currentRow = headerRows
 
         table.entries.forEach { entry ->
@@ -149,7 +180,7 @@ class ExcelReporter : TableReporter() {
     }
 
     private fun createHeader(sheet: XSSFSheet, name: String, file: String, vcsInfo: VcsInfo,
-                             metadata: Map<String, String>, extraColumns: List<String>): Int {
+                             extraColumns: List<String>): Int {
         val columns = DEFAULT_COLUMNS + extraColumns.size
 
         sheet.createRow(0).apply {
@@ -165,28 +196,6 @@ class ExcelReporter : TableReporter() {
         sheet.addMergedRegion(CellRangeAddress(1, 1, 1, columns))
 
         var rows = 2
-
-        if (metadata.isNotEmpty()) {
-            sheet.createRow(++rows).apply {
-                CellUtil.createCell(this, 0, "Metadata", headerStyle)
-            }
-
-            metadata.forEach { (key, value) ->
-                sheet.createRow(++rows).apply {
-                    CellUtil.createCell(this, 0, "$key:", defaultStyle)
-                    CellUtil.createCell(this, 1, value, defaultStyle).apply {
-                        if (value.isValidUrl()) {
-                            hyperlink = creationHelper.createHyperlink(HyperlinkType.URL).apply {
-                                address = value
-                            }
-                        }
-                    }
-                    sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, columns))
-                }
-            }
-
-            ++rows
-        }
 
         sheet.createRow(++rows).apply {
             CellUtil.createCell(this, 0, "VCS", headerStyle)
