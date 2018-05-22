@@ -20,9 +20,12 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.ScanRecord
+import com.here.ort.utils.isValidUrl
 
+import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.CellStyle
+import org.apache.poi.ss.usermodel.CreationHelper
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.util.CellRangeAddress
@@ -51,6 +54,8 @@ class ExcelReporter : TableReporter() {
     lateinit var successStyle: CellStyle
     lateinit var warningStyle: CellStyle
     lateinit var errorStyle: CellStyle
+
+    lateinit var creationHelper: CreationHelper
 
     override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File) {
         val workbook = XSSFWorkbook()
@@ -90,9 +95,11 @@ class ExcelReporter : TableReporter() {
             setFillPattern(FillPatternType.SOLID_FOREGROUND)
         }
 
-        createSheet(workbook, "Summary", "all", tabularScanRecord.summary)
+        creationHelper = workbook.creationHelper
+
+        createSheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.metadata)
         tabularScanRecord.projectDependencies.forEach { project, table ->
-            createSheet(workbook, project.id.toString(), project.definitionFilePath, table)
+            createSheet(workbook, project.id.toString(), project.definitionFilePath, table, tabularScanRecord.metadata)
         }
 
         val outputFile = File(outputDir, "scan-report.xlsx")
@@ -102,7 +109,7 @@ class ExcelReporter : TableReporter() {
         }
     }
 
-    fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table) {
+    fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, metadata: Map<String, String>) {
         var sheetName = WorkbookUtil.createSafeSheetName(name).let {
             var uniqueName = it
             var i = 0
@@ -116,7 +123,7 @@ class ExcelReporter : TableReporter() {
 
         val sheet = workbook.createSheet(sheetName)
 
-        val headerRows = createHeader(sheet, name, file)
+        val headerRows = createHeader(sheet, name, file, metadata)
         var currentRow = headerRows
 
         table.entries.forEach { entry ->
@@ -144,7 +151,7 @@ class ExcelReporter : TableReporter() {
         sheet.finalize(headerRows, currentRow)
     }
 
-    private fun createHeader(sheet: XSSFSheet, name: String, file: String): Int {
+    private fun createHeader(sheet: XSSFSheet, name: String, file: String, metadata: Map<String, String>): Int {
         sheet.createRow(0).apply {
             CellUtil.createCell(this, 0, "Project:", headerStyle)
             CellUtil.createCell(this, 1, name, headerStyle)
@@ -157,7 +164,31 @@ class ExcelReporter : TableReporter() {
         }
         sheet.addMergedRegion(CellRangeAddress(1, 1, 1, 5))
 
-        sheet.createRow(3).apply {
+        var rows = 2
+
+        if (metadata.isNotEmpty()) {
+            sheet.createRow(++rows).apply {
+                CellUtil.createCell(this, 0, "Metadata", headerStyle)
+            }
+
+            metadata.forEach { (key, value) ->
+                sheet.createRow(++rows).apply {
+                    CellUtil.createCell(this, 0, "$key:", defaultStyle)
+                    CellUtil.createCell(this, 1, value, defaultStyle).apply {
+                        if (value.isValidUrl()) {
+                            hyperlink = creationHelper.createHyperlink(HyperlinkType.URL).apply {
+                                address = value
+                            }
+                        }
+                    }
+                    sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, 5))
+                }
+            }
+
+            ++rows
+        }
+
+        sheet.createRow(++rows).apply {
             CellUtil.createCell(this, 0, "Package", headerStyle)
             CellUtil.createCell(this, 1, "Scopes", headerStyle)
             CellUtil.createCell(this, 2, "Declared Licenses", headerStyle)
@@ -166,7 +197,7 @@ class ExcelReporter : TableReporter() {
             CellUtil.createCell(this, 5, "Scan Errors", headerStyle)
         }
 
-        return 4
+        return ++rows
     }
 }
 
