@@ -56,7 +56,12 @@ abstract class TableReporter : Reporter {
             /**
              * Additional metadata read from the "reporter.metadata" field in [ScanRecord.data].
              */
-            val metadata: Map<String, String>
+            val metadata: Map<String, String>,
+
+            /**
+             * Extra columns that shall be added to the results table by the implementing reporter.
+             */
+            val extraColumns: List<String>
     )
 
     data class Table(
@@ -158,8 +163,16 @@ abstract class TableReporter : Reporter {
             }
         } ?: mapOf()
 
+        val extraColumns = scanRecord.data["reporter.extraColumns"]?.let {
+            if (it is List<*>) {
+                it.map { it.toString() }
+            } else {
+                null
+            }
+        } ?: listOf()
+
         generateReport(TabularScanRecord(scanRecord.analyzerResult.vcsProcessed, errorSummaryTable, summaryTable,
-                projectTables, metadata), outputDir)
+                projectTables, metadata, extraColumns), outputDir)
     }
 
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File)
