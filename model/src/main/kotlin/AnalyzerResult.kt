@@ -19,7 +19,11 @@
 
 package com.here.ort.model
 
+import ch.frankel.slf4k.*
+
 import com.fasterxml.jackson.annotation.JsonProperty
+
+import com.here.ort.utils.log
 
 import java.util.SortedMap
 import java.util.SortedSet
@@ -86,8 +90,20 @@ class AnalyzerResultBuilder(
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = this.apply {
-        projects.add(projectAnalyzerResult.project)
-        packages.addAll(projectAnalyzerResult.packages)
-        errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+        val duplicateProject = projects.find { it.id == projectAnalyzerResult.project.id }
+        if (duplicateProject != null) {
+            val error = "Multiple projects with the same id '${duplicateProject.id}' found. Not adding the project " +
+                    "defined in '${projectAnalyzerResult.project.id}' to the analyzer results as it duplicates the " +
+                    "project defined in '${duplicateProject.definitionFilePath}'."
+
+            log.error { error }
+
+            val projectErrors = errors.getOrDefault(duplicateProject.id, listOf())
+            errors[duplicateProject.id] = projectErrors + error
+        } else {
+            projects.add(projectAnalyzerResult.project)
+            packages.addAll(projectAnalyzerResult.packages)
+            errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+        }
     }
 }
