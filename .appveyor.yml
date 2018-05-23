@@ -28,8 +28,8 @@ install:
   - cd c:\tools\php72 # For some reason pushd / popd does not work.
   - copy php.ini-production php.ini
   - echo extension_dir=ext>>php.ini
-  - echo extension=php_openssl.dll>>php.ini
   - echo extension=php_mbstring.dll>>php.ini
+  - echo extension=php_openssl.dll>>php.ini
   - cd %APPVEYOR_BUILD_FOLDER%
   - refreshenv
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
