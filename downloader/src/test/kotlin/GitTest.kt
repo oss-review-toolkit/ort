@@ -21,7 +21,6 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.unpack
 
 import io.kotlintest.Description
@@ -36,8 +35,7 @@ class GitTest : StringSpec() {
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(description: Description, spec: Spec) {
-        val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-        val zipFile = File(rootDir, "downloader/src/test/assets/pipdeptree-2018-01-03-git.zip")
+        val zipFile = File("src/test/assets/pipdeptree-2018-01-03-git.zip")
 
         zipContentDir = createTempDir()
 

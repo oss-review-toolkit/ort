@@ -22,7 +22,6 @@ package com.here.ort.downloader
 import com.here.ort.downloader.vcs.Mercurial
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.unpack
 
 import io.kotlintest.Description
@@ -37,8 +36,7 @@ class MercurialTest : StringSpec() {
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(description: Description, spec: Spec) {
-        val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-        val zipFile = File(rootDir, "downloader/src/test/assets/lz4revlog-2018-01-03-hg.zip")
+        val zipFile = File("src/test/assets/lz4revlog-2018-01-03-hg.zip")
 
         zipContentDir = createTempDir()
 

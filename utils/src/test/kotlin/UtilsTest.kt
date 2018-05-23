@@ -384,13 +384,8 @@ class UtilsTest : WordSpec({
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
 
-            // Work-around for https://youtrack.jetbrains.com/issue/IDEA-188622.
-            val expectedRoot = File("..").canonicalPath.let {
-                File(it.removeSuffix(".idea${File.separator}modules"))
-            }
-
             gitRoot shouldNotBe null
-            gitRoot shouldBe expectedRoot
+            gitRoot shouldBe File("..").canonicalFile
         }
     }
 

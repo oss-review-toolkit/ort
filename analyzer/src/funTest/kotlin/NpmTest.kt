@@ -25,7 +25,6 @@ import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
@@ -38,16 +37,15 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class NpmTest : WordSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/npm")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    private val projectsDir = File("src/funTest/assets/projects/synthetic/npm")
+    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
     override fun afterTest(description: Description, result: TestResult) {
         // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
         // from failing tests.
-        projectDir.listFiles().forEach {
+        projectsDir.listFiles().forEach {
             if (it.isDirectory) {
                 val nodeModulesDir = File(it, "node_modules")
                 val gitKeepFile = File(nodeModulesDir, ".gitkeep")
@@ -58,11 +56,11 @@ class NpmTest : WordSpec() {
         }
     }
 
-    private fun patchExpectedResult(workingDir: File): String {
-        val vcsPath = workingDir.relativeTo(rootDir).invariantSeparatorsPath
-        return File(projectDir.parentFile, "npm-expected-output.yml").readText()
+    private fun patchExpectedResult(projectDir: File): String {
+        val vcsPath = vcsDir.getPathToRoot(projectDir)
+        return File(projectsDir.parentFile, "npm-expected-output.yml").readText()
                 // project.name:
-                .replaceFirst("npm-project", "npm-${workingDir.name}")
+                .replaceFirst("npm-project", "npm-${projectDir.name}")
                 // project.definitionFilePath
                 .replaceFirst("<REPLACE_DEFINITION_FILE_PATH>", "$vcsPath/package.json")
                 // project.vcs_processed:
@@ -74,7 +72,7 @@ class NpmTest : WordSpec() {
     init {
         "NPM" should {
             "resolve shrinkwrap dependencies correctly" {
-                val workingDir = File(projectDir, "shrinkwrap")
+                val workingDir = File(projectsDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
@@ -86,7 +84,7 @@ class NpmTest : WordSpec() {
             }
 
             "resolve package-lock dependencies correctly" {
-                val workingDir = File(projectDir, "package-lock")
+                val workingDir = File(projectsDir, "package-lock")
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
@@ -98,7 +96,7 @@ class NpmTest : WordSpec() {
             }
 
             "show error if no lockfile is present" {
-                val workingDir = File(projectDir, "no-lockfile")
+                val workingDir = File(projectsDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
                 val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
@@ -111,7 +109,7 @@ class NpmTest : WordSpec() {
             }
 
             "show error if multiple lockfiles are present" {
-                val workingDir = File(projectDir, "multiple-lockfiles")
+                val workingDir = File(projectsDir, "multiple-lockfiles")
                 val packageFile = File(workingDir, "package.json")
 
                 val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
@@ -126,7 +124,7 @@ class NpmTest : WordSpec() {
             }
 
             "resolve dependencies even if the node_modules directory already exists" {
-                val workingDir = File(projectDir, "node-modules")
+                val workingDir = File(projectsDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
@@ -140,7 +138,7 @@ class NpmTest : WordSpec() {
 
         "yarn" should {
             "resolve dependencies correctly" {
-                val workingDir = File(projectDir, "yarn")
+                val workingDir = File(projectsDir, "yarn")
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 

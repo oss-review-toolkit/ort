@@ -24,7 +24,6 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.startWith
 import io.kotlintest.should
@@ -35,25 +34,24 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class PhpComposerTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/php-composer")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    private val projectsDir = File("src/funTest/assets/projects/synthetic/php-composer")
+    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
 
     init {
         "Project dependencies are detected correctly" {
-            val definitionFile = File(projectDir, "lockfile/composer.json")
+            val definitionFile = File(projectsDir, "lockfile/composer.json")
 
             val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val f = File(projectDir.parentFile, "php-composer-expected-output.yml")
+            val f = File(projectsDir.parentFile, "php-composer-expected-output.yml")
             val expectedResults = patchExpectedResult(definitionFile.parentFile,
                     f.readText())
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
         }
 
         "Error is shown when no lock file is present" {
-            val definitionFile = File(projectDir, "no-lockfile/composer.json")
+            val definitionFile = File(projectsDir, "no-lockfile/composer.json")
 
             val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
 
@@ -65,13 +63,10 @@ class PhpComposerTest : StringSpec() {
         }
     }
 
-    private fun patchExpectedResult(workingDir: File, result: String): String {
-        val vcsPath = workingDir.relativeTo(rootDir).invariantSeparatorsPath
-
-        return result
-                // project.vcs_processed:
-                .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
-                .replaceFirst("<REPLACE_REVISION>", vcsRevision)
-                .replaceFirst("<REPLACE_PATH>", vcsPath)
-    }
+    private fun patchExpectedResult(projectDir: File, result: String) =
+            result
+                    // project.vcs_processed:
+                    .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
+                    .replaceFirst("<REPLACE_REVISION>", vcsRevision)
+                    .replaceFirst("<REPLACE_PATH>", vcsDir.getPathToRoot(projectDir))
 }

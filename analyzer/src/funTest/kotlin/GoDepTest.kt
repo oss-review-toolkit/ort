@@ -24,7 +24,6 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.startWith
 import io.kotlintest.shouldBe
@@ -34,8 +33,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class GoDepTest : WordSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectsDir = File(rootDir, "analyzer/src/funTest/assets/projects")
+    private val projectsDir = File("src/funTest/assets/projects")
 
     init {
         "GoDep" should {

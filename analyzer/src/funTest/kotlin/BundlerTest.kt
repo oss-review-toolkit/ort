@@ -26,7 +26,6 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -36,8 +35,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class BundlerTest : WordSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectsDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/bundler")
+    private val projectsDir = File("src/funTest/assets/projects/synthetic/bundler")
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -86,13 +84,10 @@ class BundlerTest : WordSpec() {
         }
     }
 
-    private fun patchExpectedResult(workingDir: File, result: String): String {
-        val vcsPath = workingDir.relativeTo(rootDir).invariantSeparatorsPath
-
-        return result
-                // vcs_processed:
-                .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
-                .replaceFirst("<REPLACE_REVISION>", vcsRevision)
-                .replaceFirst("<REPLACE_PATH>", vcsPath)
-    }
+    private fun patchExpectedResult(projectDir: File, result: String) =
+            result
+                    // vcs_processed:
+                    .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
+                    .replaceFirst("<REPLACE_REVISION>", vcsRevision)
+                    .replaceFirst("<REPLACE_PATH>", vcsDir.getPathToRoot(projectDir))
 }

@@ -26,7 +26,6 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.Description
 import io.kotlintest.Spec
@@ -41,8 +40,7 @@ import io.kotlintest.tables.table
 import java.io.File
 
 class GradleTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/gradle")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
