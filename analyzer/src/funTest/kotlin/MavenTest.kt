@@ -24,7 +24,6 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -32,8 +31,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class MavenTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/maven")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/maven")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -46,7 +44,7 @@ class MavenTest : StringSpec() {
 
     init {
         "jgnash parent dependencies are detected correctly" {
-            val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/external/jgnash")
+            val projectDir = File("src/funTest/assets/projects/external/jgnash")
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
@@ -56,7 +54,7 @@ class MavenTest : StringSpec() {
         }
 
         "jgnash-core dependencies are detected correctly" {
-            val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/external/jgnash")
+            val projectDir = File("src/funTest/assets/projects/external/jgnash")
 
             val pomFileCore = File(projectDir, "jgnash-core/pom.xml")
             val pomFileResources = File(projectDir, "jgnash-resources/pom.xml")
@@ -111,7 +109,7 @@ class MavenTest : StringSpec() {
             File(userHome, ".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                     .safeDeleteRecursively()
 
-            val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/maven-parent")
+            val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent")
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = patchExpectedResult("maven-parent-expected-output-root.yml")
 

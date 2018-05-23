@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.here.ort.utils.searchUpwardsForSubdirectory
-
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -87,8 +85,7 @@ class ScanResultContainerTest : WordSpec() {
             }
 
             "serialize as expected" {
-                val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-                val expectedScanResultsFile = File(rootDir, "model/src/test/assets/expected-scan-results.yml")
+                val expectedScanResultsFile = File("src/test/assets/expected-scan-results.yml")
                 val expectedScanResults = expectedScanResultsFile.readText()
 
                 val serializedScanResults = yamlMapper.writeValueAsString(scanResults)

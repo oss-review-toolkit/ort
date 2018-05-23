@@ -20,7 +20,6 @@
 package com.here.ort.analyzer
 
 import com.here.ort.model.Identifier
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
@@ -30,8 +29,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class YamlFilePackageCurationProviderTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val curationsFile = File(rootDir, "analyzer/src/test/assets/package-curations.yml")
+    private val curationsFile = File("src/test/assets/package-curations.yml")
 
     init {
         "Provider can read YAML file" {

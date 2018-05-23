@@ -22,7 +22,6 @@ package com.here.ort.analyzer
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
@@ -37,8 +36,7 @@ import java.io.PrintStream
  * A test for the main entry point of the application.
  */
 class MainTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-    private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic")
+    private val projectDir = File("src/funTest/assets/projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

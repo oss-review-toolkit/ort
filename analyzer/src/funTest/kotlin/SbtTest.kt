@@ -22,7 +22,6 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.SBT
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -34,10 +33,7 @@ class SbtTest : StringSpec({
 
     "Dependencies of the external 'directories' project should be detected correctly" {
         val projectName = "directories"
-
-        val rootDir = File(".").searchUpwardsForSubdirectory(".git")
-        val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/external/$projectName")
-
+        val projectDir = File("src/funTest/assets/projects/external/$projectName")
         val definitionFile = File(projectDir, "build.sbt")
         val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
 

@@ -27,7 +27,6 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class ArchiveUtilsTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     private lateinit var outputDir: File
 
     override fun beforeTest(description: Description) {
@@ -40,7 +39,7 @@ class ArchiveUtilsTest : StringSpec() {
 
     init {
         "Tar GZ archive can be unpacked" {
-            val archive = File(rootDir, "utils/src/test/assets/test.tar.gz")
+            val archive = File("src/test/assets/test.tar.gz")
 
             archive.unpack(outputDir)
 
@@ -54,7 +53,7 @@ class ArchiveUtilsTest : StringSpec() {
         }
 
         "Tar bzip2 archive can be unpacked" {
-            val archive = File(rootDir, "utils/src/test/assets/test.tar.bz2")
+            val archive = File("src/test/assets/test.tar.bz2")
 
             archive.unpack(outputDir)
 
@@ -68,7 +67,7 @@ class ArchiveUtilsTest : StringSpec() {
         }
 
         "Zip archive can be unpacked" {
-            val archive = File(rootDir, "utils/src/test/assets/test.zip")
+            val archive = File("src/test/assets/test.zip")
 
             archive.unpack(outputDir)
 

@@ -22,7 +22,6 @@ package com.here.ort.downloader.vcs
 import com.here.ort.utils.unpack
 import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.Description
 import io.kotlintest.Spec
@@ -36,8 +35,7 @@ class CvsTest : StringSpec() {
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(description: Description, spec: Spec) {
-        val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
-        val zipFile = File(rootDir, "downloader/src/test/assets/tyrex-2018-01-29-cvs.zip")
+        val zipFile = File("src/test/assets/tyrex-2018-01-29-cvs.zip")
 
         zipContentDir = createTempDir()
 

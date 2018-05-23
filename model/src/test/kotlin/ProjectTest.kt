@@ -19,31 +19,25 @@
 
 package com.here.ort.model
 
-import com.here.ort.utils.searchUpwardsForSubdirectory
-
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class ProjectTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
+class ProjectTest : StringSpec({
+    "collectAllDependencies contains all dependencies" {
+        val expectedDependencies = listOf(
+                "Maven:junit:junit:4.12",
+                "Maven:org.apache.commons:commons-lang3:3.5",
+                "Maven:org.apache.commons:commons-text:1.1",
+                "Maven:org.apache.struts:struts2-assembly:2.5.14.1",
+                "Maven:org.hamcrest:hamcrest-core:1.3"
+        ).map { Identifier.fromString(it) }.toSortedSet()
 
-    init {
-        "collectAllDependencies contains all dependencies" {
-            val expectedDependencies = listOf(
-                    "Maven:junit:junit:4.12",
-                    "Maven:org.apache.commons:commons-lang3:3.5",
-                    "Maven:org.apache.commons:commons-text:1.1",
-                    "Maven:org.apache.struts:struts2-assembly:2.5.14.1",
-                    "Maven:org.hamcrest:hamcrest-core:1.3"
-            ).map { Identifier.fromString(it) }.toSortedSet()
+        val analyzerResultsFile =
+                File("src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
+        val project = yamlMapper.readValue(analyzerResultsFile, ProjectAnalyzerResult::class.java).project
 
-            val analyzerResultsFile =
-                    File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
-            val project = yamlMapper.readValue(analyzerResultsFile, ProjectAnalyzerResult::class.java).project
-
-            project.collectAllDependencies() shouldBe expectedDependencies
-        }
+        project.collectAllDependencies() shouldBe expectedDependencies
     }
-}
+})

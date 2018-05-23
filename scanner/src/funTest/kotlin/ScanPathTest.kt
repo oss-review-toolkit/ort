@@ -26,7 +26,6 @@ import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.ScanCodeTag
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.Description
 import io.kotlintest.shouldBe
@@ -36,7 +35,6 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class ScanPathTest : StringSpec() {
-    private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     private lateinit var outputDir: File
 
     override fun beforeTest(description: Description) {
@@ -49,25 +47,25 @@ class ScanPathTest : StringSpec() {
 
     init {
         "Askalono recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val result = Askalono.scanPath(File(rootDir, "LICENSE"), outputDir)
+            val result = Askalono.scanPath(File("LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
         }
 
         "BoyterLc recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val result = BoyterLc.scanPath(File(rootDir, "LICENSE"), outputDir)
+            val result = BoyterLc.scanPath(File("LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0", "ECL-2.0")
         }
 
         "Licensee recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val result = Licensee.scanPath(File(rootDir, "LICENSE"), outputDir)
+            val result = Licensee.scanPath(File("LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
         }
 
         "ScanCode recognizes our own LICENSE".config(tags = setOf(ExpensiveTag, ScanCodeTag)) {
-            val result = ScanCode.scanPath(File(rootDir, "LICENSE"), outputDir)
+            val result = ScanCode.scanPath(File("LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe setOf("Apache-2.0")
         }
