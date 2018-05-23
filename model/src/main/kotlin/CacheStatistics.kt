@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 /**
  * Statistics about reads and hits in a cache.
  */
@@ -26,10 +28,12 @@ data class CacheStatistics(
         /**
          * The number of read operations in the cache.
          */
+        @JsonProperty("num_reads")
         var numReads: Int = 0,
 
         /**
          * The number of read operations that returned an entry from the cache.
          */
+        @JsonProperty("num_hits")
         var numHits: Int = 0
 )
