@@ -21,7 +21,6 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
@@ -29,10 +28,7 @@ import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
-import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.startWith
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
@@ -104,12 +100,17 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
 
                 val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                        File(projectsDir.parentFile, "npm-expected-output-no-lockfile.yml"),
+                        custom = Pair("npm-project", "npm-${workingDir.name}"),
+                        definitionFilePath = "$vcsPath/package.json",
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath
+                )
 
-                result shouldNotBe null
-                result!!.project shouldBe Project.EMPTY
-                result.packages.size shouldBe 0
-                result.errors.size shouldBe 1
-                result.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
             "show error if multiple lockfiles are present" {
@@ -117,14 +118,17 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
 
                 val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                        File(projectsDir.parentFile, "npm-expected-output-multiple-lockfiles.yml"),
+                        custom = Pair("npm-project", "npm-${workingDir.name}"),
+                        definitionFilePath = "$vcsPath/package.json",
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath
+                )
 
-                result shouldNotBe null
-                result!!.project shouldBe Project.EMPTY
-                result.packages.size shouldBe 0
-                result.errors.size shouldBe 1
-                result.errors.first() should startWith("IllegalArgumentException:")
-                result.errors.first() should
-                        endWith("contains multiple lockfiles. It is ambiguous which one to use.")
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
             "resolve dependencies even if the node_modules directory already exists" {

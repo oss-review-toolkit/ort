@@ -1,0 +1,23 @@
+---
+allowDynamicVersions: false
+project:
+  id: "NPM::src/funTest/assets/projects/synthetic/npm/no-lockfile/package.json:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  aliases: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes: []
+packages: []
+errors:
+- "IllegalArgumentException: No lockfile found in src/funTest/assets/projects/synthetic/npm/no-lockfile,\
+  \ dependency versions are unstable."
