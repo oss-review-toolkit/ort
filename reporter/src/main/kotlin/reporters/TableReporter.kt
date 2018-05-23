@@ -128,7 +128,10 @@ abstract class TableReporter : Reporter {
                     acc + result.summary.licenses
                 }?.toSortedSet() ?: sortedSetOf()
 
-                val analyzerErrors = project.collectErrors(id)
+                val analyzerErrors = project.collectErrors(id).toMutableList()
+                scanRecord.analyzerResult.errors[id]?.let {
+                    analyzerErrors += it
+                }
 
                 val scanErrors = scanResult?.results?.fold(listOf<String>()) { acc, result ->
                     acc + result.summary.errors
