@@ -21,7 +21,6 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
@@ -29,11 +28,7 @@ import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
-import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.startWith
-import io.kotlintest.should
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.FreeSpec
 
 import java.io.File
@@ -59,9 +54,9 @@ class NpmTest : FreeSpec() {
         }
     }
 
-    private fun patchExpectedResult(workingDir: File): String {
+    private fun patchExpectedResult(workingDir: File, expectedResultFile: String = "npm-expected-output.yml"): String {
         val vcsPath = workingDir.relativeTo(rootDir).invariantSeparatorsPath
-        return File(projectDir.parentFile, "npm-expected-output.yml").readText()
+        return File(projectDir.parentFile, expectedResultFile).readText()
                 // project.name:
                 .replaceFirst("npm-project", "npm-${workingDir.name}")
                 // project.definitionFilePath
@@ -103,12 +98,9 @@ class NpmTest : FreeSpec() {
                 val packageFile = File(workingDir, "package.json")
 
                 val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val expectedResult = patchExpectedResult(workingDir, "npm-expected-output-no-lockfile.yml")
 
-                result shouldNotBe null
-                result!!.project shouldBe Project.EMPTY
-                result.packages.size shouldBe 0
-                result.errors.size shouldBe 1
-                result.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
             "show error if multiple lockfiles are present" {
@@ -116,14 +108,9 @@ class NpmTest : FreeSpec() {
                 val packageFile = File(workingDir, "package.json")
 
                 val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val expectedResult = patchExpectedResult(workingDir, "npm-expected-output-multiple-lockfiles.yml")
 
-                result shouldNotBe null
-                result!!.project shouldBe Project.EMPTY
-                result.packages.size shouldBe 0
-                result.errors.size shouldBe 1
-                result.errors.first() should startWith("IllegalArgumentException:")
-                result.errors.first() should
-                        endWith("contains multiple lockfiles. It is ambiguous which one to use.")
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
             "resolve dependencies even if the node_modules directory already exists" {

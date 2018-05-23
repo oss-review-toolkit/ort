@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.managers.*
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
@@ -195,7 +196,20 @@ abstract class PackageManager {
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    result[definitionFile] = ProjectAnalyzerResult(Main.allowDynamicVersions, Project.EMPTY,
+                    val definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: ""
+
+                    val errorProject = Project.EMPTY.copy(
+                            id = Identifier(
+                                    provider = Unmanaged.toString(),
+                                    namespace = "",
+                                    name = definitionFilePath.takeIf { it.isNotBlank() } ?: definitionFile.name,
+                                    version = ""
+                            ),
+                            definitionFilePath = definitionFilePath,
+                            vcsProcessed = processProjectVcs(definitionFile.parentFile)
+                    )
+
+                    result[definitionFile] = ProjectAnalyzerResult(Main.allowDynamicVersions, errorProject,
                             sortedSetOf(), e.collectMessages())
 
                     log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
