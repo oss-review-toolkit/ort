@@ -23,9 +23,9 @@ import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.ExpensiveTag
 
 import io.kotlintest.Description
 import io.kotlintest.Spec

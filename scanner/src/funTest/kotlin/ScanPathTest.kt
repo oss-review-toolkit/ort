@@ -23,9 +23,9 @@ import com.here.ort.scanner.scanners.Askalono
 import com.here.ort.scanner.scanners.BoyterLc
 import com.here.ort.scanner.scanners.Licensee
 import com.here.ort.scanner.scanners.ScanCode
-import com.here.ort.utils.ExpensiveTag
-import com.here.ort.utils.ScanCodeTag
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.ExpensiveTag
+import com.here.ort.utils.test.ScanCodeTag
 
 import io.kotlintest.Description
 import io.kotlintest.shouldBe

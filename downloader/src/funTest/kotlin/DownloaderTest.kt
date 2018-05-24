@@ -24,8 +24,8 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.ExpensiveTag
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.ExpensiveTag
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
