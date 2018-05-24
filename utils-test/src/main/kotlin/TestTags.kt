@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils
+package com.here.ort.utils.test
 
 import io.kotlintest.Tag
 
