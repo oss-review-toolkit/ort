@@ -26,6 +26,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -47,8 +48,12 @@ class BundlerTest : WordSpec() {
 
                 try {
                     val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-                    val expectedResult = patchExpectedResult(definitionFile.parentFile, File(projectsDir.parentFile,
-                            "bundler-expected-output-lockfile.yml").readText())
+                    val expectedResult = patchExpectedResult(
+                            File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
+                            url = normalizeVcsUrl(vcsUrl),
+                            revision = vcsRevision,
+                            path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                    )
 
                     yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
                 } finally {
@@ -73,8 +78,12 @@ class BundlerTest : WordSpec() {
 
                 try {
                     val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-                    val expectedResult = patchExpectedResult(definitionFile.parentFile, File(projectsDir.parentFile,
-                            "bundler-expected-output-gemspec.yml").readText())
+                    val expectedResult = patchExpectedResult(
+                            File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),
+                            url = normalizeVcsUrl(vcsUrl),
+                            revision = vcsRevision,
+                            path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                    )
 
                     yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
                 } finally {
@@ -83,11 +92,4 @@ class BundlerTest : WordSpec() {
             }
         }
     }
-
-    private fun patchExpectedResult(projectDir: File, result: String) =
-            result
-                    // vcs_processed:
-                    .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
-                    .replaceFirst("<REPLACE_REVISION>", vcsRevision)
-                    .replaceFirst("<REPLACE_PATH>", vcsDir.getPathToRoot(projectDir))
 }

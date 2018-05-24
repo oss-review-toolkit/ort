@@ -25,6 +25,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
@@ -56,19 +57,6 @@ class NpmTest : WordSpec() {
         }
     }
 
-    private fun patchExpectedResult(projectDir: File): String {
-        val vcsPath = vcsDir.getPathToRoot(projectDir)
-        return File(projectsDir.parentFile, "npm-expected-output.yml").readText()
-                // project.name:
-                .replaceFirst("npm-project", "npm-${projectDir.name}")
-                // project.definitionFilePath
-                .replaceFirst("<REPLACE_DEFINITION_FILE_PATH>", "$vcsPath/package.json")
-                // project.vcs_processed:
-                .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
-                .replaceFirst("<REPLACE_REVISION>", vcsRevision)
-                .replaceFirst("<REPLACE_PATH>", vcsPath)
-    }
-
     init {
         "NPM" should {
             "resolve shrinkwrap dependencies correctly" {
@@ -77,7 +65,15 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                        File(projectsDir.parentFile, "npm-expected-output.yml"),
+                        custom = Pair("npm-project", "npm-${workingDir.name}"),
+                        definitionFilePath = "$vcsPath/package.json",
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath
+                )
 
                 npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -89,7 +85,15 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                        File(projectsDir.parentFile, "npm-expected-output.yml"),
+                        custom = Pair("npm-project", "npm-${workingDir.name}"),
+                        definitionFilePath = "$vcsPath/package.json",
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath
+                )
 
                 npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -129,7 +133,15 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                        File(projectsDir.parentFile, "npm-expected-output.yml"),
+                        custom = Pair("npm-project", "npm-${workingDir.name}"),
+                        definitionFilePath = "$vcsPath/package.json",
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath
+                )
 
                 npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -143,7 +155,15 @@ class NpmTest : WordSpec() {
                 val npm = NPM.create()
 
                 val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
-                val expectedResult = patchExpectedResult(workingDir)
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                        File(projectsDir.parentFile, "npm-expected-output.yml"),
+                        custom = Pair("npm-project", "npm-${workingDir.name}"),
+                        definitionFilePath = "$vcsPath/package.json",
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath
+                )
 
                 npm.command(workingDir) shouldBe NPM.yarn
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult

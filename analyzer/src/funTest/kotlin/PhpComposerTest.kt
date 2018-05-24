@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Project
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.matchers.startWith
 import io.kotlintest.should
@@ -44,9 +45,13 @@ class PhpComposerTest : StringSpec() {
             val definitionFile = File(projectsDir, "lockfile/composer.json")
 
             val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val f = File(projectsDir.parentFile, "php-composer-expected-output.yml")
-            val expectedResults = patchExpectedResult(definitionFile.parentFile,
-                    f.readText())
+            val expectedResults = patchExpectedResult(
+                    File(projectsDir.parentFile, "php-composer-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+            )
+
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
         }
 
@@ -62,11 +67,4 @@ class PhpComposerTest : StringSpec() {
             result.errors.first() should startWith("IllegalArgumentException: No lock file found in")
         }
     }
-
-    private fun patchExpectedResult(projectDir: File, result: String) =
-            result
-                    // project.vcs_processed:
-                    .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
-                    .replaceFirst("<REPLACE_REVISION>", vcsRevision)
-                    .replaceFirst("<REPLACE_PATH>", vcsDir.getPathToRoot(projectDir))
 }
