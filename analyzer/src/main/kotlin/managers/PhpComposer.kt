@@ -90,12 +90,14 @@ class PhpComposer : PackageManager() {
         var workingDir = definitionFiles.first().parentFile
 
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
-        // fixed versions to be sure to get consistent results.
+        // fixed versions to be sure to get consistent results. The version string can be something like:
+        // Composer version 1.5.1 2017-08-09 16:07:22
+        // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
         checkCommandVersion(
                 command(workingDir),
                 Requirement.buildStrict("1.6.5"),
                 ignoreActualVersion = Main.ignoreVersions,
-                transform = { it.substringAfter("Composer version ").substringBefore(" ") }
+                transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
         )
 
         return definitionFiles
