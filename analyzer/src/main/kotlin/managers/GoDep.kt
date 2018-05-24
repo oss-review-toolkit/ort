@@ -86,13 +86,13 @@ class GoDep : PackageManager() {
             val version = project["version"]!!
 
             val vcs = VcsInfo(provider, name, revision)
-            var vcsProcessed = VcsInfo.EMPTY
             val errors: MutableList<String> = mutableListOf()
 
-            try {
-                vcsProcessed = resolveVcsInfo(vcs, gopath)
+            val vcsProcessed = try {
+                resolveVcsInfo(vcs, gopath)
             } catch (e: IOException) {
                 errors.add(e.toString())
+                VcsInfo.EMPTY
             }
 
             val pkg = Package(
