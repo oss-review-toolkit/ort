@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
@@ -52,19 +53,17 @@ class BabelTest : WordSpec() {
         }
     }
 
-    private fun patchExpectedResult(filename: String) =
-            File(projectDir.parentFile, filename).readText()
-                    // project.vcs_processed:
-                    .replaceFirst("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
-                    .replaceFirst("<REPLACE_REVISION>", vcsRevision)
-
     init {
         "Babel dependencies" should {
             "be correctly analyzed" {
                 val npm = NPM.create()
                 val packageFile = File(projectDir, "package.json")
 
-                val expectedResult = patchExpectedResult("${projectDir.name}-expected-output.yml")
+                val expectedResult = patchExpectedResult(
+                        File(projectDir.parentFile, "${projectDir.name}-expected-output.yml"),
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision
+                )
                 val actualResult = npm.resolveDependencies(listOf(packageFile))[packageFile]
 
                 yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult

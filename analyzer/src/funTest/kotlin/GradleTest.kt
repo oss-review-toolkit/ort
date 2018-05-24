@@ -26,6 +26,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.ExpensiveTag
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
 import io.kotlintest.Spec
@@ -47,12 +48,6 @@ class GradleTest : StringSpec() {
 
     private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 
-    private fun patchExpectedResult(filename: String) =
-            File(projectDir.parentFile, filename).readText()
-                    // project.vcs_processed:
-                    .replace("<REPLACE_URL>", normalizeVcsUrl(vcsUrl))
-                    .replace("<REPLACE_REVISION>", vcsRevision)
-
     override fun afterSpec(description: Description, spec: Spec) {
         // Reset the Gradle version in the test project to clean up after the tests.
         Git.run(projectDir, "checkout", ".")
@@ -61,7 +56,11 @@ class GradleTest : StringSpec() {
     init {
         "Root project dependencies are detected correctly" {
             val packageFile = File(projectDir, "build.gradle")
-            val expectedResult = patchExpectedResult("gradle-expected-output-root.yml")
+            val expectedResult = patchExpectedResult(
+                    File(projectDir.parentFile, "gradle-expected-output-root.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
+            )
 
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
@@ -72,7 +71,11 @@ class GradleTest : StringSpec() {
 
         "Project dependencies are detected correctly" {
             val packageFile = File(projectDir, "app/build.gradle")
-            val expectedResult = patchExpectedResult("gradle-expected-output-app.yml")
+            val expectedResult = patchExpectedResult(
+                    File(projectDir.parentFile, "gradle-expected-output-app.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
+            )
 
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
@@ -83,7 +86,11 @@ class GradleTest : StringSpec() {
 
         "External dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib/build.gradle")
-            val expectedResult = patchExpectedResult("gradle-expected-output-lib.yml")
+            val expectedResult = patchExpectedResult(
+                    File(projectDir.parentFile, "gradle-expected-output-lib.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
+            )
 
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
@@ -94,7 +101,11 @@ class GradleTest : StringSpec() {
 
         "Unresolved dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib-without-repo/build.gradle")
-            val expectedResult = patchExpectedResult("gradle-expected-output-lib-without-repo.yml")
+            val expectedResult = patchExpectedResult(
+                    File(projectDir.parentFile, "gradle-expected-output-lib-without-repo.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
+            )
 
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
@@ -105,7 +116,11 @@ class GradleTest : StringSpec() {
 
         "Fails nicely for Gradle version < 2.14".config(enabled = false) {
             val packageFile = File(projectDir.parentFile, "gradle-unsupported-version/build.gradle")
-            val expectedResult = patchExpectedResult("gradle-expected-output-unsupported-version.yml")
+            val expectedResult = patchExpectedResult(
+                    File(projectDir.parentFile, "gradle-expected-output-unsupported-version.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
+            )
 
             val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
@@ -157,7 +172,11 @@ class GradleTest : StringSpec() {
                 gradleWrapper(version)
 
                 val packageFile = File(projectDir, "app/build.gradle")
-                val expectedResult = patchExpectedResult("gradle-expected-output-app$resultsFileSuffix.yml")
+                val expectedResult = patchExpectedResult(
+                        File(projectDir.parentFile, "gradle-expected-output-app$resultsFileSuffix.yml"),
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision
+                )
 
                 val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
 
