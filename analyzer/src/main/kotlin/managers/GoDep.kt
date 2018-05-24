@@ -248,7 +248,7 @@ class GoDep : PackageManager() {
 
         val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()
 
-        // We want the revision recorded in Gopkg.lock, not the one "go get" fetched.
-        return processProjectVcs(repoRoot, vcs)
+        // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
+        return processProjectVcs(repoRoot, vcs).copy(revision = vcs.revision)
     }
 }
