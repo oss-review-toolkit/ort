@@ -185,12 +185,13 @@ class PhpComposer : PackageManager() {
         val json = jsonMapper.readTree(definitionFile)
         val homepageUrl = json["homepage"].asTextOrEmpty()
         val vcs = parseVcsInfo(json)
+        val rawName = json["name"].asText()
 
         return Project(
                 id = Identifier(
                         provider = PhpComposer.toString(),
-                        namespace = "",
-                        name = json["name"].asText(),
+                        namespace = rawName.substringBefore("/"),
+                        name = rawName.substringAfter("/"),
                         version = json["version"].asTextOrEmpty()
                 ),
                 declaredLicenses = parseDeclaredLicenses(json),
@@ -208,7 +209,7 @@ class PhpComposer : PackageManager() {
 
         listOf("packages", "packages-dev").forEach {
             json[it]?.forEach { pkgInfo ->
-                val name = pkgInfo["name"].asText()
+                val rawName = pkgInfo["name"].asText()
                 val version = pkgInfo["version"].asTextOrEmpty()
                 val homepageUrl = pkgInfo["homepage"].asTextOrEmpty()
                 val vcsFromPackage = parseVcsInfo(pkgInfo)
@@ -217,14 +218,14 @@ class PhpComposer : PackageManager() {
                 // composer.json at https://getcomposer.org/schema.json and it does not include the "version" field in
                 // the list of required properties.
                 if (version.isEmpty()) {
-                    log.warn { "No version information found for package $name." }
+                    log.warn { "No version information found for package $rawName." }
                 }
 
-                packages[name] = Package(
+                packages[rawName] = Package(
                         id = Identifier(
                                 provider = PhpComposer.toString(),
-                                namespace = "",
-                                name = name,
+                                namespace = rawName.substringBefore("/"),
+                                name = rawName.substringAfter("/"),
                                 version = version
                         ),
                         declaredLicenses = parseDeclaredLicenses(pkgInfo),
