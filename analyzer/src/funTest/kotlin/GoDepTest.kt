@@ -27,19 +27,18 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.matchers.startWith
-import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.FreeSpec
+import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class GoDepTest : FreeSpec() {
+class GoDepTest : WordSpec() {
     private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     private val projectsDir = File(rootDir, "analyzer/src/funTest/assets/projects")
 
     init {
-        "GoDep should" - {
+        "GoDep" should {
             "resolve dependencies from a lockfile correctly" {
                 val manifestFile = File(projectsDir, "external/qmstr/Gopkg.toml")
                 val godep = GoDep.create()

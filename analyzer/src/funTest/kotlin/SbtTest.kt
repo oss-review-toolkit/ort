@@ -25,42 +25,40 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.searchUpwardsForSubdirectory
 
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.FreeSpec
+import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class SbtTest : FreeSpec({
+class SbtTest : StringSpec({
     val sbt = SBT.create()
 
-    "Dependencies of the" - {
-        "external 'directories' project should be detected correctly" {
-            val projectName = "directories"
+    "Dependencies of the external 'directories' project should be detected correctly" {
+        val projectName = "directories"
 
-            val rootDir = File(".").searchUpwardsForSubdirectory(".git")
-            val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/external/$projectName")
+        val rootDir = File(".").searchUpwardsForSubdirectory(".git")
+        val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/external/$projectName")
 
-            val definitionFile = File(projectDir, "build.sbt")
-            val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
+        val definitionFile = File(projectDir, "build.sbt")
+        val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
 
-            // Clean any previously generated POM files / target directories.
-            Git.run(projectDir, "clean", "-fd")
+        // Clean any previously generated POM files / target directories.
+        Git.run(projectDir, "clean", "-fd")
 
-            // Even if we do not explicit depend on the definitionFile, explicitly check for it before calling
-            // resolveDependencies() to avoid potentially less readable errors from "sbt makePom". Similar for the
-            // expected output file.
-            definitionFile.isFile shouldBe true
-            expectedOutputFile.isFile shouldBe true
+        // Even if we do not explicit depend on the definitionFile, explicitly check for it before calling
+        // resolveDependencies() to avoid potentially less readable errors from "sbt makePom". Similar for the
+        // expected output file.
+        definitionFile.isFile shouldBe true
+        expectedOutputFile.isFile shouldBe true
 
-            val resolutionResult = sbt.resolveDependencies(listOf(definitionFile))
+        val resolutionResult = sbt.resolveDependencies(listOf(definitionFile))
 
-            // Because of the mapping from SBT to POM files we cannot use definitionFile as the key, so just ensure
-            // there is exactly one entry to take.
-            resolutionResult.size shouldBe 1
+        // Because of the mapping from SBT to POM files we cannot use definitionFile as the key, so just ensure
+        // there is exactly one entry to take.
+        resolutionResult.size shouldBe 1
 
-            val actualResult = yamlMapper.writeValueAsString(resolutionResult.values.first())
-            val expectedResult = expectedOutputFile.readText()
+        val actualResult = yamlMapper.writeValueAsString(resolutionResult.values.first())
+        val expectedResult = expectedOutputFile.readText()
 
-            actualResult shouldBe expectedResult
-        }
+        actualResult shouldBe expectedResult
     }
 })

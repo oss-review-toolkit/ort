@@ -31,14 +31,13 @@ import io.kotlintest.Description
 import io.kotlintest.TestResult
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.startWith
-import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.FreeSpec
+import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class NpmTest : FreeSpec() {
+class NpmTest : WordSpec() {
     private val rootDir = File(".").searchUpwardsForSubdirectory(".git")!!
     private val projectDir = File(rootDir, "analyzer/src/funTest/assets/projects/synthetic/npm")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
@@ -73,7 +72,7 @@ class NpmTest : FreeSpec() {
     }
 
     init {
-        "NPM should" - {
+        "NPM" should {
             "resolve shrinkwrap dependencies correctly" {
                 val workingDir = File(projectDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
@@ -139,7 +138,7 @@ class NpmTest : FreeSpec() {
             }
         }
 
-        "yarn should" - {
+        "yarn" should {
             "resolve dependencies correctly" {
                 val workingDir = File(projectDir, "yarn")
                 val packageFile = File(workingDir, "package.json")
