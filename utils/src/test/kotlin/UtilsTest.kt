@@ -20,7 +20,11 @@
 package com.here.ort.utils
 
 import com.here.ort.utils.spdx.calculatePackageVerificationCode
+import com.here.ort.utils.spdx.getLicenseText
 
+import io.kotlintest.matchers.endWith
+import io.kotlintest.matchers.startWith
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
@@ -213,6 +217,19 @@ class UtilsTest : WordSpec({
 
             filterVersionNames("6.9.0", names, "babel-plugin-transform-simplify-comparison-operators")
                     .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
+        }
+    }
+
+    "getLicenseText" should {
+        "return the full license text for a valid license id" {
+            val text = getLicenseText("Apache-2.0").trim()
+
+            text should startWith("Apache License")
+            text should endWith("limitations under the License.")
+        }
+
+        "throw an exception for an invalid license id" {
+            shouldThrow<IOException> { getLicenseText("FooBar-1.0") }
         }
     }
 

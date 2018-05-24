@@ -19,10 +19,18 @@
 
 package com.here.ort.utils.spdx
 
+import com.fasterxml.jackson.databind.ObjectMapper
+
+import com.here.ort.utils.OkHttpClientHelper
+
+import okhttp3.Request
+
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 
 import java.io.File
+import java.io.IOException
+import java.net.HttpURLConnection
 
 /**
  * Calculate the [SPDX package verification code][1] for a list of known SHA1s of files.
@@ -45,3 +53,22 @@ fun calculatePackageVerificationCode(files: List<File>) =
         calculatePackageVerificationCode(files.map { file ->
             file.inputStream().use { DigestUtils.sha1Hex(it) }
         })
+
+/**
+ * Retrieve the full text for the license with the provided SPDX [id].
+ */
+fun getLicenseText(id: String): String {
+    val version = "v3.1.1"
+    val url = "https://github.com/spdx/license-list-data/raw/$version/json/details/$id.json"
+    val request = Request.Builder().get().url(url).build()
+
+    return OkHttpClientHelper.execute("utils/cache/http", request).use { response ->
+        val body = response.body()
+
+        if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
+            throw IOException("Failed to download $id license data from $url.")
+        }
+
+        ObjectMapper().readTree(body.string()).get("licenseText").asText()
+    }
+}
