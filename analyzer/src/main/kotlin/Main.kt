@@ -85,13 +85,6 @@ object Main {
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(
-            description = "Merge all results into a single results file. The individual scan results files " +
-                    "for each build file will still be created.",
-            names = ["--merge-results"],
-            order = PARAMETER_ORDER_OPTIONAL)
-    private var createMergedResult = false
-
     @Parameter(description = "The data format used for dependency information.",
             names = ["--output-format", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
@@ -223,11 +216,8 @@ object Main {
 
         val failedAnalysis = sortedSetOf<String>()
 
-        val analyzerResultBuilder = if (createMergedResult) {
-            AnalyzerResultBuilder(allowDynamicVersions, vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY)
-        } else {
-            null
-        }
+        val analyzerResultBuilder = AnalyzerResultBuilder(allowDynamicVersions, vcs?.getInfo(absoluteProjectPath)
+                ?: VcsInfo.EMPTY)
 
         // Resolve dependencies per package manager.
         managedDefinitionFiles.forEach { manager, files ->
@@ -256,14 +246,14 @@ object Main {
 
             curatedResults.forEach { definitionFile, analyzerResult ->
                 writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
-                analyzerResultBuilder?.addResult(analyzerResult)
+                analyzerResultBuilder.addResult(analyzerResult)
                 if (analyzerResult.hasErrors()) {
                     failedAnalysis.add(definitionFile.absolutePath)
                 }
             }
         }
 
-        analyzerResultBuilder?.build()?.let {
+        analyzerResultBuilder.build().let {
             val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileExtension)
 
             println("Writing merged results\nto\n\t$outputFile")
