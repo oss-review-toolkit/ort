@@ -123,6 +123,8 @@ class NPM : PackageManager() {
 
     override fun command(workingDir: File) = if (File(workingDir, "yarn.lock").isFile) yarn else npm
 
+    override fun toString() = NPM.toString()
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
@@ -265,7 +267,7 @@ class NPM : PackageManager() {
 
             val module = Package(
                     id = Identifier(
-                            provider = "NPM",
+                            provider = toString(),
                             namespace = namespace,
                             name = name,
                             version = version
@@ -413,7 +415,7 @@ class NPM : PackageManager() {
             return packageInfo.toReference(dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
-            return PackageReference(Identifier("NPM", "", name, "unknown, package not installed"), sortedSetOf())
+            return PackageReference(Identifier(toString(), "", name, "unknown, package not installed"), sortedSetOf())
         } else {
             var parent = startDir.parentFile.parentFile
 
@@ -461,7 +463,7 @@ class NPM : PackageManager() {
 
         val project = Project(
                 id = Identifier(
-                        provider = NPM.toString(),
+                        provider = toString(),
                         namespace = namespace,
                         name = name,
                         version = version

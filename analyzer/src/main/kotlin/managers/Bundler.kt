@@ -74,6 +74,8 @@ class Bundler : PackageManager() {
 
     override fun command(workingDir: File) = bundle
 
+    override fun toString() = Bundler.toString()
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
         // fixed versions to be sure to get consistent results.
@@ -107,7 +109,7 @@ class Bundler : PackageManager() {
             installDependencies(workingDir)
 
             val (projectName, version, homepageUrl, declaredLicenses) = parseProject(workingDir)
-            val projectId = Identifier(Bundler.toString(), "", projectName, version)
+            val projectId = Identifier(toString(), "", projectName, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
             for ((groupName, dependencyList) in groupedDeps) {
@@ -167,7 +169,7 @@ class Bundler : PackageManager() {
 
         try {
             var gemSpec = getGemspec(gemName, workingDir)
-            val gemId = Identifier(Bundler.toString(), "", gemSpec.name, gemSpec.version)
+            val gemId = Identifier(toString(), "", gemSpec.name, gemSpec.version)
 
             // The project itself can be listed as a dependency if the project is a Gem (i.e. there is a .gemspec file
             // for it, and the Gemfile refers to it). In that case, skip querying Rubygems and adding Package and

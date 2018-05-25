@@ -87,6 +87,8 @@ class Maven : PackageManager() {
 
     override fun command(workingDir: File) = "mvn"
 
+    override fun toString() = Maven.toString()
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = maven.createProjectBuildingRequest(false)
@@ -182,7 +184,7 @@ class Maven : PackageManager() {
             }
 
             return PackageReference(
-                    Identifier("Maven", node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
+                    Identifier(toString(), node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
                     dependencies = sortedSetOf(),
                     errors = e.collectMessages()
             )

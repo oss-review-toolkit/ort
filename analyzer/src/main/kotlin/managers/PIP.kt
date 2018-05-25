@@ -80,6 +80,8 @@ class PIP : PackageManager() {
 
     override fun command(workingDir: File) = "pip"
 
+    override fun toString() = PIP.toString()
+
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
             runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 
@@ -256,7 +258,7 @@ class PIP : PackageManager() {
 
         val project = Project(
                 id = Identifier(
-                        provider = PIP.toString(),
+                        provider = toString(),
                         namespace = "",
                         name = projectName,
                         version = projectVersion
