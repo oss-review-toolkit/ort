@@ -223,7 +223,7 @@ object Main {
 
         val failedAnalysis = sortedSetOf<String>()
 
-        val mergedResultsBuilder = if (createMergedResult) {
+        val analyzerResultBuilder = if (createMergedResult) {
             AnalyzerResultBuilder(allowDynamicVersions, vcs?.getInfo(absoluteProjectPath) ?: VcsInfo.EMPTY)
         } else {
             null
@@ -256,14 +256,14 @@ object Main {
 
             curatedResults.forEach { definitionFile, analyzerResult ->
                 writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
-                mergedResultsBuilder?.addResult(analyzerResult)
+                analyzerResultBuilder?.addResult(analyzerResult)
                 if (analyzerResult.hasErrors()) {
                     failedAnalysis.add(definitionFile.absolutePath)
                 }
             }
         }
 
-        mergedResultsBuilder?.build()?.let {
+        analyzerResultBuilder?.build()?.let {
             val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileExtension)
 
             println("Writing merged results\nto\n\t$outputFile")
