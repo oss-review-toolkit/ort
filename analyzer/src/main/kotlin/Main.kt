@@ -40,7 +40,6 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
-import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 
@@ -130,21 +129,6 @@ object Main {
             help = true,
             order = PARAMETER_ORDER_HELP)
     private var help = false
-
-    private fun writeResultFile(projectRoot: File, currentPath: File, outputRoot: File, result: ProjectAnalyzerResult)
-            : File {
-        // Mirror the directory structure from the project in the output.
-        val currentDir = if (currentPath.isFile) currentPath.parentFile else currentPath
-        val outputDir = File(outputRoot, currentDir.toRelativeString(projectRoot)).apply { safeMkdirs() }
-        val outputFile = File(outputDir, currentPath.name.replace('.', '-') +
-                "-dependencies." + outputFormat.fileExtension)
-
-        println("Writing results for\n\t$currentPath\nto\n\t$outputFile")
-        mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, result)
-        println("done.")
-
-        return outputFile
-    }
 
     /**
      * The entry point for the application.
@@ -245,7 +229,6 @@ object Main {
             } ?: results
 
             curatedResults.forEach { definitionFile, analyzerResult ->
-                writeResultFile(absoluteProjectPath, definitionFile, absoluteOutputPath, analyzerResult)
                 analyzerResultBuilder.addResult(analyzerResult)
                 if (analyzerResult.hasErrors()) {
                     failedAnalysis.add(definitionFile.absolutePath)
@@ -256,7 +239,7 @@ object Main {
         analyzerResultBuilder.build().let {
             val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileExtension)
 
-            println("Writing merged results\nto\n\t$outputFile")
+            println("Writing analyzer result\nto\n\t$outputFile")
             mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, it)
             println("done.")
         }
