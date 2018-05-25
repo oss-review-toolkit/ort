@@ -40,6 +40,8 @@ class Unmanaged : PackageManager() {
 
     override fun command(workingDir: File) = throw NotImplementedError()
 
+    override fun toString() = Unmanaged.toString()
+
     /**
      * Returns an [ProjectAnalyzerResult] containing a [Project] for the passed [definitionFile], but does not perform
      * any dependency resolution.
@@ -49,7 +51,7 @@ class Unmanaged : PackageManager() {
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val project = Project(
                 id = Identifier(
-                        provider = "Unmanaged",
+                        provider = toString(),
                         namespace = "",
                         name = definitionFile.name,
                         version = ""

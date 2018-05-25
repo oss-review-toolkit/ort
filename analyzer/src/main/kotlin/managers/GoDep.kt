@@ -64,6 +64,8 @@ class GoDep : PackageManager() {
 
     override fun command(workingDir: File) = "dep"
 
+    override fun toString() = GoDep.toString()
+
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
@@ -77,7 +79,7 @@ class GoDep : PackageManager() {
         val projects = parseProjects(workingDir, gopath)
         val packages: MutableList<Package> = mutableListOf()
         val packageRefs: MutableList<PackageReference> = mutableListOf()
-        val provider = GoDep.toString()
+        val provider = toString()
 
         for (project in projects) {
             // parseProjects() made sure that all entries contain these keys

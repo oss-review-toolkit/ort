@@ -34,4 +34,6 @@ class CocoaPods : PackageManager() {
     }
 
     override fun command(workingDir: File) = "pod"
+
+    override fun toString() = CocoaPods.toString()
 }

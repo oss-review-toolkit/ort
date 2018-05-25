@@ -62,6 +62,8 @@ class SBT : PackageManager() {
 
     override fun command(workingDir: File) = if (OS.isWindows) "sbt.bat" else "sbt"
 
+    override fun toString() = SBT.toString()
+
     private fun extractLowestSbtVersion(stdout: String): String {
         val versions = stdout.lines().mapNotNull {
             VERSION_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { Semver(it) }

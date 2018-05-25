@@ -80,6 +80,8 @@ class Gradle : PackageManager() {
 
     override fun command(workingDir: File) = if (File(workingDir, wrapper).isFile) wrapper else gradle
 
+    override fun toString() = Gradle.toString()
+
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val connection = GradleConnector
                 .newConnector()
@@ -119,7 +121,7 @@ class Gradle : PackageManager() {
 
             val project = Project(
                     id = Identifier(
-                            provider = Gradle.toString(),
+                            provider = toString(),
                             namespace = dependencyTreeModel.group,
                             name = dependencyTreeModel.name,
                             version = dependencyTreeModel.version
@@ -151,7 +153,7 @@ class Gradle : PackageManager() {
             val rawPackage by lazy {
                 Package(
                         id = Identifier(
-                                provider = "Maven",
+                                provider = Maven.toString(),
                                 namespace = dependency.groupId,
                                 name = dependency.artifactId,
                                 version = dependency.version
@@ -192,8 +194,8 @@ class Gradle : PackageManager() {
         }
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-        return PackageReference(Identifier("Maven", dependency.groupId, dependency.artifactId, dependency.version),
-                transitiveDependencies.toSortedSet(), errors)
+        return PackageReference(Identifier(Maven.toString(), dependency.groupId, dependency.artifactId,
+                dependency.version), transitiveDependencies.toSortedSet(), errors)
     }
 
     /**

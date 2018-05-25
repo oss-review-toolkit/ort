@@ -80,6 +80,8 @@ class PhpComposer : PackageManager() {
                 }
             }
 
+    override fun toString() = PhpComposer.toString()
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
@@ -189,7 +191,7 @@ class PhpComposer : PackageManager() {
 
         return Project(
                 id = Identifier(
-                        provider = PhpComposer.toString(),
+                        provider = toString(),
                         namespace = rawName.substringBefore("/"),
                         name = rawName.substringAfter("/"),
                         version = json["version"].asTextOrEmpty()
@@ -223,7 +225,7 @@ class PhpComposer : PackageManager() {
 
                 packages[rawName] = Package(
                         id = Identifier(
-                                provider = PhpComposer.toString(),
+                                provider = toString(),
                                 namespace = rawName.substringBefore("/"),
                                 name = rawName.substringAfter("/"),
                                 version = version
