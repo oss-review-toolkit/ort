@@ -24,13 +24,10 @@ import ch.frankel.slf4k.*
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.fasterxml.jackson.databind.JsonMappingException
-
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
-import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.mapper
@@ -181,33 +178,15 @@ object Main {
                 "Provided path is not a file: ${it.absolutePath}"
             }
 
-            val mapper = it.mapper()
+            val analyzerResult = it.mapper().readValue(dependenciesFile, AnalyzerResult::class.java)
 
-            // Read packages assuming the dependencies file contains an ProjectAnalyzerResult.
-            try {
-                val analyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
-
-                mutableListOf<Package>().apply {
-                    if (entities.contains(DataEntity.PROJECT)) {
-                        add(analyzerResult.project.toPackage())
-                    }
-
-                    if (entities.contains(DataEntity.PACKAGES)) {
-                        addAll(analyzerResult.packages.map { it.pkg })
-                    }
+            mutableListOf<Package>().apply {
+                if (entities.contains(DataEntity.PROJECT)) {
+                    addAll(analyzerResult.projects.map { it.toPackage() })
                 }
-            } catch (e: JsonMappingException) {
-                // Read packages assuming the dependencies file contains a AnalyzerResult.
-                val analyzerResult = mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
 
-                mutableListOf<Package>().apply {
-                    if (entities.contains(DataEntity.PROJECT)) {
-                        addAll(analyzerResult.projects.map { it.toPackage() })
-                    }
-
-                    if (entities.contains(DataEntity.PACKAGES)) {
-                        addAll(analyzerResult.packages.map { it.pkg })
-                    }
+                if (entities.contains(DataEntity.PACKAGES)) {
+                    addAll(analyzerResult.packages.map { it.pkg })
                 }
             }
         } ?: run {
