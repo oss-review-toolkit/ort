@@ -40,6 +40,7 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
+import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 
@@ -237,6 +238,7 @@ object Main {
         }
 
         analyzerResultBuilder.build().let {
+            absoluteOutputPath.safeMkdirs()
             val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileExtension)
 
             println("Writing analyzer result\nto\n\t$outputFile")
