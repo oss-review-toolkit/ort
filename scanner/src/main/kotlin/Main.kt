@@ -26,14 +26,11 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.fasterxml.jackson.databind.JsonMappingException
-
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.Identifier
 import com.here.ort.model.OutputFormat
-import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.ProjectScanScopes
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanRecord
@@ -198,17 +195,7 @@ object Main {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
 
-        val mapper = dependenciesFile.mapper()
-
-        val analyzerResult = try {
-            // Read the analyzer result assuming the dependencies file contains an instance of AnalyzerResult.
-            mapper.readValue(dependenciesFile, AnalyzerResult::class.java)
-        } catch (e: JsonMappingException) {
-            // Fall back to reading the legacy ProjectAnalyzerResult.
-            val projectAnalyzerResult = mapper.readValue(dependenciesFile, ProjectAnalyzerResult::class.java)
-            AnalyzerResultBuilder(projectAnalyzerResult.allowDynamicVersions,
-                    projectAnalyzerResult.project.vcsProcessed).addResult(projectAnalyzerResult).build()
-        }
+        val analyzerResult = dependenciesFile.mapper().readValue(dependenciesFile, AnalyzerResult::class.java)
 
         // Add the projects as packages to scan.
         val projectPackages = analyzerResult.projects.map { it.toPackage().toCuratedPackage() }
