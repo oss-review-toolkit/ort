@@ -14,13 +14,15 @@
 
 # Introduction
 
-The goal of the OSS Review Toolkit (ORT) is to verify Free and Open Source Software licence compliance by checking project source code and dependencies.
+The goal of the OSS Review Toolkit (ORT) is to verify Free and Open Source Software licence compliance by checking
+project source code and dependencies.
 
 At a high level, it works by analyzing the source code for dependencies, downloading the
 source code of the dependencies, scanning all source code for license information, and summarizing the results.
 
-The different tools that make up ORT are designed as libraries (for programmatic use) with minimal command line interfaces (for
-scripted use, [doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
+The different tools that make up ORT are designed as libraries (for programmatic use) with minimal command line
+interfaces (for scripted use, 
+[doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
 
 The toolkit is envisioned to consist of the following libraries:
 
@@ -32,8 +34,8 @@ The toolkit is envisioned to consist of the following libraries:
 * *Evaluator* * - Evaluates the scan results from Scanner as OK or NOT OK based on user specified approval / rejection
   ruleset.
 * *Advisor* * - Retrieves security advisories based on Analyzer results.
-* *Reporter* * - Summarizes the output from Analyzer, Scanner and Evaluator in an interactive UI that shows the identified copyrights,
-  licenses and NOT OK issues.
+* *Reporter* * - Summarizes the output from Analyzer, Scanner and Evaluator in an interactive UI that shows the
+  identified copyrights, licenses and NOT OK issues.
 * *Documenter* * - Generates the outcome of the review, e.g. Open Source notices and annotated [SPDX](https://spdx.org/)
   files that can be included with your deliverable.
 
