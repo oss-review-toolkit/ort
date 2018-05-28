@@ -69,21 +69,5 @@ class FileCounterTest : StringSpec() {
 
             patchResult(result) shouldBe expectedResult
         }
-
-        "Gradle project scan results from project analyzer result file are correct" {
-            val analyzerResultFile = File(assetsDir, "project-analyzer-result.yml")
-            val expectedResult = File(assetsDir, "file-counter-expected-output-for-project-analyzer-result.yml")
-                    .readText()
-
-            Main.main(arrayOf(
-                    "-d", analyzerResultFile.path,
-                    "-o", outputDir.path,
-                    "-s", "FileCounter"
-            ))
-
-            val result = File(outputDir, "scan-record.yml").readText()
-
-            patchResult(result) shouldBe expectedResult
-        }
     }
 }
