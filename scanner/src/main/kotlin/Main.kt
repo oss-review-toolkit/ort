@@ -258,7 +258,7 @@ object Main {
             }
 
             println("Declared licenses for '${pkg.id}': ${pkg.declaredLicenses.joinToString()}")
-            println("Detected licenses for '${pkg.id}': ${result.flatMap { it.summary.errors }.joinToString()}")
+            println("Detected licenses for '${pkg.id}': ${result.flatMap { it.summary.licenses }.joinToString()}")
         }
 
         val resultContainers = results.map { (pkg, results) ->
