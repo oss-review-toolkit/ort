@@ -81,21 +81,20 @@ analyzer/build/install/analyzer/bin/analyzer -i [mime-types-path] -o [output-pat
 ```
 
 The `analyzer` will search for build files of all supported package managers. In case of `mime-types` it will find the
-`package.json` file and write the results of the dependency analysis to a file called `package-json-dependencies.yml`:
+`package.json` file and write the results of the dependency analysis to the output file `all-dependencies.yml`:
 
 ```bash
 $ analyzer/build/install/analyzer/bin/analyzer -i ~/git/mime-types -o ~/analyzer-results/mime-types
 The following package managers are activated:
-        Gradle, Maven, SBT, NPM, PIP
+        Gradle, Maven, SBT, NPM, GoDep, PIP, Bundler, PhpComposer
 Scanning project path:
         [mime-types-path]
 NPM projects found in:
         package.json
 Resolving NPM dependencies for '[mime-types-path]/package.json'...
-Writing results for
-        [mime-types-path]/package.json
+Writing analyzer result
 to
-        [output-path]/mime-types/package-json-dependencies.yml
+        [output-path]/mime-types/all-dependencies.yml
 done.
 ```
 
@@ -107,23 +106,31 @@ The structure of the results file is:
 
 ```yaml
 allowDynamicVersions: false
+# VCS information for the input directory.
+vcs:
+  type: "Git"
+  url: "https://github.com/jshttp/mime-types.git"
+  revision: "076f7902e3a730970ea96cd0b9c09bb6110f1127"
+  path: ""
+vcs_processed:
+  type: "git"
+  url: "https://github.com/jshttp/mime-types.git"
+  revision: "076f7902e3a730970ea96cd0b9c09bb6110f1127"
+  path: ""
 # Metadata about the mime-types package.
-project:
-  id:
-    provider: "NPM"
-    namespace: ""
-    name: "mime-types"
-    version: "2.1.18"
+projects:
+- id: "NPM::mime-types:2.1.18"
+  definition_file_path: "package.json"
   declared_licenses:
   - "MIT"
   aliases: []
-  vcs: # Raw VCS metadata as provided by the package.
+  vcs:
     type: ""
     url: "https://github.com/jshttp/mime-types.git"
     revision: ""
     path: ""
-  vcs_processed: # Normalized metadata created by ORT.
-    type: "Git"
+  vcs_processed:
+    type: "git"
     url: "https://github.com/jshttp/mime-types.git"
     revision: "076f7902e3a730970ea96cd0b9c09bb6110f1127"
     path: ""
@@ -133,58 +140,48 @@ project:
   - name: "dependencies"
     delivered: true
     dependencies:
-    - namespace: ""
-      name: "mime-db"
-      version: "1.33.0"
+    - id: "NPM::mime-db:1.33.0"
       dependencies: []
-      errors: [] # If an error occured during the dependency analysis of this package it would be in this list.
+      errors: []
   - name: "devDependencies"
     delivered: false
     dependencies:
-    - namespace: ""
-      name: "eslint-config-standard"
-      version: "10.2.1"
+    - id: "NPM::eslint-config-standard:10.2.1"
       dependencies: []
       errors: []
-    - namespace: ""
-      name: "eslint-plugin-import"
-      version: "2.8.0"
+    - id: "NPM::eslint-plugin-import:2.8.0"
       dependencies:
-      - namespace: ""
-        name: "builtin-modules"
-        version: "1.1.1"
+      - id: "NPM::builtin-modules:1.1.1"
         dependencies: []
-        errors: []
-    # ...
+        errors: [] # If an error occured during the dependency analysis of this package it would be in this array.
+# ...
 # Detailed metadata about each package from the dependency trees.
 packages:
-- id:
-    provider: "NPM"
-    namespace: ""
-    name: "abbrev"
-    version: "1.0.9"
-  declared_licenses:
-  - "ISC"
-  description: "Like ruby's abbrev module, but in js"
-  homepage_url: "https://github.com/isaacs/abbrev-js#readme"
-  binary_artifact:
-    url: "https://registry.npmjs.org/abbrev/-/abbrev-1.0.9.tgz"
-    hash: "91b4792588a7738c25f35dd6f63752a2f8776135"
-    hash_algorithm: "SHA-1"
-  source_artifact:
-    url: ""
-    hash: ""
-    hash_algorithm: ""
-  vcs:
-    type: "git"
-    url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
-    revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "ssh://git@github.com/isaacs/abbrev-js.git"
-    revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
-    path: ""
+- package:
+    id: "NPM::abbrev:1.0.9"
+    declared_licenses:
+    - "ISC"
+    description: "Like ruby's abbrev module, but in js"
+    homepage_url: "https://github.com/isaacs/abbrev-js#readme"
+    binary_artifact:
+      url: "https://registry.npmjs.org/abbrev/-/abbrev-1.0.9.tgz"
+      hash: "91b4792588a7738c25f35dd6f63752a2f8776135"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
+      revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "ssh://git@github.com/isaacs/abbrev-js.git"
+      revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
+      path: ""
+  curations: []
 # ...
 #  Finally a list of errors that happened during dependency analysis. Fortunately empty in this case.
 errors: []
@@ -237,22 +234,21 @@ scanner on the `dependencies` scope in this tutorial. If you also want to scan t
 advised to configure a cache for the scan results as documented above to speed up repeated scans.
 
 ```bash
-$ scanner/build/install/scanner/bin/scanner -d [analyzer-output-path]/package-json-dependencies.yml -o [scanner-output-path] --scopes dependencies
+$ scanner/build/install/scanner/bin/scanner -d [analyzer-output-path]/all-dependencies.yml -o [scanner-output-path] --scopes dependencies
 Using scanner 'ScanCode'.
-Limiting scan to scopes [dependencies]
-Using processed VcsInfo(type=Git, url=https://github.com/jshttp/mime-types.git, revision=076f7902e3a730970ea96cd0b9c09bb6110f1127, path=).
-Original was VcsInfo(type=, url=https://github.com/jshttp/mime-types.git, revision=, path=).
-Running ScanCode version 2.2.1.post277.4d68f9377 on directory '[scanner-output-path]/downloads/mime-types/2.1.18'.
-Stored ScanCode results in '[scanner-output-path]/scanResults/mime-types-2.1.18_scancode.json'.
-Using processed VcsInfo(type=Git, url=https://github.com/jshttp/mime-db.git, revision=e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb, path=).
-Original was VcsInfo(type=git, url=git+https://github.com/jshttp/mime-db.git, revision=e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb, path=).
-Running ScanCode version 2.2.1.post277.4d68f9377 on directory '[scanner-output-path]/downloads/mime-db/1.33.0'.
-Stored ScanCode results in '[scanner-output-path]/scanResults/mime-db-1.33.0_scancode.json'.
-Declared licenses for 'NPM::mime-types:2.1.18': MIT
-Detected licenses for 'NPM::mime-types:2.1.18': MIT
+Limiting scan to scopes: [dependencies]
+Bootstrapping scanner 'ScanCode' as version 2.9.2 was not found in PATH.
+Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-db.git, revision=e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb, resolvedRevision=null, path=).
+Original was VcsInfo(type=git, url=git+https://github.com/jshttp/mime-db.git, revision=e7c849b1c70ff745a4ae456a0cd5e6be8b05c2fb, resolvedRevision=null, path=).
+Running ScanCode version 2.9.2 on directory '[scanner-output-path]/mime-types/downloads/NPM/unknown/mime-db/1.33.0'.
+Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-types.git, revision=076f7902e3a730970ea96cd0b9c09bb6110f1127, resolvedRevision=null, path=).
+Original was VcsInfo(type=, url=https://github.com/jshttp/mime-types.git, revision=, resolvedRevision=null, path=).
+Running ScanCode version 2.9.2 on directory '[scanner-output-path]/mime-types/downloads/NPM/unknown/mime-types/2.1.18'.
 Declared licenses for 'NPM::mime-db:1.33.0': MIT
 Detected licenses for 'NPM::mime-db:1.33.0': MIT
-Writing scan summary to [scanner-output-path]/scan-summary.yml.
+Declared licenses for 'NPM::mime-types:2.1.18': MIT
+Detected licenses for 'NPM::mime-types:2.1.18': MIT
+Writing scan record to [scanner-output-path]/mime-types/scan-record.yml.
 ```
 
 As you can see from the output the licenses detected by `ScanCode` match the licenses declared by the packages. This is
@@ -260,11 +256,22 @@ because we scanned a small and well-maintained package in this example, but if y
 will see that `ScanCode` often finds more licenses than are declared by the packages.
 
 The `scanner` writes the raw scanner output for each scanned package to a file in the
-`[scanner-output-path]/scanResults` directory. Additionally it creates a `[scanner-output-path]/scan-summary.yml` file
+`[scanner-output-path]/scanResults` directory. Additionally it creates a `[scanner-output-path]/scan-record.yml` file
 which contains a summary of all licenses for all packages and some more details like cache statistics and information
 about the scanned scopes.
 
-## 6. Curating the metadata
+## 6. Generate a report
+
+The `scan-record.yml` file can now be used as input for the reporter to generate human-readable reports. For example to
+generate both, the static HTML report and the Excel record, use:
+
+```bash
+reporter/build/install/reporter/bin/reporter  -f STATIC_HTML,EXCEL -s [scanner-output-path]/mime-types/scan-record.yml -o [reporter-output-path]/mime-types
+Writing static HTML report to '[reporter-output-path]/mime-types/scan-report.html'.
+Writing Excel report to '[reporter-output-path]/mime-types/scan-report.xlsx'.
+```
+
+## 7. Curating the metadata
 
 In the example above everything went well because the VCS information provided by the packages was correct, but this is
 not always the case. Often the metadata of packages has no VCS information, points to outdated repositories, or the
