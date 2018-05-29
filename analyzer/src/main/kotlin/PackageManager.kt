@@ -201,7 +201,7 @@ abstract class PackageManager {
                             id = Identifier(
                                     provider = toString(),
                                     namespace = "",
-                                    name = definitionFile.path,
+                                    name = definitionFile.invariantSeparatorsPath,
                                     version = ""
                             ),
                             definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
