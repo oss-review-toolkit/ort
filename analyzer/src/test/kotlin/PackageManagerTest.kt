@@ -29,7 +29,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class PackageManagerTest : WordSpec({
-    val projectDir = File("analyzer/src/funTest/assets/projects/synthetic/all-managers")
+    val projectDir = File("src/funTest/assets/projects/synthetic/all-managers")
 
     "findManagedFiles" should {
         "find all managed files" {
