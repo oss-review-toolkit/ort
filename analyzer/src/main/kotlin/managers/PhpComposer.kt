@@ -97,7 +97,7 @@ class PhpComposer : PackageManager() {
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
         checkCommandVersion(
                 command(workingDir),
-                Requirement.buildStrict("1.6.5"),
+                Requirement.buildIvy("[1.5,)"),
                 ignoreActualVersion = Main.ignoreVersions,
                 transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
         )
