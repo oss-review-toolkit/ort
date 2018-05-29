@@ -21,7 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.PhpComposer
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Project
+import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.patchExpectedResult
@@ -61,7 +61,10 @@ class PhpComposerTest : StringSpec() {
             val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
 
             result shouldNotBe null
-            result!!.project shouldBe Project.EMPTY
+            result!!.project.id shouldBe Identifier.fromString("PhpComposer::src/funTest/assets/projects/synthetic/" +
+                    "php-composer/no-lockfile/composer.json:")
+            result.project.definitionFilePath shouldBe
+                    "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
             result.packages.size shouldBe 0
             result.errors.size shouldBe 1
             result.errors.first() should startWith("IllegalArgumentException: No lock file found in")
