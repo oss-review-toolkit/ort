@@ -77,15 +77,16 @@ class BeanUtilsTest : StringSpec() {
             downloadResult.vcsInfo!!.resolvedRevision shouldBe "928490"
             downloadResult.vcsInfo!!.path shouldBe vcsFromCuration.path
 
-            val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
+            val tagsBeanUtils183Dir = File(downloadResult.downloadDirectory, "tags/BEANUTILS_1_8_3")
+
+            tagsBeanUtils183Dir.isDirectory shouldBe true
+            tagsBeanUtils183Dir.walkTopDown().count() shouldBe 302
+
+            val workingTree = VersionControlSystem.forDirectory(tagsBeanUtils183Dir)
 
             workingTree shouldNotBe null
             workingTree!!.isValid() shouldBe true
-            workingTree.getRevision() shouldBe "1823084"
-
-            val tagsBeanUtils183Dir = File(downloadResult.downloadDirectory, "tags/BEANUTILS_1_8_3")
-            tagsBeanUtils183Dir.isDirectory shouldBe true
-            tagsBeanUtils183Dir.walkTopDown().count() shouldBe 302
+            workingTree.getRevision() shouldBe "928490"
         }
     }
 }
