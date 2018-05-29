@@ -35,7 +35,7 @@ class ProjectTest : StringSpec({
         ).map { Identifier.fromString(it) }.toSortedSet()
 
         val analyzerResultsFile =
-                File("src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
+                File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
         val project = yamlMapper.readValue(analyzerResultsFile, ProjectAnalyzerResult::class.java).project
 
         project.collectAllDependencies() shouldBe expectedDependencies
