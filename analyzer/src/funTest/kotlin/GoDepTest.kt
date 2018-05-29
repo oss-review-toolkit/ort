@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.GoDep
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
@@ -54,7 +55,10 @@ class GoDepTest : WordSpec() {
                 val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
-                result!!.project shouldBe Project.EMPTY
+                result!!.project.id shouldBe Identifier
+                        .fromString("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
+                result.project.definitionFilePath shouldBe
+                        "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
                 result.packages.size shouldBe 0
                 result.errors.size shouldBe 1
                 result.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
