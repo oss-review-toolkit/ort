@@ -65,18 +65,6 @@ object Main {
     const val TOOL_NAME = "scanner"
     const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
-    private class OutputFormatConverter : IStringConverter<OutputFormat> {
-        override fun convert(name: String): OutputFormat {
-            try {
-                return OutputFormat.valueOf(name.toUpperCase())
-            } catch (e: IllegalArgumentException) {
-                e.showStackTrace()
-
-                throw ParameterException("Summary formats must be contained in ${OutputFormat.ALL}.")
-            }
-        }
-    }
-
     private class ScannerConverter : IStringConverter<Scanner> {
         override fun convert(scannerName: String): Scanner {
             // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
@@ -129,7 +117,6 @@ object Main {
 
     @Parameter(description = "The list of file formats for the summary files.",
             names = ["--summary-format", "-f"],
-            converter = OutputFormatConverter::class,
             order = PARAMETER_ORDER_OPTIONAL)
     private var summaryFormats = listOf(OutputFormat.YAML)
 

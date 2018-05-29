@@ -19,10 +19,8 @@
 
 package com.here.ort.reporter
 
-import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
-import com.beust.jcommander.ParameterException
 
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.mapper
@@ -34,7 +32,6 @@ import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.safeMkdirs
-import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
@@ -59,18 +56,6 @@ object Main {
         }
     }
 
-    private class ReportFormatConverter : IStringConverter<ReportFormat> {
-        override fun convert(name: String): ReportFormat {
-            try {
-                return ReportFormat.valueOf(name.toUpperCase())
-            } catch (e: IllegalArgumentException) {
-                e.showStackTrace()
-
-                throw ParameterException("Report formats must be contained in ${ReportFormat.ALL}.")
-            }
-        }
-    }
-
     @Parameter(description = "The scan record file to use.",
             names = ["--scan-record-file", "-s"],
             required = true,
@@ -87,7 +72,6 @@ object Main {
     @Parameter(description = "The list of report formats that will be generated.",
             names = ["--report-formats", "-f"],
             required = true,
-            converter = ReportFormatConverter::class,
             order = PARAMETER_ORDER_MANDATORY)
     private lateinit var reportFormats: List<ReportFormat>
 

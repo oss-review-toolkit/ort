@@ -21,10 +21,8 @@ package com.here.ort.downloader
 
 import ch.frankel.slf4k.*
 
-import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
-import com.beust.jcommander.ParameterException
 
 import com.fasterxml.jackson.databind.JsonMappingException
 
@@ -100,18 +98,6 @@ object Main {
         }
     }
 
-    private class DataEntityConverter : IStringConverter<DataEntity> {
-        override fun convert(name: String): DataEntity {
-            try {
-                return DataEntity.valueOf(name.toUpperCase())
-            } catch (e: IllegalArgumentException) {
-                e.showStackTrace()
-
-                throw ParameterException("Data entities must be contained in ${DataEntity.ALL}.")
-            }
-        }
-    }
-
     @Parameter(description = "A dependencies analysis file to use. Must not be used with '--project-url'.",
             names = ["--dependencies-file", "-d"],
             order = PARAMETER_ORDER_OPTIONAL)
@@ -136,7 +122,6 @@ object Main {
 
     @Parameter(description = "The data entities from the dependencies analysis file to download.",
             names = ["--entities", "-e"],
-            converter = DataEntityConverter::class,
             order = PARAMETER_ORDER_OPTIONAL)
     private var entities = DataEntity.ALL
 
