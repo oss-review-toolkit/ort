@@ -41,7 +41,6 @@ import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.jsonMapper
 import com.here.ort.model.mapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.scanners.ScanCode
@@ -309,12 +308,8 @@ object Main {
     private fun writeScanRecord(outputDirectory: File, scanRecord: ScanRecord) {
         summaryFormats.forEach { format ->
             val scanRecordFile = File(outputDirectory, "scan-record.${format.fileExtension}")
-            val mapper = when (format) {
-                OutputFormat.JSON -> jsonMapper
-                OutputFormat.YAML -> yamlMapper
-            }
             println("Writing scan record to ${scanRecordFile.absolutePath}.")
-            mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, scanRecord)
+            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, scanRecord)
         }
     }
 }
