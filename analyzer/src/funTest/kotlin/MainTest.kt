@@ -103,7 +103,7 @@ class MainTest : StringSpec() {
             lines.next() shouldBe "NPM projects found in:"
         }
 
-        "Merging into single results file creates correct output" {
+        "Analyzer creates correct output" {
             val analyzerOutputDir = File(outputDir, "merged-results")
 
             val expectedResult = patchExpectedResult(
@@ -116,8 +116,7 @@ class MainTest : StringSpec() {
             Main.main(arrayOf(
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
-                    "-o", analyzerOutputDir.path,
-                    "--merge-results"
+                    "-o", analyzerOutputDir.path
             ))
 
             val result = File(analyzerOutputDir, "all-dependencies.yml").readText()
