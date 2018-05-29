@@ -46,14 +46,6 @@ object Main {
     private enum class ReportFormat {
         EXCEL,
         STATIC_HTML;
-
-        companion object {
-            /**
-             * The list of all available report formats.
-             */
-            @JvmField
-            val ALL = ReportFormat.values().asList()
-        }
     }
 
     @Parameter(description = "The scan record file to use.",
