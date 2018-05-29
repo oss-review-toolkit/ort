@@ -115,10 +115,10 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     if (version.isBlank() || names.isEmpty()) return emptyList()
 
     val normalizedSeparator = '_'
-    val normalizedVersion = version.replace(Regex("(\\.|-)"), normalizedSeparator.toString()).toLowerCase()
+    val normalizedVersion = version.replace(Regex("([.-])"), normalizedSeparator.toString()).toLowerCase()
 
     val filteredNames = names.filter {
-        val normalizedName = it.replace(Regex("(\\.|-)"), normalizedSeparator.toString()).toLowerCase()
+        val normalizedName = it.replace(Regex("([.-])"), normalizedSeparator.toString()).toLowerCase()
 
         when {
             // Allow to ignore suffixes in names that are separated by something else than the current
