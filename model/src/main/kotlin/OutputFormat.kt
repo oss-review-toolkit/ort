@@ -36,14 +36,6 @@ enum class OutputFormat(val fileExtension: String, val mapper: ObjectMapper) {
      * Specifies the [YAML](http://yaml.org/) format.
      */
     YAML("yml", yamlMapper);
-
-    companion object {
-        /**
-         * The list of all available output formats.
-         */
-        @JvmField
-        val ALL = OutputFormat.values().asList()
-    }
 }
 
 /**

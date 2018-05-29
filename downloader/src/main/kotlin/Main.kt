@@ -70,14 +70,6 @@ object Main {
     enum class DataEntity {
         PACKAGES,
         PROJECT;
-
-        companion object {
-            /**
-             * The list of all available data entities.
-             */
-            @JvmField
-            val ALL = DataEntity.values().asList()
-        }
     }
 
     /**
@@ -123,7 +115,7 @@ object Main {
     @Parameter(description = "The data entities from the dependencies analysis file to download.",
             names = ["--entities", "-e"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var entities = DataEntity.ALL
+    private var entities = enumValues<DataEntity>().asList()
 
     @Parameter(description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
             "these revision are forbidden because they are not pointing to a stable revision of the source code.",
