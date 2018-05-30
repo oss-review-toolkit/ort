@@ -21,6 +21,8 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -117,35 +119,28 @@ object Askalono : LocalScanner() {
             if (isSuccess()) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getResult(resultsFile)
-                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
-                return ScanResult(provenance, scannerDetails, summary, result.rawResult)
+                val summary = generateSummary(startTime, endTime, result)
+                return ScanResult(provenance, scannerDetails, summary, result)
             } else {
                 throw ScanException(failMessage)
             }
         }
     }
 
-    override fun getResult(resultsFile: File): Result {
-        var fileCount = 0
-        val licenses = sortedSetOf<String>()
-        val errors = sortedSetOf<String>()
+    override fun getResult(resultsFile: File): JsonNode {
+        if (!resultsFile.isFile || resultsFile.length() == 0L) return EMPTY_JSON_NODE
 
-        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
-            val rawResult = yamlMapper.createArrayNode()
-
-            val yamlNodes = resultsFile.readLines().chunked(3) { (path, license, score) ->
-                val licenseNoOriginalText = license.substringBeforeLast(" (original text)")
-                licenses += licenseNoOriginalText.substringAfter("License: ")
-                val yamlString = listOf("Path: $path", licenseNoOriginalText, score).joinToString("\n")
-                yamlMapper.readTree(yamlString)
-            }
-
-            fileCount = yamlNodes.size
-            rawResult.addAll(yamlNodes)
-        } else {
-            EMPTY_JSON_NODE
+        val yamlNodes = resultsFile.readLines().chunked(3) { (path, license, score) ->
+            val licenseNoOriginalText = license.substringBeforeLast(" (original text)")
+            val yamlString = listOf("Path: $path", licenseNoOriginalText, score).joinToString("\n")
+            yamlMapper.readTree(yamlString)
         }
 
-        return Result(fileCount, licenses, errors, json)
+        return yamlMapper.createArrayNode().apply { addAll(yamlNodes) }
+    }
+
+    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+        val licenses = result.map { it["License"].asText() }
+        return ScanSummary(startTime, endTime, result.size(), licenses.toSortedSet(), errors = sortedSetOf())
     }
 }
