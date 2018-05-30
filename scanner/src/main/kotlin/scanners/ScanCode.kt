@@ -22,6 +22,8 @@ package com.here.ort.scanner.scanners
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -40,6 +42,7 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 import java.util.regex.Pattern
+import java.util.SortedSet
 
 object ScanCode : LocalScanner() {
     private const val OUTPUT_FORMAT = "json-pp"
@@ -148,15 +151,15 @@ object ScanCode : LocalScanner() {
             log.debug { process.stderr() }
         }
 
-        val result = getPlainResult(resultsFile)
+        val result = getResult(resultsFile)
+        val summary = generateSummary(startTime, endTime, result)
 
-        val hasOnlyMemoryErrors = mapUnknownErrors(result)
-        val hasOnlyTimeoutErrors = mapTimeoutErrors(result)
+        val hasOnlyMemoryErrors = mapUnknownErrors(summary.errors)
+        val hasOnlyTimeoutErrors = mapTimeoutErrors(summary.errors)
 
         with(process) {
             if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
-                return ScanResult(provenance, scannerDetails, summary, result.rawResult)
+                return ScanResult(provenance, scannerDetails, summary)
             } else {
                 throw ScanException(failMessage)
             }
@@ -167,57 +170,48 @@ object ScanCode : LocalScanner() {
         // TODO: Add results of license scan to YAML model
     }
 
-    internal fun getPlainResult(resultsFile: File): Result {
-        var fileCount = 0
-        val licenses = sortedSetOf<String>()
-        val errors = sortedSetOf<String>()
-
-        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
-            jsonMapper.readTree(resultsFile).also {
-                fileCount = it["files_count"].intValue()
-
-                it["files"]?.forEach { file ->
-                    file["licenses"]?.forEach { license ->
-                        var name = license["spdx_license_key"].asText()
-                        if (name.isNullOrBlank()) {
-                            val key = license["key"].asText()
-                            name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
-                        }
-                        licenses.add(name)
-                    }
-
-                    val path = file["path"].asText()
-                    errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
-                }
-            }
+    override fun getResult(resultsFile: File): JsonNode {
+        return if (resultsFile.isFile && resultsFile.length() > 0L) {
+            jsonMapper.readTree(resultsFile)
         } else {
             EMPTY_JSON_NODE
         }
-
-        return Result(fileCount, licenses, errors, json)
     }
 
-    override fun getResult(resultsFile: File) =
-            getPlainResult(resultsFile).also {
-                mapUnknownErrors(it)
-                mapTimeoutErrors(it)
+    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+        val fileCount = result["files_count"].intValue()
+        val licenses = sortedSetOf<String>()
+        val errors = sortedSetOf<String>()
+
+        result["files"]?.forEach { file ->
+            file["licenses"]?.forEach { license ->
+                var name = license["spdx_license_key"].asText()
+                if (name.isNullOrBlank()) {
+                    val key = license["key"].asText()
+                    name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+                }
+                licenses.add(name)
             }
+
+            val path = file["path"].asText()
+            errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
+        }
+
+        return ScanSummary(startTime, endTime, fileCount, licenses, errors)
+    }
 
     /**
      * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return
      * false otherwise.
      */
-    internal fun mapUnknownErrors(result: Result): Boolean {
-        if (result.errors.isEmpty()) {
+    internal fun mapUnknownErrors(errors: SortedSet<String>): Boolean {
+        if (errors.isEmpty()) {
             return false
         }
 
         var onlyMemoryErrors = true
 
-        val errors = result.errors.toSortedSet()
-        result.errors.clear()
-
-        errors.mapTo(result.errors) { fullError ->
+        val mappedErrors = errors.map { fullError ->
             UNKNOWN_ERROR_REGEX.matcher(fullError).let { matcher ->
                 if (matcher.matches()) {
                     val file = matcher.group("file")
@@ -236,6 +230,9 @@ object ScanCode : LocalScanner() {
             }
         }
 
+        errors.clear()
+        errors.addAll(mappedErrors)
+
         return onlyMemoryErrors
     }
 
@@ -243,17 +240,14 @@ object ScanCode : LocalScanner() {
      * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return
      * false otherwise.
      */
-    internal fun mapTimeoutErrors(result: Result): Boolean {
-        if (result.errors.isEmpty()) {
+    internal fun mapTimeoutErrors(errors: SortedSet<String>): Boolean {
+        if (errors.isEmpty()) {
             return false
         }
 
         var onlyTimeoutErrors = true
 
-        val errors = result.errors.toSortedSet()
-        result.errors.clear()
-
-        errors.mapTo(result.errors) { fullError ->
+        val mappedErrors = errors.map { fullError ->
             TIMEOUT_ERROR_REGEX.matcher(fullError).let { matcher ->
                 if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
                     val file = matcher.group("file")
@@ -264,6 +258,9 @@ object ScanCode : LocalScanner() {
                 }
             }
         }
+
+        errors.clear()
+        errors.addAll(mappedErrors)
 
         return onlyTimeoutErrors
     }

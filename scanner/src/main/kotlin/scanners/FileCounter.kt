@@ -19,6 +19,9 @@
 
 package com.here.ort.scanner.scanners
 
+import com.fasterxml.jackson.databind.JsonNode
+
+import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
@@ -48,20 +51,28 @@ object FileCounter : LocalScanner() {
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {
         val startTime = Instant.now()
-        val result = FileCountResult(path.walk().count())
+
+        val fileCountResult = FileCountResult(path.walk().count())
+        val fileCountJson = jsonMapper.writeValueAsString(fileCountResult)
+        resultsFile.writeText(fileCountJson)
+
         val endTime = Instant.now()
 
-        val json = jsonMapper.writeValueAsString(result)
-        resultsFile.writeText(json)
-
-        val summary = ScanSummary(startTime, endTime, result.fileCount, sortedSetOf(), sortedSetOf())
-        val rawResult = jsonMapper.readTree(json)
-
-        return ScanResult(provenance, scannerDetails, summary, rawResult)
+        val result = getResult(resultsFile)
+        val summary = generateSummary(startTime, endTime, result)
+        return ScanResult(provenance, scannerDetails, summary, result)
     }
 
-    override fun getResult(resultsFile: File): Result {
-        val result = jsonMapper.readValue(resultsFile, FileCountResult::class.java)
-        return Result(result.fileCount, sortedSetOf(), sortedSetOf(), jsonMapper.readTree(resultsFile))
+    override fun getResult(resultsFile: File): JsonNode {
+        return if (resultsFile.isFile && resultsFile.length() > 0L) {
+            jsonMapper.readTree(resultsFile)
+        } else {
+            EMPTY_JSON_NODE
+        }
+    }
+
+    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+        val fileCount = result["fileCount"].intValue()
+        return ScanSummary(startTime, endTime, fileCount, licenses = sortedSetOf(), errors = sortedSetOf())
     }
 }

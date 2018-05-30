@@ -19,6 +19,8 @@
 
 package com.here.ort.scanner
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.EMPTY_JSON_NODE
@@ -242,5 +244,7 @@ abstract class LocalScanner : Scanner() {
     protected abstract fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance,
                                     resultsFile: File): ScanResult
 
-    internal abstract fun getResult(resultsFile: File): Result
+    internal abstract fun getResult(resultsFile: File): JsonNode
+
+    internal abstract fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary
 }

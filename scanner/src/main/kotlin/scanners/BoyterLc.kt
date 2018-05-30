@@ -21,6 +21,8 @@ package com.here.ort.scanner.scanners
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -128,33 +130,31 @@ object BoyterLc : LocalScanner() {
         with(process) {
             if (isSuccess()) {
                 val result = getResult(resultsFile)
-                val summary = ScanSummary(startTime, endTime, result.fileCount, result.licenses, result.errors)
-                return ScanResult(provenance, scannerDetails, summary, result.rawResult)
+                val summary = generateSummary(startTime, endTime, result)
+                return ScanResult(provenance, scannerDetails, summary, result)
             } else {
                 throw ScanException(failMessage)
             }
         }
     }
 
-    override fun getResult(resultsFile: File): Result {
-        var fileCount = 0
-        val licenses = sortedSetOf<String>()
-        val errors = sortedSetOf<String>()
-
-        val json = if (resultsFile.isFile && resultsFile.length() > 0) {
-            jsonMapper.readTree(resultsFile).also {
-                fileCount = it.count()
-
-                it.forEach { file ->
-                    licenses.addAll(file["LicenseGuesses"].map { license ->
-                        license["LicenseId"].asText()
-                    })
-                }
-            }
+    override fun getResult(resultsFile: File): JsonNode {
+        return if (resultsFile.isFile && resultsFile.length() > 0L) {
+            jsonMapper.readTree(resultsFile)
         } else {
             EMPTY_JSON_NODE
         }
+    }
 
-        return Result(fileCount, licenses, errors, json)
+    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+        val licenses = sortedSetOf<String>()
+
+        result.forEach { file ->
+            file["LicenseGuesses"].mapTo(licenses) { license ->
+                license["LicenseId"].asText()
+            }
+        }
+
+        return ScanSummary(startTime, endTime, result.size(), licenses, errors = sortedSetOf())
     }
 }

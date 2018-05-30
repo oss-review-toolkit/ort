@@ -19,14 +19,11 @@
 
 package com.here.ort.scanner
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.scanner.scanners.*
 
 import java.io.File
-import java.util.SortedSet
 
 abstract class Scanner {
     companion object {
@@ -44,9 +41,6 @@ abstract class Scanner {
             )
         }
     }
-
-    data class Result(val fileCount: Int, val licenses: SortedSet<String>, val errors: SortedSet<String>,
-                      val rawResult: JsonNode)
 
     /**
      * Scan the [packages] using this [Scanner].
