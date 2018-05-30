@@ -161,7 +161,8 @@ class GoDep : PackageManager() {
         val lockfileName = LEGACY_MANIFESTS[definitionFile.name]
 
         if (lockfileName != NO_LOCKFILE && !File(workingDir, lockfileName).isFile && !Main.allowDynamicVersions) {
-            throw IllegalArgumentException("No lockfile found in $projectDir, dependency versions are unstable.")
+            throw IllegalArgumentException("No lockfile found in ${projectDir.invariantSeparatorsPath}, dependency " +
+                    "versions are unstable.")
         }
 
         log.debug { "Running 'dep init' to import legacy manifest file ${definitionFile.name}" }
@@ -192,7 +193,7 @@ class GoDep : PackageManager() {
         if (!lockfile.isFile) {
             if (!Main.allowDynamicVersions) {
                 throw IllegalArgumentException(
-                        "No lockfile found in $workingDir, dependency versions are unstable.")
+                        "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable.")
             }
 
             log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }

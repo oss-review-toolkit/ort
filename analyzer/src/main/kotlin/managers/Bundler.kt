@@ -250,7 +250,7 @@ class Bundler : PackageManager() {
 
     private fun installDependencies(workingDir: File) {
         require(Main.allowDynamicVersions || File(workingDir, "Gemfile.lock").isFile) {
-            "No lockfile found in $workingDir, dependency versions are unstable."
+            "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
         }
 
         ProcessCapture(workingDir, command(workingDir), "install", "--path", "vendor/bundle").requireSuccess()
