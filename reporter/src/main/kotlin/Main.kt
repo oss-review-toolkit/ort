@@ -25,6 +25,7 @@ import com.beust.jcommander.Parameter
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.mapper
 import com.here.ort.reporter.reporters.ExcelReporter
+import com.here.ort.reporter.reporters.Reporter
 import com.here.ort.reporter.reporters.StaticHtmlReporter
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -43,9 +44,12 @@ import kotlin.system.exitProcess
 object Main {
     const val TOOL_NAME = "reporter"
 
-    private enum class ReportFormat {
-        EXCEL,
-        STATIC_HTML;
+    private enum class ReportFormat(private val reporter: Reporter) : Reporter {
+        EXCEL(ExcelReporter()),
+        STATIC_HTML(StaticHtmlReporter());
+
+        override fun generateReport(scanRecord: ScanRecord, outputDir: File) =
+                reporter.generateReport(scanRecord, outputDir)
     }
 
     @Parameter(description = "The scan record file to use.",
@@ -126,10 +130,7 @@ object Main {
         }
 
         reportFormats.forEach {
-            when (it) {
-                ReportFormat.EXCEL -> ExcelReporter().generateReport(scanRecord, outputDir)
-                ReportFormat.STATIC_HTML -> StaticHtmlReporter().generateReport(scanRecord, outputDir)
-            }
+            it.generateReport(scanRecord, outputDir)
         }
     }
 }
