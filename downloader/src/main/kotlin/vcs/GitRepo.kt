@@ -32,9 +32,6 @@ import java.io.File
 import java.io.IOException
 
 object GitRepo : GitBase() {
-    // TODO: Make this configurable.
-    private const val HISTORY_DEPTH = 50
-
     override val aliases = listOf("gitrepo", "git-repo", "repo")
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
@@ -79,8 +76,7 @@ object GitRepo : GitBase() {
                 "Initializing git-repo from ${pkg.vcsProcessed.url} with revision '$revision' " +
                         "and manifest '$manifestPath'."
             }
-            runRepoCommand(targetDir, "init", "--depth", HISTORY_DEPTH.toString(), "-b", revision,
-                    "-u", pkg.vcsProcessed.url, "-m", manifestPath)
+            runRepoCommand(targetDir, "init", "-b", revision, "-u", pkg.vcsProcessed.url, "-m", manifestPath)
 
             log.info { "Starting git-repo sync." }
             runRepoCommand(targetDir, "sync", "-c")
