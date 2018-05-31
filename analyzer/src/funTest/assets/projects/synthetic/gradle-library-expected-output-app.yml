@@ -1,0 +1,330 @@
+---
+allowDynamicVersions: true
+project:
+  id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-library/app/build.gradle"
+  declared_licenses: []
+  aliases: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle-library/app"
+  homepage_url: ""
+  scopes:
+  - name: "annotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "apiElements"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "archives"
+    delivered: true
+    dependencies: []
+  - name: "compile"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "compileOnly"
+    delivered: true
+    dependencies: []
+  - name: "default"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "implementation"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtime"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtimeClasspath"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtimeElements"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "runtimeOnly"
+    delivered: true
+    dependencies: []
+  - name: "testAnnotationProcessor"
+    delivered: true
+    dependencies: []
+  - name: "testCompile"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "testCompileOnly"
+    delivered: true
+    dependencies: []
+  - name: "testImplementation"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testRuntimeClasspath"
+    delivered: true
+    dependencies:
+    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "testRuntimeOnly"
+    delivered: true
+    dependencies: []
+packages:
+- package:
+    id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "<REPLACE_URL>"
+      revision: "<REPLACE_REVISION>"
+      path: "analyzer/src/funTest/assets/projects/synthetic/gradle-library/lib"
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-lang3:3.5"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    description: "Apache Commons Lang, a package of Java utility classes for the\n\
+      \  classes that are in java.lang's hierarchy, or are considered to be so\n \
+      \ standard as to justify existence in java.lang."
+    homepage_url: "http://commons.apache.org/proper/commons-lang/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
+      hash: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+      hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+      revision: "LANG_3_5"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+      revision: "LANG_3_5"
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.commons:commons-text:1.1"
+    declared_licenses:
+    - "Apache License, Version 2.0"
+    description: "Apache Commons Text is a library focused on algorithms working on\
+      \ strings."
+    homepage_url: "http://commons.apache.org/proper/commons-text/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
+      hash: "c336bf600f44b88af356c8a85eef4af822b06a4d"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+      hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+    declared_licenses:
+    - "The Apache Software License, Version 2.0"
+    description: "Apache Struts 2"
+    homepage_url: "http://struts.apache.org/struts2-assembly/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/apache/struts/struts2-assembly/2.5.14.1/struts2-assembly-2.5.14.1-min-lib.zip"
+      hash: "8e75a38e3b8ceb01e007c5899d8d29e7a075cb7d"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://gitbox.apache.org/repos/asf/struts.git"
+      revision: "STRUTS_2_5_14_1"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://gitbox.apache.org/repos/asf/struts.git"
+      revision: "STRUTS_2_5_14_1"
+      path: ""
+  curations: []
+errors: []
