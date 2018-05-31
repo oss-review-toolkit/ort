@@ -26,7 +26,7 @@ import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
