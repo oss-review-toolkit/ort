@@ -130,7 +130,7 @@ abstract class LocalScanner : Scanner() {
                                 startTime = now,
                                 endTime = now,
                                 fileCount = 0,
-                                licenses = sortedSetOf(),
+                                licenseFindings = sortedSetOf(),
                                 errors = e.collectMessages().toMutableList()
                         ),
                         rawResult = EMPTY_JSON_NODE)
@@ -184,7 +184,7 @@ abstract class LocalScanner : Scanner() {
                             startTime = now,
                             endTime = now,
                             fileCount = 0,
-                            licenses = sortedSetOf(),
+                            licenseFindings = sortedSetOf(),
                             errors = e.collectMessages().toMutableList()
                     ),
                     EMPTY_JSON_NODE

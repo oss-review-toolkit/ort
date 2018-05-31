@@ -15,13 +15,9 @@ results:
     start_time: "1970-01-02T00:01:00Z"
     end_time: "1970-01-02T00:02:00Z"
     file_count: 1
-    license_findings:
-    - license: "license 1.1"
-      copyrights:
-      - "copyright 1"
-    - license: "license 1.2"
-      copyrights:
-      - "copyright 2"
+    licenses:
+    - "license 1.1"
+    - "license 1.2"
     errors:
     - "error 1.1"
     - "error 1.2"
@@ -42,13 +38,9 @@ results:
     start_time: "1970-01-03T00:01:00Z"
     end_time: "1970-01-03T00:02:00Z"
     file_count: 2
-    license_findings:
-    - license: "license 2.1"
-      copyrights:
-      - "copyright 3"
-    - license: "license 2.2"
-      copyrights:
-      - "copyright 4"
+    licenses:
+    - "license 2.1"
+    - "license 2.2"
     errors:
     - "error 2.1"
     - "error 2.2"

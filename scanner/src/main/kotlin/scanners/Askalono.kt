@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
@@ -140,7 +141,7 @@ object Askalono : LocalScanner() {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val licenses = result.map { it["License"].textValue() }
-        return ScanSummary(startTime, endTime, result.size(), licenses.toSortedSet(), errors = mutableListOf())
+        val findings = result.map { LicenseFinding(it["License"].textValue()) }.toSortedSet()
+        return ScanSummary(startTime, endTime, result.size(), findings, errors = mutableListOf())
     }
 }
