@@ -81,7 +81,7 @@ class Bundler : PackageManager() {
         // fixed versions to be sure to get consistent results.
         checkCommandVersion(
                 bundle,
-                Requirement.buildStrict("1.16.1"),
+                Requirement.buildIvy("1.16.+"),
                 ignoreActualVersion = Main.ignoreVersions,
                 transform = { it.substringAfter("Bundler version ") }
         )
