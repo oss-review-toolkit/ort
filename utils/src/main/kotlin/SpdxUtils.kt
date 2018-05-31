@@ -33,6 +33,19 @@ import java.io.IOException
 import java.net.HttpURLConnection
 
 /**
+ * A list of globs that match typical license file names.
+ */
+val LICENSE_FILE_NAMES = listOf(
+        "LICENSE*",
+        "LICENCE*",
+        "UNLICENSE",
+        "UNLICENCE",
+        "COPYING*",
+        "COPYRIGHT",
+        "PATENTS"
+)
+
+/**
  * Calculate the [SPDX package verification code][1] for a list of known SHA1s of files.
  *
  * [1]: https://spdx.github.io/spdx-spec/chapters/3-package-information.html#39-package-verification-code-
