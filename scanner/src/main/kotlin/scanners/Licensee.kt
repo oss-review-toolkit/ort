@@ -40,6 +40,7 @@ import com.here.ort.utils.log
 import java.io.File
 import java.io.IOException
 import java.time.Instant
+import java.util.SortedSet
 
 object Licensee : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
@@ -120,7 +121,7 @@ object Licensee : LocalScanner() {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val licenses = sortedSetOf<String>()
+        val findings = sortedMapOf<String, SortedSet<String>>()
 
         val licenseSummary = result["licenses"]
         val matchedFiles = result["matched_files"]
@@ -130,10 +131,10 @@ object Licensee : LocalScanner() {
             licenseSummary.find {
                 it["key"].asText() == licenseKey
             }?.let {
-                licenses += it["spdx_id"].asText()
+                findings[it["spdx_id"].asText()] = sortedSetOf()
             }
         }
 
-        return ScanSummary(startTime, endTime, matchedFiles.count(), licenses, errors = sortedSetOf())
+        return ScanSummary(startTime, endTime, matchedFiles.count(), findings, errors = sortedSetOf())
     }
 }

@@ -135,14 +135,14 @@ class HttpCacheTest : StringSpec() {
             scannerStartTime1,
             scannerEndTime1,
             1,
-            sortedSetOf("license 1.1", "license 1.2"),
+            sortedMapOf("license 1.1" to sortedSetOf(), "license 1.2" to sortedSetOf()),
             sortedSetOf("error 1.1", "error 1.2")
     )
     private val scanSummaryWithoutFiles = ScanSummary(
             scannerStartTime2,
             scannerEndTime2,
             0,
-            sortedSetOf(),
+            sortedMapOf(),
             sortedSetOf()
     )
 

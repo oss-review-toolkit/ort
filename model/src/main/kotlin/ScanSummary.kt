@@ -19,7 +19,10 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 import java.time.Instant
+import java.util.SortedMap
 import java.util.SortedSet
 
 /**
@@ -42,12 +45,16 @@ data class ScanSummary(
         val fileCount: Int,
 
         /**
-         * A list of licenses detected by the scanner.
+         * The licenses associated to their respective copyrights, if any.
          */
-        val licenses: SortedSet<String>,
+        val findings: SortedMap<String, SortedSet<String>>,
 
         /**
          * A list of errors that occured during the scan.
          */
         val errors: SortedSet<String>
-)
+) {
+    val licenses: Set<String>
+        @JsonIgnore
+        get() = findings.keys
+}

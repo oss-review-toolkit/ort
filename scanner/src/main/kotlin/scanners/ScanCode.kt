@@ -196,7 +196,9 @@ object ScanCode : LocalScanner() {
             errors += file["scan_errors"].map { "${it.asText()} (File: $path)" }
         }
 
-        return ScanSummary(startTime, endTime, fileCount, licenses, errors)
+        // Work around https://youtrack.jetbrains.com/issue/KT-20972.
+        val findings = licenses.associate { Pair(it, emptySet<String>().toSortedSet()) }.toSortedMap()
+        return ScanSummary(startTime, endTime, fileCount, findings, errors)
     }
 
     /**

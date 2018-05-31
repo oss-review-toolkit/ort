@@ -180,7 +180,7 @@ scan_results:
       startTime: "<TIMESTAMP>"
       endTime: "<TIMESTAMP>"
       fileCount: 0
-      licenses: []
+      findings: {}
       errors:
       - "Package 'Gradle:com.here.ort.gradle.example:lib:1.0.0' could not be scanned\
         \ because no source code could be downloaded: No source artifact URL provided\
@@ -201,7 +201,7 @@ scan_results:
       startTime: "<TIMESTAMP>"
       endTime: "<TIMESTAMP>"
       fileCount: 234
-      licenses: []
+      findings: {}
       errors: []
 - id: "Maven:org.apache.commons:commons-lang3:3.5"
   results:
@@ -219,7 +219,7 @@ scan_results:
       startTime: "<TIMESTAMP>"
       endTime: "<TIMESTAMP>"
       fileCount: 168
-      licenses: []
+      findings: {}
       errors: []
 - id: "Maven:org.apache.commons:commons-text:1.1"
   results:
@@ -237,7 +237,7 @@ scan_results:
       startTime: "<TIMESTAMP>"
       endTime: "<TIMESTAMP>"
       fileCount: 80
-      licenses: []
+      findings: {}
       errors: []
 - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   results:
@@ -255,7 +255,7 @@ scan_results:
       startTime: "<TIMESTAMP>"
       endTime: "<TIMESTAMP>"
       fileCount: 47
-      licenses: []
+      findings: {}
       errors: []
 cache_stats:
   num_reads: 5

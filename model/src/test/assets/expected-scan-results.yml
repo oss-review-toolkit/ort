@@ -15,9 +15,11 @@ results:
     startTime: "1970-01-02T00:01:00Z"
     endTime: "1970-01-02T00:02:00Z"
     fileCount: 1
-    licenses:
-    - "license 1.1"
-    - "license 1.2"
+    findings:
+      license 1.1:
+      - "copyright 1"
+      license 1.2:
+      - "copyright 2"
     errors:
     - "error 1.1"
     - "error 1.2"
@@ -38,9 +40,11 @@ results:
     startTime: "1970-01-03T00:01:00Z"
     endTime: "1970-01-03T00:02:00Z"
     fileCount: 2
-    licenses:
-    - "license 2.1"
-    - "license 2.2"
+    findings:
+      license 2.1:
+      - "copyright 3"
+      license 2.2:
+      - "copyright 4"
     errors:
     - "error 2.1"
     - "error 2.2"

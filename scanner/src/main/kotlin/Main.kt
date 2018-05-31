@@ -258,7 +258,8 @@ object Main {
 
         val result = try {
             localScanner.scanPath(inputPath, outputDir).also {
-                println("Detected licenses for path '${inputPath.absolutePath}': ${it.summary.licenses.joinToString()}")
+                println("Detected licenses for path '${inputPath.absolutePath}':" +
+                        "${it.summary.licenses.joinToString()}")
             }
         } catch (e: ScanException) {
             e.showStackTrace()
@@ -266,7 +267,7 @@ object Main {
             log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
 
             val now = Instant.now()
-            val summary = ScanSummary(now, now, 0, sortedSetOf(), e.collectMessages().toSortedSet())
+            val summary = ScanSummary(now, now, 0, sortedMapOf(), e.collectMessages().toSortedSet())
             ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 
