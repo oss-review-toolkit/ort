@@ -25,7 +25,6 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
@@ -43,7 +42,7 @@ class BundlerTest : WordSpec() {
 
     init {
         "Bundler" should {
-            "resolve dependencies correctly".config(tags = setOf(ExpensiveTag)) {
+            "resolve dependencies correctly" {
                 val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
                 try {
@@ -61,7 +60,7 @@ class BundlerTest : WordSpec() {
                 }
             }
 
-            "show error if no lockfile is present".config(tags = setOf(ExpensiveTag)) {
+            "show error if no lockfile is present" {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
 
                 val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
@@ -76,7 +75,7 @@ class BundlerTest : WordSpec() {
                 actualResult.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
             }
 
-            "resolve dependencies correctly when the project is a Gem".config(tags = setOf(ExpensiveTag)) {
+            "resolve dependencies correctly when the project is a Gem" {
                 val definitionFile = File(projectsDir, "gemspec/Gemfile")
 
                 try {
