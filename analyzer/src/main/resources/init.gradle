@@ -162,27 +162,39 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                                 'At least Gradle 2.14 is required.').toString()])
             }
 
+            // Set all configurations to be resolvable. This is important for the configurations of the "java-library"
+            // where "canBeResolved" is always set to false. According to [1] it makes only sense to resolve these
+            // configurations in the context of a specific build variant, but:
+            //
+            // 1) In pure Java projects there are no build variants, thus setting these configurations to be resolvable
+            //    is the only way to get the dependencies.
+            // 2) In Android projects the configurations for the build variants like "debugImplementation" that inherit
+            //    from the configurations of the "java-library" plugin like "implementation" are also set to be not
+            //    resolvable, so we need to set them to be resolvable to be able to get the context specific dependency
+            //    tree.
+            //
+            // [1] https://discuss.gradle.org/t/3-4-rc-1-3-3-resolving-configurations-may-be-disallowed-and-throw-illegalstateexception/21470/2
+            project.configurations.each {
+                if (it.hasProperty('canBeResolved')) {
+                    it.canBeResolved = true
+                }
+            }
+
             List<Configuration> configurations = project.configurations.findResults { configuration ->
-                if ((!configuration.hasProperty('canBeResolved') || configuration.canBeResolved)
-                        && !configuration.name.endsWith('Classpath')) {
-                    ResolutionResult result = configuration.getIncoming().getResolutionResult()
-                    Set<ResolvedArtifact> resolvedArtifacts
-                    try {
-                        resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration
-                                .getArtifacts(Specs.<org.gradle.api.artifacts.Dependency>satisfyAll())
+                ResolutionResult result = configuration.getIncoming().getResolutionResult()
+                Set<ResolvedArtifact> resolvedArtifacts
+                try {
+                    resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration
+                            .getArtifacts(Specs.<org.gradle.api.artifacts.Dependency> satisfyAll())
 
-                        List<Dependency> dependencies = result.getRoot().getDependencies().collect {
-                            parseDependency(it, project, resolvedArtifacts, [])
-                        }
-
-                        new ConfigurationImpl(configuration.name, dependencies)
-                    } catch (ResolveException e) {
-                        project.logger.info("Configuration '${configuration.name}' could not be resolved: ${e.message}")
-                        errors.add(collectCauses(e).toString())
-                        null
+                    List<Dependency> dependencies = result.getRoot().getDependencies().collect {
+                        parseDependency(it, project, resolvedArtifacts, [])
                     }
-                } else {
-                    project.logger.info("Configuration '${configuration.name}' cannot be resolved.")
+
+                    new ConfigurationImpl(configuration.name, dependencies)
+                } catch (ResolveException e) {
+                    project.logger.info("Configuration '${configuration.name}' could not be resolved: ${e.message}")
+                    errors.add(collectCauses(e).toString())
                     null
                 }
             }
