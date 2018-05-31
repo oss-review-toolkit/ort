@@ -71,6 +71,7 @@ import org.eclipse.aether.spi.connector.layout.RepositoryLayoutProvider
 import org.eclipse.aether.spi.connector.transport.GetTask
 import org.eclipse.aether.spi.connector.transport.TransporterProvider
 import org.eclipse.aether.transfer.AbstractTransferListener
+import org.eclipse.aether.transfer.NoRepositoryConnectorException
 import org.eclipse.aether.transfer.NoRepositoryLayoutException
 import org.eclipse.aether.transfer.TransferEvent
 
@@ -230,9 +231,17 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 }
             }
 
-            val repositoryConnector = repositoryConnectorProvider
-                    .newRepositoryConnector(repositorySystemSession, repository)
-            repositoryConnector.get(listOf(artifactDownload), null)
+            try {
+                val repositoryConnector = repositoryConnectorProvider
+                        .newRepositoryConnector(repositorySystemSession, repository)
+                repositoryConnector.get(listOf(artifactDownload), null)
+            } catch (e: NoRepositoryConnectorException) {
+                e.showStackTrace()
+
+                log.warn { "Could not create connector for repository '$repository': ${e.collectMessages()}" }
+
+                return@forEach
+            }
 
             if (artifactDownload.exception == null) {
                 log.debug { "Found '$artifact' in '$repository'." }
