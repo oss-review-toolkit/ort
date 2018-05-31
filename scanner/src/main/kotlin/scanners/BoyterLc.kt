@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
@@ -147,14 +148,14 @@ object BoyterLc : LocalScanner() {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val licenses = sortedSetOf<String>()
+        val findings = sortedSetOf<LicenseFinding>()
 
         result.forEach { file ->
-            file["LicenseGuesses"].mapTo(licenses) { license ->
-                license["LicenseId"].textValue()
+            file["LicenseGuesses"].mapTo(findings) { license ->
+                LicenseFinding(license["LicenseId"].textValue())
             }
         }
 
-        return ScanSummary(startTime, endTime, result.size(), licenses, errors = mutableListOf())
+        return ScanSummary(startTime, endTime, result.size(), findings, errors = mutableListOf())
     }
 }

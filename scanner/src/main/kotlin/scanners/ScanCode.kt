@@ -25,6 +25,7 @@ import ch.qos.logback.classic.Level
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
@@ -195,7 +196,9 @@ object ScanCode : LocalScanner() {
             errors += file["scan_errors"].map { "${it.textValue()} (File: $path)" }
         }
 
-        return ScanSummary(startTime, endTime, fileCount, licenses, errors)
+        // Work around https://youtrack.jetbrains.com/issue/KT-20972.
+        val findings = licenses.map { LicenseFinding(it, sortedSetOf()) }.toSortedSet()
+        return ScanSummary(startTime, endTime, fileCount, findings, errors)
     }
 
     /**

@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
@@ -120,12 +121,21 @@ object Licensee : LocalScanner() {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+        val licenses = mutableSetOf<String>()
+
+        val licenseSummary = result["licenses"]
         val matchedFiles = result["matched_files"]
 
-        val licenses = matchedFiles.map {
-            it["matched_license"].textValue()
-        }.toSortedSet()
+        matchedFiles.forEach {
+            val licenseKey = it["matched_license"].textValue()
+            licenseSummary.find {
+                it["key"].textValue() == licenseKey
+            }?.let {
+                licenses += it["spdx_id"].textValue()
+            }
+        }
 
-        return ScanSummary(startTime, endTime, matchedFiles.count(), licenses, errors = mutableListOf())
+        val findings = licenses.map { LicenseFinding(it) }.toSortedSet()
+        return ScanSummary(startTime, endTime, matchedFiles.count(), findings, errors = mutableListOf())
     }
 }

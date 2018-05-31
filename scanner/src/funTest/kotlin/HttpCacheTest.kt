@@ -22,6 +22,7 @@ package com.here.ort.scanner
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Package
 import com.here.ort.model.Provenance
 import com.here.ort.model.RemoteArtifact
@@ -135,7 +136,10 @@ class HttpCacheTest : StringSpec() {
             scannerStartTime1,
             scannerEndTime1,
             1,
-            sortedSetOf("license 1.1", "license 1.2"),
+            sortedSetOf(
+                    LicenseFinding("license 1.1", sortedSetOf()),
+                    LicenseFinding("license 1.2", sortedSetOf())
+            ),
             mutableListOf("error 1.1", "error 1.2")
     )
     private val scanSummaryWithoutFiles = ScanSummary(

@@ -53,14 +53,20 @@ class ScanResultContainerTest : WordSpec() {
             scannerStartTime1,
             scannerEndTime1,
             1,
-            sortedSetOf("license 1.1", "license 1.2"),
+            sortedSetOf(
+                    LicenseFinding("license 1.1", sortedSetOf("copyright 1")),
+                    LicenseFinding("license 1.2", sortedSetOf("copyright 2")))
+            ,
             mutableListOf("error 1.1", "error 1.2")
     )
     private val scanSummary2 = ScanSummary(
             scannerStartTime2,
             scannerEndTime2,
             2,
-            sortedSetOf("license 2.1", "license 2.2"),
+            sortedSetOf(
+                    LicenseFinding("license 2.1", sortedSetOf("copyright 3")),
+                    LicenseFinding("license 2.2", sortedSetOf("copyright 4"))
+            ),
             mutableListOf("error 2.1", "error 2.2")
     )
 
@@ -91,6 +97,14 @@ class ScanResultContainerTest : WordSpec() {
                 val serializedScanResults = yamlMapper.writeValueAsString(scanResults)
 
                 serializedScanResults shouldBe expectedScanResults
+            }
+
+            "deprecated licenses field in scan summary can be parsed" {
+                val deprecatedScanResultsFile = File("src/test/assets/deprecated-scan-results.yml")
+                val scanResults = yamlMapper.readValue(deprecatedScanResultsFile, ScanResultContainer::class.java)
+
+                scanResults.results[0].summary.licenses shouldBe sortedSetOf("license 1.1", "license 1.2")
+                scanResults.results[1].summary.licenses shouldBe sortedSetOf("license 2.1", "license 2.2")
             }
         }
     }
