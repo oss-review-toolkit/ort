@@ -174,7 +174,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
     private fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
         remoteArtifactCache.read(artifact.toString())?.let {
-            log.debug { "Reading remote artifact for $artifact from disk cache." }
+            log.debug { "Reading remote artifact for '$artifact' from disk cache." }
             return yamlMapper.readValue(it, RemoteArtifact::class.java)
         }
 
@@ -203,7 +203,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             } catch (e: NoRepositoryLayoutException) {
                 e.showStackTrace()
 
-                log.warn { "Could not search for '$artifact'in '$repository': ${e.message}" }
+                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessages()}" }
 
                 return@forEach
             }
@@ -235,7 +235,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             repositoryConnector.get(listOf(artifactDownload), null)
 
             if (artifactDownload.exception == null) {
-                log.debug { "Found '$artifact' in $repository." }
+                log.debug { "Found '$artifact' in '$repository'." }
 
                 // TODO: Could store multiple checksums in model instead of only the first.
                 val checksums = repositoryLayout.getChecksums(artifact, false, remoteLocation)
@@ -254,7 +254,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    log.warn { "Could not get checksum for '$artifact': ${e.message}" }
+                    log.warn { "Could not get checksum for '$artifact': ${e.collectMessages()}" }
 
                     // Fall back to an empty checksum string.
                     ""
@@ -266,7 +266,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
                 val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
                 return RemoteArtifact(downloadUrl, actualChecksum, HashAlgorithm.fromString(checksum.algorithm)).also {
-                    log.debug { "Writing remote artifact for $artifact to disk cache." }
+                    log.debug { "Writing remote artifact for '$artifact' to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }
             } else {
@@ -279,7 +279,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         log.warn { "Unable to find '$artifact' in any of ${remoteRepositories.map { it.url }}." }
 
         return RemoteArtifact.EMPTY.also {
-            log.debug { "Writing empty remote artifact for $artifact to disk cache." }
+            log.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
             remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
         }
     }
