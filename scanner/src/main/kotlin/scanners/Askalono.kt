@@ -140,7 +140,8 @@ object Askalono : LocalScanner() {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val licenses = result.map { it["License"].asText() }
-        return ScanSummary(startTime, endTime, result.size(), licenses.toSortedSet(), errors = sortedSetOf())
+        // Work around https://youtrack.jetbrains.com/issue/KT-20972.
+        val findings = result.associate { Pair(it["License"].asText(), emptySet<String>().toSortedSet()) }.toSortedMap()
+        return ScanSummary(startTime, endTime, result.size(), findings, errors = sortedSetOf())
     }
 }

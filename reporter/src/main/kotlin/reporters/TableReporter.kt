@@ -125,7 +125,7 @@ abstract class TableReporter : Reporter {
                         ?: sortedSetOf()
 
                 val detectedLicenses = scanResult?.results?.flatMap {
-                    it.summary.licenses
+                    it.summary.findings.keys
                 }?.toSortedSet() ?: sortedSetOf()
 
                 val analyzerErrors = project.collectErrors(id).toMutableList()

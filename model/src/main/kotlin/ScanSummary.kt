@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import java.time.Instant
+import java.util.SortedMap
 import java.util.SortedSet
 
 /**
@@ -42,9 +43,9 @@ data class ScanSummary(
         val fileCount: Int,
 
         /**
-         * A list of licenses detected by the scanner.
+         * The licenses and their associated copyrights, if any, as detected by the scanner.
          */
-        val licenses: SortedSet<String>,
+        val findings: SortedMap<String, SortedSet<String>>,
 
         /**
          * A list of errors that occured during the scan.

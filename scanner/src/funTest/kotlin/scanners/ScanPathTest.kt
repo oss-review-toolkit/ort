@@ -45,25 +45,25 @@ class ScanPathTest : StringSpec() {
         "Askalono recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
             val result = Askalono.scanPath(File("../LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe setOf("Apache-2.0")
+            result.summary.findings.keys shouldBe sortedSetOf("Apache-2.0")
         }
 
         "BoyterLc recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
             val result = BoyterLc.scanPath(File("../LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe setOf("Apache-2.0", "ECL-2.0")
+            result.summary.findings.keys shouldBe sortedSetOf("Apache-2.0", "ECL-2.0")
         }
 
         "Licensee recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
             val result = Licensee.scanPath(File("../LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe setOf("Apache-2.0")
+            result.summary.findings.keys shouldBe sortedSetOf("Apache-2.0")
         }
 
         "ScanCode recognizes our own LICENSE".config(tags = setOf(ExpensiveTag, ScanCodeTag)) {
             val result = ScanCode.scanPath(File("../LICENSE"), outputDir)
             result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe setOf("Apache-2.0")
+            result.summary.findings.keys shouldBe sortedSetOf("Apache-2.0")
         }
     }
 }

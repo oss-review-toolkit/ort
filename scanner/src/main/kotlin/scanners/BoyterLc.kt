@@ -43,6 +43,7 @@ import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.time.Instant
+import java.util.SortedSet
 
 import okhttp3.Request
 
@@ -147,14 +148,14 @@ object BoyterLc : LocalScanner() {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val licenses = sortedSetOf<String>()
+        val findings = sortedMapOf<String, SortedSet<String>>()
 
         result.forEach { file ->
-            file["LicenseGuesses"].mapTo(licenses) { license ->
-                license["LicenseId"].asText()
+            file["LicenseGuesses"].map { license ->
+                findings[license["LicenseId"].asText()] = sortedSetOf()
             }
         }
 
-        return ScanSummary(startTime, endTime, result.size(), licenses, errors = sortedSetOf())
+        return ScanSummary(startTime, endTime, result.size(), findings, errors = sortedSetOf())
     }
 }

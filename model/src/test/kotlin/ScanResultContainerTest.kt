@@ -53,14 +53,14 @@ class ScanResultContainerTest : WordSpec() {
             scannerStartTime1,
             scannerEndTime1,
             1,
-            sortedSetOf("license 1.1", "license 1.2"),
+            sortedMapOf("license 1.1" to sortedSetOf(), "license 1.2" to sortedSetOf()),
             sortedSetOf("error 1.1", "error 1.2")
     )
     private val scanSummary2 = ScanSummary(
             scannerStartTime2,
             scannerEndTime2,
             2,
-            sortedSetOf("license 2.1", "license 2.2"),
+            sortedMapOf("license 2.1" to sortedSetOf(), "license 2.2" to sortedSetOf()),
             sortedSetOf("error 2.1", "error 2.2")
     )
 
