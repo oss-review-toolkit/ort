@@ -28,6 +28,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
 
 import java.io.File
 import java.io.IOException
@@ -120,7 +121,7 @@ object Mercurial : VersionControlSystem() {
             if (extensionsList.contains(EXTENSION_SPARSE)) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
                 run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
-                        "-I", "LICENSE*", "-I", "LICENCE*")
+                        *LICENSE_FILE_NAMES.flatMap { listOf("-I", it) }.toTypedArray())
             }
 
             val workingTree = getWorkingTree(targetDir)

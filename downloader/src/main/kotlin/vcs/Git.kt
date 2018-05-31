@@ -28,6 +28,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
 
 import java.io.File
 import java.io.IOException
@@ -70,8 +71,8 @@ object Git : GitBase() {
             log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
             run(targetDir, "config", "core.sparseCheckout", "true")
             val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path +
-                    "\nLICENSE*\nLICENCE*")
+            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path + "\n" +
+                    LICENSE_FILE_NAMES.joinToString("\n"))
         }
 
         val workingTree = getWorkingTree(targetDir)
