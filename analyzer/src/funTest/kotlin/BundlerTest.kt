@@ -21,7 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Bundler
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Project
+import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
@@ -67,7 +67,10 @@ class BundlerTest : WordSpec() {
                 val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
-                actualResult!!.project shouldBe Project.EMPTY
+                actualResult!!.project.id shouldBe Identifier
+                        .fromString("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
+                actualResult.project.definitionFilePath shouldBe
+                        "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
                 actualResult.packages.size shouldBe 0
                 actualResult.errors.size shouldBe 1
                 actualResult.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
