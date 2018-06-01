@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.matchers.startWith
@@ -44,7 +45,7 @@ class PhpComposerTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val definitionFile = File(projectsDir, "lockfile/composer.json")
 
-            val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
                     File(projectsDir.parentFile, "php-composer-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
@@ -58,7 +59,7 @@ class PhpComposerTest : StringSpec() {
         "Error is shown when no lock file is present" {
             val definitionFile = File(projectsDir, "no-lockfile/composer.json")
 
-            val result = PhpComposer.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
             result shouldNotBe null
             result!!.project.id shouldBe Identifier.fromString("PhpComposer::src/funTest/assets/projects/synthetic/" +

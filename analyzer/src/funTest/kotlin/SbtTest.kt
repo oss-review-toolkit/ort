@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.SBT
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.test.USER_DIR
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -46,7 +47,7 @@ class SbtTest : StringSpec({
         definitionFile.isFile shouldBe true
         expectedOutputFile.isFile shouldBe true
 
-        val resolutionResult = sbt.resolveDependencies(listOf(definitionFile))
+        val resolutionResult = sbt.resolveDependencies(USER_DIR, listOf(definitionFile))
 
         // Because of the mapping from SBT to POM files we cannot use definitionFile as the key, so just ensure
         // there is exactly one entry to take.

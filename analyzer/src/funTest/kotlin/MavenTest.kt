@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
@@ -43,7 +44,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
-            val result = Maven.create().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -60,7 +61,7 @@ class MavenTest : StringSpec() {
             // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
             // of transitive dependencies would not work.
             val result = Maven.create()
-                    .resolveDependencies(listOf(pomFileCore, pomFileResources))[pomFileCore]
+                    .resolveDependencies(USER_DIR, listOf(pomFileCore, pomFileResources))[pomFileCore]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -73,7 +74,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven.create().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -91,7 +92,7 @@ class MavenTest : StringSpec() {
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
             // not work.
             val result = Maven.create()
-                    .resolveDependencies(listOf(pomFileApp, pomFileLib))[pomFileApp]
+                    .resolveDependencies(USER_DIR, listOf(pomFileApp, pomFileLib))[pomFileApp]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -104,7 +105,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven.create().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -123,7 +124,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven.create().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = Maven.create().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }

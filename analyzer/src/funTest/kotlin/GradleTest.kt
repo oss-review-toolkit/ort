@@ -26,6 +26,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.ExpensiveTag
+import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -62,7 +63,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -77,7 +78,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -92,7 +93,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -107,7 +108,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -122,7 +123,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -178,7 +179,7 @@ class GradleTest : StringSpec() {
                         revision = vcsRevision
                 )
 
-                val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
                 result!!.errors shouldBe emptyList()

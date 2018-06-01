@@ -183,7 +183,7 @@ abstract class PackageManager {
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
-    open fun resolveDependencies(definitionFiles: List<File>): ResolutionResult {
+    open fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, ProjectAnalyzerResult>()
 
         prepareResolution(definitionFiles).forEach { definitionFile ->
@@ -197,11 +197,13 @@ abstract class PackageManager {
                 } catch (e: Exception) {
                     e.showStackTrace()
 
+                    val relativePath = definitionFile.absoluteFile.relativeTo(analyzerRoot).invariantSeparatorsPath
+
                     val errorProject = Project.EMPTY.copy(
                             id = Identifier(
                                     provider = toString(),
                                     namespace = "",
-                                    name = definitionFile.invariantSeparatorsPath,
+                                    name = relativePath,
                                     version = ""
                             ),
                             definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
