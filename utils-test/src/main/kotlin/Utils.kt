@@ -21,6 +21,8 @@ package com.here.ort.utils.test
 
 import java.io.File
 
+val ANALYZER_ROOT = File("").toPath()
+
 fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, definitionFilePath: String? = null,
                         url: String? = null, revision: String? = null, path: String? = null,
                         urlProcessed: String? = null): String {

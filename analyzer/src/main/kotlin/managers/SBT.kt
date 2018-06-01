@@ -34,6 +34,7 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
+import java.nio.file.Path
 
 class SBT : PackageManager() {
     companion object : PackageManagerFactory<SBT>(
@@ -159,7 +160,7 @@ class SBT : PackageManager() {
         return pomFiles.toList()
     }
 
-    override fun resolveDependencies(definitionFiles: List<File>) =
+    override fun resolveDependencies(analyzerRoot: Path, definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            Maven.create().enableSbtMode().resolveDependencies(prepareResolution(definitionFiles))
+            Maven.create().enableSbtMode().resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
 }

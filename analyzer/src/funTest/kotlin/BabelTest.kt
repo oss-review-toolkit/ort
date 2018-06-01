@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.ANALYZER_ROOT
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -64,7 +65,7 @@ class BabelTest : WordSpec() {
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision
                 )
-                val actualResult = npm.resolveDependencies(listOf(packageFile))[packageFile]
+                val actualResult = npm.resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
                 yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
             }

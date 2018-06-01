@@ -25,6 +25,7 @@ import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.ANALYZER_ROOT
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.patchExpectedResult
 
@@ -62,7 +63,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -77,7 +78,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -92,7 +93,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -107,7 +108,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -122,7 +123,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -178,7 +179,7 @@ class GradleTest : StringSpec() {
                         revision = vcsRevision
                 )
 
-                val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
                 result!!.errors shouldBe emptyList()

@@ -23,6 +23,7 @@ import com.here.ort.analyzer.managers.PIP
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.ANALYZER_ROOT
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -35,7 +36,7 @@ class PipTest : StringSpec({
     "setup.py dependencies should be resolved correctly for spdx-tools-python" {
         val definitionFile = File(projectsDir, "external/spdx-tools-python/setup.py")
 
-        val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+        val result = PIP.create().resolveDependencies(ANALYZER_ROOT, listOf(definitionFile))[definitionFile]
         val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -44,7 +45,7 @@ class PipTest : StringSpec({
     "requirements.txt dependencies should be resolved correctly for example-python-flask" {
         val definitionFile = File(projectsDir, "external/example-python-flask/requirements.txt")
 
-        val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+        val result = PIP.create().resolveDependencies(ANALYZER_ROOT, listOf(definitionFile))[definitionFile]
         val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -63,7 +64,7 @@ class PipTest : StringSpec({
                 .replaceFirst("<REPLACE_REVISION>", vcsRevision)
                 .replaceFirst("<REPLACE_PATH>", vcsPath)
 
-        val result = PIP.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+        val result = PIP.create().resolveDependencies(ANALYZER_ROOT, listOf(definitionFile))[definitionFile]
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
     }

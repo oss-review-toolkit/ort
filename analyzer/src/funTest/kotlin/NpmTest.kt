@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.ANALYZER_ROOT
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -60,7 +61,7 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -80,7 +81,7 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -99,7 +100,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = NPM.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output-no-lockfile.yml"),
@@ -117,7 +118,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "multiple-lockfiles")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = NPM.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output-multiple-lockfiles.yml"),
@@ -136,7 +137,7 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -158,7 +159,7 @@ class NpmTest : WordSpec() {
                 val packageFile = File(workingDir, "package.json")
                 val npm = NPM.create()
 
-                val result = npm.resolveDependencies(listOf(packageFile))[packageFile]
+                val result = npm.resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output.yml"),

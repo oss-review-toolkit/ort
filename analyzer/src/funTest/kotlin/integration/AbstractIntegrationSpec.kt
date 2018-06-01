@@ -25,6 +25,7 @@ import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.ANALYZER_ROOT
 import com.here.ort.utils.test.ExpensiveTag
 
 import io.kotlintest.Description
@@ -101,7 +102,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         "Analyzer creates one non-empty result per definition file".config(tags = setOf(ExpensiveTag)) {
             definitionFilesForTest.forEach { manager, files ->
                 println("Resolving $manager dependencies in $files.")
-                val results = manager.create().resolveDependencies(files)
+                val results = manager.create().resolveDependencies(ANALYZER_ROOT, files)
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->

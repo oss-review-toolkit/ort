@@ -23,6 +23,7 @@ import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.ANALYZER_ROOT
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
@@ -46,7 +47,7 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -61,7 +62,7 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -76,7 +77,7 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = Gradle.create().resolveDependencies(ANALYZER_ROOT, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
