@@ -93,8 +93,8 @@ class AnalyzerResultBuilder(
         val duplicateProject = projects.find { it.id == projectAnalyzerResult.project.id }
         if (duplicateProject != null) {
             val error = "Multiple projects with the same id '${duplicateProject.id}' found. Not adding the project " +
-                    "defined in '${projectAnalyzerResult.project.id}' to the analyzer results as it duplicates the " +
-                    "project defined in '${duplicateProject.definitionFilePath}'."
+                    "defined in '${duplicateProject.definitionFilePath}' to the analyzer results as it " +
+                    "duplicates the project defined in '${projectAnalyzerResult.project.definitionFilePath}'."
 
             log.error { error }
 
