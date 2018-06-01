@@ -124,8 +124,8 @@ abstract class TableReporter : Reporter {
                         ?: scanRecord.analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
                         ?: sortedSetOf()
 
-                val detectedLicenses = scanResult?.results?.fold(listOf<String>()) { acc, result ->
-                    acc + result.summary.licenses
+                val detectedLicenses = scanResult?.results?.flatMap {
+                    it.summary.licenses
                 }?.toSortedSet() ?: sortedSetOf()
 
                 val analyzerErrors = project.collectErrors(id).toMutableList()
@@ -133,8 +133,8 @@ abstract class TableReporter : Reporter {
                     analyzerErrors += it
                 }
 
-                val scanErrors = scanResult?.results?.fold(listOf<String>()) { acc, result ->
-                    acc + result.summary.errors
+                val scanErrors = scanResult?.results?.flatMap {
+                    it.summary.errors
                 }?.distinct() ?: emptyList()
 
                 TableEntry(
