@@ -479,9 +479,5 @@ class UtilsTest : WordSpec({
             // This should not throw an IOException.
             tempDir.safeDeleteRecursively()
         }
-
-        "be reversible by String.urldecode" {
-            str.fileSystemEncode().fileSystemDecode() shouldBe str
-        }
     }
 })

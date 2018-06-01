@@ -377,13 +377,6 @@ fun String.fileSystemEncode() =
                 .replace(Regex("(^\\.|\\.$)"), "%2E")
 
 /**
- * Return the decoded string for a safe file name.
- */
-fun String.fileSystemDecode(): String =
-        // URLDecoder does decode "." and "*".
-        java.net.URLDecoder.decode(this, "UTF-8")
-
-/**
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
  */
 fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
