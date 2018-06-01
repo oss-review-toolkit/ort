@@ -25,6 +25,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
@@ -46,7 +47,8 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
                 try {
-                    val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+                    val actualResult = Bundler.create()
+                            .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
                             url = normalizeVcsUrl(vcsUrl),
@@ -63,7 +65,8 @@ class BundlerTest : WordSpec() {
             "show error if no lockfile is present" {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
 
-                val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+                val actualResult = Bundler.create()
+                        .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
                 actualResult!!.project.id shouldBe Identifier
@@ -79,7 +82,8 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "gemspec/Gemfile")
 
                 try {
-                    val actualResult = Bundler.create().resolveDependencies(listOf(definitionFile))[definitionFile]
+                    val actualResult = Bundler.create()
+                            .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),
                             url = normalizeVcsUrl(vcsUrl),

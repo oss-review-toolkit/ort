@@ -25,6 +25,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.test.USER_DIR
 
 import io.kotlintest.matchers.startWith
 import io.kotlintest.shouldBe
@@ -42,7 +43,7 @@ class GoDepTest : WordSpec() {
                 val manifestFile = File(projectsDir, "external/qmstr/Gopkg.toml")
                 val godep = GoDep.create()
 
-                val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
                 val expectedResult = File(projectsDir, "external/qmstr-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -52,7 +53,7 @@ class GoDepTest : WordSpec() {
                 val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
                 val godep = GoDep.create()
 
-                val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
                 result!!.project.id shouldBe Identifier
@@ -70,7 +71,7 @@ class GoDepTest : WordSpec() {
 
                 val allowDynamicVersionsOriginal = Main.allowDynamicVersions
                 Main.allowDynamicVersions = true
-                val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
                 Main.allowDynamicVersions = allowDynamicVersionsOriginal
 
                 result shouldNotBe null
@@ -83,7 +84,7 @@ class GoDepTest : WordSpec() {
                 val manifestFile = File(projectsDir, "external/sprig/glide.yaml")
                 val godep = GoDep.create()
 
-                val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
                 val expectedResult = File(projectsDir, "external/sprig-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -93,7 +94,7 @@ class GoDepTest : WordSpec() {
                 val manifestFile = File(projectsDir, "external/godep/Godeps/Godeps.json")
                 val godep = GoDep.create()
 
-                val result = godep.resolveDependencies(listOf(manifestFile))[manifestFile]
+                val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
                 val expectedResult = File(projectsDir, "external/godep-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
