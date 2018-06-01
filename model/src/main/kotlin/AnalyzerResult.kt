@@ -90,16 +90,16 @@ class AnalyzerResultBuilder(
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = this.apply {
-        val duplicateProject = projects.find { it.id == projectAnalyzerResult.project.id }
-        if (duplicateProject != null) {
-            val error = "Multiple projects with the same id '${duplicateProject.id}' found. Not adding the project " +
-                    "defined in '${projectAnalyzerResult.project.id}' to the analyzer results as it duplicates the " +
-                    "project defined in '${duplicateProject.definitionFilePath}'."
+        val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
+        if (existingProject != null) {
+            val error = "Multiple projects with the same id '${existingProject.id}' found. Not adding the project " +
+                    "defined in '${projectAnalyzerResult.project.definitionFilePath}' to the analyzer results as it " +
+                    "duplicates the project defined in '${existingProject.definitionFilePath}'."
 
             log.error { error }
 
-            val projectErrors = errors.getOrDefault(duplicateProject.id, listOf())
-            errors[duplicateProject.id] = projectErrors + error
+            val projectErrors = errors.getOrDefault(existingProject.id, listOf())
+            errors[existingProject.id] = projectErrors + error
         } else {
             projects.add(projectAnalyzerResult.project)
             packages.addAll(projectAnalyzerResult.packages)
