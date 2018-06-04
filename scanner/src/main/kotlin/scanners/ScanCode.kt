@@ -37,12 +37,18 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
+import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
 
 import java.io.File
 import java.io.IOException
+import java.nio.file.FileSystems
+import java.nio.file.Paths
 import java.time.Instant
 import java.util.regex.Pattern
+import java.util.SortedMap
 import java.util.SortedSet
+
+import kotlin.math.absoluteValue
 
 object ScanCode : LocalScanner() {
     private const val OUTPUT_FORMAT = "json-pp"
@@ -179,25 +185,14 @@ object ScanCode : LocalScanner() {
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["files_count"].intValue()
-        val licenses = sortedSetOf<String>()
+        val findings = associateFindings(result)
         val errors = sortedSetOf<String>()
 
         result["files"]?.forEach { file ->
-            file["licenses"]?.forEach { license ->
-                var name = license["spdx_license_key"].asText()
-                if (name.isNullOrBlank()) {
-                    val key = license["key"].asText()
-                    name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
-                }
-                licenses += name
-            }
-
             val path = file["path"].asText()
             errors += file["scan_errors"].map { "${it.asText()} (File: $path)" }
         }
 
-        // Work around https://youtrack.jetbrains.com/issue/KT-20972.
-        val findings = licenses.associate { Pair(it, emptySet<String>().toSortedSet()) }.toSortedMap()
         return ScanSummary(startTime, endTime, fileCount, findings, errors)
     }
 
@@ -264,5 +259,105 @@ object ScanCode : LocalScanner() {
         errors += mappedErrors
 
         return onlyTimeoutErrors
+    }
+
+    /**
+     * Get the SPDX license id (or a fallback) for a license finding.
+     */
+    private fun getLicenseId(license: JsonNode): String {
+        var name = license["spdx_license_key"].asText()
+
+        if (name.isEmpty()) {
+            val key = license["key"].asText()
+            name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+        }
+
+        return name
+    }
+
+    /**
+     * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
+     */
+    internal fun getRootLicense(result: JsonNode): String {
+        val matchersForLicenseFiles = LICENSE_FILE_NAMES.map {
+            FileSystems.getDefault().getPathMatcher("glob:$it")
+        }
+
+        val rootLicenseFile = result["files"].singleOrNull {
+            val path = it["path"].asText()
+            matchersForLicenseFiles.any { it.matches(Paths.get(path)) }
+        } ?: return ""
+
+        return rootLicenseFile["licenses"].singleOrNull()?.let { getLicenseId(it) } ?: ""
+    }
+
+    /**
+     * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [startLine]. The default
+     * value of [toleranceLines] is set to 5 which seems to be a good balance between associating findings separated by
+     * blank lines but not skipping complete license statements.
+     */
+    internal fun getClosestCopyrightStatements(copyrights: JsonNode, startLine: Int, toleranceLines: Int = 5):
+            SortedSet<String> {
+        val closestCopyrights = copyrights.filter {
+            (it["start_line"].asInt() - startLine).absoluteValue <= toleranceLines
+        }
+
+        return closestCopyrights.flatMap { it["statements"] }.map { it.asText() }.toSortedSet()
+    }
+
+    /**
+     * Associate copyright findings to license findings within a single file.
+     */
+    private fun associateFileFindings(licenses: JsonNode, copyrights: JsonNode, rootLicense: String = ""):
+            SortedMap<String, SortedSet<String>> {
+        val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
+        val allCopyrightStatements = copyrights.flatMap { it["statements"] }.map { it.asText() }.toSortedSet()
+
+        when (licenses.size()) {
+            0 -> {
+                // If there is no license finding but copyright findings, associate them with the root license, if any.
+                if (allCopyrightStatements.isNotEmpty() && rootLicense.isNotEmpty()) {
+                    copyrightsForLicenses[rootLicense] = allCopyrightStatements
+                }
+            }
+
+            1 -> {
+                // If there is only a single license finding, associate all copyright findings with that license.
+                val licenseId = getLicenseId(licenses.first())
+                copyrightsForLicenses[licenseId] = allCopyrightStatements
+            }
+
+            else -> {
+                // If there are multiple license findings in a single file, search for the closest copyright statements
+                // for each of these, if any.
+                licenses.forEach {
+                    val licenseId = getLicenseId(it)
+                    val licenseStartLine = it["start_line"].asInt()
+                    val closestCopyrights = getClosestCopyrightStatements(copyrights, licenseStartLine)
+                    copyrightsForLicenses.getOrPut(licenseId) { sortedSetOf() } += closestCopyrights
+                }
+            }
+        }
+
+        return copyrightsForLicenses
+    }
+
+    /**
+     * Associate copyright findings to license findings throughout the whole result.
+     */
+    internal fun associateFindings(result: JsonNode): SortedMap<String, SortedSet<String>> {
+        val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
+        val rootLicense = getRootLicense(result)
+
+        result["files"].forEach { file ->
+            val licenses = file["licenses"] ?: EMPTY_JSON_NODE
+            val copyrights = file["copyrights"] ?: EMPTY_JSON_NODE
+            val findings = associateFileFindings(licenses, copyrights, rootLicense)
+            findings.forEach { license, copyrightsForLicense ->
+                copyrightsForLicenses.getOrPut(license) { sortedSetOf() } += copyrightsForLicense
+            }
+        }
+
+        return copyrightsForLicenses
     }
 }
