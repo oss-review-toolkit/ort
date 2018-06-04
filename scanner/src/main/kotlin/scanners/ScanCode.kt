@@ -54,7 +54,6 @@ object ScanCode : LocalScanner() {
     private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
             "--copyright",
             "--license",
-            "--license-text",
             "--info",
             "--strip-root",
             "--timeout", TIMEOUT.toString()
