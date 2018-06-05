@@ -43,18 +43,12 @@ object GitRepo : GitBase() {
                 override fun isValid() = false
             }
         } else {
+            // GitRepo is special in that the workingDir points to the Git working tree of the manifest files, yet
+            // the root path is the directory containing the ".repo" directory. This way Git operations work on a valid
+            // Git repository, but path operations work relative to the path GitRepo was initialized in.
             object : GitWorkingTree(File(repoRoot, ".repo/manifests")) {
                 // Return the directory in which "repo init" was run (that directory in not managed with Git).
                 override fun getRootPath() = workingDir.parentFile.parentFile
-
-                override fun getPathToRoot(path: File): String {
-                    // GitRepo is special in that the path to the root is supposed to constantly return the path to the
-                    // manifest file in use which is symlinked from ".repo/manifest.xml". So resolve that path to the
-                    // underlying manifest file inside the "manifests" directory and ignore the actual path argument.
-                    val manifestLink = File(getRootPath(), ".repo/manifest.xml")
-                    val manifestDir = File(getRootPath(), ".repo/manifests")
-                    return manifestLink.canonicalFile.toRelativeString(manifestDir)
-                }
             }
         }
     }
