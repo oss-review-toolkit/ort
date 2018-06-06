@@ -163,8 +163,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
 
             List<Configuration> configurations = project.configurations.findResults { configuration ->
-                if ((!configuration.hasProperty('canBeResolved') || configuration.canBeResolved)
-                        && !configuration.name.endsWith('Classpath')) {
+                if (!configuration.hasProperty('canBeResolved') || configuration.canBeResolved) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
                     Set<ResolvedArtifact> resolvedArtifacts
                     try {
