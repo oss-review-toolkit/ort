@@ -61,7 +61,7 @@ import java.util.SortedSet
 import okhttp3.Request
 
 @Suppress("LargeClass", "TooManyFunctions")
-class NPM : PackageManager() {
+open class NPM : PackageManager() {
     companion object : PackageManagerFactory<NPM>(
             "https://www.npmjs.com/",
             "JavaScript",
@@ -70,19 +70,6 @@ class NPM : PackageManager() {
         private const val DEFINITELY_TYPED_VCS_URL = "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
 
         override fun create() = NPM()
-
-        val npm: String
-        val yarn: String
-
-        init {
-            if (OS.isWindows) {
-                npm = "npm.cmd"
-                yarn = "yarn.cmd"
-            } else {
-                npm = "npm"
-                yarn = "yarn"
-            }
-        }
 
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
@@ -121,15 +108,17 @@ class NPM : PackageManager() {
         }
     }
 
-    override fun command(workingDir: File) = if (File(workingDir, "yarn.lock").isFile) yarn else npm
+    override fun command(workingDir: File) = if (OS.isWindows) { "npm.cmd" } else { "npm" }
 
     override fun toString() = NPM.toString()
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        // We do not actually depend on any features specific to an NPM 5.x or Yarn version, but we still want to
-        // stick to fixed versions to be sure to get consistent results.
-        checkCommandVersion(npm, Requirement.buildIvy("5.5.+"), ignoreActualVersion = Main.ignoreVersions)
-        checkCommandVersion(yarn, Requirement.buildIvy("1.3.+"), ignoreActualVersion = Main.ignoreVersions)
+        var workingDir = definitionFiles.first().parentFile
+
+        // We do not actually depend on any features specific to an NPM version, but we still want to stick to a fixed
+        // minor version to be sure to get consistent results.
+        checkCommandVersion(command(workingDir), Requirement.buildIvy("5.5.+"),
+                ignoreActualVersion = Main.ignoreVersions)
 
         return definitionFiles
     }
@@ -150,8 +139,8 @@ class NPM : PackageManager() {
             }
 
             // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
-            // dependencies (i.e. their respective "package.json" files). As npm (and yarn) use a global cache,
-            // the same dependency is only ever downloaded once.
+            // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
+            // dependency is only ever downloaded once.
             installDependencies(workingDir)
 
             val packages = parseInstalledModules(workingDir)
@@ -267,7 +256,7 @@ class NPM : PackageManager() {
 
             val module = Package(
                     id = Identifier(
-                            provider = toString(),
+                            provider = NPM.toString(),
                             namespace = namespace,
                             name = name,
                             version = version
@@ -481,12 +470,14 @@ class NPM : PackageManager() {
                 packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
+    protected open fun getLockFiles() = listOf("npm-shrinkwrap.json", "package-lock.json")
+
     /**
      * Install dependencies using the given package manager command.
      */
     private fun installDependencies(workingDir: File) {
         if (!Main.allowDynamicVersions) {
-            val lockFiles = listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock").filter {
+            val lockFiles = getLockFiles().filter {
                 File(workingDir, it).isFile
             }
 
