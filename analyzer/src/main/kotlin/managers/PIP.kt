@@ -164,7 +164,7 @@ class PIP : PackageManager() {
         } else {
             // In case of "requirements*.txt" there is no meta-data at all available, so use the parent directory name
             // as the project name.
-            listOf(definitionFile.parentFile.name, "", "", "")
+            listOf(definitionFile.parentFile.name, "", "")
         }
 
         val packages = sortedSetOf<Package>()
