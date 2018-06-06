@@ -3,10 +3,6 @@
 This repository contains multiple NPM projects for testing. Each directory contains the same package.json plus the
 additional files described below.
 
-## multiple-lockfiles
-
-Contains Yarn, NPM, and Shrinkwrap lockfiles.
-
 ## no-lockfile
 
 Contains no lockfile at all. This makes the build unstable because dependency versions could change at any time.

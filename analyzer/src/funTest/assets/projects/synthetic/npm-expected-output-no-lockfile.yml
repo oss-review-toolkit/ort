@@ -19,5 +19,6 @@ project:
   scopes: []
 packages: []
 errors:
-- "IllegalArgumentException: No lockfile found in src/funTest/assets/projects/synthetic/npm/no-lockfile,\
-  \ dependency versions are unstable."
+- "IllegalArgumentException: No lockfile found in 'src/funTest/assets/projects/synthetic/npm/no-lockfile'.\
+  \ This potentially results in unstable versions of dependencies. To allow this,\
+  \ enable support for dynamic versions."

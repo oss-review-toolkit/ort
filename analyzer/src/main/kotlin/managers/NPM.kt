@@ -489,12 +489,13 @@ class NPM : PackageManager() {
             val lockFiles = listOf("npm-shrinkwrap.json", "package-lock.json", "yarn.lock").filter {
                 File(workingDir, it).isFile
             }
+
             when (lockFiles.size) {
                 0 -> throw IllegalArgumentException(
-                        "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable.")
-                1 -> log.debug { "Found lock file '${lockFiles.first()}'." }
-                else -> throw IllegalArgumentException("${workingDir.invariantSeparatorsPath} contains multiple " +
-                        "lockfiles. It is ambiguous which one to use.")
+                        "No lockfile found in '${workingDir.invariantSeparatorsPath}'. This potentially results in " +
+                        "unstable versions of dependencies. To allow this, enable support for dynamic versions."
+                )
+                else -> log.debug { "Found the following lockfile(s): $lockFiles." }
             }
         }
 
