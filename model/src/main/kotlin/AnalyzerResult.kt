@@ -90,7 +90,10 @@ class AnalyzerResultBuilder(
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = this.apply {
+        // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with the same
+        // ID exist. We need to decide how to handle that case.
         val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
+
         if (existingProject != null) {
             val error = "Multiple projects with the same id '${existingProject.id}' found. Not adding the project " +
                     "defined in '${projectAnalyzerResult.project.definitionFilePath}' to the analyzer results as it " +
