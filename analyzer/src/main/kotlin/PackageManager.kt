@@ -60,6 +60,7 @@ abstract class PackageManager {
                     Maven,
                     SBT,
                     NPM,
+                    Yarn,
                     // TODO: CocoaPods,
                     GoDep,
                     // TODO: Bower,

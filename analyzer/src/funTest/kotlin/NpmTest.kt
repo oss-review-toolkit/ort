@@ -72,7 +72,6 @@ class NpmTest : WordSpec() {
                         path = vcsPath
                 )
 
-                npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
@@ -92,7 +91,6 @@ class NpmTest : WordSpec() {
                         path = vcsPath
                 )
 
-                npm.command(workingDir) shouldBe NPM.npm
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
@@ -130,29 +128,6 @@ class NpmTest : WordSpec() {
                         path = vcsPath
                 )
 
-                npm.command(workingDir) shouldBe NPM.npm
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
-            }
-        }
-
-        "yarn" should {
-            "resolve dependencies correctly" {
-                val workingDir = File(projectsDir, "yarn")
-                val packageFile = File(workingDir, "package.json")
-                val npm = NPM.create()
-
-                val result = npm.resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                        File(projectsDir.parentFile, "npm-expected-output.yml"),
-                        custom = Pair("npm-project", "npm-${workingDir.name}"),
-                        definitionFilePath = "$vcsPath/package.json",
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath
-                )
-
-                npm.command(workingDir) shouldBe NPM.yarn
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }
