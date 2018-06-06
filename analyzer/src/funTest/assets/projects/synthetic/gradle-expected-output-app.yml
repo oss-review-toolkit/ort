@@ -20,40 +20,10 @@ project:
   - name: "annotationProcessor"
     delivered: true
     dependencies: []
-  - name: "apiElements"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "archives"
     delivered: true
     dependencies: []
   - name: "compile"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
-  - name: "compileClasspath"
     delivered: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -86,21 +56,6 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "implementation"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "runtime"
     delivered: true
     dependencies:
@@ -116,39 +71,6 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "runtimeClasspath"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
-  - name: "runtimeElements"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
-  - name: "runtimeOnly"
-    delivered: true
-    dependencies: []
   - name: "testAnnotationProcessor"
     delivered: true
     dependencies: []
@@ -167,39 +89,9 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "testCompileClasspath"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testCompileOnly"
     delivered: true
     dependencies: []
-  - name: "testImplementation"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testRuntime"
     delivered: true
     dependencies:
@@ -215,24 +107,6 @@ project:
         dependencies: []
         errors: []
       errors: []
-  - name: "testRuntimeClasspath"
-    delivered: true
-    dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-text:1.1"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
-  - name: "testRuntimeOnly"
-    delivered: true
-    dependencies: []
 packages:
 - package:
     id: "Maven:com.here.ort.gradle.example:lib:1.0.0"

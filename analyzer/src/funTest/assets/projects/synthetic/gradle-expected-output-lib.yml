@@ -20,34 +20,10 @@ project:
   - name: "annotationProcessor"
     delivered: true
     dependencies: []
-  - name: "apiElements"
-    delivered: true
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
   - name: "archives"
     delivered: true
     dependencies: []
   - name: "compile"
-    delivered: true
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
-  - name: "compileClasspath"
     delivered: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -74,18 +50,6 @@ project:
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       dependencies: []
       errors: []
-  - name: "implementation"
-    delivered: true
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
   - name: "runtime"
     delivered: true
     dependencies:
@@ -98,33 +62,6 @@ project:
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       dependencies: []
       errors: []
-  - name: "runtimeClasspath"
-    delivered: true
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
-  - name: "runtimeElements"
-    delivered: true
-    dependencies:
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
-  - name: "runtimeOnly"
-    delivered: true
-    dependencies: []
   - name: "testAnnotationProcessor"
     delivered: true
     dependencies: []
@@ -146,45 +83,9 @@ project:
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       dependencies: []
       errors: []
-  - name: "testCompileClasspath"
-    delivered: true
-    dependencies:
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
   - name: "testCompileOnly"
     delivered: true
     dependencies: []
-  - name: "testImplementation"
-    delivered: true
-    dependencies:
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
   - name: "testRuntime"
     delivered: true
     dependencies:
@@ -203,27 +104,6 @@ project:
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       dependencies: []
       errors: []
-  - name: "testRuntimeClasspath"
-    delivered: true
-    dependencies:
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies:
-      - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      dependencies: []
-      errors: []
-  - name: "testRuntimeOnly"
-    delivered: true
-    dependencies: []
 packages:
 - package:
     id: "Maven:junit:junit:4.12"
