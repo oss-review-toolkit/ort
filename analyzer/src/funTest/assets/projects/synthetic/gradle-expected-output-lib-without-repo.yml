@@ -31,6 +31,14 @@ project:
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+  - name: "compileClasspath"
+    delivered: true
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-text:1.1"
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
+        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
   - name: "compileOnly"
     delivered: true
     dependencies: []
@@ -43,6 +51,14 @@ project:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
   - name: "runtime"
+    delivered: true
+    dependencies:
+    - id: "Maven:org.apache.commons:commons-text:1.1"
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
+        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+  - name: "runtimeClasspath"
     delivered: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -66,10 +82,36 @@ project:
       errors:
       - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
         \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+  - name: "testCompileClasspath"
+    delivered: true
+    dependencies:
+    - id: "Maven:junit:junit:4.12"
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
+        \ junit:junit:4.12 because no repositories are defined."
+    - id: "Maven:org.apache.commons:commons-text:1.1"
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
+        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
   - name: "testCompileOnly"
     delivered: true
     dependencies: []
   - name: "testRuntime"
+    delivered: true
+    dependencies:
+    - id: "Maven:junit:junit:4.12"
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
+        \ junit:junit:4.12 because no repositories are defined."
+    - id: "Maven:org.apache.commons:commons-text:1.1"
+      dependencies: []
+      errors:
+      - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
+        \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+  - name: "testRuntimeClasspath"
     delivered: true
     dependencies:
     - id: "Maven:junit:junit:4.12"
