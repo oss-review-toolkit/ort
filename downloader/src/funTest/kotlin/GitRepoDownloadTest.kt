@@ -63,6 +63,9 @@ class GitRepoDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+
+            workingTree.getPathToRoot(File(outputDir, "docker/Dockerfile")) shouldBe "docker/Dockerfile"
+            workingTree.getPathToRoot(File(outputDir, "test-data/README.md")) shouldBe "test-data/README.md"
         }
     }
 }
