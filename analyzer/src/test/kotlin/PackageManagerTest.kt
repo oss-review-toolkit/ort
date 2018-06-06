@@ -39,14 +39,15 @@ class PackageManagerTest : WordSpec({
             // entry for each package manager.
             result.keys shouldBe PackageManager.ALL.toSet()
 
+            result[Bundler] shouldBe listOf(File(projectDir, "Gemfile"))
+            result[GoDep] shouldBe listOf(File(projectDir, "Gopkg.toml"))
             result[Gradle] shouldBe listOf(File(projectDir, "build.gradle"))
             result[Maven] shouldBe listOf(File(projectDir, "pom.xml"))
-            result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
             result[NPM] shouldBe listOf(File(projectDir, "package.json"))
-            result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
-            result[GoDep] shouldBe listOf(File(projectDir, "Gopkg.toml"))
-            result[Bundler] shouldBe listOf(File(projectDir, "Gemfile"))
             result[PhpComposer] shouldBe listOf(File(projectDir, "composer.json"))
+            result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
+            result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
+            result[Yarn] shouldBe listOf(File(projectDir, "yarn.lock"))
         }
 
         "find only files for active package managers" {

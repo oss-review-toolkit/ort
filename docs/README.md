@@ -70,10 +70,11 @@ Currently, the following package managers / build systems can be detected and qu
 * [Godep](https://github.com/tools/godep)
 * [Gradle](https://gradle.org/)
 * [Maven](http://maven.apache.org/)
-* [NPM](https://www.npmjs.com/) / [Yarn](https://yarnpkg.com/)
+* [NPM](https://www.npmjs.com/)
 * [PHP Composer](https://getcomposer.org/)
 * [PIP](https://pip.pypa.io/)
 * [SBT](http://www.scala-sbt.org/)
+* [Yarn](https://yarnpkg.com/)
 
 ## Supported license scanners
 
