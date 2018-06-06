@@ -114,24 +114,6 @@ class NpmTest : WordSpec() {
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
-            "show error if multiple lockfiles are present" {
-                val workingDir = File(projectsDir, "multiple-lockfiles")
-                val packageFile = File(workingDir, "package.json")
-
-                val result = NPM.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                        File(projectsDir.parentFile, "npm-expected-output-multiple-lockfiles.yml"),
-                        custom = Pair("npm-project", "npm-${workingDir.name}"),
-                        definitionFilePath = "$vcsPath/package.json",
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath
-                )
-
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
-            }
-
             "resolve dependencies even if the node_modules directory already exists" {
                 val workingDir = File(projectsDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
