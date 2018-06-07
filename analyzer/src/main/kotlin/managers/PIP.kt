@@ -182,7 +182,8 @@ class PIP : PackageManager() {
                 fullDependencyTree.find {
                     it["package_name"].asText() == projectName
                 }?.get("dependencies")
-                        ?: throw IOException("pipdeptree output does not contain the project dependencies.")
+                        ?: throw IOException("pipdeptree output does not contain the '$projectName' project " +
+                                "dependencies: ${pipdeptree.stdout()}")
             } else {
                 // The tree does not contain a node for the project itself. Its dependencies are on the root level
                 // together with the dependencies of pipdeptree itself, which we need to filter out.
