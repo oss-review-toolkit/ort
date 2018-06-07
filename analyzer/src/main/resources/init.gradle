@@ -165,21 +165,22 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             List<Configuration> configurations = project.configurations.findResults { configuration ->
                 if (!configuration.hasProperty('canBeResolved') || configuration.canBeResolved) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
-                    Set<ResolvedArtifact> resolvedArtifacts
+                    Set<ResolvedArtifact> resolvedArtifacts = []
+
                     try {
                         resolvedArtifacts = configuration.resolvedConfiguration.lenientConfiguration
-                                .getArtifacts(Specs.<org.gradle.api.artifacts.Dependency>satisfyAll())
-
-                        List<Dependency> dependencies = result.getRoot().getDependencies().collect {
-                            parseDependency(it, project, resolvedArtifacts, [])
-                        }
-
-                        new ConfigurationImpl(configuration.name, dependencies)
+                                .getArtifacts(Specs.<org.gradle.api.artifacts.Dependency> satisfyAll())
                     } catch (ResolveException e) {
-                        project.logger.info("Configuration '${configuration.name}' could not be resolved: ${e.message}")
-                        errors.add(collectCauses(e).toString())
-                        null
+                        project.logger.info("Artifacts for configuration '${configuration.name}' could not be " +
+                                "resolved, therefore no information about artifact classifiers and extensions is " +
+                                "available: ${e.message}")
                     }
+
+                    List<Dependency> dependencies = result.getRoot().getDependencies().collect {
+                        parseDependency(it, project, resolvedArtifacts, [])
+                    }
+
+                    new ConfigurationImpl(configuration.name, dependencies)
                 } else {
                     project.logger.info("Configuration '${configuration.name}' cannot be resolved.")
                     null
