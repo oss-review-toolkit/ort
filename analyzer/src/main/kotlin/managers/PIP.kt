@@ -379,7 +379,7 @@ class PIP : PackageManager() {
         // to a test.
         with(pip) {
             if (isError()) {
-                log.error { failMessage }
+                log.error { errorMessage }
             }
         }
 

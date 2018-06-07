@@ -160,7 +160,7 @@ object ScanCode : LocalScanner() {
             if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
                 return ScanResult(provenance, scannerDetails, summary)
             } else {
-                throw ScanException(failMessage)
+                throw ScanException(errorMessage)
             }
         }
 

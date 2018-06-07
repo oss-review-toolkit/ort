@@ -122,7 +122,7 @@ object Askalono : LocalScanner() {
                 val summary = generateSummary(startTime, endTime, result)
                 return ScanResult(provenance, scannerDetails, summary, result)
             } else {
-                throw ScanException(failMessage)
+                throw ScanException(errorMessage)
             }
         }
     }

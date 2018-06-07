@@ -56,7 +56,7 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
     /**
      * A generic error message, can be used when [exitValue] is not 0.
      */
-    val failMessage
+    val errorMessage
         get(): String {
             val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
             val message = stderr().takeUnless { it.isBlank() } ?: stdout()
@@ -112,7 +112,7 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
      */
     fun requireSuccess(): ProcessCapture {
         if (isError()) {
-            throw IOException(failMessage)
+            throw IOException(errorMessage)
         }
         return this
     }

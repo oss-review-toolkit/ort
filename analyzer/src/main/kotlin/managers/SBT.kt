@@ -144,7 +144,7 @@ class SBT : PackageManager() {
                     }
                 } else {
                     if (pomFiles.isEmpty()) {
-                        throw IOException(sbt.failMessage)
+                        throw IOException(sbt.errorMessage)
                     } else {
                         log.warn {
                             "A subsequent run of '${sbt.commandLine}' in directory '$workingDir' failed. " +
