@@ -7,8 +7,8 @@ vcs:
   path: ""
 vcs_processed:
   type: "git"
-  url: "<REPLACE_URL>"
-  revision: "<REPLACE_REVISION>"
+  url: ""
+  revision: ""
   path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
 projects:
 - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
@@ -22,8 +22,8 @@ projects:
     path: ""
   vcs_processed:
     type: "git"
-    url: "<REPLACE_URL>"
-    revision: "<REPLACE_REVISION>"
+    url: ""
+    revision: ""
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
   homepage_url: ""
   scopes:

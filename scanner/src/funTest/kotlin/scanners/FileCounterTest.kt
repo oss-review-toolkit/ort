@@ -48,11 +48,9 @@ class FileCounterTest : StringSpec() {
     }
 
     private val timeRegex = Regex("(download|end|start)Time: \".*\"")
-    private val urlRegex = Regex("url: \".*%3CREPLACE_URL%3E\"")
 
     private fun patchActualResult(result: String) = result
             .replace(timeRegex) { "${it.groupValues[1]}Time: \"<TIMESTAMP>\"" }
-            .replace(urlRegex, "url: \"<REPLACE_URL>\"")
 
     init {
         "Gradle project scan results from analyzer result file are correct" {
