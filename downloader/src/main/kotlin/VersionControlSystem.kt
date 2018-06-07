@@ -59,9 +59,15 @@ abstract class VersionControlSystem {
         fun forType(vcsType: String) = ALL.find { it.isApplicableType(vcsType) }
 
         /**
+         * A map to cache the VersionControlSystem, if any, for previously queried URLs. This helps to speed up queries
+         * for the same URLs as running e.g. "hg identify" takes several seconds on each.
+         */
+        private val urlToVcsMap = mutableMapOf<String, VersionControlSystem?>()
+
+        /**
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
-        fun forUrl(vcsUrl: String) = ALL.find { it.isApplicableUrl(vcsUrl) }
+        fun forUrl(vcsUrl: String) = urlToVcsMap.getOrPut(vcsUrl) { ALL.find { it.isApplicableUrl(vcsUrl) } }
 
         /**
          * Return the applicable VCS for the given [vcsDirectory], or null if none is applicable.
