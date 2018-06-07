@@ -118,19 +118,26 @@ class PhpComposer : PackageManager() {
                 Files.move(vendorDir.toPath(), tempVendorDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
             }
 
-            installDependencies(workingDir)
+            val manifest = jsonMapper.readTree(definitionFile)
+            val hasDependencies = manifest.fieldNames().asSequence().any { it.startsWith("require") }
 
-            log.info { "Reading $COMPOSER_LOCK_FILE_NAME file in ${workingDir.absolutePath}..." }
-            val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE_NAME))
-            val packages = parseInstalledPackages(lockFile)
+            val (packages, scopes) = if (hasDependencies) {
+                installDependencies(workingDir)
+
+                log.info { "Reading $COMPOSER_LOCK_FILE_NAME file in ${workingDir.absolutePath}..." }
+                val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE_NAME))
+                val packages = parseInstalledPackages(lockFile)
+                val scopes = sortedSetOf(
+                        parseScope("require", true, manifest, lockFile, packages),
+                        parseScope("require-dev", false, manifest, lockFile, packages)
+                )
+
+                Pair(packages, scopes)
+            } else {
+                Pair(emptyMap(), sortedSetOf())
+            }
 
             log.info { "Reading ${definitionFile.name} file in ${workingDir.absolutePath}..." }
-            val manifest = jsonMapper.readTree(definitionFile)
-
-            val scopes = sortedSetOf(
-                    parseScope("require", true, manifest, lockFile, packages),
-                    parseScope("require-dev", false, manifest, lockFile, packages)
-            )
 
             val project = parseProject(definitionFile, scopes)
 
@@ -282,6 +289,8 @@ class PhpComposer : PackageManager() {
             "No lock file found in $workingDir, dependency versions are unstable."
         }
 
+        // The "install" command creates a "composer.lock" file (if not yet present) except for projects without any
+        // dependencies, see https://getcomposer.org/doc/01-basic-usage.md#installing-without-composer-lock.
         ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), "install")
                 .requireSuccess()
     }
