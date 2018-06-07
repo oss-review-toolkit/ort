@@ -38,7 +38,8 @@ object Git : GitBase() {
 
     override val aliases = listOf("git")
 
-    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("git", "ls-remote", vcsUrl).isSuccess()
+    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.isNotBlank() &&
+            ProcessCapture("git", "ls-remote", vcsUrl).isSuccess()
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
