@@ -70,5 +70,19 @@ class PhpComposerTest : StringSpec() {
             result.errors.size shouldBe 1
             result.errors.first() should startWith("IllegalArgumentException: No lock file found in")
         }
+
+        "No composer.lock is required for projects without dependencies" {
+            val definitionFile = File(projectsDir, "no-deps/composer.json")
+
+            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val expectedResults = patchExpectedResult(
+                    File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+            )
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+        }
     }
 }
