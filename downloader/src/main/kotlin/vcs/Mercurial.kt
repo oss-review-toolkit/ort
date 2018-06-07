@@ -93,7 +93,8 @@ object Mercurial : VersionControlSystem() {
                 }
             }
 
-    override fun isApplicableUrl(vcsUrl: String) = ProcessCapture("hg", "identify", vcsUrl).isSuccess()
+    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.isNotBlank() &&
+            ProcessCapture("hg", "identify", vcsUrl).isSuccess()
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
