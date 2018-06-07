@@ -27,6 +27,8 @@ import com.here.ort.utils.test.ExpensiveTag
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
+import io.kotlintest.matchers.string.contain
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -68,7 +70,7 @@ class CvsDownloadTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
 
             // Only tag "RELEASE_0_52" has revision 1.159 of "xmlenc/build.xml".
-            buildXmlStatus.stdout().contains("Working revision:\t1.159") shouldBe true
+            buildXmlStatus.stdout() should contain("Working revision:\t1.159")
         }
 
         "CVS can download only a single path".config(enabled = Cvs.isInPath(), tags = setOf(ExpensiveTag)) {
@@ -103,7 +105,7 @@ class CvsDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
 
             // Only tag "RELEASE_0_52" has revision 1.159 of "xmlenc/build.xml".
-            buildXmlStatus.stdout().contains("Working revision:\t1.159") shouldBe true
+            buildXmlStatus.stdout() should contain("Working revision:\t1.159")
         }
 
         "CVS can download only a single path based on a version"
