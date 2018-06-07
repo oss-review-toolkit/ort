@@ -118,7 +118,7 @@ object Mercurial : VersionControlSystem() {
 
                 """.trimIndent() + extensionsList.joinToString(separator = "\n"))
 
-            if (extensionsList.contains(EXTENSION_SPARSE)) {
+            if (EXTENSION_SPARSE in extensionsList) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
                 run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
                         "-I", "LICENSE*", "-I", "LICENCE*")

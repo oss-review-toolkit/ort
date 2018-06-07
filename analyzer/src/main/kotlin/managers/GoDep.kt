@@ -244,7 +244,7 @@ class GoDep : PackageManager() {
                     "build constraints exclude all Go files in"
             )
 
-            if (!errorMessagesToIgnore.any { msg.contains(it) }) {
+            if (!errorMessagesToIgnore.any { it in msg }) {
                 throw IOException(msg)
             }
         }

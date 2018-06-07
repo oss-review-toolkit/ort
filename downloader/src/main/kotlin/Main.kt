@@ -181,11 +181,11 @@ object Main {
             val analyzerResult = it.mapper().readValue(dependenciesFile, AnalyzerResult::class.java)
 
             mutableListOf<Package>().apply {
-                if (entities.contains(DataEntity.PROJECT)) {
+                if (DataEntity.PROJECT in entities) {
                     addAll(analyzerResult.projects.map { it.toPackage() })
                 }
 
-                if (entities.contains(DataEntity.PACKAGES)) {
+                if (DataEntity.PACKAGES in entities) {
                     addAll(analyzerResult.packages.map { it.pkg })
                 }
             }

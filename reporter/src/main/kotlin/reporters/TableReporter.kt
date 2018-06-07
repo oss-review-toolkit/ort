@@ -118,7 +118,7 @@ abstract class TableReporter : Reporter {
             val tableEntries = (listOf(project.id) + project.collectAllDependencies()).map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
-                val scopes = project.scopes.filter { it.contains(id) }.map { it.name }.toSortedSet()
+                val scopes = project.scopes.filter { id in it }.map { it.name }.toSortedSet()
 
                 val declaredLicenses = scanRecord.analyzerResult.projects.find { it.id == id }?.declaredLicenses
                         ?: scanRecord.analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses

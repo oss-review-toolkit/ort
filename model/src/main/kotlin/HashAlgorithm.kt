@@ -36,7 +36,7 @@ enum class HashAlgorithm(private vararg val aliases: String) {
         @JvmStatic
         fun fromString(alias: String) =
                 enumValues<HashAlgorithm>().find {
-                    it.aliases.contains(alias.toUpperCase())
+                    alias.toUpperCase() in it.aliases
                 } ?: UNKNOWN
     }
 

@@ -134,7 +134,7 @@ object Subversion : VersionControlSystem() {
                 private fun listRemoteRefs(namespace: String): List<String> {
                     val remoteUrl = getRemoteUrl()
 
-                    val projectRoot = if (directoryNamespaces.any { remoteUrl.contains("/$it/") }) {
+                    val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
                         runSvnInfoCommand()?.repository?.root ?: ""
                     } else {
                         remoteUrl

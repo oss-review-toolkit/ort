@@ -72,7 +72,7 @@ data class AnalyzerResult(
      */
     fun createProjectAnalyzerResults() = projects.map { project ->
             val allDependencies = project.collectAllDependencies()
-            val projectPackages = packages.filter { allDependencies.contains(it.pkg.id) }.toSortedSet()
+            val projectPackages = packages.filter { it.pkg.id in allDependencies }.toSortedSet()
             ProjectAnalyzerResult(allowDynamicVersions, project, projectPackages, errors[project.id] ?: emptyList())
         }
 }
