@@ -2,7 +2,7 @@
 allowDynamicVersions: false
 project:
   id: "PhpComposer:ort:composer-test-project:0.1.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-deps/composer.json"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
