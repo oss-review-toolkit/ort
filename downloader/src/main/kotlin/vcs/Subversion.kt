@@ -162,8 +162,8 @@ object Subversion : VersionControlSystem() {
                 }
             }
 
-    override fun isApplicableUrl(vcsUrl: String) =
-            vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess()
+    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.isNotBlank() &&
+            (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess())
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
