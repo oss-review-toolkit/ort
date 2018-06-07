@@ -77,6 +77,22 @@ class PhpComposerTest : StringSpec() {
             val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
                     File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
+                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+            )
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+        }
+
+        "No composer.lock is required for projects with empty dependencies" {
+            val definitionFile = File(projectsDir, "empty-deps/composer.json")
+
+            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val expectedResults = patchExpectedResult(
+                    File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
+                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsDir.getPathToRoot(definitionFile.parentFile)

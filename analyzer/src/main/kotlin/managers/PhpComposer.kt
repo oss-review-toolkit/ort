@@ -119,7 +119,9 @@ class PhpComposer : PackageManager() {
             }
 
             val manifest = jsonMapper.readTree(definitionFile)
-            val hasDependencies = manifest.fieldNames().asSequence().any { it.startsWith("require") }
+            val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
+                key.startsWith("require") && value.count() > 0
+            }
 
             val (packages, scopes) = if (hasDependencies) {
                 installDependencies(workingDir)
