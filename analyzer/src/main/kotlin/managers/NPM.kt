@@ -379,7 +379,7 @@ open class NPM : PackageManager() {
             val version = packageJson["version"].asText()
             val identifier = "$rawName@$version"
 
-            if (dependencyBranch.contains(identifier)) {
+            if (identifier in dependencyBranch) {
                 log.debug {
                     "Not adding circular dependency $identifier to the tree, it is already on this branch of the " +
                             "dependency tree: ${dependencyBranch.joinToString(" -> ")}"

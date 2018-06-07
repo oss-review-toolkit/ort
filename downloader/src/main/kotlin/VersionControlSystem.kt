@@ -67,7 +67,7 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
-        fun forUrl(vcsUrl: String) = if (urlToVcsMap.contains(vcsUrl)) {
+        fun forUrl(vcsUrl: String) = if (vcsUrl in urlToVcsMap) {
             urlToVcsMap[vcsUrl]
         } else {
             ALL.find { it.isApplicableUrl(vcsUrl) }.also { urlToVcsMap[vcsUrl] = it }

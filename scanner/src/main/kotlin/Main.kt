@@ -217,7 +217,7 @@ object Main {
 
         val packagesToScan = if (scopesToScan.isNotEmpty()) {
             projectPackages + analyzerResult.packages.filter { pkg ->
-                analyzerResult.projects.any { it.scopes.any { it.name in scopesToScan && it.contains(pkg.pkg) } }
+                analyzerResult.projects.any { it.scopes.any { it.name in scopesToScan && pkg.pkg in it } }
             }
         } else {
             projectPackages + analyzerResult.packages

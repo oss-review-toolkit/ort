@@ -81,7 +81,7 @@ data class Identifier(
     }
 
     init {
-        require(listOf(provider, namespace, name, version).none { it.contains(":") }) {
+        require(listOf(provider, namespace, name, version).none { ":" in it }) {
             "Properties of Identifier must not contain ':' because it is used as a separator in the String " +
                     "representation of the Identifier: provider='$provider', namespace='$namespace', name='$name', " +
                     "version='$version'"

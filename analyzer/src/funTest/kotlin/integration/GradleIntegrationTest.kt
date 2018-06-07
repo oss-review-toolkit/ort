@@ -59,7 +59,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
 
         // settings.gradle shall only be detected if there is no build.gradle file in the same directory.
         gradleFiles.removeAll {
-            it.name == "settings.gradle" && gradleFiles.contains(File(it.parent, "build.gradle"))
+            it.name == "settings.gradle" && File(it.parent, "build.gradle") in gradleFiles
         }
 
         mapOf(
