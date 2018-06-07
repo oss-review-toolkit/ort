@@ -67,7 +67,13 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
-        fun forUrl(vcsUrl: String) = urlToVcsMap.getOrPut(vcsUrl) { ALL.find { it.isApplicableUrl(vcsUrl) } }
+        fun forUrl(vcsUrl: String) = if (urlToVcsMap.containsKey(vcsUrl)) {
+            urlToVcsMap[vcsUrl]
+        } else {
+            ALL.find { it.isApplicableUrl(vcsUrl) }.also {
+                urlToVcsMap[vcsUrl] = it
+            }
+        }
 
         /**
          * Return the applicable VCS for the given [vcsDirectory], or null if none is applicable.
@@ -202,7 +208,7 @@ abstract class VersionControlSystem {
          * Conveniently return all VCS information, optionally for a given [path] in the working tree.
          */
         fun getInfo(path: File? = null) =
-                VcsInfo(getType(), getRemoteUrl(), getRevision(), path = path?.let { getPathToRoot(it) } ?: "" )
+                VcsInfo(getType(), getRemoteUrl(), getRevision(), path = path?.let { getPathToRoot(it) } ?: "")
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.
