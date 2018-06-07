@@ -50,7 +50,7 @@ class FileCounterTest : StringSpec() {
     private val timeRegex = Regex("(download|end|start)Time: \".*\"")
     private val urlRegex = Regex("url: \".*%3CREPLACE_URL%3E\"")
 
-    private fun patchResult(result: String) = result
+    private fun patchActualResult(result: String) = result
             .replace(timeRegex) { "${it.groupValues[1]}Time: \"<TIMESTAMP>\"" }
             .replace(urlRegex, "url: \"<REPLACE_URL>\"")
 
@@ -67,7 +67,7 @@ class FileCounterTest : StringSpec() {
 
             val result = File(outputDir, "scan-record.yml").readText()
 
-            patchResult(result) shouldBe expectedResult
+            patchActualResult(result) shouldBe expectedResult
         }
     }
 }
