@@ -206,7 +206,7 @@ abstract class VersionControlSystem {
          * Conveniently return all VCS information, optionally for a given [path] in the working tree.
          */
         fun getInfo(path: File? = null) =
-                VcsInfo(getType(), getRemoteUrl(), getRevision(), path = path?.let { getPathToRoot(it) } ?: "" )
+                VcsInfo(getType(), getRemoteUrl(), getRevision(), path = path?.let { getPathToRoot(it) } ?: "")
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.
