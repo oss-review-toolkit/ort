@@ -23,6 +23,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.analyzer.managers.PhpComposer
+import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -85,6 +86,9 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
                 NPM to listOf(
                         File(downloadDir, "core/package.json"),
                         File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
+                ),
+                Yarn to listOf(
+                        File(downloadDir, "core/yarn.lock")
                 )
         )
     }
