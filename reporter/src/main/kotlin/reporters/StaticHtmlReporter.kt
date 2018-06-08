@@ -356,8 +356,16 @@ class StaticHtmlReporter : TableReporter() {
                             <td>${entry.scopes.joinToString(separator = "<br/>")}</td>
                             <td>${entry.declaredLicenses.joinToString(separator = "<br/>")}</td>
                             <td>${entry.detectedLicenses.joinToString(separator = "<br/>")}</td>
-                            <td>${entry.analyzerErrors.joinToString(separator = "<br/>")}</td>
-                            <td>${entry.scanErrors.joinToString(separator = "<br/>")}</td>
+                            <td><ul>
+                                ${entry.analyzerErrors.joinToString(separator = "<br/>") {
+                                    "<li>${it.replace("\n", "<br/>")}</li>"
+                                }}
+                            </ul></td>
+                            <td><ul>
+                                ${entry.scanErrors.joinToString(separator = "<br/>") {
+                                    "<li>${it.replace("\n", "<br/>")}</li>"
+                                }}
+                            </ul></td>
                         </tr>""".trimIndent())
                 }
 
