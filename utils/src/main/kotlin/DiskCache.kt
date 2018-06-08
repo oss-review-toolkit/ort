@@ -97,7 +97,7 @@ class DiskCache(
         val shortenedKey = mappedKey.chunkedSequence(MAX_KEY_LENGTH - KEY_SUFFIX_LENGTH).first()
         for (index in 0 until KEY_INDEX_LIMIT) {
             val tryKey = "$shortenedKey-" + "$index".padStart(KEY_SUFFIX_LENGTH - 1, '0')
-            diskLruCache.get(tryKey).use { entry ->
+            diskLruCache[tryKey].use { entry ->
                 if (entry == null || entry.getString(INDEX_FULL_KEY) == this) {
                     return tryKey
                 }
@@ -111,7 +111,7 @@ class DiskCache(
     fun read(key: String): String? {
         val diskKey = key.asKey()
         try {
-            diskLruCache.get(diskKey)?.use { entry ->
+            diskLruCache[diskKey]?.use { entry ->
                 val time = entry.getString(INDEX_TIMESTAMP).toLong()
                 if (time + timeToLive >= timeInSeconds()) {
                     return entry.getString(INDEX_DATA)
