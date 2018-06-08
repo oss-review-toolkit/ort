@@ -158,7 +158,7 @@ object ScanCode : LocalScanner() {
 
         with(process) {
             if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(provenance, scannerDetails, summary)
+                return ScanResult(provenance, scannerDetails, summary, result)
             } else {
                 throw ScanException(errorMessage)
             }
