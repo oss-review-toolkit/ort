@@ -82,6 +82,7 @@ class GradleTest : StringSpec() {
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            true shouldBe false
         }
 
         "External dependencies are detected correctly" {
