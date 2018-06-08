@@ -105,7 +105,7 @@ class AnalyzerResultBuilder(
             errors[existingProject.id] = projectErrors + error
         } else {
             projects.add(projectAnalyzerResult.project)
-            packages.addAll(projectAnalyzerResult.packages)
+            packages += projectAnalyzerResult.packages
             errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
         }
     }

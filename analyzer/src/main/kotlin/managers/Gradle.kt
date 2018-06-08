@@ -180,7 +180,7 @@ class Gradle : PackageManager() {
                             "Could not get package information for dependency '$identifier': ${e.message}"
                         }
 
-                        errors.addAll(e.collectMessages())
+                        errors += e.collectMessages()
 
                         rawPackage
                     }
