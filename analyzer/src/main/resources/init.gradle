@@ -206,7 +206,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
             def version = project.version == 'unspecified' ? '' : project.version
             return new DependencyTreeModelImpl(project.group ?: '', project.name, version ?: '', configurations,
-                    repositories, errors)
+                    repositories, errors.unique())
         }
 
         Dependency parseDependency(DependencyResult dependencyResult, Project project,
