@@ -58,9 +58,9 @@ artifacts:
 
 test_script:
   - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
-      gradlew --stacktrace check
+      gradlew -Dkotlintest.tags.exclude=AndroidTag --stacktrace check
     ) else (
-      gradlew -Dkotlintest.tags.exclude=ExpensiveTag --stacktrace check
+      gradlew -Dkotlintest.tags.exclude=AndroidTag,ExpensiveTag --stacktrace check
     )
 
 on_finish:
