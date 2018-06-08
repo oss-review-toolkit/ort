@@ -134,7 +134,7 @@ class Maven : PackageManager() {
                 Scope(scopeName, scopeName !in assumedNonDeliveredScopes, sortedSetOf())
             }
 
-            scope.dependencies.add(parseDependency(node, packages))
+            scope.dependencies += parseDependency(node, packages)
         }
 
         val vcsFromPackage = maven.parseVcsInfo(mavenProject)

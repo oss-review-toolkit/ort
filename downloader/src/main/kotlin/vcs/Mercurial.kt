@@ -107,7 +107,7 @@ object Mercurial : VersionControlSystem() {
             if (pkg.vcsProcessed.path.isNotBlank() && isAtLeastVersion("4.3")) {
                 // Starting with version 4.3 Mercurial has experimental built-in support for sparse checkouts, see
                 // https://www.mercurial-scm.org/wiki/WhatsNew#Mercurial_4.3_.2F_4.3.1_.282017-08-10.29
-                extensionsList.add(EXTENSION_SPARSE)
+                extensionsList += EXTENSION_SPARSE
             }
 
             run(targetDir, "init")

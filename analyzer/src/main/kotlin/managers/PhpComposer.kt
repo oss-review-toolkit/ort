@@ -181,8 +181,8 @@ class PhpComposer : PackageManager() {
                         ?: throw IOException("Could not find package info for $packageName")
                 try {
                     val transitiveDependencies = getRuntimeDependencies(packageName, lockFile)
-                    packageReferences.add(packageInfo.toReference(
-                            buildDependencyTree(transitiveDependencies, lockFile, packages)))
+                    packageReferences += packageInfo.toReference(
+                            buildDependencyTree(transitiveDependencies, lockFile, packages))
                 } catch (e: Exception) {
                     e.showStackTrace()
                     PackageReference(packageInfo.id, sortedSetOf<PackageReference>(), e.collectMessages())

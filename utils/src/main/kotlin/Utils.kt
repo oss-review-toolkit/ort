@@ -270,7 +270,7 @@ fun Exception.collectMessages(): List<String> {
     val messages = mutableListOf<String>()
     var cause: Throwable? = this
     while (cause != null) {
-        messages.add("${cause.javaClass.simpleName}: ${cause.message}")
+        messages += "${cause.javaClass.simpleName}: ${cause.message}"
         cause = cause.cause
     }
     return messages

@@ -189,7 +189,7 @@ object ScanCode : LocalScanner() {
                     val key = license["key"].asText()
                     name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
                 }
-                licenses.add(name)
+                licenses += name
             }
 
             val path = file["path"].asText()

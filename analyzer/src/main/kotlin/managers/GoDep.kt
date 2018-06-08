@@ -93,7 +93,7 @@ class GoDep : PackageManager() {
             val vcsProcessed = try {
                 resolveVcsInfo(vcs, gopath)
             } catch (e: IOException) {
-                errors.add(e.toString())
+                errors += e.toString()
                 VcsInfo.EMPTY
             }
 
@@ -108,13 +108,12 @@ class GoDep : PackageManager() {
                     vcsProcessed = vcsProcessed
             )
 
-            packages.add(pkg)
+            packages += pkg
 
-            packageRefs.add(PackageReference(
+            packageRefs += PackageReference(
                     id = Identifier(provider, "", pkg.id.name, pkg.id.version),
                     dependencies = sortedSetOf(),
                     errors = errors)
-            )
         }
 
         val scope = Scope("default", true, packageRefs.toSortedSet())
@@ -221,7 +220,7 @@ class GoDep : PackageManager() {
             }
 
             val version = project["version"] as? String ?: revision
-            projects.add(mapOf("name" to name, "revision" to revision, "version" to version))
+            projects += mapOf("name" to name, "revision" to revision, "version" to version)
         }
 
         return projects
