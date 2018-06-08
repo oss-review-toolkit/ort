@@ -20,6 +20,7 @@ cache:
 
 env:
   global:
+    - ANDROID_HOME="/opt/android"
     - GIMME_GO_VERSION="1.10"
     - DEP_RELEASE_TAG="v0.4.1"
 
@@ -29,6 +30,9 @@ install:
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh
   - phpenv global 7.1
+  - wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+  - unzip -q sdk-tools-linux-3859397.zip -d $ANDROID_HOME
+  - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
 
 script:
   - if git grep -L "Copyright" -- "*.kt"; then
