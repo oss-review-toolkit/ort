@@ -245,6 +245,12 @@ class StaticHtmlReporter : TableReporter() {
                         border-bottom-right-radius: .28rem;
                       }
                   }
+
+                  ul {
+                      list-style-position: inside;
+                      margin: 0;
+                      padding: 0;
+                  }
                 </style>
             </head>
             <body>
