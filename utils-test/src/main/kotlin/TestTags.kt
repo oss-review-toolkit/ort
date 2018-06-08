@@ -21,6 +21,8 @@ package com.here.ort.utils.test
 
 import io.kotlintest.Tag
 
+object AndroidTag : Tag()
+
 object ExpensiveTag : Tag()
 
 object ScanCodeTag : Tag()

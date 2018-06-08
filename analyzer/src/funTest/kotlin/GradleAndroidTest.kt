@@ -23,6 +23,7 @@ import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.AndroidTag
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
@@ -39,7 +40,7 @@ class GradleAndroidTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "Root project dependencies are detected correctly" {
+        "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
             val packageFile = File(projectDir, "build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-android-expected-output-root.yml"),
@@ -54,7 +55,7 @@ class GradleAndroidTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
-        "Project dependencies are detected correctly" {
+        "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
             val packageFile = File(projectDir, "app/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-android-expected-output-app.yml"),
@@ -69,7 +70,7 @@ class GradleAndroidTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
-        "External dependencies are detected correctly" {
+        "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
             val packageFile = File(projectDir, "lib/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-android-expected-output-lib.yml"),
