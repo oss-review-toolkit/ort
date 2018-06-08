@@ -24,9 +24,7 @@ import com.beust.jcommander.Parameter
 
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.mapper
-import com.here.ort.reporter.reporters.ExcelReporter
-import com.here.ort.reporter.reporters.Reporter
-import com.here.ort.reporter.reporters.StaticHtmlReporter
+import com.here.ort.reporter.reporters.*
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -46,6 +44,7 @@ object Main {
 
     private enum class ReportFormat(private val reporter: Reporter) : Reporter {
         EXCEL(ExcelReporter()),
+        NOTICE(NoticeReporter()),
         STATIC_HTML(StaticHtmlReporter());
 
         override fun generateReport(scanRecord: ScanRecord, outputDir: File) =
