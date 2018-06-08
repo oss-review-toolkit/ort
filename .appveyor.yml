@@ -1,6 +1,7 @@
 skip_branch_with_pr: true
 
 environment:
+  ANDROID_HOME: "C:\\android-sdk"
   HOME: $(HOMEDRIVE)$(HOMEPATH)
 
 cache:
@@ -47,6 +48,9 @@ install:
   - set PATH=%PATH%;%GOPATH%\bin
   - go get -u github.com/golang/dep/cmd/dep
   - dep version
+  - appveyor DownloadFile https://dl.google.com/android/repository/sdk-tools-windows-3859397.zip
+  - 7z x sdk-tools-windows-3859397.zip -o"%ANDROID_HOME%" > nul
+  - yes | C:\android-sdk-windows\tools\bin\sdkmanager.bat --verbose "platform-tools"
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
