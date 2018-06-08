@@ -27,6 +27,14 @@ subprojects {
     // Apply core plugins.
     apply plugin: 'jacoco'
 
+    kotlin {
+        experimental {
+            // Required by kotlintest as of
+            // https://github.com/kotlintest/kotlintest/pull/332.
+            coroutines 'enable'
+        }
+    }
+
     dependencyUpdates.resolutionStrategy = {
         componentSelection { rules ->
             rules.all { ComponentSelection selection ->
