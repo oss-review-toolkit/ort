@@ -48,7 +48,7 @@ data class Scope(
         val dependencies: SortedSet<PackageReference>
 ) : CustomData(), Comparable<Scope> {
     fun collectAllDependencies(): SortedSet<Identifier> = dependencies.map { it.id }.toSortedSet().also { result ->
-        dependencies.forEach { result.addAll(it.collectAllDependencies()) }
+        dependencies.forEach { result += it.collectAllDependencies() }
     }
 
     /**

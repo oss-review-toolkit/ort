@@ -193,7 +193,7 @@ object ScanCode : LocalScanner() {
             }
 
             val path = file["path"].asText()
-            errors.addAll(file["scan_errors"].map { "${it.asText()} (File: $path)" })
+            errors += file["scan_errors"].map { "${it.asText()} (File: $path)" }
         }
 
         return ScanSummary(startTime, endTime, fileCount, licenses, errors)
@@ -230,7 +230,7 @@ object ScanCode : LocalScanner() {
         }
 
         errors.clear()
-        errors.addAll(mappedErrors)
+        errors += mappedErrors
 
         return onlyMemoryErrors
     }
@@ -259,7 +259,7 @@ object ScanCode : LocalScanner() {
         }
 
         errors.clear()
-        errors.addAll(mappedErrors)
+        errors += mappedErrors
 
         return onlyTimeoutErrors
     }
