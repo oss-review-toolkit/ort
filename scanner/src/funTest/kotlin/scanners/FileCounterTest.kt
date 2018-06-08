@@ -30,6 +30,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
+import java.time.Instant
 
 class FileCounterTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")
@@ -50,7 +51,7 @@ class FileCounterTest : StringSpec() {
     private val timeRegex = Regex("(download|end|start)Time: \".*\"")
 
     private fun patchActualResult(result: String) = result
-            .replace(timeRegex) { "${it.groupValues[1]}Time: \"<TIMESTAMP>\"" }
+            .replace(timeRegex) { "${it.groupValues[1]}Time: \"${Instant.EPOCH}\"" }
 
     init {
         "Gradle project scan results from analyzer result file are correct" {
