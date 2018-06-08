@@ -280,7 +280,6 @@ class StaticHtmlReporter : TableReporter() {
                 append("<h2>Index</h2>")
                 append("<ul>")
                 append("<li><a href=\"#error-summary\">Error Summary</a></li>")
-                append("<li><a href=\"#summary\">Summary</a></li>")
                 tabularScanRecord.projectDependencies.keys.forEachIndexed { index, project ->
                     append("<li><a href=\"#$index\">${project.id}</a></li>")
                 }
@@ -288,7 +287,6 @@ class StaticHtmlReporter : TableReporter() {
 
                 append(createTable("Error Summary", null, tabularScanRecord.errorSummary,
                         "error-summary"))
-                append(createTable("Summary", tabularScanRecord.vcsInfo, tabularScanRecord.summary, "summary"))
 
                 var index = 0
                 tabularScanRecord.projectDependencies.forEach { project, entry ->
