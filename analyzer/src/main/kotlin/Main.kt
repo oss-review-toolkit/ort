@@ -232,7 +232,7 @@ object Main {
             curatedResults.forEach { definitionFile, analyzerResult ->
                 analyzerResultBuilder.addResult(analyzerResult)
                 if (analyzerResult.hasErrors()) {
-                    failedAnalysis.add(definitionFile.absolutePath)
+                    failedAnalysis += definitionFile.absolutePath
                 }
             }
         }

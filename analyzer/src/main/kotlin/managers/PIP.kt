@@ -406,10 +406,10 @@ class PIP : PackageManager() {
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
             )
-            allPackages.add(pkg)
+            allPackages += pkg
 
             val packageRef = pkg.toReference()
-            installDependencies.add(packageRef)
+            installDependencies += packageRef
 
             parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
         }

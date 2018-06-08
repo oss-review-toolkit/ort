@@ -193,7 +193,7 @@ open class NPM : PackageManager() {
 
             json["license"]?.let { licenseNode ->
                 val type = licenseNode.textValue() ?: licenseNode["type"].asTextOrEmpty()
-                declaredLicenses.add(type)
+                declaredLicenses += type
             }
 
             json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
@@ -342,7 +342,7 @@ open class NPM : PackageManager() {
             val dependencyMap = json[scope]
             dependencyMap.fields().forEach { (name, _) ->
                 buildTree(packageJson.parentFile, packageJson.parentFile, name, packages)?.let { dependency ->
-                    dependencies.add(dependency)
+                    dependencies += dependency
                 }
             }
         } else {
@@ -398,7 +398,7 @@ open class NPM : PackageManager() {
                     val dependency = buildTree(rootDir, packageFile.parentFile, dependencyName, packages,
                             newDependencyBranch)
                     if (dependency != null) {
-                        dependencies.add(dependency)
+                        dependencies += dependency
                     }
                 }
             }

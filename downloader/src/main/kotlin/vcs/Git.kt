@@ -80,7 +80,7 @@ object Git : GitBase() {
         val revisionCandidates = mutableListOf<String>()
 
         if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
-            revisionCandidates.add(pkg.vcsProcessed.revision)
+            revisionCandidates += pkg.vcsProcessed.revision
         } else {
             log.warn {
                 "No valid revision specified. Other possible candidates might cause the downloaded source code " +
@@ -91,7 +91,7 @@ object Git : GitBase() {
         log.info { "Trying to guess a $this revision for version '${pkg.id.version}' to fall back to." }
         try {
             workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
-                revisionCandidates.add(revision)
+                revisionCandidates += revision
                 log.info { "Found $this revision '$revision' for version '${pkg.id.version}'." }
             }
         } catch (e: IOException) {

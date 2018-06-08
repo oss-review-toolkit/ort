@@ -104,7 +104,7 @@ class AnalyzerResultBuilder(
             val projectErrors = errors.getOrDefault(existingProject.id, listOf())
             errors[existingProject.id] = projectErrors + error
         } else {
-            projects.add(projectAnalyzerResult.project)
+            projects += projectAnalyzerResult.project
             packages += projectAnalyzerResult.packages
             errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
         }

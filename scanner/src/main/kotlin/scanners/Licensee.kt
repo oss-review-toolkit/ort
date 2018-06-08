@@ -130,7 +130,7 @@ object Licensee : LocalScanner() {
             licenseSummary.find {
                 it["key"].asText() == licenseKey
             }?.let {
-                licenses.add(it["spdx_id"].asText())
+                licenses += it["spdx_id"].asText()
             }
         }
 

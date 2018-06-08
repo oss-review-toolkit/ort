@@ -160,7 +160,7 @@ class Bundler : PackageManager() {
         }
 
         val delivered = groupName.toLowerCase() !in DEVELOPMENT_SCOPES
-        scopes.add(Scope(groupName, delivered, scopeDependencies.toSortedSet()))
+        scopes += Scope(groupName, delivered, scopeDependencies.toSortedSet())
     }
 
     private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
@@ -183,17 +183,15 @@ class Bundler : PackageManager() {
                     gemSpec = merge(gemSpec)
                 }
 
-                packages.add(
-                        Package(
-                                id = gemId,
-                                declaredLicenses = gemSpec.declaredLicenses,
-                                description = gemSpec.description,
-                                homepageUrl = gemSpec.homepageUrl,
-                                binaryArtifact = gemSpec.binaryArtifact,
-                                sourceArtifact = RemoteArtifact.EMPTY,
-                                vcs = gemSpec.vcs,
-                                vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
-                        )
+                packages += Package(
+                        id = gemId,
+                        declaredLicenses = gemSpec.declaredLicenses,
+                        description = gemSpec.description,
+                        homepageUrl = gemSpec.homepageUrl,
+                        binaryArtifact = gemSpec.binaryArtifact,
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = gemSpec.vcs,
+                        vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
                 )
 
                 val transitiveDependencies = mutableSetOf<PackageReference>()
@@ -202,14 +200,14 @@ class Bundler : PackageManager() {
                     parseDependency(workingDir, projectId, it, packages, transitiveDependencies, errors)
                 }
 
-                scopeDependencies.add(PackageReference(gemId, transitiveDependencies.toSortedSet()))
+                scopeDependencies += PackageReference(gemId, transitiveDependencies.toSortedSet())
             }
         } catch (e: Exception) {
             e.showStackTrace()
 
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.message}"
             log.error { errorMsg }
-            errors.add(errorMsg)
+            errors += errorMsg
         }
     }
 
