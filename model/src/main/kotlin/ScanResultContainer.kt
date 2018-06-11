@@ -29,7 +29,7 @@ data class ScanResultContainer(
         val id: Identifier,
 
         /**
-         * The list of [ScanResult]s.
+         * The list of [ScanResult]s from potentially multiple scanners and / or with different package provenance.
          */
         val results: List<ScanResult>
 ) : CustomData(), Comparable<ScanResultContainer> {
