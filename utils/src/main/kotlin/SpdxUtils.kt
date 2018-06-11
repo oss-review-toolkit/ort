@@ -79,7 +79,7 @@ fun getLicenseText(id: String): String {
         val body = response.body()
 
         if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
-            throw IOException("Failed to download $id license data from $url.")
+            throw IOException("Failed to download the text for license '$id' from $url.")
         }
 
         ObjectMapper().readTree(body.string())["licenseText"].asText()
