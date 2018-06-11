@@ -30,8 +30,7 @@ import java.time.Instant
 class ScanCodeTest : WordSpec({
     "mapTimeoutErrors()" should {
         "return true for scan results with only timeout errors" {
-            val resultFileName = "/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json"
-            val resultFile = File(javaClass.getResource(resultFileName).toURI())
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapTimeoutErrors(summary.errors) shouldBe true
@@ -64,8 +63,7 @@ class ScanCodeTest : WordSpec({
         }
 
         "return false for scan results without errors" {
-            val resultFileName = "/esprima-2.7.3_scancode-2.2.1.json"
-            val resultFile = File(javaClass.getResource(resultFileName).toURI())
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapTimeoutErrors(summary.errors) shouldBe false
@@ -74,8 +72,7 @@ class ScanCodeTest : WordSpec({
 
     "mapUnknownErrors()" should {
         "return true for scan results with only memory errors" {
-            val resultFileName = "/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json"
-            val resultFile = File(javaClass.getResource(resultFileName).toURI())
+            val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapUnknownErrors(summary.errors) shouldBe true
@@ -85,8 +82,7 @@ class ScanCodeTest : WordSpec({
         }
 
         "return false for scan results with other unknown errors" {
-            val resultFileName = "/kotlin-annotation-processing-gradle-1.2.21_scancode.json"
-            val resultFile = File(javaClass.getResource(resultFileName).toURI())
+            val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapUnknownErrors(summary.errors) shouldBe false
@@ -97,8 +93,7 @@ class ScanCodeTest : WordSpec({
         }
 
         "return false for scan results without errors" {
-            val resultFileName = "/esprima-2.7.3_scancode-2.2.1.json"
-            val resultFile = File(javaClass.getResource(resultFileName).toURI())
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapUnknownErrors(summary.errors) shouldBe false
