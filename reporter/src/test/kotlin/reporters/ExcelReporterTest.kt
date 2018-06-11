@@ -21,21 +21,37 @@ package com.here.ort.reporter.reporters
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
-class ExcelReporterTest : StringSpec({
-    "createUniqueSheetName() should work for sheet names that exceed 31 characters" {
-        val workbook = XSSFWorkbook()
-        val sheetName = "1234567890123456789012345678901xxx"
+class ExcelReporterTest : WordSpec({
+    "createUniqueSheetName()" should {
+        "work for sheet names that exceed 31 characters" {
+            val workbook = XSSFWorkbook()
+            val sheetName = "1234567890123456789012345678901xxx"
 
-        val uniqueName1 = createUniqueSheetName(workbook, sheetName)
-        uniqueName1 shouldBe "1234567890123456789012345678901"
-        workbook.createSheet(uniqueName1) shouldNotBe null
+            val uniqueName1 = createUniqueSheetName(workbook, sheetName)
+            uniqueName1 shouldBe "1234567890123456789012345678901"
+            workbook.createSheet(uniqueName1) shouldNotBe null
 
-        val uniqueName2 = createUniqueSheetName(workbook, sheetName)
-        uniqueName2 shouldBe "12345678901234567890123456789-1"
-        workbook.createSheet(uniqueName2) shouldNotBe null
+            val uniqueName2 = createUniqueSheetName(workbook, sheetName)
+            uniqueName2 shouldBe "12345678901234567890123456789-1"
+            workbook.createSheet(uniqueName2) shouldNotBe null
+        }
+
+        "match sheet names case-insensitively" {
+            val workbook = XSSFWorkbook()
+            val sheetName1 = "CASE-SENSITIVITY"
+            val sheetName2 = "case-sensitivity"
+
+            val uniqueName1 = createUniqueSheetName(workbook, sheetName1)
+            uniqueName1 shouldBe "CASE-SENSITIVITY"
+            workbook.createSheet(uniqueName1) shouldNotBe null
+
+            val uniqueName2 = createUniqueSheetName(workbook, sheetName2)
+            uniqueName2 shouldBe "case-sensitivity-1"
+            workbook.createSheet(uniqueName2) shouldNotBe null
+        }
     }
 })
