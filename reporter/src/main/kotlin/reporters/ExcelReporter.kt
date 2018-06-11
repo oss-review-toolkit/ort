@@ -244,15 +244,18 @@ class ExcelReporter : TableReporter() {
     }
 }
 
+private const val MAX_SHEET_NAME_LENGTH = 31
+
 private fun createUniqueSheetName(workbook: XSSFWorkbook, name: String) =
-        WorkbookUtil.createSafeSheetName(name).let {
-            var uniqueName = it
+        WorkbookUtil.createSafeSheetName(name).let { safeName ->
+            var uniqueName = safeName
             var i = 0
 
             while (uniqueName in Sequence { workbook.sheetIterator() }.map { it.sheetName }) {
                 val suffix = "-${++i}"
-                uniqueName = uniqueName.dropLast(suffix.length) + suffix
+                uniqueName = uniqueName.take(MAX_SHEET_NAME_LENGTH - suffix.length) + suffix
             }
+
             uniqueName
         }
 
