@@ -46,18 +46,20 @@ class NoticeReporter : Reporter {
             license.startsWith("LicenseRef-")
         }.iterator()
 
+        // Note: Do not use appendln() here as that would write out platform-native line endings, but we want to
+        // normalize on Unix-style line endings for consistency.
         while (findingsIterator.hasNext()) {
             val (license, copyrights) = findingsIterator.next()
 
             var noticeBuilder = StringBuilder()
 
             copyrights.forEach { copyright ->
-                noticeBuilder.appendln(copyright)
+                noticeBuilder.append("$copyright\n")
             }
 
-            if (copyrights.isNotEmpty()) noticeBuilder.appendln()
+            if (copyrights.isNotEmpty()) noticeBuilder.append("\n")
 
-            noticeBuilder.appendln(getLicenseText(license))
+            noticeBuilder.append("${getLicenseText(license)}\n")
 
             // Trim lines and remove consecutive blank lines as the license text formatting in SPDX JSON files is
             // broken, see https://github.com/spdx/LicenseListPublisher/issues/30.
@@ -71,11 +73,7 @@ class NoticeReporter : Reporter {
             noticeBuilder = StringBuilder(trimmedNoticeLines.joinToString("\n"))
 
             // Separate notice entries.
-            if (findingsIterator.hasNext()) {
-                noticeBuilder.appendln()
-                noticeBuilder.appendln("----")
-                noticeBuilder.appendln()
-            }
+            if (findingsIterator.hasNext()) noticeBuilder.append("\n----\n\n")
 
             noticeFile.appendText(noticeBuilder.toString())
         }
