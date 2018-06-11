@@ -247,17 +247,20 @@ class ExcelReporter : TableReporter() {
 // Use the same name as in XSSFWorkbook.MAX_SENSITIVE_SHEET_NAME_LEN, which is private.
 private const val MAX_SENSITIVE_SHEET_NAME_LEN = 31
 
-internal fun createUniqueSheetName(workbook: XSSFWorkbook, name: String) =
-        WorkbookUtil.createSafeSheetName(name).let {
-            var uniqueName = it
-            var i = 0
+internal fun createUniqueSheetName(workbook: XSSFWorkbook, name: String): String {
+    fun isSheetNameTaken(workbook: XSSFWorkbook, name: String) =
+            name.toLowerCase() in Sequence { workbook.sheetIterator() }.map { it.sheetName.toLowerCase() }
 
-            while (uniqueName in Sequence { workbook.sheetIterator() }.map { it.sheetName }) {
-                val suffix = "-${++i}"
-                uniqueName = uniqueName.take(MAX_SENSITIVE_SHEET_NAME_LEN - suffix.length) + suffix
-            }
-            uniqueName
-        }
+    var uniqueName = WorkbookUtil.createSafeSheetName(name)
+    var i = 0
+
+    while (isSheetNameTaken(workbook, uniqueName)) {
+        val suffix = "-${++i}"
+        uniqueName = uniqueName.take(MAX_SENSITIVE_SHEET_NAME_LEN - suffix.length) + suffix
+    }
+
+    return uniqueName
+}
 
 private fun XSSFCellStyle.setBorder(borderStyle: BorderStyle) {
     setBorderTop(borderStyle)
