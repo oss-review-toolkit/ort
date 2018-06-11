@@ -244,7 +244,7 @@ class ExcelReporter : TableReporter() {
     }
 }
 
-private fun createUniqueSheetName(workbook: XSSFWorkbook, name: String) =
+internal fun createUniqueSheetName(workbook: XSSFWorkbook, name: String) =
         WorkbookUtil.createSafeSheetName(name).let {
             var uniqueName = it
             var i = 0
