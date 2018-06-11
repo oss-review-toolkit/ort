@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
 /**
- * The result of a single scan of a package.
+ * The result of a single scan of a single package.
  */
 data class ScanResult(
         /**
