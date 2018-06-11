@@ -45,20 +45,20 @@ import java.io.File
  * for each project in [ScanRecord.analyzerResult] and an additional sheet that summarizes all dependencies.
  */
 class ExcelReporter : TableReporter() {
-    val DEFAULT_COLUMNS = 5
+    private val defaultColumns = 5
 
-    val borderColor = XSSFColor(Color(211, 211, 211))
-    val errorColor = XSSFColor(Color(240, 128, 128))
-    val successColor = XSSFColor(Color(173, 216, 230))
-    val warningColor = XSSFColor(Color(255, 255, 224))
+    private val borderColor = XSSFColor(Color(211, 211, 211))
+    private val errorColor = XSSFColor(Color(240, 128, 128))
+    private val successColor = XSSFColor(Color(173, 216, 230))
+    private val warningColor = XSSFColor(Color(255, 255, 224))
 
-    lateinit var defaultStyle: CellStyle
-    lateinit var headerStyle: CellStyle
-    lateinit var successStyle: CellStyle
-    lateinit var warningStyle: CellStyle
-    lateinit var errorStyle: CellStyle
+    private lateinit var defaultStyle: CellStyle
+    private lateinit var headerStyle: CellStyle
+    private lateinit var successStyle: CellStyle
+    private lateinit var warningStyle: CellStyle
+    private lateinit var errorStyle: CellStyle
 
-    lateinit var creationHelper: CreationHelper
+    private lateinit var creationHelper: CreationHelper
 
     override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File) {
         val workbook = XSSFWorkbook()
@@ -118,8 +118,8 @@ class ExcelReporter : TableReporter() {
         }
     }
 
-    fun createMetadataSheet(workbook: XSSFWorkbook, metadata: Map<String, String>) {
-        var sheetName = createUniqueSheetName(workbook, "Metadata")
+    private fun createMetadataSheet(workbook: XSSFWorkbook, metadata: Map<String, String>) {
+        val sheetName = createUniqueSheetName(workbook, "Metadata")
 
         val sheet = workbook.createSheet(sheetName)
 
@@ -145,9 +145,9 @@ class ExcelReporter : TableReporter() {
         (0..1).forEach { sheet.autoSizeColumn(it) }
     }
 
-    fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, vcsInfo: VcsInfo,
+    private fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, vcsInfo: VcsInfo,
                     extraColumns: List<String>) {
-        var sheetName = createUniqueSheetName(workbook, name)
+        val sheetName = createUniqueSheetName(workbook, name)
 
         val sheet = workbook.createSheet(sheetName)
 
@@ -176,12 +176,12 @@ class ExcelReporter : TableReporter() {
             ++currentRow
         }
 
-        sheet.finalize(headerRows, currentRow, DEFAULT_COLUMNS + extraColumns.size)
+        sheet.finalize(headerRows, currentRow, defaultColumns + extraColumns.size)
     }
 
     private fun createHeader(sheet: XSSFSheet, name: String, file: String, vcsInfo: VcsInfo,
                              extraColumns: List<String>): Int {
-        val columns = DEFAULT_COLUMNS + extraColumns.size
+        val columns = defaultColumns + extraColumns.size
 
         sheet.createRow(0).apply {
             CellUtil.createCell(this, 0, "Project:", headerStyle)
@@ -250,7 +250,7 @@ private fun createUniqueSheetName(workbook: XSSFWorkbook, name: String) =
             var i = 0
 
             while (uniqueName in Sequence { workbook.sheetIterator() }.map { it.sheetName }) {
-                var suffix = "-${++i}"
+                val suffix = "-${++i}"
                 uniqueName = uniqueName.dropLast(suffix.length) + suffix
             }
             uniqueName
@@ -276,7 +276,7 @@ private fun XSSFSheet.finalize(headerRows: Int, totalRows: Int, totalColumns: In
     setAutoFilter(CellRangeAddress(headerRows - 1, totalRows - 1, 0, totalColumns))
 }
 
-private val ELLIPSIS = "[...]"
+private const val ELLIPSIS = "[...]"
 
 private fun Collection<String>.joinWithLimit(
         separator: String = " \n",
