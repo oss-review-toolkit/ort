@@ -46,6 +46,7 @@ import org.apache.maven.internal.aether.DefaultRepositorySystemSessionFactory
 import org.apache.maven.model.building.ModelBuildingRequest
 import org.apache.maven.project.MavenProject
 import org.apache.maven.project.ProjectBuilder
+import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
 
@@ -323,7 +324,26 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             val pomArtifact = mavenRepositorySystem
                     .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
 
-            projectBuilder.build(pomArtifact, projectBuildingRequest).project
+            try {
+                projectBuilder.build(pomArtifact, projectBuildingRequest).project
+            } catch (e: ProjectBuildingException) {
+                e.showStackTrace()
+
+                val id = "${it.groupId}:${it.artifactId}:${it.version}"
+
+                val failedProject = e.results.find { projectBuildingResult ->
+                    projectBuildingResult.projectId == id
+                }
+
+                if (failedProject != null) {
+                    log.warn { "There was an error building the project '$id', continuing with the incompletely " +
+                            "built project: ${e.collectMessages()}" }
+                    failedProject.project
+                } else {
+                    log.error { "Could not build project '$id': ${e.collectMessages()}" }
+                    throw e
+                }
+            }
         }
 
         val binaryRemoteArtifact = requestRemoteArtifact(artifact, repositories)
