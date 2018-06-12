@@ -28,6 +28,7 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -181,9 +182,10 @@ class PIP : PackageManager() {
                 // root next to it, as siblings.
                 fullDependencyTree.find {
                     it["package_name"].asText() == projectName
-                }?.get("dependencies")
-                        ?: throw IOException("pipdeptree output does not contain the '$projectName' project " +
-                                "dependencies: ${pipdeptree.stdout()}")
+                }?.get("dependencies") ?: run {
+                    log.info { "The '$projectName' project does not declare any dependencies." }
+                    EMPTY_JSON_NODE
+                }
             } else {
                 // The tree does not contain a node for the project itself. Its dependencies are on the root level
                 // together with the dependencies of pipdeptree itself, which we need to filter out.
