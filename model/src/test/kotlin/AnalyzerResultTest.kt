@@ -23,7 +23,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class AnalyzerResultTest : WordSpec() {
-    private val vcs = VcsInfo("type", "url", "revision", "path")
+    private val vcs = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
 
     private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
