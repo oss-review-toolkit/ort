@@ -61,7 +61,7 @@ class AnalyzerResultTest : WordSpec() {
                 mergedResults.createProjectAnalyzerResults() shouldBe listOf(analyzerResult1, analyzerResult2)
             }
 
-            "can be serialized and deserialized" {
+            "be serialized and deserialized correctly" {
                 val mergedResults = AnalyzerResultBuilder(true, vcs)
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)

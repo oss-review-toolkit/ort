@@ -76,7 +76,7 @@ class ScanResultContainerTest : WordSpec() {
 
     init {
         "ScanResults" should {
-            "be serializable and deserializable" {
+            "be serialized and deserialized correctly" {
                 val serializedScanResults = jsonMapper.writeValueAsString(scanResults)
                 val deserializedScanResults =
                         jsonMapper.readValue(serializedScanResults, ScanResultContainer::class.java)
