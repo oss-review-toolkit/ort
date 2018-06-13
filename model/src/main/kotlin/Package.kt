@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 import java.util.SortedSet
 
 /**
@@ -42,7 +40,6 @@ data class Package(
          * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
          * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
          */
-        @JsonProperty("declared_licenses")
         val declaredLicenses: SortedSet<String>,
 
         /**
@@ -53,19 +50,16 @@ data class Package(
         /**
          * The homepage of the package.
          */
-        @JsonProperty("homepage_url")
         val homepageUrl: String,
 
         /**
          * The remote artifact where the binary package can be downloaded.
          */
-        @JsonProperty("binary_artifact")
         val binaryArtifact: RemoteArtifact,
 
         /**
          * The remote artifact where the source package can be downloaded.
          */
-        @JsonProperty("source_artifact")
         val sourceArtifact: RemoteArtifact,
 
         /**
@@ -76,7 +70,6 @@ data class Package(
         /**
          * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
          */
-        @JsonProperty("vcs_processed")
         val vcsProcessed: VcsInfo = vcs.normalize()
 ) : CustomData(), Comparable<Package> {
     /**

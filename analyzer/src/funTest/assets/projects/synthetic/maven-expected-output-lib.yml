@@ -1,5 +1,5 @@
 ---
-allowDynamicVersions: true
+allow_dynamic_versions: true
 project:
   id: "Maven:com.here.ort.maven:maven-lib:1.0-SNAPSHOT"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven/lib/pom.xml"

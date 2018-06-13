@@ -123,7 +123,7 @@ class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
         val type = node["type"].asTextOrEmpty()
         val url = node["url"].asTextOrEmpty()
         val revision = node["revision"].asTextOrEmpty()
-        val resolvedRevision = node["resolvedRevision"]?.asText()
+        val resolvedRevision = (node["resolved_revision"] ?: node["resolvedRevision"])?.asText()
         val path = node["path"].asTextOrEmpty()
         return VcsInfo(type, url, revision, resolvedRevision, path)
     }

@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 import java.util.SortedSet
 
 /**
@@ -38,14 +36,12 @@ data class Project(
          * The path to the definition file of this project, relative to the root of the repository described in [vcs]
          * and [vcsProcessed].
          */
-        @JsonProperty("definition_file_path")
         val definitionFilePath: String,
 
         /**
          * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
          * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
          */
-        @JsonProperty("declared_licenses")
         val declaredLicenses: SortedSet<String>,
 
         /**
@@ -61,13 +57,11 @@ data class Project(
         /**
          * Processed VCS-related information about the [Project] that has e.g. common mistakes corrected.
          */
-        @JsonProperty("vcs_processed")
         val vcsProcessed: VcsInfo = vcs.normalize(),
 
         /**
          * The URL to the project's homepage.
          */
-        @JsonProperty("homepage_url")
         val homepageUrl: String,
 
         /**

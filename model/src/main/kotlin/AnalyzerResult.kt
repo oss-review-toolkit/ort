@@ -21,8 +21,6 @@ package com.here.ort.model
 
 import ch.frankel.slf4k.*
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 import com.here.ort.utils.log
 
 import java.util.SortedMap
@@ -38,7 +36,6 @@ data class AnalyzerResult(
          * a new version of this dependency was released in the meantime. It is always true for package managers that do
          * not support lock files, but do support version ranges.
          */
-        @JsonProperty("allow_dynamic_versions")
         val allowDynamicVersions: Boolean,
 
         /**
@@ -49,7 +46,6 @@ data class AnalyzerResult(
         /**
          * The normalized [VcsInfo] of the analyzed repository.
          */
-        @JsonProperty("vcs_processed")
         val vcsProcessed: VcsInfo,
 
         /**

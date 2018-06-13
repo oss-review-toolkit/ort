@@ -48,10 +48,10 @@ class FileCounterTest : StringSpec() {
         ScanResultsCache.stats = CacheStatistics()
     }
 
-    private val timeRegex = Regex("(download|end|start)Time: \".*\"")
+    private val timeRegex = Regex("((download|end|start)_time): \".*\"")
 
     private fun patchActualResult(result: String) = result
-            .replace(timeRegex) { "${it.groupValues[1]}Time: \"${Instant.EPOCH}\"" }
+            .replace(timeRegex) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 
     init {
         "Gradle project scan results from analyzer result file are correct" {

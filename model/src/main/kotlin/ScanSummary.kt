@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
 import java.time.Instant
 import java.util.SortedSet
 
@@ -29,16 +31,19 @@ data class ScanSummary(
         /**
          * The time when the scan started.
          */
+        @JsonAlias("startTime")
         val startTime: Instant,
 
         /**
          * The time when the scan finished.
          */
+        @JsonAlias("endTime")
         val endTime: Instant,
 
         /**
          * The number of scanned files.
          */
+        @JsonAlias("fileCount")
         val fileCount: Int,
 
         /**

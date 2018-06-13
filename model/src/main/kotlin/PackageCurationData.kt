@@ -20,7 +20,6 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.util.SortedSet
 
@@ -35,7 +34,6 @@ data class PackageCurationData(
          * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("declared_licenses")
         val declaredLicenses: SortedSet<String>? = null,
 
         /**
@@ -48,21 +46,18 @@ data class PackageCurationData(
          * The homepage of the package.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("homepage_url")
         val homepageUrl: String? = null,
 
         /**
          * The remote artifact where the binary package can be downloaded.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("binary_artifact")
         val binaryArtifact: RemoteArtifact? = null,
 
         /**
          * The remote artifact where the source package can be downloaded.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        @JsonProperty("source_artifact")
         val sourceArtifact: RemoteArtifact? = null,
 
         /**

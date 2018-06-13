@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 import java.util.SortedSet
 
 /**
@@ -30,31 +28,26 @@ data class ScanRecord(
         /**
          * The [AnalyzerResult] that was used as input for the scanner.
          */
-        @JsonProperty("analyzer_result")
         val analyzerResult: AnalyzerResult,
 
         /**
          * The scanned and ignored [Scope]s for each scanned [Project] by id.
          */
-        @JsonProperty("scanned_scopes")
         val scannedScopes: SortedSet<ProjectScanScopes>,
 
         /**
          * The [ScanResult]s for all [Package]s.
          */
-        @JsonProperty("scan_results")
         val scanResults: SortedSet<ScanResultContainer>,
 
         /**
          * The [CacheStatistics] for the scan results cache.
          */
-        @JsonProperty("cache_stats")
         val cacheStats: CacheStatistics
 ) : CustomData() {
     /**
      * True if the [analyzerResult] or any of the [scanResults] contain errors.
      */
-    @JsonProperty("has_errors")
     val hasErrors = analyzerResult.createProjectAnalyzerResults().any { it.hasErrors() }
             || scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
 }
