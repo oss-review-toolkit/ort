@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
@@ -47,6 +48,8 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
     disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
     registerModule(ortModelModule)
+
+    setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
 }
 
 val jsonMapper = ObjectMapper().apply(mapperConfig)

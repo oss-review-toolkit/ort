@@ -1,5 +1,5 @@
 ---
-allowDynamicVersions: false
+allow_dynamic_versions: false
 project:
   id: "Bundler::test-project:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/bundler/gemspec/Gemfile"
@@ -153,13 +153,13 @@ packages:
       type: "git"
       url: "https://github.com/lostisland/faraday.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/lostisland/faraday.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -181,13 +181,13 @@ packages:
       type: "git"
       url: "http://github.com/jwt/ruby-jwt.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jwt/ruby-jwt.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -210,13 +210,13 @@ packages:
       type: "git"
       url: "http://github.com/intridea/multi_json.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/intridea/multi_json.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -239,13 +239,13 @@ packages:
       type: "git"
       url: "https://github.com/nicksieger/multipart-post.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/nicksieger/multipart-post.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -397,13 +397,13 @@ packages:
       type: "git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
   curations: []
 - package:

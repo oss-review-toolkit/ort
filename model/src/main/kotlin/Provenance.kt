@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.time.Instant
@@ -31,17 +32,20 @@ data class Provenance(
         /**
          * The time when the source code was downloaded.
          */
+        @JsonAlias("downloadTime")
         val downloadTime: Instant,
 
         /**
          * The source artifact that was downloaded, or null.
          */
+        @JsonAlias("sourceArtifact")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val sourceArtifact: RemoteArtifact? = null,
 
         /**
          * The VCS repository that was downloaded, or null.
          */
+        @JsonAlias("vcsInfo")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val vcsInfo: VcsInfo? = null,
 
@@ -52,6 +56,7 @@ data class Provenance(
          * would be no way to match the package to the [Provenance] without downloading the source code and searching
          * for the tag again.
          */
+        @JsonAlias("originalVcsInfo")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val originalVcsInfo: VcsInfo? = null
 ) : CustomData() {

@@ -1,5 +1,5 @@
 ---
-allowDynamicVersions: false
+allow_dynamic_versions: false
 project:
   id: "Bundler::lockfile:"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile/Gemfile"
@@ -113,13 +113,13 @@ packages:
       type: "git"
       url: "http://github.com/flavorjones/mini_portile.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/flavorjones/mini_portile.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -271,13 +271,13 @@ packages:
       type: "git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolvedRevision: ""
+      resolved_revision: ""
       path: ""
   curations: []
 - package:

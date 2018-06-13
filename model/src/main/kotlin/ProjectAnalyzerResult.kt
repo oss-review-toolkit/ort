@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
 import java.util.SortedSet
 
 /**
@@ -31,6 +33,7 @@ data class ProjectAnalyzerResult(
          * a new version of this dependency was released in the meantime. It is always true for package managers that do
          * not support lock files, but do support version ranges.
          */
+        @JsonAlias("allowDynamicVersions")
         val allowDynamicVersions: Boolean,
 
         /**

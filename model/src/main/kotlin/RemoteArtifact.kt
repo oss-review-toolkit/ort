@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 /**
  * Bundles information about a remote artifact.
  */
@@ -38,7 +36,6 @@ data class RemoteArtifact(
         /**
          * The name of the algorithm used to calculate the [hash].
          */
-        @JsonProperty("hash_algorithm")
         val hashAlgorithm: HashAlgorithm
 ) : CustomData() {
     companion object {

@@ -1,5 +1,5 @@
 ---
-allowDynamicVersions: true
+allow_dynamic_versions: true
 project:
   id: "PIP::spdx-tools:0.5.4"
   definition_file_path: "setup.py"

@@ -1,5 +1,5 @@
 ---
-allowDynamicVersions: true
+allow_dynamic_versions: true
 project:
   id: "Maven:jgnash:jgnash-core:2.30.0"
   definition_file_path: "jgnash-core/pom.xml"
