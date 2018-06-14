@@ -161,7 +161,26 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = createProjectBuildingRequest(true)
 
-        return projectBuilder.build(pomFile, projectBuildingRequest)
+        return try {
+            projectBuilder.build(pomFile, projectBuildingRequest)
+        } catch (e: ProjectBuildingException) {
+            e.showStackTrace()
+
+            val failedProject = e.results?.find { projectBuildingResult ->
+                projectBuildingResult.pomFile == pomFile
+            }
+
+            if (failedProject != null) {
+                log.warn {
+                    "There was an error building '${pomFile.invariantSeparatorsPath}', continuing with the " +
+                            "incompletely built project: ${e.collectMessages()}"
+                }
+                failedProject
+            } else {
+                log.error { "Failed to build '${pomFile.invariantSeparatorsPath}': ${e.collectMessages()}" }
+                throw e
+            }
+        }
     }
 
     fun createProjectBuildingRequest(resolveDependencies: Boolean): ProjectBuildingRequest {
@@ -329,7 +348,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             } catch (e: ProjectBuildingException) {
                 e.showStackTrace()
 
-                val failedProject = e.results.find { projectBuildingResult ->
+                val failedProject = e.results?.find { projectBuildingResult ->
                     projectBuildingResult.projectId == it.identifier()
                 }
 
