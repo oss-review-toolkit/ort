@@ -329,7 +329,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             } catch (e: ProjectBuildingException) {
                 e.showStackTrace()
 
-                val failedProject = e.results.find { projectBuildingResult ->
+                val failedProject = e.results?.find { projectBuildingResult ->
                     projectBuildingResult.projectId == it.identifier()
                 }
 
