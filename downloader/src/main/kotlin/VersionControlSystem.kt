@@ -203,10 +203,15 @@ abstract class VersionControlSystem {
         fun getType() = this@VersionControlSystem.toString()
 
         /**
-         * Conveniently return all VCS information, optionally for a given [path] in the working tree.
+         * Conveniently return all VCS information about how this working tree was created, so it could be easily
+         * recreated from that information.
          */
-        fun getInfo(path: File? = null) =
-                VcsInfo(getType(), getRemoteUrl(), getRevision(), path = path?.let { getPathToRoot(it) } ?: "")
+        open fun getInfo() = getInfo(workingDir)
+
+        /**
+         * Conveniently return all VCS information for a specific [path] in the working tree.
+         */
+        fun getInfo(path: File) = VcsInfo(getType(), getRemoteUrl(), getRevision(), path = getPathToRoot(path))
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.

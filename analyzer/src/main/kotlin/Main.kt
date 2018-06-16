@@ -201,7 +201,7 @@ object Main {
 
         val failedAnalysis = sortedSetOf<String>()
 
-        val analyzerResultBuilder = AnalyzerResultBuilder(allowDynamicVersions, vcs?.getInfo(absoluteProjectPath)
+        val analyzerResultBuilder = AnalyzerResultBuilder(allowDynamicVersions, vcs?.getInfo()
                 ?: VcsInfo.EMPTY)
 
         // Resolve dependencies per package manager.
