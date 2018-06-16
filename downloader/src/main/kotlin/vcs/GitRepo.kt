@@ -47,6 +47,13 @@ object GitRepo : GitBase() {
             // the root path is the directory containing the ".repo" directory. This way Git operations work on a valid
             // Git repository, but path operations work relative to the path GitRepo was initialized in.
             object : GitWorkingTree(File(repoRoot, ".repo/manifests")) {
+                // Return the path to the manifest as part of the VCS information, as that is required to recreate the
+                // working tree.
+                override fun getInfo(): VcsInfo {
+                    val manifestLink = File(getRootPath(), ".repo/manifest.xml")
+                    return super.getInfo().copy(path = manifestLink.canonicalFile.toRelativeString(workingDir))
+                }
+
                 // Return the directory in which "repo init" was run (that directory in not managed with Git).
                 override fun getRootPath() = workingDir.parentFile.parentFile
             }
