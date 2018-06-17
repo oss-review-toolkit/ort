@@ -160,7 +160,7 @@ class PIP : PackageManager() {
             // So the best we can do is to map this the project's homepage URL.
             jsonMapper.readTree(pydep.stdout()).let {
                 declaredLicenses = getDeclaredLicenses(it)
-                listOf(it["project_name"].asText(), it["version"].asText(), it["repo_url"].asText())
+                listOf(it["project_name"].textValue(), it["version"].textValue(), it["repo_url"].textValue())
             }
         } else {
             // In case of "requirements*.txt" there is no meta-data at all available, so use the parent directory name
@@ -181,7 +181,7 @@ class PIP : PackageManager() {
                 // The tree contains a root node for the project itself and pipdeptree's dependencies are also at the
                 // root next to it, as siblings.
                 fullDependencyTree.find {
-                    it["package_name"].asText() == projectName
+                    it["package_name"].textValue() == projectName
                 }?.get("dependencies") ?: run {
                     log.info { "The '$projectName' project does not declare any dependencies." }
                     EMPTY_JSON_NODE
@@ -190,7 +190,7 @@ class PIP : PackageManager() {
                 // The tree does not contain a node for the project itself. Its dependencies are on the root level
                 // together with the dependencies of pipdeptree itself, which we need to filter out.
                 fullDependencyTree.filterNot {
-                    it["package_name"].asText() in PIPDEPTREE_DEPENDENCIES
+                    it["package_name"].textValue() in PIPDEPTREE_DEPENDENCIES
                 }
             }
 
@@ -230,8 +230,8 @@ class PIP : PackageManager() {
                     try {
                         val pkgInfo = pkgData["info"]
 
-                        val pkgDescription = pkgInfo["summary"]?.asText() ?: pkg.description
-                        val pkgHomepage = pkgInfo["home_page"]?.asText() ?: pkg.homepageUrl
+                        val pkgDescription = pkgInfo["summary"]?.textValue() ?: pkg.description
+                        val pkgHomepage = pkgInfo["home_page"]?.textValue() ?: pkg.homepageUrl
                         val pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
 
                         // Amend package information with more details.
@@ -289,29 +289,29 @@ class PIP : PackageManager() {
     private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {
         // Prefer python wheels and fall back to the first entry (probably a sdist).
         val pkgRelease = pkgReleases.asSequence().find {
-            it["packagetype"].asText() == "bdist_wheel"
+            it["packagetype"].textValue() == "bdist_wheel"
         } ?: pkgReleases[0]
 
         return RemoteArtifact(
-                url = pkgRelease["url"]?.asText() ?: pkg.binaryArtifact.url,
-                hash = pkgRelease["md5_digest"]?.asText() ?: pkg.binaryArtifact.hash,
+                url = pkgRelease["url"]?.textValue() ?: pkg.binaryArtifact.url,
+                hash = pkgRelease["md5_digest"]?.textValue() ?: pkg.binaryArtifact.hash,
                 hashAlgorithm = HashAlgorithm.MD5
         )
     }
 
     private fun getSourceArtifact(pkgReleases: ArrayNode): RemoteArtifact {
         val pkgSources = pkgReleases.asSequence().filter {
-            it["packagetype"].asText() == "sdist"
+            it["packagetype"].textValue() == "sdist"
         }
 
         if (pkgSources.count() == 0) return RemoteArtifact.EMPTY
 
         val pkgSource = pkgSources.find {
-            it["filename"].asText().endsWith(".tar.bz2")
+            it["filename"].textValue().endsWith(".tar.bz2")
         } ?: pkgSources.elementAt(0)
 
-        val url = pkgSource["url"]?.asText() ?: return RemoteArtifact.EMPTY
-        val hash = pkgSource["md5_digest"]?.asText() ?: return RemoteArtifact.EMPTY
+        val url = pkgSource["url"]?.textValue() ?: return RemoteArtifact.EMPTY
+        val hash = pkgSource["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
 
         return RemoteArtifact(url, hash, HashAlgorithm.MD5)
     }
@@ -321,13 +321,13 @@ class PIP : PackageManager() {
 
         // Use the top-level license field as well as the license classifiers as the declared licenses.
         setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-            it?.asText()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+            it?.textValue()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
         }
 
         // Example license classifier:
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-            val classifier = it.asText().split(" :: ")
+            val classifier = it.textValue().split(" :: ")
             if (classifier.first() == "License") {
                 classifier.last().removeSuffix(" License")
             } else {
@@ -391,8 +391,8 @@ class PIP : PackageManager() {
     private fun parseDependencies(dependencies: Iterable<JsonNode>,
                                   allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>) {
         dependencies.forEach { dependency ->
-            val name = dependency["package_name"].asText()
-            val version = dependency["installed_version"].asText()
+            val name = dependency["package_name"].textValue()
+            val version = dependency["installed_version"].textValue()
 
             val pkg = Package(
                     id = Identifier(

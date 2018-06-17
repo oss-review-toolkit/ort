@@ -296,42 +296,45 @@ data class GemSpec(
             val yaml = yamlMapper.readTree(spec)!!
 
             val runtimeDependencies = yaml["dependencies"]?.asIterable()?.mapNotNull { dependency ->
-                dependency["name"]?.asText()?.takeIf { dependency["type"]?.asText() == ":runtime" }
+                dependency["name"]?.textValue()?.takeIf { dependency["type"]?.textValue() == ":runtime" }
             }?.toSet()
 
+            val homepage = yaml["homepage"].textValueOrEmpty()
             return GemSpec(
-                    yaml["name"].asText(),
-                    yaml["version"]["version"].asText(),
-                    yaml["homepage"].textValueOrEmpty(),
-                    yaml["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
+                    yaml["name"].textValue(),
+                    yaml["version"]["version"].textValue(),
+                    homepage,
+                    yaml["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
                     yaml["description"].textValueOrEmpty(),
                     runtimeDependencies ?: emptySet(),
-                    parseVcs(yaml["homepage"].asText()),
+                    parseVcs(homepage),
                     RemoteArtifact.EMPTY
             )
         }
 
         fun createFromJson(spec: String): GemSpec {
             val json = jsonMapper.readTree(spec)!!
-            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { it["name"]?.asText() }?.toSet()
+            val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { dependency ->
+                dependency["name"]?.textValue()
+            }?.toSet()
 
             val vcs = if (json.hasNonNull("source_code_uri")) {
-                VersionControlSystem.splitUrl(json["source_code_uri"].asText())
+                VersionControlSystem.splitUrl(json["source_code_uri"].textValue())
             } else {
                 VcsInfo.EMPTY
             }
 
             val binaryArtifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
-                RemoteArtifact(json["gem_uri"].asText(), json["sha"].asText(), HashAlgorithm.SHA256)
+                RemoteArtifact(json["gem_uri"].textValue(), json["sha"].textValue(), HashAlgorithm.SHA256)
             } else {
                 RemoteArtifact.EMPTY
             }
 
             return GemSpec(
-                    json["name"].asText(),
-                    json["version"].asText(),
+                    json["name"].textValue(),
+                    json["version"].textValue(),
                     json["homepage_uri"].textValueOrEmpty(),
-                    json["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
+                    json["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
                     json["description"].textValueOrEmpty(),
                     runtimeDependencies ?: emptySet(),
                     vcs,

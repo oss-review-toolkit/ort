@@ -120,11 +120,12 @@ data class VcsInfo(
 class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
         val node = p.codec.readTree<JsonNode>(p)
-        val type = node["type"].textValueOrEmpty()
-        val url = node["url"].textValueOrEmpty()
-        val revision = node["revision"].textValueOrEmpty()
-        val resolvedRevision = (node["resolved_revision"] ?: node["resolvedRevision"])?.asText()
-        val path = node["path"].textValueOrEmpty()
-        return VcsInfo(type, url, revision, resolvedRevision, path)
+        return VcsInfo(
+                node["type"].textValueOrEmpty(),
+                node["url"].textValueOrEmpty(),
+                node["revision"].textValueOrEmpty(),
+                (node["resolved_revision"] ?: node["resolvedRevision"])?.textValue(),
+                node["path"].textValueOrEmpty()
+        )
     }
 }

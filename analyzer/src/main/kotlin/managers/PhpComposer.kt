@@ -196,7 +196,7 @@ class PhpComposer : PackageManager() {
         val json = jsonMapper.readTree(definitionFile)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
-        val rawName = json["name"].asText()
+        val rawName = json["name"].textValue()
 
         return Project(
                 id = Identifier(
@@ -220,7 +220,7 @@ class PhpComposer : PackageManager() {
 
         listOf("packages", "packages-dev").forEach {
             json[it]?.forEach { pkgInfo ->
-                val rawName = pkgInfo["name"].asText()
+                val rawName = pkgInfo["name"].textValue()
                 val version = pkgInfo["version"].textValueOrEmpty()
                 val homepageUrl = pkgInfo["homepage"].textValueOrEmpty()
                 val vcsFromPackage = parseVcsInfo(pkgInfo)
@@ -253,7 +253,7 @@ class PhpComposer : PackageManager() {
     }
 
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
-            packageInfo["license"]?.mapNotNull { it?.asText() }?.toSortedSet() ?: sortedSetOf<String>()
+            packageInfo["license"]?.mapNotNull { it?.textValue() }?.toSortedSet() ?: sortedSetOf<String>()
 
     private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo {
         return packageInfo["source"]?.let {

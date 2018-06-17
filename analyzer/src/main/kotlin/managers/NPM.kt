@@ -185,9 +185,9 @@ open class NPM : PackageManager() {
 
             @Suppress("UnsafeCast")
             val json = jsonMapper.readTree(it) as ObjectNode
-            val rawName = json["name"].asText()
+            val rawName = json["name"].textValue()
             val (namespace, name) = splitNamespaceAndName(rawName)
-            val version = json["version"].asText()
+            val version = json["version"].textValue()
 
             val declaredLicenses = sortedSetOf<String>()
 
@@ -197,7 +197,7 @@ open class NPM : PackageManager() {
             }
 
             json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
-                licenseNode["type"]?.asText()
+                licenseNode["type"]?.textValue()
             }
 
             var description = json["description"].textValueOrEmpty()
@@ -375,8 +375,8 @@ open class NPM : PackageManager() {
             log.debug { "Found package file for module $name: ${packageFile.absolutePath}" }
 
             val packageJson = jsonMapper.readTree(packageFile)
-            val rawName = packageJson["name"].asText()
-            val version = packageJson["version"].asText()
+            val rawName = packageJson["name"].textValue()
+            val version = packageJson["version"].textValue()
             val identifier = "$rawName@$version"
 
             if (identifier in dependencyBranch) {
@@ -443,7 +443,7 @@ open class NPM : PackageManager() {
 
         val declaredLicenses = sortedSetOf<String>()
         setOf(json["license"]).mapNotNullTo(declaredLicenses) {
-            it?.asText()
+            it?.textValue()
         }
 
         val homepageUrl = json["homepage"].textValueOrEmpty()

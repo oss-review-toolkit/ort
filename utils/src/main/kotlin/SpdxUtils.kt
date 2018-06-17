@@ -82,6 +82,6 @@ fun getLicenseText(id: String): String {
             throw IOException("Failed to download the text for license '$id' from $url.")
         }
 
-        ObjectMapper().readTree(body.string())["licenseText"].asText()
+        ObjectMapper().readTree(body.string())["licenseText"].textValue()
     }
 }
