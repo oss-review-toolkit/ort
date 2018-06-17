@@ -184,16 +184,16 @@ object ScanCode : LocalScanner() {
 
         result["files"]?.forEach { file ->
             file["licenses"]?.forEach { license ->
-                var name = license["spdx_license_key"].asText()
+                var name = license["spdx_license_key"].textValue()
                 if (name.isNullOrBlank()) {
-                    val key = license["key"].asText()
+                    val key = license["key"].textValue()
                     name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
                 }
                 licenses += name
             }
 
-            val path = file["path"].asText()
-            errors += file["scan_errors"].map { "${it.asText()} (File: $path)" }
+            val path = file["path"].textValue()
+            errors += file["scan_errors"].map { "${it.textValue()} (File: $path)" }
         }
 
         return ScanSummary(startTime, endTime, fileCount, licenses, errors)

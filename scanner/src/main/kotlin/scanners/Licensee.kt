@@ -126,11 +126,11 @@ object Licensee : LocalScanner() {
         val matchedFiles = result["matched_files"]
 
         matchedFiles.forEach {
-            val licenseKey = it["matched_license"].asText()
+            val licenseKey = it["matched_license"].textValue()
             licenseSummary.find {
-                it["key"].asText() == licenseKey
+                it["key"].textValue() == licenseKey
             }?.let {
-                licenses += it["spdx_id"].asText()
+                licenses += it["spdx_id"].textValue()
             }
         }
 

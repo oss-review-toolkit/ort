@@ -80,14 +80,14 @@ interface ScanResultsCache {
             // Return early if there is no cache configuration.
             val cacheNode = config?.get(Main.TOOL_NAME)?.get("cache") ?: return
 
-            val type = cacheNode["type"]?.asText() ?: throw IllegalArgumentException("Cache type is missing.")
+            val type = cacheNode["type"]?.textValue() ?: throw IllegalArgumentException("Cache type is missing.")
 
             when (type.toLowerCase()) {
                 "artifactory" -> {
-                    val apiToken = cacheNode["apiToken"]?.asText()
+                    val apiToken = cacheNode["apiToken"]?.textValue()
                             ?: throw IllegalArgumentException("API token for Artifactory cache is missing.")
 
-                    val url = cacheNode["url"]?.asText()
+                    val url = cacheNode["url"]?.textValue()
                             ?: throw IllegalArgumentException("URL for Artifactory cache is missing.")
 
                     cache = ArtifactoryCache(url, apiToken)

@@ -151,7 +151,7 @@ object BoyterLc : LocalScanner() {
 
         result.forEach { file ->
             file["LicenseGuesses"].mapTo(licenses) { license ->
-                license["LicenseId"].asText()
+                license["LicenseId"].textValue()
             }
         }
 
