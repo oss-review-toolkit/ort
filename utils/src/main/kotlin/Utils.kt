@@ -364,9 +364,10 @@ fun File.toSafeURI(): URI {
 }
 
 /**
- * Convenience function for [JsonNode] that returns an empty string if [JsonNode.asText] is called on a null object.
+ * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object
+ * or the text value is null.
  */
-fun JsonNode?.asTextOrEmpty(): String = if (this != null) this.asText() else ""
+fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
 
 /**
  * Return the string encoded for safe use as a file name. Also limit the length to 255 characters which is the maximum

@@ -15,7 +15,7 @@ project:
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/bundler/gemspec"
-  homepage_url: "null"
+  homepage_url: ""
   scopes:
   - name: "default"
     delivered: true
@@ -139,7 +139,7 @@ packages:
     id: "Bundler::faraday:0.15.1"
     declared_licenses:
     - "MIT"
-    description: "null"
+    description: ""
     homepage_url: "https://github.com/lostisland/faraday"
     binary_artifact:
       url: "https://rubygems.org/gems/faraday-0.15.1.gem"

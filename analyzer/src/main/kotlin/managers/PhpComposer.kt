@@ -40,7 +40,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
@@ -194,7 +194,7 @@ class PhpComposer : PackageManager() {
 
     private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
         val json = jsonMapper.readTree(definitionFile)
-        val homepageUrl = json["homepage"].asTextOrEmpty()
+        val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
         val rawName = json["name"].asText()
 
@@ -203,7 +203,7 @@ class PhpComposer : PackageManager() {
                         provider = toString(),
                         namespace = rawName.substringBefore("/"),
                         name = rawName.substringAfter("/"),
-                        version = json["version"].asTextOrEmpty()
+                        version = json["version"].textValueOrEmpty()
                 ),
                 declaredLicenses = parseDeclaredLicenses(json),
                 definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
@@ -221,8 +221,8 @@ class PhpComposer : PackageManager() {
         listOf("packages", "packages-dev").forEach {
             json[it]?.forEach { pkgInfo ->
                 val rawName = pkgInfo["name"].asText()
-                val version = pkgInfo["version"].asTextOrEmpty()
-                val homepageUrl = pkgInfo["homepage"].asTextOrEmpty()
+                val version = pkgInfo["version"].textValueOrEmpty()
+                val homepageUrl = pkgInfo["homepage"].textValueOrEmpty()
                 val vcsFromPackage = parseVcsInfo(pkgInfo)
 
                 // I could not find documentation on the schema of composer.lock, but there is a schema for
@@ -240,7 +240,7 @@ class PhpComposer : PackageManager() {
                                 version = version
                         ),
                         declaredLicenses = parseDeclaredLicenses(pkgInfo),
-                        description = pkgInfo["description"].asTextOrEmpty(),
+                        description = pkgInfo["description"].textValueOrEmpty(),
                         homepageUrl = homepageUrl,
                         binaryArtifact = parseBinaryArtifact(pkgInfo),
                         sourceArtifact = RemoteArtifact.EMPTY,
@@ -257,24 +257,24 @@ class PhpComposer : PackageManager() {
 
     private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo {
         return packageInfo["source"]?.let {
-            VcsInfo(it["type"].asTextOrEmpty(), it["url"].asTextOrEmpty(), it["reference"].asTextOrEmpty())
+            VcsInfo(it["type"].textValueOrEmpty(), it["url"].textValueOrEmpty(), it["reference"].textValueOrEmpty())
         } ?: VcsInfo.EMPTY
     }
 
     private fun parseBinaryArtifact(packageInfo: JsonNode): RemoteArtifact {
         return packageInfo["dist"]?.let {
-            val sha = it["shasum"].asTextOrEmpty()
+            val sha = it["shasum"].textValueOrEmpty()
             // "shasum" is SHA-1: https://github.com/composer/composer/blob/ \
             // 285ff274accb24f45ffb070c2b9cfc0722c31af4/src/Composer/Repository/ArtifactRepository.php#L149
             val algo = if (sha.isEmpty()) HashAlgorithm.UNKNOWN else HashAlgorithm.SHA1
-            RemoteArtifact(it["url"].asTextOrEmpty(), sha, algo)
+            RemoteArtifact(it["url"].textValueOrEmpty(), sha, algo)
         } ?: RemoteArtifact.EMPTY
     }
 
     private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Iterator<String> {
         listOf("packages", "packages-dev").forEach {
             lockFile[it]?.forEach { packageInfo ->
-                if (packageInfo["name"].asTextOrEmpty() == packageName) {
+                if (packageInfo["name"].textValueOrEmpty() == packageName) {
                     val requiredPackages = packageInfo["require"]
                     if (requiredPackages != null && requiredPackages.isObject) {
                         return (requiredPackages as ObjectNode).fieldNames()
