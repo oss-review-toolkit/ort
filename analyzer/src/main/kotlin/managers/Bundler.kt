@@ -41,7 +41,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -302,9 +302,9 @@ data class GemSpec(
             return GemSpec(
                     yaml["name"].asText(),
                     yaml["version"]["version"].asText(),
-                    yaml["homepage"].asTextOrEmpty(),
+                    yaml["homepage"].textValueOrEmpty(),
                     yaml["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
-                    yaml["description"].asTextOrEmpty(),
+                    yaml["description"].textValueOrEmpty(),
                     runtimeDependencies ?: emptySet(),
                     parseVcs(yaml["homepage"].asText()),
                     RemoteArtifact.EMPTY
@@ -330,9 +330,9 @@ data class GemSpec(
             return GemSpec(
                     json["name"].asText(),
                     json["version"].asText(),
-                    json["homepage_uri"].asTextOrEmpty(),
+                    json["homepage_uri"].textValueOrEmpty(),
                     json["licenses"]?.asIterable()?.map { it.asText() }?.toSortedSet() ?: sortedSetOf(),
-                    json["description"].asTextOrEmpty(),
+                    json["description"].textValueOrEmpty(),
                     runtimeDependencies ?: emptySet(),
                     vcs,
                     binaryArtifact

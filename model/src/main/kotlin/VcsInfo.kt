@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.normalizeVcsUrl
 
 /**
@@ -120,11 +120,11 @@ data class VcsInfo(
 class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
         val node = p.codec.readTree<JsonNode>(p)
-        val type = node["type"].asTextOrEmpty()
-        val url = node["url"].asTextOrEmpty()
-        val revision = node["revision"].asTextOrEmpty()
+        val type = node["type"].textValueOrEmpty()
+        val url = node["url"].textValueOrEmpty()
+        val revision = node["revision"].textValueOrEmpty()
         val resolvedRevision = (node["resolved_revision"] ?: node["resolvedRevision"])?.asText()
-        val path = node["path"].asTextOrEmpty()
+        val path = node["path"].textValueOrEmpty()
         return VcsInfo(type, url, revision, resolvedRevision, path)
     }
 }

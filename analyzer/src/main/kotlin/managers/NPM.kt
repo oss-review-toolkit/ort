@@ -41,7 +41,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.asTextOrEmpty
+import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -192,7 +192,7 @@ open class NPM : PackageManager() {
             val declaredLicenses = sortedSetOf<String>()
 
             json["license"]?.let { licenseNode ->
-                val type = licenseNode.textValue() ?: licenseNode["type"].asTextOrEmpty()
+                val type = licenseNode.textValue() ?: licenseNode["type"].textValueOrEmpty()
                 declaredLicenses += type
             }
 
@@ -200,10 +200,10 @@ open class NPM : PackageManager() {
                 licenseNode["type"]?.asText()
             }
 
-            var description = json["description"].asTextOrEmpty()
-            var homepageUrl = json["homepage"].asTextOrEmpty()
-            var downloadUrl = json["_resolved"].asTextOrEmpty()
-            var hash = json["_integrity"].asTextOrEmpty()
+            var description = json["description"].textValueOrEmpty()
+            var homepageUrl = json["homepage"].textValueOrEmpty()
+            var downloadUrl = json["_resolved"].textValueOrEmpty()
+            var hash = json["_integrity"].textValueOrEmpty()
             var vcsFromPackage = parseVcsInfo(json)
 
             val hashAlgorithm = HashAlgorithm.SHA1
@@ -237,12 +237,12 @@ open class NPM : PackageManager() {
                         val packageInfo = jsonMapper.readTree(body.string())
 
                         packageInfo["versions"][version]?.let { versionInfo ->
-                            description = versionInfo["description"].asTextOrEmpty()
-                            homepageUrl = versionInfo["homepage"].asTextOrEmpty()
+                            description = versionInfo["description"].textValueOrEmpty()
+                            homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
                             versionInfo["dist"]?.let { dist ->
-                                downloadUrl = dist["tarball"].asTextOrEmpty()
-                                hash = dist["shasum"].asTextOrEmpty()
+                                downloadUrl = dist["tarball"].textValueOrEmpty()
+                                hash = dist["shasum"].textValueOrEmpty()
                             }
 
                             vcsFromPackage = parseVcsInfo(versionInfo)
@@ -354,11 +354,11 @@ open class NPM : PackageManager() {
 
     private fun parseVcsInfo(node: JsonNode): VcsInfo {
         // See https://github.com/npm/read-package-json/issues/7 for some background info.
-        val head = node["gitHead"].asTextOrEmpty()
+        val head = node["gitHead"].textValueOrEmpty()
 
         return node["repository"]?.let { repo ->
-            val type = repo["type"].asTextOrEmpty()
-            val url = repo.textValue() ?: repo["url"].asTextOrEmpty()
+            val type = repo["type"].textValueOrEmpty()
+            val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
             VcsInfo(type, expandShortcutURL(url), head)
         } ?: VcsInfo("", "", head)
     }
@@ -430,13 +430,13 @@ open class NPM : PackageManager() {
 
         val json = jsonMapper.readTree(packageJson)
 
-        val rawName = json["name"].asTextOrEmpty()
+        val rawName = json["name"].textValueOrEmpty()
         val (namespace, name) = splitNamespaceAndName(rawName)
         if (name.isBlank()) {
             log.warn { "'$packageJson' does not define a name." }
         }
 
-        val version = json["version"].asTextOrEmpty()
+        val version = json["version"].textValueOrEmpty()
         if (version.isBlank()) {
             log.warn { "'$packageJson' does not define a version." }
         }
@@ -446,7 +446,7 @@ open class NPM : PackageManager() {
             it?.asText()
         }
 
-        val homepageUrl = json["homepage"].asTextOrEmpty()
+        val homepageUrl = json["homepage"].textValueOrEmpty()
 
         val projectDir = packageJson.parentFile
 
