@@ -34,6 +34,7 @@ import java.io.File
 
 private const val REPO_URL = "https://github.com/heremaps/oss-review-toolkit-test-data"
 private const val REPO_REV = "63e77022c973e53ec4ca0dfc2f810a7393985d38"
+private const val REPO_MANIFEST = "git-repo/manifest.xml"
 
 class GitRepoDownloadTest : StringSpec() {
     private lateinit var outputDir: File
@@ -48,8 +49,8 @@ class GitRepoDownloadTest : StringSpec() {
 
     init {
         "GitRepo can download a given revision".config(enabled = !OS.isWindows, tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("GitRepo", REPO_URL, REPO_REV,
-                    path = "git-repo/manifest.xml"))
+            val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
+            val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
             val expectedFiles = listOf(
                     ".git",
                     "LICENSE",
@@ -61,7 +62,7 @@ class GitRepoDownloadTest : StringSpec() {
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
+            workingTree.getInfo() shouldBe vcs
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
 
             workingTree.getPathToRoot(File(outputDir, "docker/Dockerfile")) shouldBe "docker/Dockerfile"
