@@ -230,8 +230,8 @@ object Main {
                 yamlMapper.writeValue(it, ScanResultContainer(pkg.id, result))
             }
 
-            println("Declared licenses for '${pkg.id}': ${pkg.declaredLicenses.joinToString()}")
-            println("Detected licenses for '${pkg.id}': ${result.flatMap { it.summary.licenses }.joinToString()}")
+            log.debug { "Declared licenses for '${pkg.id}': ${pkg.declaredLicenses.joinToString()}" }
+            log.debug { "Detected licenses for '${pkg.id}': ${result.flatMap { it.summary.licenses }.joinToString()}" }
         }
 
         val resultContainers = results.map { (pkg, results) ->
