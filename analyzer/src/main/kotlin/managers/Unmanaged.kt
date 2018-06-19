@@ -43,10 +43,10 @@ class Unmanaged : PackageManager() {
     override fun toString() = Unmanaged.toString()
 
     /**
-     * Returns an [ProjectAnalyzerResult] containing a [Project] for the passed [definitionFile], but does not perform
-     * any dependency resolution.
+     * Returns a [ProjectAnalyzerResult] for the [Project] contained in the [definitionFile] directory, but does not
+     * perform any dependency resolution.
      *
-     * @param definitionFile The directory to create the project for.
+     * @param definitionFile The directory containing the unmanaged project.
      */
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val project = Project(
