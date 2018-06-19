@@ -56,7 +56,7 @@ class Unmanaged : PackageManager() {
                         name = definitionFile.name,
                         version = ""
                 ),
-                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
