@@ -60,7 +60,7 @@ class Unmanaged : PackageManager() {
                 declaredLicenses = sortedSetOf(),
                 aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(definitionFile),
+                vcsProcessed = VersionControlSystem.forDirectory(definitionFile)?.getInfo() ?: VcsInfo.EMPTY,
                 homepageUrl = "",
                 scopes = sortedSetOf()
         )
