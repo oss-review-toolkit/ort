@@ -224,6 +224,11 @@ fun normalizeVcsUrl(vcsUrl: String): String {
         }
     }
 
+    // If we have no protocol by now, and the host is GitHub, assume https.
+    if (url.startsWith("github.com")) {
+        url = "https://$url"
+    }
+
     // A hierarchical URI looks like
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax

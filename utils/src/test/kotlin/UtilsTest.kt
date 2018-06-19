@@ -292,6 +292,17 @@ class UtilsTest : WordSpec({
             }
         }
 
+        "add missing https:// for GitHub URLs" {
+            val packages = mapOf(
+                    "github.com/leanovate/play-mockws"
+                            to "https://github.com/leanovate/play-mockws.git"
+            )
+
+            packages.forEach { actualUrl, expectedUrl ->
+                normalizeVcsUrl(actualUrl) shouldBe expectedUrl
+            }
+        }
+
         "add missing .git for GitHub URLs" {
             val packages = mapOf(
                     "https://github.com/fb55/nth-check"
