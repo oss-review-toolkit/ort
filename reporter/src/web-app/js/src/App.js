@@ -21,6 +21,7 @@ import React, { Component } from 'react';
 import { Row, Tabs } from 'antd';
 import { convertToProjectTableFormat } from './utils';
 import { DependencyTable } from './components/DependencyTable';
+import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -34,24 +35,15 @@ const TabPane = Tabs.TabPane;
  */
 
 class ReporterApp extends Component {
-  constructor() {
+  constructor(props) {
     super();
-
-    // Parse JSON report data embedded in HTML page
-    const jsonNode = document.querySelector("script[type='application/json']");
-    const jsonText = jsonNode.textContent;
-    const reportData = JSON.parse(jsonText);
-
     // FIXME For debugging purposes print scan results to console 
-    console.log('reportData:', reportData);
-    
-    this.state = {
-      reportData: reportData
-    };
+    console.log('reportData:', props.reportData);
+  
   }
   
   render() {
-    const { reportData } = this.state;
+    const { reportData } = this.props;
     const reportProjectsData = convertToProjectTableFormat(reportData);
 
 
@@ -84,4 +76,7 @@ class ReporterApp extends Component {
   }
 }
 
-export default ReporterApp;
+export default connect(
+  (state) => ({reportData: state}),
+  () => ({})
+)(ReporterApp);
