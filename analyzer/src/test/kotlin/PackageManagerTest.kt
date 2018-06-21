@@ -47,6 +47,7 @@ class PackageManagerTest : WordSpec({
             result[PhpComposer] shouldBe listOf(File(projectDir, "composer.json"))
             result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
             result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
+            result[Stack] shouldBe listOf(File(projectDir, "stack.yaml"))
             result[Yarn] shouldBe listOf(File(projectDir, "yarn.lock"))
         }
 
