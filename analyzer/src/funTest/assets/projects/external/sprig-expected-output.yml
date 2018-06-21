@@ -4,7 +4,6 @@ project:
   id: "GoDep::sprig:9d9aa1f74c86fd9d36ecfe3f2a44a3093c3d4c15"
   definition_file_path: "glide.yaml"
   declared_licenses: []
-  aliases: []
   vcs:
     type: ""
     url: ""

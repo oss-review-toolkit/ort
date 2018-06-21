@@ -205,9 +205,8 @@ class PhpComposer : PackageManager() {
                         name = rawName.substringAfter("/"),
                         version = json["version"].textValueOrEmpty()
                 ),
-                declaredLicenses = parseDeclaredLicenses(json),
                 definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
-                aliases = emptyList(),
+                declaredLicenses = parseDeclaredLicenses(json),
                 vcs = vcs,
                 vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
                 homepageUrl = homepageUrl,

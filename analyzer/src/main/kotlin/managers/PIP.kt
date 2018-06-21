@@ -273,7 +273,6 @@ class PIP : PackageManager() {
                 ),
                 definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                 declaredLicenses = declaredLicenses,
-                aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, homepageUrl = projectHomepage),
                 homepageUrl = projectHomepage,

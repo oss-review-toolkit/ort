@@ -120,7 +120,6 @@ class Bundler : PackageManager() {
                     id = projectId,
                     definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                     declaredLicenses = declaredLicenses.toSortedSet(),
-                    aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(workingDir, homepageUrl = homepageUrl),
                     homepageUrl = homepageUrl,

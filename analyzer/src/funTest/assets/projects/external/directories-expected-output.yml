@@ -5,7 +5,6 @@ project:
   definition_file_path: "target/directories-6.pom"
   declared_licenses:
   - "Mozilla Public License 2.0"
-  aliases: []
   vcs:
     type: "git"
     url: "git@github.com:soc/directories.git"

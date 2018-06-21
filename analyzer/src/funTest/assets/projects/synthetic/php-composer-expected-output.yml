@@ -6,7 +6,6 @@ project:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
-  aliases: []
   vcs:
     type: ""
     url: ""

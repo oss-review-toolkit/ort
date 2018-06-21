@@ -459,9 +459,8 @@ open class NPM : PackageManager() {
                         name = name,
                         version = version
                 ),
-                declaredLicenses = declaredLicenses,
                 definitionFilePath = VersionControlSystem.getPathToRoot(packageJson) ?: "",
-                aliases = emptyList(),
+                declaredLicenses = declaredLicenses,
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
                 homepageUrl = homepageUrl,
