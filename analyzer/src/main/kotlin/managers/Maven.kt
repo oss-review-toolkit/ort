@@ -162,6 +162,7 @@ class Maven : PackageManager() {
                 scopes = scopes.values.toSortedSet()
         )
 
+        // Maven does not support lock files, so hard-code "allowDynamicVersions" to "true".
         return ProjectAnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 

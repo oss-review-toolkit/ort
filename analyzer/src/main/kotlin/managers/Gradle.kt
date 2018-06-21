@@ -134,6 +134,7 @@ class Gradle : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
+            // Gradle < 4.8 does not support lock files, so hard-code "allowDynamicVersions" to "true".
             return ProjectAnalyzerResult(true, project,
                     packages.values.map { it.toCuratedPackage() }.toSortedSet(), dependencyTreeModel.errors)
         } finally {
