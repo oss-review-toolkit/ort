@@ -66,7 +66,8 @@ abstract class PackageManager {
                     // TODO: Bower,
                     PIP,
                     Bundler,
-                    PhpComposer
+                    PhpComposer,
+                    Stack
             )
         }
 
