@@ -74,6 +74,7 @@ Currently, the following package managers / build systems can be detected and qu
 * [Composer](https://getcomposer.org/) (PHP)
 * [PIP](https://pip.pypa.io/) (Python)
 * [SBT](http://www.scala-sbt.org/) (Scala)
+* [Stack](http://haskellstack.org/) (Haskell)
 * [Yarn](https://yarnpkg.com/) (Node.js)
 
 ## Supported license scanners
