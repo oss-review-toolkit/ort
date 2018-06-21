@@ -232,7 +232,7 @@ class PIP : PackageManager() {
 
                         val pkgDescription = pkgInfo["summary"]?.textValue() ?: pkg.description
                         val pkgHomepage = pkgInfo["home_page"]?.textValue() ?: pkg.homepageUrl
-                        val pkgReleases = pkgData["releases"][pkg.id.version] as ArrayNode
+                        val pkgReleases = pkgData["releases"][pkg.id.version] as? ArrayNode
 
                         // Amend package information with more details.
                         Package(
@@ -240,8 +240,16 @@ class PIP : PackageManager() {
                                 declaredLicenses = getDeclaredLicenses(pkgInfo),
                                 description = pkgDescription,
                                 homepageUrl = pkgHomepage,
-                                binaryArtifact = getBinaryArtifact(pkg, pkgReleases),
-                                sourceArtifact = getSourceArtifact(pkgReleases),
+                                binaryArtifact = if (pkgReleases != null) {
+                                    getBinaryArtifact(pkg, pkgReleases)
+                                } else {
+                                    pkg.binaryArtifact
+                                },
+                                sourceArtifact = if (pkgReleases != null) {
+                                    getSourceArtifact(pkgReleases)
+                                } else {
+                                    pkg.sourceArtifact
+                                },
                                 vcs = pkg.vcs,
                                 vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
                         )
