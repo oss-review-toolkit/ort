@@ -64,17 +64,17 @@ the output of external tools.
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
 
-* [Bundler](http://bundler.io/)
-* [dep](https://golang.github.io/dep/)
-* [Glide](https://glide.sh/)
-* [Godep](https://github.com/tools/godep)
-* [Gradle](https://gradle.org/)
-* [Maven](http://maven.apache.org/)
-* [NPM](https://www.npmjs.com/)
-* [PHP Composer](https://getcomposer.org/)
-* [PIP](https://pip.pypa.io/)
-* [SBT](http://www.scala-sbt.org/)
-* [Yarn](https://yarnpkg.com/)
+* [Bundler](http://bundler.io/) (Ruby)
+* [dep](https://golang.github.io/dep/) (Go)
+* [Glide](https://glide.sh/) (Go)
+* [Godep](https://github.com/tools/godep) (Go)
+* [Gradle](https://gradle.org/) (Java)
+* [Maven](http://maven.apache.org/) (Java)
+* [NPM](https://www.npmjs.com/) (Node.js)
+* [Composer](https://getcomposer.org/) (PHP)
+* [PIP](https://pip.pypa.io/) (Python)
+* [SBT](http://www.scala-sbt.org/) (Scala)
+* [Yarn](https://yarnpkg.com/) (Node.js)
 
 ## Supported license scanners
 
