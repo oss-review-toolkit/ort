@@ -6,7 +6,6 @@ project:
   declared_licenses:
   - "Apache Software"
   - "Apache-2.0"
-  aliases: []
   vcs:
     type: ""
     url: ""

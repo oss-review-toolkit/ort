@@ -4,7 +4,6 @@ project:
   id: "GoDep::qmstr:0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
   definition_file_path: "Gopkg.toml"
   declared_licenses: []
-  aliases: []
   vcs:
     type: ""
     url: ""

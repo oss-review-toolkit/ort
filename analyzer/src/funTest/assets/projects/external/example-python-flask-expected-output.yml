@@ -4,7 +4,6 @@ project:
   id: "PIP::example-python-flask:0773991e36a4c69b121cdb05146d6140347d4065"
   definition_file_path: "requirements.txt"
   declared_licenses: []
-  aliases: []
   vcs:
     type: ""
     url: ""

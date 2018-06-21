@@ -128,7 +128,6 @@ class Gradle : PackageManager() {
                     ),
                     definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                     declaredLicenses = sortedSetOf(),
-                    aliases = emptyList(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",

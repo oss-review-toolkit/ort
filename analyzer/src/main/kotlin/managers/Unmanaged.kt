@@ -58,7 +58,6 @@ class Unmanaged : PackageManager() {
                 ),
                 definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
-                aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = VersionControlSystem.forDirectory(definitionFile)?.getInfo() ?: VcsInfo.EMPTY,
                 homepageUrl = "",

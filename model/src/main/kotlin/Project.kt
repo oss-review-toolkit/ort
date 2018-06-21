@@ -45,11 +45,6 @@ data class Project(
         val declaredLicenses: SortedSet<String>,
 
         /**
-         * Alternate project names, like abbreviations or code names.
-         */
-        val aliases: List<String>,
-
-        /**
          * Original VCS-related information as defined in the [Project]'s meta-data.
          */
         val vcs: VcsInfo,
@@ -120,7 +115,6 @@ data class Project(
                 id = Identifier.EMPTY,
                 definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
-                aliases = emptyList(),
                 vcs = VcsInfo.EMPTY,
                 homepageUrl = "",
                 scopes = sortedSetOf()

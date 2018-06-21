@@ -156,7 +156,6 @@ class Maven : PackageManager() {
                 ),
                 definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                 declaredLicenses = maven.parseLicenses(mavenProject),
-                aliases = emptyList(),
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: ""),
                 homepageUrl = mavenProject.url ?: "",

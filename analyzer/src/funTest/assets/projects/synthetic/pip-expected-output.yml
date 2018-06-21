@@ -5,7 +5,6 @@ project:
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip/requirements.txt"
   declared_licenses:
   - "MIT"
-  aliases: []
   vcs:
     type: ""
     url: ""

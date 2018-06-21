@@ -127,7 +127,6 @@ class GoDep : PackageManager() {
                         id = Identifier(provider, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                         declaredLicenses = sortedSetOf(),
-                        aliases = emptyList(),
                         vcs = VcsInfo.EMPTY,
                         vcsProcessed = projectVcs,
                         homepageUrl = "",
