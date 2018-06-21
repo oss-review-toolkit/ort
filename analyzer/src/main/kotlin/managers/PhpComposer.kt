@@ -196,7 +196,7 @@ class PhpComposer : PackageManager() {
         val json = jsonMapper.readTree(definitionFile)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
-        val rawName = json["name"].textValue()
+        val rawName = json["name"]?.textValue() ?: definitionFile.parentFile.name
 
         return Project(
                 id = Identifier(
