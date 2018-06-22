@@ -1,0 +1,27 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.google.guava:guava:20.0
+com.univocity:univocity-parsers:2.6.1
+io.arrow-kt:arrow-annotations:0.7.1
+io.arrow-kt:arrow-core:0.7.1
+io.kindedj:kindedj:1.1.0
+io.kotlintest:kotlintest-assertions:3.1.7
+io.kotlintest:kotlintest-core:3.1.7
+io.kotlintest:kotlintest-runner-junit5:3.1.7
+io.kotlintest:kotlintest-runner-jvm:3.1.7
+org.apiguardian:apiguardian-api:1.0.0
+org.javassist:javassist:3.21.0-GA
+org.jetbrains.kotlin:kotlin-reflect:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib-common:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib:1.2.50
+org.jetbrains:annotations:13.0
+org.junit.platform:junit-platform-commons:1.2.0
+org.junit.platform:junit-platform-engine:1.2.0
+org.junit.platform:junit-platform-launcher:1.2.0
+org.junit.platform:junit-platform-suite-api:1.2.0
+org.opentest4j:opentest4j:1.1.0
+org.reflections:reflections:0.9.11
+org.slf4j:slf4j-api:1.7.25

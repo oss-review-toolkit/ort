@@ -1,0 +1,22 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+ch.frankel.log4k:slf4k-api:1.0.0
+ch.qos.logback:logback-classic:1.2.3
+ch.qos.logback:logback-core:1.2.3
+com.fasterxml.jackson.core:jackson-annotations:2.9.0
+com.fasterxml.jackson.core:jackson-core:2.9.5
+com.fasterxml.jackson.core:jackson-databind:2.9.5
+com.jakewharton:disklrucache:2.0.2
+com.squareup.okhttp3:okhttp:3.10.0
+com.squareup.okio:okio:1.14.0
+com.vdurmont:semver4j:2.2.0
+commons-codec:commons-codec:1.11
+org.apache.commons:commons-compress:1.16.1
+org.jetbrains.kotlin:kotlin-stdlib-common:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib:1.2.50
+org.jetbrains:annotations:13.0
+org.objenesis:objenesis:2.6
+org.slf4j:slf4j-api:1.7.25

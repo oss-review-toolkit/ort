@@ -1,0 +1,13 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.beust:jcommander:1.72
+io.gitlab.arturbosch.detekt:detekt-api:1.0.0.RC7-2
+io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.RC7-2
+io.gitlab.arturbosch.detekt:detekt-core:1.0.0.RC7-2
+io.gitlab.arturbosch.detekt:detekt-rules:1.0.0.RC7-2
+org.jetbrains.kotlin:kotlin-compiler-embeddable:1.2.41
+org.jetbrains.kotlin:kotlin-script-runtime:1.2.41
+org.jetbrains.kotlin:kotlin-stdlib:1.2.41
+org.jetbrains:annotations:13.0
+org.yaml:snakeyaml:1.21

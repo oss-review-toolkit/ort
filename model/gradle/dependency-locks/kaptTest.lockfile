@@ -1,0 +1,9 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+org.jetbrains.kotlin:kotlin-annotation-processing-gradle:1.2.50
+org.jetbrains.kotlin:kotlin-compiler-embeddable:1.2.50
+org.jetbrains.kotlin:kotlin-script-runtime:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib-common:1.2.50
+org.jetbrains.kotlin:kotlin-stdlib:1.2.50
+org.jetbrains:annotations:13.0

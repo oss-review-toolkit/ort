@@ -35,20 +35,6 @@ subprojects {
         }
     }
 
-    dependencyUpdates.resolutionStrategy = {
-        componentSelection { rules ->
-            rules.all { ComponentSelection selection ->
-                boolean isNonFinalVersion = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-                    selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-                }
-
-                if (isNonFinalVersion) {
-                    selection.reject('Release candidate')
-                }
-            }
-        }
-    }
-
     sourceSets {
         funTest {
             kotlin.srcDirs 'src/funTest/kotlin'
@@ -76,6 +62,36 @@ subprojects {
         funTestCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
         funTestCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
         funTestCompile project(':utils-test')
+    }
+
+    dependencyLocking {
+        lockAllConfigurations()
+    }
+
+    task resolveAndLockAll {
+        doFirst {
+            assert gradle.startParameter.writeDependencyLocks
+        }
+
+        doLast {
+            configurations.findAll {
+                it.canBeResolved
+            }.each { it.resolve() }
+        }
+    }
+
+    dependencyUpdates.resolutionStrategy = {
+        componentSelection { rules ->
+            rules.all { ComponentSelection selection ->
+                boolean isNonFinalVersion = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+                    selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+                }
+
+                if (isNonFinalVersion) {
+                    selection.reject('Release candidate')
+                }
+            }
+        }
     }
 
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
