@@ -231,7 +231,7 @@ object Main {
             curatedResults.forEach { definitionFile, analyzerResult ->
                 analyzerResultBuilder.addResult(analyzerResult)
                 if (analyzerResult.hasErrors()) {
-                    failedAnalysis += definitionFile.absolutePath
+                    failedAnalysis += definitionFile.path
                 }
             }
         }

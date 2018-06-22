@@ -198,7 +198,7 @@ abstract class PackageManager {
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    val relativePath = definitionFile.absoluteFile.relativeTo(analyzerRoot).invariantSeparatorsPath
+                    val relativePath = definitionFile.relativeTo(analyzerRoot).invariantSeparatorsPath
 
                     val errorProject = Project.EMPTY.copy(
                             id = Identifier(
