@@ -43,7 +43,7 @@ import java.time.Instant
 
 object Licensee : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
-    override val scannerVersion = "9.9.0.beta.3"
+    override val scannerVersion = "9.9.1"
     override val resultFileExt = "json"
 
     val CONFIGURATION_OPTIONS = listOf("--json")
