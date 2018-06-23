@@ -23,6 +23,213 @@ import 'antd/dist/antd.css';
 import { removeDuplicatesInArray } from '../utils';
 import { LicenseTag } from './LicenseTag';
 
+export class DependencyTable extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const data = props.data,
+      packages = data.packages[props.project],
+      packagesDeclaredLicenses = removeDuplicatesInArray(Object.keys(data.declaredLicenses[props.project])),
+      packagesDeclaredLicensesFilter = [],
+      packagesDetectedLicenses = removeDuplicatesInArray(Object.keys(data.detectedLicenses[props.project])),
+      packagesDetectedLicensesFilter = [],
+      packagesLevels = data.levels[props.project],
+      packagesLevelsFilter = [],
+      statusFilter = [];
+
+      this.packages = packages;
+
+    // Do not display any table column filters if table is small
+    if (packages.length > 2) {
+      // Create select options to filter table by declared package licenses
+      if (packagesDeclaredLicenses.length > 1) {
+        packagesDeclaredLicenses.map(license => { 
+          packagesDeclaredLicensesFilter.push({
+            'text': license,
+            'value': license,
+          });
+    
+          return {};
+        })
+      }
+
+      // Create select options to filter table by detected package licenses
+      if (packagesDetectedLicenses.length > 1) {
+        packagesDetectedLicenses.map(license => { 
+          packagesDetectedLicensesFilter.push({
+            'text': license,
+            'value': license,
+          });
+    
+          return {};
+        })
+      }
+
+      // Create select options to filter table by detected package levels
+      if (packagesLevels.length > 1) {
+        for (let i = 0; i < packagesLevels.length; i++) {
+          packagesLevelsFilter.push({
+            'text': packagesLevels[i],
+            'value': packagesLevels[i],
+          });
+        }
+      }
+
+      // Create select options to filter table by package status
+      statusFilter.push(
+        { 'text': 'Errors', 'value': 'errors'},
+        { 'text': 'OK', 'value': 'ok'},
+        { 'text': 'Updates', 'value': 'updates'},
+        { 'text': 'Warnings', 'value': 'warnings'},
+      );
+    }
+
+    // Specifies table columns as per
+    // https://ant.design/components/table/
+    this.columns = [
+      {
+        title: 'Id', 
+        dataIndex: 'id', 
+        key: 'id',
+        align: 'left',
+        render: (text, row, index) => {
+          return <span className="reporter-package-id">{text}</span>;
+        },
+        onFilter: (value, record) => record.id.indexOf(value) === 0,
+        sorter: (a, b) => a.id.length - b.id.length,
+      },
+      {
+        title: 'Scopes',
+        dataIndex: 'scopes',
+        align: 'left',
+        render: (text, row, index) => {
+          const listItems = row.scopes.map((scope) =>
+            <li key={scope}>{scope}</li>
+          );
+
+          return (<ul className="reporter-table-list">{listItems}</ul>);
+        },
+        key: 'scopes'
+      },
+      {
+        title: 'Levels',
+        dataIndex: 'levels',
+        align: 'left',
+        filters: (function () { return packagesLevelsFilter })(),
+        filterMultiple: true,
+        render: (text, row, index) => {
+          const listItems = row.levels.map((level) =>
+            <li key={level}>{level}</li>
+          );
+
+          return (<ul className="reporter-table-list">{listItems}</ul>);
+        },
+        key: 'levels'
+      },
+      {
+        title: 'Declared Licenses',
+        dataIndex: 'declaredLicenses',
+        align: 'left',
+        filters: (function () { return packagesDeclaredLicensesFilter })(),
+        filterMultiple: true,
+        render: (text, row, index) => {
+          const listItems = row.declaredLicenses.map((license) =>
+            <li key={license}><LicenseTag text={license}/></li>
+          );
+
+          return (<ul className="reporter-table-list">{listItems}</ul>);
+        },
+        key: 'declaredLicenses',
+        onFilter: (value, record) => record.declaredLicenses.includes(value)
+      },
+      {
+        title: 'Detected Licenses',
+        dataIndex: 'detectedLicenses',
+        align: 'left',
+        filters: (function () { return packagesDetectedLicensesFilter })(),
+        filterMultiple: true,
+        render: (text, row, index) => {
+          const listItems = row.detectedLicenses.map((license) =>
+            <li key={license}><LicenseTag text={license}/></li>
+          );
+
+          return (<ul className="reporter-table-list">{listItems}</ul>);
+        },
+        key: 'detectedLicenses'
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        align: 'left',
+        filters: (function () { return statusFilter })(),
+        filterMultiple: true,
+        render: (text, row, index) => {
+          // FIXME Remove quick hack to show 'Status' and
+          // switch to using report data
+        
+          let errorText = '';
+
+          if (row.errors && !row.errors.total) {
+           return <Tag className="reporter-status-ok" color="blue">OK</Tag>
+          } else {
+            errorText = row.errors.total + ' error';
+
+            if (row.errors.total > 1) {
+              errorText = errorText + 's';
+            }
+          
+            return <Tag className="reporter-status-error" color="red">{errorText}</Tag>;
+          }
+        },
+        key: 'status'
+      }
+    ];
+  }
+
+  render() {
+    let props = this.props;
+
+    if (!props.data && !props.project) {
+      return (
+        <div className="reporter-package-info-error">
+          <Alert
+            message="Oops, something went wrong. Missing data to be able to create ProjectTable" 
+            type="error"
+            showIcon/>
+        </div>
+      );
+    }
+
+    return (
+      <Table
+        columns={this.columns}
+        expandedRowRender={record => {
+          let className = "reporter-package-expand", 
+              props = this.props,
+              packageId = record.id,
+              packageMetaData;
+
+          if (props.data.packagesMetaInfo && props.data.packagesMetaInfo[packageId]) {
+            packageMetaData = props.data.packagesMetaInfo[packageId];
+          }
+
+          if (record.errors && record.errors.total !== 0) {
+            className += "-error"; 
+          }
+
+          return (
+            <div className={className}>
+              <PackageInfo packageData={record} packageMetaData={packageMetaData}/>
+            </div>
+            )
+        }}
+        dataSource={this.packages}
+        pagination={false}
+        size='small'/>
+    );
+  }
+}
+
 // Generates the HTML to display the paths from root package to current package
 // in an expanded row of projectTable
 // Example
@@ -140,227 +347,4 @@ const PackageInfo = function (props) {
       <PackageErrors errors={packageData.errors}/>
     </div>
   );
-}
-
-export class DependencyTable extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const data = props.data,
-      packages = data.packages[props.project],
-      packagesDeclaredLicenses = removeDuplicatesInArray(Object.keys(data.declaredLicenses[props.project])),
-      packagesDeclaredLicensesFilter = [],
-      packagesDetectedLicenses = removeDuplicatesInArray(Object.keys(data.detectedLicenses[props.project])),
-      packagesDetectedLicensesFilter = [],
-      packagesLevels = data.levels[props.project],
-      packagesLevelsFilter = [],
-      statusFilter = [];
-
-      this.packages = packages;
-
-    // Do not display any table column filters if table is small
-    if (packages.length > 2) {
-      // Create select options to filter table by declared package licenses
-      if (packagesDeclaredLicenses.length > 1) {
-        packagesDeclaredLicenses.map(license => { 
-          packagesDeclaredLicensesFilter.push({
-            'text': license,
-            'value': license,
-          });
-    
-          return {};
-        })
-      }
-
-      // Create select options to filter table by detected package licenses
-      if (packagesDetectedLicenses.length > 1) {
-        packagesDetectedLicenses.map(license => { 
-          packagesDetectedLicensesFilter.push({
-            'text': license,
-            'value': license,
-          });
-    
-          return {};
-        })
-      }
-
-      // Create select options to filter table by detected package levels
-      if (packagesLevels.length > 1) {
-        for (let i = 0; i < packagesLevels.length; i++) {
-          packagesLevelsFilter.push({
-            'text': packagesLevels[i],
-            'value': packagesLevels[i],
-          });
-        }
-      }
-
-      // Create select options to filter table by package status
-      statusFilter.push(
-        { 'text': 'Errors', 'value': 'errors'},
-        { 'text': 'OK', 'value': 'ok'},
-        { 'text': 'Updates', 'value': 'updates'},
-        { 'text': 'Warnings', 'value': 'warnings'},
-      );
-    }
-
-    // Specifies table columns as per
-    // https://ant.design/components/table/
-    this.columns = [
-      {
-        title: 'Id', 
-        dataIndex: 'id', 
-        key: 'id',
-        align: 'left',
-        render: (text, row, index) => {
-          return <span className="reporter-package-id">{text}</span>;
-        },
-        onFilter: (value, record) => record.id.indexOf(value) === 0,
-        sorter: (a, b) => a.id.length - b.id.length,
-      },
-      {
-        title: 'Scopes',
-        dataIndex: 'scopes',
-        align: 'left',
-        render: (text, row, index) => {
-          return (
-              <ul className="reporter-table-list">
-                  {
-                    row.scopes.map((scope) => {
-                     return <li key={scope}>{scope}</li>
-                    })
-                  }
-              </ul>
-          );
-        },
-        key: 'scopes'
-      },
-      {
-        title: 'Levels',
-        dataIndex: 'levels',
-        align: 'left',
-        filters: (function () { return packagesLevelsFilter })(),
-        filterMultiple: true,
-        render: (text, row, index) => {
-          return (
-              <ul className="reporter-table-list">
-                  {
-                    row.levels.map((level) => {
-                     return <li key={level}>{level}</li>
-                    })
-                  }
-              </ul>
-          );
-        },
-        key: 'levels'
-      },
-      {
-        title: 'Declared Licenses',
-        dataIndex: 'declaredLicenses',
-        align: 'left',
-        filters: (function () { return packagesDeclaredLicensesFilter })(),
-        filterMultiple: true,
-        render: (text, row, index) => {
-          return (
-              <ul className="reporter-table-list">
-                  {
-                    row.declaredLicenses.map((license) => {
-                     return <li key={license}><LicenseTag text={license}/></li>
-                    })
-                  }
-              </ul>
-          );
-        },
-        key: 'declaredLicenses',
-        onFilter: (value, record) => record.declaredLicenses.includes(value)
-      },
-      {
-        title: 'Detected Licenses',
-        dataIndex: 'detectedLicenses',
-        align: 'left',
-        filters: (function () { return packagesDetectedLicensesFilter })(),
-        filterMultiple: true,
-        render: (text, row, index) => {
-          return (
-              <ul className="reporter-table-list">
-                  {
-                    row.detectedLicenses.map((license) => {
-                     return <li key={license}><LicenseTag text={license}/></li>
-                    })
-                  }
-              </ul>
-          );
-        },
-        key: 'detectedLicenses'
-      },
-      {
-        title: 'Status',
-        dataIndex: 'status',
-        align: 'left',
-        filters: (function () { return statusFilter })(),
-        filterMultiple: true,
-        render: (text, row, index) => {
-          // FIXME Rmeove quick hack to show 'Status' and
-          // switch to using report data
-        
-          let errorText = '';
-
-          if (row.errors && !row.errors.total) {
-           return <Tag className="reporter-status-ok" color="blue">OK</Tag>
-          } else {
-            errorText = row.errors.total + ' error';
-
-            if (row.errors.total > 1) {
-              errorText = errorText + 's';
-            }
-          
-            return <Tag className="reporter-status-error" color="red">{errorText}</Tag>;
-          }
-        },
-        key: 'status'
-      }
-    ];
-  }
-
-  render() {
-    let props = this.props;
-
-    if (!props.data && !props.project) {
-      return (
-        <div className="reporter-package-info-error">
-          <Alert
-            message="Oops, something went wrong. Missing data to be able to create ProjectTable" 
-            type="error"
-            showIcon/>
-        </div>
-      );
-    }
-
-    return (
-      <Table
-        columns={this.columns}
-        expandedRowRender={record => {
-          let className = "reporter-package-expand", 
-              props = this.props,
-              packageId = record.id,
-              packageMetaData;
-
-          if (props.data.packagesMetaInfo && props.data.packagesMetaInfo[packageId]) {
-            packageMetaData = props.data.packagesMetaInfo[packageId];
-          }
-
-          if (record.errors && record.errors.total !== 0) {
-            className += "-error"; 
-          }
-
-          return (
-            <div className={className}>
-              <PackageInfo packageData={record} packageMetaData={packageMetaData}/>
-            </div>
-            )
-        }}
-        dataSource={this.packages}
-        pagination={false}
-        size='small'/>
-    );
-  }
 }
