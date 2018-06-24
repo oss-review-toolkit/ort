@@ -18,7 +18,7 @@
  */
 
 import React from 'react';
-import { Button, Modal, Tag, Tooltip } from 'antd';
+import { Modal, Tag, Tooltip } from 'antd';
 import { config } from '../config';
 import 'antd/dist/antd.css';
 
