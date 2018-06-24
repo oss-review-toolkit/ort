@@ -18,7 +18,7 @@
  */
 
 import React, { Component } from 'react';
-import { Col, Row, Tabs } from 'antd';
+import { Row, Tabs } from 'antd';
 import { convertToProjectTableFormat } from './utils';
 import { DependencyTable } from './components/DependencyTable';
 import 'antd/dist/antd.css';
