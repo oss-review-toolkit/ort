@@ -18,10 +18,12 @@
  */
 
 import React from 'react';
-import { Alert, Table, Tag } from 'antd';
+import { Alert, List, Steps, Table, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import { removeDuplicatesInArray } from '../utils';
 import { LicenseTag } from './LicenseTag';
+
+const Step = Steps.Step;
 
 export class DependencyTable extends React.Component {
   constructor(props) {
@@ -241,43 +243,53 @@ export class DependencyTable extends React.Component {
   }
 }
 
-// Generates the HTML to display the paths from root package to current package
+// Generates the HTML to display the path(s) from root package to current package
 // in an expanded row of projectTable
-// Example
-// Gradle:helloworld:app: → Maven:org.jacoco:org.jacoco.agent:0.7.4.201502262128
-const PackageDependencyPaths = function (props) {
-  var dependencyPaths = props.dependencyPaths,
-      dependencyPathsStrArr = [],
-      listElements,
-      ulElement;
+const PackageDependencyPaths = (props) => {
+  let dependencyPaths = props.dependencyPaths,
+      stepItems = (steps) => {
+        return steps.map((item) =>
+          <Step key={item} title={item}/>
+        );
+      },
+      dependencyPathsTitle;
 
-  // Combine dependency path Array into a string
   if (dependencyPaths && dependencyPaths.length > 0 && dependencyPaths[0].length > 1) {
-    for (let i = 0; i < dependencyPaths.length; i++) {
-     dependencyPathsStrArr.push(dependencyPaths[i]
-        .filter(function (value) {return value.toString();})
-        .join(' → '));
-    }
-
-    listElements = dependencyPathsStrArr.map(
-      function (elem) {
-        return React.createElement('li', {key: elem}, elem);
+    dependencyPathsTitle = (() => {
+      if (dependencyPaths.length === 1) {
+        return (<h4>Dependency Path</h4>);
+      } else {
+        return (<h4>Dependency Paths ({dependencyPaths.length})</h4>);
       }
-    );
-
-    ulElement = React.createElement('ul', {className: 'reporter-package-deps-paths'}, listElements);
-
+    })();
+    
     return (
-      <div className="reporter-package-deps-path">
-        <h4>Dependency Paths</h4>
-        {ulElement}
+      <div className="reporter-package-deps-paths">
+        {dependencyPathsTitle}
+        <List
+          itemLayout="vertical"
+          size="small"
+          pagination={{
+            hideOnSinglePage: true,
+            pageSize: 1,
+            size: "small"
+          }}
+          dataSource={dependencyPaths}
+          renderItem={item => (
+            <List.Item>
+              <Steps progressDot direction="vertical" size="small" current={item.length}>
+                {stepItems(item)}
+              </Steps>
+            </List.Item>
+          )}
+        />
       </div>
     );
-  } else {
-    return (
-      <div className="reporter-package-deps-path"></div>
-    );
   }
+
+  return (
+    <div className="reporter-package-deps-paths"></div>
+  );
 }
 
 // Generates the HTML for packages errors in an expanded row of projectTable
