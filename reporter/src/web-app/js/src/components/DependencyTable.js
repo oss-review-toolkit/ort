@@ -267,11 +267,12 @@ const PackageDependencyPaths = (props) => {
       <div className="reporter-package-deps-paths">
         {dependencyPathsTitle}
         <List
+          grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 }}
           itemLayout="vertical"
           size="small"
           pagination={{
             hideOnSinglePage: true,
-            pageSize: 1,
+            pageSize: 2,
             size: "small"
           }}
           dataSource={dependencyPaths}
