@@ -79,3 +79,12 @@
   background: #1890ff;
   border-color: #1890ff;
 }
+
+.reporter-app .reporter-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
+  border-bottom: 0px;
+}
+
+.reporter-app .reporter-package-deps-paths .ant-list-pagination {
+  margin: 0px 0px 5px 0px;
+  text-align: left;
+}
