@@ -62,7 +62,7 @@ object Licensee : LocalScanner() {
         } else {
             ProcessCapture(gem, "install", "--user-install", "licensee", "-v", scannerVersion).requireSuccess()
 
-            val ruby = ProcessCapture("ruby", "-rubygems", "-e", "puts Gem.user_dir").requireSuccess()
+            val ruby = ProcessCapture("ruby", "-r", "rubygems", "-e", "puts Gem.user_dir").requireSuccess()
             val userDir = ruby.stdout().trimEnd()
 
             File(userDir, "bin")
