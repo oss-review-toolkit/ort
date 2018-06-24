@@ -84,6 +84,10 @@ export class DependencyTable extends React.Component {
       );
     }
 
+    function componentOk(component) {
+      return component.errors && !component.errors.total
+    }
+
     // Specifies table columns as per
     // https://ant.design/components/table/
     this.columns = [
@@ -116,6 +120,7 @@ export class DependencyTable extends React.Component {
         dataIndex: 'levels',
         align: 'left',
         filters: (function () { return packagesLevelsFilter })(),
+        onFilter: (level, component) => component.levels.includes(parseInt(level, 10)),
         filterMultiple: true,
         render: (text, row, index) => {
           const listItems = row.levels.map((level) =>
@@ -147,6 +152,7 @@ export class DependencyTable extends React.Component {
         dataIndex: 'detectedLicenses',
         align: 'left',
         filters: (function () { return packagesDetectedLicensesFilter })(),
+        onFilter: (license, component) => component.detectedLicenses.includes(license),
         filterMultiple: true,
         render: (text, row, index) => {
           const listItems = row.detectedLicenses.map((license) =>
@@ -159,9 +165,14 @@ export class DependencyTable extends React.Component {
       },
       {
         title: 'Status',
-        dataIndex: 'status',
         align: 'left',
         filters: (function () { return statusFilter })(),
+        onFilter: (status, component) =>
+          status === 'ok'
+            ? componentOk(component)
+            : status === 'errors'
+              ? !componentOk(component)
+              : false,
         filterMultiple: true,
         render: (text, row, index) => {
           // FIXME Remove quick hack to show 'Status' and
@@ -169,7 +180,7 @@ export class DependencyTable extends React.Component {
         
           let errorText = '';
 
-          if (row.errors && !row.errors.total) {
+          if (componentOk(row)) {
            return <Tag className="reporter-status-ok" color="blue">OK</Tag>
           } else {
             errorText = row.errors.total + ' error';
