@@ -57,6 +57,8 @@ export const choosealicense = (() => {
       let legend = window.legend = (() => {
         let rules = {};
 
+        // Convert rules which is the licens esummary legenda
+        // from array to object for easier and faster lookups
         Object.entries(RULES).forEach(([key, value]) => {
           rules[key] = {};
 
@@ -67,7 +69,9 @@ export const choosealicense = (() => {
 
         return rules;
       })(),
-     /* Using ES6 Proxy to create Object to extend arrays so array item object can by accessed by its property.
+     /* Using ES6 Proxy to create Object which includes properties with extended arrays of strings.
+      * In these extended string arrays you access an array item based on its value and 
+      * if you do so not a string but object with additional information will be returned.
       *
       * Run choosealicense.data['Apache-2.0'].conditions in console will return:
       * Proxy {0: "include-copyright", 1: "document-changes", length: 2}
@@ -101,6 +105,9 @@ export const choosealicense = (() => {
         );
       }
 
+      // Convert summary tag field for a license into ES6 proxy
+      // Allows for property lookup of summary tag 'include-copyright'
+      // into Choosealicense's legend. See also example above 'applyProxy'.
       if (license.hasOwnProperty('conditions')) {
         license.conditions = applyProxy('conditions', license.conditions);
       }
