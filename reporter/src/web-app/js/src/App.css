@@ -9,11 +9,6 @@
  https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.svg#iconfont
 */
 
-.container {
-  height: 100%;
-  width: 100%;
-}
-
 .reporter-app {
   background-color: #fff;
   border: 1px solid rgba(34,36,38,.15);
@@ -46,17 +41,6 @@
   height: 13px;
   line-height: 10px;
   padding: 0 3px 0 3px;
-}
-
-.reporter-side {
-  background-color: #f7f7f7;
-}
-
-.reporter-app .reporter-license-btn {
-  padding: 0 7px;
-  font-size: 10px;
-  border-radius: 4px;
-  height: 20px;
 }
 
 .reporter-app .reporter-license.ant-tag:hover {

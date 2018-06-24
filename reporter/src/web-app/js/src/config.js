@@ -2,27 +2,6 @@ export const config = {
   'licenses': {
     'Apache-2.0': {
       'color': 'green',
-      'summary': {
-        'permissions': [
-          'commercial-use',
-          'modifications',
-          'distributions',
-          'patent-use',
-          'private-use'
-        ],
-        'conditions': [
-          'commercial-use',
-          'modifications',
-          'distribution',
-          'patent-use',
-          'private-use'
-        ],
-        'limitations': [
-          'trademark-use',
-          'liability',
-          'warranty'
-        ]
-      }
     },
     'BSD-2-Clause': {
       'color': 'green'
@@ -116,6 +95,6 @@ export const config = {
     },
     'Zlib': {
       'color': 'green'
-    },
+    }
   }
 };
