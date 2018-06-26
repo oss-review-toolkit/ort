@@ -22,6 +22,7 @@ import { Row, Tabs } from 'antd';
 import { convertToProjectTableFormat } from './utils';
 import { DependencyTable } from './components/DependencyTable';
 import { connect } from 'react-redux';
+import TreeView from './components/TreeView';
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -69,6 +70,7 @@ class ReporterApp extends Component {
                 ))}
           </TabPane>
           <TabPane tab="Tree" key="3">
+              <TreeView />
           </TabPane>
        </Tabs>
       </Row>

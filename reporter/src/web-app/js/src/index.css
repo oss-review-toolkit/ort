@@ -3,3 +3,7 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.oss-tree-tooltip .ant-tooltip-inner {
+  max-width: 500px;
+}
