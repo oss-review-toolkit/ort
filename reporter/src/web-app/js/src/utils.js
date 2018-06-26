@@ -22,6 +22,41 @@ export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+export function convertToTableFormat(reportData) {
+  const projects = reportData.analyzer_result.projects;
+  // traverse over projects
+
+  const recursivePackageAnalyzer = (file, pkg, dependencyPathFromRoot = []) => {
+    const children = Object.entries(pkg).reduce((ret, [key, value]) => {
+      // Only recursively traverse objects which can hold packages
+      if (key === 'dependencies') {
+        const childs = value.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.id || pkg.name]))
+        if (Array.isArray(childs[0]) || Array.isArray(ret[0])) debugger;
+        ret.push(...childs);
+      }
+      if (key === 'scopes') {
+        const scopeChildren = value.map((scope) => {
+          return scope.dependencies.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.id || pkg.name]))
+        }).reduce((ret, scopeDeps) => [...ret, ...scopeDeps], []);
+        
+        if (Array.isArray(scopeChildren[0]) || Array.isArray(ret[0])) debugger;        
+        ret.push(...scopeChildren);
+      }
+      return ret;
+    }, []);
+    return {
+      id: pkg.id || pkg.name,
+      name: pkg.name || pkg.id,
+      children
+    }
+  }
+
+
+  return projects.map((project) => {
+    return recursivePackageAnalyzer(project.definition_file_path, project);
+  })
+}
+
 // FIXME This data conversion should for performance reasons be done in the Kotlin code
 // Converts data format used by ORT Reporter
 // into a form that projectTable can render
