@@ -19,9 +19,13 @@
 
 package com.here.ort.analyzer.managers
 
+import ch.frankel.slf4k.*
+
+import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -30,12 +34,17 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 
 import com.paypal.digraph.parser.GraphParser
 
+import okhttp3.Request
+
 import java.io.File
+import java.net.HttpURLConnection
 import java.util.SortedSet
 
 class Stack : PackageManager() {
@@ -84,22 +93,22 @@ class Stack : PackageManager() {
             }
         }
 
-        val allPackages = sortedSetOf<Package>()
+        val packageTemplates = sortedSetOf<Package>()
 
         val externalChildren = mapParentsToChildren("external")
         val externalVersions = mapNamesToVersions("external")
         val externalDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectName, externalChildren, externalVersions, allPackages, externalDependencies)
+        buildDependencyTree(projectName, externalChildren, externalVersions, packageTemplates, externalDependencies)
 
         val testChildren = mapParentsToChildren("test")
         val testVersions = mapNamesToVersions("test")
         val testDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectName, testChildren, testVersions, allPackages, testDependencies)
+        buildDependencyTree(projectName, testChildren, testVersions, packageTemplates, testDependencies)
 
         val benchChildren = mapParentsToChildren("bench")
         val benchVersions = mapNamesToVersions("bench")
         val benchDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectName, benchChildren, benchVersions, allPackages, benchDependencies)
+        buildDependencyTree(projectName, benchChildren, benchVersions, packageTemplates, benchDependencies)
 
         val scopes = sortedSetOf(
                 Scope("external", true, externalDependencies),
@@ -107,24 +116,55 @@ class Stack : PackageManager() {
                 Scope("bench", false, benchDependencies)
         )
 
-        val project = Project(
-                id = Identifier(
-                        provider = toString(),
-                        namespace = "",
-                        name = projectName,
-                        version = ""
-                ),
-                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
-                declaredLicenses = sortedSetOf(),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, homepageUrl = ""),
-                homepageUrl = "",
-                scopes = scopes
-        )
+        // Enrich the package templates with additional meta-data from Hackage.
+        val packages = sortedSetOf<Package>()
+        packageTemplates.mapTo(packages) { pkg ->
+            downloadCabalFile(pkg)?.let {
+                parseCabalFile(it)
+            } ?: pkg
+        }
+
+        var parentDir = workingDir.parentFile
+        var cabalFile = File(workingDir, "$projectName.cabal")
+
+        while (!cabalFile.isFile && parentDir != null) {
+            // Guess cabal file names for sub-projects.
+            cabalFile = File(workingDir, "${parentDir.name}-$projectName.cabal")
+            parentDir = parentDir.parentFile
+        }
+
+        val project = if (cabalFile.isFile) {
+            val projectPackage = parseCabalFile(cabalFile.readText())
+
+            Project(
+                    id = projectPackage.id,
+                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                    declaredLicenses = projectPackage.declaredLicenses,
+                    vcs = projectPackage.vcs,
+                    vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
+                    homepageUrl = projectPackage.homepageUrl,
+                    scopes = scopes
+            )
+        } else {
+            Project(
+                    id = Identifier(
+                            provider = toString(),
+                            namespace = "",
+                            name = projectName,
+                            version = ""
+                    ),
+                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                    declaredLicenses = sortedSetOf(),
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = processProjectVcs(workingDir),
+                    homepageUrl = "",
+                    scopes = scopes
+            )
+        }
 
         // Stack does not support lock files, so hard-code "allowDynamicVersions" to "true".
         return ProjectAnalyzerResult(true, project,
-                allPackages.map { it.toCuratedPackage() }.toSortedSet())
+                packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun buildDependencyTree(parentName: String,
@@ -153,5 +193,136 @@ class Stack : PackageManager() {
 
             buildDependencyTree(childName, childMap, versionMap, allPackages, packageRef.dependencies)
         }
+    }
+
+    private fun getPackageUrl(name: String, version: String) =
+            "https://hackage.haskell.org/package/$name-$version"
+
+    private fun downloadCabalFile(pkg: Package): String? {
+        val pkgRequest = Request.Builder()
+                .get()
+                .url("${getPackageUrl(pkg.id.name, pkg.id.version)}/src/${pkg.id.name}.cabal")
+                .build()
+
+        return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, pkgRequest).use { response ->
+            val body = response.body()?.string()?.trim()
+
+            if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
+                log.warn { "Unable to retrieve Hackage meta-data for package '${pkg.id}'." }
+                if (body != null) {
+                    log.warn { "Response was '$body'." }
+                }
+
+                null
+            } else {
+                body
+            }
+        }
+    }
+
+    private fun parseKeyValue(i: ListIterator<String>, keyPrefix: String = ""): Map<String, String> {
+        fun getIndentation(line: String) =
+                line.takeWhile { it.isWhitespace() }.length
+
+        var indentation: Int? = null
+        val map = mutableMapOf<String, String>()
+
+        while (i.hasNext()) {
+            val line = i.next()
+
+            // Skip blank lines and comments.
+            if (line.isBlank() || line.trimStart().startsWith("--")) continue
+
+            if (indentation == null) {
+                indentation = getIndentation(line)
+            } else if (indentation != getIndentation(line)) {
+                // Stop if the indentation level changes.
+                i.previous()
+                break
+            }
+
+            val keyValue = line.split(':', limit = 2).map { it.trim() }
+            when (keyValue.count()) {
+                1 -> {
+                    // Handle lines without a colon.
+                    val nestedMap = parseKeyValue(i, keyPrefix + keyValue[0].replace(" ", "-") + "-")
+                    map += nestedMap
+                }
+                2 -> {
+                    // Handle lines with a colon.
+                    val key = (keyPrefix + keyValue[0]).toLowerCase()
+
+                    val valueLines = mutableListOf<String>()
+
+                    if (keyValue[1].isNotEmpty()) {
+                        valueLines += keyValue[1]
+                    }
+
+                    // Parse a multi-line value.
+                    while (i.hasNext()) {
+                        var indentedLine = i.next()
+
+                        if (getIndentation(indentedLine) <= indentation) {
+                            // Stop if the indentation level does not increase.
+                            i.previous()
+                            break
+                        }
+
+                        indentedLine = indentedLine.trim()
+
+                        // Within a multi-line value, lines with only a dot mark empty lines.
+                        if (indentedLine == ".") {
+                            if (valueLines.isNotEmpty()) {
+                                valueLines += ""
+                            }
+                        } else {
+                            valueLines += indentedLine
+                        }
+                    }
+
+                    map[key] = valueLines.joinToString("\n")
+                }
+            }
+        }
+
+        return map
+    }
+
+    // TODO: Consider replacing this with a Haskell helper script that calls "readGenericPackageDescription" and dumps
+    // it as JSON to the console.
+    private fun parseCabalFile(cabal: String): Package {
+        // For an example file see
+        // https://hackage.haskell.org/package/transformers-compat-0.5.1.4/src/transformers-compat.cabal
+        val map = parseKeyValue(cabal.lines().listIterator())
+
+        val id = Identifier(
+                provider = "Hackage",
+                namespace = map["category"] ?: "",
+                name = map["name"] ?: "",
+                version = map["version"] ?: ""
+        )
+
+        val artifact = RemoteArtifact(
+                url = "${getPackageUrl(id.name, id.version)}/${id.name}-${id.version}.tar.gz",
+                hash = "",
+                hashAlgorithm = HashAlgorithm.UNKNOWN
+        )
+
+        val vcs = VcsInfo(
+                type = map["source-repository-this-type"] ?: map["source-repository-head-type"] ?: "",
+                revision = map["source-repository-this-tag"] ?: "",
+                url = map["source-repository-this-location"] ?: map["source-repository-head-location"] ?: ""
+        )
+
+        return Package(
+                id = id,
+                declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
+                description = map["description"] ?: "",
+                homepageUrl = map["homepage"] ?: "",
+                binaryArtifact = artifact,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = vcs,
+                vcsProcessed = processPackageVcs(vcs, homepageUrl)
+        )
     }
 }
