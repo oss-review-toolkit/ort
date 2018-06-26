@@ -66,13 +66,11 @@ export const LicenseSummaryCard = (props) => {
                     </div>
                 );
                 
-                return (
-                    <li key={item.tag}>
+        return (<li key={item.tag}>
                         <Popover content={content} title={item.label} arrowPointAtCenter trigger="hover">
                             <Badge status={listItemStatus(itemColor)} text={item.tag}/>
                         </Popover>
-                    </li>
-                );
+          </li>);
             });
         };
 
