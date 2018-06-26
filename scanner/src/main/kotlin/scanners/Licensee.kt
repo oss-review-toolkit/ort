@@ -120,19 +120,11 @@ object Licensee : LocalScanner() {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val licenses = sortedSetOf<String>()
-
-        val licenseSummary = result["licenses"]
         val matchedFiles = result["matched_files"]
 
-        matchedFiles.forEach {
-            val licenseKey = it["matched_license"].textValue()
-            licenseSummary.find {
-                it["key"].textValue() == licenseKey
-            }?.let {
-                licenses += it["spdx_id"].textValue()
-            }
-        }
+        val licenses = matchedFiles.map {
+            it["matched_license"].textValue()
+        }.toSortedSet()
 
         return ScanSummary(startTime, endTime, matchedFiles.count(), licenses, errors = sortedSetOf())
     }
