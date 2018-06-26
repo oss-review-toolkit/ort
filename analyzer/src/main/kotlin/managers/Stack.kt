@@ -119,9 +119,14 @@ class Stack : PackageManager() {
         // Enrich the package templates with additional meta-data from Hackage.
         val packages = sortedSetOf<Package>()
         packageTemplates.mapTo(packages) { pkg ->
-            downloadCabalFile(pkg)?.let {
-                parseCabalFile(it)
-            } ?: pkg
+            if (pkg.id.name == "rts") {
+                // The runtime system ships with the compiler and is not hosted on Hackage.
+                pkg
+            } else {
+                downloadCabalFile(pkg)?.let {
+                    parseCabalFile(it)
+                } ?: pkg
+            }
         }
 
         var parentDir = workingDir.parentFile
