@@ -88,23 +88,9 @@ class TreeView extends React.Component {
             )
         }
 
-        const tooltip = (
-            treeLeaf.path.length >= 1 && <div className="tooltip-list">
-                <div class-name="tooltip-item">
-                    {treeLeaf.path.slice(0).join(" / ")}
-                </div>
-            </div>
-        )
-
-        const nameWithTooltip = (
-            <Tooltip overlayClassName="oss-tree-tooltip" placement="right" title={tooltip}>
-                {nameMapped}
-            </Tooltip>
-        )
-
         return (<TreeNode
             key={treeLeaf.id || treeLeaf.name}
-            title={nameWithTooltip}
+            title={nameMapped}
             >
             {treeLeaf.children.map((childLeaf) =>
                 this.renderTreeNode(childLeaf)  
@@ -115,7 +101,7 @@ class TreeView extends React.Component {
     render() {
         const { tree, expandedKeys, autoExpandParent } = this.state;
         return tree && (
-        <div className="oss-tree-view">
+        <div>
             <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onSearchChange} />
             <Tree 
                 onExpand={this.onExpand}
