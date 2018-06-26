@@ -56,6 +56,8 @@ class ReporterApp extends Component {
     return (
       <Row className="reporter-app">
         <Tabs>
+          <TabPane tab="Summary" key="1">
+          </TabPane>
           <TabPane tab="List" key="2">
                 {Object.keys(reportProjectsData.packages).map((definitionFilePath) => (
                   <div key={definitionFilePath}>
@@ -66,8 +68,6 @@ class ReporterApp extends Component {
                       data={reportProjectsData}/>
                   </div>
                 ))}
-          </TabPane>
-          <TabPane tab="Summary" key="1">
           </TabPane>
           <TabPane tab="Tree" key="3">
               <TreeView />
