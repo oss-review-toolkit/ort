@@ -1,3 +1,8 @@
+# Do not trigger builds for changes on below branches
+branches:
+  except:
+  - reporter-web-app
+
 language: java
 
 jdk:

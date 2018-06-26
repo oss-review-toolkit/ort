@@ -18,8 +18,9 @@
  */
 
 import React from 'react';
-import { Button, Modal, Tag, Tooltip } from 'antd';
+import { Badge, Card, Col, Modal, Popover, Tag, Tooltip, Row } from 'antd';
 import { config } from '../config';
+import { choosealicense } from '../data/choosealicense/index';
 import 'antd/dist/antd.css';
 
 var correctToSPDX = require('spdx-correct'),
@@ -33,6 +34,7 @@ var correctToSPDX = require('spdx-correct'),
   window.licenses = licenses;
   window.licensesDataFromConfig = licensesDataFromConfig
   window.licensesDataFromSPDX = licensesDataFromSPDX;
+  window.choosealicense = choosealicense;
 
 export class LicenseTag extends React.Component {
   constructor(props) {
@@ -112,11 +114,7 @@ export class LicenseTag extends React.Component {
         license.modal = {
           title: licenseName,
           className: 'reporter-license-info',
-          content: (
-            <div>
-              {licenseText}
-            </div>
-          ),
+          content: (<LicenseInfo name={licenseName}/>),
           onOk() {},
           okText: "Close",
           maskClosable: true,
@@ -144,4 +142,55 @@ export class LicenseTag extends React.Component {
       </Tooltip>
     );
   }
+}
+
+// Generates the HTML for the additional license information
+const LicenseInfo = function (props) {
+  
+  return (
+    <div className="reporter-license-info">
+      <p className="reporter-license-description">
+        A permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+      </p>
+      <div className="reporter-license-obligations">
+        <Row gutter={16}>
+          <Col span={8}>
+            <Card title="Permissions" bordered={false}>
+              <ul>
+                <li>
+                  <Popover content="This Software and its derivates may be used for commercial purposes" title="Permission">
+                     <Badge status="success" text="commercial-use"/>
+                  </Popover>
+                </li>
+                <li><Badge status="success" text="modifications"/></li>
+                <li><Badge status="success" text="distribution"/></li>
+                <li><Badge status="success" text="patent-use"/></li>
+                <li><Badge status="success" text="private-use"/></li>
+              </ul>
+            </Card>
+          </Col>
+          <Col span={8}>
+            <Card title="Conditions" bordered={false}>
+              <ul>
+                <li><Badge status="warning" text="include-copyright"/></li>
+                <li><Badge status="warning" text="document-changes"/></li>
+              </ul>
+            </Card>
+          </Col>
+          <Col span={8}>
+            <Card title="Limitations" bordered={false}>
+              <ul>
+                <li><Badge status="error" text="trademark-use"/></li>
+                <li><Badge status="error" text="liability"/></li>
+                <li><Badge status="error" text="warranty"/></li>
+              </ul>
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          Source: Choosealicense.com
+        </Row>
+      </div>
+    </div>
+  );
 }

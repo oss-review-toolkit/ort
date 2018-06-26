@@ -18,7 +18,7 @@
  */
 
 import React, { Component } from 'react';
-import { Col, Row, Tabs } from 'antd';
+import { Row, Tabs } from 'antd';
 import { convertToProjectTableFormat } from './utils';
 import { DependencyTable } from './components/DependencyTable';
 import { connect } from 'react-redux';
@@ -55,8 +55,6 @@ class ReporterApp extends Component {
     return (
       <Row className="reporter-app">
         <Tabs>
-          <TabPane tab="Summary" key="1">
-          </TabPane>
           <TabPane tab="List" key="2">
                 {Object.keys(reportProjectsData.packages).map((definitionFilePath) => (
                   <div key={definitionFilePath}>
@@ -67,6 +65,8 @@ class ReporterApp extends Component {
                       data={reportProjectsData}/>
                   </div>
                 ))}
+          </TabPane>
+          <TabPane tab="Summary" key="1">
           </TabPane>
           <TabPane tab="Tree" key="3">
           </TabPane>

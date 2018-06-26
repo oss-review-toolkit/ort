@@ -9,11 +9,6 @@
  https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.svg#iconfont
 */
 
-.container {
-  height: 100%;
-  width: 100%;
-}
-
 .reporter-app {
   background-color: #fff;
   border: 1px solid rgba(34,36,38,.15);
@@ -46,17 +41,6 @@
   height: 13px;
   line-height: 10px;
   padding: 0 3px 0 3px;
-}
-
-.reporter-side {
-  background-color: #f7f7f7;
-}
-
-.reporter-app .reporter-license-btn {
-  padding: 0 7px;
-  font-size: 10px;
-  border-radius: 4px;
-  height: 20px;
 }
 
 .reporter-app .reporter-license.ant-tag:hover {
@@ -94,4 +78,13 @@
   color: #fff;
   background: #1890ff;
   border-color: #1890ff;
+}
+
+.reporter-app .reporter-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
+  border-bottom: 0px;
+}
+
+.reporter-app .reporter-package-deps-paths .ant-list-pagination {
+  margin: 0px 0px 5px 0px;
+  text-align: left;
 }
