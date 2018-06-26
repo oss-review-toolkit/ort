@@ -254,18 +254,31 @@ class Stack : PackageManager() {
 
                     val valueLines = mutableListOf<String>()
 
+                    var isBlock = false
                     if (keyValue[1].isNotEmpty()) {
-                        valueLines += keyValue[1]
+                        if (keyValue[1] == "{") {
+                            // Support multi-line values that use curly braces instead of indentation.
+                            isBlock = true
+                        } else {
+                            valueLines += keyValue[1]
+                        }
                     }
 
                     // Parse a multi-line value.
                     while (i.hasNext()) {
                         var indentedLine = i.next()
 
-                        if (getIndentation(indentedLine) <= indentation) {
-                            // Stop if the indentation level does not increase.
-                            i.previous()
-                            break
+                        if (isBlock) {
+                            if (indentedLine == "}") {
+                                // Stop if a block closes.
+                                break
+                            }
+                        } else {
+                            if (getIndentation(indentedLine) <= indentation) {
+                                // Stop if the indentation level does not increase.
+                                i.previous()
+                                break
+                            }
                         }
 
                         indentedLine = indentedLine.trim()
