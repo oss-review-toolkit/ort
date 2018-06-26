@@ -97,7 +97,7 @@ class TreeView extends React.Component {
         )
 
         const nameWithTooltip = (
-            <Tooltip placement="right" title={tooltip}>
+            <Tooltip overlayClassName="oss-tree-tooltip" placement="right" title={tooltip}>
                 {nameMapped}
             </Tooltip>
         )
@@ -115,7 +115,7 @@ class TreeView extends React.Component {
     render() {
         const { tree, expandedKeys, autoExpandParent } = this.state;
         return tree && (
-        <div>
+        <div className="oss-tree-view">
             <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onSearchChange} />
             <Tree 
                 onExpand={this.onExpand}
