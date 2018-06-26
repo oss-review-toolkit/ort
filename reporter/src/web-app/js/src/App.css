@@ -88,3 +88,22 @@
   margin: 0px 0px 5px 0px;
   text-align: left;
 }
+
+.reporter-license-info .reporter-license-obligations {
+  padding: 0 25px 0 25px;
+}
+
+.reporter-license-info .reporter-license-obligations ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reporter-license-info .reporter-license-obligations .reporter-data-attribution {
+  font-size: 0.5em;
+}
+
+.reporter-license-info .reporter-license-fulltext {
+  font-size: 0.7em;
+  white-space: pre-wrap;
+}
