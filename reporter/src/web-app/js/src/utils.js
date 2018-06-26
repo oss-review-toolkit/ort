@@ -36,7 +36,7 @@ export function convertToTableFormat(reportData) {
       }
       if (key === 'scopes') {
         const scopeChildren = value.map((scope) => {
-          return scope.dependencies.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.id || pkg.name]))
+          return scope.dependencies.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.name || pkg.id]))
         }).reduce((ret, scopeDeps) => [...ret, ...scopeDeps], []);
         
         if (Array.isArray(scopeChildren[0]) || Array.isArray(ret[0])) debugger;        
@@ -47,7 +47,8 @@ export function convertToTableFormat(reportData) {
     return {
       id: pkg.id || pkg.name,
       name: pkg.name || pkg.id,
-      children
+      children,
+      path: dependencyPathFromRoot
     }
   }
 

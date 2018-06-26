@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tree, Input } from 'antd';
+import { Tree, Input, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import { convertToTableFormat } from '../utils';
 
@@ -88,9 +88,23 @@ class TreeView extends React.Component {
             )
         }
 
+        const tooltip = (
+            treeLeaf.path.length >= 1 && <div className="tooltip-list">
+                <div class-name="tooltip-item">
+                    {treeLeaf.path.slice(0).join(" / ")}
+                </div>
+            </div>
+        )
+
+        const nameWithTooltip = (
+            <Tooltip placement="right" title={tooltip}>
+                {nameMapped}
+            </Tooltip>
+        )
+
         return (<TreeNode
             key={treeLeaf.id || treeLeaf.name}
-            title={nameMapped}
+            title={nameWithTooltip}
             >
             {treeLeaf.children.map((childLeaf) =>
                 this.renderTreeNode(childLeaf)  
