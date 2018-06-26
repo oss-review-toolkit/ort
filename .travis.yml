@@ -32,6 +32,8 @@ install:
   - curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh
   - npm install -g npm@5.5.1 yarn@1.3.2
   - phpenv global 7.1
+  - curl -sSL https://get.haskellstack.org/ | sh
+  - stack setup
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
   - wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip

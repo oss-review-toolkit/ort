@@ -1,0 +1,3807 @@
+---
+allow_dynamic_versions: true
+project:
+  id: "Hackage:Testing:quickcheck-state-machine:0.3.1"
+  definition_file_path: "stack.yaml"
+  declared_licenses:
+  - "BSD3"
+  vcs:
+    type: "git"
+    url: "https://github.com/advancedtelematic/quickcheck-state-machine"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "https://github.com/advancedtelematic/quickcheck-state-machine.git"
+    revision: "aa38cb0aa2c6c0f61e5d38e6e5b385c4eb644ee1"
+    path: ""
+  homepage_url: "https://github.com/advancedtelematic/quickcheck-state-machine#readme"
+  scopes:
+  - name: "bench"
+    delivered: false
+    dependencies: []
+  - name: "external"
+    delivered: true
+    dependencies:
+    - id: "Stack::QuickCheck:2.10.1"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::containers:0.5.10.2"
+        dependencies: []
+        errors: []
+      - id: "Stack::deepseq:1.4.3.0"
+        dependencies: []
+        errors: []
+      - id: "Stack::random:1.1"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::time:1.8.0.2"
+          dependencies:
+          - id: "Stack::Win32:2.5.4.1"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::bytestring:0.10.8.2"
+              dependencies: []
+              errors: []
+            - id: "Stack::filepath:1.4.1.2"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::deepseq:1.4.3.0"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "Stack::template-haskell:2.12.0.0"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::ghc-boot-th:8.2.2"
+          dependencies: []
+          errors: []
+        - id: "Stack::pretty:1.1.3.3"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::tf-random:0.5"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::primitive:0.6.3.0"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::random:1.1"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::time:1.8.0.2"
+            dependencies:
+            - id: "Stack::Win32:2.5.4.1"
+              dependencies:
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::bytestring:0.10.8.2"
+                dependencies: []
+                errors: []
+              - id: "Stack::filepath:1.4.1.2"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::deepseq:1.4.3.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::time:1.8.0.2"
+          dependencies:
+          - id: "Stack::Win32:2.5.4.1"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::bytestring:0.10.8.2"
+              dependencies: []
+              errors: []
+            - id: "Stack::filepath:1.4.1.2"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::deepseq:1.4.3.0"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "Stack::transformers:0.5.2.0"
+        dependencies: []
+        errors: []
+      errors: []
+    - id: "Stack::ansi-wl-pprint:0.6.8.2"
+      dependencies:
+      - id: "Stack::ansi-terminal:0.7.1.1"
+        dependencies:
+        - id: "Stack::Win32:2.5.4.1"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::bytestring:0.10.8.2"
+            dependencies: []
+            errors: []
+          - id: "Stack::filepath:1.4.1.2"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::base-compat:0.9.3"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::colour:2.3.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::containers:0.5.10.2"
+          dependencies: []
+          errors: []
+        - id: "Stack::process:1.6.1.0"
+          dependencies:
+          - id: "Stack::Win32:2.5.4.1"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::bytestring:0.10.8.2"
+              dependencies: []
+              errors: []
+            - id: "Stack::filepath:1.4.1.2"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::deepseq:1.4.3.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::directory:1.3.0.2"
+            dependencies:
+            - id: "Stack::Win32:2.5.4.1"
+              dependencies:
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::bytestring:0.10.8.2"
+                dependencies: []
+                errors: []
+              - id: "Stack::filepath:1.4.1.2"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::filepath:1.4.1.2"
+              dependencies: []
+              errors: []
+            - id: "Stack::time:1.8.0.2"
+              dependencies:
+              - id: "Stack::Win32:2.5.4.1"
+                dependencies:
+                - id: "Stack::base:4.10.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  - id: "Stack::integer-gmp:1.0.1.0"
+                    dependencies:
+                    - id: "Stack::ghc-prim:0.5.1.1"
+                      dependencies:
+                      - id: "Stack::rts:1.0"
+                        dependencies: []
+                        errors: []
+                      errors: []
+                    errors: []
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::bytestring:0.10.8.2"
+                  dependencies: []
+                  errors: []
+                - id: "Stack::filepath:1.4.1.2"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::deepseq:1.4.3.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::filepath:1.4.1.2"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - id: "Stack::async:2.1.1.1"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::stm:2.4.5.0"
+        dependencies:
+        - id: "Stack::array:0.5.2.0"
+          dependencies: []
+          errors: []
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      errors: []
+    - id: "Stack::base:4.10.1.0"
+      dependencies:
+      - id: "Stack::ghc-prim:0.5.1.1"
+        dependencies:
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::integer-gmp:1.0.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "Stack::rts:1.0"
+        dependencies: []
+        errors: []
+      errors: []
+    - id: "Stack::containers:0.5.10.2"
+      dependencies: []
+      errors: []
+    - id: "Stack::lifted-async:0.9.3.3"
+      dependencies:
+      - id: "Stack::async:2.1.1.1"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::stm:2.4.5.0"
+          dependencies:
+          - id: "Stack::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::constraints:0.9.1"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::binary:0.8.5.1"
+          dependencies: []
+          errors: []
+        - id: "Stack::deepseq:1.4.3.0"
+          dependencies: []
+          errors: []
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::hashable:1.2.6.1"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::bytestring:0.10.8.2"
+            dependencies: []
+            errors: []
+          - id: "Stack::deepseq:1.4.3.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::text:1.2.2.2"
+            dependencies:
+            - id: "Stack::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::binary:0.8.5.1"
+              dependencies: []
+              errors: []
+            - id: "Stack::bytestring:0.10.8.2"
+              dependencies: []
+              errors: []
+            - id: "Stack::deepseq:1.4.3.0"
+              dependencies: []
+              errors: []
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::mtl:2.2.1"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-compat:0.5.1.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::lifted-base:0.2.3.11"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::monad-control:1.0.2.2"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::stm:2.4.5.0"
+            dependencies:
+            - id: "Stack::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers-base:0.4.4"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::stm:2.4.5.0"
+              dependencies:
+              - id: "Stack::array:0.5.2.0"
+                dependencies: []
+                errors: []
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::transformers-compat:0.5.1.4"
+              dependencies:
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::transformers:0.5.2.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::transformers:0.5.2.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers-compat:0.5.1.4"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::transformers:0.5.2.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-base:0.4.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::stm:2.4.5.0"
+            dependencies:
+            - id: "Stack::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers-compat:0.5.1.4"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::transformers:0.5.2.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "Stack::monad-control:1.0.2.2"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::stm:2.4.5.0"
+          dependencies:
+          - id: "Stack::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-base:0.4.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::stm:2.4.5.0"
+            dependencies:
+            - id: "Stack::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers-compat:0.5.1.4"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::transformers:0.5.2.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-compat:0.5.1.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::transformers-base:0.4.4"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::stm:2.4.5.0"
+          dependencies:
+          - id: "Stack::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-compat:0.5.1.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - id: "Stack::lifted-base:0.2.3.11"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::monad-control:1.0.2.2"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::stm:2.4.5.0"
+          dependencies:
+          - id: "Stack::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-base:0.4.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::stm:2.4.5.0"
+            dependencies:
+            - id: "Stack::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers-compat:0.5.1.4"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::transformers:0.5.2.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-compat:0.5.1.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::transformers-base:0.4.4"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::stm:2.4.5.0"
+          dependencies:
+          - id: "Stack::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-compat:0.5.1.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - id: "Stack::monad-control:1.0.2.2"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::stm:2.4.5.0"
+        dependencies:
+        - id: "Stack::array:0.5.2.0"
+          dependencies: []
+          errors: []
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        errors: []
+      - id: "Stack::transformers-base:0.4.4"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::stm:2.4.5.0"
+          dependencies:
+          - id: "Stack::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers-compat:0.5.1.4"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::transformers-compat:0.5.1.4"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::transformers:0.5.2.0"
+        dependencies: []
+        errors: []
+      errors: []
+    - id: "Stack::mtl:2.2.1"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::transformers:0.5.2.0"
+        dependencies: []
+        errors: []
+      errors: []
+    - id: "Stack::quickcheck-with-counterexamples:1.0"
+      dependencies:
+      - id: "Stack::QuickCheck:2.10.1"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::containers:0.5.10.2"
+          dependencies: []
+          errors: []
+        - id: "Stack::deepseq:1.4.3.0"
+          dependencies: []
+          errors: []
+        - id: "Stack::random:1.1"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::time:1.8.0.2"
+            dependencies:
+            - id: "Stack::Win32:2.5.4.1"
+              dependencies:
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::bytestring:0.10.8.2"
+                dependencies: []
+                errors: []
+              - id: "Stack::filepath:1.4.1.2"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::deepseq:1.4.3.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::template-haskell:2.12.0.0"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::ghc-boot-th:8.2.2"
+            dependencies: []
+            errors: []
+          - id: "Stack::pretty:1.1.3.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::tf-random:0.5"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::primitive:0.6.3.0"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::transformers:0.5.2.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::random:1.1"
+            dependencies:
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::time:1.8.0.2"
+              dependencies:
+              - id: "Stack::Win32:2.5.4.1"
+                dependencies:
+                - id: "Stack::base:4.10.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  - id: "Stack::integer-gmp:1.0.1.0"
+                    dependencies:
+                    - id: "Stack::ghc-prim:0.5.1.1"
+                      dependencies:
+                      - id: "Stack::rts:1.0"
+                        dependencies: []
+                        errors: []
+                      errors: []
+                    errors: []
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::bytestring:0.10.8.2"
+                  dependencies: []
+                  errors: []
+                - id: "Stack::filepath:1.4.1.2"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::deepseq:1.4.3.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::time:1.8.0.2"
+            dependencies:
+            - id: "Stack::Win32:2.5.4.1"
+              dependencies:
+              - id: "Stack::base:4.10.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                - id: "Stack::integer-gmp:1.0.1.0"
+                  dependencies:
+                  - id: "Stack::ghc-prim:0.5.1.1"
+                    dependencies:
+                    - id: "Stack::rts:1.0"
+                      dependencies: []
+                      errors: []
+                    errors: []
+                  errors: []
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::bytestring:0.10.8.2"
+                dependencies: []
+                errors: []
+              - id: "Stack::filepath:1.4.1.2"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::base:4.10.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Stack::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Stack::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "Stack::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::deepseq:1.4.3.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::transformers:0.5.2.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::template-haskell:2.12.0.0"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::ghc-boot-th:8.2.2"
+          dependencies: []
+          errors: []
+        - id: "Stack::pretty:1.1.3.3"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - id: "Stack::random:1.1"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::time:1.8.0.2"
+        dependencies:
+        - id: "Stack::Win32:2.5.4.1"
+          dependencies:
+          - id: "Stack::base:4.10.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Stack::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Stack::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "Stack::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::bytestring:0.10.8.2"
+            dependencies: []
+            errors: []
+          - id: "Stack::filepath:1.4.1.2"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::deepseq:1.4.3.0"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - id: "Stack::stm:2.4.5.0"
+      dependencies:
+      - id: "Stack::array:0.5.2.0"
+        dependencies: []
+        errors: []
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+    - id: "Stack::template-haskell:2.12.0.0"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::ghc-boot-th:8.2.2"
+        dependencies: []
+        errors: []
+      - id: "Stack::pretty:1.1.3.3"
+        dependencies: []
+        errors: []
+      errors: []
+    - id: "Stack::th-abstraction:0.2.6.0"
+      dependencies:
+      - id: "Stack::base:4.10.1.0"
+        dependencies:
+        - id: "Stack::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::containers:0.5.10.2"
+        dependencies: []
+        errors: []
+      - id: "Stack::ghc-prim:0.5.1.1"
+        dependencies:
+        - id: "Stack::rts:1.0"
+          dependencies: []
+          errors: []
+        errors: []
+      - id: "Stack::template-haskell:2.12.0.0"
+        dependencies:
+        - id: "Stack::base:4.10.1.0"
+          dependencies:
+          - id: "Stack::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "Stack::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Stack::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Stack::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "Stack::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Stack::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Stack::ghc-boot-th:8.2.2"
+          dependencies: []
+          errors: []
+        - id: "Stack::pretty:1.1.3.3"
+          dependencies: []
+          errors: []
+        errors: []
+      errors: []
+  - name: "test"
+    delivered: false
+    dependencies: []
+packages:
+- package:
+    id: "Hackage:Compatibility:base-compat:0.9.3"
+    declared_licenses:
+    - "MIT"
+    description: "Provides functions available in later versions of @base@ to\na wider\
+      \ range of compilers, without requiring you to use CPP\npragmas in your code.\
+      \  See the\n<https://github.com/haskell-compat/base-compat#readme README>\n\
+      for what is covered. Also see the\n<https://github.com/haskell-compat/base-compat/blob/master/CHANGES.markdown\
+      \ changelog>\nfor recent changes.\n\nNote that @base-compat@ does not add any\
+      \ orphan instances.\nThere is a separate package,\n@<http://hackage.haskell.org/package/base-orphans\
+      \ base-orphans>@,\nfor that.\n\nIn addition, `base-compat` does not backport\
+      \ any data types\nor type classes. See\n@<https://github.com/haskell-compat/base-compat#data-types-and-type-classes\
+      \ this section of the README>@\nfor more info."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/base-compat-0.9.3/base-compat-0.9.3.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell-compat/base-compat"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell-compat/base-compat.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Compatibility:transformers-compat:0.5.1.4"
+    declared_licenses:
+    - "BSD3"
+    description: "This package includes backported versions of types that were added\n\
+      to transformers in transformers 0.3, 0.4, and 0.5 for users who need strict\n\
+      transformers 0.2 or 0.3 compatibility to run on old versions of the\nplatform,\
+      \ but also need those types.\n\nThose users should be able to just depend on\
+      \ @transformers >= 0.2@\nand @transformers-compat >= 0.3@.\n\nNote: missing\
+      \ methods are not supplied, but this at least permits the types to be used."
+    homepage_url: "http://github.com/ekmett/transformers-compat/"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/transformers-compat-0.5.1.4/transformers-compat-0.5.1.4.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "git://github.com/ekmett/transformers-compat.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/ekmett/transformers-compat.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Concurrency:async:2.1.1.1"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides a higher-level interface over\nthreads, in\
+      \ which an @Async a@ is a concurrent\nthread that will eventually deliver a\
+      \ value of\ntype @a@.  The package provides ways to create\n@Async@ computations,\
+      \ wait for their results, and\ncancel them.\n\nUsing @Async@ is safer than using\
+      \ threads in two\nways:\n\n* When waiting for a thread to return a result,\n\
+      if the thread dies with an exception then the\ncaller must either re-throw the\
+      \ exception\n('wait') or handle it ('waitCatch'); the\nexception cannot be ignored.\n\
+      \n* The API makes it possible to build a tree of\nthreads that are automatically\
+      \ killed when\ntheir parent dies (see 'withAsync')."
+    homepage_url: "https://github.com/simonmar/async"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/async-2.1.1.1/async-2.1.1.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/simonmar/async.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/simonmar/async.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Concurrency:lifted-async:0.9.3.3"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides IO operations from @async@ package lifted\
+      \ to any\ninstance of 'MonadBase' or 'MonadBaseControl'."
+    homepage_url: "https://github.com/maoe/lifted-async"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/lifted-async-0.9.3.3/lifted-async-0.9.3.3.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/maoe/lifted-async.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/maoe/lifted-async.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Concurrency:stm:2.4.5.0"
+    declared_licenses:
+    - "BSD3"
+    description: "Software Transactional Memory, or STM, is an abstraction for\nconcurrent\
+      \ communication. The main benefits of STM are\n/composability/ and /modularity/.\
+      \ That is, using STM you can write\nconcurrent abstractions that can be easily\
+      \ composed with any other\nabstraction built using STM, without exposing the\
+      \ details of how\nyour abstraction ensures safety. This is typically not the\
+      \ case\nwith other forms of concurrent communication, such as locks or\n'MVar's."
+    homepage_url: "https://wiki.haskell.org/Software_transactional_memory"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/stm-2.4.5.0/stm-2.4.5.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/stm.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/stm.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Constraints:constraints:0.9.1"
+    declared_licenses:
+    - "BSD2"
+    description: "GHC 7.4 gave us the ability to talk about @ConstraintKinds@. They\
+      \ stopped crashing the compiler in GHC 7.6.\n\nThis package provides a vocabulary\
+      \ for working with them."
+    homepage_url: "http://github.com/ekmett/constraints/"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/constraints-0.9.1/constraints-0.9.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "git://github.com/ekmett/constraints.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/ekmett/constraints.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Control:deepseq:1.4.3.0"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides methods for fully evaluating data structures\n\
+      (\\\"deep evaluation\\\"). Deep evaluation is often used for adding\nstrictness\
+      \ to a program, e.g. in order to force pending exceptions,\nremove space leaks,\
+      \ or force lazy I/O to happen. It is also useful\nin parallel programs, to ensure\
+      \ pending work does not migrate to the\nwrong thread.\n\nThe primary use of\
+      \ this package is via the 'deepseq' function, a\n\\\"deep\\\" version of 'seq'.\
+      \ It is implemented on top of an 'NFData'\ntypeclass (\\\"Normal Form Data\\\
+      \", data structures with no unevaluated\ncomponents) which defines strategies\
+      \ for fully evaluating different\ndata types."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/deepseq-1.4.3.0/deepseq-1.4.3.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/deepseq.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/deepseq.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Control:lifted-base:0.2.3.11"
+    declared_licenses:
+    - "BSD3"
+    description: "@lifted-base@ exports IO operations from the base library lifted\
+      \ to\nany instance of 'MonadBase' or 'MonadBaseControl'.\n\nNote that not all\
+      \ modules from @base@ are converted yet. If\nyou need a lifted version of a\
+      \ function from @base@, just\nask me to add it or send me a patch.\n\nThe package\
+      \ includes a copy of the @monad-peel@ testsuite written\nby Anders Kaseorg The\
+      \ tests can be performed using @cabal test@."
+    homepage_url: "https://github.com/basvandijk/lifted-base"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/lifted-base-0.2.3.11/lifted-base-0.2.3.11.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/basvandijk/lifted-base.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/basvandijk/lifted-base.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Control:monad-control:1.0.2.2"
+    declared_licenses:
+    - "BSD3"
+    description: "This package defines the type class @MonadBaseControl@, a subset\
+      \ of\n@MonadBase@ into which generic control operations such as @catch@ can\
+      \ be\nlifted from @IO@ or any other base monad. Instances are based on monad\n\
+      transformers in @MonadTransControl@, which includes all standard monad\ntransformers\
+      \ in the @transformers@ library except @ContT@.\n\nSee the <http://hackage.haskell.org/package/lifted-base\
+      \ lifted-base>\npackage which uses @monad-control@ to lift @IO@\noperations\
+      \ from the @base@ library (like @catch@ or @bracket@) into any monad\nthat is\
+      \ an instance of @MonadBase@ or @MonadBaseControl@.\n\nNote that this package\
+      \ is a rewrite of Anders Kaseorg's @monad-peel@\nlibrary. The main difference\
+      \ is that this package provides CPS style operators\nand exploits the @RankNTypes@\
+      \ and @TypeFamilies@ language extensions to\nsimplify and speedup most definitions."
+    homepage_url: "https://github.com/basvandijk/monad-control"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/monad-control-1.0.2.2/monad-control-1.0.2.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "git://github.com/basvandijk/monad-control.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/basvandijk/monad-control.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Control:mtl:2.2.1"
+    declared_licenses:
+    - "BSD3"
+    description: "Monad classes using functional dependencies, with instances\nfor\
+      \ various monad transformers, inspired by the paper\n/Functional Programming\
+      \ with Overloading and Higher-Order Polymorphism/,\nby Mark P Jones, in /Advanced\
+      \ School of Functional Programming/, 1995\n(<http://web.cecs.pdx.edu/~mpj/pubs/springschool.html>)."
+    homepage_url: "http://github.com/ekmett/mtl"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/mtl-2.2.1/mtl-2.2.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "git://github.com/ekmett/mtl.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/ekmett/mtl.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Control:transformers-base:0.4.4"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides a straightforward port of @monadLib@'s BaseM\n\
+      typeclass to @transformers@."
+    homepage_url: "https://github.com/mvv/transformers-base"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/transformers-base-0.4.4/transformers-base-0.4.4.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/mvv/transformers-base.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/mvv/transformers-base.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Control:transformers:0.5.2.0"
+    declared_licenses:
+    - "BSD3"
+    description: "A portable library of functor and monad transformers, inspired by\n\
+      the paper \\\"Functional Programming with Overloading and Higher-Order\nPolymorphism\\\
+      \", by Mark P Jones,\nin /Advanced School of Functional Programming/, 1995\n\
+      (<http://web.cecs.pdx.edu/~mpj/pubs/springschool.html>).\n\nThis package contains:\n\
+      \n* the monad transformer class (in \"Control.Monad.Trans.Class\")\nand IO monad\
+      \ class (in \"Control.Monad.IO.Class\")\n\n* concrete functor and monad transformers,\
+      \ each with associated\noperations and functions to lift operations associated\
+      \ with other\ntransformers.\n\nThe package can be used on its own in portable\
+      \ Haskell code, in\nwhich case operations need to be manually lifted through\
+      \ transformer\nstacks (see \"Control.Monad.Trans.Class\" for some examples).\n\
+      Alternatively, it can be used with the non-portable monad classes in\nthe @mtl@\
+      \ or @monads-tf@ packages, which automatically lift operations\nintroduced by\
+      \ monad transformers through other transformers."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/transformers-0.5.2.0/transformers-0.5.2.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "darcs"
+      url: "http://hub.darcs.net/ross/transformers"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "darcs"
+      url: "http://hub.darcs.net/ross/transformers"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Data Structures:array:0.5.2.0"
+    declared_licenses:
+    - "BSD3"
+    description: "In addition to providing the \"Data.Array\" module\n<http://www.haskell.org/onlinereport/haskell2010/haskellch14.html\
+      \ as specified in the Haskell 2010 Language Report>,\nthis package also defines\
+      \ the classes 'IArray' of\nimmutable arrays and 'MArray' of arrays mutable within\
+      \ appropriate\nmonads, as well as some instances of these classes."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/array-0.5.2.0/array-0.5.2.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://git.haskell.org/packages/array.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git.haskell.org/packages/array.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Data Structures:containers:0.5.10.2"
+    declared_licenses:
+    - "BSD3"
+    description: "This package contains efficient general-purpose implementations\n\
+      of various basic immutable container types.  The declared cost of\neach operation\
+      \ is either worst-case or amortized, but remains\nvalid even if structures are\
+      \ shared."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/containers-0.5.10.2/containers-0.5.10.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://github.com/haskell/containers.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/containers.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Data, Parsing:binary:0.8.5.1"
+    declared_licenses:
+    - "BSD3"
+    description: "Efficient, pure binary serialisation using lazy ByteStrings.\nHaskell\
+      \ values may be encoded to and from binary formats,\nwritten to disk as binary,\
+      \ or sent over the network.\nThe format used can be automatically generated,\
+      \ or\nyou can choose to implement a custom format if needed.\nSerialisation\
+      \ speeds of over 1 G\\/sec have been observed,\nso this library should be suitable\
+      \ for high performance\nscenarios."
+    homepage_url: "https://github.com/kolmodin/binary"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/binary-0.8.5.1/binary-0.8.5.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "git://github.com/kolmodin/binary.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/kolmodin/binary.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Data, Text:text:1.2.2.2"
+    declared_licenses:
+    - "BSD2"
+    description: "An efficient packed, immutable Unicode text type (both strict and\n\
+      lazy), with a powerful loop fusion optimization framework.\n\nThe 'Text' type\
+      \ represents Unicode character strings, in a time and\nspace-efficient manner.\
+      \ This package provides text processing\ncapabilities that are optimized for\
+      \ performance critical use, both\nin terms of large data quantities and high\
+      \ speed.\n\nThe 'Text' type provides character-encoding, type-safe case\nconversion\
+      \ via whole-string case conversion functions. It also\nprovides a range of functions\
+      \ for converting 'Text' values to and from\n'ByteStrings', using several standard\
+      \ encodings.\n\nEfficient locale-sensitive support for text IO is also supported.\n\
+      \nThese modules are intended to be imported qualified, to avoid name\nclashes\
+      \ with Prelude functions, e.g.\n\n> import qualified Data.Text as T\n\nTo use\
+      \ an extended and very rich family of functions for working\nwith Unicode text\
+      \ (including normalization, regular expressions,\nnon-standard encodings, text\
+      \ breaking, and locales), see\nthe @text-icu@ package:\n<http://hackage.haskell.org/package/text-icu>"
+    homepage_url: "https://github.com/bos/text"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/text-1.2.2.2/text-1.2.2.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "mercurial"
+      url: "https://bitbucket.org/bos/text"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Mercurial"
+      url: "https://bitbucket.org/bos/text"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Data:bytestring:0.10.8.2"
+    declared_licenses:
+    - "BSD3"
+    description: "An efficient compact, immutable byte string type (both strict and\
+      \ lazy)\nsuitable for binary or 8-bit character data.\n\nThe 'ByteString' type\
+      \ represents sequences of bytes or 8-bit characters.\nIt is suitable for high\
+      \ performance use, both in terms of large data\nquantities, or high speed requirements.\
+      \ The 'ByteString' functions follow\nthe same style as Haskell\\'s ordinary\
+      \ lists, so it is easy to convert code\nfrom using 'String' to 'ByteString'.\n\
+      \nTwo 'ByteString' variants are provided:\n\n* Strict 'ByteString's keep the\
+      \ string as a single large array. This\nmakes them convenient for passing data\
+      \ between C and Haskell.\n\n* Lazy 'ByteString's use a lazy list of strict chunks\
+      \ which makes it\nsuitable for I\\/O streaming tasks.\n\nThe @Char8@ modules\
+      \ provide a character-based view of the same\nunderlying 'ByteString' types.\
+      \ This makes it convenient to handle mixed\nbinary and 8-bit character content\
+      \ (which is common in many file formats\nand network protocols).\n\nThe 'Builder'\
+      \ module provides an efficient way to build up 'ByteString's\nin an ad-hoc way\
+      \ by repeated concatenation. This is ideal for fast\nserialisation or pretty\
+      \ printing.\n\nThere is also a 'ShortByteString' type which has a lower memory\
+      \ overhead\nand can can be converted to or from a 'ByteString', but supports\
+      \ very few\nother operations. It is suitable for keeping many short strings\
+      \ in memory.\n\n'ByteString's are not designed for Unicode. For Unicode strings\
+      \ you should\nuse the 'Text' type from the @text@ package.\n\nThese modules\
+      \ are intended to be imported qualified, to avoid name clashes\nwith \"Prelude\"\
+      \ functions, e.g.\n\n> import qualified Data.ByteString as BS"
+    homepage_url: "https://github.com/haskell/bytestring"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/bytestring-0.10.8.2/bytestring-0.10.8.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/bytestring"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/bytestring.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Data:hashable:1.2.6.1"
+    declared_licenses:
+    - "BSD3"
+    description: "This package defines a class, 'Hashable', for types that\ncan be\
+      \ converted to a hash value.  This class\nexists for the benefit of hashing-based\
+      \ data\nstructures.  The package provides instances for\nbasic types and a way\
+      \ to combine hash values."
+    homepage_url: "http://github.com/tibbe/hashable"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/hashable-1.2.6.1/hashable-1.2.6.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/tibbe/hashable.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/tibbe/hashable.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Data:primitive:0.6.3.0"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides various primitive memory-related operations."
+    homepage_url: "https://github.com/haskell/primitive"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/primitive-0.6.3.0/primitive-0.6.3.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/primitive"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/primitive.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Development:th-abstraction:0.2.6.0"
+    declared_licenses:
+    - "ISC"
+    description: "This package normalizes variations in the interface for\ninspecting\
+      \ datatype information via Template Haskell\nso that packages and support a\
+      \ single, easier to use\ninformational datatype while supporting many versions\n\
+      of Template Haskell."
+    homepage_url: "https://github.com/glguy/th-abstraction"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/th-abstraction-0.2.6.0/th-abstraction-0.2.6.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/glguy/th-abstraction.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/glguy/th-abstraction.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:GHC:ghc-boot-th:8.2.2"
+    declared_licenses:
+    - "BSD3"
+    description: "This library contains various bits shared between the @ghc@ and\n\
+      @template-haskell@ libraries.\n\nThis package exists to ensure that @template-haskell@\
+      \ has a\nminimal set of transitive dependencies, since it is intended to\nbe\
+      \ depended upon by user code."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/ghc-boot-th-8.2.2/ghc-boot-th-8.2.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:GHC:ghc-prim:0.5.1.1"
+    declared_licenses:
+    - "BSD3"
+    description: "This package contains the primitive types and operations supplied\
+      \ by GHC."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/ghc-prim-0.5.1.1/ghc-prim-0.5.1.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Numeric, Algebra:integer-gmp:1.0.1.0"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides the low-level implementation of the standard\n\
+      'Integer' type based on the\n<http://gmplib.org/ GNU Multiple Precision Arithmetic\
+      \ Library (GMP)>.\n\nThis package provides access to the internal representation\
+      \ of\n'Integer' as well as primitive operations with no proper error\nhandling,\
+      \ and should only be used directly with the utmost care."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/integer-gmp-1.0.1.0/integer-gmp-1.0.1.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Prelude:base:4.10.1.0"
+    declared_licenses:
+    - "BSD3"
+    description: "This package contains the Standard Haskell \"Prelude\" and its support\
+      \ libraries,\nand a large collection of useful libraries ranging from data\n\
+      structures to parsing combinators and debugging utilities."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/base-4.10.1.0/base-4.10.1.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Random:tf-random:0.5"
+    declared_licenses:
+    - "BSD3"
+    description: "This package contains an implementation of a high-quality splittable\
+      \ pseudorandom number generator. The generator is based on a cryptographic hash\
+      \ function built on top of the ThreeFish block cipher. See the paper /Splittable\
+      \ Pseudorandom Number Generators Using Cryptographic Hashing/ by Claessen, Pał\
+      ka for details and the rationale of the design.\n\nThe package provides the\
+      \ following:\n\n* A splittable PRNG that implements the standard 'System.Random.RandomGen'\
+      \ class.\n\n* The generator also implements an alternative version of the 'System.Random.TF.Gen.RandomGen'\
+      \ class (exported from \"System.Random.TF.Gen\"), which requires the generator\
+      \ to return pseudorandom integers from the full 32-bit range, and contains an\
+      \ n-way split function.\n\n* An alternative version of the @Random@ class is\
+      \ provided, which is linked to the new @RandomGen@ class, together with @Random@\
+      \ instances for some integral types.\n\n* Two functions for initialising the\
+      \ generator with a non-deterministic seed: one using the system time, and one\
+      \ using the @\\/dev\\/urandom@ UNIX special file.\n\nThe package uses an adapted\
+      \ version of the reference C implementation of ThreeFish from the reference\
+      \ package of the Skein hash function (<https://www.schneier.com/skein.html>),\
+      \ originally written by Doug Whiting.\n\nPlease note that even though the generator\
+      \ provides very high-quality pseudorandom numbers, it has not been designed\
+      \ with cryptographic applications in mind."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/tf-random-0.5/tf-random-0.5.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "darcs"
+      url: "http://hub.darcs.net/michal.palka/tf-random"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "darcs"
+      url: "http://hub.darcs.net/michal.palka/tf-random"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:System, Graphics:Win32:2.5.4.1"
+    declared_licenses:
+    - "BSD3"
+    description: "A binding to part of the Win32 library."
+    homepage_url: "https://github.com/haskell/win32"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/Win32-2.5.4.1/Win32-2.5.4.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:System:directory:1.3.0.2"
+    declared_licenses:
+    - "BSD3"
+    description: "This library provides a basic set of operations for manipulating\
+      \ files and\ndirectories in a portable way."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/directory-1.3.0.2/directory-1.3.0.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/directory"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/directory.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:System:filepath:1.4.1.2"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides functionality for manipulating @FilePath@\
+      \ values, and is shipped with both <https://www.haskell.org/ghc/ GHC> and the\
+      \ <https://www.haskell.org/platform/ Haskell Platform>. It provides three modules:\n\
+      \n* \"System.FilePath.Posix\" manipulates POSIX\\/Linux style @FilePath@ values\
+      \ (with @\\/@ as the path separator).\n\n* \"System.FilePath.Windows\" manipulates\
+      \ Windows style @FilePath@ values (with either @\\\\@ or @\\/@ as the path separator,\
+      \ and deals with drives).\n\n* \"System.FilePath\" is an alias for the module\
+      \ appropriate to your platform.\n\nAll three modules provide the same API, and\
+      \ the same documentation (calling out differences in the different variants)."
+    homepage_url: "https://github.com/haskell/filepath#readme"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/filepath-1.4.1.2/filepath-1.4.1.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/filepath.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/filepath.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:System:process:1.6.1.0"
+    declared_licenses:
+    - "BSD3"
+    description: "This package contains libraries for dealing with system processes.\n\
+      \nThe typed-process package is a more recent take on a process API,\nwhich uses\
+      \ this package internally. It features better binary\nsupport, easier concurrency,\
+      \ and a more composable API. You can\nread more about it at\n<https://haskell-lang.org/library/typed-process>."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/process-1.6.1.0/process-1.6.1.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/process.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/process.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:System:random:1.1"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides a basic random number generation\nlibrary,\
+      \ including the ability to split random number\ngenerators."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/random-1.1/random-1.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://git.haskell.org/packages/random.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git.haskell.org/packages/random.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Template Haskell:template-haskell:2.12.0.0"
+    declared_licenses:
+    - "BSD3"
+    description: "This package provides modules containing facilities for manipulating\n\
+      Haskell source code using Template Haskell.\n\nSee <http://www.haskell.org/haskellwiki/Template_Haskell>\
+      \ for more\ninformation."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/template-haskell-2.12.0.0/template-haskell-2.12.0.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "http://git.haskell.org/ghc.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Testing:QuickCheck:2.10.1"
+    declared_licenses:
+    - "BSD3"
+    description: "QuickCheck is a library for random testing of program properties.\n\
+      \nThe programmer provides a specification of the program, in the form of\nproperties\
+      \ which functions should satisfy, and QuickCheck then tests that the\nproperties\
+      \ hold in a large number of randomly generated cases.\n\nSpecifications are\
+      \ expressed in Haskell, using combinators defined in the\nQuickCheck library.\
+      \ QuickCheck provides combinators to define properties,\nobserve the distribution\
+      \ of test data, and define test data generators.\n\nThe <http://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html\
+      \ official QuickCheck manual>\nexplains how to write generators and properties;\n\
+      it is out-of-date in some details but still full of useful advice.\n\nA user\
+      \ of QuickCheck has written an unofficial, but detailed, tutorial which\nyou\
+      \ can find at\n<https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html>."
+    homepage_url: "https://github.com/nick8325/quickcheck"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/QuickCheck-2.10.1/QuickCheck-2.10.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/nick8325/quickcheck"
+      revision: "2.10.1"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/nick8325/quickcheck.git"
+      revision: "2.10.1"
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Testing:quickcheck-with-counterexamples:1.0"
+    declared_licenses:
+    - "BSD3"
+    description: "When QuickCheck finds a counterexample, it prints it out but\ndoesn't\
+      \ save it so that the programmer can access it. This can be\nannoying when debugging.\n\
+      \nThis library provides a small extension to QuickCheck that returns\ncounterexamples\
+      \ as normal Haskell values. To use it, just import\n\"Test.QuickCheck.Counterexamples\"\
+      \ /instead of/ @Test.QuickCheck@.\nThe library is largely compatible with normal\
+      \ QuickCheck, but the\nreturn types of 'Test.QuickCheck.Counterexamples.quickCheck'\
+      \ and\nrelated functions are changed to include a counterexample.\n\nFor usage\
+      \ information, see the \"Test.QuickCheck.Counterexamples\"\nmodule."
+    homepage_url: "http://www.github.com/nick8325/quickcheck-with-counterexamples"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/quickcheck-with-counterexamples-1.0/quickcheck-with-counterexamples-1.0.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/nick8325/quickcheck-with-counterexamples"
+      revision: "1.0"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/nick8325/quickcheck-with-counterexamples.git"
+      revision: "1.0"
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Text:pretty:1.1.3.3"
+    declared_licenses:
+    - "BSD3"
+    description: "This package contains a pretty-printing library, a set of API's\n\
+      that provides a way to easily print out text in a consistent\nformat of your\
+      \ choosing. This is useful for compilers and related\ntools.\n\nThis library\
+      \ was originally designed by John Hughes's and has since\nbeen heavily modified\
+      \ by Simon Peyton Jones."
+    homepage_url: "http://github.com/haskell/pretty"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/pretty-1.1.3.3/pretty-1.1.3.3.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "http://github.com/haskell/pretty.git"
+      revision: "1.1.3.3"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/pretty.git"
+      revision: "1.1.3.3"
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:Time:time:1.8.0.2"
+    declared_licenses:
+    - "BSD3"
+    description: "A time library"
+    homepage_url: "https://github.com/haskell/time"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/time-1.8.0.2/time-1.8.0.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/haskell/time"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/haskell/time.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
+    declared_licenses:
+    - "BSD3"
+    description: "\nThis is a pretty printing library based on Wadler's paper [\"\
+      A Prettier Printer\"](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf).\
+      \ It has been enhanced with support for ANSI terminal colored output using the\
+      \ [ansi-terminal](https://hackage.haskell.org/package/ansi-terminal) package.\n"
+    homepage_url: "http://github.com/ekmett/ansi-wl-pprint"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/ansi-wl-pprint-0.6.8.2/ansi-wl-pprint-0.6.8.2.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/ekmett/ansi-wl-pprint.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/ekmett/ansi-wl-pprint.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:User Interfaces:ansi-terminal:0.7.1.1"
+    declared_licenses:
+    - "BSD3"
+    description: "ANSI terminal support for Haskell: allows cursor movement,\nscreen\
+      \ clearing, color output, showing or hiding the\ncursor, and changing the title.\
+      \ Works on UNIX and Windows."
+    homepage_url: "https://github.com/feuerbach/ansi-terminal"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/ansi-terminal-0.7.1.1/ansi-terminal-0.7.1.1.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "git://github.com/feuerbach/ansi-terminal.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/feuerbach/ansi-terminal.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Hackage:data, graphics:colour:2.3.4"
+    declared_licenses:
+    - "MIT"
+    description: "This package provides a data type for colours and transparency.\n\
+      Colours can be blended and composed.\nVarious colour spaces are supported.\n\
+      A module of colour names (\"Data.Colour.Names\") is provided."
+    homepage_url: "http://www.haskell.org/haskellwiki/Colour"
+    binary_artifact:
+      url: "https://hackage.haskell.org/package/colour-2.3.4/colour-2.3.4.tar.gz"
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Stack::rts:1.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+errors: []

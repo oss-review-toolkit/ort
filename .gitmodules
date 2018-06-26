@@ -30,3 +30,7 @@
 	path = analyzer/src/funTest/assets/projects/external/godep
 	url = https://github.com/tools/godep.git
 	ignore = untracked
+[submodule "quickcheck-state-machine"]
+	path = analyzer/src/funTest/assets/projects/external/quickcheck-state-machine
+	url = https://github.com/advancedtelematic/quickcheck-state-machine.git
+	ignore = untracked
