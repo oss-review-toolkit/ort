@@ -267,7 +267,7 @@ class Bundler : PackageManager() {
                 if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
                     log.warn { "Unable to retrieve rubygems.org meta-data for gem '$name'." }
                     if (body != null) {
-                        log.warn { "Response was '$body'." }
+                        log.warn { "The response was '$body' (code ${response.code()})." }
                     }
                     return null
                 }
