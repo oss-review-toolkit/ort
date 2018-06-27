@@ -99,6 +99,12 @@ object Main {
             order = PARAMETER_ORDER_OPTIONAL)
     private var projectUrl: String? = null
 
+    @Parameter(description = "The speaking name of the project to download. Will be ignored if '--dependencies-file' " +
+            "is also specified.",
+            names = ["--project-name"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var projectName: String? = null
+
     @Parameter(description = "The output directory to download the source code to.",
             names = ["--output-dir", "-o"],
             required = true,
@@ -194,11 +200,12 @@ object Main {
         } ?: run {
             allowMovingRevisions = true
 
-            // TODO: Allow to specify the project name as a parameter.
             val projectFile = File(projectUrl)
-            val projectName = projectFile.nameWithoutExtension
+            if (projectName == null) {
+                projectName = projectFile.nameWithoutExtension
+            }
 
-            val dummyId = Identifier.EMPTY.copy(name = projectName)
+            val dummyId = Identifier.EMPTY.copy(name = projectName!!)
             val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
                 Package.EMPTY.copy(
                         id = dummyId,
