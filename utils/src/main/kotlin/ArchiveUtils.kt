@@ -41,6 +41,8 @@ private val TAR_EXTENSIONS = listOf(".gem", ".tar", ".tar.gz", ".tgz", ".tar.bz2
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
 private val SEVENZIP_EXTENSIONS = listOf(".7z")
 
+val ARCHIVE_EXTENSIONS = TAR_EXTENSIONS + ZIP_EXTENSIONS + SEVENZIP_EXTENSIONS
+
 fun File.unpack(targetDirectory: File) {
     val lowerName = this.name.toLowerCase()
     when {
