@@ -415,7 +415,7 @@ object Main {
                 HashAlgorithm.SHA384 -> DigestUtils.sha384Hex(it)
                 HashAlgorithm.SHA512 -> DigestUtils.sha512Hex(it)
                 HashAlgorithm.UNKNOWN -> {
-                    log.error { "Unknown hash algorithm." }
+                    log.warn { "Unknown hash algorithm." }
                     ""
                 }
             }
