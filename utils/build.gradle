@@ -15,4 +15,5 @@ dependencies {
 
     compile "commons-codec:commons-codec:$commonsCodecVersion"
     compile "org.apache.commons:commons-compress:$commonsCompressVersion"
+    compile "org.tukaani:xz:$xzVersion"
 }
