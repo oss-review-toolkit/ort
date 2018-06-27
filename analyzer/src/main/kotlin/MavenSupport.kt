@@ -328,7 +328,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                      localProjects: Map<String, MavenProject> = emptyMap(), sbtMode: Boolean = false): Package {
         val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
         val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
-        val projectBuildingRequest = createProjectBuildingRequest(true)
+        val projectBuildingRequest = createProjectBuildingRequest(false)
 
         projectBuildingRequest.remoteRepositories = repositories.map { repo ->
             // As the ID might be used as the key when generating a metadata file name, avoid the URL being used as the
