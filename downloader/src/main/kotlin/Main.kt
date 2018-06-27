@@ -105,6 +105,24 @@ object Main {
             order = PARAMETER_ORDER_OPTIONAL)
     private var projectName: String? = null
 
+    @Parameter(description = "The VCS type if '--project-url' points to a VCS. Will be ignored if " +
+            "'--dependencies-file' is also specified.",
+            names = ["--vcs-type"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var vcsType = ""
+
+    @Parameter(description = "The VCS revision if '--project-url' points to a VCS. Will be ignored if " +
+            "'--dependencies-file' is also specified.",
+            names = ["--vcs-revision"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var vcsRevision = ""
+
+    @Parameter(description = "The VCS path if '--project-url' points to a VCS. Will be ignored if " +
+            "'--dependencies-file' is also specified.",
+            names = ["--vcs-path"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var vcsPath = ""
+
     @Parameter(description = "The output directory to download the source code to.",
             names = ["--output-dir", "-o"],
             required = true,
@@ -216,9 +234,7 @@ object Main {
                         )
                 )
             } else {
-                // TODO: Allow to specify the VCS revision as a parameter.
-                val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
-
+                val vcs = VcsInfo(type = vcsType, url = projectUrl!!, revision = vcsRevision, path = vcsPath)
                 Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs.normalize())
             }
 
