@@ -33,7 +33,7 @@ install:
   - npm install -g npm@5.5.1 yarn@1.3.2
   - phpenv global 7.1
   - curl -sSL https://get.haskellstack.org/ | sh
-  - stack setup
+  - stack setup # This installs the whole GHC to an isolated location!
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
   - wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
