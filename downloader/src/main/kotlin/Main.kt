@@ -31,6 +31,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.mapper
+import com.here.ort.utils.ARCHIVE_EXTENSIONS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -92,7 +93,7 @@ object Main {
             order = PARAMETER_ORDER_OPTIONAL)
     private var dependenciesFile: File? = null
 
-    @Parameter(description = "A VCS URL to a project to download. Must not be used together with " +
+    @Parameter(description = "A VCS or archive URL of a project to download. Must not be used together with " +
             "'--dependencies-file'.",
             names = ["--project-url"],
             order = PARAMETER_ORDER_OPTIONAL)
@@ -191,15 +192,28 @@ object Main {
                 }
             }
         } ?: run {
-            // TODO: Allow to specify the project name as a parameter.
-            val projectName = projectUrl!!.substringAfterLast('/').substringBeforeLast('.')
-
-            // TODO: Allow to specify the VCS revision as a parameter.
             allowMovingRevisions = true
-            val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
+
+            // TODO: Allow to specify the project name as a parameter.
+            val projectFile = File(projectUrl)
+            val projectName = projectFile.nameWithoutExtension
 
             val dummyId = Identifier.EMPTY.copy(name = projectName)
-            val dummyPackage = Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs)
+            val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
+                Package.EMPTY.copy(
+                        id = dummyId,
+                        sourceArtifact = RemoteArtifact(
+                                url = projectUrl!!,
+                                hash = "",
+                                hashAlgorithm = HashAlgorithm.UNKNOWN
+                        )
+                )
+            } else {
+                // TODO: Allow to specify the VCS revision as a parameter.
+                val vcs = VcsInfo.EMPTY.copy(url = projectUrl!!)
+
+                Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs)
+            }
 
             listOf(dummyPackage)
         }
