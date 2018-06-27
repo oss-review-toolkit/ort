@@ -87,12 +87,13 @@ object Main {
         }
     }
 
-    @Parameter(description = "A dependencies analysis file to use. Must not be used with '--project-url'.",
+    @Parameter(description = "A dependencies analysis file to use. Must not be used together with '--project-url'.",
             names = ["--dependencies-file", "-d"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var dependenciesFile: File? = null
 
-    @Parameter(description = "A VCS URL to a project to download. Must not be used with '--dependencies-file'.",
+    @Parameter(description = "A VCS URL to a project to download. Must not be used together with " +
+            "'--dependencies-file'.",
             names = ["--project-url"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var projectUrl: String? = null
@@ -168,9 +169,9 @@ object Main {
         // Make the parameter globally available.
         printStackTrace = stacktrace
 
-        if (dependenciesFile != null && projectUrl != null) {
+        if ((dependenciesFile != null) == (projectUrl != null)) {
             throw IllegalArgumentException(
-                    "The '--dependencies-file' and '--project-url' parameters must not be used together.")
+                    "Either '--dependencies-file' or '--project-url' must be specified.")
         }
 
         val packages = dependenciesFile?.let {
