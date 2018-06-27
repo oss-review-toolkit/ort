@@ -55,11 +55,8 @@ class PackageManagerTest : WordSpec({
 
             result.size shouldBe 3
             result[Gradle] shouldBe listOf(File(projectDir, "build.gradle"))
-            result[Maven] shouldBe null
-            result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
-            result[NPM] shouldBe null
             result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
-            result[PhpComposer] shouldBe null
+            result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
         }
 
         "find no files if no package managers are active" {
