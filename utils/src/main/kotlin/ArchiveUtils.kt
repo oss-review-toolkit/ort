@@ -28,6 +28,7 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.zip.Deflater
 
+import org.apache.commons.compress.archivers.sevenz.SevenZFile
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
@@ -38,6 +39,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 private val UNCOMPRESSED_EXTENSIONS = listOf(".pom")
 private val TAR_EXTENSIONS = listOf(".gem", ".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2")
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
+private val SEVENZIP_EXTENSIONS = listOf(".7z")
 
 fun File.unpack(targetDirectory: File) {
     val lowerName = this.name.toLowerCase()
@@ -45,6 +47,7 @@ fun File.unpack(targetDirectory: File) {
         UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {}
         TAR_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackTar(targetDirectory)
         ZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackZip(targetDirectory)
+        SEVENZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpack7Zip(targetDirectory)
         else -> throw IOException("Unknown archive type for file '$absolutePath'.")
     }
 }
@@ -104,6 +107,28 @@ fun File.unpackZip(targetDirectory: File) {
 
             target.outputStream().use { output ->
                 it.copyTo(output)
+            }
+        }
+    }
+}
+
+fun File.unpack7Zip(targetDirectory: File) {
+    SevenZFile(this).use {
+        while (true) {
+            val entry = it.nextEntry ?: break
+
+            if (entry.isDirectory || entry.isAntiItem) {
+                continue
+            }
+
+            val target = File(targetDirectory, entry.name)
+
+            target.parentFile.safeMkdirs()
+
+            target.outputStream().use { output ->
+                val buffer = ByteArray(entry.size.toInt())
+                it.read(buffer)
+                output.write(buffer)
             }
         }
     }
