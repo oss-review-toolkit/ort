@@ -40,15 +40,19 @@ import java.util.regex.Pattern
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
+import org.apache.maven.execution.DefaultMavenExecutionResult
 import org.apache.maven.execution.MavenExecutionRequest
 import org.apache.maven.execution.MavenExecutionRequestPopulator
+import org.apache.maven.execution.MavenSession
 import org.apache.maven.internal.aether.DefaultRepositorySystemSessionFactory
 import org.apache.maven.model.building.ModelBuildingRequest
+import org.apache.maven.plugin.LegacySupport
 import org.apache.maven.project.MavenProject
 import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
+import org.apache.maven.session.scope.internal.SessionScope
 
 import org.codehaus.plexus.DefaultContainerConfiguration
 import org.codehaus.plexus.DefaultPlexusContainer
@@ -162,7 +166,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val projectBuildingRequest = createProjectBuildingRequest(true)
 
         return try {
-            projectBuilder.build(pomFile, projectBuildingRequest)
+            wrapMavenSession {
+                projectBuilder.build(pomFile, projectBuildingRequest)
+            }
         } catch (e: ProjectBuildingException) {
             e.showStackTrace()
 
@@ -252,9 +258,11 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
 
             try {
-                val repositoryConnector = repositoryConnectorProvider
-                        .newRepositoryConnector(repositorySystemSession, repository)
-                repositoryConnector.get(listOf(artifactDownload), null)
+                wrapMavenSession {
+                    val repositoryConnector = repositoryConnectorProvider
+                            .newRepositoryConnector(repositorySystemSession, repository)
+                    repositoryConnector.get(listOf(artifactDownload), null)
+                }
             } catch (e: NoRepositoryConnectorException) {
                 e.showStackTrace()
 
@@ -344,7 +352,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
                     .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
 
             try {
-                projectBuilder.build(pomArtifact, projectBuildingRequest).project
+                wrapMavenSession {
+                    projectBuilder.build(pomArtifact, projectBuildingRequest).project
+                }
             } catch (e: ProjectBuildingException) {
                 e.showStackTrace()
 
@@ -459,5 +469,31 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         }
 
         return VcsInfo(type, url, tag)
+    }
+
+    /**
+     * Create a [MavenSession] and setup the [LegacySupport] and [SessionScope] because this is required to load
+     * extensions using Maven Wagon.
+     */
+    private fun <R> wrapMavenSession(block: () -> R): R {
+        val request = DefaultMavenExecutionRequest()
+        val result = DefaultMavenExecutionResult()
+
+        @Suppress("DEPRECATION")
+        val mavenSession = MavenSession(container, repositorySystemSession, request, result)
+
+        val legacySupport = container.lookup(LegacySupport::class.java, "default")
+        legacySupport.session = mavenSession
+
+        val sessionScope = container.lookup(SessionScope::class.java, "default")
+        sessionScope.enter()
+
+        try {
+            sessionScope.seed(MavenSession::class.java, mavenSession)
+            return block()
+        } finally {
+            sessionScope.exit()
+            legacySupport.session = null
+        }
     }
 }
