@@ -28,6 +28,7 @@ dependencies {
     compile "org.apache.maven.resolver:maven-resolver-connector-basic:$mavenResolverVersion"
     compile "org.apache.maven.resolver:maven-resolver-transport-file:$mavenResolverVersion"
     compile "org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion"
+    compile "org.apache.maven.resolver:maven-resolver-transport-wagon:$mavenResolverVersion"
 
     compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
 }
