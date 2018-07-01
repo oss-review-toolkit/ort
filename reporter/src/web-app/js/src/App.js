@@ -21,6 +21,7 @@ import React, { Component } from 'react';
 import { Row, Tabs } from 'antd';
 import { connect } from 'react-redux';
 import TableView from './components/TableView';
+import TreeView from './components/TreeView';
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -35,7 +36,7 @@ const TabPane = Tabs.TabPane;
 
 class ReporterApp extends Component {
     constructor(props) {
-        super();
+        super(props);
     }
     
     render() {
@@ -48,6 +49,7 @@ class ReporterApp extends Component {
                        <TableView/>
                     </TabPane>
                     <TabPane tab="Tree" key="3">
+                        <TreeView />
                     </TabPane>
                 </Tabs>
             </Row>
