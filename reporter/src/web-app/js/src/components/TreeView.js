@@ -8,7 +8,7 @@ const Search = Input.Search;
 
 class TreeView extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = { search: '' };
         if (props.reportData) {
@@ -37,7 +37,7 @@ class TreeView extends React.Component {
     }
 
     calcTree = (reportData) => {
-        return convertToTableFormat(reportData);
+        return convertToTreeFormat(reportData);
     }
 
     onSearchChange = (e) => {
@@ -57,7 +57,7 @@ class TreeView extends React.Component {
             }, [])
         }
         if (tree) {
-            const keysToExpand = reccurSearch(tree, { key: 'root' }, searchVal);
+            const keysToExpand = searchVal ? reccurSearch(tree, { key: 'root' }, searchVal) : [];
             this.setState({
                 expandedKeys: keysToExpand,
                 autoExpandParent: true,
@@ -120,12 +120,13 @@ class TreeView extends React.Component {
             <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onSearchChange} />
             <Tree 
                 onExpand={this.onExpand}
+                showLine={true}
                 autoExpandParent={autoExpandParent}
                 expandedKeys={expandedKeys}>
                 {tree.map((rootLeaf) => this.renderTreeNode(rootLeaf))}
             </Tree>
         </div>)
-    }    
+    }
 }
 
 export default connect(

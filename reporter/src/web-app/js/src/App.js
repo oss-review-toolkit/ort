@@ -53,55 +53,27 @@ class ReporterApp extends Component {
         // FIXME For debugging purposes make data available to console
         window.data = reportProjectsData;
 
-<<<<<<< HEAD
         return (
-            <Row className="reporter-app">
-                <Tabs>
-                    <TabPane tab="Summary" key="1">
-                    </TabPane>
-                    <TabPane tab="List" key="2">
-                                {Object.keys(reportProjectsData.packages).map((definitionFilePath) => (
-                                    <div key={definitionFilePath}>
-                                        <h4>Packages resolved from ./{definitionFilePath}</h4>
-                                        <DependencyTable 
-                                            key={definitionFilePath}
-                                            project={definitionFilePath}
-                                            data={reportProjectsData}/>
-                                    </div>
-                                ))}
-                    </TabPane>
-                    <TabPane tab="Tree" key="3">
-              <TreeView />
-                    </TabPane>
-                </Tabs>
-            </Row>
-        );
+        <Row className="reporter-app">
+            <Tabs>
+                <TabPane tab="Summary" key="1"></TabPane>
+                <TabPane tab="List" key="2">
+                        {Object.keys(reportProjectsData.packages).map((definitionFilePath) => (
+                        <div key={definitionFilePath}>
+                            <h4>Packages resolved from ./{definitionFilePath}</h4>
+                            <DependencyTable 
+                            key={definitionFilePath}
+                            project={definitionFilePath}
+                            data={reportProjectsData}/>
+                        </div>
+                        ))}
+                </TabPane>
+                <TabPane tab="Tree" key="3">
+                    <TreeView />
+                </TabPane>
+            </Tabs>
+        </Row>);
     }
-=======
-    return (
-      <Row className="reporter-app">
-        <Tabs>
-          <TabPane tab="Summary" key="1">
-          </TabPane>
-          <TabPane tab="List" key="2">
-                {Object.keys(reportProjectsData.packages).map((definitionFilePath) => (
-                  <div key={definitionFilePath}>
-                    <h4>Packages resolved from ./{definitionFilePath}</h4>
-                    <DependencyTable 
-                      key={definitionFilePath}
-                      project={definitionFilePath}
-                      data={reportProjectsData}/>
-                  </div>
-                ))}
-          </TabPane>
-          <TabPane tab="Tree" key="3">
-              <TreeView />
-          </TabPane>
-       </Tabs>
-      </Row>
-    );
-  }
->>>>>>> add Tree view initial component
 }
 
 export default connect(
