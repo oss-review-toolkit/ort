@@ -27,7 +27,7 @@ class TreeView extends React.Component {
             this.state = {
                 ...this.state,
                 tree: this.calcTree(props.reportData),
-                expandedKeys: [],
+                expandedKeys: []
             };
         }
     }
