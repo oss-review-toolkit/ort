@@ -342,7 +342,7 @@ export function convertToProjectTableFormat(reportData) {
         errors: errors,
         levels: levels,
         original: reportData,
-        packages: packagesByDefinitionFilePath,
+        projects: packagesByDefinitionFilePath,
         packagesMetaInfo: packagesFromAnalyzerById
     };
 }

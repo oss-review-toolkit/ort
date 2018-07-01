@@ -19,9 +19,8 @@
 
 import React, { Component } from 'react';
 import { Row, Tabs } from 'antd';
-import { convertToProjectTableFormat } from './utils';
-import { DependencyTable } from './components/DependencyTable';
 import { connect } from 'react-redux';
+import TableView from './components/TableView';
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -37,36 +36,16 @@ const TabPane = Tabs.TabPane;
 class ReporterApp extends Component {
     constructor(props) {
         super();
-        // FIXME For debugging purposes print scan results to console 
-        console.log('reportData:', props.reportData);
-    
     }
     
     render() {
-        const { reportData } = this.props;
-        const reportProjectsData = convertToProjectTableFormat(reportData);
-
-
-        // FIXME For debugging purposes print scan results to console 
-        console.log('renderData', reportProjectsData);
-        // FIXME For debugging purposes make data available to console
-        window.data = reportProjectsData;
-
         return (
             <Row className="reporter-app">
                 <Tabs>
                     <TabPane tab="Summary" key="1">
                     </TabPane>
-                    <TabPane tab="List" key="2">
-                                {Object.keys(reportProjectsData.packages).map((definitionFilePath) => (
-                                    <div key={definitionFilePath}>
-                                        <h4>Packages resolved from ./{definitionFilePath}</h4>
-                                        <DependencyTable 
-                                            key={definitionFilePath}
-                                            project={definitionFilePath}
-                                            data={reportProjectsData}/>
-                                    </div>
-                                ))}
+                    <TabPane tab="Table" key="2">
+                       <TableView/>
                     </TabPane>
                     <TabPane tab="Tree" key="3">
                     </TabPane>
