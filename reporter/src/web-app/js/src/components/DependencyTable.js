@@ -30,7 +30,7 @@ export class DependencyTable extends React.Component {
         super(props);
 
         const data = props.data,
-              packages = data.packages[props.project],
+              packages = data.projects[props.project],
               packagesDeclaredLicenses = removeDuplicatesInArray(Object.keys(data.declaredLicenses[props.project])),
               packagesDeclaredLicensesFilter = [],
               packagesDetectedLicenses = removeDuplicatesInArray(Object.keys(data.detectedLicenses[props.project])),
