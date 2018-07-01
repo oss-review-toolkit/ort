@@ -30,16 +30,13 @@ export function convertToTreeFormat(reportData) {
     const children = Object.entries(pkg).reduce((ret, [key, value]) => {
       // Only recursively traverse objects which can hold packages
       if (key === 'dependencies') {
-        const childs = value.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.id || pkg.name]))
-        if (Array.isArray(childs[0]) || Array.isArray(ret[0])) debugger;
-        ret.push(...childs);
+        const depsChildren = value.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.id || pkg.name]))
+        ret.push(...depsChildren);
       }
       if (key === 'scopes') {
         const scopeChildren = value.map((scope) => {
           return scope.dependencies.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.name || pkg.id]))
         }).reduce((ret, scopeDeps) => [...ret, ...scopeDeps], []);
-        
-        if (Array.isArray(scopeChildren[0]) || Array.isArray(ret[0])) debugger;        
         ret.push(...scopeChildren);
       }
       return ret;
