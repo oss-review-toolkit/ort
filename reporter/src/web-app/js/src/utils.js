@@ -23,36 +23,35 @@ export function isNumeric(n) {
 }
 
 export function convertToTreeFormat(reportData) {
-  const projects = reportData.analyzer_result.projects;
-  // traverse over projects
+    const projects = reportData.analyzer_result.projects;
+    // traverse over projects
 
-  const recursivePackageAnalyzer = (file, pkg, dependencyPathFromRoot = []) => {
-    const children = Object.entries(pkg).reduce((ret, [key, value]) => {
-      // Only recursively traverse objects which can hold packages
-      if (key === 'dependencies') {
-        const depsChildren = value.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.id || pkg.name]))
-        ret.push(...depsChildren);
-      }
-      if (key === 'scopes') {
-        const scopeChildren = value.map((scope) => {
-          return scope.dependencies.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.name || pkg.id]))
-        }).reduce((ret, scopeDeps) => [...ret, ...scopeDeps], []);
-        ret.push(...scopeChildren);
-      }
-      return ret;
-    }, []);
-    return {
-      id: pkg.id || pkg.name,
-      name: pkg.name || pkg.id,
-      children,
-      path: dependencyPathFromRoot
+    const recursivePackageAnalyzer = (file, pkg, dependencyPathFromRoot = []) => {
+        const children = Object.entries(pkg).reduce((ret, [key, value]) => {
+            // Only recursively traverse objects which can hold packages
+            if (key === 'dependencies') {
+                const depsChildren = value.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.id || pkg.name]))
+                ret.push(...depsChildren);
+            }
+            if (key === 'scopes') {
+                const scopeChildren = value.map((scope) => {
+                    return scope.dependencies.map((dep) => recursivePackageAnalyzer(file, dep, [...dependencyPathFromRoot, pkg.name || pkg.id]))
+                }).reduce((ret, scopeDeps) => [...ret, ...scopeDeps], []);
+                ret.push(...scopeChildren);
+            }
+            return ret;
+        }, []);
+        return {
+            id: pkg.id || pkg.name,
+            name: pkg.name || pkg.id,
+            children,
+            path: dependencyPathFromRoot
+        }
     }
-  }
 
-
-  return projects.map((project) => {
-    return recursivePackageAnalyzer(project.definition_file_path, project);
-  })
+    return projects.map((project) => {
+        return recursivePackageAnalyzer(project.definition_file_path, project);
+    })
 }
 
 // FIXME This data conversion should for performance reasons be done in the Kotlin code
