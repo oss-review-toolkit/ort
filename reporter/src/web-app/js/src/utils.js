@@ -22,7 +22,7 @@ export function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-export function convertToTableFormat(reportData) {
+export function convertToTreeFormat(reportData) {
   const projects = reportData.analyzer_result.projects;
   // traverse over projects
 

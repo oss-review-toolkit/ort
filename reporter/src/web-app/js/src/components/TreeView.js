@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tree, Input, Tooltip } from 'antd';
 import { connect } from 'react-redux';
-import { convertToTableFormat } from '../utils';
+import { convertToTreeFormat } from '../utils';
 
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -73,6 +73,7 @@ class TreeView extends React.Component {
 
         let nameMapped = (<span>{name}</span>);
 
+
         if (search && name.indexOf(search) >= 0) {
             const index = name.indexOf(search);
             const pre = name.substring(0, index);
@@ -88,9 +89,23 @@ class TreeView extends React.Component {
             )
         }
 
+        const tooltip = (
+            treeLeaf.path.length >= 1 && <div className="tooltip-list">
+                <div class-name="tooltip-item">
+                    {treeLeaf.path.slice(0).join(" / ")}
+                </div>
+            </div>
+        )
+
+        const nameWithTooltip = (
+            <Tooltip overlayClassName="oss-tree-tooltip" placement="right" title={tooltip}>
+                {nameMapped}
+            </Tooltip>
+        )
+
         return (<TreeNode
             key={treeLeaf.id || treeLeaf.name}
-            title={nameMapped}
+            title={nameWithTooltip}
             >
             {treeLeaf.children.map((childLeaf) =>
                 this.renderTreeNode(childLeaf)  
