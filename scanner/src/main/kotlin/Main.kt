@@ -111,10 +111,10 @@ object Main {
     @Suppress("LateinitUsage")
     private var configFile: File? = null
 
-    @Parameter(description = "The list of file formats for the summary files.",
-            names = ["--summary-format", "-f"],
+    @Parameter(description = "The list of output formats used for the result file(s).",
+            names = ["--output-formats", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var summaryFormats = listOf(OutputFormat.YAML)
+    private var outputFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
@@ -224,7 +224,7 @@ object Main {
 
         val results = scanner.scan(packagesToScan.map { it.pkg }, outputDir, downloadDir)
         results.forEach { pkg, result ->
-            summaryFormats.forEach { format ->
+            outputFormats.forEach { format ->
                 File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.${format.fileExtension}").also {
                     format.mapper.writeValue(it, ScanResultContainer(pkg.id, result))
                 }
@@ -280,9 +280,9 @@ object Main {
     }
 
     private fun writeScanRecord(outputDirectory: File, scanRecord: ScanRecord) {
-        summaryFormats.forEach { format ->
+        outputFormats.forEach { format ->
             val scanRecordFile = File(outputDirectory, "scan-record.${format.fileExtension}")
-            println("Writing scan record to ${scanRecordFile.absolutePath}.")
+            println("Writing scan record to '${scanRecordFile.absolutePath}'.")
             format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, scanRecord)
         }
     }

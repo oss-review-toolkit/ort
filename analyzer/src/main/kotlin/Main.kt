@@ -26,8 +26,6 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.fasterxml.jackson.databind.ObjectMapper
-
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResultBuilder
@@ -85,13 +83,10 @@ object Main {
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The data format used for dependency information.",
-            names = ["--output-format", "-f"],
+    @Parameter(description = "The list of output formats used for the result file(s).",
+            names = ["--output-formats", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var outputFormat = OutputFormat.YAML
-
-    @Suppress("LateinitUsage")
-    private lateinit var mapper: ObjectMapper
+    private var outputFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
             names = ["--ignore-versions"],
@@ -163,8 +158,6 @@ object Main {
             log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
             exitProcess(1)
         }
-
-        mapper = outputFormat.mapper
 
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
@@ -238,11 +231,11 @@ object Main {
 
         analyzerResultBuilder.build().let {
             absoluteOutputPath.safeMkdirs()
-            val outputFile = File(absoluteOutputPath, "all-dependencies." + outputFormat.fileExtension)
-
-            println("Writing analyzer result\nto\n\t$outputFile")
-            mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, it)
-            println("done.")
+            outputFormats.forEach { format ->
+                val outputFile = File(absoluteOutputPath, "all-dependencies.${format.fileExtension}")
+                println("Writing analyzer result to '$outputFile'.")
+                format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, it)
+            }
         }
 
         if (failedAnalysis.isNotEmpty()) {
