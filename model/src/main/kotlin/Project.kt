@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import java.util.SortedSet
 
 /**
@@ -26,6 +28,7 @@ import java.util.SortedSet
  * meta-data like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
  * packages.
  */
+@JsonIgnoreProperties("aliases")
 data class Project(
         /**
          * The unique identifier of this project.
