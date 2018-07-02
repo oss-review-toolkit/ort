@@ -37,6 +37,7 @@ import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.collectMessages
 import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
@@ -384,7 +385,12 @@ object Main {
         val request = Request.Builder().get().url(target.sourceArtifact.url).build()
 
         val startTime = Instant.now()
-        val response = OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
+        val response = try {
+            OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
+        } catch (e: IOException) {
+            throw DownloadException("Failed to download source artifact: ${e.collectMessages()}", e)
+        }
+
         val body = response.body()
         if (!response.isSuccessful || body == null) {
             throw DownloadException("Failed to download source artifact: $response")
