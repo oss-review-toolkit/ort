@@ -357,16 +357,16 @@ class StaticHtmlReporter : TableReporter() {
                     append("""
                         <tr class="$cssClass">
                             <td>${entry.id}</td>
-                            <td>${entry.scopes.joinToString(separator = "<br/>")}</td>
-                            <td>${entry.declaredLicenses.joinToString(separator = "<br/>")}</td>
-                            <td>${entry.detectedLicenses.joinToString(separator = "<br/>")}</td>
+                            <td>${entry.scopes.joinToString("<br/>")}</td>
+                            <td>${entry.declaredLicenses.joinToString("<br/>")}</td>
+                            <td>${entry.detectedLicenses.joinToString("<br/>")}</td>
                             <td><ul>
-                                ${entry.analyzerErrors.joinToString(separator = "\n") {
+                                ${entry.analyzerErrors.joinToString("\n") {
                                     "<li>${it.replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>
                             <td><ul>
-                                ${entry.scanErrors.joinToString(separator = "\n") {
+                                ${entry.scanErrors.joinToString("\n") {
                                     "<li>${it.replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>

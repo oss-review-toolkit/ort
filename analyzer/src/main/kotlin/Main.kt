@@ -248,7 +248,7 @@ object Main {
         if (failedAnalysis.isNotEmpty()) {
             log.error {
                 "Analysis for these projects did not complete successfully:\n" +
-                        failedAnalysis.joinToString(separator = "\n")
+                        failedAnalysis.joinToString("\n")
             }
         }
     }
