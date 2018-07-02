@@ -179,8 +179,8 @@ object Main {
             }
         }
 
-        if (configFile != null) {
-            ScanResultsCache.configure(yamlMapper.readTree(configFile))
+        configFile?.let {
+            ScanResultsCache.configure(it.mapper().readTree(it))
         }
 
         println("Using scanner '$scanner'.")
