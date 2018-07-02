@@ -39,7 +39,6 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.mapper
-import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -225,9 +224,10 @@ object Main {
 
         val results = scanner.scan(packagesToScan.map { it.pkg }, outputDir, downloadDir)
         results.forEach { pkg, result ->
-            // TODO: Make output format configurable.
-            File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.yml").also {
-                yamlMapper.writeValue(it, ScanResultContainer(pkg.id, result))
+            summaryFormats.forEach { format ->
+                File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.${format.fileExtension}").also {
+                    format.mapper.writeValue(it, ScanResultContainer(pkg.id, result))
+                }
             }
 
             log.debug { "Declared licenses for '${pkg.id}': ${pkg.declaredLicenses.joinToString()}" }
