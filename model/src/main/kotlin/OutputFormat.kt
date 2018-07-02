@@ -24,18 +24,21 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 
 /**
- * An enumeration of supported output file formats and their [fileExtension] (not including the dot).
+ * An enumeration of supported output file formats, their primary [fileExtension], and optional [aliases] (not including
+ * the dot).
  */
-enum class OutputFormat(val fileExtension: String, val mapper: ObjectMapper) {
+enum class OutputFormat(val mapper: ObjectMapper, val fileExtension: String, vararg aliases: String) {
     /**
      * Specifies the [JSON](http://www.json.org/) format.
      */
-    JSON("json", jsonMapper),
+    JSON(jsonMapper, "json"),
 
     /**
      * Specifies the [YAML](http://yaml.org/) format.
      */
-    YAML("yml", yamlMapper);
+    YAML(yamlMapper, "yml", "yaml");
+
+    val fileExtensions = listOf(fileExtension, *aliases)
 }
 
 /**
@@ -44,6 +47,6 @@ enum class OutputFormat(val fileExtension: String, val mapper: ObjectMapper) {
  * @throws IllegalArgumentException If no matching OutputFormat for the [File.extension] can be found.
  */
 fun File.mapper() =
-        OutputFormat.values().find { extension == it.fileExtension }?.mapper ?: throw IllegalArgumentException(
+        OutputFormat.values().find { extension in it.fileExtensions }?.mapper ?: throw IllegalArgumentException(
                 "No matching ObjectMapper found for file extension '$extension' of file '$absolutePath'."
         )
