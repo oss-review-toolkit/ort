@@ -80,6 +80,7 @@ class GitTest : StringSpec() {
             val expectedBranches = listOf(
                     "debug-test-failures",
                     "drop-py2.6",
+                    "fixing-test-setups",
                     "master",
                     "release-0.10.1",
                     "reverse-mode"
@@ -96,6 +97,7 @@ class GitTest : StringSpec() {
                     "0.11.0",
                     "0.12.0",
                     "0.12.1",
+                    "0.13.0",
                     "0.5.0",
                     "0.6.0",
                     "0.7.0",
