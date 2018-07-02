@@ -108,7 +108,7 @@ class Maven : PackageManager() {
             if (projectBuildingResult.project == null) {
                 log.warn {
                     "Project for POM file '${projectBuildingResult.pomFile.absolutePath}' could not be built:\n" +
-                            projectBuildingResult.problems.joinToString(separator = "\n")
+                            projectBuildingResult.problems.joinToString("\n")
                 }
             } else {
                 val project = projectBuildingResult.project

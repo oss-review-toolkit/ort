@@ -117,7 +117,7 @@ object Mercurial : VersionControlSystem() {
                 default = ${pkg.vcsProcessed.url}
                 [extensions]
 
-                """.trimIndent() + extensionsList.joinToString(separator = "\n"))
+                """.trimIndent() + extensionsList.joinToString("\n"))
 
             if (EXTENSION_SPARSE in extensionsList) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
