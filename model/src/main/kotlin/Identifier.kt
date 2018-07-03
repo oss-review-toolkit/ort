@@ -70,12 +70,12 @@ data class Identifier(
          * has less than three colon separators the missing values are assigned empty strings.
          */
         fun fromString(identifier: String): Identifier {
-            val list = identifier.split(':')
+            val components = identifier.split(':')
             return Identifier(
-                    provider = list.getOrNull(0) ?: "",
-                    namespace = list.getOrNull(1) ?: "",
-                    name = list.getOrNull(2) ?: "",
-                    version = list.getOrNull(3) ?: ""
+                    provider = components.getOrNull(0) ?: "",
+                    namespace = components.getOrNull(1) ?: "",
+                    name = components.getOrNull(2) ?: "",
+                    version = components.getOrNull(3) ?: ""
             )
         }
     }
