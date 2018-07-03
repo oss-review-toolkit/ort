@@ -80,8 +80,10 @@ data class Identifier(
         }
     }
 
+    private val components = listOf(provider, namespace, name, version)
+
     init {
-        require(listOf(provider, namespace, name, version).none { ":" in it }) {
+        require(components.none { ":" in it }) {
             "Properties of Identifier must not contain ':' because it is used as a separator in the String " +
                     "representation of the Identifier: provider='$provider', namespace='$namespace', name='$name', " +
                     "version='$version'"
@@ -122,10 +124,10 @@ data class Identifier(
     /**
      * Create a path based on the properties of the [Identifier]. All properties are encoded using [encodeOrUnknown].
      */
-    fun toPath() = listOf(provider, namespace, name, version).joinToString("/") { it.encodeOrUnknown() }
+    fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
 
     // TODO: Consider using a PURL here, see https://github.com/package-url/purl-spec#purl.
-    override fun toString() = "$provider:$namespace:$name:$version"
+    override fun toString() = components.joinToString(":")
 }
 
 class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class.java) {
