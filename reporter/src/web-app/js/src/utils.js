@@ -57,7 +57,7 @@ export function convertToTreeFormat(reportData) {
 // FIXME This data conversion should for performance reasons be done in the Kotlin code
 // Converts data format used by ORT Reporter
 // into a form that projectTable can render
-export function convertToProjectTableFormat(reportData) {
+export function convertToRenderFormat(reportData) {
     var declaredLicenses = {},
         detectedLicenses = {},
         errors = {},
@@ -375,7 +375,8 @@ export function convertToProjectTableFormat(reportData) {
         levels: levels,
         original: reportData,
         projects: packagesByDefinitionFilePath,
-        packagesMetaInfo: packagesFromAnalyzerById
+        packagesMetaInfo: packagesFromAnalyzerById,
+        tree: convertToTreeFormat(reportData)
     };
 }
 

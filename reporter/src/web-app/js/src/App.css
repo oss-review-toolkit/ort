@@ -34,7 +34,12 @@ body {
 FIXME Switch to use Ant Design customization
 https://ant.design/docs/react/customize-theme
 */
-.reporter-app .ant-collapse, .reporter-app .ant-tag, .reporter-app .ant-table, .reporter-app .ant-tree {
+.reporter-app .ant-collapse,
+.reporter-app .ant-steps,
+.reporter-app .ant-tabs,
+.reporter-app .ant-tag,
+.reporter-app .ant-table,
+.reporter-app .ant-tree {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
