@@ -43,6 +43,8 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
     val stdoutFile = File(tempDir, "$tempPrefix.stdout")
     val stderrFile = File(tempDir, "$tempPrefix.stderr")
 
+    private val DEBUG_LINES = 20
+
     private val builder = ProcessBuilder(*command)
             .directory(workingDir)
             .redirectOutput(stdoutFile)
@@ -69,17 +71,26 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
             "Running '$commandLine' in '$usedWorkingDir'..."
         }
 
-        if (log.isDebugEnabled) {
-            // No need to use curly-braces-syntax for logging here as the log level check is already done above.
-            log.debug("Keeping temporary files:")
-            log.debug(stdoutFile.absolutePath)
-            log.debug(stderrFile.absolutePath)
-        } else {
-            stdoutFile.deleteOnExit()
-            stderrFile.deleteOnExit()
-        }
+        stdoutFile.deleteOnExit()
+        stderrFile.deleteOnExit()
 
         process.waitFor()
+
+        if (log.isDebugEnabled) {
+            // No need to use curly-braces-syntax for logging here as the log level check is already done above.
+
+            stdoutFile.useLines { lines ->
+                lines.chunked(DEBUG_LINES).first().forEach { line ->
+                    log.debug("stdout: $line")
+                }
+            }
+
+            stderrFile.useLines { lines ->
+                lines.chunked(DEBUG_LINES).first().forEach { line ->
+                    log.debug("stderr: $line")
+                }
+            }
+        }
     }
 
     /**
