@@ -79,17 +79,17 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
         if (log.isDebugEnabled) {
             // No need to use curly-braces-syntax for logging here as the log level check is already done above.
 
-            stdoutFile.useLines { lines ->
-                if (lines.any()) {
-                    lines.chunked(DEBUG_LINES).first().forEach { line ->
+            if (stdoutFile.length() > 0L) {
+                stdoutFile.useLines { lines ->
+                    lines.take(DEBUG_LINES).forEach { line ->
                         log.debug("stdout: $line")
                     }
                 }
             }
 
-            stderrFile.useLines { lines ->
-                if (lines.any()) {
-                    lines.chunked(DEBUG_LINES).first().forEach { line ->
+            if (stderrFile.length() > 0L) {
+                stderrFile.useLines { lines ->
+                    lines.take(DEBUG_LINES).forEach { line ->
                         log.debug("stderr: $line")
                     }
                 }
