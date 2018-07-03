@@ -9,6 +9,11 @@
  https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.svg#iconfont
 */
 
+body {
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 .reporter-app {
     background-color: #fff;
     border: 1px solid rgba(34,36,38,.15);
@@ -23,6 +28,14 @@
 .reporter-app h1, h2, h3, h4 {
     color: #262727;
     margin: 1em 0em 1em 0em;
+}
+
+/*
+FIXME Switch to use Ant Design customization
+https://ant.design/docs/react/customize-theme
+*/
+.reporter-app .ant-collapse, .reporter-app .ant-tag, .reporter-app .ant-table, .reporter-app .ant-tree {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .reporter-app ul.reporter-table-list {
@@ -106,4 +119,8 @@
 .reporter-license-info .reporter-license-fulltext {
     font-size: 0.7em;
     white-space: pre-wrap;
+}
+
+.oss-tree-tooltip .ant-tooltip-inner {
+  max-width: 500px;
 }
