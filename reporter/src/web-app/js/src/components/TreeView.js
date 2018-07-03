@@ -21,7 +21,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tree, Input, Tooltip } from 'antd';
 import { connect } from 'react-redux';
-import { convertToTreeFormat } from '../utils';
 
 const { TreeNode } = Tree;
 const { Search } = Input;
@@ -42,23 +41,12 @@ class TreeView extends React.Component {
     constructor(props) {
         super(props);
         this.state = { search: '' };
-        if (props.reportData) {
+        if (props.reportData && props.reportData.tree) {
             this.state = {
                 ...this.state,
-                tree: this.calcTree(props.reportData),
+                tree: props.reportData.tree,
                 expandedKeys: []
             };
-        }
-    }
-
-    componentWillReceiveProps(newProps) {
-        const { reportData: oldReportData } = this.props;
-        const { reportData: newReportData } = newProps;
-        if (oldReportData !== newReportData) {
-            this.setState({
-                search: '',
-                tree: this.calcTree(newReportData),
-            });
         }
     }
 
@@ -92,8 +80,6 @@ class TreeView extends React.Component {
             });
         }
     }
-
-    calcTree = reportData => convertToTreeFormat(reportData)
 
     renderTreeNode = (treeLeaf) => {
         const { name } = treeLeaf;

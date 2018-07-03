@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Col, Collapse, Row } from 'antd';
-import { convertToProjectTableFormat } from '../utils';
 import { DependencyTable } from './DependencyTable';
 
 const Panel = Collapse.Panel;
@@ -14,17 +13,13 @@ class TableView extends React.Component {
         if (props.reportData) {
             this.state = {
                 ...this.state,
-                data: this.convertData(props.reportData)
+                data: props.reportData
             };
         }
 
         // FIXME For debugging purposes print scan results to console 
         console.log('renderData', this.state.data);
         window.listData = this.state.data;
-    }
-
-    convertData = (reportData) => {
-        return convertToProjectTableFormat(reportData);
     }
 
     render() {
