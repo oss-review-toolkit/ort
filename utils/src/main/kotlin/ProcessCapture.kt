@@ -84,6 +84,7 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
                     lines.take(DEBUG_LINES).forEach { line ->
                         log.debug("stdout: $line")
                     }
+                    log.debug("(Above output is limited to $DEBUG_LINES lines.)")
                 }
             }
 
@@ -92,6 +93,7 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
                     lines.take(DEBUG_LINES).forEach { line ->
                         log.debug("stderr: $line")
                     }
+                    log.debug("(Above output is limited to $DEBUG_LINES lines.)")
                 }
             }
         }
