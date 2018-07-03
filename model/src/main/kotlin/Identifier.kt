@@ -127,7 +127,9 @@ data class Identifier(
     fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
 
     // TODO: Consider using a PURL here, see https://github.com/package-url/purl-spec#purl.
-    override fun toString() = components.joinToString(":")
+    // TODO: We probably want to already sanitize the individual properties, also in other classes, but Kotlin does not
+    // seem to offer a generic / elegant way to do so.
+    override fun toString() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
 }
 
 class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class.java) {
