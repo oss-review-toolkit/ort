@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Col, Collapse, Row } from 'antd';
 import { convertToProjectTableFormat } from '../utils';
 import { DependencyTable } from './DependencyTable';
+
+const Panel = Collapse.Panel;
 
 class TableView extends React.Component {
 
@@ -26,15 +29,36 @@ class TableView extends React.Component {
 
     render() {
         const { data } = this.state;
-        return Object.keys(data.projects).map((definitionFilePath) => (
-            <div key={definitionFilePath}>
-                <h4>Packages resolved from ./{definitionFilePath}</h4>
-                <DependencyTable 
-                    key={definitionFilePath}
-                    project={definitionFilePath}
-                    data={data}/>
-            </div>
-        ));
+        const panelHeader = (definitionFilePath) => {
+            let packagesNrText = (num) => {
+                switch(num) {
+                    case 0:
+                        return '';
+                    case 1:
+                        return '1 package';
+                    default:
+                        return num + ' packages';
+                }
+            }
+            return (<Row>
+                        <Col span={12}>{'./' + definitionFilePath}</Col>
+                        <Col span={2} offset={10}>{packagesNrText(data.projects[definitionFilePath].length)}</Col>
+                    </Row>
+                   );
+        }
+        const panelItems = Object.keys(data.projects).map((definitionFilePath) => (
+                <Panel header={panelHeader(definitionFilePath)} key={'./' + definitionFilePath}>
+                    <DependencyTable 
+                        key={definitionFilePath}
+                        project={definitionFilePath}
+                        data={data}/>
+                </Panel>
+            ))
+        return (
+            <Collapse defaultActiveKey={Object.keys(data.projects).map((item) => { return './' + item })} >
+                {panelItems}
+            </Collapse>
+        );
     }
 }
 
