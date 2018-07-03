@@ -20,10 +20,12 @@
 import React, { Component } from 'react';
 import { Row, Tabs } from 'antd';
 import { connect } from 'react-redux';
+import SummaryView from './components/SummaryView';
 import TableView from './components/TableView';
 import TreeView from './components/TreeView';
 import 'antd/dist/antd.css';
 import './App.css';
+import store from './store/setup'
 
 const TabPane = Tabs.TabPane;
 
@@ -37,6 +39,7 @@ const TabPane = Tabs.TabPane;
 class ReporterApp extends Component {
     constructor(props) {
         super(props);
+        store.dispatch({ type: 'CONVERT_REPORT_DATA' });
     }
     
     render() {
@@ -44,12 +47,13 @@ class ReporterApp extends Component {
             <Row className="reporter-app">
                 <Tabs>
                     <TabPane tab="Summary" key="1">
+                        <SummaryView/>
                     </TabPane>
                     <TabPane tab="Table" key="2">
-                       <TableView/>
+                        <TableView/>
                     </TabPane>
                     <TabPane tab="Tree" key="3">
-                        <TreeView />
+                        <TreeView/>
                     </TabPane>
                 </Tabs>
             </Row>
