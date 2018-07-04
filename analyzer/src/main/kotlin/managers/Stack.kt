@@ -80,6 +80,7 @@ class Stack : PackageManager() {
         }
 
         val projectPackage = parseCabalFile(cabalFile.readText())
+        val projectId = projectPackage.id.copy(provider = toString())
 
         // Parse package information from the stack.yaml file.
         fun runStack(vararg command: String): ProcessCapture {
@@ -120,18 +121,17 @@ class Stack : PackageManager() {
         val externalChildren = mapParentsToChildren("external")
         val externalVersions = mapNamesToVersions("external")
         val externalDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectPackage.id.name, externalChildren, externalVersions, packageTemplates,
-                externalDependencies)
+        buildDependencyTree(projectId.name, externalChildren, externalVersions, packageTemplates, externalDependencies)
 
         val testChildren = mapParentsToChildren("test")
         val testVersions = mapNamesToVersions("test")
         val testDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectPackage.id.name, testChildren, testVersions, packageTemplates, testDependencies)
+        buildDependencyTree(projectId.name, testChildren, testVersions, packageTemplates, testDependencies)
 
         val benchChildren = mapParentsToChildren("bench")
         val benchVersions = mapNamesToVersions("bench")
         val benchDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectPackage.id.name, benchChildren, benchVersions, packageTemplates, benchDependencies)
+        buildDependencyTree(projectId.name, benchChildren, benchVersions, packageTemplates, benchDependencies)
 
         val scopes = sortedSetOf(
                 Scope("external", true, externalDependencies),
@@ -142,18 +142,17 @@ class Stack : PackageManager() {
         // Enrich the package templates with additional meta-data from Hackage.
         val packages = sortedSetOf<Package>()
         packageTemplates.mapTo(packages) { pkg ->
-            if (pkg.id.name == "rts") {
-                // The runtime system ships with the compiler and is not hosted on Hackage.
-                pkg
-            } else {
+            if (pkg.id.provider == "Hackage") {
                 downloadCabalFile(pkg)?.let {
                     parseCabalFile(it)
                 } ?: pkg
+            } else {
+                pkg
             }
         }
 
         val project = Project(
-                id = projectPackage.id,
+                id = projectId,
                 definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
@@ -174,7 +173,9 @@ class Stack : PackageManager() {
             children.forEach { childName ->
                 val pkg = Package(
                         id = Identifier(
-                                provider = toString(),
+                                // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
+                                // on Hackage.
+                                provider = if (childName == "rts") "GHC" else "Hackage",
                                 namespace = "",
                                 name = childName,
                                 version = versionMap[childName] ?: ""

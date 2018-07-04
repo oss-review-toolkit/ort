@@ -1,7 +1,7 @@
 ---
 allow_dynamic_versions: true
 project:
-  id: "Hackage:Testing:quickcheck-state-machine:0.3.1"
+  id: "Stack:Testing:quickcheck-state-machine:0.3.1"
   definition_file_path: "stack.yaml"
   declared_licenses:
   - "BSD3"
@@ -23,2006 +23,2006 @@ project:
   - name: "external"
     distributed: true
     dependencies:
-    - id: "Stack::QuickCheck:2.10.1"
+    - id: "Hackage::QuickCheck:2.10.1"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
-          errors: []
         errors: []
-      - id: "Stack::containers:0.5.10.2"
+      - id: "Hackage::containers:0.5.10.2"
         dependencies: []
         errors: []
-      - id: "Stack::deepseq:1.4.3.0"
+      - id: "Hackage::deepseq:1.4.3.0"
         dependencies: []
         errors: []
-      - id: "Stack::random:1.1"
+      - id: "Hackage::random:1.1"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
-        - id: "Stack::time:1.8.0.2"
+        - id: "Hackage::time:1.8.0.2"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::template-haskell:2.12.0.0"
+      - id: "Hackage::template-haskell:2.12.0.0"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
-        - id: "Stack::ghc-boot-th:8.2.2"
+        - id: "Hackage::ghc-boot-th:8.2.2"
           dependencies: []
           errors: []
-        - id: "Stack::pretty:1.1.3.3"
+        - id: "Hackage::pretty:1.1.3.3"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::tf-random:0.5"
+      - id: "Hackage::tf-random:0.5"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
             errors: []
           errors: []
-        - id: "Stack::primitive:0.6.3.0"
+        - id: "Hackage::primitive:0.6.3.0"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::random:1.1"
+        - id: "Hackage::random:1.1"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::time:1.8.0.2"
+          - id: "Hackage::time:1.8.0.2"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::time:1.8.0.2"
+        - id: "Hackage::time:1.8.0.2"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::transformers:0.5.2.0"
+      - id: "Hackage::transformers:0.5.2.0"
         dependencies: []
         errors: []
       errors: []
-    - id: "Stack::ansi-wl-pprint:0.6.8.2"
+    - id: "Hackage::ansi-wl-pprint:0.6.8.2"
       dependencies:
-      - id: "Stack::ansi-terminal:0.7.1.1"
+      - id: "Hackage::ansi-terminal:0.7.1.1"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
             errors: []
           errors: []
-        - id: "Stack::colour:2.3.4"
+        - id: "Hackage::colour:2.3.4"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
           errors: []
         errors: []
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
           errors: []
         errors: []
       errors: []
-    - id: "Stack::async:2.1.1.1"
+    - id: "Hackage::async:2.1.1.1"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
           errors: []
         errors: []
-      - id: "Stack::stm:2.4.5.0"
+      - id: "Hackage::stm:2.4.5.0"
         dependencies:
-        - id: "Stack::array:0.5.2.0"
+        - id: "Hackage::array:0.5.2.0"
           dependencies: []
           errors: []
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
         errors: []
       errors: []
-    - id: "Stack::base:4.10.1.0"
+    - id: "Hackage::base:4.10.1.0"
       dependencies:
-      - id: "Stack::ghc-prim:0.5.1.1"
+      - id: "GHC::rts:1.0"
+        dependencies: []
+        errors: []
+      - id: "Hackage::ghc-prim:0.5.1.1"
         dependencies:
-        - id: "Stack::rts:1.0"
+        - id: "GHC::rts:1.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::integer-gmp:1.0.1.0"
+      - id: "Hackage::integer-gmp:1.0.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
         errors: []
-      - id: "Stack::rts:1.0"
-        dependencies: []
-        errors: []
       errors: []
-    - id: "Stack::containers:0.5.10.2"
+    - id: "Hackage::containers:0.5.10.2"
       dependencies: []
       errors: []
-    - id: "Stack::lifted-async:0.9.3.3"
+    - id: "Hackage::lifted-async:0.9.3.3"
       dependencies:
-      - id: "Stack::async:2.1.1.1"
+      - id: "Hackage::async:2.1.1.1"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
             errors: []
           errors: []
-        - id: "Stack::stm:2.4.5.0"
+        - id: "Hackage::stm:2.4.5.0"
           dependencies:
-          - id: "Stack::array:0.5.2.0"
+          - id: "Hackage::array:0.5.2.0"
             dependencies: []
             errors: []
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
+            errors: []
+          errors: []
+        errors: []
+      - id: "Hackage::base:4.10.1.0"
+        dependencies:
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Hackage::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Hackage::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
         errors: []
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::constraints:0.9.1"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
-          errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
-          dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
+          - id: "Hackage::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Hackage::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
           errors: []
-        - id: "Stack::rts:1.0"
+        - id: "Hackage::binary:0.8.5.1"
+          dependencies: []
+          errors: []
+        - id: "Hackage::deepseq:1.4.3.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Hackage::hashable:1.2.6.1"
+          dependencies:
+          - id: "Hackage::base:4.10.1.0"
+            dependencies:
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Hackage::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Hackage::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Hackage::bytestring:0.10.8.2"
+            dependencies: []
+            errors: []
+          - id: "Hackage::deepseq:1.4.3.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Hackage::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Hackage::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Hackage::text:1.2.2.2"
+            dependencies:
+            - id: "Hackage::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::base:4.10.1.0"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Hackage::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Hackage::ghc-prim:0.5.1.1"
+                  dependencies:
+                  - id: "GHC::rts:1.0"
+                    dependencies: []
+                    errors: []
+                  errors: []
+                errors: []
+              errors: []
+            - id: "Hackage::binary:0.8.5.1"
+              dependencies: []
+              errors: []
+            - id: "Hackage::bytestring:0.10.8.2"
+              dependencies: []
+              errors: []
+            - id: "Hackage::deepseq:1.4.3.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Hackage::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Hackage::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            errors: []
+          errors: []
+        - id: "Hackage::mtl:2.2.1"
+          dependencies:
+          - id: "Hackage::base:4.10.1.0"
+            dependencies:
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Hackage::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Hackage::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Hackage::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Hackage::transformers-compat:0.5.1.4"
+          dependencies:
+          - id: "Hackage::base:4.10.1.0"
+            dependencies:
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Hackage::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Hackage::ghc-prim:0.5.1.1"
+                dependencies:
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              errors: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Hackage::transformers:0.5.2.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::constraints:0.9.1"
+      - id: "Hackage::lifted-base:0.2.3.11"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
-        - id: "Stack::binary:0.8.5.1"
-          dependencies: []
-          errors: []
-        - id: "Stack::deepseq:1.4.3.0"
-          dependencies: []
-          errors: []
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "Hackage::monad-control:1.0.2.2"
           dependencies:
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Stack::hashable:1.2.6.1"
-          dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
+            errors: []
+          - id: "Hackage::stm:2.4.5.0"
+            dependencies:
+            - id: "Hackage::array:0.5.2.0"
               dependencies: []
               errors: []
-            errors: []
-          - id: "Stack::bytestring:0.10.8.2"
-            dependencies: []
-            errors: []
-          - id: "Stack::deepseq:1.4.3.0"
-            dependencies: []
-            errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
-            dependencies:
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
-              errors: []
-            errors: []
-          - id: "Stack::text:1.2.2.2"
-            dependencies:
-            - id: "Stack::array:0.5.2.0"
-              dependencies: []
-              errors: []
-            - id: "Stack::base:4.10.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
+              errors: []
+            errors: []
+          - id: "Hackage::transformers-base:0.4.4"
+            dependencies:
+            - id: "Hackage::base:4.10.1.0"
+              dependencies:
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
-              errors: []
-            - id: "Stack::binary:0.8.5.1"
-              dependencies: []
-              errors: []
-            - id: "Stack::bytestring:0.10.8.2"
-              dependencies: []
-              errors: []
-            - id: "Stack::deepseq:1.4.3.0"
-              dependencies: []
-              errors: []
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              errors: []
-            errors: []
-          errors: []
-        - id: "Stack::mtl:2.2.1"
-          dependencies:
-          - id: "Stack::base:4.10.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          - id: "Stack::transformers:0.5.2.0"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Stack::transformers-compat:0.5.1.4"
-          dependencies:
-          - id: "Stack::base:4.10.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
-                dependencies:
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
-            dependencies:
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          - id: "Stack::transformers:0.5.2.0"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Stack::transformers:0.5.2.0"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Stack::lifted-base:0.2.3.11"
-        dependencies:
-        - id: "Stack::base:4.10.1.0"
-          dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
-            dependencies:
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Stack::monad-control:1.0.2.2"
-          dependencies:
-          - id: "Stack::base:4.10.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
-                dependencies:
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          - id: "Stack::stm:2.4.5.0"
-            dependencies:
-            - id: "Stack::array:0.5.2.0"
-              dependencies: []
-              errors: []
-            - id: "Stack::base:4.10.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
-                dependencies:
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
-                dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
+              errors: []
+            - id: "Hackage::stm:2.4.5.0"
+              dependencies:
+              - id: "Hackage::array:0.5.2.0"
                 dependencies: []
                 errors: []
-              errors: []
-            errors: []
-          - id: "Stack::transformers-base:0.4.4"
-            dependencies:
-            - id: "Stack::base:4.10.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::base:4.10.1.0"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
-                errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
-                dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
-                errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            - id: "Stack::stm:2.4.5.0"
-              dependencies:
-              - id: "Stack::array:0.5.2.0"
-                dependencies: []
-                errors: []
-              - id: "Stack::base:4.10.1.0"
-                dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::integer-gmp:1.0.1.0"
                   dependencies:
-                  - id: "Stack::rts:1.0"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                - id: "Stack::integer-gmp:1.0.1.0"
-                  dependencies:
-                  - id: "Stack::ghc-prim:0.5.1.1"
+                  - id: "Hackage::ghc-prim:0.5.1.1"
                     dependencies:
-                    - id: "Stack::rts:1.0"
+                    - id: "GHC::rts:1.0"
                       dependencies: []
                       errors: []
                     errors: []
                   errors: []
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
                 errors: []
               errors: []
-            - id: "Stack::transformers-compat:0.5.1.4"
+            - id: "Hackage::transformers-compat:0.5.1.4"
               dependencies:
-              - id: "Stack::base:4.10.1.0"
+              - id: "Hackage::base:4.10.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
-                - id: "Stack::integer-gmp:1.0.1.0"
+                - id: "Hackage::integer-gmp:1.0.1.0"
                   dependencies:
-                  - id: "Stack::ghc-prim:0.5.1.1"
+                  - id: "Hackage::ghc-prim:0.5.1.1"
                     dependencies:
-                    - id: "Stack::rts:1.0"
+                    - id: "GHC::rts:1.0"
                       dependencies: []
                       errors: []
                     errors: []
                   errors: []
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
                 errors: []
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::transformers:0.5.2.0"
+              - id: "Hackage::transformers:0.5.2.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::transformers:0.5.2.0"
+            - id: "Hackage::transformers:0.5.2.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers-compat:0.5.1.4"
+          - id: "Hackage::transformers-compat:0.5.1.4"
             dependencies:
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::transformers:0.5.2.0"
+            - id: "Hackage::transformers:0.5.2.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers-base:0.4.4"
+        - id: "Hackage::transformers-base:0.4.4"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
               errors: []
             errors: []
-          - id: "Stack::stm:2.4.5.0"
+          - id: "Hackage::stm:2.4.5.0"
             dependencies:
-            - id: "Stack::array:0.5.2.0"
+            - id: "Hackage::array:0.5.2.0"
               dependencies: []
               errors: []
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
             errors: []
-          - id: "Stack::transformers-compat:0.5.1.4"
+          - id: "Hackage::transformers-compat:0.5.1.4"
             dependencies:
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::transformers:0.5.2.0"
+            - id: "Hackage::transformers:0.5.2.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
         errors: []
-      - id: "Stack::monad-control:1.0.2.2"
+      - id: "Hackage::monad-control:1.0.2.2"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
-              errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Stack::stm:2.4.5.0"
-          dependencies:
-          - id: "Stack::array:0.5.2.0"
-            dependencies: []
-            errors: []
-          - id: "Stack::base:4.10.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
-                dependencies:
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "Stack::transformers-base:0.4.4"
+        - id: "Hackage::stm:2.4.5.0"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
               errors: []
             errors: []
-          - id: "Stack::stm:2.4.5.0"
+          errors: []
+        - id: "Hackage::transformers-base:0.4.4"
+          dependencies:
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::array:0.5.2.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Hackage::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              errors: []
+            errors: []
+          - id: "Hackage::stm:2.4.5.0"
+            dependencies:
+            - id: "Hackage::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::base:4.10.1.0"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Hackage::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
             errors: []
-          - id: "Stack::transformers-compat:0.5.1.4"
+          - id: "Hackage::transformers-compat:0.5.1.4"
             dependencies:
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::transformers:0.5.2.0"
+            - id: "Hackage::transformers:0.5.2.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers-compat:0.5.1.4"
+        - id: "Hackage::transformers-compat:0.5.1.4"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers:0.5.2.0"
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::transformers-base:0.4.4"
+      - id: "Hackage::transformers-base:0.4.4"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
             errors: []
           errors: []
-        - id: "Stack::stm:2.4.5.0"
+        - id: "Hackage::stm:2.4.5.0"
           dependencies:
-          - id: "Stack::array:0.5.2.0"
+          - id: "Hackage::array:0.5.2.0"
             dependencies: []
             errors: []
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
           errors: []
-        - id: "Stack::transformers-compat:0.5.1.4"
+        - id: "Hackage::transformers-compat:0.5.1.4"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers:0.5.2.0"
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
       errors: []
-    - id: "Stack::lifted-base:0.2.3.11"
+    - id: "Hackage::lifted-base:0.2.3.11"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
-          dependencies:
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
-          dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
-            dependencies:
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
-        - id: "Stack::rts:1.0"
+        - id: "GHC::rts:1.0"
           dependencies: []
           errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
+          dependencies:
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Hackage::integer-gmp:1.0.1.0"
+          dependencies:
+          - id: "Hackage::ghc-prim:0.5.1.1"
+            dependencies:
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          errors: []
         errors: []
-      - id: "Stack::monad-control:1.0.2.2"
+      - id: "Hackage::monad-control:1.0.2.2"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
-              errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Stack::stm:2.4.5.0"
-          dependencies:
-          - id: "Stack::array:0.5.2.0"
-            dependencies: []
-            errors: []
-          - id: "Stack::base:4.10.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
-              dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
-                dependencies:
-                - id: "Stack::rts:1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "Stack::transformers-base:0.4.4"
+        - id: "Hackage::stm:2.4.5.0"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
               errors: []
             errors: []
-          - id: "Stack::stm:2.4.5.0"
+          errors: []
+        - id: "Hackage::transformers-base:0.4.4"
+          dependencies:
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::array:0.5.2.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Hackage::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              errors: []
+            errors: []
+          - id: "Hackage::stm:2.4.5.0"
+            dependencies:
+            - id: "Hackage::array:0.5.2.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::base:4.10.1.0"
+              dependencies:
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "GHC::rts:1.0"
+                  dependencies: []
+                  errors: []
+                errors: []
+              - id: "Hackage::integer-gmp:1.0.1.0"
+                dependencies:
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
             errors: []
-          - id: "Stack::transformers-compat:0.5.1.4"
+          - id: "Hackage::transformers-compat:0.5.1.4"
             dependencies:
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::transformers:0.5.2.0"
+            - id: "Hackage::transformers:0.5.2.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers-compat:0.5.1.4"
+        - id: "Hackage::transformers-compat:0.5.1.4"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers:0.5.2.0"
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::transformers-base:0.4.4"
+      - id: "Hackage::transformers-base:0.4.4"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
             errors: []
           errors: []
-        - id: "Stack::stm:2.4.5.0"
+        - id: "Hackage::stm:2.4.5.0"
           dependencies:
-          - id: "Stack::array:0.5.2.0"
+          - id: "Hackage::array:0.5.2.0"
             dependencies: []
             errors: []
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
           errors: []
-        - id: "Stack::transformers-compat:0.5.1.4"
+        - id: "Hackage::transformers-compat:0.5.1.4"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers:0.5.2.0"
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
       errors: []
-    - id: "Stack::monad-control:1.0.2.2"
+    - id: "Hackage::monad-control:1.0.2.2"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
-            errors: []
-          errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
-          errors: []
-        errors: []
-      - id: "Stack::stm:2.4.5.0"
-        dependencies:
-        - id: "Stack::array:0.5.2.0"
-          dependencies: []
-          errors: []
-        - id: "Stack::base:4.10.1.0"
-          dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
-            dependencies:
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
-            dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
-              dependencies:
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
             errors: []
           errors: []
         errors: []
-      - id: "Stack::transformers-base:0.4.4"
+      - id: "Hackage::stm:2.4.5.0"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::array:0.5.2.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
             errors: []
           errors: []
-        - id: "Stack::stm:2.4.5.0"
+        errors: []
+      - id: "Hackage::transformers-base:0.4.4"
+        dependencies:
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::array:0.5.2.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "Hackage::integer-gmp:1.0.1.0"
+            dependencies:
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            errors: []
+          errors: []
+        - id: "Hackage::stm:2.4.5.0"
+          dependencies:
+          - id: "Hackage::array:0.5.2.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::base:4.10.1.0"
+            dependencies:
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              errors: []
+            - id: "Hackage::integer-gmp:1.0.1.0"
+              dependencies:
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
           errors: []
-        - id: "Stack::transformers-compat:0.5.1.4"
+        - id: "Hackage::transformers-compat:0.5.1.4"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::transformers:0.5.2.0"
+          - id: "Hackage::transformers:0.5.2.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers:0.5.2.0"
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::transformers-compat:0.5.1.4"
+      - id: "Hackage::transformers-compat:0.5.1.4"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers:0.5.2.0"
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::transformers:0.5.2.0"
+      - id: "Hackage::transformers:0.5.2.0"
         dependencies: []
         errors: []
       errors: []
-    - id: "Stack::mtl:2.2.1"
+    - id: "Hackage::mtl:2.2.1"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
-          errors: []
         errors: []
-      - id: "Stack::transformers:0.5.2.0"
+      - id: "Hackage::transformers:0.5.2.0"
         dependencies: []
         errors: []
       errors: []
-    - id: "Stack::quickcheck-with-counterexamples:1.0"
+    - id: "Hackage::quickcheck-with-counterexamples:1.0"
       dependencies:
-      - id: "Stack::QuickCheck:2.10.1"
+      - id: "Hackage::QuickCheck:2.10.1"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
-        - id: "Stack::containers:0.5.10.2"
+        - id: "Hackage::containers:0.5.10.2"
           dependencies: []
           errors: []
-        - id: "Stack::deepseq:1.4.3.0"
+        - id: "Hackage::deepseq:1.4.3.0"
           dependencies: []
           errors: []
-        - id: "Stack::random:1.1"
+        - id: "Hackage::random:1.1"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::time:1.8.0.2"
+          - id: "Hackage::time:1.8.0.2"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::template-haskell:2.12.0.0"
+        - id: "Hackage::template-haskell:2.12.0.0"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
-              errors: []
             errors: []
-          - id: "Stack::ghc-boot-th:8.2.2"
+          - id: "Hackage::ghc-boot-th:8.2.2"
             dependencies: []
             errors: []
-          - id: "Stack::pretty:1.1.3.3"
+          - id: "Hackage::pretty:1.1.3.3"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::tf-random:0.5"
+        - id: "Hackage::tf-random:0.5"
           dependencies:
-          - id: "Stack::base:4.10.1.0"
+          - id: "Hackage::base:4.10.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "GHC::rts:1.0"
+              dependencies: []
+              errors: []
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::integer-gmp:1.0.1.0"
+            - id: "Hackage::integer-gmp:1.0.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              errors: []
-            - id: "Stack::rts:1.0"
-              dependencies: []
               errors: []
             errors: []
-          - id: "Stack::primitive:0.6.3.0"
+          - id: "Hackage::primitive:0.6.3.0"
             dependencies:
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
-            - id: "Stack::transformers:0.5.2.0"
+            - id: "Hackage::transformers:0.5.2.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::random:1.1"
+          - id: "Hackage::random:1.1"
             dependencies:
-            - id: "Stack::base:4.10.1.0"
+            - id: "Hackage::base:4.10.1.0"
               dependencies:
-              - id: "Stack::ghc-prim:0.5.1.1"
+              - id: "GHC::rts:1.0"
+                dependencies: []
+                errors: []
+              - id: "Hackage::ghc-prim:0.5.1.1"
                 dependencies:
-                - id: "Stack::rts:1.0"
+                - id: "GHC::rts:1.0"
                   dependencies: []
                   errors: []
                 errors: []
-              - id: "Stack::integer-gmp:1.0.1.0"
+              - id: "Hackage::integer-gmp:1.0.1.0"
                 dependencies:
-                - id: "Stack::ghc-prim:0.5.1.1"
+                - id: "Hackage::ghc-prim:0.5.1.1"
                   dependencies:
-                  - id: "Stack::rts:1.0"
+                  - id: "GHC::rts:1.0"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "Stack::rts:1.0"
-                dependencies: []
-                errors: []
               errors: []
-            - id: "Stack::time:1.8.0.2"
+            - id: "Hackage::time:1.8.0.2"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::time:1.8.0.2"
+          - id: "Hackage::time:1.8.0.2"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::transformers:0.5.2.0"
+        - id: "Hackage::transformers:0.5.2.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
           errors: []
         errors: []
-      - id: "Stack::template-haskell:2.12.0.0"
+      - id: "Hackage::template-haskell:2.12.0.0"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
-        - id: "Stack::ghc-boot-th:8.2.2"
+        - id: "Hackage::ghc-boot-th:8.2.2"
           dependencies: []
           errors: []
-        - id: "Stack::pretty:1.1.3.3"
+        - id: "Hackage::pretty:1.1.3.3"
           dependencies: []
           errors: []
         errors: []
       errors: []
-    - id: "Stack::random:1.1"
+    - id: "Hackage::random:1.1"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
-          errors: []
         errors: []
-      - id: "Stack::time:1.8.0.2"
+      - id: "Hackage::time:1.8.0.2"
         dependencies: []
         errors: []
       errors: []
-    - id: "Stack::stm:2.4.5.0"
+    - id: "Hackage::stm:2.4.5.0"
       dependencies:
-      - id: "Stack::array:0.5.2.0"
+      - id: "Hackage::array:0.5.2.0"
         dependencies: []
         errors: []
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
           errors: []
         errors: []
       errors: []
-    - id: "Stack::template-haskell:2.12.0.0"
+    - id: "Hackage::template-haskell:2.12.0.0"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
-          errors: []
         errors: []
-      - id: "Stack::ghc-boot-th:8.2.2"
+      - id: "Hackage::ghc-boot-th:8.2.2"
         dependencies: []
         errors: []
-      - id: "Stack::pretty:1.1.3.3"
+      - id: "Hackage::pretty:1.1.3.3"
         dependencies: []
         errors: []
       errors: []
-    - id: "Stack::th-abstraction:0.2.6.0"
+    - id: "Hackage::th-abstraction:0.2.6.0"
       dependencies:
-      - id: "Stack::base:4.10.1.0"
+      - id: "Hackage::base:4.10.1.0"
         dependencies:
-        - id: "Stack::ghc-prim:0.5.1.1"
+        - id: "GHC::rts:1.0"
+          dependencies: []
+          errors: []
+        - id: "Hackage::ghc-prim:0.5.1.1"
           dependencies:
-          - id: "Stack::rts:1.0"
+          - id: "GHC::rts:1.0"
             dependencies: []
             errors: []
           errors: []
-        - id: "Stack::integer-gmp:1.0.1.0"
+        - id: "Hackage::integer-gmp:1.0.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "Stack::rts:1.0"
-          dependencies: []
-          errors: []
         errors: []
-      - id: "Stack::containers:0.5.10.2"
+      - id: "Hackage::containers:0.5.10.2"
         dependencies: []
         errors: []
-      - id: "Stack::ghc-prim:0.5.1.1"
+      - id: "Hackage::ghc-prim:0.5.1.1"
         dependencies:
-        - id: "Stack::rts:1.0"
+        - id: "GHC::rts:1.0"
           dependencies: []
           errors: []
         errors: []
-      - id: "Stack::template-haskell:2.12.0.0"
+      - id: "Hackage::template-haskell:2.12.0.0"
         dependencies:
-        - id: "Stack::base:4.10.1.0"
+        - id: "Hackage::base:4.10.1.0"
           dependencies:
-          - id: "Stack::ghc-prim:0.5.1.1"
+          - id: "GHC::rts:1.0"
+            dependencies: []
+            errors: []
+          - id: "Hackage::ghc-prim:0.5.1.1"
             dependencies:
-            - id: "Stack::rts:1.0"
+            - id: "GHC::rts:1.0"
               dependencies: []
               errors: []
             errors: []
-          - id: "Stack::integer-gmp:1.0.1.0"
+          - id: "Hackage::integer-gmp:1.0.1.0"
             dependencies:
-            - id: "Stack::ghc-prim:0.5.1.1"
+            - id: "Hackage::ghc-prim:0.5.1.1"
               dependencies:
-              - id: "Stack::rts:1.0"
+              - id: "GHC::rts:1.0"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "Stack::rts:1.0"
-            dependencies: []
-            errors: []
           errors: []
-        - id: "Stack::ghc-boot-th:8.2.2"
+        - id: "Hackage::ghc-boot-th:8.2.2"
           dependencies: []
           errors: []
-        - id: "Stack::pretty:1.1.3.3"
+        - id: "Hackage::pretty:1.1.3.3"
           dependencies: []
           errors: []
         errors: []
@@ -2031,6 +2031,30 @@ project:
     distributed: false
     dependencies: []
 packages:
+- package:
+    id: "GHC::rts:1.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
 - package:
     id: "Hackage:Compatibility:transformers-compat:0.5.1.4"
     declared_licenses:
@@ -3009,30 +3033,6 @@ packages:
     homepage_url: "http://www.haskell.org/haskellwiki/Colour"
     binary_artifact:
       url: "https://hackage.haskell.org/package/colour-2.3.4/colour-2.3.4.tar.gz"
-      hash: ""
-      hash_algorithm: ""
-    source_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Stack::rts:1.0"
-    declared_licenses: []
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
