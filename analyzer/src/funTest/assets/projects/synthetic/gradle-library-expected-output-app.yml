@@ -17,13 +17,13 @@ project:
   homepage_url: ""
   scopes:
   - name: "annotationProcessor"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "archives"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "compile"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -38,7 +38,7 @@ project:
         errors: []
       errors: []
   - name: "compileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -50,10 +50,10 @@ project:
         errors: []
       errors: []
   - name: "compileOnly"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "default"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -68,7 +68,7 @@ project:
         errors: []
       errors: []
   - name: "runtime"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -83,7 +83,7 @@ project:
         errors: []
       errors: []
   - name: "runtimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -98,10 +98,10 @@ project:
         errors: []
       errors: []
   - name: "testAnnotationProcessor"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "testCompile"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -116,7 +116,7 @@ project:
         errors: []
       errors: []
   - name: "testCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -128,10 +128,10 @@ project:
         errors: []
       errors: []
   - name: "testCompileOnly"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "testRuntime"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -146,7 +146,7 @@ project:
         errors: []
       errors: []
   - name: "testRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:

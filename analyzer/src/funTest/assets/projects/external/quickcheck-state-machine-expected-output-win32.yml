@@ -18,10 +18,10 @@ project:
   homepage_url: "https://github.com/advancedtelematic/quickcheck-state-machine#readme"
   scopes:
   - name: "bench"
-    delivered: false
+    distributed: false
     dependencies: []
   - name: "external"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Stack::QuickCheck:2.10.1"
       dependencies:
@@ -2637,7 +2637,7 @@ project:
         errors: []
       errors: []
   - name: "test"
-    delivered: false
+    distributed: false
     dependencies: []
 packages:
 - package:

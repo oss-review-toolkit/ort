@@ -18,7 +18,7 @@ project:
   homepage_url: "https://github.com/soc/directories"
   scopes:
   - name: "compile"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:junit:junit:4.12"
       dependencies:

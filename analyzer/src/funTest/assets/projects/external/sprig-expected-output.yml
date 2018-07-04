@@ -17,7 +17,7 @@ project:
   homepage_url: ""
   scopes:
   - name: "default"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "GoDep::github.com/Masterminds/semver:v1.2.2"
       dependencies: []

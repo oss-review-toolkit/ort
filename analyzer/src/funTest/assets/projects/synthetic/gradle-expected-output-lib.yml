@@ -17,13 +17,13 @@ project:
   homepage_url: ""
   scopes:
   - name: "annotationProcessor"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "archives"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "compile"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
       dependencies:
@@ -35,7 +35,7 @@ project:
       dependencies: []
       errors: []
   - name: "compileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
       dependencies:
@@ -47,10 +47,10 @@ project:
       dependencies: []
       errors: []
   - name: "compileOnly"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "default"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
       dependencies:
@@ -62,7 +62,7 @@ project:
       dependencies: []
       errors: []
   - name: "runtime"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
       dependencies:
@@ -74,7 +74,7 @@ project:
       dependencies: []
       errors: []
   - name: "runtimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
       dependencies:
@@ -86,10 +86,10 @@ project:
       dependencies: []
       errors: []
   - name: "testAnnotationProcessor"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "testCompile"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:junit:junit:4.12"
       dependencies:
@@ -107,7 +107,7 @@ project:
       dependencies: []
       errors: []
   - name: "testCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:junit:junit:4.12"
       dependencies:
@@ -125,10 +125,10 @@ project:
       dependencies: []
       errors: []
   - name: "testCompileOnly"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "testRuntime"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:junit:junit:4.12"
       dependencies:
@@ -146,7 +146,7 @@ project:
       dependencies: []
       errors: []
   - name: "testRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:junit:junit:4.12"
       dependencies:
