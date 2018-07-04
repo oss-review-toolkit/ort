@@ -54,7 +54,7 @@ data class Scope(
     /**
      * A comparison function to sort scopes by their name.
      */
-    override fun compareTo(other: Scope) = compareValuesBy(this, other, { it.name })
+    override fun compareTo(other: Scope) = compareValuesBy(this, other) { it.name }
 
     /**
      * Returns whether the given package is contained as a (transitive) dependency in this scope.
