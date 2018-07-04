@@ -172,15 +172,15 @@ class Stack : PackageManager() {
         childMap[parentName]?.let { children ->
             children.forEach { childName ->
                 val pkg = Package(
+                        // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
+                        // on Hackage.
                         id = Identifier(
-                                // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
-                                // on Hackage.
                                 provider = if (childName == "rts") "GHC" else "Hackage",
                                 namespace = "",
                                 name = childName,
                                 version = versionMap[childName] ?: ""
                         ),
-                        declaredLicenses = sortedSetOf(),
+                        declaredLicenses = if (childName == "rts") sortedSetOf("BSD-3-Clause") else sortedSetOf(),
                         description = "",
                         homepageUrl = "",
                         binaryArtifact = RemoteArtifact.EMPTY,

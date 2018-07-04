@@ -2033,7 +2033,8 @@ project:
 packages:
 - package:
     id: "GHC::rts:1.0"
-    declared_licenses: []
+    declared_licenses:
+    - "BSD-3-Clause"
     description: ""
     homepage_url: ""
     binary_artifact:
