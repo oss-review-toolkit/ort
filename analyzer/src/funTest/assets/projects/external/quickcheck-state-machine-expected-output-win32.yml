@@ -3127,7 +3127,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "Mercurial"
+      type: "mercurial"
       url: "https://bitbucket.org/bos/text"
       revision: ""
       path: ""
