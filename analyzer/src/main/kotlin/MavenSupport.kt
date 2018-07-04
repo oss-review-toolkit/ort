@@ -52,6 +52,7 @@ import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
+import org.apache.maven.properties.internal.EnvironmentUtils
 import org.apache.maven.session.scope.internal.SessionScope
 
 import org.codehaus.plexus.DefaultContainerConfiguration
@@ -117,8 +118,9 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
     private fun createMavenExecutionRequest(): MavenExecutionRequest {
         val request = DefaultMavenExecutionRequest()
 
-        request.systemProperties["java.home"] = System.getProperty("java.home")
-        request.systemProperties["java.version"] = System.getProperty("java.version")
+        val props = System.getProperties()
+        EnvironmentUtils.addEnvVars(props)
+        request.systemProperties = props
 
         val populator = container.lookup(MavenExecutionRequestPopulator::class.java, "default")
 
