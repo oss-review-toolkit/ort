@@ -17,7 +17,7 @@ project:
   homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-core/"
   scopes:
   - name: "compile"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:com.h2database:h2:1.4.194"
       dependencies: []
@@ -119,7 +119,7 @@ project:
       dependencies: []
       errors: []
   - name: "test"
-    delivered: false
+    distributed: false
     dependencies:
     - id: "Maven:junit:junit:4.12"
       dependencies: []

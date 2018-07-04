@@ -37,7 +37,7 @@ The toolkit is envisioned to consist of the following libraries:
 * *Reporter* - Summarizes the output from Analyzer, Scanner and Evaluator in an interactive UI that shows the
   identified copyrights, licenses and NOT OK issues.
 * *Documenter* * - Generates the outcome of the review, e.g. Open Source notices and annotated [SPDX](https://spdx.org/)
-  files that can be included with your deliverable.
+  files that can be included into your distribution.
 
 \* Libraries to be completed by Q3 2018.
 

@@ -17,22 +17,22 @@ project:
   homepage_url: ""
   scopes:
   - name: "androidTestUtil"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "archives"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "compile"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "default"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "demoDebugAndroidTestAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "demoDebugAndroidTestCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -44,7 +44,7 @@ project:
         errors: []
       errors: []
   - name: "demoDebugAndroidTestRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -56,10 +56,10 @@ project:
         errors: []
       errors: []
   - name: "demoDebugAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "demoDebugCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -71,7 +71,7 @@ project:
         errors: []
       errors: []
   - name: "demoDebugRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -83,10 +83,10 @@ project:
         errors: []
       errors: []
   - name: "demoDebugUnitTestAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "demoDebugUnitTestCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -98,7 +98,7 @@ project:
         errors: []
       errors: []
   - name: "demoDebugUnitTestRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -110,10 +110,10 @@ project:
         errors: []
       errors: []
   - name: "demoReleaseAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "demoReleaseCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -125,7 +125,7 @@ project:
         errors: []
       errors: []
   - name: "demoReleaseRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -137,10 +137,10 @@ project:
         errors: []
       errors: []
   - name: "demoReleaseUnitTestAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "demoReleaseUnitTestCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -152,7 +152,7 @@ project:
         errors: []
       errors: []
   - name: "demoReleaseUnitTestRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -164,10 +164,10 @@ project:
         errors: []
       errors: []
   - name: "fullDebugAndroidTestAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "fullDebugAndroidTestCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -179,7 +179,7 @@ project:
         errors: []
       errors: []
   - name: "fullDebugAndroidTestRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -191,10 +191,10 @@ project:
         errors: []
       errors: []
   - name: "fullDebugAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "fullDebugCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -206,7 +206,7 @@ project:
         errors: []
       errors: []
   - name: "fullDebugRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -218,10 +218,10 @@ project:
         errors: []
       errors: []
   - name: "fullDebugUnitTestAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "fullDebugUnitTestCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -233,7 +233,7 @@ project:
         errors: []
       errors: []
   - name: "fullDebugUnitTestRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -245,10 +245,10 @@ project:
         errors: []
       errors: []
   - name: "fullReleaseAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "fullReleaseCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -260,7 +260,7 @@ project:
         errors: []
       errors: []
   - name: "fullReleaseRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -272,10 +272,10 @@ project:
         errors: []
       errors: []
   - name: "fullReleaseUnitTestAnnotationProcessorClasspath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "fullReleaseUnitTestCompileClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -287,7 +287,7 @@ project:
         errors: []
       errors: []
   - name: "fullReleaseUnitTestRuntimeClasspath"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "Maven:org.apache.commons:commons-compress:1.17"
       dependencies: []
@@ -299,13 +299,13 @@ project:
         errors: []
       errors: []
   - name: "lintChecks"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "lintClassPath"
-    delivered: true
+    distributed: true
     dependencies: []
   - name: "testCompile"
-    delivered: true
+    distributed: true
     dependencies: []
 packages:
 - package:

@@ -138,13 +138,13 @@ projects:
   # The dependency trees by scope.
   scopes:
   - name: "dependencies"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "NPM::mime-db:1.33.0"
       dependencies: []
       errors: []
   - name: "devDependencies"
-    delivered: false
+    distributed: false
     dependencies:
     - id: "NPM::eslint-config-standard:10.2.1"
       dependencies: []

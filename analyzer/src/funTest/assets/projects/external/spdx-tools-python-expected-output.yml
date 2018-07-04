@@ -19,7 +19,7 @@ project:
   homepage_url: "https://github.com/spdx/tools-python"
   scopes:
   - name: "install"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "PyPI::ply:3.11"
       dependencies: []

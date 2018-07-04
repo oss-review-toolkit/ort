@@ -17,7 +17,7 @@ project:
   homepage_url: ""
   scopes:
   - name: "default"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "GoDep::github.com/kr/fs:2788f0dbd16903de03cb8186e5c7d97b69ad387b"
       dependencies: []
