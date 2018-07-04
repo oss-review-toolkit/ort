@@ -230,6 +230,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             .execute()
                             .resolvedComponents
 
+                    // Imitate Kotlin's "firstOrNull()".
                     def result = resolvedComponents?.find { true }?.getArtifacts(MavenPomArtifact)?.find { true }
 
                     String error = null
