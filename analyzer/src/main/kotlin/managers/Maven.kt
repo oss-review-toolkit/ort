@@ -67,7 +67,7 @@ class Maven : PackageManager() {
     }
 
     /**
-     * Set of scope names for which [Scope.delivered] will be set to false by default. This can be changed later by
+     * Set of scope names for which [Scope.distributed] will be set to false by default. This can be changed later by
      * manually editing the output file.
      */
     private val assumedNonDeliveredScopes = setOf("test")

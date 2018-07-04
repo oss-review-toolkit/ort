@@ -28,7 +28,7 @@ analyzer_result:
     homepage_url: ""
     scopes:
     - name: "compile"
-      delivered: true
+      distributed: true
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -37,7 +37,7 @@ analyzer_result:
           errors: []
         errors: []
     - name: "testCompile"
-      delivered: true
+      distributed: true
       dependencies:
       - id: "Maven:junit:junit:4.12"
         dependencies:

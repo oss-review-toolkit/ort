@@ -158,8 +158,8 @@ class Bundler : PackageManager() {
             parseDependency(workingDir, projectId, it, packages, scopeDependencies, errors)
         }
 
-        val delivered = groupName.toLowerCase() !in DEVELOPMENT_SCOPES
-        scopes += Scope(groupName, delivered, scopeDependencies.toSortedSet())
+        val distributed = groupName.toLowerCase() !in DEVELOPMENT_SCOPES
+        scopes += Scope(groupName, distributed, scopeDependencies.toSortedSet())
     }
 
     private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,

@@ -19,7 +19,7 @@ project:
   homepage_url: "https://github.com/heremaps/oss-review-toolkit"
   scopes:
   - name: "require"
-    delivered: true
+    distributed: true
     dependencies:
     - id: "PhpComposer:mailgun:mailgun-php:v2.4.0"
       dependencies:
@@ -109,7 +109,7 @@ project:
       dependencies: []
       errors: []
   - name: "require-dev"
-    delivered: false
+    distributed: false
     dependencies:
     - id: "PhpComposer:guzzlehttp:psr7:1.4.0"
       dependencies:

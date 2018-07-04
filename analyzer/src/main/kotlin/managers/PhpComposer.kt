@@ -161,11 +161,11 @@ class PhpComposer : PackageManager() {
         }
     }
 
-    private fun parseScope(scopeName: String, delivered: Boolean, manifest: JsonNode, lockFile: JsonNode,
+    private fun parseScope(scopeName: String, distributed: Boolean, manifest: JsonNode, lockFile: JsonNode,
                            packages: Map<String, Package>): Scope {
         val requiredPackages = manifest[scopeName]?.fieldNames() ?: listOf<String>().iterator()
         val dependencies = buildDependencyTree(requiredPackages, lockFile, packages)
-        return Scope(scopeName, delivered, dependencies)
+        return Scope(scopeName, distributed, dependencies)
     }
 
     private fun buildDependencyTree(dependencies: Iterator<String>, lockFile: JsonNode,

@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
 import java.util.SortedSet
 
 /**
@@ -32,10 +34,10 @@ data class Scope(
         val name: String,
 
         /**
-         * A flag to indicate whether this scope is delivered along with the product, i.e. distributed to external
-         * parties.
+         * A flag to indicate whether the dependencies in this scope are distributed along with the product.
          */
-        val delivered: Boolean,
+        @JsonAlias("delivered")
+        val distributed: Boolean,
 
         /**
          * The set of references to packages in this scope. Note that only the first-order packages in this set

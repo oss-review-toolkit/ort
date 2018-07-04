@@ -36,7 +36,7 @@ class ProjectAnalyzerResultTest : StringSpec({
                         scopes = sortedSetOf(
                                 Scope(
                                         name = "scope 1",
-                                        delivered = true,
+                                        distributed = true,
                                         dependencies = sortedSetOf(
                                                 PackageReference(
                                                         Identifier(
