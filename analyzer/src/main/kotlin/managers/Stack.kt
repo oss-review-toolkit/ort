@@ -44,7 +44,10 @@ import com.paypal.digraph.parser.GraphParser
 import okhttp3.Request
 
 import java.io.File
+import java.io.FileFilter
+import java.io.IOException
 import java.net.HttpURLConnection
+import java.nio.file.FileSystems
 import java.util.SortedSet
 
 class Stack : PackageManager() {
@@ -62,8 +65,23 @@ class Stack : PackageManager() {
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
-        val projectName = workingDir.name
 
+        // Parse project information from the *.cabal file.
+        val cabalMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.cabal")
+
+        val cabalFiles = workingDir.listFiles(FileFilter {
+            cabalMatcher.matches(it.toPath())
+        })
+
+        val cabalFile = when (cabalFiles.count()) {
+            0 -> throw IOException("No *.cabal file found in '$workingDir'.")
+            1 -> cabalFiles.first()
+            else -> throw IOException("Multiple *.cabal files found in '$cabalFiles'.")
+        }
+
+        val projectPackage = parseCabalFile(cabalFile.readText())
+
+        // Parse package information from the stack.yaml file.
         fun runStack(vararg command: String): ProcessCapture {
             // Delete any left-overs from interrupted stack runs.
             File(workingDir, ".stack-work").safeDeleteRecursively()
@@ -102,17 +120,18 @@ class Stack : PackageManager() {
         val externalChildren = mapParentsToChildren("external")
         val externalVersions = mapNamesToVersions("external")
         val externalDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectName, externalChildren, externalVersions, packageTemplates, externalDependencies)
+        buildDependencyTree(projectPackage.id.name, externalChildren, externalVersions, packageTemplates,
+                externalDependencies)
 
         val testChildren = mapParentsToChildren("test")
         val testVersions = mapNamesToVersions("test")
         val testDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectName, testChildren, testVersions, packageTemplates, testDependencies)
+        buildDependencyTree(projectPackage.id.name, testChildren, testVersions, packageTemplates, testDependencies)
 
         val benchChildren = mapParentsToChildren("bench")
         val benchVersions = mapNamesToVersions("bench")
         val benchDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectName, benchChildren, benchVersions, packageTemplates, benchDependencies)
+        buildDependencyTree(projectPackage.id.name, benchChildren, benchVersions, packageTemplates, benchDependencies)
 
         val scopes = sortedSetOf(
                 Scope("external", true, externalDependencies),
@@ -133,43 +152,15 @@ class Stack : PackageManager() {
             }
         }
 
-        var parentDir = workingDir.parentFile
-        var cabalFile = File(workingDir, "$projectName.cabal")
-
-        while (!cabalFile.isFile && parentDir != null) {
-            // Guess cabal file names for sub-projects.
-            cabalFile = File(workingDir, "${parentDir.name}-$projectName.cabal")
-            parentDir = parentDir.parentFile
-        }
-
-        val project = if (cabalFile.isFile) {
-            val projectPackage = parseCabalFile(cabalFile.readText())
-
-            Project(
-                    id = projectPackage.id,
-                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
-                    declaredLicenses = projectPackage.declaredLicenses,
-                    vcs = projectPackage.vcs,
-                    vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
-                    homepageUrl = projectPackage.homepageUrl,
-                    scopes = scopes
-            )
-        } else {
-            Project(
-                    id = Identifier(
-                            provider = toString(),
-                            namespace = "",
-                            name = projectName,
-                            version = ""
-                    ),
-                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
-                    declaredLicenses = sortedSetOf(),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(workingDir),
-                    homepageUrl = "",
-                    scopes = scopes
-            )
-        }
+        val project = Project(
+                id = projectPackage.id,
+                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                declaredLicenses = projectPackage.declaredLicenses,
+                vcs = projectPackage.vcs,
+                vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
+                homepageUrl = projectPackage.homepageUrl,
+                scopes = scopes
+        )
 
         // Stack does not support lock files, so hard-code "allowDynamicVersions" to "true".
         return ProjectAnalyzerResult(true, project,
