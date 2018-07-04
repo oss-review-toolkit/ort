@@ -83,6 +83,8 @@ class Stack : PackageManager() {
                 dependencies.getOrPut(parent) { mutableListOf() } += child
             }
 
+            log.debug { "Parsed ${dependencies.count()} dependency relations from graph." }
+
             return dependencies
         }
 
@@ -90,6 +92,8 @@ class Stack : PackageManager() {
             val dependencies = runStack("ls", "dependencies", "--$scope").stdout()
             return dependencies.lines().associate {
                 Pair(it.substringBefore(" "), it.substringAfter(" "))
+            }.also {
+                log.debug { "Parsed ${it.count()} dependency versions from list." }
             }
         }
 
@@ -175,29 +179,31 @@ class Stack : PackageManager() {
     private fun buildDependencyTree(parentName: String,
                                     childMap: Map<String, List<String>>, versionMap: Map<String, String>,
                                     allPackages: SortedSet<Package>, dependencies: SortedSet<PackageReference>) {
-        childMap[parentName]?.forEach { childName ->
-            val pkg = Package(
-                    id = Identifier(
-                            provider = toString(),
-                            namespace = "",
-                            name = childName,
-                            version = versionMap[childName] ?: ""
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY
-            )
+        childMap[parentName]?.let { children ->
+            children.forEach { childName ->
+                val pkg = Package(
+                        id = Identifier(
+                                provider = toString(),
+                                namespace = "",
+                                name = childName,
+                                version = versionMap[childName] ?: ""
+                        ),
+                        declaredLicenses = sortedSetOf(),
+                        description = "",
+                        homepageUrl = "",
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+                )
 
-            allPackages += pkg
+                allPackages += pkg
 
-            val packageRef = pkg.toReference()
-            dependencies += packageRef
+                val packageRef = pkg.toReference()
+                dependencies += packageRef
 
-            buildDependencyTree(childName, childMap, versionMap, allPackages, packageRef.dependencies)
-        }
+                buildDependencyTree(childName, childMap, versionMap, allPackages, packageRef.dependencies)
+            }
+        } ?: log.debug { "No dependencies found for '$parentName'." }
     }
 
     private fun getPackageUrl(name: String, version: String) =
