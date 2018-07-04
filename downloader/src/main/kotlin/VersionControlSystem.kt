@@ -70,15 +70,15 @@ abstract class VersionControlSystem {
         fun forUrl(vcsUrl: String) = if (vcsUrl in urlToVcsMap) {
             urlToVcsMap[vcsUrl]
         } else {
-            ALL.find { it.isApplicableUrl(vcsUrl) }.also { urlToVcsMap[vcsUrl] = it }
+            ALL.find { it.isInPath() && it.isApplicableUrl(vcsUrl) }.also { urlToVcsMap[vcsUrl] = it }
         }
 
         /**
          * Return the applicable VCS for the given [vcsDirectory], or null if none is applicable.
          */
         fun forDirectory(vcsDirectory: File) =
-                ALL.asSequence().map {
-                    it.getWorkingTree(vcsDirectory)
+                ALL.asSequence().mapNotNull {
+                    if (it.isInPath()) it.getWorkingTree(vcsDirectory) else null
                 }.find {
                     try {
                         it.isValid()
