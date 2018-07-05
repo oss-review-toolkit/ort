@@ -25,7 +25,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class ProjectTest : StringSpec({
-    "collectAllDependencies contains all dependencies" {
+    "collectDependencyIds contains all dependencies" {
         val expectedDependencies = listOf(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-lang3:3.5",
@@ -38,6 +38,6 @@ class ProjectTest : StringSpec({
                 File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
         val project = yamlMapper.readValue(analyzerResultsFile, ProjectAnalyzerResult::class.java).project
 
-        project.collectAllDependencies() shouldBe expectedDependencies
+        project.collectDependencyIds() shouldBe expectedDependencies
     }
 })
