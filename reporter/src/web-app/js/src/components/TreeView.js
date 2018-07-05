@@ -21,7 +21,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {
-    Tree, Input, Tooltip, Button, Row,
+    Tree, Input, Tooltip, Button,
 } from 'antd';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -36,13 +36,14 @@ class TreeView extends React.Component {
         };
     }
 
+    static get defaultProps() {
+        return {
+            reportData: null,
+        };
+    }
+
   treeNodes = {};
 
-  static get defaultProps() {
-      return {
-          reportData: null,
-      };
-  }
 
   constructor(props) {
       super(props);
@@ -58,13 +59,6 @@ class TreeView extends React.Component {
       }
   }
 
-  onExpand = (expandedKeys) => {
-      this.setState({
-          expandedKeys,
-          autoExpandParent: false,
-      });
-  }
-
   componentDidUpdate(_, prevState) {
       const { search } = this.state;
 
@@ -73,43 +67,11 @@ class TreeView extends React.Component {
       }
   }
 
-  calcSorted = () => {
-      const { search } = this.state;
-      const selectedNodes = search ? Object.keys(this.treeNodes).filter(node => this.treeNodes[node].name.indexOf(search) >= 0) : [];
-      const sorted = selectedNodes.sort((a, b) => {
-          const aIndexes = a.split('-');
-          const bIndexes = b.split('-');
-          let diff = 0;
-          const maxIndex = Math.min(aIndexes.length, bIndexes.length);
-          for (let i = 0; i < maxIndex; i++) {
-              diff += parseInt(aIndexes[i], 10) - parseInt(bIndexes[i], 10);
-              if (diff !== 0) {
-                  return diff;
-              }
-          }
-          return aIndexes.length > bIndexes.length ? 1 : -1;
+  onExpand = (expandedKeys) => {
+      this.setState({
+          expandedKeys,
+          autoExpandParent: false,
       });
-      if (sorted) {
-          this.scrollTo(sorted[0]);
-          this.setState({
-              sorted,
-          });
-      }
-  }
-
-  scrollTo = (index) => {
-      if (index && this.treeNodes[index].ref) {
-          let el = ReactDOM.findDOMNode(this.treeNodes[index].ref);
-          let top = el.offsetHeight / 2;
-          while (el && el !== this.tree) {
-              top += el.offsetTop;
-              el = el.offsetParent;
-          }
-          top -= Math.round(this.tree.clientHeight / 2);
-          window.setTimeout(() => {
-              this.tree.scrollTop = top;
-          }, 0);
-      }
   }
 
   onSearchChange = (e) => {
@@ -135,6 +97,47 @@ class TreeView extends React.Component {
               expandedKeys: keysToExpand,
               autoExpandParent: true,
               search: searchVal,
+          });
+      }
+  }
+
+  scrollTo = (index) => {
+      if (index && this.treeNodes[index].ref) {
+          let el = ReactDOM.findDOMNode(this.treeNodes[index].ref);
+          let top = el.offsetHeight / 2;
+          while (el && el !== this.tree) {
+              top += el.offsetTop;
+              el = el.offsetParent;
+          }
+          top -= Math.round(this.tree.clientHeight / 2);
+          window.setTimeout(() => {
+              this.tree.scrollTop = top;
+          }, 0);
+      }
+  }
+
+  calcSorted = () => {
+      const { search } = this.state;
+      const selectedNodes = search
+          ? Object.keys(this.treeNodes)
+              .filter(node => this.treeNodes[node].name.indexOf(search) >= 0)
+          : [];
+      const sorted = selectedNodes.sort((a, b) => {
+          const aIndexes = a.split('-');
+          const bIndexes = b.split('-');
+          const maxIndex = Math.min(aIndexes.length, bIndexes.length);
+          for (let i = 0, diff = 0; i < maxIndex; i += 1) {
+              diff += parseInt(aIndexes[i], 10) - parseInt(bIndexes[i], 10);
+              if (diff !== 0) {
+                  return diff;
+              }
+          }
+          return aIndexes.length > bIndexes.length ? 1 : -1;
+      });
+      if (sorted) {
+          this.scrollTo(sorted[0]);
+          this.setState({
+              sorted,
           });
       }
   }
@@ -190,9 +193,11 @@ class TreeView extends React.Component {
           <TreeNode
               key={`${indexElem}-${treeLeaf.id || treeLeaf.name}`}
               title={nameWithTooltip}
-              ref={ref => this.treeNodes[`${indexElem}`] = {
-                  ref,
-                  name,
+              ref={(ref) => {
+                  this.treeNodes[`${indexElem}`] = {
+                      ref,
+                      name,
+                  };
               }}
           >
               {treeLeaf.children.map((childLeaf, nodeIndex) => this.renderTreeNode(childLeaf, `${indexElem}-${nodeIndex}`))}
@@ -232,7 +237,9 @@ class TreeView extends React.Component {
                               <Button onClick={this.next} icon="arrow-down" />
                               <Button onClick={this.prev} icon="arrow-up" />
                               <span className="ort-tree-navigation-counter">
-                                  {selectedIndex + 1}/{sorted.length}
+                                  {selectedIndex + 1}
+                                  /
+                                  {sorted.length}
                               </span>
                           </div>
                       ) : null
