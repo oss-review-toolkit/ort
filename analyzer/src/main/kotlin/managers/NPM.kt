@@ -176,12 +176,12 @@ open class NPM : PackageManager() {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = File(rootDirectory, "node_modules")
 
-        log.info { "Searching for package.json files in ${nodeModulesDir.absolutePath}..." }
+        log.info { "Searching for package.json files in '${nodeModulesDir.absolutePath}'..." }
 
         nodeModulesDir.walkTopDown().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }.forEach {
-            log.debug { "Found module: ${it.absolutePath}" }
+            log.debug { "Found a module in '${it.absolutePath}'." }
 
             @Suppress("UnsafeCast")
             val json = jsonMapper.readTree(it) as ObjectNode
@@ -211,7 +211,7 @@ open class NPM : PackageManager() {
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
-            log.debug { "Retrieving package info for $identifier" }
+            log.debug { "Retrieving package info for '$identifier'." }
             val encodedName = if (rawName.startsWith("@")) {
                 "@${URLEncoder.encode(rawName.substringAfter("@"), "UTF-8")}"
             } else {
@@ -227,9 +227,9 @@ open class NPM : PackageManager() {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     log.debug {
                         if (response.cacheResponse() != null) {
-                            "Retrieved info about $encodedName from local cache."
+                            "Retrieved info about '$encodedName' from local cache."
                         } else {
-                            "Downloaded info about $encodedName from NPM registry."
+                            "Downloaded info about '$encodedName' from NPM registry."
                         }
                     }
 
@@ -251,7 +251,7 @@ open class NPM : PackageManager() {
                 } else {
                     log.info {
                         "Could not retrieve package information for '$encodedName' " +
-                                "from public NPM registry: ${response.code()} - ${response.message()}"
+                                "from public NPM registry: ${response.message()} (code ${response.code()})."
                     }
                 }
             }
@@ -338,7 +338,7 @@ open class NPM : PackageManager() {
         val json = jsonMapper.readTree(packageJson)
         val dependencies = sortedSetOf<PackageReference>()
         if (json[scope] != null) {
-            log.debug { "Looking for dependencies in scope $scope" }
+            log.debug { "Looking for dependencies in scope '$scope'." }
             val dependencyMap = json[scope]
             dependencyMap.fields().forEach { (name, _) ->
                 buildTree(packageJson.parentFile, packageJson.parentFile, name, packages)?.let { dependency ->
@@ -346,7 +346,7 @@ open class NPM : PackageManager() {
                 }
             }
         } else {
-            log.debug { "Could not find scope $scope in ${packageJson.absolutePath}" }
+            log.debug { "Could not find scope '$scope' in '${packageJson.absolutePath}'." }
         }
 
         return dependencies
@@ -365,14 +365,14 @@ open class NPM : PackageManager() {
 
     private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>,
                           dependencyBranch: List<String> = listOf()): PackageReference? {
-        log.debug { "Building dependency tree for $name from directory ${startDir.absolutePath}" }
+        log.debug { "Building dependency tree for '$name' from directory '${startDir.absolutePath}'." }
 
         val nodeModulesDir = File(startDir, "node_modules")
         val moduleDir = File(nodeModulesDir, name)
         val packageFile = File(moduleDir, "package.json")
 
         if (packageFile.isFile) {
-            log.debug { "Found package file for module $name: ${packageFile.absolutePath}" }
+            log.debug { "Found package file for module '$name' in '${packageFile.absolutePath}'." }
 
             val packageJson = jsonMapper.readTree(packageFile)
             val rawName = packageJson["name"].textValue()
@@ -381,8 +381,8 @@ open class NPM : PackageManager() {
 
             if (identifier in dependencyBranch) {
                 log.debug {
-                    "Not adding circular dependency $identifier to the tree, it is already on this branch of the " +
-                            "dependency tree: ${dependencyBranch.joinToString(" -> ")}"
+                    "Not adding circular dependency '$identifier' to the tree, it is already on this branch of the " +
+                            "dependency tree: ${dependencyBranch.joinToString(" -> ")}."
                 }
                 return null
             }
@@ -405,7 +405,7 @@ open class NPM : PackageManager() {
 
             return packageInfo.toReference(dependencies)
         } else if (rootDir == startDir) {
-            log.error { "Could not find module $name" }
+            log.error { "Could not find module '$name'." }
             return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
                     listOf("Package was not installed."))
         } else {
@@ -417,8 +417,8 @@ open class NPM : PackageManager() {
             }
 
             log.debug {
-                "Could not find package file for $name in ${startDir.absolutePath}, looking in " +
-                        "${parent.absolutePath} instead"
+                "Could not find package file for '$name' in '${startDir.absolutePath}', looking in " +
+                        "'${parent.absolutePath}' instead."
             }
 
             return buildTree(rootDir, parent, name, packages, dependencyBranch)
@@ -427,7 +427,7 @@ open class NPM : PackageManager() {
 
     private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>)
             : ProjectAnalyzerResult {
-        log.debug { "Parsing project info from ${packageJson.absolutePath}." }
+        log.debug { "Parsing project info from '${packageJson.absolutePath}'." }
 
         val json = jsonMapper.readTree(packageJson)
 
@@ -491,7 +491,6 @@ open class NPM : PackageManager() {
         }
 
         val managerCommand = command(workingDir)
-        log.debug { "Using '$managerCommand' to install $NPM dependencies." }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         ProcessCapture(workingDir, managerCommand, "install", "--ignore-scripts").requireSuccess()
