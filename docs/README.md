@@ -55,6 +55,7 @@ Follow these steps to get started with the OSS Review Toolkit:
 * `./analyzer/build/install/analyzer/bin/analyzer`
 * `./downloader/build/install/downloader/bin/downloader`
 * `./scanner/build/install/scanner/bin/scanner`
+* `./reporter/build/install/scanner/bin/reporter`
 
 Make sure that the locale of your system is set to `en_US.UTF-8`, using other locales might lead to issues with parsing
 the output of external tools.
