@@ -1467,9 +1467,10 @@ project:
         - id: "NPM::async-each:1.0.1"
           dependencies: []
           errors: []
-        - id: "NPM::fsevents:unknown, package not installed"
+        - id: "NPM::fsevents:"
           dependencies: []
-          errors: []
+          errors:
+          - "Package was not installed."
         - id: "NPM::glob-parent:2.0.0"
           dependencies:
           - id: "NPM::is-glob:2.0.1"

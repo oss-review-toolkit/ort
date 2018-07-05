@@ -406,7 +406,8 @@ open class NPM : PackageManager() {
             return packageInfo.toReference(dependencies)
         } else if (rootDir == startDir) {
             log.error { "Could not find module $name" }
-            return PackageReference(Identifier(toString(), "", name, "unknown, package not installed"), sortedSetOf())
+            return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
+                    listOf("Package was not installed."))
         } else {
             var parent = startDir.parentFile.parentFile
 
