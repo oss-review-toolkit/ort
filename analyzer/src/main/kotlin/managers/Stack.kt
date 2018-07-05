@@ -116,40 +116,28 @@ class Stack : PackageManager() {
             }
         }
 
-        val packageTemplates = sortedSetOf<Package>()
+        val allPackages = mutableMapOf<Package, Package>()
 
         val externalChildren = mapParentsToChildren("external")
         val externalVersions = mapNamesToVersions("external")
         val externalDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, externalChildren, externalVersions, packageTemplates, externalDependencies)
+        buildDependencyTree(projectId.name, allPackages, externalChildren, externalVersions, externalDependencies)
 
         val testChildren = mapParentsToChildren("test")
         val testVersions = mapNamesToVersions("test")
         val testDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, testChildren, testVersions, packageTemplates, testDependencies)
+        buildDependencyTree(projectId.name, allPackages, testChildren, testVersions, testDependencies)
 
         val benchChildren = mapParentsToChildren("bench")
         val benchVersions = mapNamesToVersions("bench")
         val benchDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, benchChildren, benchVersions, packageTemplates, benchDependencies)
+        buildDependencyTree(projectId.name, allPackages, benchChildren, benchVersions, benchDependencies)
 
         val scopes = sortedSetOf(
                 Scope("external", true, externalDependencies),
                 Scope("test", false, testDependencies),
                 Scope("bench", false, benchDependencies)
         )
-
-        // Enrich the package templates with additional meta-data from Hackage.
-        val packages = sortedSetOf<Package>()
-        packageTemplates.mapTo(packages) { pkg ->
-            if (pkg.id.provider == "Hackage") {
-                downloadCabalFile(pkg)?.let {
-                    parseCabalFile(it)
-                } ?: pkg
-            } else {
-                pkg
-            }
-        }
 
         val project = Project(
                 id = projectId,
@@ -163,15 +151,15 @@ class Stack : PackageManager() {
 
         // Stack does not support lock files, so hard-code "allowDynamicVersions" to "true".
         return ProjectAnalyzerResult(true, project,
-                packages.map { it.toCuratedPackage() }.toSortedSet())
+                allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
-    private fun buildDependencyTree(parentName: String,
+    private fun buildDependencyTree(parentName: String, allPackages: MutableMap<Package, Package>,
                                     childMap: Map<String, List<String>>, versionMap: Map<String, String>,
-                                    allPackages: SortedSet<Package>, dependencies: SortedSet<PackageReference>) {
+                                    scopeDependencies: SortedSet<PackageReference>) {
         childMap[parentName]?.let { children ->
             children.forEach { childName ->
-                val pkg = Package(
+                val pkgTemplate = Package(
                         id = Identifier(
                                 // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
                                 // on Hackage.
@@ -188,12 +176,21 @@ class Stack : PackageManager() {
                         vcs = VcsInfo.EMPTY
                 )
 
-                allPackages += pkg
+                val pkg = allPackages.getOrPut(pkgTemplate) {
+                    if (pkgTemplate.id.provider == "Hackage") {
+                        // Enrich the package with additional meta-data from Hackage.
+                        downloadCabalFile(pkgTemplate)?.let {
+                            parseCabalFile(it)
+                        } ?: pkgTemplate
+                    } else {
+                        pkgTemplate
+                    }
+                }
 
                 val packageRef = pkg.toReference()
-                dependencies += packageRef
+                scopeDependencies += packageRef
 
-                buildDependencyTree(childName, childMap, versionMap, allPackages, packageRef.dependencies)
+                buildDependencyTree(childName, allPackages, childMap, versionMap, packageRef.dependencies)
             }
         } ?: log.debug { "No dependencies found for '$parentName'." }
     }
