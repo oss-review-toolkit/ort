@@ -53,12 +53,12 @@ data class PackageReference(
     override fun compareTo(other: PackageReference) = id.compareTo(other.id)
 
     /**
-     * Returns whether the given package is a (transitive) dependency of this reference.
+     * Return whether the given package is a (transitive) dependency of this reference.
      */
     fun dependsOn(pkg: Package) = dependsOn(pkg.id)
 
     /**
-     * Returns whether the package identified by [pkgId] is a (transitive) dependency of this reference.
+     * Return whether the package identified by [pkgId] is a (transitive) dependency of this reference.
      */
     fun dependsOn(pkgId: Identifier): Boolean {
         return dependencies.find { pkgRef ->

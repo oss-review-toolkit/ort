@@ -72,7 +72,7 @@ data class Project(
     }
 
     /**
-     * Returns a de-duplicated list of all errors for the provided [id].
+     * Return a de-duplicated list of all errors for the provided [id].
      */
     fun collectErrors(id: Identifier): List<String> {
         val collectedErrors = mutableListOf<String>()
