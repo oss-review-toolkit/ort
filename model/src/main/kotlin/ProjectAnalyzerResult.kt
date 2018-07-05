@@ -52,6 +52,17 @@ data class ProjectAnalyzerResult(
          */
         val errors: List<String> = emptyList()
 ) {
+    init {
+        // Perform a sanity check to ensure we have no references to non-existing packages.
+        val packageIds = packages.map { it.pkg.id }
+        val referencedIds = project.collectDependencyIds(false)
+
+        // Note that not all packageIds have to be contained in the referencedIds, e.g. for NPM optional dependencies.
+        require(packageIds.containsAll(referencedIds)) {
+            "The following references do not actually refer to packages: ${referencedIds - packageIds}."
+        }
+    }
+
     /**
      * Return true if there were any errors during the analysis, false otherwise.
      */
