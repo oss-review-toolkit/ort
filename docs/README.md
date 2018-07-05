@@ -53,7 +53,6 @@ Follow these steps to get started with the OSS Review Toolkit:
    from their respective locations as follows:
 
 * `./analyzer/build/install/analyzer/bin/analyzer`
-* `./graph/build/install/graph/bin/graph`
 * `./downloader/build/install/downloader/bin/downloader`
 * `./scanner/build/install/scanner/bin/scanner`
 
@@ -103,12 +102,6 @@ dependencies per project is written out as [ABCD](https://github.com/nexB/aboutc
 YAML (or JSON, see `-f`) files to the specified output directory (`-o`) whose inner structure mirrors the one from the
 input directory. The output files exactly document the status quo of all package-related meta-data. They can and
 probably need to be further processed or manually edited before passing them to one of the other tools.
-
-### [graph](../graph/src/main/kotlin)
-
-In order to quickly visualize dependency information from an analysis the Graph tool can be used. Given a dependencies
-file (`-d`) it diplays a simple representation of the dependency graph in a GUI. The graph is interactive in the sense
-that nodes can be dragged & dropped with the mouse to rearrange them for a better overview.
 
 ### [downloader](../downloader/src/main/kotlin)
 
