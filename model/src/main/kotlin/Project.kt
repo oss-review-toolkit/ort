@@ -67,8 +67,8 @@ data class Project(
          */
         val scopes: SortedSet<Scope>
 ) : CustomData(), Comparable<Project> {
-    fun collectDependencyIds() = scopes.fold(sortedSetOf<Identifier>()) { ids, scope ->
-        ids.also { it += scope.collectDependencyIds() }
+    fun collectDependencyIds(includeErroneous: Boolean = true) = scopes.fold(sortedSetOf<Identifier>()) { ids, scope ->
+        ids.also { it += scope.collectDependencyIds(includeErroneous) }
     }
 
     /**
