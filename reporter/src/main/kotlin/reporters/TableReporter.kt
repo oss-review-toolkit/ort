@@ -115,7 +115,7 @@ abstract class TableReporter : Reporter {
         val summaryEntries = mutableMapOf<Identifier, TableEntry>()
 
         val projectTables = scanRecord.analyzerResult.projects.associate { project ->
-            val tableEntries = (listOf(project.id) + project.collectAllDependencies()).map { id ->
+            val tableEntries = (listOf(project.id) + project.collectDependencyIds()).map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.map { it.name }.toSortedSet()
