@@ -43,7 +43,7 @@ class Unmanaged : PackageManager() {
     override fun toString() = Unmanaged.toString()
 
     /**
-     * Returns a [ProjectAnalyzerResult] for the [Project] contained in the [definitionFile] directory, but does not
+     * Return a [ProjectAnalyzerResult] for the [Project] contained in the [definitionFile] directory, but does not
      * perform any dependency resolution.
      *
      * @param definitionFile The directory containing the unmanaged project.
