@@ -8,6 +8,7 @@ body {
 .ort-tree-tooltip .ant-tooltip-inner {
     max-width: 500px;
 }
+
 .ort-tree-searched-item {
     background: yellow;
 }
@@ -16,6 +17,7 @@ body {
     background: orange;
     transition: background 100ms ease-in;
 }
+
 .ort-tree-wrapper {
     overflow: auto;
     flex: auto;
