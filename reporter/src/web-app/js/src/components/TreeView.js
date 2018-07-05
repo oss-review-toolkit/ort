@@ -21,7 +21,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {
-    Tree, Input, Tooltip, Button,
+    Tree, Input, Tooltip, Button
 } from 'antd';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -32,13 +32,13 @@ const { Search } = Input;
 class TreeView extends React.Component {
     static get propTypes() {
         return {
-            reportData: PropTypes.any,
+            reportData: PropTypes.any
         };
     }
 
     static get defaultProps() {
         return {
-            reportData: null,
+            reportData: null
         };
     }
 
@@ -53,7 +53,7 @@ class TreeView extends React.Component {
                 tree: props.reportData.tree,
                 expandedKeys: [],
                 selectedIndex: 0,
-                sorted: [],
+                sorted: []
             };
         }
     }
@@ -69,7 +69,7 @@ class TreeView extends React.Component {
     onExpand = (expandedKeys) => {
         this.setState({
             expandedKeys,
-            autoExpandParent: false,
+            autoExpandParent: false
         });
     }
 
@@ -95,18 +95,18 @@ class TreeView extends React.Component {
                 selectedIndex: 0,
                 expandedKeys: keysToExpand,
                 autoExpandParent: true,
-                search: searchVal,
+                search: searchVal
             });
         }
     }
 
     scrollTo = (index) => {
         if (index && this.treeNodes[index].ref) {
-            let el = ReactDOM.findDOMNode(this.treeNodes[index].ref);
-            let top = el.offsetHeight / 2;
-            while (el && el !== this.tree) {
-                top += el.offsetTop;
-                el = el.offsetParent;
+            let elem = ReactDOM.findDOMNode(this.treeNodes[index].ref);
+            let top = elem.offsetHeight / 2;
+            while (elem && elem !== this.tree) {
+                top += elem.offsetTop;
+                elem = elem.offsetParent;
             }
             top -= Math.round(this.tree.clientHeight / 2);
             window.setTimeout(() => {
@@ -136,7 +136,7 @@ class TreeView extends React.Component {
         if (sorted) {
             this.scrollTo(sorted[0]);
             this.setState({
-                sorted,
+                sorted
             });
         }
     }
@@ -162,7 +162,7 @@ class TreeView extends React.Component {
                     <span
                         className={classNames({
                             'ort-tree-searched-item': !selected,
-                            'ort-tree-selected-item': selected,
+                            'ort-tree-selected-item': selected
                         })}
                     >
                         {search}
@@ -195,7 +195,7 @@ class TreeView extends React.Component {
                 ref={(ref) => {
                     this.treeNodes[`${indexElem}`] = {
                         ref,
-                        name,
+                        name
                     };
                 }}
             >
@@ -209,7 +209,7 @@ class TreeView extends React.Component {
         const index = selectedIndex - 1 < 0 ? sorted.length - 1 : selectedIndex - 1;
         this.scrollTo(sorted[index]);
         this.setState({
-            selectedIndex: index,
+            selectedIndex: index
         });
     }
 
@@ -218,13 +218,13 @@ class TreeView extends React.Component {
         const index = selectedIndex + 1 > sorted.length - 1 ? 0 : selectedIndex + 1;
         this.scrollTo(sorted[index]);
         this.setState({
-            selectedIndex: index,
+            selectedIndex: index
         });
     }
 
     render() {
         const {
-            tree, expandedKeys, autoExpandParent, selectedIndex, sorted,
+            tree, expandedKeys, autoExpandParent, selectedIndex, sorted
         } = this.state;
         return tree && (
             <div className="ort-tree-view">
