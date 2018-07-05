@@ -42,12 +42,13 @@ data class PackageReference(
          */
         val errors: List<String> = emptyList()
 ) : CustomData(), Comparable<PackageReference> {
-    fun collectDependencyIds(): SortedSet<Identifier> = dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
-        ids.also {
-            it += ref.id
-            it += ref.collectDependencyIds()
-        }
-    }
+    fun collectDependencyIds(includeErroneous: Boolean = true): SortedSet<Identifier> =
+            dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
+                ids.also {
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
+                    it += ref.collectDependencyIds()
+                }
+            }
 
     /**
      * A comparison function to sort package references by their identifier. This function ignores all other properties
