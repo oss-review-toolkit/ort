@@ -1,7 +1,18 @@
-// FIXME index.css is being picked up
 body {
     background: #fafafa;
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+}
+
+.oss-tree-tooltip .ant-tooltip-inner {
+    max-width: 500px;
+}
+.searched-item {
+    background: yellow;
+}
+
+.selected-item {
+    background: orange;
+    transition: background 100ms ease-in;
 }
