@@ -159,8 +159,8 @@ class TreeView extends React.Component {
                   {pre}
                   <span
                       className={classNames({
-                          'searched-item': !selected,
-                          'selected-item': selected,
+                          'ort-tree-searched-item': !selected,
+                          'ort-tree-selected-item': selected,
                       })}
                   >
                       {search}
@@ -181,7 +181,7 @@ class TreeView extends React.Component {
       );
 
       const nameWithTooltip = (
-          <Tooltip overlayClassName="oss-tree-tooltip" placement="right" title={tooltip}>
+          <Tooltip overlayClassName="ort-tree-tooltip" placement="right" title={tooltip}>
               {nameMapped}
           </Tooltip>
       );
@@ -223,20 +223,18 @@ class TreeView extends React.Component {
           tree, expandedKeys, autoExpandParent, selectedIndex, sorted,
       } = this.state;
       return tree && (
-          <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', marginBottom: 8 }}>
+          <div className="ort-tree-view">
+              <div className="ort-tree-search">
                   <Search placeholder="Search" onChange={this.onSearchChange} />
                   {
                       sorted.length ? (
-                          <Row type="flex" align="middle" style={{ marginLeft: 8, flexWrap: 'nowrap' }}>
+                          <div className="ort-tree-navigation">
                               <Button onClick={this.next} icon="arrow-down" />
                               <Button onClick={this.prev} icon="arrow-up" />
-                              <span style={{ marginLeft: 8 }}>
-                                  {selectedIndex + 1}
-/
-                                  {sorted.length}
+                              <span className="ort-tree-navigation-counter">
+                                  {selectedIndex + 1}/{sorted.length}
                               </span>
-                          </Row>
+                          </div>
                       ) : null
                   }
               </div>
@@ -245,7 +243,7 @@ class TreeView extends React.Component {
                       this.tree = treeContainer;
                       return treeContainer;
                   }}
-                  style={{ overflow: 'auto', flex: 'auto', height: 'calc(100vh - 150px)' }}
+                  className="ort-tree-wrapper"
               >
                   <Tree
                       onExpand={this.onExpand}

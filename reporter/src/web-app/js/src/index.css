@@ -5,14 +5,41 @@ body {
     font-family: sans-serif;
 }
 
-.oss-tree-tooltip .ant-tooltip-inner {
+.ort-tree-tooltip .ant-tooltip-inner {
     max-width: 500px;
 }
-.searched-item {
+.ort-tree-searched-item {
     background: yellow;
 }
 
-.selected-item {
+.ort-tree-selected-item {
     background: orange;
     transition: background 100ms ease-in;
+}
+.ort-tree-wrapper {
+    overflow: auto;
+    flex: auto;
+    height: calc(100vh - 150px);
+}
+
+.ort-tree-view {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ort-tree-search {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.ort-tree-navigation {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+    flex-wrap: nowrap;
+}
+
+.ort-tree-navigation-counter {
+    margin-left: 8px;
 }
