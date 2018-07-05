@@ -93,7 +93,7 @@ data class Identifier(
     override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
-     * Returns true if this matches the other identifier. To match, both identifiers need to have the same
+     * Return true if this matches the other identifier. To match, both identifiers need to have the same
      * [provider] and [namespace], and the [name] and [version] must be either equal or empty for at least one of
      * them.
      *
