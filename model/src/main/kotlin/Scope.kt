@@ -49,12 +49,13 @@ data class Scope(
          */
         val dependencies: SortedSet<PackageReference>
 ) : CustomData(), Comparable<Scope> {
-    fun collectDependencyIds() = dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
-        ids.also {
-            it += ref.id
-            it += ref.collectDependencyIds()
-        }
-    }
+    fun collectDependencyIds(includeErroneous: Boolean = true) =
+            dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
+                ids.also {
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
+                    it += ref.collectDependencyIds(includeErroneous)
+                }
+            }
 
     /**
      * A comparison function to sort scopes by their name.
