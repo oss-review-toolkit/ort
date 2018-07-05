@@ -52,6 +52,23 @@ data class ProjectAnalyzerResult(
          */
         val errors: List<String> = emptyList()
 ) {
+    init {
+        // Perform a sanity check to ensure we have no references to non-existing packages.
+        val packageIds = packages.fold(sortedSetOf<Identifier>()) { ids, curPkg ->
+            ids.also { it += curPkg.pkg.id }
+        }
+
+        val referencedIds = project.collectDependencyIds(false)
+
+        // Note that e.g. NPM optional dependencies are not part of the references in the dependency tree, but they are
+        // part of the global package list.
+        require(packageIds.containsAll(referencedIds)) {
+            "The set of package IDs does not match the set of referenced package IDs:\n" +
+                    "Packages: $packageIds\n" +
+                    "References: $referencedIds"
+        }
+    }
+
     /**
      * Return true if there were any errors during the analysis, false otherwise.
      */
