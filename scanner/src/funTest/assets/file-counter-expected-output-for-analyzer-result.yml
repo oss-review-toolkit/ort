@@ -181,9 +181,7 @@ scan_results:
       file_count: 0
       licenses: []
       errors:
-      - "Package 'Gradle:com.here.ort.gradle.example:lib:1.0.0' could not be scanned\
-        \ because no source code could be downloaded: No source artifact URL provided\
-        \ for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'."
+      - "DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'."
 - id: "Maven:junit:junit:4.12"
   results:
   - provenance:

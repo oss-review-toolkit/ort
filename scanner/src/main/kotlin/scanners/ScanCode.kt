@@ -42,7 +42,6 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 import java.util.regex.Pattern
-import java.util.SortedSet
 
 object ScanCode : LocalScanner() {
     private const val OUTPUT_FORMAT = "json-pp"
@@ -180,7 +179,7 @@ object ScanCode : LocalScanner() {
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["files_count"].intValue()
         val licenses = sortedSetOf<String>()
-        val errors = sortedSetOf<String>()
+        val errors = mutableListOf<String>()
 
         result["files"]?.forEach { file ->
             file["licenses"]?.forEach { license ->
@@ -203,7 +202,7 @@ object ScanCode : LocalScanner() {
      * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return
      * false otherwise.
      */
-    internal fun mapUnknownErrors(errors: SortedSet<String>): Boolean {
+    internal fun mapUnknownErrors(errors: MutableList<String>): Boolean {
         if (errors.isEmpty()) {
             return false
         }
@@ -230,7 +229,7 @@ object ScanCode : LocalScanner() {
         }
 
         errors.clear()
-        errors += mappedErrors
+        errors += mappedErrors.distinct()
 
         return onlyMemoryErrors
     }
@@ -239,7 +238,7 @@ object ScanCode : LocalScanner() {
      * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return
      * false otherwise.
      */
-    internal fun mapTimeoutErrors(errors: SortedSet<String>): Boolean {
+    internal fun mapTimeoutErrors(errors: MutableList<String>): Boolean {
         if (errors.isEmpty()) {
             return false
         }
@@ -259,7 +258,7 @@ object ScanCode : LocalScanner() {
         }
 
         errors.clear()
-        errors += mappedErrors
+        errors += mappedErrors.distinct()
 
         return onlyTimeoutErrors
     }

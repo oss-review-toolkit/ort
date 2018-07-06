@@ -34,31 +34,32 @@ class ScanCodeTest : WordSpec({
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapTimeoutErrors(summary.errors) shouldBe true
-            summary.errors.joinToString("\n") shouldBe sortedSetOf(
-                    "ERROR: Timeout after 300 seconds while scanning file " +
-                            "'test/3rdparty/syntax/angular-1.2.5.json'.",
+            summary.errors.joinToString("\n") shouldBe listOf(
                     "ERROR: Timeout after 300 seconds while scanning file " +
                             "'test/3rdparty/syntax/angular-1.2.5.tokens'.",
                     "ERROR: Timeout after 300 seconds while scanning file " +
-                            "'test/3rdparty/syntax/jquery-1.9.1.json'.",
-                    "ERROR: Timeout after 300 seconds while scanning file " +
                             "'test/3rdparty/syntax/jquery-1.9.1.tokens'.",
-                    "ERROR: Timeout after 300 seconds while scanning file " +
-                            "'test/3rdparty/syntax/jquery.mobile-1.4.2.json'.",
                     "ERROR: Timeout after 300 seconds while scanning file " +
                             "'test/3rdparty/syntax/jquery.mobile-1.4.2.tokens'.",
                     "ERROR: Timeout after 300 seconds while scanning file " +
-                            "'test/3rdparty/syntax/mootools-1.4.5.json'.",
-                    "ERROR: Timeout after 300 seconds while scanning file " +
                             "'test/3rdparty/syntax/mootools-1.4.5.tokens'.",
-                    "ERROR: Timeout after 300 seconds while scanning file " +
-                            "'test/3rdparty/syntax/underscore-1.5.2.json'.",
                     "ERROR: Timeout after 300 seconds while scanning file " +
                             "'test/3rdparty/syntax/underscore-1.5.2.tokens'.",
                     "ERROR: Timeout after 300 seconds while scanning file " +
-                            "'test/3rdparty/syntax/yui-3.12.0.json'.",
+                            "'test/3rdparty/syntax/yui-3.12.0.tokens'.",
+
                     "ERROR: Timeout after 300 seconds while scanning file " +
-                            "'test/3rdparty/syntax/yui-3.12.0.tokens'."
+                            "'test/3rdparty/syntax/angular-1.2.5.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/jquery-1.9.1.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/jquery.mobile-1.4.2.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/mootools-1.4.5.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/underscore-1.5.2.json'.",
+                    "ERROR: Timeout after 300 seconds while scanning file " +
+                            "'test/3rdparty/syntax/yui-3.12.0.json'."
             ).joinToString("\n")
         }
 
@@ -76,7 +77,7 @@ class ScanCodeTest : WordSpec({
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapUnknownErrors(summary.errors) shouldBe true
-            summary.errors.joinToString("\n") shouldBe sortedSetOf(
+            summary.errors.joinToString("\n") shouldBe listOf(
                     "ERROR: MemoryError while scanning file 'data.json'."
             ).joinToString("\n")
         }
@@ -86,7 +87,7 @@ class ScanCodeTest : WordSpec({
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
             ScanCode.mapUnknownErrors(summary.errors) shouldBe false
-            summary.errors.joinToString("\n") shouldBe sortedSetOf(
+            summary.errors.joinToString("\n") shouldBe listOf(
                     "ERROR: AttributeError while scanning file 'compiler/testData/cli/js-dce/withSourceMap.js.map' " +
                             "('NoneType' object has no attribute 'splitlines')."
             ).joinToString("\n")

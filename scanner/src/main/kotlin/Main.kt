@@ -266,7 +266,7 @@ object Main {
             log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
 
             val now = Instant.now()
-            val summary = ScanSummary(now, now, 0, sortedSetOf(), e.collectMessages().toSortedSet())
+            val summary = ScanSummary(now, now, 0, sortedSetOf(), e.collectMessages().toMutableList())
             ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 

@@ -54,14 +54,14 @@ class ScanResultContainerTest : WordSpec() {
             scannerEndTime1,
             1,
             sortedSetOf("license 1.1", "license 1.2"),
-            sortedSetOf("error 1.1", "error 1.2")
+            mutableListOf("error 1.1", "error 1.2")
     )
     private val scanSummary2 = ScanSummary(
             scannerStartTime2,
             scannerEndTime2,
             2,
             sortedSetOf("license 2.1", "license 2.2"),
-            sortedSetOf("error 2.1", "error 2.2")
+            mutableListOf("error 2.1", "error 2.2")
     )
 
     private val rawResult1 = jsonMapper.readTree("\"key 1\": \"value 1\"")

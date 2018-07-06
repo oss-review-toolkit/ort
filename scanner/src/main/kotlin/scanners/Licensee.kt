@@ -126,6 +126,6 @@ object Licensee : LocalScanner() {
             it["matched_license"].textValue()
         }.toSortedSet()
 
-        return ScanSummary(startTime, endTime, matchedFiles.count(), licenses, errors = sortedSetOf())
+        return ScanSummary(startTime, endTime, matchedFiles.count(), licenses, errors = mutableListOf())
     }
 }
