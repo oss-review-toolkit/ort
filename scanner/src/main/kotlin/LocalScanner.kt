@@ -131,7 +131,7 @@ abstract class LocalScanner : Scanner() {
                                 endTime = now,
                                 fileCount = 0,
                                 licenses = sortedSetOf(),
-                                errors = e.collectMessages().toSortedSet()
+                                errors = e.collectMessages().toMutableList()
                         ),
                         rawResult = EMPTY_JSON_NODE)
                 )
@@ -185,8 +185,7 @@ abstract class LocalScanner : Scanner() {
                             endTime = now,
                             fileCount = 0,
                             licenses = sortedSetOf(),
-                            errors = sortedSetOf("Package '${pkg.id}' could not be scanned because no source code " +
-                                    "could be downloaded: ${e.message}")
+                            errors = e.collectMessages().toMutableList()
                     ),
                     EMPTY_JSON_NODE
             )

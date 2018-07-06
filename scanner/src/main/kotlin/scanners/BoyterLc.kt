@@ -155,6 +155,6 @@ object BoyterLc : LocalScanner() {
             }
         }
 
-        return ScanSummary(startTime, endTime, result.size(), licenses, errors = sortedSetOf())
+        return ScanSummary(startTime, endTime, result.size(), licenses, errors = mutableListOf())
     }
 }

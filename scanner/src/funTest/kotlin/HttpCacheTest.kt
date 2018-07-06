@@ -136,14 +136,14 @@ class HttpCacheTest : StringSpec() {
             scannerEndTime1,
             1,
             sortedSetOf("license 1.1", "license 1.2"),
-            sortedSetOf("error 1.1", "error 1.2")
+            mutableListOf("error 1.1", "error 1.2")
     )
     private val scanSummaryWithoutFiles = ScanSummary(
             scannerStartTime2,
             scannerEndTime2,
             0,
             sortedSetOf(),
-            sortedSetOf()
+            mutableListOf()
     )
 
     private val rawResultWithContent = jsonMapper.readTree("\"key 1\": \"value 1\"")

@@ -73,6 +73,6 @@ object FileCounter : LocalScanner() {
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["file_count"].intValue()
-        return ScanSummary(startTime, endTime, fileCount, licenses = sortedSetOf(), errors = sortedSetOf())
+        return ScanSummary(startTime, endTime, fileCount, licenses = sortedSetOf(), errors = mutableListOf())
     }
 }

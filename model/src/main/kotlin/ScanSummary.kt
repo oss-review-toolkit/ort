@@ -52,7 +52,7 @@ data class ScanSummary(
         val licenses: SortedSet<String>,
 
         /**
-         * A list of errors that occured during the scan.
+         * The list of errors that occurred during the scan.
          */
-        val errors: SortedSet<String>
+        val errors: MutableList<String>
 )
