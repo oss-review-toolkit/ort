@@ -297,23 +297,29 @@ object Main {
 
         val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
 
-        if (target.vcsProcessed.url.isBlank()) {
-            log.info { "No VCS URL provided for '${target.id}'." }
-        } else {
-            try {
+        try {
+            if (target.vcsProcessed.url.isBlank()) {
+                throw DownloadException("No VCS URL provided for '${target.id}'.")
+            } else {
                 return downloadFromVcs(target, targetDir)
-            } catch (e: DownloadException) {
-                e.showStackTrace()
+            }
+        } catch (vcsDownloadException: DownloadException) {
+            log.debug { "VCS download failed for '${target.id}': ${vcsDownloadException.message}" }
 
-                log.info { "VCS download failed for '${target.id}': ${e.message}" }
+            // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
+            targetDir.safeDeleteRecursively()
+            targetDir.safeMkdirs()
 
-                // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
-                targetDir.safeDeleteRecursively()
-                targetDir.safeMkdirs()
+            try {
+                return downloadSourceArtifact(target, targetDir)
+            } catch (sourceDownloadException: DownloadException) {
+                if (sourceDownloadException.cause != null) {
+                    throw sourceDownloadException
+                } else {
+                    throw sourceDownloadException.initCause(vcsDownloadException)
+                }
             }
         }
-
-        return downloadSourceArtifact(target, targetDir)
     }
 
     private fun downloadFromVcs(target: Package, outputDirectory: File): DownloadResult {
