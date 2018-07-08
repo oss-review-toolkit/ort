@@ -359,7 +359,7 @@ object Main {
         }
 
         if (applicableVcs == null) {
-            throw DownloadException("Could not find an applicable VCS type.")
+            throw DownloadException("Unsupported VCS type '${target.vcsProcessed.type}'.")
         }
 
         val startTime = Instant.now()
