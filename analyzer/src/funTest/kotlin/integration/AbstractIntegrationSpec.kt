@@ -23,6 +23,7 @@ import com.here.ort.analyzer.ManagedProjectFiles
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
@@ -31,6 +32,8 @@ import com.here.ort.utils.test.USER_DIR
 import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.matchers.beEmpty
+import io.kotlintest.matchers.collections.containExactly
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNot
 import io.kotlintest.shouldNotBe
@@ -54,6 +57,11 @@ abstract class AbstractIntegrationSpec : StringSpec() {
      * can be reduced for large projects that have a lot of definition files to speed up the test.
      */
     protected open val definitionFilesForTest by lazy { expectedDefinitionFiles }
+
+    /**
+     * The list of package identifiers for which errors are expected.
+     */
+    protected open val identifiersWithExpectedErrors = setOf<Identifier>()
 
     /**
      * The temporary parent directory for downloads.
@@ -111,7 +119,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     result.project.vcsProcessed.url shouldBe pkg.vcs.url
                     result.project.scopes shouldNot beEmpty()
                     result.packages shouldNot beEmpty()
-                    result.hasErrors() shouldBe false
+                    result.collectErrors().keys should containExactly(identifiersWithExpectedErrors)
                 }
             }
         }
