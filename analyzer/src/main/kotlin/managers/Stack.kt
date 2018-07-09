@@ -274,7 +274,7 @@ class Stack : PackageManager() {
                                 break
                             }
                         } else {
-                            if (getIndentation(indentedLine) <= indentation) {
+                            if (indentedLine.isNotBlank() && getIndentation(indentedLine) <= indentation) {
                                 // Stop if the indentation level does not increase.
                                 i.previous()
                                 break
@@ -293,7 +293,8 @@ class Stack : PackageManager() {
                         }
                     }
 
-                    map[key] = valueLines.joinToString("\n")
+                    val trimmedValueLines = valueLines.dropWhile { it.isBlank() }.dropLastWhile { it.isBlank() }
+                    map[key] = trimmedValueLines.joinToString("\n")
                 }
             }
         }
