@@ -66,4 +66,6 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
         mapOf(NPM as PackageManagerFactory<PackageManager> to
                 listOf(File(downloadResult.downloadDirectory, "package.json")))
     }
+
+    override val identifiersWithExpectedErrors = setOf(Identifier.fromString("NPM::fsevents:"))
 }
