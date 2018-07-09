@@ -2067,11 +2067,11 @@ packages:
       \ methods are not supplied, but this at least permits the types to be used."
     homepage_url: "http://github.com/ekmett/transformers-compat/"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/transformers-compat-0.5.1.4/transformers-compat-0.5.1.4.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/transformers-compat-0.5.1.4/transformers-compat-0.5.1.4.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2100,11 +2100,11 @@ packages:
       \ killed when\ntheir parent dies (see 'withAsync')."
     homepage_url: "https://github.com/simonmar/async"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/async-2.1.1.1/async-2.1.1.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/async-2.1.1.1/async-2.1.1.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2126,11 +2126,11 @@ packages:
       \ to any\ninstance of 'MonadBase' or 'MonadBaseControl'."
     homepage_url: "https://github.com/maoe/lifted-async"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/lifted-async-0.9.3.3/lifted-async-0.9.3.3.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/lifted-async-0.9.3.3/lifted-async-0.9.3.3.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2156,11 +2156,11 @@ packages:
       \ case\nwith other forms of concurrent communication, such as locks or\n'MVar's."
     homepage_url: "https://wiki.haskell.org/Software_transactional_memory"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/stm-2.4.5.0/stm-2.4.5.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/stm-2.4.5.0/stm-2.4.5.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2183,11 +2183,11 @@ packages:
       \ for working with them."
     homepage_url: "http://github.com/ekmett/constraints/"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/constraints-0.9.1/constraints-0.9.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/constraints-0.9.1/constraints-0.9.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2216,11 +2216,11 @@ packages:
       \ for fully evaluating different\ndata types."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/deepseq-1.4.3.0/deepseq-1.4.3.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/deepseq-1.4.3.0/deepseq-1.4.3.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2246,11 +2246,11 @@ packages:
       \ tests can be performed using @cabal test@."
     homepage_url: "https://github.com/basvandijk/lifted-base"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/lifted-base-0.2.3.11/lifted-base-0.2.3.11.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/lifted-base-0.2.3.11/lifted-base-0.2.3.11.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2281,11 +2281,11 @@ packages:
       \ and @TypeFamilies@ language extensions to\nsimplify and speedup most definitions."
     homepage_url: "https://github.com/basvandijk/monad-control"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/monad-control-1.0.2.2/monad-control-1.0.2.2.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/monad-control-1.0.2.2/monad-control-1.0.2.2.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2309,11 +2309,11 @@ packages:
       \ School of Functional Programming/, 1995\n(<http://web.cecs.pdx.edu/~mpj/pubs/springschool.html>)."
     homepage_url: "http://github.com/ekmett/mtl"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/mtl-2.2.1/mtl-2.2.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/mtl-2.2.1/mtl-2.2.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2335,11 +2335,11 @@ packages:
       typeclass to @transformers@."
     homepage_url: "https://github.com/mvv/transformers-base"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/transformers-base-0.4.4/transformers-base-0.4.4.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/transformers-base-0.4.4/transformers-base-0.4.4.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2372,11 +2372,11 @@ packages:
       \ monad transformers through other transformers."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/transformers-0.5.2.0/transformers-0.5.2.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/transformers-0.5.2.0/transformers-0.5.2.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2400,11 +2400,11 @@ packages:
       \ appropriate\nmonads, as well as some instances of these classes."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/array-0.5.2.0/array-0.5.2.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/array-0.5.2.0/array-0.5.2.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2428,11 +2428,11 @@ packages:
       \ shared."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/containers-0.5.10.2/containers-0.5.10.2.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/containers-0.5.10.2/containers-0.5.10.2.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2458,11 +2458,11 @@ packages:
       \ for high performance\nscenarios."
     homepage_url: "https://github.com/kolmodin/binary"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/binary-0.8.5.1/binary-0.8.5.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/binary-0.8.5.1/binary-0.8.5.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2496,11 +2496,11 @@ packages:
       \ breaking, and locales), see\nthe @text-icu@ package:\n<http://hackage.haskell.org/package/text-icu>"
     homepage_url: "https://github.com/bos/text"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/text-1.2.2.2/text-1.2.2.2.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/text-1.2.2.2/text-1.2.2.2.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2542,11 +2542,11 @@ packages:
       \ functions, e.g.\n\n> import qualified Data.ByteString as BS"
     homepage_url: "https://github.com/haskell/bytestring"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/bytestring-0.10.8.2/bytestring-0.10.8.2.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/bytestring-0.10.8.2/bytestring-0.10.8.2.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2570,11 +2570,11 @@ packages:
       \ to combine hash values."
     homepage_url: "http://github.com/tibbe/hashable"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/hashable-1.2.6.1/hashable-1.2.6.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/hashable-1.2.6.1/hashable-1.2.6.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2595,11 +2595,11 @@ packages:
     description: "This package provides various primitive memory-related operations."
     homepage_url: "https://github.com/haskell/primitive"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/primitive-0.6.3.0/primitive-0.6.3.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/primitive-0.6.3.0/primitive-0.6.3.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2623,11 +2623,11 @@ packages:
       of Template Haskell."
     homepage_url: "https://github.com/glguy/th-abstraction"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/th-abstraction-0.2.6.0/th-abstraction-0.2.6.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/th-abstraction-0.2.6.0/th-abstraction-0.2.6.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2651,11 +2651,11 @@ packages:
       \ depended upon by user code."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/ghc-boot-th-8.2.2/ghc-boot-th-8.2.2.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/ghc-boot-th-8.2.2/ghc-boot-th-8.2.2.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2677,11 +2677,11 @@ packages:
       \ by GHC."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/ghc-prim-0.5.1.1/ghc-prim-0.5.1.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/ghc-prim-0.5.1.1/ghc-prim-0.5.1.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2706,11 +2706,11 @@ packages:
       \ and should only be used directly with the utmost care."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/integer-gmp-1.0.1.0/integer-gmp-1.0.1.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/integer-gmp-1.0.1.0/integer-gmp-1.0.1.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2733,11 +2733,11 @@ packages:
       structures to parsing combinators and debugging utilities."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/base-4.10.1.0/base-4.10.1.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/base-4.10.1.0/base-4.10.1.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2776,11 +2776,11 @@ packages:
       \ with cryptographic applications in mind."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/tf-random-0.5/tf-random-0.5.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/tf-random-0.5/tf-random-0.5.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2802,11 +2802,11 @@ packages:
       \ including the ability to split random number\ngenerators."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/random-1.1/random-1.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/random-1.1/random-1.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2829,11 +2829,11 @@ packages:
       \ for more\ninformation."
     homepage_url: ""
     binary_artifact:
-      url: "https://hackage.haskell.org/package/template-haskell-2.12.0.0/template-haskell-2.12.0.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/template-haskell-2.12.0.0/template-haskell-2.12.0.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2864,11 +2864,11 @@ packages:
       \ can find at\n<https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html>."
     homepage_url: "https://github.com/nick8325/quickcheck"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/QuickCheck-2.10.1/QuickCheck-2.10.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/QuickCheck-2.10.1/QuickCheck-2.10.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2896,11 +2896,11 @@ packages:
       \ information, see the \"Test.QuickCheck.Counterexamples\"\nmodule."
     homepage_url: "http://www.github.com/nick8325/quickcheck-with-counterexamples"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/quickcheck-with-counterexamples-1.0/quickcheck-with-counterexamples-1.0.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/quickcheck-with-counterexamples-1.0/quickcheck-with-counterexamples-1.0.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2925,11 +2925,11 @@ packages:
       \ by Simon Peyton Jones."
     homepage_url: "http://github.com/haskell/pretty"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/pretty-1.1.3.3/pretty-1.1.3.3.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/pretty-1.1.3.3/pretty-1.1.3.3.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2950,11 +2950,11 @@ packages:
     description: "A time library"
     homepage_url: "https://github.com/haskell/time"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/time-1.8.0.2/time-1.8.0.2.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/time-1.8.0.2/time-1.8.0.2.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -2978,11 +2978,11 @@ packages:
       \ [ansi-terminal](https://hackage.haskell.org/package/ansi-terminal) package."
     homepage_url: "http://github.com/ekmett/ansi-wl-pprint"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/ansi-wl-pprint-0.6.8.2/ansi-wl-pprint-0.6.8.2.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/ansi-wl-pprint-0.6.8.2/ansi-wl-pprint-0.6.8.2.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -3005,11 +3005,11 @@ packages:
       \ Works on UNIX and Windows."
     homepage_url: "https://github.com/feuerbach/ansi-terminal"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/ansi-terminal-0.7.1.1/ansi-terminal-0.7.1.1.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/ansi-terminal-0.7.1.1/ansi-terminal-0.7.1.1.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -3032,11 +3032,11 @@ packages:
       A module of colour names (\"Data.Colour.Names\") is provided."
     homepage_url: "http://www.haskell.org/haskellwiki/Colour"
     binary_artifact:
-      url: "https://hackage.haskell.org/package/colour-2.3.4/colour-2.3.4.tar.gz"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://hackage.haskell.org/package/colour-2.3.4/colour-2.3.4.tar.gz"
       hash: ""
       hash_algorithm: ""
     vcs:

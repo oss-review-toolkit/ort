@@ -263,11 +263,11 @@ packages:
     description: "A simple and modern approach to stream filtering in PHP"
     homepage_url: "https://github.com/clue/php-stream-filter"
     binary_artifact:
-      url: "https://api.github.com/repos/clue/php-stream-filter/zipball/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/clue/php-stream-filter/zipball/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -289,11 +289,11 @@ packages:
       \ invoking their constructors"
     homepage_url: "https://github.com/doctrine/instantiator"
     binary_artifact:
-      url: "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -314,11 +314,11 @@ packages:
     description: "Guzzle is a PHP HTTP client library"
     homepage_url: "http://guzzlephp.org/"
     binary_artifact:
-      url: "https://api.github.com/repos/guzzle/guzzle/zipball/f4db5a78a5ea468d4831de7f0bf9d9415e348699"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/guzzle/guzzle/zipball/f4db5a78a5ea468d4831de7f0bf9d9415e348699"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -339,11 +339,11 @@ packages:
     description: "Guzzle promises library"
     homepage_url: ""
     binary_artifact:
-      url: "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -364,11 +364,11 @@ packages:
     description: "PSR-7 message implementation that also provides common utility methods"
     homepage_url: ""
     binary_artifact:
-      url: "https://api.github.com/repos/guzzle/psr7/zipball/04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/guzzle/psr7/zipball/04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -389,11 +389,11 @@ packages:
     description: "The Mailgun SDK provides methods for all API functions."
     homepage_url: ""
     binary_artifact:
-      url: "https://api.github.com/repos/mailgun/mailgun-php/zipball/20783215042b181b0dec92c9e01947b93cb5d085"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/mailgun/mailgun-php/zipball/20783215042b181b0dec92c9e01947b93cb5d085"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -414,11 +414,11 @@ packages:
     description: "Logging for PHP 5.3"
     homepage_url: "http://github.com/Seldaek/monolog"
     binary_artifact:
-      url: "https://api.github.com/repos/Seldaek/monolog/zipball/b704c49a3051536f67f2d39f13568f74615b9922"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/Seldaek/monolog/zipball/b704c49a3051536f67f2d39f13568f74615b9922"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -439,11 +439,11 @@ packages:
     description: "Common HTTP Client implementations and tools for HTTPlug"
     homepage_url: "http://httplug.io"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/client-common/zipball/9accb4a082eb06403747c0ffd444112eda41a0fd"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/client-common/zipball/9accb4a082eb06403747c0ffd444112eda41a0fd"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -464,11 +464,11 @@ packages:
     description: "Finds installed HTTPlug implementations and PSR-7 message factories"
     homepage_url: "http://php-http.org"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/discovery/zipball/7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/discovery/zipball/7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -489,11 +489,11 @@ packages:
     description: "Guzzle 6 HTTP Adapter"
     homepage_url: "http://httplug.io"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/guzzle6-adapter/zipball/e884cf6dae5235fffd2a07f761e0066b9ebef170"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/guzzle6-adapter/zipball/e884cf6dae5235fffd2a07f761e0066b9ebef170"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -514,11 +514,11 @@ packages:
     description: "HTTPlug, the HTTP client abstraction for PHP"
     homepage_url: "http://httplug.io"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/httplug/zipball/1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/httplug/zipball/1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -539,11 +539,11 @@ packages:
     description: "Factory interfaces for PSR-7 HTTP Message"
     homepage_url: "http://php-http.org"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/message-factory/zipball/a478cb11f66a6ac48d8954216cfed9aa06a501a1"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/message-factory/zipball/a478cb11f66a6ac48d8954216cfed9aa06a501a1"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -564,11 +564,11 @@ packages:
     description: "HTTP Message related tools"
     homepage_url: "http://php-http.org"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/message/zipball/2edd63bae5f52f79363c5f18904b05ce3a4b7253"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/message/zipball/2edd63bae5f52f79363c5f18904b05ce3a4b7253"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -589,11 +589,11 @@ packages:
     description: "A builder class that help you create a multipart stream"
     homepage_url: "http://php-http.org"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/1fa3c623fc813a43b39494b2a1612174e36e0fb0"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/1fa3c623fc813a43b39494b2a1612174e36e0fb0"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -614,11 +614,11 @@ packages:
     description: "Promise used for asynchronous HTTP requests"
     homepage_url: "http://httplug.io"
     binary_artifact:
-      url: "https://api.github.com/repos/php-http/promise/zipball/dc494cdc9d7160b9a09bd5573272195242ce7980"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-http/promise/zipball/dc494cdc9d7160b9a09bd5573272195242ce7980"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -640,11 +640,11 @@ packages:
       \ structure"
     homepage_url: "http://www.phpdoc.org"
     binary_artifact:
-      url: "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -666,11 +666,11 @@ packages:
       \ via DocBlocks or otherwise retrieve information that is embedded in a DocBlock."
     homepage_url: ""
     binary_artifact:
-      url: "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/66465776cfc249844bde6d117abff1d22e06c2da"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/66465776cfc249844bde6d117abff1d22e06c2da"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -691,11 +691,11 @@ packages:
     description: ""
     homepage_url: ""
     binary_artifact:
-      url: "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/9c977708995954784726e25d0cd1dddf4e65b0f7"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/9c977708995954784726e25d0cd1dddf4e65b0f7"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -716,11 +716,11 @@ packages:
     description: "Highly opinionated mocking framework for PHP 5.3+"
     homepage_url: "https://github.com/phpspec/prophecy"
     binary_artifact:
-      url: "https://api.github.com/repos/phpspec/prophecy/zipball/e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/phpspec/prophecy/zipball/e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -742,11 +742,11 @@ packages:
       \ for PHP code coverage information."
     homepage_url: "https://github.com/sebastianbergmann/php-code-coverage"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -768,11 +768,11 @@ packages:
       \ of suffixes."
     homepage_url: "https://github.com/sebastianbergmann/php-file-iterator/"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/730b01bc3e867237eaac355e06a36b85dd93a8b4"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/730b01bc3e867237eaac355e06a36b85dd93a8b4"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -793,11 +793,11 @@ packages:
     description: "Simple template engine."
     homepage_url: "https://github.com/sebastianbergmann/php-text-template/"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -818,11 +818,11 @@ packages:
     description: "Utility class for timing"
     homepage_url: "https://github.com/sebastianbergmann/php-timer/"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/3dcf38ca72b158baf0bc245e9184d3fdffa9c46f"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/3dcf38ca72b158baf0bc245e9184d3fdffa9c46f"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -843,11 +843,11 @@ packages:
     description: "Wrapper around PHP's tokenizer extension."
     homepage_url: "https://github.com/sebastianbergmann/php-token-stream/"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/1ce90ba27c42e4e44e6d8458241466380b51fa16"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/1ce90ba27c42e4e44e6d8458241466380b51fa16"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -868,11 +868,11 @@ packages:
     description: "Mock Object library for PHPUnit"
     homepage_url: "https://github.com/sebastianbergmann/phpunit-mock-objects/"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ac8e7a3db35738d56ee9a76e78a4e03d97628983"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ac8e7a3db35738d56ee9a76e78a4e03d97628983"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -893,11 +893,11 @@ packages:
     description: "The PHP Unit Testing framework."
     homepage_url: "https://phpunit.de/"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/283111a903eb9225aedb95e846bef876e006a688"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/283111a903eb9225aedb95e846bef876e006a688"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -918,11 +918,11 @@ packages:
     description: "Common interface for HTTP messages"
     homepage_url: "https://github.com/php-fig/http-message"
     binary_artifact:
-      url: "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -943,11 +943,11 @@ packages:
     description: "Provides the functionality to compare PHP values for equality"
     homepage_url: "http://www.github.com/sebastianbergmann/comparator"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/comparator/zipball/2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -968,11 +968,11 @@ packages:
     description: "Diff implementation"
     homepage_url: "https://github.com/sebastianbergmann/diff"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/diff/zipball/7f066a26a962dbe58ddea9f72a4e82874a3975a4"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/diff/zipball/7f066a26a962dbe58ddea9f72a4e82874a3975a4"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -993,11 +993,11 @@ packages:
     description: "Provides functionality to handle HHVM/PHP environments"
     homepage_url: "http://www.github.com/sebastianbergmann/environment"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/environment/zipball/be2c607e43ce4c89ecd60e75c6a85c126e754aea"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/environment/zipball/be2c607e43ce4c89ecd60e75c6a85c126e754aea"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -1018,11 +1018,11 @@ packages:
     description: "Provides the functionality to export PHP variables for visualization"
     homepage_url: "http://www.github.com/sebastianbergmann/exporter"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/exporter/zipball/42c4c2eec485ee3e159ec9884f95b431287edde4"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/exporter/zipball/42c4c2eec485ee3e159ec9884f95b431287edde4"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -1043,11 +1043,11 @@ packages:
     description: "Snapshotting of global state"
     homepage_url: "http://www.github.com/sebastianbergmann/global-state"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/global-state/zipball/bc37d50fea7d017d3d340f230811c9f1d7280af4"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/global-state/zipball/bc37d50fea7d017d3d340f230811c9f1d7280af4"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -1068,11 +1068,11 @@ packages:
     description: "Provides functionality to recursively process PHP variables"
     homepage_url: "http://www.github.com/sebastianbergmann/recursion-context"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -1094,11 +1094,11 @@ packages:
       \ PHP projects"
     homepage_url: "https://github.com/sebastianbergmann/version"
     binary_artifact:
-      url: "https://api.github.com/repos/sebastianbergmann/version/zipball/58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/sebastianbergmann/version/zipball/58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -1119,11 +1119,11 @@ packages:
     description: "Symfony OptionsResolver Component"
     homepage_url: "https://symfony.com"
     binary_artifact:
-      url: "https://api.github.com/repos/symfony/options-resolver/zipball/75fdda335eb0adbd464089e8a0184c61097808e0"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/symfony/options-resolver/zipball/75fdda335eb0adbd464089e8a0184c61097808e0"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -1144,11 +1144,11 @@ packages:
     description: "Symfony Yaml Component"
     homepage_url: "https://symfony.com"
     binary_artifact:
-      url: "https://api.github.com/repos/symfony/yaml/zipball/afe0cd38486505c9703707707d91450cfc1bd536"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/symfony/yaml/zipball/afe0cd38486505c9703707707d91450cfc1bd536"
       hash: ""
       hash_algorithm: ""
     vcs:
@@ -1169,11 +1169,11 @@ packages:
     description: "Assertions to validate method input/output with nice error messages."
     homepage_url: ""
     binary_artifact:
-      url: "https://api.github.com/repos/webmozart/assert/zipball/2db61e59ff05fe5126d152bd0655c9ea113e550f"
+      url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: ""
+      url: "https://api.github.com/repos/webmozart/assert/zipball/2db61e59ff05fe5126d152bd0655c9ea113e550f"
       hash: ""
       hash_algorithm: ""
     vcs:

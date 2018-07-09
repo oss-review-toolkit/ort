@@ -240,8 +240,8 @@ class PhpComposer : PackageManager() {
                         declaredLicenses = parseDeclaredLicenses(pkgInfo),
                         description = pkgInfo["description"].textValueOrEmpty(),
                         homepageUrl = homepageUrl,
-                        binaryArtifact = parseBinaryArtifact(pkgInfo),
-                        sourceArtifact = RemoteArtifact.EMPTY,
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        sourceArtifact = parseArtifact(pkgInfo),
                         vcs = vcsFromPackage,
                         vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
                 )
@@ -259,7 +259,7 @@ class PhpComposer : PackageManager() {
         } ?: VcsInfo.EMPTY
     }
 
-    private fun parseBinaryArtifact(packageInfo: JsonNode): RemoteArtifact {
+    private fun parseArtifact(packageInfo: JsonNode): RemoteArtifact {
         return packageInfo["dist"]?.let {
             val sha = it["shasum"].textValueOrEmpty()
             // "shasum" is SHA-1: https://github.com/composer/composer/blob/ \

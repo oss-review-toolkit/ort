@@ -67,8 +67,6 @@ open class NPM : PackageManager() {
             "JavaScript",
             listOf("package.json")
     ) {
-        private const val DEFINITELY_TYPED_VCS_URL = "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
-
         override fun create() = NPM()
 
         /**
@@ -266,12 +264,12 @@ open class NPM : PackageManager() {
                     declaredLicenses = declaredLicenses,
                     description = description,
                     homepageUrl = homepageUrl,
-                    binaryArtifact = RemoteArtifact(
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
                             url = downloadUrl,
                             hash = hash,
                             hashAlgorithm = hashAlgorithm
                     ),
-                    sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = vcsFromPackage,
                     vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
             )
@@ -284,20 +282,7 @@ open class NPM : PackageManager() {
                 "Generated package info for $identifier has no version."
             }
 
-            // For TypeScript definitions there is no way to get the Git revision of the type definitions for a
-            // particular NPM package version. The DefinitelyTyped project only uses a directory hierarchy of
-            // "types/<package name>" without a version, and there are no tags in Git. See e.g.
-            // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/chai
-            // TODO: Think about how this can be turned into a generic curation.
-            packages[identifier] = if (module.id.namespace == "@types"
-                    && module.vcsProcessed.url == DEFINITELY_TYPED_VCS_URL) {
-                // Clear the VCS URL to directly trigger source artifact download and use the binary artifact as the
-                // source artifact.
-                log.info { "Falling back to source artifact for TypeScript type definition package '${module.id}'." }
-                module.copy(sourceArtifact = module.binaryArtifact, vcsProcessed = VcsInfo.EMPTY)
-            } else {
-                module
-            }
+            packages[identifier] = module
         }
 
         return packages

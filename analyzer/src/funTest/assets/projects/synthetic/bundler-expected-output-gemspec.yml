@@ -83,13 +83,13 @@ packages:
       \ RFCs and\nadds support for IRIs and URI templates.\n"
     homepage_url: "https://github.com/sporkmonger/addressable"
     binary_artifact:
-      url: "https://rubygems.org/gems/addressable-2.5.2.gem"
-      hash: "73771ea960b3900d96e6b3729bd203e66f387d0717df83304411bf37efd7386e"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/addressable-2.5.2.gem"
+      hash: "73771ea960b3900d96e6b3729bd203e66f387d0717df83304411bf37efd7386e"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/sporkmonger/addressable.git"
@@ -116,13 +116,13 @@ packages:
       \ experience\nto Ruby 2.4 users."
     homepage_url: "https://github.com/halostatue/diff-lcs"
     binary_artifact:
-      url: "https://rubygems.org/gems/diff-lcs-1.3.gem"
-      hash: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/diff-lcs-1.3.gem"
+      hash: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "https://github.com/halostatue/diff-lcs.git"
@@ -141,13 +141,13 @@ packages:
     description: ""
     homepage_url: "https://github.com/lostisland/faraday"
     binary_artifact:
-      url: "https://rubygems.org/gems/faraday-0.15.1.gem"
-      hash: "bd5bd1ab8db9b3f99ed1113d80522dabf95941e40cc3107f9621546f6a357f60"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/faraday-0.15.1.gem"
+      hash: "bd5bd1ab8db9b3f99ed1113d80522dabf95941e40cc3107f9621546f6a357f60"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "https://github.com/lostisland/faraday.git"
@@ -169,13 +169,13 @@ packages:
       \ (JWT) standard."
     homepage_url: "http://github.com/jwt/ruby-jwt"
     binary_artifact:
-      url: "https://rubygems.org/gems/jwt-2.1.0.gem"
-      hash: "7e7e7ffc1a5ebce628ac7da428341c50615a3a10ac47bb74c22c1cba325613f0"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/jwt-2.1.0.gem"
+      hash: "7e7e7ffc1a5ebce628ac7da428341c50615a3a10ac47bb74c22c1cba325613f0"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/jwt/ruby-jwt.git"
@@ -198,13 +198,13 @@ packages:
       \ gson.rb, JrJackson, and OkJson."
     homepage_url: "http://github.com/intridea/multi_json"
     binary_artifact:
-      url: "https://rubygems.org/gems/multi_json-1.13.1.gem"
-      hash: "db8613c039b9501e6b2fb85efe4feabb02f55c3365bae52bba35381b89c780e6"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/multi_json-1.13.1.gem"
+      hash: "db8613c039b9501e6b2fb85efe4feabb02f55c3365bae52bba35381b89c780e6"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/intridea/multi_json.git"
@@ -227,13 +227,13 @@ packages:
       \ file."
     homepage_url: "https://github.com/nicksieger/multipart-post"
     binary_artifact:
-      url: "https://rubygems.org/gems/multipart-post-2.0.0.gem"
-      hash: "3dc44e50d3df3d42da2b86272c568fd7b75c928d8af3cc5f9834e2e5d9586026"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/multipart-post-2.0.0.gem"
+      hash: "3dc44e50d3df3d42da2b86272c568fd7b75c928d8af3cc5f9834e2e5d9586026"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "https://github.com/nicksieger/multipart-post.git"
@@ -255,13 +255,13 @@ packages:
       \ domain, domain and subdomains."
     homepage_url: "https://simonecarletti.com/code/publicsuffix-ruby"
     binary_artifact:
-      url: "https://rubygems.org/gems/public_suffix-3.0.2.gem"
-      hash: "3a0168c33fa0b00886423a2ceb21c74199273ccd01bc250360fc8d18600bb0f4"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/public_suffix-3.0.2.gem"
+      hash: "3a0168c33fa0b00886423a2ceb21c74199273ccd01bc250360fc8d18600bb0f4"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/weppos/publicsuffix-ruby.git"
@@ -284,13 +284,13 @@ packages:
       \nAlso see http://rack.github.io/.\n"
     homepage_url: "http://rack.github.io/"
     binary_artifact:
-      url: "https://rubygems.org/gems/rack-1.6.10.gem"
-      hash: "58e8ae09c502f219a6ad2e7f932072faf2d2b38ce6fd0251ac7ff3096c55c046"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/rack-1.6.10.gem"
+      hash: "58e8ae09c502f219a6ad2e7f932072faf2d2b38ce6fd0251ac7ff3096c55c046"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/rack/rack.git"
@@ -309,13 +309,13 @@ packages:
     description: "BDD for Ruby. RSpec runner and example groups."
     homepage_url: "https://github.com/rspec/rspec-core"
     binary_artifact:
-      url: "https://rubygems.org/gems/rspec-core-3.7.1.gem"
-      hash: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/rspec-core-3.7.1.gem"
+      hash: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/rspec/rspec-core.git"
@@ -335,13 +335,13 @@ packages:
       \ outcomes of a code example."
     homepage_url: "https://github.com/rspec/rspec-expectations"
     binary_artifact:
-      url: "https://rubygems.org/gems/rspec-expectations-3.7.0.gem"
-      hash: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/rspec-expectations-3.7.0.gem"
+      hash: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/rspec/rspec-expectations.git"
@@ -360,13 +360,13 @@ packages:
     description: "RSpec's 'test double' framework, with support for stubbing and mocking"
     homepage_url: "https://github.com/rspec/rspec-mocks"
     binary_artifact:
-      url: "https://rubygems.org/gems/rspec-mocks-3.7.0.gem"
-      hash: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/rspec-mocks-3.7.0.gem"
+      hash: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/rspec/rspec-mocks.git"
@@ -385,13 +385,13 @@ packages:
     description: "Support utilities for RSpec gems"
     homepage_url: "https://github.com/rspec/rspec-support"
     binary_artifact:
-      url: "https://rubygems.org/gems/rspec-support-3.7.1.gem"
-      hash: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/rspec-support-3.7.1.gem"
+      hash: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "https://github.com/rspec/rspec-support.git"
@@ -412,13 +412,13 @@ packages:
     description: "BDD for Ruby"
     homepage_url: "http://github.com/rspec"
     binary_artifact:
-      url: "https://rubygems.org/gems/rspec-3.7.0.gem"
-      hash: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/rspec-3.7.0.gem"
+      hash: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
+      hash_algorithm: "SHA-256"
     vcs:
       type: "git"
       url: "http://github.com/rspec/rspec.git"
@@ -437,13 +437,13 @@ packages:
     description: "Signet is an OAuth 1.0 / OAuth 2.0 implementation.\n"
     homepage_url: "https://github.com/google/signet/"
     binary_artifact:
-      url: "https://rubygems.org/gems/signet-0.8.1.gem"
-      hash: "7b2efb61e689a22b4fc721ba5e9f4fc45b1702dcca38e11e52bfe5883b0d484b"
-      hash_algorithm: "SHA-256"
-    source_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
+    source_artifact:
+      url: "https://rubygems.org/gems/signet-0.8.1.gem"
+      hash: "7b2efb61e689a22b4fc721ba5e9f4fc45b1702dcca38e11e52bfe5883b0d484b"
+      hash_algorithm: "SHA-256"
     vcs:
       type: ""
       url: ""

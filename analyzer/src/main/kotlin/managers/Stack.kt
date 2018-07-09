@@ -333,8 +333,8 @@ class Stack : PackageManager() {
                 declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
                 description = map["description"] ?: "",
                 homepageUrl = map["homepage"] ?: "",
-                binaryArtifact = artifact,
-                sourceArtifact = RemoteArtifact.EMPTY,
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = artifact,
                 vcs = vcs,
                 vcsProcessed = processPackageVcs(vcs, homepageUrl)
         )
