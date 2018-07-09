@@ -187,8 +187,8 @@ class Bundler : PackageManager() {
                         declaredLicenses = gemSpec.declaredLicenses,
                         description = gemSpec.description,
                         homepageUrl = gemSpec.homepageUrl,
-                        binaryArtifact = gemSpec.binaryArtifact,
-                        sourceArtifact = RemoteArtifact.EMPTY,
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        sourceArtifact = gemSpec.artifact,
                         vcs = gemSpec.vcs,
                         vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
                 )
@@ -288,7 +288,7 @@ data class GemSpec(
         val description: String,
         val runtimeDependencies: Set<String>,
         val vcs: VcsInfo,
-        val binaryArtifact: RemoteArtifact
+        val artifact: RemoteArtifact
 ) {
     companion object Factory {
         fun createFromYaml(spec: String): GemSpec {
@@ -323,7 +323,7 @@ data class GemSpec(
                 VcsInfo.EMPTY
             }
 
-            val binaryArtifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
+            val artifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
                 RemoteArtifact(json["gem_uri"].textValue(), json["sha"].textValue(), HashAlgorithm.SHA256)
             } else {
                 RemoteArtifact.EMPTY
@@ -337,7 +337,7 @@ data class GemSpec(
                     json["description"].textValueOrEmpty(),
                     runtimeDependencies ?: emptySet(),
                     vcs,
-                    binaryArtifact
+                    artifact
             )
         }
 
@@ -365,7 +365,7 @@ data class GemSpec(
                 description.takeUnless { it.isEmpty() } ?: other.description,
                 runtimeDependencies.takeUnless { it.isEmpty() } ?: other.runtimeDependencies,
                 vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
-                binaryArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.binaryArtifact
+                artifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.artifact
         )
     }
 }
