@@ -224,9 +224,8 @@ class PhpComposer : PackageManager() {
                 val homepageUrl = pkgInfo["homepage"].textValueOrEmpty()
                 val vcsFromPackage = parseVcsInfo(pkgInfo)
 
-                // I could not find documentation on the schema of composer.lock, but there is a schema for
-                // composer.json at https://getcomposer.org/schema.json and it does not include the "version" field in
-                // the list of required properties.
+                // Just warn if the version is missing as Composer itself declares it as optional, see
+                // https://getcomposer.org/doc/04-schema.md#version.
                 if (version.isEmpty()) {
                     log.warn { "No version information found for package $rawName." }
                 }
