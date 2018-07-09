@@ -2972,10 +2972,10 @@ packages:
     id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
     declared_licenses:
     - "BSD3"
-    description: "\nThis is a pretty printing library based on Wadler's paper [\"\
-      A Prettier Printer\"](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf).\
+    description: "This is a pretty printing library based on Wadler's paper [\"A Prettier\
+      \ Printer\"](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf).\
       \ It has been enhanced with support for ANSI terminal colored output using the\
-      \ [ansi-terminal](https://hackage.haskell.org/package/ansi-terminal) package.\n"
+      \ [ansi-terminal](https://hackage.haskell.org/package/ansi-terminal) package."
     homepage_url: "http://github.com/ekmett/ansi-wl-pprint"
     binary_artifact:
       url: "https://hackage.haskell.org/package/ansi-wl-pprint-0.6.8.2/ansi-wl-pprint-0.6.8.2.tar.gz"
