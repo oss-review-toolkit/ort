@@ -103,7 +103,7 @@ object Main {
     @Parameter(description = "A YAML file that contains package curation data.",
             names = ["--package-curations-file"],
             order = PARAMETER_ORDER_OPTIONAL)
-    var packageCurationsFile: File? = null
+    private var packageCurationsFile: File? = null
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
