@@ -92,8 +92,11 @@ class Stack : PackageManager() {
 
         fun mapParentsToChildren(scope: String): Map<String, List<String>> {
             val dotGraph = runStack("dot", "--$scope").stdout()
-            val dotParser = GraphParser(dotGraph.byteInputStream())
 
+            // Strip any leading garbage in case Stack was bootstrapping itself, resulting in unrelated output.
+            val dotLines = dotGraph.lineSequence().dropWhile { !it.startsWith("strict digraph deps") }
+
+            val dotParser = GraphParser(dotLines.joinToString("\n").byteInputStream())
             val dependencies = mutableMapOf<String, MutableList<String>>()
 
             dotParser.edges.values.forEach { edge ->
