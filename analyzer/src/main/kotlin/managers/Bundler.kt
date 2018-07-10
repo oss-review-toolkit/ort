@@ -341,7 +341,7 @@ data class GemSpec(
             )
         }
 
-        private val GITHUB_REGEX = Regex("https?:\\/\\/github.com\\/(?<owner>[^\\/]+)\\/(?<repo>[^\\/]+)")
+        private val GITHUB_REGEX = Regex("https?://github.com/(?<owner>[^/]+)/(?<repo>[^/]+)")
 
         // Gems tend to have GitHub URL set as homepage. Seems like it is the only way to get any VCS information out of
         // gemspec files.
