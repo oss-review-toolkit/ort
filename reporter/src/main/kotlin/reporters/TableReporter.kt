@@ -145,9 +145,9 @@ abstract class TableReporter : Reporter {
                         analyzerErrors = analyzerErrors,
                         scanErrors = scanErrors
                 ).also { entry ->
-                    summaryEntries[entry.id] = summaryEntries[entry.id]?.let { it.merge(entry) } ?: entry
+                    summaryEntries[entry.id] = summaryEntries[entry.id]?.merge(entry) ?: entry
                     if (entry.analyzerErrors.isNotEmpty() || entry.scanErrors.isNotEmpty()) {
-                        errorSummaryEntries[entry.id] = errorSummaryEntries[entry.id]?.let { it.merge(entry) } ?: entry
+                        errorSummaryEntries[entry.id] = errorSummaryEntries[entry.id]?.merge(entry) ?: entry
                     }
                 }
             }
