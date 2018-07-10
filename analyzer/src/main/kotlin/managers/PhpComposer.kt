@@ -89,7 +89,7 @@ class PhpComposer : PackageManager() {
             return definitionFiles
         }
 
-        var workingDir = definitionFiles.first().parentFile
+        val workingDir = definitionFiles.first().parentFile
 
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
         // fixed versions to be sure to get consistent results. The version string can be something like:

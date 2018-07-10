@@ -44,7 +44,7 @@ class Yarn : NPM() {
     override fun toString() = Yarn.toString()
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        var workingDir = definitionFiles.first().parentFile
+        val workingDir = definitionFiles.first().parentFile
 
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
