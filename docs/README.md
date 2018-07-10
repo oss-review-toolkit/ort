@@ -34,8 +34,8 @@ The toolkit is envisioned to consist of the following libraries:
 * *Evaluator* * - Evaluates the scan results from Scanner as OK or NOT OK based on user specified approval / rejection
   ruleset.
 * *Advisor* * - Retrieves security advisories based on Analyzer results.
-* *Reporter* - Summarizes the output from Analyzer, Scanner and Evaluator in an interactive UI that shows the
-  identified copyrights, licenses and NOT OK issues.
+* *Reporter* - Presents the output from Analyzer and Scanner in various formats, making it easy to identify the
+  dependencies, licenses, copyrights and issues.
 * *Documenter* * - Generates the outcome of the review, e.g. Open Source notices and annotated [SPDX](https://spdx.org/)
   files that can be included into your distribution.
 
