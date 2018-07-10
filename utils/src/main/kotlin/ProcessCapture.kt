@@ -44,6 +44,7 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
     val stderrFile = File(tempDir, "$tempPrefix.stderr")
 
     private val DEBUG_LINES = 20
+    private val DEBUG_LINES_MESSAGE = "(Above output is limited to $DEBUG_LINES lines.)"
 
     private val builder = ProcessBuilder(*command)
             .directory(workingDir)
@@ -61,7 +62,16 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
     val errorMessage
         get(): String {
             val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
-            val message = stderr().takeUnless { it.isBlank() } ?: stdout()
+            var message = stderr().takeUnless { it.isBlank() } ?: stdout()
+
+            // Insert ellipsis in the middle of a long error message.
+            val lines = message.lines()
+            if (lines.count() > DEBUG_LINES) {
+                val prefix = lines.take(DEBUG_LINES / 2)
+                val suffix = lines.takeLast(DEBUG_LINES / 2)
+                message = (prefix + "[...]" + suffix + DEBUG_LINES_MESSAGE).joinToString("\n")
+            }
+
             return "Running '$commandLine' in '$usedWorkingDir' failed with exit code ${exitValue()}:\n$message"
         }
 
@@ -84,7 +94,7 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
                     lines.take(DEBUG_LINES).forEach { line ->
                         log.debug("stdout: $line")
                     }
-                    log.debug("(Above output is limited to $DEBUG_LINES lines.)")
+                    log.debug(DEBUG_LINES_MESSAGE)
                 }
             }
 
@@ -93,7 +103,7 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
                     lines.take(DEBUG_LINES).forEach { line ->
                         log.debug("stderr: $line")
                     }
-                    log.debug("(Above output is limited to $DEBUG_LINES lines.)")
+                    log.debug(DEBUG_LINES_MESSAGE)
                 }
             }
         }
