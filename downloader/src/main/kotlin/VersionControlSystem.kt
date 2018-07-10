@@ -259,8 +259,11 @@ abstract class VersionControlSystem {
             return when {
                 versionNames.isEmpty() ->
                     throw IOException("No matching tag found for version '$version'.")
-                versionNames.size > 1 ->
-                    throw IOException("Multiple matching tags found for version '$version': $versionNames")
+                versionNames.size > 1 -> {
+                    val limit = 20
+                    throw IOException("Multiple matching tags found for version '$version' (output limited to $limit " +
+                            "matches): ${versionNames.take(limit)}")
+                }
                 else -> versionNames.first()
             }
         }
