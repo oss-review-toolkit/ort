@@ -174,7 +174,9 @@ fun getPathFromEnvironment(executable: String): File? {
         } ?: emptyList()
 
         if (executable.substringAfterLast(".").toLowerCase() !in pathExt) {
-            pathExt.map { "$executable.$it" }
+            // Specifying an executable's file extension is optional on Windows, so try all of them in order, but still
+            // also try the unmodified executable name as a fall-back.
+            pathExt.map { "$executable.$it" } + executable
         } else {
             listOf(executable)
         }
