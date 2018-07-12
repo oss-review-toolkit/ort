@@ -114,6 +114,9 @@ object OkHttpClientHelper {
 fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
     if (version.isBlank() || names.isEmpty()) return emptyList()
 
+    // If there is a full match, return it right away.
+    names.find { it == version }?.let { return listOf(it) }
+
     val normalizedSeparator = '_'
     val normalizedVersion = version.replace(Regex("([.-])"), normalizedSeparator.toString()).toLowerCase()
 

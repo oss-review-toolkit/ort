@@ -218,6 +218,15 @@ class UtilsTest : WordSpec({
             filterVersionNames("6.9.0", names, "babel-plugin-transform-simplify-comparison-operators")
                     .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
         }
+
+        "find names when others with trailing digits are present" {
+            val names = listOf(
+                    "1.11.6", "1.11.60", "1.11.61", "1.11.62", "1.11.63", "1.11.64", "1.11.65", "1.11.66", "1.11.67",
+                    "1.11.68", "1.11.69"
+            )
+
+            filterVersionNames("1.11.6", names).joinToString("\n") shouldBe "1.11.6"
+        }
     }
 
     "getLicenseText" should {
