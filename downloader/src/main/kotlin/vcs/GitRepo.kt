@@ -24,7 +24,9 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
@@ -93,6 +95,21 @@ object GitRepo : GitBase() {
     }
 
     private fun runRepoCommand(targetDir: File, vararg args: String) {
-        ProcessCapture(targetDir, "repo", *args).requireSuccess()
+        if (OS.isWindows) {
+            val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
+
+            val windowsArgs = if (args.first() == "init") {
+                // The current "stable" release of "repo" still does not support Windows officially, so get the latest
+                // code from the "master" branch instead.
+                listOf(args.first(), "--no-clone-bundle", "--no-repo-verify", "--repo-branch=master") + args.drop(1)
+            } else {
+                args.toList()
+            }
+
+            // On Windows, the script itself is not executable, so we need to wrap the call by "python".
+            ProcessCapture(targetDir, "python", repo.absolutePath, *windowsArgs.toTypedArray()).requireSuccess()
+        } else {
+            ProcessCapture(targetDir, "repo", *args).requireSuccess()
+        }
     }
 }
