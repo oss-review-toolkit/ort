@@ -388,7 +388,13 @@ object Main {
             "Trying to download source artifact for '${target.id}' from '${target.sourceArtifact.url}'..."
         }
 
-        val request = Request.Builder().get().url(target.sourceArtifact.url).build()
+        val request = Request.Builder()
+                // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to find
+                // a tar.gz file, thus failing to unpack the archive.
+                // There might be a better way to do this, but I could not find it in the documentation.
+                // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/http/BridgeInterceptor.java#L79
+                .addHeader("Accept-Encoding", "identity")
+                .get().url(target.sourceArtifact.url).build()
 
         val startTime = Instant.now()
         val response = try {
