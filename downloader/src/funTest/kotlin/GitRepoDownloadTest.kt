@@ -21,7 +21,6 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.OS
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
@@ -48,7 +47,7 @@ class GitRepoDownloadTest : StringSpec() {
     }
 
     init {
-        "GitRepo can download a given revision".config(enabled = !OS.isWindows, tags = setOf(ExpensiveTag)) {
+        "GitRepo can download a given revision".config(tags = setOf(ExpensiveTag)) {
             val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
             val expectedFiles = listOf(
