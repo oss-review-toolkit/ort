@@ -53,7 +53,8 @@ object GitRepo : GitBase() {
                 // working tree.
                 override fun getInfo(): VcsInfo {
                     val manifestLink = File(getRootPath(), ".repo/manifest.xml")
-                    return super.getInfo().copy(path = manifestLink.canonicalFile.toRelativeString(workingDir))
+                    val manifestFile = manifestLink.toPath().toRealPath().toFile()
+                    return super.getInfo().copy(path = manifestFile.relativeTo(workingDir).invariantSeparatorsPath)
                 }
 
                 // Return the directory in which "repo init" was run (that directory in not managed with Git).
