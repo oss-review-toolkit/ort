@@ -102,7 +102,7 @@ object GitRepo : GitBase() {
             val windowsArgs = if (args.first() == "init") {
                 // The current "stable" release of "repo" still does not support Windows officially, so get the latest
                 // code from the "master" branch instead.
-                listOf(args.first(), "--no-clone-bundle", "--repo-branch=master") + args.drop(1)
+                listOf(args.first(), "--no-clone-bundle", "--no-repo-verify", "--repo-branch=master") + args.drop(1)
             } else {
                 args.toList()
             }
