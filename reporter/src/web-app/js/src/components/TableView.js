@@ -36,7 +36,7 @@ class TableView extends React.Component {
                 }
             }
             return (<Row>
-                        <Col span={12}>{'./' + definitionFilePath}</Col>
+                        <Col span={12}>Dependencies defined in <b> {'./' + definitionFilePath}</b></Col>
                         <Col span={2} offset={10}>{packagesNrText(data.projects[definitionFilePath].length)}</Col>
                     </Row>
                    );
