@@ -59,23 +59,24 @@ export class LicenseTag extends React.Component {
     }
 
     render() {
-        if (this.license && this.tagText) {
+        if (this.tagText) {
             return (
-                <Tooltip placement="left" title={this.license.name}>
+                <Tooltip placement="left" title={this.license ? this.license.name : this.tagText}>
                     <Tag className="reporter-license"
-                        color={this.license.color}
+                        color={this.license ? this.license.color : ''}
                         checked="true"
-                        onClick={this.showLicenseInfoModal}>{this.tagText}</Tag>
+                        onClick={this.license && this.showLicenseInfoModal}>{this.tagText}</Tag>
                 </Tooltip>
             );
         } else {
+            console.log("this", this);
             return(<div>No data</div>);
         }
     }
 };
 
 // Generates the HTML for the additional license information
-const LicenseInfo = function (props) {
+const LicenseInfo = (props) => {
     const license = props.license,
           licenseDescription = license.description ? 
           license.description : 'No description available for this license';
