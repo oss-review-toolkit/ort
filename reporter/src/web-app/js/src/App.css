@@ -10,6 +10,7 @@
 */
 
 body {
+    height: auto;
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

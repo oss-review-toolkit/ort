@@ -14,10 +14,11 @@
   },
   "dependencies": {
     "antd": "^3.6.1",
+    "classnames": "^2.2.6",
     "immutable": "^3.8.2",
     "prop-types": "^15.6.2",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
     "react-scripts": "1.1.4",
     "recharts": "^1.0.0-beta.10",
