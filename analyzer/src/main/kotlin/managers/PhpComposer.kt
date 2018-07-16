@@ -55,11 +55,6 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
-const val COMPOSER_BINARY = "composer.phar"
-const val COMPOSER_GLOBAL_SCRIPT_FILE_NAME = "composer"
-const val COMPOSER_GLOBAL_SCRIPT_FILE_NAME_WINDOWS = "composer.bat"
-const val COMPOSER_LOCK_FILE_NAME = "composer.lock"
-
 class PhpComposer : PackageManager() {
     companion object : PackageManagerFactory<PhpComposer>(
             "https://getcomposer.org/",
@@ -67,16 +62,19 @@ class PhpComposer : PackageManager() {
             listOf("composer.json")
     ) {
         override fun create() = PhpComposer()
+
+        private const val PHAR_BINARY = "composer.phar"
+        private const val LOCK_FILE = "composer.lock"
     }
 
     override fun command(workingDir: File) =
-            if (File(workingDir, COMPOSER_BINARY).isFile) {
-                "php $COMPOSER_BINARY"
+            if (File(workingDir, PHAR_BINARY).isFile) {
+                "php $PHAR_BINARY"
             } else {
                 if (OS.isWindows) {
-                    COMPOSER_GLOBAL_SCRIPT_FILE_NAME_WINDOWS
+                    "composer.bat"
                 } else {
-                    COMPOSER_GLOBAL_SCRIPT_FILE_NAME
+                    "composer"
                 }
             }
 
@@ -85,7 +83,7 @@ class PhpComposer : PackageManager() {
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
-        if (definitionFiles.all { File(it.parentFile, COMPOSER_BINARY).isFile }) {
+        if (definitionFiles.all { File(it.parentFile, PHAR_BINARY).isFile }) {
             return definitionFiles
         }
 
@@ -127,8 +125,8 @@ class PhpComposer : PackageManager() {
             val (packages, scopes) = if (hasDependencies) {
                 installDependencies(workingDir)
 
-                log.info { "Reading $COMPOSER_LOCK_FILE_NAME file in ${workingDir.absolutePath}..." }
-                val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE_NAME))
+                log.info { "Reading $LOCK_FILE file in ${workingDir.absolutePath}..." }
+                val lockFile = jsonMapper.readTree(File(workingDir, LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
                 val scopes = sortedSetOf(
                         parseScope("require", true, manifest, lockFile, packages),
@@ -286,7 +284,7 @@ class PhpComposer : PackageManager() {
     }
 
     private fun installDependencies(workingDir: File) {
-        require(Main.allowDynamicVersions || File(workingDir, COMPOSER_LOCK_FILE_NAME).isFile) {
+        require(Main.allowDynamicVersions || File(workingDir, LOCK_FILE).isFile) {
             "No lock file found in $workingDir, dependency versions are unstable."
         }
 
