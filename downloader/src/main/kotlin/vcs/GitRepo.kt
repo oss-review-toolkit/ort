@@ -28,6 +28,7 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
+import com.here.ort.utils.realFile
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
 
@@ -53,7 +54,7 @@ object GitRepo : GitBase() {
                 // working tree.
                 override fun getInfo(): VcsInfo {
                     val manifestLink = File(getRootPath(), ".repo/manifest.xml")
-                    val manifestFile = manifestLink.toPath().toRealPath().toFile()
+                    val manifestFile = manifestLink.realFile()
                     return super.getInfo().copy(path = manifestFile.relativeTo(workingDir).invariantSeparatorsPath)
                 }
 
