@@ -288,6 +288,12 @@ fun Exception.collectMessages(): List<String> {
 }
 
 /**
+ * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
+ * resolve symbolic links on Windows.
+ */
+fun File.realFile(): File = toPath().toRealPath().toFile()
+
+/**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
  *
  * @throws IOException if the directory could not be deleted.
