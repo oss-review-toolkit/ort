@@ -28,6 +28,7 @@ install:
   - stack setup > nul # This installs the whole GHC to an isolated location!
   - cinst sbt --version 1.0.2 -y
   - cinst php --version 7.2.0 -y
+  - cinst composer --version 4.8.0 -y
   - cd c:\tools\php72 # For some reason pushd / popd does not work.
   - copy php.ini-production php.ini
   - echo extension_dir=ext>>php.ini
