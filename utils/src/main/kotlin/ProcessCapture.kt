@@ -177,7 +177,7 @@ fun getCommandVersion(
         workingDir: File? = null,
         transform: (String) -> String = { it }
 ): String {
-    val commandLine = arrayOf(command).plus(versionArguments.split(' '))
+    val commandLine = arrayOf(command) + versionArguments.split(' ')
     val version = ProcessCapture(workingDir, *commandLine).requireSuccess()
 
     // Some tools, like pipdeptree, actually report the version to stderr.
