@@ -30,9 +30,10 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
+import java.io.FileFilter
 
 private const val REPO_URL = "https://github.com/heremaps/oss-review-toolkit-test-data"
-private const val REPO_REV = "63e77022c973e53ec4ca0dfc2f810a7393985d38"
+private const val REPO_REV = "1c0b86e578349f38acd43de354f815370112a213"
 private const val REPO_MANIFEST = "git-repo/manifest.xml"
 
 class GitRepoDownloadTest : StringSpec() {
@@ -50,22 +51,37 @@ class GitRepoDownloadTest : StringSpec() {
         "GitRepo can download a given revision".config(tags = setOf(ExpensiveTag)) {
             val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
+            val grpcDir = File(outputDir, "grpc")
             val expectedFiles = listOf(
                     ".git",
-                    "LICENSE",
-                    "README.md",
-                    "git-repo"
-            )
+                    ".github",
+                    ".vscode",
+                    "bazel",
+                    "cmake",
+                    "doc",
+                    "etc",
+                    "examples",
+                    "include",
+                    "src",
+                    "summerofcode",
+                    "templates",
+                    "test",
+                    "third_party",
+                    "tools",
+                    "vsprojects"
+            ).map { File(grpcDir, it) }
 
             val workingTree = GitRepo.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+            val actualFiles = grpcDir.listFiles(FileFilter {
+                it.isDirectory
+            }).sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getInfo() shouldBe vcs
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
 
             workingTree.getPathToRoot(File(outputDir, "docker/Dockerfile")) shouldBe "docker/Dockerfile"
-            workingTree.getPathToRoot(File(outputDir, "test-data/README.md")) shouldBe "test-data/README.md"
+            workingTree.getPathToRoot(File(outputDir, "grpc/README.md")) shouldBe "grpc/README.md"
         }
     }
 }
