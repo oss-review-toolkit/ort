@@ -1,0 +1,87 @@
+---
+config:
+  ignore_tool_versions: false
+  allow_dynamic_versions: false
+vcs:
+  type: "GitRepo"
+  url: "https://github.com/heremaps/oss-review-toolkit-test-data"
+  revision: "1c0b86e578349f38acd43de354f815370112a213"
+  path: "git-repo/manifest.xml"
+vcs_processed:
+  type: "gitrepo"
+  url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
+  revision: "1c0b86e578349f38acd43de354f815370112a213"
+  path: "git-repo/manifest.xml"
+projects:
+- id: "Bundler::grpc/Gemfile:"
+  definition_file_path: "grpc/Gemfile"
+  declared_licenses: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "gitrepo"
+    url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
+    revision: "1c0b86e578349f38acd43de354f815370112a213"
+    path: "grpc"
+  homepage_url: ""
+  scopes: []
+- id: "Bundler::grpc/examples/ruby/Gemfile:"
+  definition_file_path: "grpc/examples/ruby/Gemfile"
+  declared_licenses: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "gitrepo"
+    url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
+    revision: "1c0b86e578349f38acd43de354f815370112a213"
+    path: "grpc/examples/ruby"
+  homepage_url: ""
+  scopes: []
+- id: "Bundler::grpc/test/distrib/ruby/Gemfile:"
+  definition_file_path: "grpc/test/distrib/ruby/Gemfile"
+  declared_licenses: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "gitrepo"
+    url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
+    revision: "1c0b86e578349f38acd43de354f815370112a213"
+    path: "grpc/test/distrib/ruby"
+  homepage_url: ""
+  scopes: []
+- id: "Unmanaged::<REPLACE_TMP>:"
+  definition_file_path: ""
+  declared_licenses: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "GitRepo"
+    url: "https://github.com/heremaps/oss-review-toolkit-test-data"
+    revision: "1c0b86e578349f38acd43de354f815370112a213"
+    path: "git-repo/manifest.xml"
+  homepage_url: ""
+  scopes: []
+packages: []
+errors:
+  'Bundler::grpc/Gemfile:':
+  - "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc,\
+    \ dependency versions are unstable."
+  'Bundler::grpc/examples/ruby/Gemfile:':
+  - "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/examples/ruby,\
+    \ dependency versions are unstable."
+  'Bundler::grpc/test/distrib/ruby/Gemfile:':
+  - "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/test/distrib/ruby,\
+    \ dependency versions are unstable."
+  'Unmanaged::<REPLACE_TMP>:': []
