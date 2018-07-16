@@ -73,9 +73,6 @@ class MainTest : StringSpec() {
 
             lines.next() shouldBe "The following package managers are activated:"
             lines.next() shouldBe "\tGradle"
-            lines.next() shouldBe "Scanning project path:"
-            lines.next() shouldBe "\t" + inputDir.absolutePath
-            lines.next() shouldBe "Gradle projects found in:"
         }
 
         "Activating only NPM works" {
@@ -98,9 +95,6 @@ class MainTest : StringSpec() {
 
             lines.next() shouldBe "The following package managers are activated:"
             lines.next() shouldBe "\tNPM"
-            lines.next() shouldBe "Scanning project path:"
-            lines.next() shouldBe "\t" + inputDir.absolutePath
-            lines.next() shouldBe "NPM projects found in:"
         }
 
         "Analyzer creates correct output" {
