@@ -45,6 +45,74 @@ import java.io.File
 
 import kotlin.system.exitProcess
 
+fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
+            packageManagers: List<PackageManagerFactory<PackageManager>> = PackageManager.ALL,
+            packageCurationsFile: File? = null
+): AnalyzerResultBuilder {
+    // Map of files managed by the respective package manager.
+    val managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        // If only one package manager is activated, treat the given path as definition file for that package
+        // manager despite its name.
+        mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
+    } else {
+        PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
+    }
+
+    val vcs = VersionControlSystem.forDirectory(absoluteProjectPath)
+
+    val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any {
+        it.parentFile.absoluteFile == absoluteProjectPath
+    }
+
+    if (managedDefinitionFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
+        managedDefinitionFiles[Unmanaged] = listOf(absoluteProjectPath)
+    }
+
+    if (log.isInfoEnabled) {
+        // Log the summary of projects found per package manager.
+        managedDefinitionFiles.forEach { manager, files ->
+            // No need to use curly-braces-syntax for logging here as the log level check is already done above.
+            log.info("$manager projects found in:")
+            log.info(files.joinToString("\n") {
+                "\t${it.toRelativeString(absoluteProjectPath).let { if (it.isEmpty()) "." else it }}"
+            })
+        }
+    }
+
+    val analyzerResultBuilder = AnalyzerResultBuilder(config, vcs?.getInfo() ?: VcsInfo.EMPTY)
+
+    // Resolve dependencies per package manager.
+    managedDefinitionFiles.forEach { manager, files ->
+        val results = manager.create(config).resolveDependencies(absoluteProjectPath, files)
+
+        val curatedResults = packageCurationsFile?.let {
+            val provider = YamlFilePackageCurationProvider(it)
+            results.mapValues { entry ->
+                ProjectAnalyzerResult(
+                        config = entry.value.config,
+                        project = entry.value.project,
+                        errors = entry.value.errors,
+                        packages = entry.value.packages.map { curatedPackage ->
+                            val curations = provider.getCurationsFor(curatedPackage.pkg.id)
+                            curations.fold(curatedPackage) { cur, packageCuration ->
+                                log.debug {
+                                    "Applying curation '$packageCuration' to package '${curatedPackage.pkg.id}'."
+                                }
+                                packageCuration.apply(cur)
+                            }
+                        }.toSortedSet()
+                )
+            }
+        } ?: results
+
+        curatedResults.forEach { _, analyzerResult ->
+            analyzerResultBuilder.addResult(analyzerResult)
+        }
+    }
+
+    return analyzerResultBuilder
+}
+
 /**
  * The main entry point of the application.
  */
@@ -166,70 +234,9 @@ object Main {
         val absoluteProjectPath = inputDir.absoluteFile
         println("Scanning project path:\n\t$absoluteProjectPath")
 
-        // Map of files managed by the respective package manager.
-        val managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
-            // If only one package manager is activated, treat the given path as definition file for that package
-            // manager despite its name.
-            mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
-        } else {
-            PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
-        }
-
-        val vcs = VersionControlSystem.forDirectory(absoluteProjectPath)
-
-        val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any {
-            it.parentFile.absoluteFile == absoluteProjectPath
-        }
-
-        if (managedDefinitionFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-            managedDefinitionFiles[Unmanaged] = listOf(absoluteProjectPath)
-        }
-
-        // Print a summary of all projects found per package manager.
-        managedDefinitionFiles.forEach { manager, files ->
-            println("$manager projects found in:")
-            println(files.joinToString("\n") {
-                "\t${it.toRelativeString(absoluteProjectPath).let { if (it.isEmpty()) "." else it}}"
-            })
-        }
-
-        val failedAnalysis = sortedSetOf<String>()
-
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
-        val analyzerResultBuilder = AnalyzerResultBuilder(config, vcs?.getInfo() ?: VcsInfo.EMPTY)
-
-        // Resolve dependencies per package manager.
-        managedDefinitionFiles.forEach { manager, files ->
-            // Print the list of dependencies.
-            val results = manager.create(config).resolveDependencies(absoluteProjectPath, files)
-
-            val curatedResults = packageCurationsFile?.let {
-                val provider = YamlFilePackageCurationProvider(it)
-                results.mapValues { entry ->
-                    ProjectAnalyzerResult(
-                            config = entry.value.config,
-                            project = entry.value.project,
-                            errors = entry.value.errors,
-                            packages = entry.value.packages.map { curatedPackage ->
-                                val curations = provider.getCurationsFor(curatedPackage.pkg.id)
-                                curations.fold(curatedPackage) { cur, packageCuration ->
-                                    log.debug {
-                                        "Applying curation '$packageCuration' to package '${curatedPackage.pkg.id}'."
-                                    }
-                                    packageCuration.apply(cur)
-                                }
-                            }.toSortedSet()
-                    )
-                }
-            } ?: results
-
-            curatedResults.forEach { definitionFile, analyzerResult ->
-                analyzerResultBuilder.addResult(analyzerResult)
-                if (analyzerResult.hasErrors()) {
-                    failedAnalysis += definitionFile.absolutePath
-                }
-            }
-        }
+        val analyzerResultBuilder = analyze(config, absoluteProjectPath, packageManagers,
+                packageCurationsFile)
 
         analyzerResultBuilder.build().let {
             absoluteOutputPath.safeMkdirs()
@@ -237,13 +244,6 @@ object Main {
                 val outputFile = File(absoluteOutputPath, "all-dependencies.${format.fileExtension}")
                 println("Writing analyzer result to '$outputFile'.")
                 format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, it)
-            }
-        }
-
-        if (failedAnalysis.isNotEmpty()) {
-            log.error {
-                "Analysis for these projects did not complete successfully:\n" +
-                        failedAnalysis.joinToString("\n")
             }
         }
     }
