@@ -35,6 +35,11 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
     constructor(vararg command: String) : this(null, *command)
     constructor(workingDir: File?, vararg command: String) : this(workingDir, mapOf(), *command)
 
+    companion object {
+        private const val DEBUG_LINES = 20
+        private const val DEBUG_LINES_MESSAGE = "(Above output is limited to $DEBUG_LINES lines.)"
+    }
+
     val commandLine = command.joinToString(" ")
 
     private val tempDir = createTempDir("ort")
@@ -42,9 +47,6 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
 
     val stdoutFile = File(tempDir, "$tempPrefix.stdout")
     val stderrFile = File(tempDir, "$tempPrefix.stderr")
-
-    private val DEBUG_LINES = 20
-    private val DEBUG_LINES_MESSAGE = "(Above output is limited to $DEBUG_LINES lines.)"
 
     private val builder = ProcessBuilder(*command)
             .directory(workingDir)
