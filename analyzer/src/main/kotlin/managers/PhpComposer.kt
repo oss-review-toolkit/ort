@@ -98,6 +98,7 @@ class PhpComposer : PackageManager() {
         checkCommandVersion(
                 command(workingDir),
                 Requirement.buildIvy("[1.5,)"),
+                "--no-ansi --version",
                 ignoreActualVersion = Main.ignoreVersions,
                 transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
         )
