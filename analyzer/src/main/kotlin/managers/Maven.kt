@@ -21,6 +21,7 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
@@ -162,8 +163,8 @@ class Maven : PackageManager() {
                 scopes = scopes.values.toSortedSet()
         )
 
-        // Maven does not support lock files, so hard-code "allowDynamicVersions" to "true".
-        return ProjectAnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
+                packages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {

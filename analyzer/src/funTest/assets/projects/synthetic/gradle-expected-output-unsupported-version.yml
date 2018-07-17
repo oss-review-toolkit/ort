@@ -1,5 +1,5 @@
 ---
-allow_dynamic_versions: true
+allow_dynamic_versions: false
 project:
   id: "Gradle:com.here.ort.gradle.example:gradle-unsupported-version:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-unsupported-version/build.gradle"

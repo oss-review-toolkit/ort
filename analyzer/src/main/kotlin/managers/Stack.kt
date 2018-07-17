@@ -152,8 +152,7 @@ class Stack : PackageManager() {
                 scopes = scopes
         )
 
-        // Stack does not support lock files, so hard-code "allowDynamicVersions" to "true".
-        return ProjectAnalyzerResult(true, project,
+        return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
                 allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
