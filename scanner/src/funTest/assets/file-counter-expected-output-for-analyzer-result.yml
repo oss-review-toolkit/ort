@@ -1,6 +1,8 @@
 ---
 analyzer_result:
-  allow_dynamic_versions: false
+  config:
+    ignore_tool_versions: false
+    allow_dynamic_versions: false
   vcs:
     type: ""
     url: ""

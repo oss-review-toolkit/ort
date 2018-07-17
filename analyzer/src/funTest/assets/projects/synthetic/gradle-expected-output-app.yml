@@ -1,5 +1,7 @@
 ---
-allow_dynamic_versions: false
+config:
+  ignore_tool_versions: false
+  allow_dynamic_versions: false
 project:
   id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"

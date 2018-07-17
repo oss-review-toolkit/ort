@@ -44,16 +44,18 @@ class AnalyzerResultTest : WordSpec() {
             scopes = sortedSetOf(scope1, scope2)
     )
 
-    private val analyzerResult1 = ProjectAnalyzerResult(true, project1, sortedSetOf(package1.toCuratedPackage()),
+    private val config = AnalyzerConfiguration(false, true)
+    private val analyzerResult1 = ProjectAnalyzerResult(config, project1, sortedSetOf(package1.toCuratedPackage()),
             listOf("error-1", "error-2"))
-    private val analyzerResult2 = ProjectAnalyzerResult(true, project2,
+    private val analyzerResult2 = ProjectAnalyzerResult(config, project2,
             sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
             listOf("error-2"))
 
     init {
         "AnalyzerResult" should {
             "create the correct ProjectAnalyzerResults" {
-                val mergedResults = AnalyzerResultBuilder(true, vcs)
+                val config = AnalyzerConfiguration(false, true)
+                val mergedResults = AnalyzerResultBuilder(config, vcs)
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)
                         .build()
@@ -62,7 +64,8 @@ class AnalyzerResultTest : WordSpec() {
             }
 
             "be serialized and deserialized correctly" {
-                val mergedResults = AnalyzerResultBuilder(true, vcs)
+                val config = AnalyzerConfiguration(false, true)
+                val mergedResults = AnalyzerResultBuilder(config, vcs)
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)
                         .build()
@@ -77,12 +80,13 @@ class AnalyzerResultTest : WordSpec() {
 
         "AnalyzerResultBuilder" should {
             "merge results from all files" {
-                val mergedResults = AnalyzerResultBuilder(true, vcs)
+                val config = AnalyzerConfiguration(false, true)
+                val mergedResults = AnalyzerResultBuilder(config, vcs)
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)
                         .build()
 
-                mergedResults.allowDynamicVersions shouldBe true
+                mergedResults.config.allowDynamicVersions shouldBe true
                 mergedResults.vcs shouldBe vcs
                 mergedResults.vcsProcessed shouldBe vcs.normalize()
                 mergedResults.projects shouldBe sortedSetOf(project1, project2)

@@ -1,5 +1,7 @@
 ---
-allow_dynamic_versions: false
+config:
+  ignore_tool_versions: false
+  allow_dynamic_versions: false
 project:
   id: "NPM::src/funTest/assets/projects/synthetic/npm/no-lockfile/package.json:"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"

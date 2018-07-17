@@ -30,6 +30,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 val ortModelModule = SimpleModule("OrtModelModule").apply {
+    addDeserializer(AnalyzerConfiguration::class.java, AnalyzerConfigurationDeserializer())
     addDeserializer(Identifier::class.java, IdentifierFromStringDeserializer())
     addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
 

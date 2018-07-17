@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
 import com.here.ort.utils.log
 
 import java.util.SortedMap
@@ -31,12 +33,10 @@ import java.util.SortedSet
  */
 data class AnalyzerResult(
         /**
-         * If dynamic versions were allowed during the dependency resolution. If true it means that the dependency tree
-         * might change with another scan if any of the (transitive) dependencies is declared with a version range and
-         * a new version of this dependency was released in the meantime. It is always true for package managers that do
-         * not support lock files, but do support version ranges.
+         * The [AnalyzerConfiguration] that was used to generate the result.
          */
-        val allowDynamicVersions: Boolean,
+        @JsonAlias("allowDynamicVersions", "allow_dynamic_versions")
+        val config: AnalyzerConfiguration,
 
         /**
          * The [VcsInfo] of the analyzed repository.
@@ -69,12 +69,12 @@ data class AnalyzerResult(
     fun createProjectAnalyzerResults() = projects.map { project ->
             val allDependencies = project.collectDependencyIds()
             val projectPackages = packages.filter { it.pkg.id in allDependencies }.toSortedSet()
-            ProjectAnalyzerResult(allowDynamicVersions, project, projectPackages, errors[project.id] ?: emptyList())
+            ProjectAnalyzerResult(config, project, projectPackages, errors[project.id] ?: emptyList())
         }
 }
 
 class AnalyzerResultBuilder(
-        private val allowDynamicVersions: Boolean,
+        private val config: AnalyzerConfiguration,
         private val vcsInfo: VcsInfo
 ) {
     private val projects = sortedSetOf<Project>()
@@ -82,7 +82,7 @@ class AnalyzerResultBuilder(
     private val errors = sortedMapOf<Identifier, List<String>>()
 
     fun build(): AnalyzerResult {
-        return AnalyzerResult(allowDynamicVersions, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
+        return AnalyzerResult(config, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = this.apply {
