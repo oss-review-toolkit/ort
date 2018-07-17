@@ -30,8 +30,6 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class SbtTest : StringSpec({
-    val sbt = SBT.create()
-
     "Dependencies of the external 'directories' project should be detected correctly" {
         val projectName = "directories"
         val projectDir = File("src/funTest/assets/projects/external/$projectName")
@@ -47,7 +45,8 @@ class SbtTest : StringSpec({
         definitionFile.isFile shouldBe true
         expectedOutputFile.isFile shouldBe true
 
-        val resolutionResult = sbt.resolveDependencies(USER_DIR, listOf(definitionFile))
+        val config = AnalyzerConfiguration(false, false)
+        val resolutionResult = SBT.create(config).resolveDependencies(USER_DIR, listOf(definitionFile))
 
         // Because of the mapping from SBT to POM files we cannot use definitionFile as the key, so just ensure
         // there is exactly one entry to take.

@@ -36,7 +36,8 @@ class PipTest : StringSpec({
     "setup.py dependencies should be resolved correctly for spdx-tools-python" {
         val definitionFile = File(projectsDir, "external/spdx-tools-python/setup.py")
 
-        val result = PIP.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+        val config = AnalyzerConfiguration(false, false)
+        val result = PIP.create(config).resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
         val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -45,7 +46,8 @@ class PipTest : StringSpec({
     "requirements.txt dependencies should be resolved correctly for example-python-flask" {
         val definitionFile = File(projectsDir, "external/example-python-flask/requirements.txt")
 
-        val result = PIP.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+        val config = AnalyzerConfiguration(false, false)
+        val result = PIP.create(config).resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
         val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -64,7 +66,8 @@ class PipTest : StringSpec({
                 .replaceFirst("<REPLACE_REVISION>", vcsRevision)
                 .replaceFirst("<REPLACE_PATH>", vcsPath)
 
-        val result = PIP.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+        val config = AnalyzerConfiguration(false, false)
+        val result = PIP.create(config).resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
     }

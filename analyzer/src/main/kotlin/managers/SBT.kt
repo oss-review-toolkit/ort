@@ -20,8 +20,8 @@
 package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
+import com.here.ort.analyzer.AnalyzerConfiguration
 
-import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.utils.OS
@@ -35,7 +35,7 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.io.IOException
 
-class SBT : PackageManager() {
+class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<SBT>(
             "http://www.scala-sbt.org/",
             "Scala",
@@ -57,7 +57,7 @@ class SBT : PackageManager() {
             }
         }
 
-        override fun create() = SBT()
+        override fun create(config: AnalyzerConfiguration) = SBT(config)
     }
 
     override fun command(workingDir: File) = if (OS.isWindows) "sbt.bat" else "sbt"
@@ -92,7 +92,7 @@ class SBT : PackageManager() {
                 Requirement.buildIvy("[0.13.0,)"),
                 versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
                 workingDir = workingDir,
-                ignoreActualVersion = Main.ignoreVersions,
+                ignoreActualVersion = config.ignoreToolVersions,
                 transform = this::extractLowestSbtVersion
         )
 
@@ -161,5 +161,5 @@ class SBT : PackageManager() {
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            Maven.create().enableSbtMode().resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
+            Maven.create(config).enableSbtMode().resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
 }

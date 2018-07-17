@@ -19,6 +19,7 @@
 
 package com.here.ort.analyzer.integration
 
+import com.here.ort.analyzer.AnalyzerConfiguration
 import com.here.ort.analyzer.ManagedProjectFiles
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.Main
@@ -110,7 +111,8 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         "Analyzer creates one non-empty result per definition file".config(tags = setOf(ExpensiveTag)) {
             definitionFilesForTest.forEach { manager, files ->
                 println("Resolving $manager dependencies in $files.")
-                val results = manager.create().resolveDependencies(USER_DIR, files)
+                val config = AnalyzerConfiguration(false, false)
+                val results = manager.create(config).resolveDependencies(USER_DIR, files)
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->

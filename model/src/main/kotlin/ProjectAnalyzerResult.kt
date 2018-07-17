@@ -19,7 +19,7 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
+import com.here.ort.analyzer.AnalyzerConfiguration
 
 import java.util.SortedSet
 
@@ -28,13 +28,9 @@ import java.util.SortedSet
  */
 data class ProjectAnalyzerResult(
         /**
-         * If dynamic versions were allowed during the dependency resolution. If true it means that the dependency tree
-         * might change with another scan if any of the (transitive) dependencies is declared with a version range and
-         * a new version of this dependency was released in the meantime. It is always true for package managers that do
-         * not support lock files, but do support version ranges.
+         * The [AnalyzerConfiguration] that was used to generate the result.
          */
-        @JsonAlias("allowDynamicVersions")
-        val allowDynamicVersions: Boolean,
+        val config: AnalyzerConfiguration,
 
         /**
          * The project that was analyzed. The tree of dependencies is implicitly contained in the scopes in the form

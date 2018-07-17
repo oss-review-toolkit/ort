@@ -47,7 +47,8 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
                 try {
-                    val actualResult = Bundler.create()
+                    val config = AnalyzerConfiguration(false, false)
+                    val actualResult = Bundler.create(config)
                             .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
@@ -65,7 +66,8 @@ class BundlerTest : WordSpec() {
             "show error if no lockfile is present" {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
 
-                val actualResult = Bundler.create()
+                val config = AnalyzerConfiguration(false, false)
+                val actualResult = Bundler.create(config)
                         .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
@@ -82,7 +84,8 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "gemspec/Gemfile")
 
                 try {
-                    val actualResult = Bundler.create()
+                    val config = AnalyzerConfiguration(false, false)
+                    val actualResult = Bundler.create(config)
                             .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),

@@ -22,6 +22,7 @@ package com.here.ort.analyzer.managers
 import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.here.ort.analyzer.AnalyzerConfiguration
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
@@ -58,14 +59,14 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-class Bundler : PackageManager() {
+class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<Bundler>(
             "http://bundler.io/",
             "Ruby",
             // See http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
             listOf("Gemfile")
     ) {
-        override fun create() = Bundler()
+        override fun create(config: AnalyzerConfiguration) = Bundler(config)
 
         val bundle = if (OS.isWindows) "bundle.bat" else "bundle"
     }
@@ -82,7 +83,7 @@ class Bundler : PackageManager() {
         checkCommandVersion(
                 bundle,
                 Requirement.buildIvy("1.16.+"),
-                ignoreActualVersion = Main.ignoreVersions,
+                ignoreActualVersion = config.ignoreToolVersions,
                 transform = { it.substringAfter("Bundler version ") }
         )
 
@@ -126,12 +127,7 @@ class Bundler : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
-            return ProjectAnalyzerResult(
-                    Main.allowDynamicVersions,
-                    project,
-                    packages.map { it.toCuratedPackage() }.toSortedSet(),
-                    errors
-            )
+            return ProjectAnalyzerResult(config, project, packages.map { it.toCuratedPackage() }.toSortedSet(), errors)
         } finally {
             // Delete vendor folder to not pollute the scan.
             log.info { "Deleting temporary directory '$vendorDir'..." }
@@ -246,7 +242,7 @@ class Bundler : PackageManager() {
             workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
-        require(Main.allowDynamicVersions || File(workingDir, "Gemfile.lock").isFile) {
+        require(config.allowDynamicVersions || File(workingDir, "Gemfile.lock").isFile) {
             "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
         }
 

@@ -23,6 +23,7 @@ import Dependency
 import DependencyTreeModel
 
 import ch.frankel.slf4k.*
+import com.here.ort.analyzer.AnalyzerConfiguration
 
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
@@ -62,13 +63,13 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.gradle.tooling.GradleConnector
 
-class Gradle : PackageManager() {
+class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<Gradle>(
             "https://gradle.org/",
             "Java",
             listOf("build.gradle", "settings.gradle")
     ) {
-        override fun create() = Gradle()
+        override fun create(config: AnalyzerConfiguration) = Gradle(config)
 
         val gradle = if (OS.isWindows) "gradle.bat" else "gradle"
         val wrapper = if (OS.isWindows) "gradlew.bat" else "gradlew"
@@ -135,7 +136,8 @@ class Gradle : PackageManager() {
             )
 
             // Gradle < 4.8 does not support lock files, so hard-code "allowDynamicVersions" to "true".
-            return ProjectAnalyzerResult(true, project,
+            val config = AnalyzerConfiguration(false, true)
+            return ProjectAnalyzerResult(config, project,
                     packages.values.map { it.toCuratedPackage() }.toSortedSet(), dependencyTreeModel.errors)
         } finally {
             connection.close()

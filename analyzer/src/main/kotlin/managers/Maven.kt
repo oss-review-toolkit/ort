@@ -20,6 +20,7 @@
 package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
+import com.here.ort.analyzer.AnalyzerConfiguration
 
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
@@ -57,13 +58,13 @@ import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
 
-class Maven : PackageManager() {
+class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<Maven>(
             "https://maven.apache.org/",
             "Java",
             listOf("pom.xml")
     ) {
-        override fun create() = Maven()
+        override fun create(config: AnalyzerConfiguration) = Maven(config)
     }
 
     /**
@@ -163,7 +164,8 @@ class Maven : PackageManager() {
         )
 
         // Maven does not support lock files, so hard-code "allowDynamicVersions" to "true".
-        return ProjectAnalyzerResult(true, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
+        val config = AnalyzerConfiguration(false, true)
+        return ProjectAnalyzerResult(config, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {

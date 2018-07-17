@@ -20,6 +20,7 @@
 package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
+import com.here.ort.analyzer.AnalyzerConfiguration
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
@@ -50,13 +51,13 @@ import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.util.SortedSet
 
-class Stack : PackageManager() {
+class Stack(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<Stack>(
             "http://haskellstack.org/",
             "Haskell",
             listOf("stack.yaml")
     ) {
-        override fun create() = Stack()
+        override fun create(config: AnalyzerConfiguration) = Stack(config)
     }
 
     override fun command(workingDir: File) = "stack"
@@ -153,8 +154,8 @@ class Stack : PackageManager() {
         )
 
         // Stack does not support lock files, so hard-code "allowDynamicVersions" to "true".
-        return ProjectAnalyzerResult(true, project,
-                allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
+        val config = AnalyzerConfiguration(false, true)
+        return ProjectAnalyzerResult(config, project, allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun buildDependencyTree(parentName: String, allPackages: MutableMap<Package, Package>,

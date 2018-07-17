@@ -47,7 +47,8 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -62,7 +63,8 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -77,7 +79,8 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()

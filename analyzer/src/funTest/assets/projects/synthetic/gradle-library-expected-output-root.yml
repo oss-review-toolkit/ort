@@ -1,5 +1,7 @@
 ---
-allow_dynamic_versions: true
+config:
+  ignore_tool_versions: false
+  allow_dynamic_versions: true
 project:
   id: "Gradle::Gradle-Example:"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-library/build.gradle"

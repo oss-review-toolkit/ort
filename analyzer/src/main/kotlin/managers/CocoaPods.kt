@@ -19,18 +19,19 @@
 
 package com.here.ort.analyzer.managers
 
+import com.here.ort.analyzer.AnalyzerConfiguration
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 
 import java.io.File
 
-class CocoaPods : PackageManager() {
+class CocoaPods(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<CocoaPods>(
             "https://cocoapods.org/",
             "Objective-C",
             listOf("Podfile.lock", "Podfile")
     ) {
-        override fun create() = CocoaPods()
+        override fun create(config: AnalyzerConfiguration) = CocoaPods(config)
     }
 
     override fun command(workingDir: File) = "pod"

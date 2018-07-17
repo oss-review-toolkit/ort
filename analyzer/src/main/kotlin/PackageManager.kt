@@ -48,7 +48,7 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
 /**
  * A class representing a package manager that handles software dependencies.
  */
-abstract class PackageManager {
+abstract class PackageManager(protected val config: AnalyzerConfiguration) {
     companion object {
         /**
          * The prioritized list of all available package managers. This needs to be initialized lazily to ensure the
@@ -212,8 +212,8 @@ abstract class PackageManager {
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    result[definitionFile] = ProjectAnalyzerResult(Main.allowDynamicVersions, errorProject,
-                            sortedSetOf(), e.collectMessages())
+                    result[definitionFile] = ProjectAnalyzerResult(config, errorProject, sortedSetOf(),
+                            e.collectMessages())
 
                     log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
                 }
