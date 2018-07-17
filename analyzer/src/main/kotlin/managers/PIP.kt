@@ -291,8 +291,8 @@ class PIP : PackageManager() {
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.safeDeleteRecursively()
 
-        // PIP does not support lock files, so hard-code "allowDynamicVersions" to "true".
-        return ProjectAnalyzerResult(true, project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
+                packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {
