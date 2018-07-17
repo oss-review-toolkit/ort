@@ -47,18 +47,28 @@ Follow these steps to get started with the OSS Review Toolkit:
 
 1. Ensure OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler) is installed and the
    `JAVA_HOME` environment variable set.
+
 2. Clone this repository *recursively*, i.e. with submodules (`git clone --recurse-submodules`).
+
 3. Change into the repo directory on your machine and run `./gradlew installDist` to setup the build environment (e.g.
    get Gradle etc.) and build / install the start scripts for ORT. The individual start scripts can then be run directly
    from their respective locations as follows:
 
-* `./analyzer/build/install/analyzer/bin/analyzer`
-* `./downloader/build/install/downloader/bin/downloader`
-* `./scanner/build/install/scanner/bin/scanner`
-* `./reporter/build/install/scanner/bin/reporter`
+   * `./analyzer/build/install/analyzer/bin/analyzer --help`
+   * `./downloader/build/install/downloader/bin/downloader --help`
+   * `./scanner/build/install/scanner/bin/scanner --help`
+   * `./reporter/build/install/scanner/bin/reporter --help`
 
-Make sure that the locale of your system is set to `en_US.UTF-8`, using other locales might lead to issues with parsing
-the output of external tools.
+   Alternatively, as of [Gradle 4.9](https://docs.gradle.org/4.9/release-notes.html#command-line-args-supported-by-javaexec)
+   the different tools can be run directly:
+
+   * `./gradlew analyzer:run --args="--help"`
+   * `./gradlew downloader:run --args="--help"`
+   * `./gradlew scanner:run --args="--help"`
+   * `./gradlew reporter:run --args="--help"`
+
+4. Make sure that the locale of your system is set to `en_US.UTF-8`, using other locales might lead to issues with parsing
+   the output of external tools.
 
 ## Supported package managers
 
