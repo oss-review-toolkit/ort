@@ -28,6 +28,7 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
@@ -56,7 +57,7 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-class PIP : PackageManager() {
+class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<PIP>(
             "https://pip.pypa.io/",
             "Python",
@@ -64,7 +65,7 @@ class PIP : PackageManager() {
             // https://caremad.io/posts/2013/07/setup-vs-requirement/.
             listOf("requirements*.txt", "setup.py")
     ) {
-        override fun create() = PIP()
+        override fun create(config: AnalyzerConfiguration) = PIP(config)
 
         private const val PIP_VERSION = "9.0.3"
 
@@ -111,7 +112,8 @@ class PIP : PackageManager() {
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
-        checkCommandVersion("virtualenv", Requirement.buildIvy("15.1.+"), ignoreActualVersion = Main.ignoreVersions)
+        checkCommandVersion("virtualenv", Requirement.buildIvy("15.1.+"),
+                ignoreActualVersion = config.ignoreToolVersions)
 
         return definitionFiles
     }
@@ -291,8 +293,7 @@ class PIP : PackageManager() {
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.safeDeleteRecursively()
 
-        return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
-                packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(config, project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {

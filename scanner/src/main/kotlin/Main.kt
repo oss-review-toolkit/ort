@@ -27,6 +27,7 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.Identifier
@@ -272,7 +273,8 @@ object Main {
 
         val vcsInfo = VersionControlSystem.forDirectory(inputPath.takeIf { it.isDirectory }
                 ?: inputPath.parentFile)?.getInfo(inputPath) ?: VcsInfo.EMPTY
-        val analyzerResult = AnalyzerResultBuilder(true, vcsInfo).build()
+        val config = AnalyzerConfiguration(false, true)
+        val analyzerResult = AnalyzerResultBuilder(config, vcsInfo).build()
 
         val scanResultContainer = ScanResultContainer(Identifier("", "", inputPath.absolutePath, ""), listOf(result))
 

@@ -28,6 +28,7 @@ import com.beust.jcommander.ParameterException
 
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.ProjectAnalyzerResult
@@ -89,16 +90,16 @@ object Main {
     private var outputFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
-            names = ["--ignore-versions"],
+            names = ["--ignore-tool-versions"],
             order = PARAMETER_ORDER_OPTIONAL)
-    var ignoreVersions = false
+    private var ignoreToolVersions = false
 
     @Parameter(description = "Allow dynamic versions of dependencies. This can result in unstable results when " +
             "dependencies use version ranges. This option only affects package managers that support lock files, " +
             "like NPM.",
             names = ["--allow-dynamic-versions"],
             order = PARAMETER_ORDER_OPTIONAL)
-    var allowDynamicVersions = false
+    private var allowDynamicVersions = false
 
     @Parameter(description = "A YAML file that contains package curation data.",
             names = ["--package-curations-file"],
@@ -194,18 +195,19 @@ object Main {
 
         val failedAnalysis = sortedSetOf<String>()
 
-        val analyzerResultBuilder = AnalyzerResultBuilder(allowDynamicVersions, vcs?.getInfo() ?: VcsInfo.EMPTY)
+        val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
+        val analyzerResultBuilder = AnalyzerResultBuilder(config, vcs?.getInfo() ?: VcsInfo.EMPTY)
 
         // Resolve dependencies per package manager.
         managedDefinitionFiles.forEach { manager, files ->
             // Print the list of dependencies.
-            val results = manager.create().resolveDependencies(absoluteProjectPath, files)
+            val results = manager.create(config).resolveDependencies(absoluteProjectPath, files)
 
             val curatedResults = packageCurationsFile?.let {
                 val provider = YamlFilePackageCurationProvider(it)
                 results.mapValues { entry ->
                     ProjectAnalyzerResult(
-                            allowDynamicVersions = entry.value.allowDynamicVersions,
+                            config = entry.value.config,
                             project = entry.value.project,
                             errors = entry.value.errors,
                             packages = entry.value.packages.map { curatedPackage ->

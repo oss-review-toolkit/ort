@@ -22,10 +22,10 @@ package com.here.ort.analyzer.managers
 import ch.frankel.slf4k.debug
 import ch.frankel.slf4k.warn
 
-import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -45,7 +45,7 @@ import java.io.IOException
 import java.net.URI
 import java.nio.file.Paths
 
-class GoDep : PackageManager() {
+class GoDep(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<GoDep>(
             "https://golang.github.io/dep/",
             "Go",
@@ -59,7 +59,7 @@ class GoDep : PackageManager() {
                 "Godeps.json" to NO_LOCKFILE
         )
 
-        override fun create() = GoDep()
+        override fun create(config: AnalyzerConfiguration) = GoDep(config)
     }
 
     override fun command(workingDir: File) = "dep"
@@ -122,7 +122,7 @@ class GoDep : PackageManager() {
         gopath.safeDeleteRecursively()
 
         return ProjectAnalyzerResult(
-                allowDynamicVersions = Main.allowDynamicVersions,
+                config = config,
                 project = Project(
                         id = Identifier(provider, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
@@ -158,7 +158,7 @@ class GoDep : PackageManager() {
     private fun importLegacyManifest(definitionFile: File, projectDir: File, workingDir: File, gopath: File) {
         val lockfileName = LEGACY_MANIFESTS[definitionFile.name]
 
-        if (lockfileName != NO_LOCKFILE && !File(workingDir, lockfileName).isFile && !Main.allowDynamicVersions) {
+        if (lockfileName != NO_LOCKFILE && !File(workingDir, lockfileName).isFile && !config.allowDynamicVersions) {
             throw IllegalArgumentException("No lockfile found in ${projectDir.invariantSeparatorsPath}, dependency " +
                     "versions are unstable.")
         }
@@ -189,7 +189,7 @@ class GoDep : PackageManager() {
     private fun parseProjects(workingDir: File, gopath: File): List<Map<String, String>> {
         val lockfile = File(workingDir, "Gopkg.lock")
         if (!lockfile.isFile) {
-            if (!Main.allowDynamicVersions) {
+            if (!config.allowDynamicVersions) {
                 throw IllegalArgumentException(
                         "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable.")
             }

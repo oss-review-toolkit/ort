@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
@@ -59,9 +60,9 @@ class NpmTest : WordSpec() {
             "resolve shrinkwrap dependencies correctly" {
                 val workingDir = File(projectsDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
-                val npm = NPM.create()
 
-                val result = npm.resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val config = AnalyzerConfiguration(false, false)
+                val result = NPM.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -78,9 +79,9 @@ class NpmTest : WordSpec() {
             "resolve package-lock dependencies correctly" {
                 val workingDir = File(projectsDir, "package-lock")
                 val packageFile = File(workingDir, "package.json")
-                val npm = NPM.create()
 
-                val result = npm.resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val config = AnalyzerConfiguration(false, false)
+                val result = NPM.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -98,7 +99,8 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val config = AnalyzerConfiguration(false, false)
+                val result = NPM.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output-no-lockfile.yml"),
@@ -115,9 +117,9 @@ class NpmTest : WordSpec() {
             "resolve dependencies even if the node_modules directory already exists" {
                 val workingDir = File(projectsDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
-                val npm = NPM.create()
 
-                val result = npm.resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val config = AnalyzerConfiguration(false, false)
+                val result = NPM.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "npm-expected-output.yml"),

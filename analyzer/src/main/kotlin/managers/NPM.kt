@@ -28,6 +28,7 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -61,13 +62,13 @@ import java.util.SortedSet
 import okhttp3.Request
 
 @Suppress("LargeClass", "TooManyFunctions")
-open class NPM : PackageManager() {
+open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<NPM>(
             "https://www.npmjs.com/",
             "JavaScript",
             listOf("package.json")
     ) {
-        override fun create() = NPM()
+        override fun create(config: AnalyzerConfiguration) = NPM(config)
 
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
@@ -118,7 +119,7 @@ open class NPM : PackageManager() {
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
         checkCommandVersion(command(workingDir), Requirement.buildIvy("5.5.+"),
-                ignoreActualVersion = Main.ignoreVersions)
+                ignoreActualVersion = config.ignoreToolVersions)
 
         return definitionFiles
     }
@@ -453,15 +454,14 @@ open class NPM : PackageManager() {
                 scopes = scopes
         )
 
-        return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
-                packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(config, project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     /**
      * Install dependencies using the given package manager command.
      */
     private fun installDependencies(workingDir: File) {
-        if (!Main.allowDynamicVersions) {
+        if (!config.allowDynamicVersions) {
             val lockFiles = recognizedLockFiles.filter {
                 File(workingDir, it).isFile
             }

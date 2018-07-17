@@ -25,7 +25,7 @@ import io.kotlintest.specs.StringSpec
 class ProjectAnalyzerResultTest : StringSpec({
     "collectErrors should find all errors" {
         val result = ProjectAnalyzerResult(
-                allowDynamicVersions = true,
+                config = AnalyzerConfiguration(false, true),
                 project = Project(
                         id = Identifier("provider", "namespace", "name", "version"),
                         definitionFilePath = "definitionFilePath",

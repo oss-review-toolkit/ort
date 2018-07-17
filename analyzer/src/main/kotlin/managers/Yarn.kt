@@ -19,8 +19,8 @@
 
 package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.utils.OS
 import com.here.ort.utils.checkCommandVersion
 
@@ -28,13 +28,13 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 
-class Yarn : NPM() {
+class Yarn(config: AnalyzerConfiguration) : NPM(config) {
     companion object : PackageManagerFactory<Yarn>(
             "https://www.yarnpkg.com/",
             "JavaScript",
             listOf("yarn.lock")
     ) {
-        override fun create() = Yarn()
+        override fun create(config: AnalyzerConfiguration) = Yarn(config)
     }
 
     override val recognizedLockFiles = listOf("yarn.lock")
@@ -49,7 +49,7 @@ class Yarn : NPM() {
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
         checkCommandVersion(command(workingDir), Requirement.buildIvy("1.3.+"),
-                ignoreActualVersion = Main.ignoreVersions)
+                ignoreActualVersion = config.ignoreToolVersions)
 
         return definitionFiles
     }
