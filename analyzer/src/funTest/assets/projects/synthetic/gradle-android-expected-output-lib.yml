@@ -1,5 +1,5 @@
 ---
-allow_dynamic_versions: true
+allow_dynamic_versions: false
 project:
   id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/lib/build.gradle"

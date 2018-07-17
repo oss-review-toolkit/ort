@@ -24,6 +24,7 @@ import DependencyTreeModel
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
@@ -134,8 +135,7 @@ class Gradle : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
-            // Gradle < 4.8 does not support lock files, so hard-code "allowDynamicVersions" to "true".
-            return ProjectAnalyzerResult(true, project,
+            return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
                     packages.values.map { it.toCuratedPackage() }.toSortedSet(), dependencyTreeModel.errors)
         } finally {
             connection.close()

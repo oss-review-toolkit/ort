@@ -1,5 +1,5 @@
 ---
-allow_dynamic_versions: true
+allow_dynamic_versions: false
 project:
   id: "SBT:io.github.soc:directories:6"
   definition_file_path: "target/directories-6.pom"
