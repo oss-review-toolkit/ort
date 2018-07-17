@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.USER_DIR
@@ -47,7 +48,8 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -62,7 +64,8 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -77,7 +80,8 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()

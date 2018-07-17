@@ -21,6 +21,7 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.PhpComposer
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -45,7 +46,9 @@ class PhpComposerTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val definitionFile = File(projectsDir, "lockfile/composer.json")
 
-            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = PhpComposer.create(config)
+                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
                     File(projectsDir.parentFile, "php-composer-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
@@ -59,7 +62,9 @@ class PhpComposerTest : StringSpec() {
         "Error is shown when no lock file is present" {
             val definitionFile = File(projectsDir, "no-lockfile/composer.json")
 
-            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = PhpComposer.create(config)
+                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
             result shouldNotBe null
             result!!.project.id shouldBe Identifier.fromString("PhpComposer::src/funTest/assets/projects/synthetic/" +
@@ -74,7 +79,9 @@ class PhpComposerTest : StringSpec() {
         "No composer.lock is required for projects without dependencies" {
             val definitionFile = File(projectsDir, "no-deps/composer.json")
 
-            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = PhpComposer.create(config)
+                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
                     File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
                     definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile),
@@ -89,7 +96,9 @@ class PhpComposerTest : StringSpec() {
         "No composer.lock is required for projects with empty dependencies" {
             val definitionFile = File(projectsDir, "empty-deps/composer.json")
 
-            val result = PhpComposer.create().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val config = AnalyzerConfiguration(false, false)
+            val result = PhpComposer.create(config)
+                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
                     File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
                     definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile),

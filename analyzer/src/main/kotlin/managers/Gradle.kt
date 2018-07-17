@@ -24,12 +24,12 @@ import DependencyTreeModel
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -63,13 +63,13 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.gradle.tooling.GradleConnector
 
-class Gradle : PackageManager() {
+class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<Gradle>(
             "https://gradle.org/",
             "Java",
             listOf("build.gradle", "settings.gradle")
     ) {
-        override fun create() = Gradle()
+        override fun create(config: AnalyzerConfiguration) = Gradle(config)
 
         val gradle = if (OS.isWindows) "gradle.bat" else "gradle"
         val wrapper = if (OS.isWindows) "gradlew.bat" else "gradlew"
@@ -135,8 +135,8 @@ class Gradle : PackageManager() {
                     scopes = scopes.toSortedSet()
             )
 
-            return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
-                    packages.values.map { it.toCuratedPackage() }.toSortedSet(), dependencyTreeModel.errors)
+            return ProjectAnalyzerResult(config, project, packages.values.map { it.toCuratedPackage() }.toSortedSet(),
+                    dependencyTreeModel.errors)
         } finally {
             connection.close()
         }

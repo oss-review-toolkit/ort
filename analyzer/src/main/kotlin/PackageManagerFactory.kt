@@ -19,6 +19,8 @@
 
 package com.here.ort.analyzer
 
+import com.here.ort.model.AnalyzerConfiguration
+
 import java.nio.file.FileSystems
 
 /**
@@ -38,7 +40,7 @@ abstract class PackageManagerFactory<out T : PackageManager>(
     /**
      * Create a new instance of the [PackageManager].
      */
-    abstract fun create(): T
+    abstract fun create(config: AnalyzerConfiguration): T
 
     /**
      * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.

@@ -28,6 +28,7 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -55,13 +56,13 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
-class PhpComposer : PackageManager() {
+class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<PhpComposer>(
             "https://getcomposer.org/",
             "PHP",
             listOf("composer.json")
     ) {
-        override fun create() = PhpComposer()
+        override fun create(config: AnalyzerConfiguration) = PhpComposer(config)
 
         private const val PHAR_BINARY = "composer.phar"
         private const val LOCK_FILE = "composer.lock"
@@ -97,7 +98,7 @@ class PhpComposer : PackageManager() {
                 command(workingDir),
                 Requirement.buildIvy("[1.5,)"),
                 "--no-ansi --version",
-                ignoreActualVersion = Main.ignoreVersions,
+                ignoreActualVersion = config.ignoreToolVersions,
                 transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
         )
 
@@ -142,8 +143,7 @@ class PhpComposer : PackageManager() {
 
             val project = parseProject(definitionFile, scopes)
 
-            return ProjectAnalyzerResult(Main.allowDynamicVersions, project,
-                    packages.values.map { it.toCuratedPackage() }.toSortedSet())
+            return ProjectAnalyzerResult(config, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
         } finally {
             // Delete vendor folder to not pollute the scan.
             log.info { "Deleting temporary '$vendorDir'..." }
@@ -284,7 +284,7 @@ class PhpComposer : PackageManager() {
     }
 
     private fun installDependencies(workingDir: File) {
-        require(Main.allowDynamicVersions || File(workingDir, LOCK_FILE).isFile) {
+        require(config.allowDynamicVersions || File(workingDir, LOCK_FILE).isFile) {
             "No lock file found in $workingDir, dependency versions are unstable."
         }
 

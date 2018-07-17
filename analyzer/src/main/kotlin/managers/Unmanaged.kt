@@ -19,10 +19,10 @@
 
 package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -33,9 +33,9 @@ import java.io.File
 /**
  * A fake [PackageManager] for projects that do not use any of the known package managers.
  */
-class Unmanaged : PackageManager() {
+class Unmanaged(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<Unmanaged>("", "", emptyList()) {
-        override fun create() = Unmanaged()
+        override fun create(config: AnalyzerConfiguration) = Unmanaged(config)
     }
 
     override fun command(workingDir: File) = throw NotImplementedError()
@@ -64,6 +64,6 @@ class Unmanaged : PackageManager() {
                 scopes = sortedSetOf()
         )
 
-        return ProjectAnalyzerResult(Main.allowDynamicVersions, project, sortedSetOf())
+        return ProjectAnalyzerResult(config, project, sortedSetOf())
     }
 }
