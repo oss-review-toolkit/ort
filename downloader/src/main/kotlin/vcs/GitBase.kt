@@ -60,7 +60,7 @@ abstract class GitBase : VersionControlSystem() {
             return File(dotGitDir, "shallow").isFile
         }
 
-        override fun getRemoteUrl() = run(workingDir, "remote", "get-url", "origin").stdout().trimEnd()
+        override fun getRemoteUrl() = run(workingDir, "remote", "get-url", getFirstRemote()).stdout().trimEnd()
 
         override fun getRevision() = run(workingDir, "rev-parse", "HEAD").stdout().trimEnd()
 
@@ -68,7 +68,7 @@ abstract class GitBase : VersionControlSystem() {
                 File(run(workingDir, "rev-parse", "--show-toplevel").stdout().trimEnd('\n', '/'))
 
         private fun listRemoteRefs(namespace: String): List<String> {
-            val tags = run(workingDir, "ls-remote", "--refs", "origin", "refs/$namespace/*").stdout().trimEnd()
+            val tags = run(workingDir, "ls-remote", "--refs", getFirstRemote(), "refs/$namespace/*").stdout().trimEnd()
             return tags.lines().map {
                 it.split('\t').last().removePrefix("refs/$namespace/")
             }
@@ -77,6 +77,8 @@ abstract class GitBase : VersionControlSystem() {
         override fun listRemoteBranches() = listRemoteRefs("heads")
 
         override fun listRemoteTags() = listRemoteRefs("tags")
+
+        private fun getFirstRemote() = run(workingDir, "remote", "show", "-n").stdout().lineSequence().first()
     }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory)
