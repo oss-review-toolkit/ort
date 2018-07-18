@@ -204,7 +204,7 @@ class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
                         name = rawName.substringAfter("/"),
                         version = json["version"].textValueOrEmpty()
                 ),
-                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
                 declaredLicenses = parseDeclaredLicenses(json),
                 vcs = vcs,
                 vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),

@@ -14,7 +14,7 @@ vcs_processed:
   path: "git-repo/manifest.xml"
 projects:
 - id: "Bundler::grpc/Gemfile:"
-  definition_file_path: "grpc/Gemfile"
+  definition_file_path: "Gemfile"
   declared_licenses: []
   vcs:
     type: ""
@@ -22,14 +22,14 @@ projects:
     revision: ""
     path: ""
   vcs_processed:
-    type: "gitrepo"
-    url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
-    revision: "1c0b86e578349f38acd43de354f815370112a213"
-    path: "grpc"
+    type: "git"
+    url: "https://github.com/grpc/grpc.git"
+    revision: "5cf4b44fff8755edc9bdc46284d6cd270bc4a162"
+    path: ""
   homepage_url: ""
   scopes: []
 - id: "Bundler::grpc/examples/ruby/Gemfile:"
-  definition_file_path: "grpc/examples/ruby/Gemfile"
+  definition_file_path: "examples/ruby/Gemfile"
   declared_licenses: []
   vcs:
     type: ""
@@ -37,14 +37,14 @@ projects:
     revision: ""
     path: ""
   vcs_processed:
-    type: "gitrepo"
-    url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
-    revision: "1c0b86e578349f38acd43de354f815370112a213"
-    path: "grpc/examples/ruby"
+    type: "git"
+    url: "https://github.com/grpc/grpc.git"
+    revision: "5cf4b44fff8755edc9bdc46284d6cd270bc4a162"
+    path: "examples/ruby"
   homepage_url: ""
   scopes: []
 - id: "Bundler::grpc/test/distrib/ruby/Gemfile:"
-  definition_file_path: "grpc/test/distrib/ruby/Gemfile"
+  definition_file_path: "test/distrib/ruby/Gemfile"
   declared_licenses: []
   vcs:
     type: ""
@@ -52,10 +52,10 @@ projects:
     revision: ""
     path: ""
   vcs_processed:
-    type: "gitrepo"
-    url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
-    revision: "1c0b86e578349f38acd43de354f815370112a213"
-    path: "grpc/test/distrib/ruby"
+    type: "git"
+    url: "https://github.com/grpc/grpc.git"
+    revision: "5cf4b44fff8755edc9bdc46284d6cd270bc4a162"
+    path: "test/distrib/ruby"
   homepage_url: ""
   scopes: []
 - id: "Unmanaged::<REPLACE_TMP>:"

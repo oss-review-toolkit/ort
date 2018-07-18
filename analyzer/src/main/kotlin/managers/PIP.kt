@@ -282,7 +282,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
                         name = projectName,
                         version = projectVersion
                 ),
-                definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
                 declaredLicenses = declaredLicenses,
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, homepageUrl = projectHomepage),
