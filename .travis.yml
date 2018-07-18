@@ -50,11 +50,7 @@ script:
       exit 1;
     fi
   - set -o pipefail
-  - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
-      ./gradlew -Dkotlintest.tags.exclude=ScanCodeTag --stacktrace check jacocoReport | tee log.txt;
-    else
-      ./gradlew -Dkotlintest.tags.exclude=ExpensiveTag --stacktrace check jacocoReport | tee log.txt;
-    fi
+  - ./gradlew --rerun-tasks -Dkotlintest.tags.exclude=ScanCodeTag --stacktrace check jacocoReport | tee log.txt;
   - if grep -A1 ".+Test.+STARTED$" log.txt | grep -q "^:"; then
       echo "Some tests seemingly have been aborted.";
       exit 1;
