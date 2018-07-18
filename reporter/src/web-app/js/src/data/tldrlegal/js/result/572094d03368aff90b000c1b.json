@@ -1,0 +1,17 @@
+{
+  "id": "572094d03368aff90b000c1b",
+  "title": "Open Government Licence v3 (UK)",
+  "manager": {
+    "id": "572092da3368aff90b000c18",
+    "username": "oebb"
+  },
+  "slug": "open-government-licence-v3-(uk)",
+  "source": "https://tldrlegal.com/api/license/572094d03368aff90b000c1b",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Please review and add the licence below&nbsp; (yes UK spelling!)</p><p>Open Government Licence v3 (UK): https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/</p><p>I think it is important because it addresses the special needs of a government.</p><p>It should be compatible with: <a href=\"https://creativecommons.org/licenses/by/4.0/\">https://creativecommons.org/licenses/by/4.0/</a></p>"
+}

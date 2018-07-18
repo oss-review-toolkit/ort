@@ -1,0 +1,56 @@
+{
+  "id": "53a0fdfd44c1715555000123",
+  "title": "Net Boolean Public License v1 (NBPL-1.0)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "net-boolean-public-license-v1-(nbpl-1.0)",
+  "source": "https://tldrlegal.com/api/license/53a0fdfd44c1715555000123",
+  "description": "<p>An older license that imposes a variety of conditional restrictions that you must fulfill. Check the fulltext for more detailed information.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      }
+    ]
+  },
+  "fulltext": "<p>The Net Boolean Public License</p><p>Version 1, 22 August 1998 <br>Copyright 1998, Net Boolean Incorporated, Redwood City, California, USA <br>All Rights Reserved.</p><p>Note: <br>This license is derived from the \"Artistic License\" as distributed <br>with the Perl Programming Language. Its terms are different from <br>those of the \"Artistic License.\"</p><p>PREAMBLE</p><p>The intent of this document is to state the conditions under which a <br>Package may be copied, such that the Copyright Holder maintains some <br>semblance of artistic control over the development of the package, <br>while giving the users of the package the right to use and distribute <br>the Package in a more-or-less customary fashion, plus the right to make <br>reasonable modifications.</p><p>Definitions:</p><p>\"Package\" refers to the collection of files distributed by the <br>Copyright Holder, and derivatives of that collection of files <br>created through textual modification.</p><p>\"Standard Version\" refers to such a Package if it has not been <br>modified, or has been modified in accordance with the wishes <br>of the Copyright Holder.</p><p>\"Copyright Holder\" is whoever is named in the copyright or <br>copyrights for the package.</p><p>\"You\" is you, if you're thinking about copying or distributing <br>this Package.</p><p>\"Reasonable copying fee\" is whatever you can justify on the <br>basis of media cost, duplication charges, time of people involved, <br>and so on. (You will not be required to justify it to the <br>Copyright Holder, but only to the computing community at large <br>as a market that must bear the fee.)</p><p>\"Freely Available\" means that no fee is charged for the item <br>itself, though there may be fees involved in handling the item. <br>It also means that recipients of the item may redistribute it <br>under the same conditions they received it.</p><p>1. You may make and give away verbatim copies of the source form of the <br>Standard Version of this Package without restriction, provided that you <br>duplicate all of the original copyright notices and associated disclaimers.</p><p>2. You may apply bug fixes, portability fixes and other modifications <br>derived from the Public Domain or from the Copyright Holder. A Package <br>modified in such a way shall still be considered the Standard Version.</p><p>3. You may otherwise modify your copy of this Package in any way, provided <br>that you insert a prominent notice in each changed file stating how and <br>when you changed that file, and provided that you do at least ONE of the <br>following:</p><p>a) place your modifications in the Public Domain or otherwise make them <br>Freely Available, such as by posting said modifications to Usenet or <br>an equivalent medium, or placing the modifications on a major archive <br>site such as uunet.uu.net, or by allowing the Copyright Holder to include <br>your modifications in the Standard Version of the Package.</p><p>b) use the modified Package only within your corporation or organization.</p><p>c) rename any non-standard executables so the names do not conflict <br>with standard executables, which must also be provided, and provide <br>a separate manual page for each non-standard executable that clearly <br>documents how it differs from the Standard Version.</p><p>d) make other distribution arrangements with the Copyright Holder.</p><p>4. You may distribute the programs of this Package in object code or <br>executable form, provided that you do at least ONE of the following:</p><p>a) distribute a Standard Version of the executables and library files, <br>together with instructions (in the manual page or equivalent) on where <br>to get the Standard Version.</p><p>b) accompany the distribution with the machine-readable source of <br>the Package with your modifications.</p><p>c) accompany any non-standard executables with their corresponding <br>Standard Version executables, giving the non-standard executables <br>non-standard names, and clearly documenting the differences in manual <br>pages (or equivalent), together with instructions on where to get <br>the Standard Version.</p><p>d) make other distribution arrangements with the Copyright Holder.</p><p>5. You may charge a reasonable copying fee for any distribution of this <br>Package. You may charge any fee you choose for support of this Package. <br>You may not charge a fee for this Package itself. However, <br>you may distribute this Package in aggregate with other (possibly <br>commercial) programs as part of a larger (possibly commercial) software <br>distribution provided that you do not advertise this Package as a <br>product of your own.</p><p>6. The scripts and library files supplied as input to or produced as <br>output from the programs of this Package do not automatically fall <br>under the copyright of this Package, but belong to whomever generated <br>them, and may be sold commercially, and may be aggregated with this <br>Package.</p><p>7. C subroutines supplied by you and linked into this Package in order <br>to emulate subroutines and variables of the language defined by this <br>Package shall not be considered part of this Package, but are the <br>equivalent of input as in Paragraph 6, provided these subroutines do <br>not change the language in any way that would cause it to fail the <br>regression tests for the language.</p><p>8. The name of the Copyright Holder may not be used to endorse or promote <br>products derived from this software without specific prior written permission.</p><p>9. THIS PACKAGE IS PROVIDED \"AS IS\" AND WITHOUT ANY EXPRESS OR <br>IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED <br>WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p><p>The End</p>"
+}

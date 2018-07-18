@@ -1,0 +1,17 @@
+{
+  "id": "57a31a856cca83a54c004023",
+  "title": "ngoan",
+  "manager": {
+    "id": "57a316b66cca83a54c004017",
+    "username": "NGOAN"
+  },
+  "slug": "ngoan",
+  "source": "https://tldrlegal.com/api/license/57a31a856cca83a54c004023",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>sorry</p>"
+}

@@ -1,0 +1,52 @@
+{
+  "id": "57d034503836361d1c000639",
+  "title": "Simple Non Code License (SNCL) 2.1.0",
+  "manager": {
+    "id": "568d45d367eca599140017b3",
+    "username": "MysteryDash"
+  },
+  "slug": "simple-non-code-license-2.0.2",
+  "source": "https://tldrlegal.com/api/license/57d034503836361d1c000639",
+  "description": "<p>This license is an upgrade (but completely rewritten) to the original SNCL by CodeWizard (https://tldrlegal.com/license/simple-non-code-license-(sncl)) which allows Commercial Use&nbsp;with the original licensor express written consent. &nbsp;</p><p>A better readable version (with changelog) is hosted on Github at&nbsp;https://github.com/MysteryDash/Simple-Non-Code-License/blob/master/License.txt.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      }
+    ]
+  },
+  "fulltext": "<p>Simple Non Code License (SNCL)</p><p>Version 2.1.0</p><p>Copyright &copy; 2016-2017 Alexandre Quoniou</p><p>The original creator of the data or text under this license is thereby called the licensor.</p><p>The person physical or juridical obtaining a copy of the data or text under this license is thereby called the licensee.</p><p>The data, source code or text under this license is therefore called the object.</p><p>1. The licensee rights and obligations</p><p>1.1. The licensee has the right to obtain a free copy of the object.</p><p>1.2. It is the right of the licensee to redistribute unaltered copies of the object although commercial use is utterly forbidden (except with the original licensor express written consent).</p><p>1.3. The licensee is given the right to adapt or modify the object to suit his needs and to redistribute the modified version subject to the following conditions :</p><p>1.3.1. You must add the following notice in any copy of the object that you may create : Written originally by {Licensor} in {Year of Creation}.</p><p>1.3.2. You must not remove the license information (e.g., a header in source code) present in the object.</p><p>1.3.3. You must keep a changelog somewhere inside the modified object in the following format : {Version} {YYYY-MM-DD HH:MM (24-hour cycle)} {Description}.</p><p>1.3.4. The same rule about commercial use stated in clause 1.1 applies here.</p><p>1.3.5. You must include the following notice in any object-modified copies you redistribute : This document or data is a derivative of {Name of the object} and the information contained here may or may not represent the original document or data.</p><p>1.3.6. You must include this file along with any object-modified copies you redistribute.</p><p>1.3.7. In case of juridical problems that may arise from licensee edits the licensee is liable instead of the licensor.</p><p>1.4. The licensee is given the right to redistribute work including any licensor copyrights originally contained in the object but not to use it on its own behalf.</p><p>2. The liability of the licensor and of the licensee</p><p>2.1. The licensor offers the object as-is and as-available, and makes no representations or warranties of any kind concerning the object. Thus, the licensor is not liable for any use made of the object.</p><p>2.2. The licensee only is liable for any juridical issue related to the use of the object, edited by third parties or not.</p><p>3. Termination</p><p>3.1. All of the clauses stated in section 1 are void if the licensee fails to accomplish his obligations established in section 1.</p><p>3.2. If the 3.1 clause becomes true the licensee must pay for any costs the licensor may have with juridical actions against him.</p><p>4. Other terms and conditions</p><p>4.1. The licensor shall not be bound by any additional or different terms or conditions communicated by the licensee unless expressly agreed.</p><p>4.2. The licensor has the right to edit at any time the content of this license, however, its effects will not be retroactive.</p><p>4.3. Any modification made by the licensor shall not affect the already published versions of the object, only the future ones.</p>"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "56f8984567eca5991400468d",
+  "title": "Animacion",
+  "manager": {
+    "id": "56f8979867eca5991400468b",
+    "username": "JonathanJimenez"
+  },
+  "slug": "animacion",
+  "source": "https://tldrlegal.com/api/license/56f8984567eca5991400468d",
+  "description": "<p>Jonathan Jiménez Guillén</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<pre>&lt;code&gt;&lt;html&gt;&lt;br&gt;  &lt;head&gt;&lt;br&gt;    &lt;link rel=\"stylesheet\" href=\"animate.min.css\"&gt;&lt;br&gt;  &lt;/head&gt;&lt;br&gt;  &lt;body&gt;&lt;br&gt;    &lt;h1 class=\"animated infinite shake\"&gt;Jonathan&lt;/h1&gt;&lt;br&gt;    &lt;h1 class=\"animated infinite tada\"&gt;Jiménez&lt;/h1&gt;&lt;br&gt;    &lt;h1 class=\"animated infinite rubberBand\"&gt;Guillén&lt;/h1&gt;&lt;br&gt;  &lt;/body&gt;&lt;br&gt;&lt;/html&gt;</pre>"
+}

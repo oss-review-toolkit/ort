@@ -1,0 +1,48 @@
+{
+  "id": "5434108f98d9d5a17e000188",
+  "title": "bzip2 (original)",
+  "manager": {
+    "id": "54340e9998d9d5a17e000186",
+    "username": "fullstack2014"
+  },
+  "slug": "bzip2",
+  "source": "https://tldrlegal.com/api/license/5434108f98d9d5a17e000188",
+  "description": "<p>A simple license with that can be used commercially, with easily met conditions.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>--------------------------------------------------------------------------</p><p>This program, \"bzip2\", the associated library \"libbzip2\", and all</p><p>documentation, are copyright (C) 1996-2010 Julian R Seward.  All</p><p>rights reserved.</p><p>Redistribution and use in source and binary forms, with or without</p><p>modification, are permitted provided that the following conditions</p><p>are met:</p><p>1. Redistributions of source code must retain the above copyright</p><p>   notice, this list of conditions and the following disclaimer.</p><p>2. The origin of this software must not be misrepresented; you must </p><p>   not claim that you wrote the original software.  If you use this </p><p>   software in a product, an acknowledgment in the product </p><p>   documentation would be appreciated but is not required.</p><p>3. Altered source versions must be plainly marked as such, and must</p><p>   not be misrepresented as being the original software.</p><p>4. The name of the author may not be used to endorse or promote </p><p>   products derived from this software without specific prior written </p><p>   permission.</p><p>THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS</p><p>OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</p><p>WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</p><p>ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY</p><p>DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</p><p>DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE</p><p>GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</p><p>INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,</p><p>WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING</p><p>NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</p><p>SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p><p>Julian Seward, jseward@bzip.org</p><p>bzip2/libbzip2 version 1.0.6 of 6 September 2010</p><p>--------------------------------------------------------------------------</p>"
+}

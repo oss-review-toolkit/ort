@@ -1,0 +1,56 @@
+{
+  "id": "5323fd8c2618a4a504000012",
+  "title": "Beer Recipe License (BRL)",
+  "manager": {
+    "id": "5323fcf72618a4a504000010",
+    "username": "ellisgl"
+  },
+  "slug": "beer-recipe",
+  "source": "https://tldrlegal.com/api/license/5323fd8c2618a4a504000012",
+  "description": "<p>Modified MIT licence for beer recipes.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>The Beer Recipe License (BRL)</p><p>Copyright (c) &lt;year&gt; &lt;copyright holders&gt;</p><p>Permission is hereby granted, free of charge, to any person obtaining a copy of this recipe and associated documentation files (the \"Recipe\"), to deal in the Recipe without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Recipe, and to permit persons to whom the Recipe is furnished to do so, subject to the following conditions:</p><p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Recipe</p><p>THE RECIPE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE RECIPE OR THE USE OR OTHER DEALINGS IN THE RECIPE.</p>"
+}

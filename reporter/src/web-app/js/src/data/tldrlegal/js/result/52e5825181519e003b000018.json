@@ -1,0 +1,53 @@
+{
+  "id": "52e5825181519e003b000018",
+  "title": "PHP License 3.0 (PHP)",
+  "shorthand": "php",
+  "manager": {
+    "id": "528c0b975dc5e1e131000006",
+    "username": "kevin"
+  },
+  "slug": "php-license-3.0-(php)",
+  "source": "https://tldrlegal.com/api/license/52e5825181519e003b000018",
+  "description": "<p>Has minimal, clear requirements, and explicitly bars you from using the PHP name to endorse your software.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      }
+    ]
+  },
+  "fulltext": "<h3>The PHP License</h3><p>version 3.0 (PHP-3.0)</p><pre>Redistribution and use in source and binary forms, with or without\nmodification, is permitted provided that the following conditions\nare met:\n\n  1. Redistributions of source code must retain the above copyright\n     notice, this list of conditions and the following disclaimer.\n \n  2. Redistributions in binary form must reproduce the above copyright\n     notice, this list of conditions and the following disclaimer in\n     the documentation and/or other materials provided with the\n     distribution.\n \n  3. The name \"PHP\" must not be used to endorse or promote products\n     derived from this software without prior written permission. For\n     written permission, please contact group@php.net.\n  \n  4. Products derived from this software may not be called \"PHP\", nor\n     may \"PHP\" appear in their name, without prior written permission\n     from group@php.net.  You may indicate that your software works in\n     conjunction with PHP by saying \"Foo for PHP\" instead of calling\n     it \"PHP Foo\" or \"phpfoo\"\n \n  5. The PHP Group may publish revised and/or new versions of the\n     license from time to time. Each version will be given a\n     distinguishing version number.\n     Once covered code has been published under a particular version\n     of the license, you may always continue to use it under the terms\n     of that version. You may also choose to use such covered code\n     under the terms of any subsequent version of the license\n     published by the PHP Group. No one other than the PHP Group has\n     the right to modify the terms applicable to covered code created\n     under this License.\n\n  6. Redistributions of any form whatsoever must retain the following\n     acknowledgment:\n     \"This product includes PHP, freely available from\n     &lt;http://www.php.net/&gt;\".\nTHIS SOFTWARE IS PROVIDED BY THE PHP DEVELOPMENT TEAM ``AS IS'' AND \nANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,\nTHE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A \nPARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE PHP\nDEVELOPMENT TEAM OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, \nINDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES \n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR \nSERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)\nHOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,\nSTRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)\nARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED\nOF THE POSSIBILITY OF SUCH DAMAGE.\n\n-------------------------------------------------------------------- \n\nThis software consists of voluntary contributions made by many\nindividuals on behalf of the PHP Group.\n\nThe PHP Group can be contacted via Email at group@php.net.\n\nFor more information on the PHP Group and the PHP project, \nplease see &lt;http://www.php.net&gt;.\n\nThis product includes the Zend Engine, freely available at\n&lt;http://www.zend.com&gt;.</pre><p></p>"
+}

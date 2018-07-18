@@ -1,0 +1,56 @@
+{
+  "id": "55ca138a00eb7076210002fe",
+  "title": "4-Clause BSD",
+  "manager": {
+    "id": "55ca0d2300eb7076210002f5",
+    "username": "Oliver"
+  },
+  "slug": "4-clause-bsd",
+  "source": "https://tldrlegal.com/api/license/55ca138a00eb7076210002fe",
+  "description": "<p>The BSD 4-clause license is a permissive license with a special obligation to credit the copyright holders of the software. </p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>Copyright (c)&nbsp; &lt;year&gt; &lt;owner&gt; . All rights reserved.&nbsp; <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:&nbsp; </p><p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.&nbsp; </p><p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.&nbsp; </p><p>3. All advertising materials mentioning features or use of this software must display the following acknowledgement:&nbsp; <br> This product includes software developed by the organization .&nbsp; </p><p>4. Neither the name of&nbsp; the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. </p><p>THIS SOFTWARE IS PROVIDED BY&nbsp; COPYRIGHT HOLDER \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL&nbsp; COPYRIGHT HOLDER BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>"
+}

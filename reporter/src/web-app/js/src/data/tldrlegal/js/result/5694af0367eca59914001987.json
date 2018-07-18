@@ -1,0 +1,17 @@
+{
+  "id": "5694af0367eca59914001987",
+  "title": "first license!",
+  "manager": {
+    "id": "5694adcb67eca59914001985",
+    "username": "scholar"
+  },
+  "slug": "first-license!",
+  "source": "https://tldrlegal.com/api/license/5694af0367eca59914001987",
+  "description": "<p>a common license!</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>common license! OK!</p>"
+}

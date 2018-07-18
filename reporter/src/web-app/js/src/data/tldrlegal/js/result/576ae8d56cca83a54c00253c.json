@@ -1,0 +1,17 @@
+{
+  "id": "576ae8d56cca83a54c00253c",
+  "title": "Mup License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "mup-license",
+  "source": "https://tldrlegal.com/api/license/576ae8d56cca83a54c00253c",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Copyright (c) 1995-2012 by Arkkra Enterprises. All rights reserved.</p><p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p><p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following DISCLAIMER.</p><p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following DISCLAIMER in the documentation and/or other materials provided with the distribution.</p><p>3. Any additions, deletions, or changes to the original files must be clearly indicated in accompanying documentation. including the reasons for the changes, and the names of those who made the modifications.</p><p>DISCLAIMER</p><p>THIS SOFTWARE IS PROVIDED \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>"
+}

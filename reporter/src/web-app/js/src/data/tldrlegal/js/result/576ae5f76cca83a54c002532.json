@@ -1,0 +1,43 @@
+{
+  "id": "576ae5f76cca83a54c002532",
+  "title": "Haskell Language Report License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "haskell-language-report-license",
+  "source": "https://tldrlegal.com/api/license/576ae5f76cca83a54c002532",
+  "description": "<p>GPL-Compatible license, allows for software to be redistributed or modified as long as it is clearly presented as modified.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      }
+    ],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>Code derived from the document \"Report on the Programming Language&nbsp;</p><p>Haskell 2010\", is distributed under the following license:\r\n</p><p>Copyright (c) 2010 Simon Marlow</p><p>The authors intend this Report to belong to the entire Haskell community, and so we grant permission to copy and distribute it for any purpose, provided that it is reproduced in its entirety, including this Notice. Modified versions of this Report may also be copied and distributed for any purpose, provided that the modified version is clearly presented as such, and that it does not claim to be a definition of the Haskell 2010 Language.</p>"
+}

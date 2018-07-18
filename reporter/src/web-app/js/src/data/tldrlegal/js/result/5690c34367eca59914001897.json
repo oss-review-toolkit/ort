@@ -1,0 +1,17 @@
+{
+  "id": "5690c34367eca59914001897",
+  "title": "Yeni Lisans",
+  "manager": {
+    "id": "5690c2e567eca59914001895",
+    "username": "sonerbenli"
+  },
+  "slug": "yeni-lisans",
+  "source": "https://tldrlegal.com/api/license/5690c34367eca59914001897",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

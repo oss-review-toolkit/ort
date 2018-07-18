@@ -1,0 +1,17 @@
+{
+  "id": "576ad7136cca83a54c0024e2",
+  "title": "Crossword License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "crossword-license",
+  "source": "https://tldrlegal.com/api/license/576ad7136cca83a54c0024e2",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Copyright (C) 1995-2009 Gerd Neugebauer&nbsp;</p><p> <br>cwpuzzle.dtx is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY. No author or distributor accepts responsibility to anyone for the consequences of using it or for whether it serves any particular purpose or works at all, unless he says so in writing. <br> . <br>Everyone is granted permission to copy, modify and redistribute cwpuzzle.dtx, provided this copyright notice is preserved and any modifications are indicated.</p>"
+}

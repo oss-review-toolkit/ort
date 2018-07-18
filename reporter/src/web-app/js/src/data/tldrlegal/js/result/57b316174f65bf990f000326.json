@@ -1,0 +1,17 @@
+{
+  "id": "57b316174f65bf990f000326",
+  "title": "Intel XDK",
+  "manager": {
+    "id": "57b312704f65bf990f000314",
+    "username": "nilmar"
+  },
+  "slug": "intel-xdk",
+  "source": "https://tldrlegal.com/api/license/57b316174f65bf990f000326",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

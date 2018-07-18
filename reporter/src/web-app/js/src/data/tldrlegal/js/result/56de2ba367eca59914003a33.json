@@ -1,0 +1,17 @@
+{
+  "id": "56de2ba367eca59914003a33",
+  "title": "netdisco",
+  "manager": {
+    "id": "56de2b6f67eca59914003a32",
+    "username": "parrotao"
+  },
+  "slug": "netdisco",
+  "source": "https://tldrlegal.com/api/license/56de2ba367eca59914003a33",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p><code style=\"line-height: 1.5rem;\">Redistribution and </code><code style=\"line-height: 1.5rem;\">use</code> <code style=\"line-height: 1.5rem;\"><a href=\"https://metacpan.org/pod/in\">in</a> source and binary forms, </code><code style=\"line-height: 1.5rem;\">with</code> <code style=\"line-height: 1.5rem;\">or without</code></p><p><code>modification, are permitted provided that the following conditions are met:</code></p><p><code>* Redistributions of source code must retain the above copyright</code></p><p><code>notice, this list of conditions and the following disclaimer.</code></p><p><code>* Redistributions in binary form must reproduce the above copyright</code></p><p><code>notice, this list of conditions and the following disclaimer in the</code></p><p><code>documentation and/or other materials provided </code><code>with</code> <code>the distribution.</code></p><p><code>* Neither the name of the Netdisco Project nor the</code></p><p><code>names of its contributors may be used to endorse or promote products</code></p><p><code>derived from this software without specific prior written permission.</code></p><p><code>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS </code><code>\"AS IS\"</code> <code>AND</code></p><p><code>ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</code></p><p><code>WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</code></p><p><code>DISCLAIMED. IN NO EVENT SHALL THE NETDISCO DEVELOPER TEAM BE LIABLE FOR ANY</code></p><p><code>DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</code></p><p><code>(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</code></p><p><code>LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</code></p><p><code>ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</code></p><p><code>(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</code></p><p><code>SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></p>"
+}

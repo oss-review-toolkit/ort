@@ -1,0 +1,17 @@
+{
+  "id": "564cfbe400eb7076210023cb",
+  "title": "apache",
+  "manager": {
+    "id": "564cf84000eb7076210023c3",
+    "username": "marro"
+  },
+  "slug": "apache",
+  "source": "https://tldrlegal.com/api/license/564cfbe400eb7076210023cb",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

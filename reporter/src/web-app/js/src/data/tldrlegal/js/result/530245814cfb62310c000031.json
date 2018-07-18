@@ -1,0 +1,17 @@
+{
+  "id": "530245814cfb62310c000031",
+  "title": "AbCMS",
+  "manager": {
+    "id": "530245434cfb62310c00002e",
+    "username": "henzigo"
+  },
+  "slug": "abcms",
+  "source": "https://tldrlegal.com/api/license/530245814cfb62310c000031",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

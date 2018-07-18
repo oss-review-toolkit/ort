@@ -1,0 +1,22 @@
+{
+  "id": "5763d4b96cca83a54c0020dd",
+  "title": "gridSlider",
+  "manager": {
+    "id": "5763d46d6cca83a54c0020dc",
+    "username": "mkmmslearn"
+  },
+  "slug": "gridslider",
+  "source": "https://tldrlegal.com/api/license/5763d4b96cca83a54c0020dd",
+  "description": "<p>https://github.com/mkmms/gridSlider</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>gridSlider for sliding tiles each and every one</p><p>Licensed Under MIT</p>"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "576add5c6cca83a54c002510",
+  "title": "dvipdfm License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "dvipdfm-license",
+  "source": "https://tldrlegal.com/api/license/576add5c6cca83a54c002510",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>A modified version of this file may be distributed, but it should be distributed with a *different* name. Changed files must be distributed *together with a complete and unchanged* distribution of these files.</p>"
+}

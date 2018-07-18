@@ -1,0 +1,52 @@
+{
+  "id": "576aeba26cca83a54c00255c",
+  "title": "Qhull License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "qhull-license",
+  "source": "https://tldrlegal.com/api/license/576aeba26cca83a54c00255c",
+  "description": "<p>Any product that includes Qhull must have this license.&nbsp;You can freely copy, modify, and redistribute Qhull as long as all copyright notices are intact in all files and the original source code can be obtained (as noted in Fulltext).&nbsp;</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include Notice",
+        "description": "Include a \"NOTICE\" file with attribution notes included."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      }
+    ]
+  },
+  "fulltext": "<p>Qhull, Copyright (c) 1993-2003</p><p>The National Science and Technology Research Center for Computation and Visualization of Geometric Structures (The Geometry Center) University of Minnesota</p><p>email: qhull@qhull.org</p><p>This software includes Qhull from The Geometry Center. Qhull is copyrighted as noted above. Qhull is free software and may be obtained via http from www.qhull.org. It may be freely copied, modified, and redistributed under the following conditions:</p><p>1. All copyright notices must remain intact in all files.</p><p>2. A copy of this text file must be distributed along with any copies of Qhull that you redistribute; this includes copies that you have modified, or copies of programs or other software products that include Qhull.</p><p>3. If you modify Qhull, you must include a notice giving the name of the person performing the modification, the date of modification, and the reason for such modification.</p><p>4. When distributing modified versions of Qhull, or other software products that include Qhull, you must provide notice that the original source code may be obtained as noted above.</p><p>5. There is no warranty or other guarantee of fitness for Qhull, it is provided solely \"as is\". Bug reports or fixes may be sent to qhull_bug@qhull.org; the authors may or may not act on them as they desire.</p>"
+}

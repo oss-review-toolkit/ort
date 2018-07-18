@@ -1,0 +1,17 @@
+{
+  "id": "573fbbf96cca83a54c000edb",
+  "title": "whatsapp",
+  "manager": {
+    "id": "573fbb7f6cca83a54c000ed7",
+    "username": "derique"
+  },
+  "slug": "whatsapp",
+  "source": "https://tldrlegal.com/api/license/573fbbf96cca83a54c000edb",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

@@ -1,0 +1,17 @@
+{
+  "id": "5567a05c5d8277e75d000016",
+  "title": "Koaned Privacy Policy",
+  "manager": {
+    "id": "5567a0035d8277e75d000010",
+    "username": "koaned"
+  },
+  "slug": "koaned-privacy-policy",
+  "source": "https://tldrlegal.com/api/license/5567a05c5d8277e75d000016",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Lorem ipsum</p>"
+}

@@ -1,0 +1,56 @@
+{
+  "id": "559f59be47cdaa075e0002ab",
+  "title": "Simple non code license (SNCL)",
+  "manager": {
+    "id": "559ed65347cdaa075e000252",
+    "username": "CodeWizard"
+  },
+  "slug": "simple-non-code-license-(sncl)",
+  "source": "https://tldrlegal.com/api/license/559f59be47cdaa075e0002ab",
+  "description": "<p><strong>Note: This&nbsp;summary&nbsp;refers to the&nbsp;standard no flags license.</strong></p><p>This license preserves the author rights and by default don't allow commercial distribution of the original or modified &nbsp;without authorization of the author.</p><p>The author is only liable in things a license can't go over law like racism, instigating violence, and etc... so don't try to use this to write what your county's law don't allow.</p><p>You shall make clear that you are distributing a modified work when doing so as described in the licensee's rights and obligations clause in the license full text.</p><p>If distributing a modified version you must make clear what you changed via a changelog inside the object.&nbsp;</p><p><strong>Flag clauses (Copy them from the flags section):</strong></p><p>If the author feels the need to do so he may activate the flag clause 3 that void every licensee rights and obligations except for the 1.1 and 1.6.</p><p>Flag clause 4 voids the trademark usage clause.</p><p>Flag clause 5 turns the license void and the licensor becomes completely safe from liability in the extent of the law. (ie public domain use it alone)</p><p><strong>Flags:</strong></p><ul><li><strong>3.</strong><strong>This clause voids everything from 1.2 to\nthe end of the clause 1 except 1.6. (Flag clause remove before using unless you\nwish this to become true)</strong></li><li><strong>4.</strong><strong>This clause voids the clause 1.4 forbidding\nthe redistribution of licensor copyrighted material. (Flag clause remove before\nusing unless you wish this to become true).</strong></li><li><strong>5.</strong><strong>The licensor waives form his copyright\nentirely and this entire license is voided except for the clause 2.</strong></li></ul>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include Notice",
+        "description": "Include a \"NOTICE\" file with attribution notes included."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      }
+    ]
+  },
+  "fulltext": "<p>Version 1.10.0</p><p>Copyright (C) {year} {Copyright holder(s)}.</p><p>Trademark (tm) {year} {trademark holders} (use only if you\nhave a trademark if you don't remove this line)</p><p>The original creator(s) of the data or text under this\nlicense is thereby called the licensor.</p><p>The person physical or juridical obtaining a copy of the\ndata or text under this license is thereby called the licensee.</p><p>The data or text under this license is therefore called the\nobject.</p><ul>\n<li><strong>1.</strong><strong>The licensee rights and obligations</strong></li><li><strong>1.1.</strong><strong>The licensee have the right to obtain a\nfree copy of the object.</strong></li><li><strong>1.2.</strong><strong>It is a right of the licensee to\nredistribute unaltered copies of the object although commercial use is utterly\nforbidden (except with licensor express written consent).</strong></li><li><strong>1.3.</strong><strong>The licensee is given the right to adapt or\nmodify the object to suit his needs and to redistribute the modified version subject\nto the following conditions:</strong></li><li><strong>1.3.1.</strong><strong>You\nmust keep the following notice in any copy of the object that you may create: Written\noriginally by {Copyright holder(s)} in {date YYYY-MM-DD}.</strong></li><li><strong>1.3.2.</strong><strong>You\nmust keep a changelog somewhere inside the modified object in the following\nformat: {version} {YYYY-MM-DD HH:MM (24 hours cycle)} {Description} {pages\nchanged list}.</strong></li><li><strong>1.3.3.</strong><strong>The\nsame rules about commercial use stated in clause 1.1 applies here.</strong></li><li><strong>1.3.4.</strong><strong>You\nmust include the following notice in any object-modified copies you\nredistribute: This document or data is a derivative of {object information} and\nthe information contained here may or may not represent the original document\nor data.</strong></li><li><strong>1.3.5.</strong><strong>In\ncase of juridical problems that may arise from licensee edits the licensee is\nliable instead of the licensor.</strong></li><li><strong>1.4.</strong><strong>The licensee is given the right to\nredistribute work including any licensor copyrights originally contained in the\nobject but not to use it on its own behalf. (void if the clause 3 is present)</strong></li><li><strong>1.5.</strong><strong>All of the above clauses are void if the licensee\nfails to accomplish his obligations stablished in clause 1.</strong></li><li><strong>1.6.</strong><strong>If the 1.5 clause becomes true the licensee\nmust pay for any costs the licensor may have with juridical actions against him.</strong></li><li><strong>2.</strong><strong>The liability of the licensor</strong></li><li><strong>2.1.</strong><strong>The licensor is liable only for what\nhimself wrote regarding juridical issues related to injury, racism or offense\nand any other crimes.</strong></li><li><strong>2.2.</strong><strong>The licensor is not liable for the content\nthat was edited by third parties and the liability for such cases falls over the\nlicensee as described in 1.3.5.</strong></li></ul>"
+}

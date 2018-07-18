@@ -1,0 +1,32 @@
+{
+  "id": "55468ae57062769a06000021",
+  "title": "neve",
+  "manager": {
+    "id": "55468a677062769a06000020",
+    "username": "Akaree"
+  },
+  "slug": "neve",
+  "source": "https://tldrlegal.com/api/license/55468ae57062769a06000021",
+  "description": "<p>neve</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ],
+    "can": [
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>neve,made by akari</p>"
+}

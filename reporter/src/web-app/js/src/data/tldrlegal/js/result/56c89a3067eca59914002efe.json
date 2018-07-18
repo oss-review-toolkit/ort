@@ -1,0 +1,17 @@
+{
+  "id": "56c89a3067eca59914002efe",
+  "title": "आधार कार्ड",
+  "manager": {
+    "id": "56c899ff67eca59914002efd",
+    "username": "AKHALESHPAL"
+  },
+  "slug": "आधार-कार्ड",
+  "source": "https://tldrlegal.com/api/license/56c89a3067eca59914002efe",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>https://www.tldrlegal.com/l/gpl2</p>"
+}

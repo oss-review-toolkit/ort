@@ -1,0 +1,45 @@
+{
+  "id": "52e58b3e81519e003b00009f",
+  "title": " ISC License",
+  "shorthand": "isc",
+  "manager": {
+    "id": "528c0b975dc5e1e131000006",
+    "username": "kevin"
+  },
+  "slug": "-isc-license",
+  "source": "https://tldrlegal.com/api/license/52e58b3e81519e003b00009f",
+  "description": "<p>A short, permissive software license. Basically, you can do whatever you want as long as you include the original copyright.&nbsp;</p><p>This license is functionally identical to the MIT/Expat and the Simplified BSD licenses, discarding some language that was made unnecessary by the <a>Berne convention</a>.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>Copyright (c) 4-digit year, Company or Person's Name</p><p>Permission to use, copy, modify, and/or distribute this software for any<br>purpose&nbsp;with or without fee is hereby granted, provided that the above<br>copyright notice and this permission notice appear in all copies.</p><p>THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES<br>WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF<br>MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY<br>SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES<br>WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION<br>OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN<br>CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>"
+}

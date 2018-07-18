@@ -1,0 +1,17 @@
+{
+  "id": "564592ae00eb707621002045",
+  "title": "MIT",
+  "manager": {
+    "id": "5645927200eb707621002044",
+    "username": "frocky"
+  },
+  "slug": "mit",
+  "source": "https://tldrlegal.com/api/license/564592ae00eb707621002045",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

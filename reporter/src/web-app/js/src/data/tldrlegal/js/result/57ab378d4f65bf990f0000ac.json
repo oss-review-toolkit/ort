@@ -1,0 +1,17 @@
+{
+  "id": "57ab378d4f65bf990f0000ac",
+  "title": "New Relic Agent License",
+  "manager": {
+    "id": "57ab31d54f65bf990f0000a7",
+    "username": "hhearst"
+  },
+  "slug": "new-relic-agent-license",
+  "source": "https://tldrlegal.com/api/license/57ab378d4f65bf990f0000ac",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>&lt;h1&gt;New Relic Agent License&lt;/h1&gt;<br>&lt;tt&gt;Copyright (c) 2008-2014 New Relic, Inc.  All rights reserved.&lt;/tt&gt;<br>&lt;p&gt;<br>Certain inventions disclosed in this file may be claimed within<br>patents owned or patent applications filed by New Relic, Inc. or third<br>parties.<br>&lt;p&gt;<br>Subject to the terms of this notice, &lt;a name=\"maximumUsageLevelLicense\"&gt;New Relic grants you a<br>nonexclusive, nontransferable license, without the right to<br>sublicense, to&lt;ol type=a&gt; &lt;li&gt; install and execute one copy of these files on any<br>number of workstations owned or controlled by you&lt;/a&gt; and &lt;li&gt; &lt;a name=\"modificationRestrictionLicense\"&gt;distribute<br>verbatim copies of these files to third parties.&lt;/a&gt;&lt;/ol&gt;  As a condition to the<br>foregoing grant, &lt;a name=\"includeLicenseRestrictionLicense\"&gt;you must provide this notice along with each copy you<br>distribute and you must not remove, alter, or obscure this notice.&lt;/a&gt; All<br>other use, reproduction, modification, distribution, or other<br>exploitation of these files is strictly prohibited, except as may be set<br>forth in a separate written license agreement between you and New<br>Relic.  The terms of any such license agreement will control over this<br>notice.  The license stated above will be automatically terminated and<br>revoked if you exceed its scope or violate any of the terms of this<br>notice.<br>&lt;p&gt;<br>&lt;a name=\"promotionRestrictionLicense\"&gt;This License does not grant permission to use the trade names,<br>trademarks, service marks, or product names of New Relic, except as<br>required for reasonable and customary use in describing the origin of<br>this file and reproducing the content of this notice.&lt;/a&gt;  You may not<br>mark or brand this file with any trade name, trademarks, service<br>marks, or product names other than the original brand (if any)<br>provided by New Relic.<br>&lt;p&gt;<br>Unless otherwise expressly agreed by New Relic in a separate written<br>license agreement, these files are provided AS IS, WITHOUT WARRANTY OF<br>ANY KIND, including without any implied warranties of MERCHANTABILITY,<br>FITNESS FOR A PARTICULAR PURPOSE, TITLE, or NON-INFRINGEMENT.  As a<br>condition to your use of these files, you are solely responsible for such use. New Relic will have no liability to you for direct,<br>indirect, consequential, incidental, special, or punitive damages or for lost profits or data.</p>"
+}

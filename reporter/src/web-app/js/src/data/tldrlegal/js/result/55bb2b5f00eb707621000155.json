@@ -1,0 +1,17 @@
+{
+  "id": "55bb2b5f00eb707621000155",
+  "title": "madre@vipmail.hu",
+  "manager": {
+    "id": "55bb2ac300eb707621000152",
+    "username": "madre"
+  },
+  "slug": "madre@vipmail.hu",
+  "source": "https://tldrlegal.com/api/license/55bb2b5f00eb707621000155",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

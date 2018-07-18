@@ -1,0 +1,44 @@
+{
+  "id": "576ace536cca83a54c0024b4",
+  "title": "Amazon Digital Services License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "amazon-digital-services-license",
+  "source": "https://tldrlegal.com/api/license/576ace536cca83a54c0024b4",
+  "description": "<p>A short, permissive software license. Basically, you can do whatever you want as long as you include the original copyright and license notice in any copy of the software/source.&nbsp;</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>This software code is made available \"AS IS\" without warranties of any kind. You may copy, display, modify and redistribute the software code either by itself or as incorporated into your code; provided that &gt; you do not remove any proprietary notices. Your use of this software code is at your own risk and you waive any claim against Amazon Digital Services, Inc. or its affiliates with respect to your use of this software code. (c) 2006 Amazon Digital Services, Inc. or its affiliates.</p>"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "57b3130a4f65bf990f00031b",
+  "title": "Test Intel XDK",
+  "manager": {
+    "id": "57b312704f65bf990f000314",
+    "username": "nilmar"
+  },
+  "slug": "test-intel-xdk",
+  "source": "https://tldrlegal.com/api/license/57b3130a4f65bf990f00031b",
+  "description": "<p>Test development in Intel XDK</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

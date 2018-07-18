@@ -1,0 +1,52 @@
+{
+  "id": "53a1dcea44c17155550001a8",
+  "title": "Open Group Test Suite License (OGTSL)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "open-group-test-suite-license-(ogtsl)",
+  "source": "https://tldrlegal.com/api/license/53a1dcea44c17155550001a8",
+  "description": "<p>A license meant to facilitate software testing, without placing severe restrictions on use of the software except in terms of including original versions of the software.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>The Open Group Test Suite License</p><p>Preamble</p><p>The intent of this document is to state the conditions under which <br>a Package may be copied, such that the Copyright Holder maintains <br>some semblance of artistic control over the development of the <br>package, while giving the users of the package the right to use and <br>distribute the Package in a more-or-less customary fashion, plus <br>the right to make reasonable modifications.</p><p>Testing is essential for proper development and maintenance of <br>standards-based products.</p><p>For buyers: adequate conformance testing leads to reduced <br>integration costs and protection of investments in applications, <br>software and people.</p><p>For software developers: conformance testing of platforms and <br>middleware greatly reduces the cost of developing and maintaining <br>multi-platform application software.</p><p>For suppliers: In-depth testing increases customer satisfaction and <br>keeps development and support costs in check. API conformance is <br>highly measurable and suppliers who claim it must be able to <br>substantiate that claim.</p><p>As such, since these are benchmark measures of conformance, we feel <br>the integrity of test tools is of importance. In order to preserve <br>the integrity of the existing conformance modes of this test <br>package and to permit recipients of modified versions of this <br>package to run the original test modes, this license requires that <br>the original test modes be preserved.</p><p>If you find a bug in one of the standards mode test cases, please <br>let us know so we can feed this back into the original, and also <br>raise any specification issues with the appropriate bodies (for <br>example the POSIX committees).</p><p>Definitions:</p><p>\"Package\" refers to the collection of files distributed by the <br>Copyright Holder, and derivatives of that collection of files <br>created through textual modification. <br>\"Standard Version\" refers to such a Package if it has not been <br>modified, or has been modified in accordance with the wishes <br>of the Copyright Holder. <br>\"Copyright Holder\" is whoever is named in the copyright or <br>copyrights for the package. \"You\" is you, if you're thinking <br>about copying or distributing this Package. <br>\"Reasonable copying fee\" is whatever you can justify on the <br>basis of media cost, duplication charges, time of people <br>involved, and so on. (You will not be required to justify it <br>to the Copyright Holder, but only to the computing community <br>at large as a market that must bear the fee.) <br>\"Freely Available\" means that no fee is charged for the item <br>itself, though there may be fees involved in handling the <br>item. It also means that recipients of the item may <br>redistribute it under the same conditions they received it.</p><p>1. You may make and give away verbatim copies of the source form of <br>the Standard Version of this Package without restriction, provided <br>that you duplicate all of the original copyright notices and <br>associated disclaimers.</p><p>2. You may apply bug fixes, portability fixes and other <br>modifications derived from the Public Domain or from the Copyright <br>Holder. A Package modified in such a way shall still be considered <br>the Standard Version.</p><p>3. You may otherwise modify your copy of this Package in any way, <br>provided that you insert a prominent notice in each changed file <br>stating how and when you changed that file, and provided that you <br>do at least the following:</p><p>rename any non-standard executables and testcases so the <br>names do not conflict with standard executables and <br>testcases, which must also be provided, and provide a <br>separate manual page for each non-standard executable and <br>testcase that clearly documents how it differs from the <br>Standard Version.</p><p>4. You may distribute the programs of this Package in object code <br>or executable form, provided that you do at least the following:</p><p>accompany any non-standard executables and testcases with <br>their corresponding Standard Version executables and <br>testcases, giving the non-standard executables and <br>testcases non-standard names, and clearly documenting the <br>differences in manual pages (or equivalent), together with <br>instructions on where to get the Standard Version.</p><p>5. You may charge a reasonable copying fee for any distribution of <br>this Package. You may charge any fee you choose for support of this <br>Package. You may not charge a fee for this Package itself. However, <br>you may distribute this Package in aggregate with other (possibly <br>commercial) programs as part of a larger (possibly commercial) <br>software distribution provided that you do not advertise this <br>Package as a product of your own.</p><p>6. The scripts and library files supplied as input to or produced <br>as output from the programs of this Package do not automatically <br>fall under the copyright of this Package, but belong to whomever <br>generated them, and may be sold commercially, and may be aggregated <br>with this Package.</p><p>7.Subroutines supplied by you and linked into this Package shall <br>not be considered part of this Package.</p><p>8. The name of the Copyright Holder may not be used to endorse or <br>promote products derived from this software without specific prior <br>written permission.</p><p>9. THIS PACKAGE IS PROVIDED \"AS IS\" AND WITHOUT ANY EXPRESS OR <br>IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED <br>WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p><p>The End</p>"
+}

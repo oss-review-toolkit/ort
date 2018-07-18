@@ -1,0 +1,17 @@
+{
+  "id": "5539e2604f296fbc2d0002fd",
+  "title": "FWDraggableSwipePlayer",
+  "manager": {
+    "id": "5539e20d4f296fbc2d0002fc",
+    "username": "fillywong"
+  },
+  "slug": "fwdraggableswipeplayer",
+  "source": "https://tldrlegal.com/api/license/5539e2604f296fbc2d0002fd",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>MPMoviePlayerController A draggable player like youtube's and PPS's app, full screen with swipe player</p>"
+}

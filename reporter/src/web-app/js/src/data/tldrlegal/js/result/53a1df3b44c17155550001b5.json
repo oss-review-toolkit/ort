@@ -1,0 +1,48 @@
+{
+  "id": "53a1df3b44c17155550001b5",
+  "title": "OpenLDAP Public License v2.8 (OLDAP-2.8)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "openldap-public-license-v2.8-(oldap-2.8)",
+  "source": "https://tldrlegal.com/api/license/53a1df3b44c17155550001b5",
+  "description": "<p>A fairly permissive, short and simple license written in general terms, but used &nbsp;by OpenLDAP software in specific.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>The OpenLDAP Public License&nbsp;</p><p>Version 2.8, 17 August 2003\r\n</p><p>Redistribution and use of this software and associated documentation <br>(\"Software\"), with or without modification, are permitted provided <br>that the following conditions are met:</p><p>1. Redistributions in source form must retain copyright statements <br>and notices,</p><p>2. Redistributions in binary form must reproduce applicable copyright <br>statements and notices, this list of conditions, and the following <br>disclaimer in the documentation and/or other materials provided <br>with the distribution, and</p><p>3. Redistributions must contain a verbatim copy of this document.</p><p>The OpenLDAP Foundation may revise this license from time to time. <br>Each revision is distinguished by a version number. You may use <br>this Software under terms of this license revision or under the <br>terms of any subsequent revision of the license.</p><p>THIS SOFTWARE IS PROVIDED BY THE OPENLDAP FOUNDATION AND ITS <br>CONTRIBUTORS ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES, <br>INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY <br>AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT <br>SHALL THE OPENLDAP FOUNDATION, ITS CONTRIBUTORS, OR THE AUTHOR(S) <br>OR OWNER(S) OF THE SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, <br>INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, <br>BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; <br>LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER <br>CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT <br>LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN <br>ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE <br>POSSIBILITY OF SUCH DAMAGE.</p><p>The names of the authors and copyright holders must not be used in <br>advertising or otherwise to promote the sale, use or other dealing <br>in this Software without specific, written prior permission. Title <br>to copyright in this Software shall at all times remain with copyright <br>holders.</p><p>OpenLDAP is a registered trademark of the OpenLDAP Foundation.</p><p>Copyright 1999-2003 The OpenLDAP Foundation, Redwood City, <br>California, USA. All Rights Reserved. Permission to copy and <br>distribute verbatim copies of this document is granted.</p>"
+}

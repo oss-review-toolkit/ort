@@ -1,0 +1,17 @@
+{
+  "id": "575a0d976cca83a54c001c18",
+  "title": "MTS mechanical",
+  "manager": {
+    "id": "5759cdbe6cca83a54c001b44",
+    "username": "Mdavis1297"
+  },
+  "slug": "mts-mechanical",
+  "source": "https://tldrlegal.com/api/license/575a0d976cca83a54c001c18",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

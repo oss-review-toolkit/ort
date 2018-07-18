@@ -1,0 +1,36 @@
+{
+  "id": "5368e8d1d622869044000016",
+  "title": "MiTTY",
+  "manager": {
+    "id": "5368e8b2d622869044000015",
+    "username": "samtarling"
+  },
+  "slug": "mitty",
+  "source": "https://tldrlegal.com/api/license/5368e8d1d622869044000016",
+  "description": "<p>MiiTY (sometimes MiTY) means  \"Mine (ii) Then Yours\". &nbsp;You may modify and distribute only with explicit permission from the author while the license is in effect. The license only stays in effect for 90 days from a release/licensing date. &nbsp;After, you can do what you want (similar to WTFPL).</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Contact Author",
+        "description": "Describes your ability to contact the author about the module you're using."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Relicense",
+        "description": "Describes the ability to freely relicense the software."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<h3>MiiTY License Version 1.0</h3><h4>0. Definitions.</h4><p>\"This License\" refers to MiiTY Version 1.0 <br>\r\n\"The Program\" refers to any copyrightable work licensed under this \r\nLicense. Each licensee is addressed as \"you\". \"Licensees\" and \r\n\"recipients\" may be individuals or organizations. </p><h3>1. No modification or distribution.</h3><p>This licensing period begins when the license text included with the program is dated. <br>\r\nThe licensing period for No modification or distribution is 90 (ninety) days. This means that you are <strong>not</strong> permitted to modify the source code or distribute it to others WITHOUT the permission of the program's creator.<br>\r\nAt the end of this licensing period, Section two becomes effective. </p><h4>2. Free use, modification and distribution.</h4><p>At the end of Section one's licensing period, you are hereby granted \r\npermission to \"do whatever you want\" with the code. This includes, but \r\nis not limited to, modification, distributing verbatim copes of the \r\nsource code, distributing modified copies of the source code. While \r\ndoing this, you <strong>must</strong> adhere to the conditions of Section three. </p><h4>3. Further conditions.</h4><p> \r\nThe only further conditions of this license is that all modified or verbatim copies of the Program's source code <strong>must</strong> be licensed under a MiiTY-friendly license (which are available at <a href=\"http://www.samtarling.co.uk/dev/MiiTYLicense.html\">www.samtarling.co.uk/dev/MiiTYLicense.html</a>) and that when licensed under MiiTY, the following is in the \"license.txt\":\r\n<br>\r\n<br>\r\n\"This program is licensed under MiiTY Version 1.0. You're free to do what you want with the source of this program <strong>IF</strong> 90 (ninety) days have passed from [insert licensing date]. Please see <a href=\"http://www.samtarling.co.uk/dev/MiiTYLicense.html\">www.samtarling.co.uk/dev/MiiTYLicense.html</a> for the full license text\"</p><h4>4. Clarifications.</h4><p>I'm not a lawyer, nor have I ever been taught law. This license \r\nprobably (definitely) has major flaws and loopholes. Please use your \r\ncommon sense when licensing programs under this license.</p><p>I consider it ethical to edit the licensing date on each major \r\nversion release. For example, when the first version of your program is \r\nreleased, the licensing date could be 20/11/13. When the next version is\r\n released, you could update the licensing date to 29/11/13.</p>"
+}

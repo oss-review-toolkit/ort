@@ -1,0 +1,17 @@
+{
+  "id": "5650f79500eb7076210025c8",
+  "title": "System with xfce platform apache and sql",
+  "manager": {
+    "id": "5650f60f00eb7076210025c6",
+    "username": "hch"
+  },
+  "slug": "system-with-xfce-platform-apache-and-sql",
+  "source": "https://tldrlegal.com/api/license/5650f79500eb7076210025c8",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Opensource development and use of similar to gnu license agreement. By Hans Christian Isak Mørch Holm.</p>"
+}

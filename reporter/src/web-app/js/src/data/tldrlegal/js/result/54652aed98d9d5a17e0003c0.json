@@ -1,0 +1,48 @@
+{
+  "id": "54652aed98d9d5a17e0003c0",
+  "title": "Copyfree Open Innovation License 0.3 (COIL-0.3)",
+  "manager": {
+    "id": "546513f798d9d5a17e0003bf",
+    "username": "alexvoda"
+  },
+  "slug": "coil-v0.3",
+  "source": "https://tldrlegal.com/api/license/54652aed98d9d5a17e0003c0",
+  "description": "<p>Not completed!!!!!!!!!!!!!</p><p>Needs verifying!!!!!!!!!</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p># Copyfree Open Innovation License<br><br>This is version 0.3 of the Copyfree Open Innovation License.<br><br>## Terms and Conditions<br><br>Redistributions, modified or unmodified, in whole or in part, must retain<br>applicable copyright notices, these conditions, and the following license terms<br>and disclaimer.  Subject to these conditions, the copyright holders, authors,<br>and contributors of this work hereby grant to any person who obtains a copy of<br>this work in any form:<br><br>1. Permission to reproduce, modify, distribute, publish, sell, sublicense, use,<br>and/or otherwise deal in the licensed material without restriction.<br><br>2. A perpetual, worldwide, non-exclusive, royalty-free, irrevocable patent<br>license to reproduce, modify, distribute, publish, sell, use, and/or otherwise<br>deal in the licensed material without restriction, for any and all patents:<br><br>  a. Held presently or in the future by each such copyright holder, author,<br>  or contributor, necessarily infringed by the contributions of that<br>  copyright holder, author, or contributor.<br><br>  b. Necessarily infringed by the work at the time of contribution by that<br>  copyright holder, author, or contributor.<br><br>NO WARRANTY OF ANY KIND IS IMPLIED BY, OR SHOULD BE INFERRED FROM, THIS LICENSE<br>OR THE ACT OF DISTRIBUTION UNDER THE TERMS OF THIS LICENSE, INCLUDING BUT NOT<br>LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,<br>AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE<br>LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF<br>CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE<br>WORK, OR THE USE OF OR OTHER DEALINGS IN THE WORK.</p>"
+}

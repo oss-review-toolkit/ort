@@ -1,0 +1,39 @@
+{
+  "id": "576ad0526cca83a54c0024c3",
+  "title": "Barr License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "barr-license",
+  "source": "https://tldrlegal.com/api/license/576ad0526cca83a54c0024c3",
+  "description": "<p>Permissive license, allows for the modification and distribution of a work for commercial or non commercial use. If commercial use, author appreciates receiving a free copy of the work.&nbsp;GPL-incompatible.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Rename",
+        "description": "Describes the ability to change software's name if modified/distributed."
+      }
+    ],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>This is a package of commutative diagram macros built on top of Xy-pic by Michael Barr (email: barr@barrs.org). Its use is unrestricted. It may be freely distributed, unchanged, for non-commercial or commercial use. If changed, it must be renamed. Inclusion in a commercial software package is also permitted, but I would appreciate receiving a free copy for my personal examination and use. There are no guarantees that this package is good for anything. I have tested it with LaTeX 2e, LaTeX 2.09 and Plain TeX. Although I know of no reason it will not work with AMSTeX, I have not tested it.</p>"
+}

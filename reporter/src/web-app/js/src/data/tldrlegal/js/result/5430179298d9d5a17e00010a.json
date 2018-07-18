@@ -1,0 +1,55 @@
+{
+  "id": "5430179298d9d5a17e00010a",
+  "title": "GG License 1.0 (GG1)",
+  "manager": {
+    "id": "542e544498d9d5a17e0000f5",
+    "username": "Aspie96"
+  },
+  "slug": "gg-license-1.0-(gg1)",
+  "source": "https://tldrlegal.com/api/license/5430179298d9d5a17e00010a",
+  "description": "<p>This work is provided under the GG License 1.0 (GG1).</p><p>By owning, using, modifying or distributing a copy of this work or any its derivative work you are accepting this license.</p><p>This license allows you to modify and distribute the work (both free and for a fee), under the terms stated there:</p><p><a>http://aspie96.altervista.org/gg/en/1.0/</a></p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      }
+    ],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>Preamble</p><p>This work is provided under GG License 1.0 (GG1).</p><p>By owning, using, modifying or distributing a copy of this work or any its derivative work you are accepting this license.</p><p>This license allows you to modify and distribute the work (both free and for a fee), under the terms stated below.</p><p>1) Definitions:</p><p>a) \"This license\": This version of the GG License 1.0</p><p>b) \"This work\": This work, released under the terms of this license. If a software is released under this license, then this license applies to its source code (the binary version shall be considered a derivative work). If a part of a software is released under this license, then this license applies to its source code (the binary version shall be considered a derivative work)</p><p>c) \"Derivative work\": Any work obtained by applying \"transformation processes\", either manual or automatic, to this work. Those transformation processes includes, but are not limited to, editing, adaptations, obfuscations, compiling, joining or aggregation with other works, inclusion in other works and removing components that are parts of this work. Any work obtained by applying transformation processes to a derivative work shall be considered a derivative work itself</p><p>d) \"Distribute\": Distributing a work means making copies of it available for third parties (regardless the used medium)</p><p>e) \"You\": Any person (or group of people), entity, association or company that has a copy of this work (or a derivative work)</p><p>f) \"Author\" (or \"Author of this work\"): Anyone who retains the copyright of this work (the author could be a single person, a group of people, an agency or any other kind of entity).</p><p>2) Grants:</p><p>The author of this work allows you to do the activities reported below, as long as you respect this license, especially the section 3 (\"Obligations and restrictions\"):</p><p>a) Using this work: You are allowed to use this work</p><p>b) Distributing this work: You can distribute copies of this work both for free and for a fee</p><p>c) Modifying this work: You can use this work to make derivative works and distribute them, both for free and for a fee.</p><p>As explained in the section 4 (\"Termination\"), any violation of this license make you lose all the rights listed above.</p><p>3) Obligations and restrictions</p><p>a) Attribution (or \"Citation\"): If you distribute this work or any derivative work you must provide, with the distributed work, any supplied piece of information among the following ones: the author's name (or pseudonym, if applicable), copyright notice of the author on this work, the title of this work and, if you are distributing a derived work, information about how to obtain this work. You must also make clear this work is released under this license, providing a full copy of this text or via a hyperlink (or URI). These pieces of information must be clearly visible and easily accessible even for those whose computer science skills are just the ones needed to a basic use of the distributed work. Therefore, if the distributed work is available in the binary form, attribution in the source code is not enough</p><p>b) Removing (or changing) the attribution: If required by the author of this work, you must remove the information the section 3.a (\"Attribution\") require you to provide. Note that this removal is not allowed if not expressly required or approved by the author of this work. Also, if required by the author, you must replace, in the attribution, the name of the author with a pseudonym or vice versa.</p><p>c) Stating changes: If you distribute a derivative work, it must be clear (and, so, expressly specified) that it is a derivative work and not the original work.</p><p>4) Termination:</p><p>If you do not respect the terms of this license, you lose any right it provides to you.</p><p>You must therefore delete any copy of this work and on any derivative work you have.</p><p>As long as you respect this license, the author of this work cannot revoke the rights this license provides you.</p><p>5) Exceptions:</p><p>This license is just an agreement between you and the author of this work.</p><p>By means of this license, the author allows you to use this work under the terms of this license. See the section 2 (\"Grants\").</p><p>This work could be provided also under other licenses, more or less restrictive.</p><p>The author of this work could (upon request or not) allow a use of this work contrary to this license, especially to the section 3 (\"Obligations and restrictions\"). Such a permission could be provided only to a few individuals and shall be considered an exception.</p><p>Also, this license states the following exceptions:</p><p>a) The section 1.c (\"derivative work\") establishes that the result of a compilation process shall be considered a derivative work and the section 3.c establishes that when you distribute a derivative work, you must specify that it is a derivative work and not this work. This is not required if the derivative work has been made only by compiling this work (and without any other transformation process). See the section 1.b (\"This work\").</p><p>b) Any removal of parts of the attribution (or of the full attribution) required by the section 3.b (\"Removing or changing the attribution\") shall not be considered a violation of the section 3.a (\"Attribution\").</p><p>Other exceptions (for instance, in some countries, fair use) might be determined by the law. See the section 6.</p><p>6) Disclaimers and additional notes:</p><p>THIS WORK IS PROVIDED \"AS IS\", WITHOUT ANY WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED.</p><p>USING THIS WORK IS YOUR RESPONSIBILITY AND IT IS AT YOUR OWN RISK.</p><p>IF THERE IS ANY CONFLICT BETWEEN THIS LICENSE AND THE LAW, THEN THE LAW PREVAILS.</p>"
+}

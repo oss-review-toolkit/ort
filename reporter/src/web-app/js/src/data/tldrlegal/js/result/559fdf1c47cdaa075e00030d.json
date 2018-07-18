@@ -1,0 +1,52 @@
+{
+  "id": "559fdf1c47cdaa075e00030d",
+  "title": "Zope Public License 1.1 (ZPL-1.1)",
+  "manager": {
+    "id": "558c1fd847cdaa075e000123",
+    "username": "bfitzg"
+  },
+  "slug": "zope-public-license-1.1-(zpl-1.1)",
+  "source": "https://tldrlegal.com/api/license/559fdf1c47cdaa075e00030d",
+  "description": "<p>A permissive BSD-style license with some additional trademark restrictions and the requirement that changes to the software must be stated. This version of ZPL is not compatible with GNU GPL.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>Zope Public License (ZPL) Version 1.1</p><p>Copyright (c) Zope Corporation. All rights reserved.</p><p>This license has been certified as open source.</p><p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p><p>1. Redistributions in source code must retain the above copyright notice, this list of conditions, and the following disclaimer.</p><p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following disclaimer in the documentation and/or other materials provided with the distribution.</p><p>3. All advertising materials and documentation mentioning features derived from or use of this software must display the following acknowledgement:</p><p>\"This product includes software developed by Zope Corporation for use in the Z Object Publishing Environment (http://www.zope.com/).\"</p><p>In the event that the product being advertised includes an intact Zope distribution (with copyright and license included) then this clause is waived.</p><p>4. Names associated with Zope or Zope Corporation must not be used to endorse or promote products derived from this software without prior written permission from Zope Corporation.</p><p>5. Modified redistributions of any form whatsoever must retain the following acknowledgment:</p><p>\"This product includes software developed by Zope Corporation for use in the Z Object Publishing Environment (http://www.zope.com/).\"</p><p>Intact (re-)distributions of any official Zope release do not require an external acknowledgement.</p><p>6. Modifications are encouraged but must be packaged separately as patches to official Zope releases. Distributions that do not clearly separate the patches from the original work must be clearly labeled as unofficial distributions. Modifications which do not carry the name Zope may be packaged in any form, as long as they conform to all of the clauses above.</p><p>Disclaimer</p><p>THIS SOFTWARE IS PROVIDED BY ZOPE CORPORATION ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL ZOPE CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p><p>This software consists of contributions made by Zope Corporation and many individuals on behalf of Zope Corporation. Specific attributions are listed in the accompanying credits file.</p>"
+}

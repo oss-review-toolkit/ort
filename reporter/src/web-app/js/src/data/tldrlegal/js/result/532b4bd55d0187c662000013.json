@@ -1,0 +1,39 @@
+{
+  "id": "532b4bd55d0187c662000013",
+  "title": "The Don't Ask Me About It License",
+  "manager": {
+    "id": "532b4a405d0187c662000012",
+    "username": "DestinationVoid"
+  },
+  "slug": "the-don't-ask-me-about-it-license",
+  "source": "https://tldrlegal.com/api/license/532b4bd55d0187c662000013",
+  "description": "<p>Do what you want, just don't contact the author.</p>",
+  "summary": {
+    "must": [],
+    "cannot": [
+      {
+        "title": "Contact Author",
+        "description": "Describes your ability to contact the author about the module you're using."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>Copying and distribution of this file, with or without modification, are\r\n permitted in any medium provided you do not contact the author about \r\nthe file or any problems you are having with the file.</p>"
+}

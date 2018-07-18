@@ -1,0 +1,48 @@
+{
+  "id": "576acc596cca83a54c0024a3",
+  "title": "Adobe Postscript AFM License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "adobe-postscript-afm-license",
+  "source": "https://tldrlegal.com/api/license/576acc596cca83a54c0024a3",
+  "description": "<p>This license was identified as part of the halibut package. It is Free and GPL-Compatible.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      }
+    ]
+  },
+  "fulltext": "<p>Copyright (c) 1985, 1987, 1989, 1990, 1991, 1992, 1993, 1997 Adobe Systems Incorporated. All Rights Reserved.</p><p>This file and the 14 PostScript(R) AFM files it accompanies may be used, copied, and distributed for any purpose and without charge, with or without modification, provided that all copyright notices are retained; that the AFM files are not distributed without this file; that all modifications to this file or any of the AFM files are prominently noted in the modified file(s); and that this paragraph is not modified. Adobe Systems has no responsibility or obligation to support the use of the AFM files.</p>"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "574ab9726cca83a54c001516",
+  "title": "TRDRLegal terms of servis",
+  "manager": {
+    "id": "574ab3926cca83a54c001505",
+    "username": "widarto"
+  },
+  "slug": "trdrlegal-terms-of-servis",
+  "source": "https://tldrlegal.com/api/license/574ab9726cca83a54c001516",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>https://github.com/travis-ci/docs-travis-ci-com.git</p>"
+}

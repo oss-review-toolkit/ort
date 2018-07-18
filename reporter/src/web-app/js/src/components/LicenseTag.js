@@ -19,8 +19,11 @@
 
 import React from 'react';
 import { List, Modal, Table, Tabs, Tag, Tooltip } from 'antd';
+import ReactHtmlParser from 'react-html-parser';
 import { LicenseSummaryCard } from './LicenseSummaryCard';
 import { LICENSES } from '../data/licenses';
+import licenses from '../data/tldrlegal/js';
+import { config } from '../config';
 import 'antd/dist/antd.css';
 
 const TabPane = Tabs.TabPane;
@@ -30,9 +33,10 @@ export class LicenseTag extends React.Component {
         super(props);
 
         this.tagText = props.text;
-        
+
         if (this.tagText) {
-            this.license = LICENSES[this.tagText];
+            this.license = this.findLicense(this.tagText);
+            // this.license = LICENSES[this.tagText];
 
             this.showLicenseInfoModal = () => {
                 if (!this.license) {
@@ -42,9 +46,9 @@ export class LicenseTag extends React.Component {
                 if (this.license.name !== 'NONE') {
                     if (!this.license.modal) {
                         this.license.modal = {
-                            title: this.license.name,
+                            title: this.license.name || this.license.title,
                             className: 'reporter-license-info',
-                            content: (<LicenseInfo license={this.license}/>),
+                            content: (<TLDLicenseInfo license={this.license} />),
                             onOk() {},
                             okText: "Close",
                             maskClosable: true,
@@ -56,6 +60,16 @@ export class LicenseTag extends React.Component {
                 }
             }
         }
+    }
+
+    findLicense = (value) => {
+        const lowerCaseValue = value.toLowerCase();
+        const color = config.licenses[value] && config.licenses[value].color
+        const result = licenses.find(license => (
+            license.title.toLowerCase().indexOf(lowerCaseValue) !== -1)
+            || (license.shorthand && license.shorthand.toLowerCase().indexOf(lowerCaseValue) !== -1)
+            || (license.slug && license.slug.indexOf(lowerCaseValue) !== -1));
+        return result && { ...result, color };
     }
 
     render() {
@@ -78,14 +92,14 @@ export class LicenseTag extends React.Component {
 // Generates the HTML for the additional license information
 const LicenseInfo = (props) => {
     const license = props.license,
-          licenseDescription = license.description ? 
+          licenseDescription = license.description ?
           license.description : 'No description available for this license';
 
     if (!license && !license.summary) {
         return (<div>No summary data for this license</div>);
     }
 
-    // Transform array of license summaries by provider so 
+    // Transform array of license summaries by provider so
     // we can display and attribute each provider's license summary
     var summaryProviders = ((summary = license.summary) => {
         let providers = {};
@@ -104,7 +118,6 @@ const LicenseInfo = (props) => {
 
         return Object.values(providers);
     })();
-
     return (
         <div className="reporter-license-info">
             <Tabs>
@@ -125,14 +138,14 @@ const LicenseInfo = (props) => {
                             dataSource={summaryProviders}
                             renderItem={summary => (
                                 <List.Item>
-                                    <LicenseSummaryCard summary={summary}/> 
+                                    <LicenseSummaryCard summary={summary}/>
                                 </List.Item>
                             )}
                         />
                     </div>
                 </TabPane>
                 <TabPane tab="Fulltext" key="2">
-                    <Table 
+                    <Table
                         columns={[{
                             title: license.name,
                             dataIndex: 'text',
@@ -148,6 +161,90 @@ const LicenseInfo = (props) => {
                         pagination={{
                             hideOnSinglePage: true
                          }}
+                        scroll={{
+                            y: 365
+                        }}
+                        showHeader={false}/>
+                </TabPane>
+            </Tabs>
+        </div>
+    );
+};
+
+const ucFirst = (str) => {
+    if (!str) return str;
+
+    return str[0].toUpperCase() + str.slice(1);
+}
+
+const TLDLicenseInfo = (props) => {
+    const { license: { license } } = props;
+    const licenseDescription = license.description ? license.description : 'No description available for this license';
+
+    if (!license && !license.summary) {
+        return (<div>No summary data for this license</div>);
+    }
+
+    // Transform array of license summaries by provider so
+    // we can display and attribute each provider's license summary
+    const summaryProviders = [Object.keys(license.summary).map((key) => {
+        const color = key === 'can' ? 'green' : (key === 'cannot' ? 'red' : 'orange');
+        return {
+            key,
+            provider: 'tldrlegal',
+            color,
+            tags: license.summary[key].map(item => ({
+                label: item.title,
+                tag: item.title,
+                description: item.description,
+            })),
+            title: ucFirst(key),
+        };
+    })];
+    console.log(summaryProviders)
+    return (
+        <div className="reporter-license-info">
+            <Tabs>
+                <TabPane tab="Summary" key="1">
+                    <div className="reporter-license-description">
+                        {ReactHtmlParser(licenseDescription)}
+                    </div>
+                    <div className="reporter-license-obligations">
+                        <List
+                            grid={{ gutter: 16, column: 1 }}
+                            itemLayout="vertical"
+                            size="small"
+                            pagination={{
+                                hideOnSinglePage: true,
+                                pageSize: 1,
+                                size: "small"
+                            }}
+                            dataSource={summaryProviders}
+                            renderItem={summary => (
+                                <List.Item>
+                                    <LicenseSummaryCard summary={summary}/>
+                                </List.Item>
+                            )}
+                        />
+                    </div>
+                </TabPane>
+                <TabPane tab="Fulltext" key="2">
+                    <Table
+                        columns={[{
+                            title: license.name,
+                            dataIndex: 'text',
+                            render: (text, row, index) => {
+                                return(<pre className="reporter-license-fulltext">{ReactHtmlParser(text)}</pre>)
+                            }
+                        }]}
+                        dataSource={[{
+                            key: 1,
+                            dataIndex: 'text',
+                            text: license.fulltext
+                        }]}
+                        pagination={{
+                            hideOnSinglePage: true
+                        }}
                         scroll={{
                             y: 365
                         }}

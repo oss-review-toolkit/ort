@@ -1,0 +1,52 @@
+{
+  "id": "53a0930d8634f2f9420000a4",
+  "title": "Entessa Public License v1.0 (Entessa)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "entessa-public-license-v1.0-(entessa)",
+  "source": "https://tldrlegal.com/api/license/53a0930d8634f2f9420000a4",
+  "description": "<p>A straightforward license used in openSEAL software that only slightly differs from licenses like the Eiffel Forum License. Consider that license as a template instead, as this license is highly specified for openSEAL.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Include Notice",
+        "description": "Include a \"NOTICE\" file with attribution notes included."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      }
+    ]
+  },
+  "fulltext": "<p>Entessa Public License Version. 1.0&nbsp;</p><p>Copyright (c) 2003 Entessa, LLC. All rights reserved.\r\n</p><p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p><p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p><p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p><p>3. The end-user documentation included with the redistribution, if any, must include the following acknowledgment:</p><p>\"This product includes open source software developed by openSEAL (http://www.openseal.org/).\"</p><p>Alternately, this acknowledgment may appear in the software itself, if and wherever such third-party acknowledgments normally appear.</p><p>4. The names \"openSEAL\" and \"Entessa\" must not be used to endorse or promote products derived from this software without prior written permission. For written permission, please contact epl@entessa.com.</p><p>5. Products derived from this software may not be called \"openSEAL\", nor may \"openSEAL\" appear in their name, without prior written permission of Entessa.</p><p>THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL ENTESSA, LLC, OPENSEAL OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p><p>This software consists of voluntary contributions made by many individuals on behalf of openSEAL and was originally based on software contributed by Entessa, LLC, http://www.entessa.com. For more information on the openSEAL, please see &lt;http://www.openseal.org/&gt;.</p>"
+}

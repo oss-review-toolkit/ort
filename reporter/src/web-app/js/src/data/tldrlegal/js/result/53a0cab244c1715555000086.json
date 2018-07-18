@@ -1,0 +1,48 @@
+{
+  "id": "53a0cab244c1715555000086",
+  "title": "IBM PowerPC Initialization and Boot Software (IBM-pibs)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "ibm-powerpc-initialization-and-boot-software-(ibm-pibs)",
+  "source": "https://tldrlegal.com/api/license/53a0cab244c1715555000086",
+  "description": "<p>A highly-permissive, short and simple license specified for IBM software.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      }
+    ]
+  },
+  "fulltext": "<p>This source code has been made available to you by IBM on an AS-IS basis.  Anyone receiving this source is licensed under IBM copyrights to use it in any way he or she deems fit, including copying it, modifying it, compiling it, and redistributing it either with or without modifications.  No license under IBM patents or patent applications is to be implied by the copyright license.</p><p>Any user of this software should understand that IBM cannot provide technical support for this software and will not be responsible for any consequences resulting from the use of this software.</p><p>Any person who transfers this source code or any derivative work must include the IBM copyright notice, this paragraph, and the preceding two paragraphs in the transferred software.</p><p>COPYRIGHT  IBM  CORPORATION 2002 <br>LICENSED MATERIAL  -  PROGRAM PROPERTY OF IBM</p>"
+}

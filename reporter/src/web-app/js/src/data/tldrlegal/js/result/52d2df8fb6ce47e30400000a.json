@@ -1,0 +1,49 @@
+{
+  "id": "52d2df8fb6ce47e30400000a",
+  "title": "Sleepycat License",
+  "shorthand": "sleepycat",
+  "manager": {
+    "id": "52d2df2bb6ce47e304000009",
+    "username": "valeriedouglas"
+  },
+  "slug": "sleepycat-license",
+  "source": "https://tldrlegal.com/api/license/52d2df8fb6ce47e30400000a",
+  "description": "<p>This open source license used for the Berkeley DB database is rather strict because it requires you to provide a way to obtain the source code for the software which utilizes Berkeley DB as well as the original source code of Berkeley DB, the only alternative is to pay the copyright holder for a commercial use license.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>The Sleepycat License&nbsp;</p><p>Copyright (c) 1990-1999 <br>Sleepycat Software. All rights reserved.\r\n</p><p>Redistribution and use in source and binary forms, with or without <br>modification, are permitted provided that the following conditions <br>are met:</p><p>Redistributions of source code must retain the above copyright <br>notice, this list of conditions and the following disclaimer. <br>Redistributions in binary form must reproduce the above copyright <br>notice, this list of conditions and the following disclaimer in the <br>documentation and/or other materials provided with the distribution. <br>Redistributions in any form must be accompanied by information on <br>how to obtain complete source code for the DB software and any <br>accompanying software that uses the DB software. The source code <br>must either be included in the distribution or be available for no <br>more than the cost of distribution plus a nominal fee, and must be <br>freely redistributable under reasonable conditions. For an <br>executable file, complete source code means the source code for all <br>modules it contains. It does not include source code for modules or <br>files that typically accompany the major components of the operating <br>system on which the executable file runs. <br>THIS SOFTWARE IS PROVIDED BY SLEEPYCAT SOFTWARE ``AS IS'' AND ANY EXPRESS <br>OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED <br>WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR <br>NON-INFRINGEMENT, ARE DISCLAIMED. IN NO EVENT SHALL SLEEPYCAT SOFTWARE <br>BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR <br>CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF <br>SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS <br>INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN <br>CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) <br>ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF <br>THE POSSIBILITY OF SUCH DAMAGE.</p><p>Copyright (c) 1990, 1993, 1994, 1995 <br>The Regents of the University of California. All rights reserved.</p><p>Redistribution and use in source and binary forms, with or without <br>modification, are permitted provided that the following conditions <br>are met:</p><p>Redistributions of source code must retain the above copyright <br>notice, this list of conditions and the following disclaimer. <br>Redistributions in binary form must reproduce the above copyright <br>notice, this list of conditions and the following disclaimer in the <br>documentation and/or other materials provided with the distribution. <br>Neither the name of the University nor the names of its contributors <br>may be used to endorse or promote products derived from this software <br>without specific prior written permission. <br>THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND <br>ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE <br>IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE <br>ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE <br>FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL <br>DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS <br>OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) <br>HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT <br>LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY <br>OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF <br>SUCH DAMAGE.</p>"
+}

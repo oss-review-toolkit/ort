@@ -1,0 +1,64 @@
+{
+  "id": "559ed6b847cdaa075e000254",
+  "title": "Mug Foundation open formats license",
+  "manager": {
+    "id": "559ed65347cdaa075e000252",
+    "username": "CodeWizard"
+  },
+  "slug": "mug-foundation-open-formats-license",
+  "source": "https://tldrlegal.com/api/license/559ed6b847cdaa075e000254",
+  "description": "<p><strong><em>!Attention! You still need a license for the sourcecode as this license only covers the specifications and the technology</em></strong></p><p>This license is permissive but keeps the licensor rights to sell the format specification.</p><p>But gives Licensee the rights to sell software using the format under this license.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Relicense",
+        "description": "Describes the ability to freely relicense the software."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Use Patent Claims",
+        "description": "Describes the rights to practice patent claims of contributors to the code."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>The Mug Foundation Open License\n(MFOFL)</p><p>Copyright (c) {Year} {Copyright\nHolder(s)}</p><p>{Author contact info}</p><p>The original author of the\nsoftware or the organization that owns the rights are thereby called the\nlicensor.</p><p>The person Physical or Legal\nobtaining a copy of this piece of software or its accompanying sources,\ndocumentation, specifications and tools are thereby called the licensee.</p><p>The source code or its binary\nform, specifications and documentation are thereby called the software.</p><p>Permission is hereby granted,\nfree of charge, to any person using this software in any way and associated\ndocumentation files, to use in the software without restriction, including\nwithout limitation the following rights:</p><p>Re-distribute the software and or\nits underlying technology.</p><p>Publish, distribute, sublicense,\nand/or sell Software using the software or its underlying technology given the appropriate\naccreditation is made either in the source files of the software embedding it\nor in the documentation of proprietary software.</p><p>Furnished to do so, subject to\nthe following conditions:</p><p>The licensee may not redistribute\nthe software under a different license.</p><p>You are not authorized to sell\nthe software or its underlying technology without embedding it in another\nsoftware as described in the second right, except with express written\npermission from the original authors. (This clause is void if no contact\ninformation is present in the header and this clause becomes “It is utterly forbidden\nto sell this software or its underlying technology without embedding it in\nanother software.”).</p><p>IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE FILE FORMAT OR THE USE OR OTHER DEALINGS IN THE FILE\nFORMAT.</p><p>FURTHERMORE, THERE IS NO WARRANTY\nOF THE FILE SOFTWARE UNDER THIS LICENSE TO BE FAIL SAFE AND OR FIT FOR A\nSPECIFIC PURPOSE(S).</p><p>THE SOFTWARE PROTECTED BY THE\nLICENSE MAY USE STRONG CRYPTOGRAPHY ALGORITHMS AND THEREFORE MAY NOT BE USED IN\nSPECIFIC COUNTRIES (CONSULT YOUR COUNTRY LAW BEFORE EMBEDDING THIS SOFTWARE IN\nYOUR SOFTWARE).</p><p>THE AUTHORS IN NO OCCASION SHALL\nBE LIABLE FOR JURIDICAL PROBLEMS THAT MAY ARRISE IN DECURRENCE OF THE USAGE OF\nTHE SOFTWARE UNDER THIS LICENSE.</p><p>The above copyright notice shall\nbe included in every Software that uses the files software under this license.</p><p>The licensor here thereby gives\nthe licensee the rights to use any patents that may have been included in the\nsoftware.</p><p>The licensee must by either\nincluding directly the original source files or by giving instructions on how\nto get it, distribute the original software.</p><p>If licensor contact information’s\nis present on the license header the licensee can consider this a request for\ncontact to inform about how the software the licensor wrote is being used but\nthis is kept to the licensee behalf.</p>"
+}

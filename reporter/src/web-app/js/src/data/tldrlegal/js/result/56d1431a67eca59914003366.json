@@ -1,0 +1,17 @@
+{
+  "id": "56d1431a67eca59914003366",
+  "title": "Verified Content",
+  "manager": {
+    "id": "5663c1b467eca599140006d5",
+    "username": "paulho09"
+  },
+  "slug": "verified-content",
+  "source": "https://tldrlegal.com/api/license/56d1431a67eca59914003366",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

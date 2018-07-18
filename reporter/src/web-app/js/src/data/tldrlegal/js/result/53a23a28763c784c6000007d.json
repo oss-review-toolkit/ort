@@ -1,0 +1,48 @@
+{
+  "id": "53a23a28763c784c6000007d",
+  "title": "Vovida Software License v1.0 (VSL-1.0)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "vovida-software-license-v1.0-(vsl-1.0)",
+  "source": "https://tldrlegal.com/api/license/53a23a28763c784c6000007d",
+  "description": "<p>A short and very permissive license with a few straightforward restrictions. </p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>Vovida Software License v. 1.0</p><p>This license applies to all software incorporated in the \"Vovida <br>Open Communication Application Library\" except for those portions <br>incorporating third party software specifically identified as being <br>licensed under separate license.</p><p>The Vovida Software License, Version 1.0 <br>Copyright (c) 2000 Vovida Networks, Inc. All rights reserved.</p><p>Redistribution and use in source and binary forms, with or without <br>modification, are permitted provided that the following conditions <br>are met:</p><p>1. Redistributions of source code must retain the above copyright <br>notice, this list of conditions and the following disclaimer.</p><p>2. Redistributions in binary form must reproduce the above copyright <br>notice, this list of conditions and the following disclaimer in <br>the documentation and/or other materials provided with the <br>distribution.</p><p>3. The names \"VOCAL\", \"Vovida Open Communication Application Library\", <br>and \"Vovida Open Communication Application Library (VOCAL)\" must <br>not be used to endorse or promote products derived from this <br>software without prior written permission. For written <br>permission, please contact vocal@vovida.org.</p><p>4. Products derived from this software may not be called \"VOCAL\", nor <br>may \"VOCAL\" appear in their name, without prior written <br>permission.</p><p>THIS SOFTWARE IS PROVIDED \"AS IS\" AND ANY EXPRESSED OR IMPLIED <br>WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES <br>OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND <br>NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL VOVIDA <br>NETWORKS, INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY DAMAGES <br>IN EXCESS OF $1,000, NOR FOR ANY INDIRECT, INCIDENTAL, SPECIAL, <br>EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, <br>PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR <br>PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY <br>OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT <br>(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE <br>USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH <br>DAMAGE.</p>"
+}

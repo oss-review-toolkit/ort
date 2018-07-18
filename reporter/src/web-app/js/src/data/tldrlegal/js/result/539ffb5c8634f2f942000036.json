@@ -1,0 +1,48 @@
+{
+  "id": "539ffb5c8634f2f942000036",
+  "title": "Clarified Artistic License",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "clarified-artistic-license",
+  "source": "https://tldrlegal.com/api/license/539ffb5c8634f2f942000036",
+  "description": "<p>This straightforward license asks you to do one of several things, specified below and in the fulltext, in order to distribute or modify software. Basically, make your source code and edits available online.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>The Clarified Artistic License</p><p>Preamble</p><p>The intent of this document is to state the conditions under which a <br>Package may be copied, such that the Copyright Holder maintains some <br>semblance of artistic control over the development of the package, <br>while giving the users of the package the right to use and distribute <br>the Package in a more-or-less customary fashion, plus the right to make <br>reasonable modifications.</p><p>Definitions:</p><p>\"Package\" refers to the collection of files distributed by the <br>Copyright Holder, and derivatives of that collection of files <br>created through textual modification.</p><p>\"Standard Version\" refers to such a Package if it has not been <br>modified, or has been modified in accordance with the wishes <br>of the Copyright Holder as specified below.</p><p>\"Copyright Holder\" is whoever is named in the copyright or <br>copyrights for the package.</p><p>\"You\" is you, if you're thinking about copying or distributing <br>this Package.</p><p>\"Distribution fee\" is a fee you charge for providing a copy <br>of this Package to another party.</p><p>\"Freely Available\" means that no fee is charged for the right to <br>use the item, though there may be fees involved in handling the <br>item. It also means that recipients of the item may redistribute <br>it under the same conditions they received it.</p><p>1. You may make and give away verbatim copies of the source form of the <br>Standard Version of this Package without restriction, provided that you <br>duplicate all of the original copyright notices and associated disclaimers.</p><p>2. You may apply bug fixes, portability fixes and other modifications <br>derived from the Public Domain, or those made Freely Available, or from <br>the Copyright Holder. A Package modified in such a way shall still be <br>considered the Standard Version.</p><p>3. You may otherwise modify your copy of this Package in any way, provided <br>that you insert a prominent notice in each changed file stating how and <br>when you changed that file, and provided that you do at least ONE of the <br>following:</p><p>a) place your modifications in the Public Domain or otherwise make them <br>Freely Available, such as by posting said modifications to Usenet or an <br>equivalent medium, or placing the modifications on a major network <br>archive site allowing unrestricted access to them, or by allowing the <br>Copyright Holder to include your modifications in the Standard Version <br>of the Package.</p><p>b) use the modified Package only within your corporation or organization.</p><p>c) rename any non-standard executables so the names do not conflict <br>with standard executables, which must also be provided, and provide <br>a separate manual page for each non-standard executable that clearly <br>documents how it differs from the Standard Version.</p><p>d) make other distribution arrangements with the Copyright Holder.</p><p>e) permit and encourge anyone who receives a copy of the modified Package <br>permission to make your modifications Freely Available <br>in some specific way.</p><p><br>4. You may distribute the programs of this Package in object code or <br>executable form, provided that you do at least ONE of the following:</p><p>a) distribute a Standard Version of the executables and library files, <br>together with instructions (in the manual page or equivalent) on where <br>to get the Standard Version.</p><p>b) accompany the distribution with the machine-readable source of <br>the Package with your modifications.</p><p>c) give non-standard executables non-standard names, and clearly <br>document the differences in manual pages (or equivalent), together <br>with instructions on where to get the Standard Version.</p><p>d) make other distribution arrangements with the Copyright Holder.</p><p>e) offer the machine-readable source of the Package, with your <br>modifications, by mail order.</p><p>5. You may charge a distribution fee for any distribution of this Package. <br>If you offer support for this Package, you may charge any fee you choose <br>for that support. You may not charge a license fee for the right to use <br>this Package itself. You may distribute this Package in aggregate with <br>other (possibly commercial and possibly nonfree) programs as part of a <br>larger (possibly commercial and possibly nonfree) software distribution, <br>and charge license fees for other parts of that software distribution, <br>provided that you do not advertise this Package as a product of your own. <br>If the Package includes an interpreter, You may embed this Package's <br>interpreter within an executable of yours (by linking); this shall be <br>construed as a mere form of aggregation, provided that the complete <br>Standard Version of the interpreter is so embedded.</p><p>6. The scripts and library files supplied as input to or produced as <br>output from the programs of this Package do not automatically fall <br>under the copyright of this Package, but belong to whoever generated <br>them, and may be sold commercially, and may be aggregated with this <br>Package. If such scripts or library files are aggregated with this <br>Package via the so-called \"undump\" or \"unexec\" methods of producing a <br>binary executable image, then distribution of such an image shall <br>neither be construed as a distribution of this Package nor shall it <br>fall under the restrictions of Paragraphs 3 and 4, provided that you do <br>not represent such an executable image as a Standard Version of this <br>Package.</p><p>7. C subroutines (or comparably compiled subroutines in other <br>languages) supplied by you and linked into this Package in order to <br>emulate subroutines and variables of the language defined by this <br>Package shall not be considered part of this Package, but are the <br>equivalent of input as in Paragraph 6, provided these subroutines do <br>not change the language in any way that would cause it to fail the <br>regression tests for the language.</p><p>8. Aggregation of the Standard Version of the Package with a commercial <br>distribution is always permitted provided that the use of this Package <br>is embedded; that is, when no overt attempt is made to make this Package's <br>interfaces visible to the end user of the commercial distribution. <br>Such use shall not be construed as a distribution of this Package.</p><p>9. The name of the Copyright Holder may not be used to endorse or promote <br>products derived from this software without specific prior written permission.</p><p>10. THIS PACKAGE IS PROVIDED \"AS IS\" AND WITHOUT ANY EXPRESS OR <br>IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED <br>WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p><p>The End</p>"
+}

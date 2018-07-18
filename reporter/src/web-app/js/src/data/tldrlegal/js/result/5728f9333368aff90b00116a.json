@@ -1,0 +1,44 @@
+{
+  "id": "5728f9333368aff90b00116a",
+  "title": "hx711_SPI",
+  "manager": {
+    "id": "5728f90f3368aff90b001169",
+    "username": "dudapickler"
+  },
+  "slug": "hx711_spi",
+  "source": "https://tldrlegal.com/api/license/5728f9333368aff90b00116a",
+  "description": "<p>HX711 weight scale interface with Raspberry PI using SPI communication</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ],
+    "can": [
+      {
+        "title": "Contact Author",
+        "description": "Describes your ability to contact the author about the module you're using."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      },
+      {
+        "title": "Include Install Instructions",
+        "description": "Describes the necessity to include build & install instructions."
+      }
+    ]
+  },
+  "fulltext": "<p>#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include &lt;stdint.h&gt;<br><br>#include \"src/spi.h\"<br><br>#define N_SAMPLES   50<br>#define SPREAD     1<br>#define SCALE  1// calibration parameter<br><br>int main(void) {<br>   spi_t spi;<br>   spi_bit_order_t MSB_FIRST;<br>   uint8_t buf[1] = {0x00};<br>   uint8_t buf0[1];<br>   int8_t buf2[7];<br>   uint8_t buf1[7] = {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0x80}; // To change the gain to 64, change the last byte(0x80) to (0xA8) or 32 =&gt; (0xA0)<br>   char buffer [8];<br>   unsigned char byte;<br>   int32_t desired_bits;<br>   int i, j;<br>   int size = 6;<br>   int32_t offset;<br>   int nsamples=N_SAMPLES;<br>   long samples[nsamples];<br>   float spread_percent = SPREAD / 100.0 /2.0;<br>   float filter_low, filter_high;<br>   long tmp_avg=0;<br>   long tmp_avg2;<br><br>   <br>  /* Open spidev0.0 with mode 0 and max speed 1MHz */<br>  if (spi_open(&spi, \"/dev/spidev0.0\", 0, 1000000) &lt; 0) {<br>  fprintf(stderr, \"spi_open(): %s\\n\", spi_errmsg(&spi));<br>  exit(1);<br>  }<br>   <br>   /* Set_Offset */<br><br>   i=0;<br>   j=0;<br>     printf(\"Wait: Getting Tare\\n\");<br><br>     while(i&lt;=nsamples)<br>     {   /* Shift out 1 byte of 0x00 and read DOUT */<br>     <br>       if (spi_transfer(&spi, buf, buf0, sizeof(buf)) &lt; 0) <br>       {<br>        fprintf(stderr, \"spi_transfer(): %s\\n\", spi_errmsg(&spi));<br>        exit(1);<br>       }<br>     <br>       if(buf0[0] == 0x00)<br>       {<br>       spi_transfer(&spi, buf1, buf2, sizeof(buf2));<br>       desired_bits = get_bits(buf2);<br>       samples[i] = desired_bits;<br>       i++;<br>       }<br>     }<br>     <br>     for(i=0;i&lt;nsamples;i++)<br>     {     <br>     tmp_avg += samples[i];<br>     }<br>   //usleep(6000);<br>       <br><br>  tmp_avg = tmp_avg / nsamples;<br><br><br>  tmp_avg2 = 0;<br>  j=0;<br><br>  filter_low =  (float) tmp_avg * (1.0 - spread_percent);<br>  filter_high = (float) tmp_avg * (1.0 + spread_percent);<br><br>//  printf(\"%d %d\\n\", (int) filter_low, (int) filter_high);<br><br>  for(i=0;i&lt;nsamples;i++) {<br>   if ((samples[i] &lt; filter_high && samples[i] &gt; filter_low) || <br>  (samples[i] &gt; filter_high && samples[i] &lt; filter_low) ) {<br>     tmp_avg2 += samples[i];<br>    j++;<br>   }<br>  }<br><br>  if (j == 0) {<br>  printf(\"No data to consider: Change the spread or the number of samples\\n\");<br>  exit(255);<br><br>  }<br><br><br>   offset = tmp_avg2/j;<br>   //offset = tmp_avg;   <br>   printf(\"Offset: %d\\n\", offset);<br>   printf(\"Starting...\\n\" );<br>usleep(5000000);<br>while(1)<br>{<br>    <br>   /* Shift out 1 byte of 0x00 and read DOUT */<br>   if (spi_transfer(&spi, buf, buf0, sizeof(buf)) &lt; 0) <br>   {<br>    fprintf(stderr, \"spi_transfer(): %s\\n\", spi_errmsg(&spi));<br>    exit(1);<br>   }<br>   /*If DOUT is 0x00, Shift out 4 bytes that represents 24 pulses + 1 of set gain(128)  */<br>   if(buf0[0] == 0x00){<br>     spi_transfer(&spi, buf1, buf2, sizeof(buf2));<br>     desired_bits = get_bits(buf2);<br>   }<br>   <br>   printf(\"Value: %d grams\\n\", (desired_bits - offset)/scale);<br><br>   <br>}<br>  spi_close(&spi);<br>  return 0;<br>}<br><br><br><br>int32_t get_bits(uint8_t buf2[7])<br>{<br>     unsigned char byte;     <br>     int32_t desired_bits;<br>     int i, j;<br>       int size = 6;<br>     desired_bits = 0;   <br>     for (i=0;i&lt;=size-1;i++)<br>     {<br>       for (j=6;j&gt;=0;j=j-2){<br>         byte = buf2[i] & (1&lt;&lt;j);<br>         byte &gt;&gt;= j;<br>         desired_bits = desired_bits | byte ;<br>         if (j&gt;0 | i&lt;size-1)<br>           desired_bits = (desired_bits&lt;&lt;1);<br>      }<br>     }<br>   return desired_bits;<br>}</p>"
+}

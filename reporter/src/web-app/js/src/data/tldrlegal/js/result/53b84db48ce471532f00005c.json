@@ -1,0 +1,48 @@
+{
+  "id": "53b84db48ce471532f00005c",
+  "title": "Creative Commons CC0 1.0 Universal (CC-0)",
+  "shorthand": "cc0-1.0",
+  "manager": {
+    "id": "53b84ca48ce471532f000059",
+    "username": "jack126guy"
+  },
+  "slug": "creative-commons-cc0-1.0-universal",
+  "source": "https://tldrlegal.com/api/license/53b84db48ce471532f00005c",
+  "description": "<p>Releases software into the public domain, or otherwise grants permission to use it for any purpose. Disclaims patent licenses.</p>",
+  "summary": {
+    "must": [],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Patent Claims",
+        "description": "Describes the rights to practice patent claims of contributors to the code."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p><strong><em>Statement of Purpose</em></strong></p><p>The laws of most jurisdictions throughout the world\r\n\tautomatically confer exclusive Copyright and Related Rights\r\n\t(defined below) upon the creator and subsequent owner(s) (each\r\n\tand all, an \"owner\") of an original work of authorship and/or\r\n\ta database (each, a \"Work\").</p><p>Certain owners wish to permanently relinquish those rights\r\n\tto a Work for the purpose of contributing to a commons of\r\n\tcreative, cultural and scientific works (\"Commons\") that the\r\n\tpublic can reliably and without fear of later claims of\r\n\tinfringement build upon, modify, incorporate in other works,\r\n\treuse and redistribute as freely as possible in any form\r\n\twhatsoever and for any purposes, including without limitation\r\n\tcommercial purposes. These owners may contribute to the\r\n\tCommons to promote the ideal of a free culture and the further\r\n\tproduction of creative, cultural and scientific works, or to\r\n\tgain reputation or greater distribution for their Work in part\r\n\tthrough the use and efforts of others.</p><p>For these and/or other purposes and motivations, and\r\n\twithout any expectation of additional consideration or\r\n\tcompensation, the person associating CC0 with a Work (the\r\n\t\"Affirmer\"), to the extent that he or she is an owner of\r\n\tCopyright and Related Rights in the Work, voluntarily elects\r\n\tto apply CC0 to the Work and publicly distribute the Work\r\n\tunder its terms, with knowledge of his or her Copyright and\r\n\tRelated Rights in the Work and the meaning and intended legal\r\n\teffect of CC0 on those rights.</p><p><strong>1. Copyright and Related Rights.</strong>\r\n\t   A Work made available under CC0 may be protected by\r\n\t   copyright and related or neighboring rights (\"Copyright and\r\n\t   Related Rights\"). Copyright and Related Rights include, but\r\n\t   are not limited to, the following: \r\n\t</p><ol><li>the right to reproduce, adapt, distribute, perform,\r\n\t  display, communicate, and translate a Work;</li><li> moral rights retained by the original author(s) and/or\r\n\t  performer(s);</li><li>publicity and privacy rights pertaining to a person's\r\n\t  image or likeness depicted in a Work;</li><li>rights protecting against unfair competition in regards\r\n\t  to a Work, subject to the limitations in paragraph 4(a),\r\n\t  below;</li><li>rights protecting the extraction, dissemination, use and\r\n\t  reuse of data in a Work;</li><li>database rights (such as those arising under Directive\r\n\t  96/9/EC of the European Parliament and of the Council of 11\r\n\t  March 1996 on the legal protection of databases, and under\r\n\t  any national implementation thereof, including any amended\r\n\t  or successor version of such directive); and</li><li>other similar, equivalent or corresponding rights\r\n\t  throughout the world based on applicable law or treaty, and\r\n\t  any national implementations thereof.</li></ol><p><strong>2. Waiver.</strong> To the greatest extent\r\n        permitted by, but not in contravention of, applicable law,\r\n        Affirmer hereby overtly, fully, permanently, irrevocably and\r\n        unconditionally waives, abandons, and surrenders all of\r\n        Affirmer's Copyright and Related Rights and associated claims\r\n        and causes of action, whether now known or unknown (including\r\n        existing as well as future claims and causes of action), in\r\n        the Work (i) in all territories worldwide, (ii) for the\r\n        maximum duration provided by applicable law or treaty\r\n        (including future time extensions), (iii) in any current or\r\n        future medium and for any number of copies, and (iv) for any\r\n        purpose whatsoever, including without limitation commercial,\r\n        advertising or promotional purposes (the \"Waiver\"). Affirmer\r\n        makes the Waiver for the benefit of each member of the public\r\n        at large and to the detriment of Affirmer's heirs and\r\n        successors, fully intending that such Waiver shall not be\r\n        subject to revocation, rescission, cancellation, termination,\r\n        or any other legal or equitable action to disrupt the quiet\r\n        enjoyment of the Work by the public as contemplated by\r\n        Affirmer's express Statement of Purpose.\r\n\t</p><p><strong>3. Public License Fallback.</strong> Should any\r\n        part of the Waiver for any reason be judged legally invalid or\r\n        ineffective under applicable law, then the Waiver shall be\r\n        preserved to the maximum extent permitted taking into account\r\n        Affirmer's express Statement of Purpose. In addition, to the\r\n        extent the Waiver is so judged Affirmer hereby grants to each\r\n        affected person a royalty-free, non transferable, non\r\n        sublicensable, non exclusive, irrevocable and unconditional\r\n        license to exercise Affirmer's Copyright and Related Rights\r\n        in the Work (i) in all territories worldwide, (ii) for the\r\n        maximum duration provided by applicable law or treaty\r\n        (including future time extensions), (iii) in any current or\r\n        future medium and for any number of copies, and (iv) for any\r\n        purpose whatsoever, including without limitation commercial,\r\n        advertising or promotional purposes (the \"License\"). The\r\n        License shall be deemed effective as of the date CC0 was\r\n        applied by Affirmer to the Work. Should any part of the\r\n        License for any reason be judged legally invalid or\r\n        ineffective under applicable law, such partial invalidity or\r\n        ineffectiveness shall not invalidate the remainder of the\r\n        License, and in such case Affirmer hereby affirms that he or\r\n        she will not (i) exercise any of his or her remaining\r\n        Copyright and Related Rights in the Work or (ii) assert any\r\n        associated claims and causes of action with respect to the\r\n        Work, in either case contrary to Affirmer's express Statement\r\n        of Purpose.</p><p><strong>4. Limitations and Disclaimers.</strong></p><ol><li>No trademark or patent rights held by Affirmer are\r\n          waived, abandoned, surrendered, licensed or otherwise\r\n          affected by this document.</li><li>Affirmer offers the Work as-is and makes no\r\n\t  representations or warranties of any kind concerning the\r\n\t  Work, express, implied, statutory or otherwise, including\r\n\t  without limitation warranties of title, merchantability,\r\n\t  fitness for a particular purpose, non infringement, or the\r\n\t  absence of latent or other defects, accuracy, or the present\r\n\t  or absence of errors, whether or not discoverable, all to\r\n\t  the greatest extent permissible under applicable law.</li><li>Affirmer disclaims responsibility for clearing rights of\r\n\t  other persons that may apply to the Work or any use thereof,\r\n\t  including without limitation any person's Copyright and\r\n\t  Related Rights in the Work. Further, Affirmer disclaims\r\n\t  responsibility for obtaining any necessary consents,\r\n\t  permissions or other rights required for any use of the\r\n\t  Work.</li><li>Affirmer understands and acknowledges that Creative\r\n\t  Commons is not a party to this document and has no duty or\r\n\t  obligation with respect to this CC0 or use of the Work.</li></ol>"
+}

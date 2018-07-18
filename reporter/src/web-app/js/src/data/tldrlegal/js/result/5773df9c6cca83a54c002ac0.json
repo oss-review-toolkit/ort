@@ -1,0 +1,47 @@
+{
+  "id": "5773df9c6cca83a54c002ac0",
+  "title": "XSkat License",
+  "manager": {
+    "id": "5773de716cca83a54c002abe",
+    "username": "aarena"
+  },
+  "slug": "xskat-license",
+  "source": "https://tldrlegal.com/api/license/5773df9c6cca83a54c002ac0",
+  "description": "<p>A short, permissive software license. You can freely redistribute as long as it is just packaging or porting changes. For more extensive modifications you need to clearly state who last changed the program and either&nbsp;rename the program or change the version number.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      }
+    ],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Rename",
+        "description": "Describes the ability to change software's name if modified/distributed."
+      }
+    ]
+  },
+  "fulltext": "<p>This program is free software; you can redistribute it freely.&nbsp;</p><p>Use it at your own risk; there is NO WARRANTY.\r\n</p><p>Redistribution of modified versions is permitted provided that the following conditions are met:</p><p>1. All copyright & permission notices are preserved.</p><p>2.a) Only changes required for packaging or porting are made. <br>or <br>2.b) It is clearly stated who last changed the program. The program is renamed or the version number is of the form x.y.z, where x.y is the version of the original program and z is an arbitrary suffix.</p>"
+}

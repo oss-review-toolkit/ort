@@ -1,0 +1,56 @@
+{
+  "id": "52f664891a01050f78000007",
+  "title": "Tóca Operating System General License 2.0 (TOSG-2.00)",
+  "manager": {
+    "id": "52f661db82dcc50b72000015",
+    "username": "tocacorp"
+  },
+  "slug": "tosg-2.00-(toca-operating-system-general-license)",
+  "source": "https://tldrlegal.com/api/license/52f664891a01050f78000007",
+  "description": "<p>A \"Normal\" License, made by Tóca CompuGlobal <strong>just for Operating Systems</strong>...</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Statically Link",
+        "description": "Describes whether the library can be compiled into the program (linked at compile time rather than runtime, aka dynamic linking)."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>Copyright\n(c) Tóca CompuGlobal Corporation Inc - All right reserved 2015</p><p>Everyone\nis permitted to copy and distribute copies of this license document,\nbut changing it is not allowed. </p><ol><p>\n\tThis license is\n\tapplied only to “Operating Systems”, which refers to a computer program\n\tthat is capable of making the communication beetwen hardware and software, composed by several layers such as kernel, daemons, GUI (etc..)</p></ol><p>Terms\nand Conditions:</p><ol><li>The person acquiring the \"Operating System\" is granted permitted use for:<p>a)\n\tCommercial Use - This\n\tsoftware can be used for commercial purposes in derivative works. &nbsp;The “acquirer” (person acquiring or running the\n\t“Operating System”) can use the “Operating System” for any type of commercial &nbsp;/ non-personal use therefor in Corporations, Institutions Hospitals (etc..)</p><p>b) Modify -\n\tThis software can be modified. &nbsp;The “acquirer”&nbsp;can\n\tchange/alter/modify the software and source code &nbsp;under the conditions present on\n\tthis license. &nbsp;Modifying is defined as changing the source code to apply to\n\tthe acquirer's&nbsp;needs;</p><p>c) Distribute -\n\tThis software can be distributed. &nbsp; The “acquirer”&nbsp;can\n\tdistribute the \"Operating System\" under the conditions present on this license in either modified or untouched (in it's original form).</p></li><li>The\n\tperson acquiring the “Operating System” cannot:<p>a)\n\tSublicense - The “acquirer” must retain the original copyright and\n\tlicense. &nbsp;If the acquirer changes the “Operating System”\n\t(modify) he cannot change the copyright or the license used;</p><p>b)\n\tWarranty -  The “acquirer” cannot put a Warranty on the “Operating\n\tSystem”. &nbsp;If the “Operating System” is changed\n\t(modify) the “acquirer” cannot put on the \"Operating System\" a warranty;</p><p>c)\n\tHold Liable- The Software is released without warranty and the\n\tsoftware/license owner  cannot be charged for damages;</p></li><li>The\n\tperson acquiring the “Operating System” must:<p>a)\n\tState Changes- If the “acquirer” changes the “Operating System”, &nbsp;he must register the changes that has made from the original\n\tversion in an accessible way distributed with the derivative version (i.e. written on the \"source code\" it self);</p><p>b)\n\tInclude Non-Static Link-  If the “acquirer” changes the\n\t“Operating System” he has to put in the “Operating System” a\n\ttext “link” to the original version, in such a way that the \"end user\" can know who manufactured/codded the original system;</p><p>c)\n\tIf the “acquirer” changes the “Operating System”, he has to\n\tpublish the changed source code.</p><p>End\n\tof License</p></li></ol>"
+}

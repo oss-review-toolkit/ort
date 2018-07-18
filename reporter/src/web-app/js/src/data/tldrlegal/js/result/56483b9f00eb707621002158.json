@@ -1,0 +1,17 @@
+{
+  "id": "56483b9f00eb707621002158",
+  "title": "GPL3",
+  "manager": {
+    "id": "56483b3c00eb707621002151",
+    "username": "cl2008"
+  },
+  "slug": "gpl3",
+  "source": "https://tldrlegal.com/api/license/56483b9f00eb707621002158",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

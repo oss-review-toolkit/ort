@@ -1,0 +1,52 @@
+{
+  "id": "53a0fcb644c1715555000115",
+  "title": "Naumen Public License (Naumen)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "naumen-public-license-(naumen)",
+  "source": "https://tldrlegal.com/api/license/53a0fcb644c1715555000115",
+  "description": "<p>This license is fairly restrictive, but provides good protection for the author of the software.&nbsp;</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>NAUMEN Public License&nbsp;</p><p>This software is Copyright (c) NAUMEN (tm) and Contributors. <br>All rights reserved.\r\n</p><p>Redistribution and use in source and binary forms, with or <br>without modification, are permitted provided that the following <br>conditions are met:</p><p>1. Redistributions in source code must retain the above <br>copyright notice, this list of conditions, and the following <br>disclaimer.</p><p>2. Redistributions in binary form must reproduce the above <br>copyright notice, this list of conditions, and the following <br>disclaimer in the documentation and/or other materials <br>provided with the distribution.</p><p>3. The name NAUMEN (tm) must not be used to <br>endorse or promote products derived from this software without prior <br>written permission from NAUMEN.</p><p>4. The right to distribute this software or to use it for any <br>purpose does not give you the right to use Servicemarks (sm) <br>or Trademarks (tm) of NAUMEN.</p><p>5. If any files originating from NAUMEN or Contributors are modified, you must <br>cause the modified files to carry prominent notices stating <br>that you changed the files and the date of any change.</p><p>Disclaimer:</p><p>THIS SOFTWARE IS PROVIDED BY NAUMEN \"AS IS\" AND ANY EXPRESSED <br>OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE <br>IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A <br>PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL NAUMEN <br>OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, <br>INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES <br>(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE <br>GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS <br>INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, <br>WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING <br>NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF <br>THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH <br>DAMAGE.</p><p>This software consists of contributions made by NAUMEN <br>and Contributors. Specific attributions are listed in the <br>accompanying credits file.</p>"
+}

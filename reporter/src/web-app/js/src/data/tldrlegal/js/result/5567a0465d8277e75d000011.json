@@ -1,0 +1,17 @@
+{
+  "id": "5567a0465d8277e75d000011",
+  "title": "Koaned Terms of Service",
+  "manager": {
+    "id": "5567a0035d8277e75d000010",
+    "username": "koaned"
+  },
+  "slug": "koaned-terms-of-service",
+  "source": "https://tldrlegal.com/api/license/5567a0465d8277e75d000011",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Lorem ipsum</p>"
+}

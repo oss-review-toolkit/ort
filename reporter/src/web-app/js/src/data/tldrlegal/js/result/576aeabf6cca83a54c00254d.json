@@ -1,0 +1,51 @@
+{
+  "id": "576aeabf6cca83a54c00254d",
+  "title": "Noweb License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "noweb-license",
+  "source": "https://tldrlegal.com/api/license/576aeabf6cca83a54c00254d",
+  "description": "<p>A permissive license allowing the program to be modified, sold, and redistributed. It is not protected by a ``copyleft'' agreement like the one used by the Free Software Foundation.&nbsp;</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      },
+      {
+        "title": "Contact Author",
+        "description": "Describes your ability to contact the author about the module you're using."
+      }
+    ],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Rename",
+        "description": "Describes the ability to change software's name if modified/distributed."
+      }
+    ]
+  },
+  "fulltext": "<p>Noweb is copyright 1989-2000 by Norman Ramsey. All rights reserved.\r\n</p><p>Noweb is protected by copyright. It is not public-domain software or shareware, and it is not protected by a ``copyleft'' agreement like the one used by the Free Software Foundation.</p><p>Noweb is available free for any use in any field of endeavor. You may redistribute noweb in whole or in part provided you acknowledge its source and include this COPYRIGHT file. You may modify noweb and create derived works, provided you retain this copyright notice, but the result may not be called noweb without my written consent.</p><p>You may sell noweb if you wish. For example, you may sell a CD-ROM including noweb.</p><p>You may sell a derived work, provided that all source code for your derived work is available, at no additional charge, to anyone who buys your derived work in any form. You must give permisson for said source code to be used and modified under the terms of this license. You must state clearly that your work uses or is based on noweb and that noweb is available free of change. You must also request that bug reports on your work be reported to you.</p>"
+}

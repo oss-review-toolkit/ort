@@ -1,0 +1,17 @@
+{
+  "id": "56483b6000eb707621002152",
+  "title": "GPL",
+  "manager": {
+    "id": "56483b3c00eb707621002151",
+    "username": "cl2008"
+  },
+  "slug": "gpl",
+  "source": "https://tldrlegal.com/api/license/56483b6000eb707621002152",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

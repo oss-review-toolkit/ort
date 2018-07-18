@@ -1,0 +1,40 @@
+{
+  "id": "5408153c0891fb8a76000052",
+  "title": "Licence for 6 box js",
+  "manager": {
+    "id": "540814ed0891fb8a76000051",
+    "username": "nimesh4monto"
+  },
+  "slug": "licence-for-6-box-js",
+  "source": "https://tldrlegal.com/api/license/5408153c0891fb8a76000052",
+  "description": "<p>You can use this javascript for personal use only and for that you must have to purchased this script.<br>You can not resale this script. this script is for single domain only so for new domain you must purchase another license form our site.</p><p>To purchase this script you need to contact on this email : nimesh4monto@gmail.com.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Relicense",
+        "description": "Describes the ability to freely relicense the software."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      }
+    ]
+  },
+  "fulltext": "<p>Licence for 6 box js<br><br>You can use this javascript for personal use only and for that you must have to purchased this script.&nbsp;</p><p>You can not resale this script. this script is for single domain only so for new domain you must purchase another license form our site.&nbsp;</p><p>To purchase this script you need to contact on this email : nimesh4monto@gmail.com.</p>"
+}

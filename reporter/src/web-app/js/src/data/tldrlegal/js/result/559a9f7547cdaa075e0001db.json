@@ -1,0 +1,17 @@
+{
+  "id": "559a9f7547cdaa075e0001db",
+  "title": "YOU49",
+  "manager": {
+    "id": "559a9f5847cdaa075e0001da",
+    "username": "you49net"
+  },
+  "slug": "you49",
+  "source": "https://tldrlegal.com/api/license/559a9f7547cdaa075e0001db",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

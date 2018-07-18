@@ -1,0 +1,17 @@
+{
+  "id": "552dbaf64f296fbc2d00022e",
+  "title": "cc by sa",
+  "manager": {
+    "id": "5522b4854f296fbc2d0001e5",
+    "username": "Sebastien"
+  },
+  "slug": "cc-by-sa",
+  "source": "https://tldrlegal.com/api/license/552dbaf64f296fbc2d00022e",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

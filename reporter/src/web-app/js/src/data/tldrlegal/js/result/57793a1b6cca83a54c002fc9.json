@@ -1,0 +1,64 @@
+{
+  "id": "57793a1b6cca83a54c002fc9",
+  "title": "yyy",
+  "manager": {
+    "id": "5779398f6cca83a54c002fc7",
+    "username": "piotrekli"
+  },
+  "slug": "yyy",
+  "source": "https://tldrlegal.com/api/license/57793a1b6cca83a54c002fc9",
+  "description": "<p>WIP</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Patent Claims",
+        "description": "Describes the rights to practice patent claims of contributors to the code."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Statically Link",
+        "description": "Describes whether the library can be compiled into the program (linked at compile time rather than runtime, aka dynamic linking)."
+      },
+      {
+        "title": "Rename",
+        "description": "Describes the ability to change software's name if modified/distributed."
+      }
+    ]
+  },
+  "fulltext": "<p>yyy</p>"
+}

@@ -1,0 +1,72 @@
+{
+  "id": "553bb7134f296fbc2d000326",
+  "title": "TrackingTeam Licence",
+  "manager": {
+    "id": "553bb3c44f296fbc2d000324",
+    "username": "tankerkiller125"
+  },
+  "slug": "trackingteam-licence",
+  "source": "https://tldrlegal.com/api/license/553bb7134f296fbc2d000326",
+  "description": "<p>TrackingTeams Projects License. Essentially a Apache 2.0 License with modifications to deter Commercial Use</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Include Notice",
+        "description": "Include a \"NOTICE\" file with attribution notes included."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      },
+      {
+        "title": "Use Patent Claims",
+        "description": "Describes the rights to practice patent claims of contributors to the code."
+      }
+    ]
+  },
+  "fulltext": "<p>TrackingTeam License, Version 1.0 TrackingTeam License Version 1.0, April 2015</p><p>TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION</p><p>1. Definitions.</p><p>\"License\"\n shall mean the terms and conditions for use, reproduction, and \ndistribution as defined by Sections 1 through 9 of this document.</p><p>\"Licensor\" shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.</p><p>\"Legal\n Entity\" shall mean the union of the acting entity and all other \nentities that control, are controlled by, or are under common control \nwith that entity. For the purposes of this definition, \"control\" means \n(i) the power, direct or indirect, to cause the direction or management \nof such entity, whether by contract or otherwise, or (ii) ownership of \nfifty percent (50%) or more of the outstanding shares, or (iii) \nbeneficial ownership of such entity.</p><p>\"You\" (or \"Your\") shall mean an individual or Legal Entity exercising permissions granted by this License.</p><p>\"Source\"\n form shall mean the preferred form for making modifications, including \nbut not limited to software source code, documentation source, and \nconfiguration files.</p><p>\"Object\" form shall mean any form resulting \nfrom mechanical transformation or translation of a Source form, \nincluding but not limited to compiled object code, generated \ndocumentation, and conversions to other media types.</p><p>\"Work\" shall \nmean the work of authorship, whether in Source or Object form, made \navailable under the License, as indicated by a copyright notice that is \nincluded in or attached to the work (an example is provided in the \nAppendix below).</p><p>\"Derivative Works\" shall mean any work, whether \nin Source or Object form, that is based on (or derived from) the Work \nand for which the editorial revisions, annotations, elaborations, or \nother modifications represent, as a whole, an original work of \nauthorship. For the purposes of this License, Derivative Works shall not\n include works that remain separable from, or merely link (or bind by \nname) to the interfaces of, the Work and Derivative Works thereof.</p><p>\"Contribution\"\n shall mean any work of authorship, including the original version of \nthe Work and any modifications or additions to that Work or Derivative \nWorks thereof, that is intentionally submitted to Licensor for inclusion\n in the Work by the copyright owner or by an individual or Legal Entity \nauthorized to submit on behalf of the copyright owner. For the purposes \nof this definition, \"submitted\" means any form of electronic, verbal, or\n written communication sent to the Licensor or its representatives, \nincluding but not limited to communication on electronic mailing lists, \nsource code control systems, and issue tracking systems that are managed\n by, or on behalf of, the Licensor for the purpose of discussing and \nimproving the Work, but excluding communication that is conspicuously \nmarked or otherwise designated in writing by the copyright owner as \"Not\n a Contribution.\"</p><p>\"Contributor\" shall mean Licensor and any \nindividual or Legal Entity on behalf of whom a Contribution has been \nreceived by Licensor and subsequently incorporated within the Work.</p><p>2. Grant of Copyright License.</p><p>Subject\n to the terms and conditions of this License, each Contributor hereby \ngrants to You a perpetual, worldwide, non-exclusive, no-charge, \nroyalty-free, irrevocable copyright license to reproduce, prepare \nDerivative Works of, publicly display, publicly perform, sublicense, and\n distribute the Work and such Derivative Works in Source or Object form.</p><p>3. Grant of Patent License.</p><p>Subject\n to the terms and conditions of this License, each Contributor hereby \ngrants to You a perpetual, worldwide, non-exclusive, no-charge, \nroyalty-free, irrevocable (except as stated in this section) patent \nlicense to make, have made, use, offer to sell, sell, import, and \notherwise transfer the Work, where such license applies only to those \npatent claims licensable by such Contributor that are necessarily \ninfringed by their Contribution(s) alone or by combination of their \nContribution(s) with the Work to which such Contribution(s) was \nsubmitted. If You institute patent litigation against any entity \n(including a cross-claim or counterclaim in a lawsuit) alleging that the\n Work or a Contribution incorporated within the Work constitutes direct \nor contributory patent infringement, then any patent licenses granted to\n You under this License for that Work shall terminate as of the date \nsuch litigation is filed.</p><p>4. Redistribution.</p><p>You may \nreproduce and distribute copies of the Work or Derivative Works thereof \nin any medium, with or without modifications, and in Source or Object \nform, provided that You meet the following conditions:</p><p>You must \ngive any other recipients of the Work or Derivative Works a copy of this\n License; and You must cause any modified files to carry prominent \nnotices stating that You changed the files; and You must retain, in the \nSource form of any Derivative Works that You distribute, all copyright, \npatent, trademark, and attribution notices from the Source form of the \nWork, excluding those notices that do not pertain to any part of the \nDerivative Works; and If the Work includes a \"NOTICE\" text file as part \nof its distribution, then any Derivative Works that You distribute must \ninclude a readable copy of the attribution notices contained within such\n NOTICE file, excluding those notices that do not pertain to any part of\n the Derivative Works, in at least one of the following places: within a\n NOTICE text file distributed as part of the Derivative Works; within \nthe Source form or documentation, if provided along with the Derivative \nWorks; or, within a display generated by the Derivative Works, if and \nwherever such third-party notices normally appear. The contents of the \nNOTICE file are for informational purposes only and do not modify the \nLicense. You may add Your own attribution notices within Derivative \nWorks that You distribute, alongside or as an addendum to the NOTICE \ntext from the Work, provided that such additional attribution notices \ncannot be construed as modifying the License. You may add Your own \ncopyright statement to Your modifications and may provide additional or \ndifferent license terms and conditions for use, reproduction, or \ndistribution of Your modifications, or for any such Derivative Works as a\n whole, provided Your use, reproduction, and distribution of the Work \notherwise complies with the conditions stated in this License.</p><p>5. Commercial Use</p><p>This license prohibits the use of this software for commercial usage. Where Commercial Usage is considered any form of distribution that requires the user to pay any form of cash or digital currency (including unofficial cryptocurrencies). This includes but is not limited to:</p><p>\"Enterprise Editions\" that cost money to use and/or download</p><p>\"Subscriptions\" that cost money monthly or yearly to use and/or download</p><p>Payments to \"unlock\" or \"permit\" portions of the software</p><p>6. Submission of Contributions.</p><p>Unless\n You explicitly state otherwise, any Contribution intentionally \nsubmitted for inclusion in the Work by You to the Licensor shall be \nunder the terms and conditions of this License, without any additional \nterms or conditions. Notwithstanding the above, nothing herein shall \nsupersede or modify the terms of any separate license agreement you may \nhave executed with Licensor regarding such Contributions.</p><p>7. Trademarks.</p><p>This\n License does not grant permission to use the trade names, trademarks, \nservice marks, or product names of the Licensor, except as required for \nreasonable and customary use in describing the origin of the Work and \nreproducing the content of the NOTICE file.</p><p>8. Disclaimer of Warranty.</p><p>Unless\n required by applicable law or agreed to in writing, Licensor provides \nthe Work (and each Contributor provides its Contributions) on an \"AS IS\"\n BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or \nimplied, including, without limitation, any warranties or conditions of \nTITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR \nPURPOSE. You are solely responsible for determining the appropriateness \nof using or redistributing the Work and assume any risks associated with\n Your exercise of permissions under this License.</p><p>9. Limitation of Liability.</p><p>In\n no event and under no legal theory, whether in tort (including \nnegligence), contract, or otherwise, unless required by applicable law \n(such as deliberate and grossly negligent acts) or agreed to in writing,\n shall any Contributor be liable to You for damages, including any \ndirect, indirect, special, incidental, or consequential damages of any \ncharacter arising as a result of this License or out of the use or \ninability to use the Work (including but not limited to damages for loss\n of goodwill, work stoppage, computer failure or malfunction, or any and\n all other commercial damages or losses), even if such Contributor has \nbeen advised of the possibility of such damages.</p><p>10. Accepting Warranty or Additional Liability.</p><p>While\n redistributing the Work or Derivative Works thereof, You may choose to \noffer, and charge a fee for, acceptance of support, warranty, indemnity,\n or other liability obligations and/or rights consistent with this \nLicense. However, in accepting such obligations, You may act only on \nYour own behalf and on Your sole responsibility, not on behalf of any \nother Contributor, and only if You agree to indemnify, defend, and hold \neach Contributor harmless for any liability incurred by, or claims \nasserted against, such Contributor by reason of your accepting any such \nwarranty or additional liability.</p><p>END OF TERMS AND CONDITIONS</p><p>APPENDIX: How to apply the TrackingTeam License to your work</p><p>To\n apply the TrackingTeam License to your work, attach the following boilerplate\n notice, with the fields enclosed by brackets \"[]\" replaced with your \nown identifying information. (Don't include the brackets!) The text \nshould be enclosed in the appropriate comment syntax for the file \nformat. We also recommend that a file or class name and description of \npurpose be included on the same \"printed page\" as the copyright notice \nfor easier identification within third-party archives.</p><p>Copyright [yyyy] [name of copyright owner]</p><p>Licensed\n under the TrackingTeam License, Version 1.0 (the \"License\"); you may not use \nthis file except in compliance with the License. You may obtain a copy \nof the License at</p><p>Unless\n required by applicable law or agreed to in writing, software \ndistributed under the License is distributed on an \"AS IS\" BASIS, \nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n See the License for the specific language governing permissions and \nlimitations under the License.</p>"
+}

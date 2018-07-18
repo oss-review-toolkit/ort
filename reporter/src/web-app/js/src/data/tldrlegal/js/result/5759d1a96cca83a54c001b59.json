@@ -1,0 +1,27 @@
+{
+  "id": "5759d1a96cca83a54c001b59",
+  "title": "Mechanical",
+  "manager": {
+    "id": "5759cdbe6cca83a54c001b44",
+    "username": "Mdavis1297"
+  },
+  "slug": "mechanical",
+  "source": "https://tldrlegal.com/api/license/5759d1a96cca83a54c001b59",
+  "description": "<p>MTS A-E 6.2&nbsp;<a>Drake</a></p>",
+  "summary": {
+    "must": [],
+    "cannot": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ],
+    "can": [
+      {
+        "title": "Pay Above Use Threshold",
+        "description": "Described the obligation to pay the licensor after a certain amount of use."
+      }
+    ]
+  },
+  "fulltext": "<p>You must have a minumbof $50.00 U.S DOLLARS to engage in any communication or customer relations where verbal, media , or any communication whatsoever is engaged. No legal action to damage Miss Davis record or reputation is honored in international law . A-E6.2 any time be for 12-10-1973 is pending for total of funds owed for prior dealings and or transactions. Subject to enforce 42 U.S.C 666</p>"
+}

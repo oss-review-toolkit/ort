@@ -1,0 +1,52 @@
+{
+  "id": "576adff86cca83a54c00251e",
+  "title": "Eurosym License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "eurosym-license",
+  "source": "https://tldrlegal.com/api/license/576adff86cca83a54c00251e",
+  "description": "<p>Similar to the&nbsp;BSD 3-clause and allows a lot of freedom as long as you include the license notice (found in Fulltext)</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Rename",
+        "description": "Describes the ability to change software's name if modified/distributed."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>Copyright (c) 1999-2002 Henrik Theiling&nbsp;</p><p>Licence Version 2\r\n</p><p>This software is provided 'as-is', without warranty of any kind, express or implied. In no event will the authors or copyright holders be held liable for any damages arising from the use of this software.</p><p>Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:</p><p>1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated.</p><p>2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.</p><p>3. You must not use any of the names of the authors or copyright holders of the original software for advertising or publicity pertaining to distribution without specific, written prior permission.</p><p>4. If you change this software and redistribute parts or all of it in any form, you must make the source code of the altered version of this software available.</p><p>5. This notice may not be removed or altered from any source distribution.</p><p>This licence is governed by the Laws of Germany. Disputes shall be settled by Saarbruecken City Court.</p>"
+}

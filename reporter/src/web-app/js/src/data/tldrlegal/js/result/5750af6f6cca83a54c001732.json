@@ -1,0 +1,17 @@
+{
+  "id": "5750af6f6cca83a54c001732",
+  "title": "nayem",
+  "manager": {
+    "id": "5750ab306cca83a54c00172e",
+    "username": "naieemahmed"
+  },
+  "slug": "nayem",
+  "source": "https://tldrlegal.com/api/license/5750af6f6cca83a54c001732",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

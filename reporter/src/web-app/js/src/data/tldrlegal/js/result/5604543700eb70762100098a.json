@@ -1,0 +1,17 @@
+{
+  "id": "5604543700eb70762100098a",
+  "title": "l",
+  "manager": {
+    "id": "5602ef4d00eb707621000931",
+    "username": "luis10"
+  },
+  "slug": "l",
+  "source": "https://tldrlegal.com/api/license/5604543700eb70762100098a",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>l</p>"
+}

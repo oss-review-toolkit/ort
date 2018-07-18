@@ -1,5 +1,6 @@
 import { data as choosealicenseLicenses } from '../data/choosealicense/index';
 import { metadata as choosealicenseMetaData } from '../data/choosealicense/index';
+import { metadata as tldrlegalMetadata } from '../data/tldrlegal/js/index';
 import { config } from '../config';
 
 export const LICENSES = window.LICENSES =  (() => {
@@ -125,6 +126,7 @@ export const LICENSES = window.LICENSES =  (() => {
 
 export const LICENSES_PROVIDERS = window.LICENSES_PROVIDERS = (() => {
     return {
-      choosealicense: choosealicenseMetaData
+      choosealicense: choosealicenseMetaData,
+      tldrlegal: tldrlegalMetadata,
     }
 })();

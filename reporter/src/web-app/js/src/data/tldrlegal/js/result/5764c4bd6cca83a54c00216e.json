@@ -1,0 +1,72 @@
+{
+  "id": "5764c4bd6cca83a54c00216e",
+  "title": "Jared M.F. Public License",
+  "manager": {
+    "id": "5764c0786cca83a54c00214d",
+    "username": "JaredMF"
+  },
+  "slug": "jared-m.f.-public-license",
+  "source": "https://tldrlegal.com/api/license/5764c4bd6cca83a54c00216e",
+  "description": "<p>This is the Public-Domain version of the JMFOSPL.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Compensate for Damages",
+        "description": "Describes the obligation to compensate the author for any damages cased by your work."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      }
+    ],
+    "can": [
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>JARED M.F. PUBLIC LICENSE<br>Version 1, June 2016<br><br>Copyright &copy; Jared Newsom (AKA Jared M.F.)<br><br>Everyone is permitted to copy and distribute verbatim or modified<br>copies of this license document, and changing it is allowed as long<br>as the name is changed.<br><br>TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION, AND MODIFICATION<br><br>1.   As long as you retain the copyright, and send a cookie/brownie/soda<br>   to the original people who made the original work, you can do<br>   what you want with it.<br><br>2.   If you manage to modify the original work to do the following:<br>   <br>   2a. Contain hidden viruses, and/or make computers crash.<br>   2b. Make computers EXTREMELY laggy, leading to outrage.<br>   2c. Send you other people's information, and laugh over it.<br>   <br>   Then, you will be ashamed of it, and/or get thrown in jail.<br><br>3.   You cannot claim the work to be YOUR work.  YOU have to give<br>   credit to THE ORIGINAL PEOPLE who made THE ORIGINAL WORK.<br><br>4.   Holding the original people who made the original work liable<br>   for whatever happens, and/or may happen with your use of work,<br>   is outright prohibited.  DO NOT MAKE ACCUSATIONS.<br><br>5.   You can grant, and/or extend another license to this license,<br>   but, please give credit to the people who made the license.<br><br>6.   You must state the changes that you make to the software, so,<br>   people can see that you REALLY made changes to the software<br>   (REALLY (YES, REALLY (No sarcasm or smart-mouth intended))).<br><br>7.   Code is provided without a warranty, whatsoever, but, when<br>   you use SOMEBODY ELSE'S code, and complain about whatever happens,<br>   and/or may happen with your use of work, you just might not be<br>   trusted by them, or their friends, or their family, or society.<br>   DO NOT MAKE ACCUSATIONS, DO NOT COMPLAIN.<br><br>8.   You don't have to contact me about what you manage to do with<br>   the work.  You have to fix the problems and mistakes that occur<br>   in the work.<br><br>9.   You can distribute the software at your website, as long as the<br>   software is modified, and the credit goes to the original people<br>   who made the original work.<br><br>10.   You cannot sell the software to people, unless all profits go directly<br>   to the original people who made the original work.  Only a lousy,<br>   inconsiderate jerk would keep all the profits for themselves when<br>   they sell software released under a license like this.<br><br>END OF TERMS AND CONDITIONS<br><br>By using this license, you agree to the terms and conditions of the license.<br>Please use it only for good.  Using it for bad will break the terms and conditions.<br>Good luck and have fun!  EXCELSIOR!! -Jared Newsom (AKA Jared M.F.)</p>"
+}

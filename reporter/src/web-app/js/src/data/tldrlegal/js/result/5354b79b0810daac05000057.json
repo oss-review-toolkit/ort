@@ -1,0 +1,22 @@
+{
+  "id": "5354b79b0810daac05000057",
+  "title": "Phpwscript",
+  "manager": {
+    "id": "5354b77e0810daac05000056",
+    "username": "rajeshaah"
+  },
+  "slug": "phpwscript",
+  "source": "https://tldrlegal.com/api/license/5354b79b0810daac05000057",
+  "description": "<p>Dummy Text</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": ""
+}

@@ -1,0 +1,68 @@
+{
+  "id": "578419ce6cca83a54c00346b",
+  "title": "Code Energy Public License (CEPL-1.0)",
+  "manager": {
+    "id": "55c40fa100eb70762100023b",
+    "username": "wladston"
+  },
+  "slug": "code-energy-public-license-(cepl-1.0)",
+  "source": "https://tldrlegal.com/api/license/578419ce6cca83a54c00346b",
+  "description": "<p>Must keep the original copyright and license notice. Cannot use the name of copyright holders to promote products. It's redistribute, as long as it's made under similar terms.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include Notice",
+        "description": "Include a \"NOTICE\" file with attribution notes included."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      },
+      {
+        "title": "Rename",
+        "description": "Describes the ability to change software's name if modified/distributed."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>CODE ENERGY PUBLIC LICENSE 1.0 (CEPL-1.0)</p><p>&copy;&nbsp;&lt;year&gt; &lt;copyright holders&gt;</p><p>Usage of the works is permitted provided the following conditions are met:</p><ul><li>This instrument is retained with the works, such that any entity that uses&nbsp;the works is aware of this instrument.</li><li>Redistribution of the works must contain the complete source code for&nbsp;everything included in the distributed version, or alternatively instructions&nbsp;to freely download the complete source code. Moreover, the complete source&nbsp;code must be redistributable under similar conditions. The complete source&nbsp;code must contemplate all software modules and documentation included in the&nbsp;distributed software.</li><li>Entities remotely interacting with a server that uses the works must be&nbsp;provided with a link to this instrument upon the start of the iteration,&nbsp;along with information on how to download the complete source code for the&nbsp;software and documentation necessary to replicate the interaction.</li><li>The name of any copyright holders, their trademarks, and the names of any&nbsp;contributors may not be used to endorse or promote products derived from the&nbsp;works without permission.</li></ul><p>DISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.</p>"
+}

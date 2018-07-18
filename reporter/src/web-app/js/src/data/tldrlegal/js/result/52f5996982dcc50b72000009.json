@@ -1,0 +1,17 @@
+{
+  "id": "52f5996982dcc50b72000009",
+  "title": "SIP",
+  "manager": {
+    "id": "52f5993282dcc50b72000008",
+    "username": "Caleb"
+  },
+  "slug": "sip",
+  "source": "https://tldrlegal.com/api/license/52f5996982dcc50b72000009",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Goals and Timeline\r\n </p><p>The goals and timelines for published documents are as follows:</p><p>Initial Goals\r\n1. A comprehensive SIP interoperability requirements document -- February 2014, enabling:</p><p>Relay communication between relay service users and telephony users, allowing both deaf/hearing impaired and hearing parties to place the call using their preferred relay provider.\r\nPoint-to-point communication between deaf/hearing impaired individuals.\r\nEmergency service access.\r\n2. A valid collection of use cases to be enabled -- February 2014.</p><p>Main Goals\r\n3. Combined profiles for interaction between relay service Client User Agents, operator and relay service provider network components. -- May 2014.</p><p>4. A Client User Agent portability specification -- June 2014.</p><p>Subsequent Goals\r\n5. Specifications for other features identified in the charter and requirement specification but not included in the first profiles -- September 2014.</p>"
+}

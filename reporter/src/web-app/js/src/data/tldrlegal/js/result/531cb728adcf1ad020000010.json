@@ -1,0 +1,42 @@
+{
+  "id": "531cb728adcf1ad020000010",
+  "title": "DON'T BE A DICK PUBLIC LICENSE",
+  "manager": {
+    "id": "531cb6c8adcf1ad02000000c",
+    "username": "warmwaffles"
+  },
+  "slug": "don't-be-a-dick-public-license",
+  "source": "https://tldrlegal.com/api/license/531cb728adcf1ad020000010",
+  "description": "<p>As developers we all want to protect our code from dicks that try to steal, sell, infringe or just generally rip us off. For this we have licenses like GPL, MIT, etc.</p><p><a>http://www.dbad-license.org/</a></p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ]
+  },
+  "fulltext": "<h1>DON'T BE A DICK PUBLIC LICENSE</h1><blockquote>\r\n<p>Version 1, December 2009</p><p>Copyright (C) 2009 Philip Sturgeon <a href=\"mailto:email@philsturgeon.co.uk\">email@philsturgeon.co.uk</a></p></blockquote><p>Everyone is permitted to copy and distribute verbatim or modified copies of this license document, and changing it is allowed as long as the name is changed.</p><blockquote>\r\n<p>DON'T BE A DICK PUBLIC LICENSE TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</p></blockquote><ol>\r\n<li>Do whatever you like with the original work, just don't be a dick.<p>Being a dick includes - but is not limited to - the following instances:</p><p>1a. Outright copyright infringement - Don't just copy this and change the name.<br>1b. Selling the unmodified original with no work done what-so-ever, that's REALLY being a dick.<br>1c. Modifying the original work to contain hidden harmful content. That would make you a PROPER dick.</p></li><li>If you become rich through modifications, related works/services, or supporting the original work, share the love. Only a dick would make loads off this work and not buy the original work's creator(s) a pint.</li><li>Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.</li></ol>"
+}

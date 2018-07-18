@@ -1,0 +1,53 @@
+{
+  "id": "52c869359f62d56435000055",
+  "title": "BSD 3-Clause License (Revised)",
+  "shorthand": "bsd3",
+  "manager": {
+    "id": "528c0b975dc5e1e131000006",
+    "username": "kevin"
+  },
+  "slug": "bsd-3-clause-license-(revised)",
+  "source": "https://tldrlegal.com/api/license/52c869359f62d56435000055",
+  "description": "<p>The BSD 3-clause license allows you almost unlimited freedom with the software so long as you include the BSD copyright and license notice in it (found in Fulltext).&nbsp;</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      }
+    ]
+  },
+  "fulltext": "<p>The BSD 3-Clause License The following is a BSD 3-Clause (\"BSD New\" or \"BSD Simplified\") license template. To generate your own license, change the values of OWNER, ORGANIZATION and YEAR from their original values as given here, and substitute your own.</p><p>Note: You may omit clause 3 and still be OSD-conformant. Despite its colloquial name \"BSD New\", this is not the newest version of the BSD license; it was followed by the even newer BSD-2-Clause version, sometimes known as the \"Simplified BSD License\". On January 9th, 2008 the OSI Board approved BSD-2-Clause, which is used by FreeBSD and others. It omits the final \"no-endorsement\" clause and is thus roughly equivalent to the MIT License.</p><p>Historical Background: The original license used on BSD Unix had four clauses. The advertising clause (the third of four clauses) required you to acknowledge use of U.C. Berkeley code in your advertising of any product using that code. It was officially rescinded by the Director of the Office of Technology Licensing of the University of California on July 22nd, 1999. He states that clause 3 is \"hereby deleted in its entirety.\" The four clause license has not been approved by OSI. The license below does not contain the advertising clause.</p><p>This prelude is not part of the license.</p><p>OWNER = Regents of the University of California </p><p>ORGANIZATION = University of California, Berkeley </p><p>YEAR = 1998</p><p>In the original BSD license, both occurrences of the phrase \"COPYRIGHT HOLDERS AND CONTRIBUTORS\" in the disclaimer read \"REGENTS AND CONTRIBUTORS\".</p><h2>License template</h2><p>Copyright (c) $YEAR $OWNER, All rights reserved.</p><p>Redistribution and use in source and binary forms, with or without \nmodification, are permitted provided that the following conditions are \nmet:</p><ol>\n<li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. </li><li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</li><li>Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.&nbsp;</li></ol><p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>"
+}

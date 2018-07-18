@@ -1,0 +1,48 @@
+{
+  "id": "53a1eb6344c1715555000203",
+  "title": "Ruby License (Ruby)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "ruby-license-(ruby)",
+  "source": "https://tldrlegal.com/api/license/53a1eb6344c1715555000203",
+  "description": "<p>One of the licenses that Ruby uses, this is a very permissive license that allows you to negotiate terms with the author instead of fulfilling one of several requirements to distribute or modify code.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Disclose Source",
+        "description": "Describes whether you must disclose your source code when you distribute the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      }
+    ]
+  },
+  "fulltext": "<p>Ruby is copyrighted free software by Yukihiro Matsumoto &lt;matz@netlab.co.jp&gt;.&nbsp;</p><p>You can redistribute it and/or modify it under either the terms of the GPL  (see COPYING.txt file), or the conditions below: \r\n</p><p>1. You may make and give away verbatim copies of the source form of the  software without restriction, provided that you duplicate all of the original copyright notices and associated disclaimers. </p><p>2. You may modify your copy of the software in any way, provided that  you do at least ONE of the following: </p><p>a) place your modifications in the Public Domain or otherwise make them Freely Available, such as by posting said modifications to Usenet or an equivalent medium, or by allowing the author to include your modifications in the software. </p><p>b) use the modified software only within your corporation or organization. </p><p>c) rename any non-standard executables so the names do not conflict with standard executables, which must also be provided. </p><p>d) make other distribution arrangements with the author. </p><p>3. You may distribute the software in object code or executable form, provided that you do at least ONE of the following: </p><p>a) distribute the executables and library files of the software, together with instructions (in the manual page or equivalent) on where to get the original distribution. </p><p>b) accompany the distribution with the machine-readable source of the software. </p><p>c) give non-standard executables non-standard names, with instructions on where to get the original software distribution. </p><p>d) make other distribution arrangements with the author. </p><p>4. You may modify and include the part of the software into any other software (possibly commercial). But some files in the distribution are not written by the author, so that they are not under this terms. </p><p>They are gc.c(partly), utils.c(partly), regex.[ch], st.[ch] and some files under the ./missing directory. See each file for the copying condition. </p><p>5. The scripts and library files supplied as input to or produced as output from the software do not automatically fall under the copyright of the software, but belong to whomever generated them, and may be sold commercially, and may be aggregated with this software. </p><p>6. THIS SOFTWARE IS PROVIDED \"AS IS\" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</p>"
+}

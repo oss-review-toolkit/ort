@@ -1,0 +1,48 @@
+{
+  "id": "5772d3436cca83a54c002a45",
+  "title": "Wizardry License",
+  "manager": {
+    "id": "5772cdb26cca83a54c002a3f",
+    "username": "LordSaad"
+  },
+  "slug": "wizardry-license",
+  "source": "https://tldrlegal.com/api/license/5772d3436cca83a54c002a45",
+  "description": "<p>You can do whatever you want with the software, but you can't use it to generate money nor hold us liable. You must include this license in the derivative work and give us credit for the project.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>The Wizardry License</p><p><br>Copyright (c) 2016 Team Wizardry</p><p>Permission is hereby granted to any persons and/or organizations using this software to&nbsp;copy, modify, merge, publish, and distribute it.<br>Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income unless it is to be used as a part of a larger project (IE: \"mod packs\"), nor are they allowed to claim this software as their own.</p><p>The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from the organization \"Team Wizardry\".&nbsp;</p><p>Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Wizardry), as well as provide a link to the original project.</p><p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
+}

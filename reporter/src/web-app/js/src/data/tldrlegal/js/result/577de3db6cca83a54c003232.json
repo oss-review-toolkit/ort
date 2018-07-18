@@ -1,0 +1,17 @@
+{
+  "id": "577de3db6cca83a54c003232",
+  "title": "build setting",
+  "manager": {
+    "id": "577de39f6cca83a54c003231",
+    "username": "ericmarinay"
+  },
+  "slug": "build-setting",
+  "source": "https://tldrlegal.com/api/license/577de3db6cca83a54c003232",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

@@ -1,0 +1,17 @@
+{
+  "id": "553798684f296fbc2d0002e8",
+  "title": "kendoui",
+  "manager": {
+    "id": "553798264f296fbc2d0002e6",
+    "username": "Shiva"
+  },
+  "slug": "kendoui",
+  "source": "https://tldrlegal.com/api/license/553798684f296fbc2d0002e8",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>http://cdn.kendostatic.com/2014.3.1119/styles/kendo.common.min.css</p>"
+}

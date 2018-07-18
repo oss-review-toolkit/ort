@@ -1,0 +1,35 @@
+{
+  "id": "5773e9556cca83a54c002ad7",
+  "title": "Zed License",
+  "manager": {
+    "id": "5773de716cca83a54c002abe",
+    "username": "aarena"
+  },
+  "slug": "zed-license",
+  "source": "https://tldrlegal.com/api/license/5773e9556cca83a54c002ad7",
+  "description": "<p>You may copy and distribute the program freely.&nbsp;This license was found on the \"zed-csp\" component of texlive 2010. It is Free and GPL-compatible.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Rename",
+        "description": "Describes the ability to change software's name if modified/distributed."
+      }
+    ],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>You may copy and distribute this file freely. Any queries and complaints should be forwarded to Jim.Davies@comlab.ox.ac.uk. </p><p>If you make any changes to this file, please do not distribute the results under the name `zed-csp.sty'.</p>"
+}

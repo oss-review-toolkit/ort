@@ -1,0 +1,17 @@
+{
+  "id": "55e5abba00eb707621000646",
+  "title": "License of XHSK-Home's Source",
+  "manager": {
+    "id": "55e5ab1400eb707621000644",
+    "username": "Qinka"
+  },
+  "slug": "license-of-xhsk-home's-source",
+  "source": "https://tldrlegal.com/api/license/55e5abba00eb707621000646",
+  "description": "<p>N</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Copyright (c) 2015, Xidian-Haskell-Server-Keeper</p><p>All rights reserved.</p><p>Redistribution and use in source and binary forms, with or without</p><p>modification, are permitted provided that the following conditions are met:</p><p>* Redistributions of source code must retain the above copyright notice, this</p><p>  list of conditions and the following disclaimer.</p><p>* Redistributions in binary form must reproduce the above copyright notice,</p><p>  this list of conditions and the following disclaimer in the documentation</p><p>  and/or other materials provided with the distribution.</p><p>* Neither the name of XHSK-Home nor the names of its</p><p>  contributors may be used to endorse or promote products derived from</p><p>  this software without specific prior written permission.</p><p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"</p><p>AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</p><p>IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</p><p>DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE</p><p>FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</p><p>DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</p><p>SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER</p><p>CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,</p><p>OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</p><p>OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>"
+}

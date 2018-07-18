@@ -1,0 +1,17 @@
+{
+  "id": "537aa17db8c2c0604500004d",
+  "title": "No License",
+  "manager": {
+    "id": "537a9f3fb8c2c0604500004a",
+    "username": "filipesilva"
+  },
+  "slug": "no-license",
+  "source": "https://tldrlegal.com/api/license/537aa17db8c2c0604500004d",
+  "description": "<p>When no license is applied, it is under common law trademark.</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

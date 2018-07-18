@@ -1,0 +1,51 @@
+{
+  "id": "52e583d881519e003b000072",
+  "title": "Do What The F*ck You Want To Public License v2 (WTFPL-2.0)",
+  "shorthand": "wtfpl",
+  "manager": {
+    "id": "528c0b975dc5e1e131000006",
+    "username": "kevin"
+  },
+  "slug": "do-wtf-you-want-to-public-license-v2-(wtfpl-2.0)",
+  "source": "https://tldrlegal.com/api/license/52e583d881519e003b000072",
+  "description": "<p>The WTFPL is almost a public domain grant. It is super-permissive. Basically, do whatever you want. Note, however, that it is not a trademark license.</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE</p><p>Version 2, December 2004</p><p>Copyright (C) 2004 Sam Hocevar [sam@hocevar.net]</p><p>Everyone is permitted to copy and distribute verbatim or modified\n copies of this license document, and changing it is allowed as long\n as the name is changed.</p><p>DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE&nbsp;TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</p><p>0. You just DO WHAT THE FUCK YOU WANT TO.</p>"
+}

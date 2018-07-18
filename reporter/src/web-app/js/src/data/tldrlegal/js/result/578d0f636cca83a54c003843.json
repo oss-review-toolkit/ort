@@ -1,0 +1,17 @@
+{
+  "id": "578d0f636cca83a54c003843",
+  "title": "Apache 2",
+  "manager": {
+    "id": "578d0f0f6cca83a54c003841",
+    "username": "sisil"
+  },
+  "slug": "apache-2",
+  "source": "https://tldrlegal.com/api/license/578d0f636cca83a54c003843",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

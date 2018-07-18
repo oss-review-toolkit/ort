@@ -1,0 +1,17 @@
+{
+  "id": "57c6b1ef3836361d1c0002fc",
+  "title": "FECommonPod",
+  "manager": {
+    "id": "57c6b1c93836361d1c0002fb",
+    "username": "linchangfeng"
+  },
+  "slug": "fecommonpod",
+  "source": "https://tldrlegal.com/api/license/57c6b1ef3836361d1c0002fc",
+  "description": "<p>MIT</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>FECommonPod</p>"
+}

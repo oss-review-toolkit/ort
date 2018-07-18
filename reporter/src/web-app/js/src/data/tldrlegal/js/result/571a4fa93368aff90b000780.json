@@ -1,0 +1,32 @@
+{
+  "id": "571a4fa93368aff90b000780",
+  "title": "Use License",
+  "manager": {
+    "id": "571a4ec03368aff90b00077a",
+    "username": "WEBWIZARDPRO"
+  },
+  "slug": "use-license",
+  "source": "https://tldrlegal.com/api/license/571a4fa93368aff90b000780",
+  "description": "<p>This is a quick capture of the Terms &amp; Conditions of this License.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>Copyright (c) &lt;2016&gt; &lt;MIT & TLDRLegal&gt;</p><p>You \r\ncan modify, distribute and use this software for any purpose without \r\nany restrictions as long as you keep this copyright notice intact. The \r\nsoftware is provided without any warranty.</p>"
+}

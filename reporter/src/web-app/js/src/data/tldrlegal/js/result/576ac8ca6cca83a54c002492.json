@@ -1,0 +1,44 @@
+{
+  "id": "576ac8ca6cca83a54c002492",
+  "title": "Abstyles License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "abstyles-license",
+  "source": "https://tldrlegal.com/api/license/576ac8ca6cca83a54c002492",
+  "description": "<p>A copyleft license allowing the the distribution of verbatim copies and modified versions.&nbsp;GPL incompatible.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>This is APREAMBL.TEX, version 1.10e, written by Hans-Hermann Bode&nbsp;</p><p>(HHBODE@DOSUNI1.BITNET), for the BibTeX `adaptable' family, version 1.10. <br>See the file APREAMBL.DOC for a detailed documentation.\r\n</p><p>This program is distributed WITHOUT ANY WARRANTY, express or implied.</p><p>Copyright (C) 1991, 1992 Hans-Hermann Bode</p><p>Permission is granted to make and distribute verbatim copies of this document provided that the copyright notice and this permission notice are preserved on all copies.</p><p>Permission is granted to copy and distribute modified versions of this document under the conditions for verbatim copying, provided that the entire resulting derived work is distributed under the terms of a permission notice identical to this one.</p>"
+}

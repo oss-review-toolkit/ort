@@ -1,0 +1,47 @@
+{
+  "id": "576ae5af6cca83a54c00252d",
+  "title": "Glulxe License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "glulxe-license",
+  "source": "https://tldrlegal.com/api/license/576ae5af6cca83a54c00252d",
+  "description": "<p>This license is Free and GPL (v2 and v3) compatible. The attribution requirement here is GPLv2-compatible, based on the precedent of the NCSA/U of Illinois Open Source License.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [],
+    "can": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Place Warranty",
+        "description": "Describes the ability to place warranty on the software licensed."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      }
+    ]
+  },
+  "fulltext": "<p>The source code in this package is copyright 1999-2010 by Andrew Plotkin.</p><p>You may copy and distribute it freely, by any means and under any conditions, as long as the code and documentation is not changed. You may also incorporate this code into your own program and distribute that, or modify this code and use and distribute the modified version, as long as you retain a notice in your program or documentation which mentions my name and the URL shown above.</p>"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "576adcde6cca83a54c002505",
+  "title": "Dotseqn License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "dotseqn-license",
+  "source": "https://tldrlegal.com/api/license/576adcde6cca83a54c002505",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>Copyright (C) 1995 by Donald Arseneau</p><p>This file may be freely transmitted and reproduced, but it may not be changed unless the name is changed also (except that you may freely change the paper-size option for \\documentclass).</p><p>This notice must be left intact.</p>"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "53fcc2e209cc3f9e2400024f",
+  "title": "GL-2",
+  "manager": {
+    "id": "53fcc2d109cc3f9e2400024e",
+    "username": "clairebowen"
+  },
+  "slug": "gl-2",
+  "source": "https://tldrlegal.com/api/license/53fcc2e209cc3f9e2400024f",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

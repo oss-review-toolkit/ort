@@ -1,0 +1,44 @@
+{
+  "id": "576aeb486cca83a54c002552",
+  "title": "psfrag License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "psfrag-license",
+  "source": "https://tldrlegal.com/api/license/576aeb486cca83a54c002552",
+  "description": "<p>This license is considered Free, but GPL-incompatible only when used for TeX files. In all other use cases, this may not be true.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Notice",
+        "description": "Include a \"NOTICE\" file with attribution notes included."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>psfrag.dtx&nbsp;</p><p>Copyright (C) 1996 Craig Barratt, Michael C. Grant, and David Carlisle. <br>All rights are reserved.\r\n</p><p>This system is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. Don't come complaining to us if you modify this file and it doesn't work! If this file is modified by anyone but the authors, those changes and their authors must be explicitly stated HERE.</p>"
+}

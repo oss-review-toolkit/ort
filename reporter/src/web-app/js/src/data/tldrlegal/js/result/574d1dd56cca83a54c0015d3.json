@@ -1,0 +1,17 @@
+{
+  "id": "574d1dd56cca83a54c0015d3",
+  "title": "Freeware",
+  "manager": {
+    "id": "574d1d976cca83a54c0015d2",
+    "username": "surkum"
+  },
+  "slug": "freeware",
+  "source": "https://tldrlegal.com/api/license/574d1dd56cca83a54c0015d3",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>https://en.wikipedia.org/wiki/Freeware</p>"
+}

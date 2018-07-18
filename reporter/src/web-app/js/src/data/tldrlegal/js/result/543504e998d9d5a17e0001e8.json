@@ -1,0 +1,40 @@
+{
+  "id": "543504e998d9d5a17e0001e8",
+  "title": "JZLib",
+  "manager": {
+    "id": "54340e9998d9d5a17e000186",
+    "username": "fullstack2014"
+  },
+  "slug": "jzlib",
+  "source": "https://tldrlegal.com/api/license/543504e998d9d5a17e0001e8",
+  "description": "<p>The JZlib license allows you almost unlimited freedom with the software so long as you include the&nbsp;JZlib&nbsp;copyright notice in it (found in Fulltext).</p><p>Note: JZlib 0.0.* were released under the GNU LGPL license.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      },
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      }
+    ]
+  },
+  "fulltext": "<p>JZlib 0.0.* were released under the GNU LGPL license.  Later, we have switched</p><p>over to a BSD-style license. </p><p>------------------------------------------------------------------------------</p><p>Copyright (c) 2000-2011 ymnk, JCraft,Inc. All rights reserved.</p><p>Redistribution and use in source and binary forms, with or without</p><p>modification, are permitted provided that the following conditions are met:</p><p>  1. Redistributions of source code must retain the above copyright notice,</p><p>     this list of conditions and the following disclaimer.</p><p>  2. Redistributions in binary form must reproduce the above copyright </p><p>     notice, this list of conditions and the following disclaimer in </p><p>     the documentation and/or other materials provided with the distribution.</p><p>  3. The names of the authors may not be used to endorse or promote products</p><p>     derived from this software without specific prior written permission.</p><p>THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,</p><p>INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND</p><p>FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JCRAFT,</p><p>INC. OR ANY CONTRIBUTORS TO THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT,</p><p>INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</p><p>LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,</p><p>OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF</p><p>LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING</p><p>NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,</p><p>EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>"
+}

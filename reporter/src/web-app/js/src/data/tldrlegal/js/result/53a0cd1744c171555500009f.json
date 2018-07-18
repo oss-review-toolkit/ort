@@ -1,0 +1,48 @@
+{
+  "id": "53a0cd1744c171555500009f",
+  "title": "Independent JPEG Group License (IJG)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "independent-jpeg-group-license-(ijg)",
+  "source": "https://tldrlegal.com/api/license/53a0cd1744c171555500009f",
+  "description": "<p>A very specific license that requires you to give credit to the authors in a way stated in the fulltext.&nbsp;</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Sublicense",
+        "description": "Describes the ability for you to grant/extend a license to the software."
+      }
+    ]
+  },
+  "fulltext": "<p>Independent JPEG Group License</p><p><br>LEGAL ISSUES <br>============</p><p>In plain English:</p><p>1. We don't promise that this software works. (But if you find any bugs, <br>please let us know!) <br>2. You can use this software for whatever you want. You don't have to pay us. <br>3. You may not pretend that you wrote this software. If you use it in a <br>program, you must acknowledge somewhere in your documentation that <br>you've used the IJG code.</p><p>In legalese:</p><p>The authors make NO WARRANTY or representation, either express or implied, <br>with respect to this software, its quality, accuracy, merchantability, or <br>fitness for a particular purpose. This software is provided \"AS IS\", and you, <br>its user, assume the entire risk as to its quality and accuracy.</p><p>This software is copyright (C) 1991-1998, Thomas G. Lane. <br>All Rights Reserved except as specified below.</p><p>Permission is hereby granted to use, copy, modify, and distribute this <br>software (or portions thereof) for any purpose, without fee, subject to these <br>conditions: <br>(1) If any part of the source code for this software is distributed, then this <br>README file must be included, with this copyright and no-warranty notice <br>unaltered; and any additions, deletions, or changes to the original files <br>must be clearly indicated in accompanying documentation. <br>(2) If only executable code is distributed, then the accompanying <br>documentation must state that \"this software is based in part on the work of <br>the Independent JPEG Group\". <br>(3) Permission for use of this software is granted only if the user accepts <br>full responsibility for any undesirable consequences; the authors accept <br>NO LIABILITY for damages of any kind.</p><p>These conditions apply to any software derived from or based on the IJG code, <br>not just to the unmodified library. If you use our work, you ought to <br>acknowledge us.</p><p>Permission is NOT granted for the use of any IJG author's name or company name <br>in advertising or publicity relating to this software or products derived from <br>it. This software may be referred to only as \"the Independent JPEG Group's <br>software\".</p><p>We specifically permit and encourage the use of this software as the basis of <br>commercial products, provided that all warranty or liability claims are <br>assumed by the product vendor.</p><p><br>ansi2knr.c is included in this distribution by permission of L. Peter Deutsch, <br>sole proprietor of its copyright holder, Aladdin Enterprises of Menlo Park, CA. <br>ansi2knr.c is NOT covered by the above copyright and conditions, but instead <br>by the usual distribution terms of the Free Software Foundation; principally, <br>that you must include source code if you redistribute it. (See the file <br>ansi2knr.c for full details.) However, since ansi2knr.c is not needed as part <br>of any program generated from the IJG code, this does not limit you more than <br>the foregoing paragraphs do.</p><p>The Unix configuration script \"configure\" was produced with GNU Autoconf. <br>It is copyright by the Free Software Foundation but is freely distributable. <br>The same holds for its supporting scripts (config.guess, config.sub, <br>ltconfig, ltmain.sh). Another support script, install-sh, is copyright <br>by M.I.T. but is also freely distributable.</p><p>It appears that the arithmetic coding option of the JPEG spec is covered by <br>patents owned by IBM, AT&T, and Mitsubishi. Hence arithmetic coding cannot <br>legally be used without obtaining one or more licenses. For this reason, <br>support for arithmetic coding has been removed from the free JPEG software. <br>(Since arithmetic coding provides only a marginal gain over the unpatented <br>Huffman mode, it is unlikely that very many implementations will support it.) <br>So far as we are aware, there are no patent restrictions on the remaining <br>code.</p><p>The IJG distribution formerly included code to read and write GIF files. <br>To avoid entanglement with the Unisys LZW patent, GIF reading support has <br>been removed altogether, and the GIF writer has been simplified to produce <br>\"uncompressed GIFs\". This technique does not use the LZW algorithm; the <br>resulting GIF files are larger than usual, but are readable by all standard <br>GIF decoders.</p><p>We are required to state that <br>\"The Graphics Interchange Format(c) is the Copyright property of <br>CompuServe Incorporated. GIF(sm) is a Service Mark property of <br>CompuServe Incorporated.\"</p>"
+}

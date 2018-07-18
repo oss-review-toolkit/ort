@@ -1,0 +1,17 @@
+{
+  "id": "5673cf3267eca599140010fc",
+  "title": "Public Domain",
+  "manager": {
+    "id": "528c0b975dc5e1e131000006",
+    "username": "kevin"
+  },
+  "slug": "public-domain",
+  "source": "https://tldrlegal.com/api/license/5673cf3267eca599140010fc",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": ""
+}

@@ -1,0 +1,40 @@
+{
+  "id": "547c767913c436691100001b",
+  "title": "Charity Software License",
+  "manager": {
+    "id": "547c722413c4366911000019",
+    "username": "thewreck"
+  },
+  "slug": "charity-software-license",
+  "source": "https://tldrlegal.com/api/license/547c767913c436691100001b",
+  "description": "<p>The intention of this license is to distribute software in the spirit of software made to donate money to a charity.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "State Changes",
+        "description": "Stating significant changes made to software."
+      },
+      {
+        "title": "Include Copyright",
+        "description": "Describes whether the original copyright must be retained."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>Copyright (c) &lt;year&gt; &lt;copyright holders&gt;</p><p>Permission is hereby granted, free of charge, to any person (the \"Person\") obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software, including the rights to use, copy, modify, merge,&nbsp;publish,&nbsp;distribute the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p><p>1. The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p><p>2. Under no circumstances shall the Person&nbsp;be permitted, allowed or authorized to commercially exploit the Software.</p><p>3.&nbsp;Changes made to the original Software shall be&nbsp;labeled, demarcated or otherwise identified and attributed to the Person.</p><p>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>"
+}

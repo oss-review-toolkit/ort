@@ -1,0 +1,17 @@
+{
+  "id": "5645f29700eb70762100205c",
+  "title": "webressources",
+  "manager": {
+    "id": "5645f27700eb70762100205b",
+    "username": "webressources"
+  },
+  "slug": "webressources",
+  "source": "https://tldrlegal.com/api/license/5645f29700eb70762100205c",
+  "description": "",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>2015</p>"
+}

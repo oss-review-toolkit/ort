@@ -1,0 +1,40 @@
+{
+  "id": "53a0f7bd44c17155550000f7",
+  "title": "Multics License (Multics)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "multics-license-(multics)",
+  "source": "https://tldrlegal.com/api/license/53a0f7bd44c17155550000f7",
+  "description": "<p>The legal text of this license is only a paragraph long and both protects the authors' trademarks and requires users to include this license.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>Multics License</p><p>Historical Background</p><p>This edition of the Multics software materials and documentation is <br>provided and donated to Massachusetts Institute of Technology by Group <br>BULL including BULL HN Information Systems Inc. as a contribution to <br>computer science knowledge. This donation is made also to give evidence <br>of the common contributions of Massachusetts Institute of Technology, <br>Bell Laboratories, General Electric, Honeywell Information Systems <br>Inc., Honeywell BULL Inc., Groupe BULL and BULL HN Information Systems <br>Inc. to the development of this operating system. Multics development <br>was initiated by Massachusetts Institute of Technology Project MAC <br>(1963-1970), renamed the MIT Laboratory for Computer Science and <br>Artificial Intelligence in the mid 1970s, under the leadership of <br>Professor Fernando Jose Corbato. Users consider that Multics provided the <br>best software architecture for managing computer hardware properly and <br>for executing programs. Many subsequent operating systems incorporated <br>Multics principles. Multics was distributed in 1975 to 2000 by Group <br>Bull in Europe , and in the U.S. by Bull HN Information Systems Inc., as <br>successor in interest by change in name only to Honeywell Bull Inc. and <br>Honeywell Information Systems Inc. .</p><p>-----------------------------------------------------------</p><p>Permission to use, copy, modify, and distribute these programs and their <br>documentation for any purpose and without fee is hereby granted,provided <br>that the below copyright notice and historical background appear in all <br>copies and that both the copyright notice and historical background and <br>this permission notice appear in supporting documentation, and that <br>the names of MIT, HIS, BULL or BULL HN not be used in advertising or <br>publicity pertaining to distribution of the programs without specific <br>prior written permission. <br>Copyright 1972 by Massachusetts Institute of Technology and Honeywell Information <br>Systems Inc. <br>Copyright 2006 by BULL HN Information Systems Inc. <br>Copyright 2006 by Bull SAS <br>All Rights Reserved</p>"
+}

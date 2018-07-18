@@ -1,0 +1,48 @@
+{
+  "id": "576aeb806cca83a54c002557",
+  "title": "psutils License",
+  "manager": {
+    "id": "576ab7aa6cca83a54c002483",
+    "username": "jgreenfield"
+  },
+  "slug": "psutils-license",
+  "source": "https://tldrlegal.com/api/license/576aeb806cca83a54c002557",
+  "description": "<p>Permissive license, allows you to do nearly anything&nbsp;so long as you acknowledge the author, and give people the originals if they want them.</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include Notice",
+        "description": "Include a \"NOTICE\" file with attribution notes included."
+      },
+      {
+        "title": "Include Original",
+        "description": "Describes whether copies of the original software or instructions to obtain copies must be distributed with the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Private Use",
+        "description": "Describes the ability to use/modify software freely without distributing it."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      }
+    ]
+  },
+  "fulltext": "<p>PS Utilities Package</p><p>The constituent files of this package listed below are copyright (C) 1991-1995 Angus J. C. Duggan.</p><p>LICENSE Makefile.msc Makefile.nt\tMakefile.os2 <br>Makefile.unix README config.h descrip.mms <br>epsffit.c epsffit.man\textractres.man extractres.pl <br>fixdlsrps.man fixdlsrps.pl fixfmps.man\tfixfmps.pl <br>fixmacps.man fixmacps.pl\tfixpsditps.man fixpsditps.pl <br>fixpspps.man fixpspps.pl\tfixscribeps.man fixscribeps.pl <br>fixtpps.man\tfixtpps.pl\tfixwfwps.man fixwfwps.pl <br>fixwpps.man\tfixwpps.pl\tfixwwps.man\tfixwwps.pl <br>getafm getafm.man\tincluderes.man includeres.pl <br>maketext patchlev.h\tpsbook.c psbook.man <br>pserror.c pserror.h psmerge.man\tpsmerge.pl <br>psnup.c psnup.man psresize.c\tpsresize.man <br>psselect.c\tpsselect.man psspec.c psspec.h <br>pstops.c pstops.man\tpsutil.c psutil.h <br>showchar</p><p>They may be copied and used for any purpose (including distribution as part of a for-profit product), provided:</p><p>1) The original attribution of the programs is clearly displayed in the product and/or documentation, even if the programs are modified and/or renamed as part of the product.</p><p>2) The original source code of the programs is provided free of charge (except for reasonable distribution costs). For a definition of reasonable distribution costs, see the Gnu General Public License or Larry Wall's Artistic License (provided with the Perl 4 kit). The GPL and Artistic License in NO WAY affect this license; they are merely used as examples of the spirit in which it is intended.</p><p>3) These programs are provided \"as-is\". No warranty or guarantee of their fitness for any particular task is provided. Use of these programs is completely at your own risk.</p><p>Basically, I don't mind how you use the programs so long as you acknowledge the author, and give people the originals if they want them.</p>"
+}

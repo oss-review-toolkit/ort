@@ -1,0 +1,17 @@
+{
+  "id": "57454fae6cca83a54c001238",
+  "title": "TestCocopods",
+  "manager": {
+    "id": "57454f756cca83a54c001237",
+    "username": "Yuan"
+  },
+  "slug": "testcocopods",
+  "source": "https://tldrlegal.com/api/license/57454fae6cca83a54c001238",
+  "description": "<p>hello</p>",
+  "summary": {
+    "must": [],
+    "cannot": [],
+    "can": []
+  },
+  "fulltext": "<p>hello,world,test cocopods</p>"
+}

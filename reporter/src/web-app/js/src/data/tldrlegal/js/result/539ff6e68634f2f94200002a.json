@@ -1,0 +1,48 @@
+{
+  "id": "539ff6e68634f2f94200002a",
+  "title": "Attribution Assurance License (AAL)",
+  "manager": {
+    "id": "52d6fd46699b50d11d00000a",
+    "username": "Henry"
+  },
+  "slug": "attribution-assurance-license-(aal)",
+  "source": "https://tldrlegal.com/api/license/539ff6e68634f2f94200002a",
+  "description": "<p>A simple, BSD-adapted license that forces the author to display specified personal information when the software is launched.&nbsp;</p>",
+  "summary": {
+    "must": [
+      {
+        "title": "Include License",
+        "description": "Including the full text of license in modified software."
+      },
+      {
+        "title": "Give Credit",
+        "description": "Describes the need to give explicit credit to the author when distributing the software."
+      }
+    ],
+    "cannot": [
+      {
+        "title": "Hold Liable",
+        "description": "Describes the warranty and if the software/license owner can be charged for damages."
+      },
+      {
+        "title": "Use Trademark",
+        "description": "Describes the allowance of using contributors' names, trademarks or logos."
+      }
+    ],
+    "can": [
+      {
+        "title": "Modify",
+        "description": "Describes the ability to modify the software and create derivatives."
+      },
+      {
+        "title": "Distribute",
+        "description": "Describes the ability to distribute original or modified (derivative) works."
+      },
+      {
+        "title": "Commercial Use",
+        "description": "Describes the ability to use the software for commercial purposes."
+      }
+    ]
+  },
+  "fulltext": "<p>Attribution Assurance License&nbsp;</p><p>Copyright (c) 2002 by AUTHOR PROFESSIONAL IDENTIFICATION * URL <br>\"PROMOTIONAL SLOGAN FOR AUTHOR'S PROFESSIONAL PRACTICE\"\r\n</p><p>All Rights Reserved <br>ATTRIBUTION ASSURANCE LICENSE (adapted from the original BSD license)</p><p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the conditions below are met. These conditions require a modest attribution to &lt;AUTHOR&gt; (the \"Author\"), who hopes that its promotional value may help justify the thousands of dollars in otherwise billable time invested in writing this and other freely available, open-source software.</p><p>1. Redistributions of source code, in whole or part and with or without modification (the \"Code\"), must prominently display this GPG-signed text in verifiable form.</p><p>2. Redistributions of the Code in binary form must be accompanied by this GPG-signed text in any documentation and, each time the resulting executable program or a program dependent thereon is launched, a prominent display (e.g., splash screen or banner text) of the Author's attribution information, which includes: <br>(a) Name (\"AUTHOR\"), <br>(b) Professional identification (\"PROFESSIONAL IDENTIFICATION\"), and <br>(c) URL (\"URL\").</p><p>3. Neither the name nor any trademark of the Author may be used to endorse or promote products derived from this software without specific prior written permission.</p><p>4. Users are entirely responsible, to the exclusion of the Author and any other persons, for compliance with (1) regulations set by owners or administrators of employed equipment, (2) licensing terms of any other software, and (3) local regulations regarding use, including those regarding import, export, and use of encryption software.</p><p>THIS FREE SOFTWARE IS PROVIDED BY THE AUTHOR \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR ANY CONTRIBUTOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, EFFECTS OF UNAUTHORIZED OR MALICIOUS NETWORK ACCESS; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p><p>--End of License</p><p>Originally written by Edwin A. Suominen for licensing his PRIVARIA secure networking software (see www.privaria.org). The author, who is not an attorney, places this license template into the public domain along with a complete disclaimer of any warranty or responsibility for its content or legal efficacy. You may use or modify the language freely, but entirely at your own risk.</p>"
+}
