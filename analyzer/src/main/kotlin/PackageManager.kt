@@ -100,7 +100,7 @@ abstract class PackageManager(protected val config: AnalyzerConfiguration) {
             Files.walkFileTree(directory.toPath(), object : SimpleFileVisitor<Path>() {
                 override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
                     if (IGNORED_DIRECTORY_MATCHERS.any { it.matches(dir) }) {
-                        println("Skipping directory '$dir' as it is part of the ignore list.")
+                        log.info { "Skipping directory '$dir' as it is part of the ignore list." }
                         return FileVisitResult.SKIP_SUBTREE
                     }
 
@@ -190,7 +190,7 @@ abstract class PackageManager(protected val config: AnalyzerConfiguration) {
         val result = mutableMapOf<File, ProjectAnalyzerResult>()
 
         prepareResolution(definitionFiles).forEach { definitionFile ->
-            println("Resolving ${javaClass.simpleName} dependencies for '$definitionFile'...")
+            log.info { "Resolving ${javaClass.simpleName} dependencies for '$definitionFile'..." }
 
             val elapsed = measureTimeMillis {
                 try {
