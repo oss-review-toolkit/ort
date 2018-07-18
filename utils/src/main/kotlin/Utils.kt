@@ -411,5 +411,7 @@ fun String.isValidUrl() =
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
  */
 fun Throwable.showStackTrace() {
+    // We cannot use a function expression for a single "if"-statement, see
+    // https://discuss.kotlinlang.org/t/if-operator-in-function-expression/7227.
     if (printStackTrace) printStackTrace()
 }
