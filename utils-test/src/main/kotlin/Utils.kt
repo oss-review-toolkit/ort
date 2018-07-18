@@ -27,7 +27,7 @@ fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, defi
                         url: String? = null, revision: String? = null, path: String? = null,
                         urlProcessed: String? = null): String {
     fun String.replaceIfNotNull(strings: Pair<String, String>?) =
-            if (strings != null) replaceFirst(strings.first, strings.second) else this
+            if (strings != null) replace(strings.first, strings.second) else this
     fun String.replaceIfNotNull(oldValue: String, newValue: String?) =
             if (newValue != null) replace(oldValue, newValue) else this
 
