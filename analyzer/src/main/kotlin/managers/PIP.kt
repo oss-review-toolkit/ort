@@ -350,7 +350,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
-        println("Creating a virtualenv for the '${workingDir.name}' project directory...")
+        log.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
         val virtualEnvDir = createTempDir(workingDir.name.padEnd(3, '_'), "virtualenv")
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
 
@@ -378,7 +378,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
         // TODO: Find a way to make installation of packages with native extensions work on Windows where often
         // the appropriate compiler is missing / not set up, e.g. by using pre-built packages from
         // http://www.lfd.uci.edu/~gohlke/pythonlibs/
-        println("Installing dependencies for the '${workingDir.name}' project directory...")
+        log.info { "Installing dependencies for the '${workingDir.name}' project directory..." }
         pip = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", ".")
