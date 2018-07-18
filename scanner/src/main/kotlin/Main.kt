@@ -38,7 +38,6 @@ import com.here.ort.model.ScanRecord
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
-import com.here.ort.model.VcsInfo
 import com.here.ort.model.mapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -271,8 +270,7 @@ object Main {
             ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 
-        val vcsInfo = VersionControlSystem.forDirectory(inputPath.takeIf { it.isDirectory }
-                ?: inputPath.parentFile)?.getInfo(inputPath) ?: VcsInfo.EMPTY
+        val vcsInfo = VersionControlSystem.getInfo(inputPath)
         val config = AnalyzerConfiguration(false, true)
         val analyzerResult = AnalyzerResultBuilder(config, vcsInfo).build()
 

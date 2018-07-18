@@ -45,8 +45,8 @@ abstract class VersionControlSystem {
          */
         val ALL by lazy {
             listOf(
-                    GitRepo,
                     Git,
+                    GitRepo,
                     Mercurial,
                     Subversion,
                     Cvs
@@ -93,12 +93,15 @@ abstract class VersionControlSystem {
                 }
 
         /**
-         * Return the relative path to [file] with respect to the VCS root or null if [file] is not in a VCS repository.
-         * This is a convenience wrapper around [WorkingTree.getPathToRoot] that creates a temporary working tree based
-         * on [file].
+         * Conveniently return all VCS information for a specific [path]. If [path] points to a nested VCS (like an
+         * individual Git working tree of GitRepo), information for the nested VCS is returned.
          */
-        fun getPathToRoot(file: File) = forDirectory(file.takeIf { it.isDirectory } ?: file.parentFile)
-                ?.getPathToRoot(file)
+        fun getInfo(path: File): VcsInfo {
+            val dir = path.takeIf { it.isDirectory } ?: path.parentFile
+            return VersionControlSystem.forDirectory(dir)?.let { workingTree ->
+                workingTree.getInfo().copy(path = workingTree.getPathToRoot(path))
+            } ?: VcsInfo.EMPTY
+        }
 
         /**
          * Decompose a [vcsUrl] into any contained VCS information.
@@ -206,12 +209,7 @@ abstract class VersionControlSystem {
          * Conveniently return all VCS information about how this working tree was created, so it could be easily
          * recreated from that information.
          */
-        open fun getInfo() = getInfo(workingDir)
-
-        /**
-         * Conveniently return all VCS information for a specific [path] in the working tree.
-         */
-        fun getInfo(path: File) = VcsInfo(getType(), getRemoteUrl(), getRevision(), path = getPathToRoot(path))
+        open fun getInfo() = VcsInfo(getType(), getRemoteUrl(), getRevision())
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.

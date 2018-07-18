@@ -127,7 +127,7 @@ class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
                             name = dependencyTreeModel.name,
                             version = dependencyTreeModel.version
                     ),
-                    definitionFilePath = VersionControlSystem.getPathToRoot(definitionFile) ?: "",
+                    definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
