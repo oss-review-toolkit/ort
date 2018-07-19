@@ -32,6 +32,7 @@ import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.ProjectAnalyzerResult
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -76,7 +77,8 @@ fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
         }
     }
 
-    val analyzerResultBuilder = AnalyzerResultBuilder(config, VersionControlSystem.getInfo(absoluteProjectPath))
+    val vcs = VersionControlSystem.forDirectory(absoluteProjectPath)?.getInfo() ?: VcsInfo.EMPTY
+    val analyzerResultBuilder = AnalyzerResultBuilder(config, vcs)
 
     // Resolve dependencies per package manager.
     managedDefinitionFiles.forEach { manager, files ->
