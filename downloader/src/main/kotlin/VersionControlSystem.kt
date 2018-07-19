@@ -99,6 +99,7 @@ abstract class VersionControlSystem {
         fun getInfo(path: File): VcsInfo {
             val dir = path.takeIf { it.isDirectory } ?: path.parentFile
             return VersionControlSystem.forDirectory(dir)?.let { workingTree ->
+                // Always return the relative path to the (nested) VCS root.
                 workingTree.getInfo().copy(path = workingTree.getPathToRoot(path))
             } ?: VcsInfo.EMPTY
         }
@@ -209,7 +210,7 @@ abstract class VersionControlSystem {
          * Conveniently return all VCS information about how this working tree was created, so it could be easily
          * recreated from that information.
          */
-        open fun getInfo() = VcsInfo(getType(), getRemoteUrl(), getRevision())
+        open fun getInfo() = VcsInfo(getType(), getRemoteUrl(), getRevision(), path = getPathToRoot(workingDir))
 
         /**
          * Return true if the [workingDir] is managed by this VCS, false otherwise.
