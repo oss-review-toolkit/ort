@@ -27,7 +27,6 @@ import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -53,7 +52,7 @@ class GitRepoTest : StringSpec() {
     }
 
     init {
-        "Analyzer correctly reports GitRepo VcsInfo for Bundler projects".config(tags = setOf(ExpensiveTag)) {
+        "Analyzer correctly reports GitRepo VcsInfo for Bundler projects" {
             val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
