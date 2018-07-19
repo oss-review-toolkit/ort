@@ -93,6 +93,11 @@ abstract class VersionControlSystem {
                 }
 
         /**
+         * Return all VCS information about a [workingDir]. This is a convenience wrapper around [WorkingTree.getInfo].
+         */
+        fun getCloneInfo(workingDir: File) = VersionControlSystem.forDirectory(workingDir)?.getInfo() ?: VcsInfo.EMPTY
+
+        /**
          * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like an individual Git
          * working tree of GitRepo), information for the nested VCS is returned.
          */
