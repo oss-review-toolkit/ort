@@ -171,6 +171,14 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
             val name = definitionFile.parentFile.name +
                     definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
             val version = VersionControlSystem.forDirectory(workingDir)?.getRevision() ?: ""
+
+            val pythonVersionLines = definitionFile.readLines().filter { it.contains("python_version") }
+            if (pythonVersionLines.isNotEmpty()) {
+                log.debug {
+                    "Some dependencies have Python version requirements:\n$pythonVersionLines"
+                }
+            }
+
             listOf(name, version, "")
         }
 
