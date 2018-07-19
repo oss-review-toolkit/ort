@@ -59,7 +59,7 @@ class Unmanaged(config: AnalyzerConfiguration) : PackageManager(config) {
                 definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = VersionControlSystem.forDirectory(definitionFile)?.getInfo() ?: VcsInfo.EMPTY,
+                vcsProcessed = VersionControlSystem.getCloneInfo(definitionFile),
                 homepageUrl = "",
                 scopes = sortedSetOf()
         )

@@ -170,7 +170,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
             // plus what "*" expands to as the project name and the VCS revision, if any, as the project version.
             val name = definitionFile.parentFile.name +
                     definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
-            val version = VersionControlSystem.forDirectory(workingDir)?.getRevision() ?: ""
+            val version = VersionControlSystem.getCloneInfo(workingDir).revision
 
             val pythonVersionLines = definitionFile.readLines().filter { it.contains("python_version") }
             if (pythonVersionLines.isNotEmpty()) {
