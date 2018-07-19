@@ -270,7 +270,7 @@ object Main {
             ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 
-        val vcsInfo = VersionControlSystem.getInfo(inputPath)
+        val vcsInfo = VersionControlSystem.getPathInfo(inputPath)
         val config = AnalyzerConfiguration(false, true)
         val analyzerResult = AnalyzerResultBuilder(config, vcsInfo).build()
 

@@ -155,7 +155,7 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
                         name = mavenProject.artifactId,
                         version = mavenProject.version
                 ),
-                definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: ""),

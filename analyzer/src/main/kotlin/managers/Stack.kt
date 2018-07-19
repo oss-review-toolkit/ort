@@ -145,7 +145,7 @@ class Stack(config: AnalyzerConfiguration) : PackageManager(config) {
 
         val project = Project(
                 id = projectId,
-                definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
