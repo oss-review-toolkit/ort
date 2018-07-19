@@ -119,7 +119,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
 
             val project = Project(
                     id = projectId,
-                    definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     declaredLicenses = declaredLicenses.toSortedSet(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(workingDir, homepageUrl = homepageUrl),

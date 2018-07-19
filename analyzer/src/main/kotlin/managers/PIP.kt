@@ -290,7 +290,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
                         name = projectName,
                         version = projectVersion
                 ),
-                definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = declaredLicenses,
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, homepageUrl = projectHomepage),

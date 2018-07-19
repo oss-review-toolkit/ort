@@ -93,10 +93,10 @@ abstract class VersionControlSystem {
                 }
 
         /**
-         * Conveniently return all VCS information for a specific [path]. If [path] points to a nested VCS (like an
-         * individual Git working tree of GitRepo), information for the nested VCS is returned.
+         * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like an individual Git
+         * working tree of GitRepo), information for the nested VCS is returned.
          */
-        fun getInfo(path: File): VcsInfo {
+        fun getPathInfo(path: File): VcsInfo {
             val dir = path.takeIf { it.isDirectory } ?: path.parentFile
             return VersionControlSystem.forDirectory(dir)?.let { workingTree ->
                 // Always return the relative path to the (nested) VCS root.

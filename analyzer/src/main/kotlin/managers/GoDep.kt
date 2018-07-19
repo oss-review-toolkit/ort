@@ -125,7 +125,7 @@ class GoDep(config: AnalyzerConfiguration) : PackageManager(config) {
                 config = config,
                 project = Project(
                         id = Identifier(provider, "", projectDir.name, projectVcs.revision),
-                        definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = sortedSetOf(),
                         vcs = VcsInfo.EMPTY,
                         vcsProcessed = projectVcs,

@@ -446,7 +446,7 @@ open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
                         name = name,
                         version = version
                 ),
-                definitionFilePath = VersionControlSystem.getInfo(packageJson).path,
+                definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
                 declaredLicenses = declaredLicenses,
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),

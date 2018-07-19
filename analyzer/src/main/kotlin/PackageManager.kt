@@ -169,7 +169,7 @@ abstract class PackageManager(protected val config: AnalyzerConfiguration) {
          */
         fun processProjectVcs(projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY,
                               homepageUrl: String = ""): VcsInfo {
-            val vcsFromWorkingTree = VersionControlSystem.getInfo(projectDir).normalize()
+            val vcsFromWorkingTree = VersionControlSystem.getPathInfo(projectDir).normalize()
             return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, homepageUrl))
         }
     }
@@ -207,7 +207,7 @@ abstract class PackageManager(protected val config: AnalyzerConfiguration) {
                                     name = relativePath,
                                     version = ""
                             ),
-                            definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 

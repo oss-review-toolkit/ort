@@ -84,7 +84,7 @@ class PhpComposerTest : StringSpec() {
                     .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
                     File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
-                    definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -101,7 +101,7 @@ class PhpComposerTest : StringSpec() {
                     .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
                     File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
-                    definitionFilePath = VersionControlSystem.getInfo(definitionFile).path,
+                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsDir.getPathToRoot(definitionFile.parentFile)
