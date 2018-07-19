@@ -75,11 +75,22 @@ abstract class VersionControlSystem {
         }
 
         /**
-         * Return the applicable VCS for the given [vcsDirectory], or null if none is applicable.
+         * A map to cache the [WorkingTree], if any, for previously queried directories. This helps to speed up
+         * subsequent queries for the same directories and to reduce log output from running external VCS tools.
          */
-        fun forDirectory(vcsDirectory: File) =
+        private val dirToVcsMap = mutableMapOf<File, WorkingTree?>()
+
+        /**
+         * Return the applicable VCS working tree for the given [vcsDirectory], or null if none is applicable.
+         */
+        fun forDirectory(vcsDirectory: File): WorkingTree? {
+            val absoluteVcsDirectory = vcsDirectory.absoluteFile
+
+            return if (absoluteVcsDirectory in dirToVcsMap) {
+                dirToVcsMap[absoluteVcsDirectory]
+            } else {
                 ALL.asSequence().mapNotNull {
-                    if (it.isInPath()) it.getWorkingTree(vcsDirectory) else null
+                    if (it.isInPath()) it.getWorkingTree(absoluteVcsDirectory) else null
                 }.find {
                     try {
                         it.isValid()
@@ -91,7 +102,11 @@ abstract class VersionControlSystem {
 
                         false
                     }
+                }.also {
+                    dirToVcsMap[absoluteVcsDirectory] = it
                 }
+            }
+        }
 
         /**
          * Return all VCS information about a [workingDir]. This is a convenience wrapper around [WorkingTree.getInfo].
