@@ -138,11 +138,11 @@ class GoDep(config: AnalyzerConfiguration) : PackageManager(config) {
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File {
         if (vcs == VcsInfo.EMPTY) {
-            return Paths.get(gopath.path, "src", projectDir.name).toFile().canonicalFile
+            return Paths.get(gopath.path, "src", projectDir.name).toAbsolutePath().toFile()
         }
 
         val uri = URI(vcs.url)
-        return Paths.get(gopath.path, "src", uri.host, uri.path).toFile().canonicalFile
+        return Paths.get(gopath.path, "src", uri.host, uri.path).toAbsolutePath().toFile()
     }
 
     private fun resolveProjectRoot(definitionFile: File): File {
