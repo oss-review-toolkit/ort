@@ -65,9 +65,9 @@ export const metadata = {
 };
 
 export const data = (() => {
-    let createLicenseWithProxies = (license) => {
-    let legend = (() => {
-        let rules = {};
+    const createLicenseWithProxies = (license) => {
+        const legend = (() => {
+            const rules = {};
 
             // Convert rules which is the licens esummary legenda
             // from array to object for easier and faster lookups
@@ -80,24 +80,27 @@ export const data = (() => {
             });
 
             return rules;
-        })(),
-     /* Using ES6 Proxy to create Object which includes properties with extended arrays of strings.
-        * In these extended string arrays you access an array item based on its value and 
-        * if you do so not a string but object with additional information will be returned.
-        *
-        * Run choosealicense.data['Apache-2.0'].conditions in console will return:
-        * Proxy {0: "include-copyright", 1: "document-changes", length: 2}
-        *
-        * Run choosealicense.data['Apache-2.0'].conditions['include-copyright'] in console will return:
-        * {
-        *     description: "A copy of the license and copyright notice must be included with the software.",
-        *     label: "License and copyright notice",
-        *     tag: "include-copyright"
-        *.}
-        *
-        * For more details on ES6 proxy please see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
-        */
-        applyProxy = (type, obj) => {
+        })();
+        /* Using ES6 Proxy to create Object which includes properties
+         * with extended arrays of strings.
+         * In these extended string arrays you access an array item based on its value and
+         * if you do so not a string but object with additional information will be returned.
+         *
+         * Run choosealicense.data['Apache-2.0'].conditions in console will return:
+         * Proxy {0: "include-copyright", 1: "document-changes", length: 2}
+         *
+         * Run choosealicense.data['Apache-2.0'].conditions['include-copyright']
+         * in console will return:
+         * {
+         *     description: "A copy of the license and copyright notice must be included...",
+         *     label: "License and copyright notice",
+         *     tag: "include-copyright"
+         * }
+         *
+         * For more details on ES6 proxy please see
+         * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+         */
+        const applyProxy = (type, obj) => {
             return new Proxy(
                 obj,
                 {
@@ -107,7 +110,7 @@ export const data = (() => {
                             return obj[prop];
                         }
 
-                        if (legend[type].hasOwnProperty(prop)) {
+                        if (legend[type][prop]) {
                             return legend[type][prop];
                         }
 
@@ -122,7 +125,7 @@ export const data = (() => {
         // Convert summary tag field for a license into ES6 proxy
         // Allows for property lookup of summary tag 'include-copyright'
         // into Choosealicense's legend. See also example above 'applyProxy'.
-        if (license.hasOwnProperty('permissions')) {
+        if (license.permissions) {
             license.permissions = applyProxy('permissions', license.permissions);
             license.summary.push({
                 key: 'permissions',
@@ -131,7 +134,7 @@ export const data = (() => {
                 provider: 'choosealicense',
                 tags: ((tags = license.permissions) => {
                     return tags.map((tag) => {
-                        if (legend.permissions.hasOwnProperty(tag)) {
+                        if (legend.permissions[tag]) {
                             return legend.permissions[tag];
                         }
 
@@ -141,16 +144,16 @@ export const data = (() => {
             });
         }
 
-        if (license.hasOwnProperty('conditions')) {
+        if (license.conditions) {
             license.conditions = applyProxy('conditions', license.conditions);
             license.summary.push({
-                key: 'conditions', 
-                title: 'Conditions', 
+                key: 'conditions',
+                title: 'Conditions',
                 color: 'orange',
                 provider: 'choosealicense',
                 tags: ((tags = license.conditions) => {
                     return tags.map((tag) => {
-                        if (legend.conditions.hasOwnProperty(tag)) {
+                        if (legend.conditions[tag]) {
                             return legend.conditions[tag];
                         }
 
@@ -160,7 +163,7 @@ export const data = (() => {
             });
         }
 
-        if (license.hasOwnProperty('limitations')) {
+        if (license.limitations) {
             license.limitations = applyProxy('limitations', license.limitations);
             license.summary.push({
                 key: 'limitations',
@@ -169,7 +172,7 @@ export const data = (() => {
                 provider: 'choosealicense',
                 tags: ((tags = license.limitations) => {
                     return tags.map((tag) => {
-                        if (legend.limitations.hasOwnProperty(tag)) {
+                        if (legend.limitations[tag]) {
                             return legend.limitations[tag];
                         }
 
@@ -180,28 +183,28 @@ export const data = (() => {
         }
 
         // Swap title prop for name as this is more commonly used in other datasets
-        if (license.hasOwnProperty('title')) {
+        if (license.title) {
             license.name = license.title;
             delete license.title;
         }
 
         // Remove props included solely for use in choosealicense.com
-        if (license.hasOwnProperty('featured')) {
+        if (license.featured) {
             delete license.featured;
         }
 
-        if (license.hasOwnProperty('hidden')) {
+        if (license.hidden) {
             delete license.hidden;
         }
 
-        if (license.hasOwnProperty('redirect_from')) {
+        if (license.redirect_from) {
             delete license.redirect_from;
         }
 
         return license;
     };
 
-    return { 
+    return {
         ...metadata,
         data: {
             'AFL-3.0': createLicenseWithProxies(AFL_3_0),

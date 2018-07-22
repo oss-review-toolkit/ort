@@ -12,9 +12,14 @@
 body {
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: auto;
 }
 
-.reporter-app {
+.ort-summary .ant-row {
+    margin-top: 20px;
+}
+
+.ort-app {
     background-color: #fff;
     border: 1px solid rgba(34,36,38,.15);
     border-radius: .28rem;
@@ -25,7 +30,7 @@ body {
     margin: 1em 2em 1em 2em;
 }
 
-.reporter-app h1, h2, h3, h4 {
+.ort-app h1, h2, h3, h4 {
     color: #262727;
     margin: 1em 0em 1em 0em;
 }
@@ -34,98 +39,155 @@ body {
 FIXME Switch to use Ant Design customization
 https://ant.design/docs/react/customize-theme
 */
-.reporter-app .ant-collapse,
-.reporter-app .ant-steps,
-.reporter-app .ant-tabs,
-.reporter-app .ant-tag,
-.reporter-app .ant-table,
-.reporter-app .ant-tree {
+.ort-app .ant-collapse,
+.ort-app .ant-steps,
+.ort-app .ant-tabs,
+.ort-app .ant-tag,
+.ort-app .ant-table,
+.ort-app .ant-tree {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.reporter-app ul.reporter-table-list {
+.ort-app ul.ort-table-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.reporter-app .reporter-table-list > li {
+.ort-app .ort-table-list > li {
     margin: 3px 0 3px 0;
     padding: 0;
 }
 
-.reporter-app .reporter-package-id .ant-tag {
+.ort-app .ort-package-id .ant-tag {
     font-size: 10px;
     height: 13px;
     line-height: 10px;
     padding: 0 3px 0 3px;
 }
 
-.reporter-app .reporter-license.ant-tag:hover {
+.ort-app .ort-license.ant-tag:hover {
     color: #fff;
     background: rgba(0, 0, 0, 0.65);;
     border-color: rgba(0, 0, 0, 0.65);;
 }
 
-.reporter-app .reporter-license.ant-tag-green {
+.ort-app .ort-license.ant-tag-green {
     color: #007020;
     background: #f6ffed;
     border-color: #4e8b60;
 }
 
-.reporter-app .reporter-license.ant-tag-green:hover {
+.ort-app .ort-license.ant-tag-green:hover {
     color: #fff;
     background: #007020;
     border-color: #007020;
 }
 
-.reporter-app .reporter-license.ant-tag-red:hover {
+.ort-app .ort-license.ant-tag-red:hover {
     color: #fff;
     background-color: #cf1322;
     border-color: #cf1322;
 }
 
-.reporter-app .reporter-license.ant-tag-orange:hover {
+.ort-app .ort-license.ant-tag-orange:hover {
     color: #fff;
     background: #fa8c16;
     border-color: #fa8c16;
 }
 
-.reporter-app .reporter-license.ant-tag-blue:hover, 
-.reporter-app .reporter-status-ok.ant-tag-blue:hover{
+.ort-app .ort-license.ant-tag-blue:hover, 
+.ort-app .ort-status-ok.ant-tag-blue:hover{
     color: #fff;
     background: #1890ff;
     border-color: #1890ff;
 }
 
-.reporter-app .reporter-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
+.ort-app .ort-package-props th, .ort-app .ort-package-props td {
+    vertical-align: top;
+}
+
+.ort-app .ort-package-props th {
+    font-weight: 400;
+    width: 110px;
+}
+
+.ort-app .ort-clickable {
+    cursor: pointer;
+}
+
+.ort-app .ort-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
     border-bottom: 0px;
 }
 
-.reporter-app .reporter-package-deps-paths .ant-list-pagination {
+.ort-app .ort-package-deps-paths .ant-list-pagination {
     margin: 0px 0px 5px 0px;
     text-align: left;
 }
 
-.reporter-license-info .reporter-license-obligations {
+.ort-license-info .ort-license-obligations {
     padding: 0 25px 0 25px;
 }
 
-.reporter-license-info .reporter-license-obligations ul {
+.ort-license-info .ort-license-obligations ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.reporter-license-info .reporter-license-obligations .reporter-data-attribution {
+.ort-license-info .ort-license-obligations .ort-data-attribution {
     font-size: 0.5em;
 }
 
-.reporter-license-info .reporter-license-fulltext {
+.ort-license-info .ort-license-fulltext {
     font-size: 0.7em;
     white-space: pre-wrap;
 }
 
 .oss-tree-tooltip .ant-tooltip-inner {
   max-width: 500px;
+}
+
+.ort-tree-tooltip .ant-tooltip-inner {
+    max-width: 500px;
+}
+
+.ort-tree-searched-item {
+    background: #99ccff;
+    color: #fff;
+}
+
+.ort-tree-selected-item {
+    background: #1890ff;
+    color: #fff;
+    transition: background 100ms ease-in;
+}
+
+.ort-tree-wrapper {
+    overflow: auto;
+    flex: auto;
+    height: calc(100vh - 150px);
+}
+
+.ort-tree-view {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ort-tree-search {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.ort-tree-navigation {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+    flex-wrap: nowrap;
+}
+
+.ort-tree-navigation-counter {
+    margin-left: 8px;
+    width: 80px;
 }

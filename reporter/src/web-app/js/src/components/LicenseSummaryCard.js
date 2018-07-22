@@ -22,40 +22,46 @@ import { Badge, Card, Popover, List } from 'antd';
 import { LICENSES_PROVIDERS } from '../data/licenses';
 
 export const LicenseSummaryCard = (props) => {
-    let summary = props.summary,
-        licenseDataAttributed = false,
-        licenseAttributionText = (item) => {
-            let provider,
-                    providerName = item.provider;
-            
-            if (providerName && !licenseDataAttributed) {
-                provider = LICENSES_PROVIDERS[providerName];
+    const summary = props.summary;
+    let licenseDataAttributed = false;
+    const licenseAttributionText = (item) => {
+        let provider;
+        let providerName = item.provider;
 
-                licenseDataAttributed = true;
+        if (providerName && !licenseDataAttributed) {
+            provider = LICENSES_PROVIDERS[providerName];
 
-                return (
-                    <div className="reporter-data-attribution">
-                        <span>Source: <a href={provider.packageHomePage} target="_blank">{provider.packageName}</a></span>
-                        <p>{provider.packageCopyrightText} {provider.packageLicenseDeclared}</p>
-                    </div>
-                );
-            }
+            licenseDataAttributed = true;
 
-            return;
-        },
-        listItemStatus = (color) => {
-            switch(color) {
-                case 'green':
-                    return 'success';
-                case 'orange':
-                    return 'warning';
-                case 'red':
-                    return 'error';
-                default:
-                    return 'default';
-            }
-        },
-        listItems;
+            return (
+                <div className="ort-data-attribution">
+                    <span>Source:
+                        <a href={provider.packageHomePage}
+                            rel="noopener noreferrer"
+                            target="_blank">
+                            {provider.packageName}
+                        </a>
+                    </span>
+                    <p>{provider.packageCopyrightText} {provider.packageLicenseDeclared}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+    const listItemStatus = (color) => {
+        switch(color) {
+            case 'green':
+                return 'success';
+            case 'orange':
+                return 'warning';
+            case 'red':
+                return 'error';
+            default:
+                return 'default';
+        }
+    };
+    let listItems;
 
     if (summary) {
         listItems = (items, itemColor) => {
@@ -69,7 +75,7 @@ export const LicenseSummaryCard = (props) => {
                 return (
                     <li key={item.tag}>
                         <Popover content={content} title={item.label} arrowPointAtCenter trigger="hover">
-                            <Badge status={listItemStatus(itemColor)} text={item.tag}/>
+                            <Badge status={listItemStatus(itemColor)} text={item.tag} />
                         </Popover>
                     </li>
                 );
@@ -78,7 +84,17 @@ export const LicenseSummaryCard = (props) => {
 
         return (
             <List
-                grid={{ gutter: 16, xs: 3, sm: 3, md: 3, lg: 3, xl: 3, xxl: 3 }}
+                grid={
+                    { 
+                        gutter: 16,
+                        xs: 3,
+                        sm: 3,
+                        md: 3,
+                        lg: 3,
+                        xl: 3,
+                        xxl: 3
+                    }
+                }
                 size="large"
                 dataSource={summary}
                 renderItem={item => (
@@ -95,5 +111,5 @@ export const LicenseSummaryCard = (props) => {
         );
     }
 
-    return (<div></div>);
-}
+    return null;
+};
