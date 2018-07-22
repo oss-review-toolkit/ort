@@ -1,12 +1,12 @@
 export const config = {
     'licenses': {
         'Apache-2.0': {
-            'color': 'green',
+            'color': 'green'
         },
         'BSD-2-Clause': {
             'color': 'green'
         },
-        "BSD-2-Clause-FreeBSD": {
+        'BSD-2-Clause-FreeBSD': {
             'color': 'green'
         },
         'BSD-3-Clause': {

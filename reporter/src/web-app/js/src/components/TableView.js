@@ -9,55 +9,78 @@ class TableView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            view: {
+                showProjects: [],
+                forceRender: false
+            }
+        };
+
         if (props.reportData) {
             this.state = {
                 ...this.state,
                 data: props.reportData
             };
+
+            // Expand all project panels with 0.5 second delay
+            // to ensure smooth UI when tabs switching
+            window.setTimeout(() => {
+                const projects = Object.values(
+                    this.state.data.projects.data
+                ).reduce((accumulator, project) => {
+                    accumulator.push('panel-' + project.id);
+                    return accumulator;
+                }, []);
+
+                this.setState({
+                    view: { showProjects: projects }
+                });
+            }, 500);
         }
 
-        // FIXME For debugging purposes print scan results to console 
-        console.log('renderData', this.state.data);
-        window.listData = this.state.data;
+        // Bind so `this` works in the Collapse's onChange callback
+        this.onChangeProjectCollapse = this.onChangeProjectCollapse.bind(this);
+    }
+
+    onChangeProjectCollapse(activeKeys) {
+        this.setState({
+            view: {
+                showProjects: activeKeys
+            }
+        });
     }
 
     render() {
-        const { data } = this.state;
-        const panelHeader = (definitionFilePath) => {
-            let packagesNrText = (num) => {
-                switch(num) {
-                    case 0:
-                        return '';
-                    case 1:
-                        return '1 package';
-                    default:
-                        return num + ' packages';
-                }
-            }
-            return (<Row>
-                        <Col span={12}>Dependencies defined in <b> {'./' + definitionFilePath}</b></Col>
-                        <Col span={2} offset={10}>{packagesNrText(data.projects[definitionFilePath].length)}</Col>
-                    </Row>
-                   );
-        }
-        const panelItems = Object.keys(data.projects).map((definitionFilePath) => (
-                <Panel header={panelHeader(definitionFilePath)} key={'./' + definitionFilePath}>
-                    <DependencyTable 
-                        key={definitionFilePath}
-                        project={definitionFilePath}
-                        data={data}/>
-                </Panel>
-            ))
+        const { data, view } = this.state;
+        const panelHeader = (project) => {
+            const nrPackagesText = (nrPackages) => {
+                return (nrPackages + ' package' + ((nrPackages > 1) ? 's' : ''));
+            };
+
+            return (
+                <Row>
+                    <Col span={12}>
+                        Dependencies defined in <b> {project.definition_file_path}</b>
+                    </Col>
+                    <Col span={2} offset={10}>
+                        {nrPackagesText(project.packages.total)}
+                    </Col>
+                </Row>
+            );
+        };
+
         return (
-            <Collapse defaultActiveKey={Object.keys(data.projects).map((item) => { return './' + item })} >
-                {panelItems}
+            <Collapse activeKey={view.showProjects} onChange={this.onChangeProjectCollapse}>
+                {Object.values(data.projects.data).map((project) =>
+                    <Panel key={'panel-' + project.id} header={panelHeader(project)}>
+                        <DependencyTable project={project} />
+                    </Panel>)}
             </Collapse>
         );
     }
 }
 
 export default connect(
-    (state) => ({reportData: state}),
+    (state) => ({ reportData: state }),
     () => ({})
-)(TableView); 
+)(TableView);

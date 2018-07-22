@@ -30,7 +30,8 @@ export class LicenseTag extends React.Component {
         super(props);
 
         this.tagText = props.text;
-        
+        this.ellipsisAtChar = props.ellipsisAtChar;
+
         if (this.tagText) {
             this.license = LICENSES[this.tagText];
 
@@ -43,10 +44,10 @@ export class LicenseTag extends React.Component {
                     if (!this.license.modal) {
                         this.license.modal = {
                             title: this.license.name,
-                            className: 'reporter-license-info',
-                            content: (<LicenseInfo license={this.license}/>),
+                            className: 'ort-license-info',
+                            content: (<LicenseInfo license={this.license} />),
                             onOk() {},
-                            okText: "Close",
+                            okText: 'Close',
                             maskClosable: true,
                             width: 800
                         };
@@ -54,32 +55,35 @@ export class LicenseTag extends React.Component {
 
                     Modal.info(this.license.modal);
                 }
-            }
+            };
         }
     }
 
     render() {
         if (this.tagText) {
             return (
-                <Tooltip placement="left" title={this.license ? this.license.name : this.tagText}>
-                    <Tag className="reporter-license"
+                <Tooltip placement="left" title={this.license 
+                    ? this.license.name : this.tagText}>
+                    <Tag className="ort-license"
                         color={this.license ? this.license.color : ''}
                         checked="true"
-                        onClick={this.license && this.showLicenseInfoModal}>{this.tagText}</Tag>
-                </Tooltip>
-            );
-        } else {
-            console.log("this", this);
-            return(<div>No data</div>);
+                        onClick={this.license && this.showLicenseInfoModal}>
+                        {(this.ellipsisAtChar 
+                            && this.tagText.length >= this.ellipsisAtChar) 
+                            ? this.tagText.substr(0, this.ellipsisAtChar) + '...' : this.tagText}
+                    </Tag>
+                </Tooltip>);
+            } else {
+                return(<div>No data</div>);
+            }
         }
-    }
 };
 
 // Generates the HTML for the additional license information
 const LicenseInfo = (props) => {
-    const license = props.license,
-          licenseDescription = license.description ? 
-          license.description : 'No description available for this license';
+    const license = props.license;
+    const licenseDescription = license.description
+        ? license.description : 'No description available for this license';
 
     if (!license && !license.summary) {
         return (<div>No summary data for this license</div>);
@@ -87,14 +91,14 @@ const LicenseInfo = (props) => {
 
     // Transform array of license summaries by provider so 
     // we can display and attribute each provider's license summary
-    var summaryProviders = ((summary = license.summary) => {
+    let summaryProviders = ((summary = license.summary) => {
         let providers = {};
 
         for (let i = 0; i < summary.length; i++) {
-            let provider = summary[i].provider;
+            const provider = summary[i].provider;
 
             if (provider) {
-                if (!providers.hasOwnProperty(provider)) {
+                if (!providers[provider]) {
                     providers[provider] = [];
                 }
 
@@ -106,13 +110,13 @@ const LicenseInfo = (props) => {
     })();
 
     return (
-        <div className="reporter-license-info">
+        <div className="ort-license-info">
             <Tabs>
                 <TabPane tab="Summary" key="1">
-                    <p className="reporter-license-description">
+                    <p className="ort-license-description">
                         {licenseDescription}
                     </p>
-                    <div className="reporter-license-obligations">
+                    <div className="ort-license-obligations">
                         <List
                             grid={{ gutter: 16, column: 1 }}
                             itemLayout="vertical"
@@ -120,12 +124,12 @@ const LicenseInfo = (props) => {
                             pagination={{
                                 hideOnSinglePage: true,
                                 pageSize: 1,
-                                size: "small"
+                                size: 'small'
                             }}
                             dataSource={summaryProviders}
                             renderItem={summary => (
                                 <List.Item>
-                                    <LicenseSummaryCard summary={summary}/> 
+                                    <LicenseSummaryCard summary={summary} /> 
                                 </List.Item>
                             )}
                         />
@@ -137,7 +141,7 @@ const LicenseInfo = (props) => {
                             title: license.name,
                             dataIndex: 'text',
                             render: (text, row, index) => {
-                                return(<pre className="reporter-license-fulltext">{text}</pre>)
+                                return(<pre className="ort-license-fulltext">{text}</pre>)
                             }
                         }]}
                         dataSource={[{
@@ -151,7 +155,7 @@ const LicenseInfo = (props) => {
                         scroll={{
                             y: 365
                         }}
-                        showHeader={false}/>
+                        showHeader={false} />
                 </TabPane>
             </Tabs>
         </div>

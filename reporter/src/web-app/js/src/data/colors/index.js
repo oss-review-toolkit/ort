@@ -32,7 +32,7 @@ export const metadata = {
 };
 
 export const UNIQUE_COLORS = (() => {
-    return { 
+    return {
         ...metadata,
         data: COLORS,
         type: 'unique-colors'
