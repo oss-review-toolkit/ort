@@ -193,7 +193,7 @@ abstract class LocalScanner : Scanner() {
         }
 
         println("Running $this version ${scannerDetails.version} on directory " +
-                "'${downloadResult.downloadDirectory.canonicalPath}'.")
+                "'${downloadResult.downloadDirectory.absolutePath}'.")
 
         val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
                 downloadResult.originalVcsInfo)
@@ -221,7 +221,7 @@ abstract class LocalScanner : Scanner() {
         val resultsFile = File(scanResultsDirectory,
                 "${path.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
 
-        println("Running $this version ${scannerDetails.version} on path '${path.canonicalPath}'.")
+        println("Running $this version ${scannerDetails.version} on path '${path.absolutePath}'.")
 
         return scanPath(scannerDetails, path, Provenance(downloadTime = Instant.now()), resultsFile)
                 .also { println("Stored $this results in '${resultsFile.absolutePath}'.") }

@@ -111,8 +111,8 @@ object ScanCode : LocalScanner() {
 
         val configureExe = if (OS.isWindows) "configure.bat" else "configure"
         val configurePath = File(scancodeDir, configureExe)
-        ProcessCapture(configurePath.canonicalPath, "--clean").requireSuccess()
-        ProcessCapture(configurePath.canonicalPath).requireSuccess()
+        ProcessCapture(configurePath.absolutePath, "--clean").requireSuccess()
+        ProcessCapture(configurePath.absolutePath).requireSuccess()
 
         return scancodeDir
     }
@@ -126,7 +126,7 @@ object ScanCode : LocalScanner() {
     }
 
     override fun getVersion(dir: File) =
-            getCommandVersion(dir.resolve(scannerExe).canonicalPath, transform = {
+            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
                 // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
                 // the prefix.
                 it.substringAfter("ScanCode version ")
@@ -144,11 +144,11 @@ object ScanCode : LocalScanner() {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-                scannerPath.canonicalPath,
+                scannerPath.absolutePath,
                 *options.toTypedArray(),
-                path.canonicalPath,
+                path.absolutePath,
                 OUTPUT_FORMAT_OPTION,
-                resultsFile.canonicalPath
+                resultsFile.absolutePath
         )
 
         val endTime = Instant.now()
