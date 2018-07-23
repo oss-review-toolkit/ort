@@ -28,7 +28,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class VersionControlSystemTest : WordSpec({
-    val vcsRoot = File("..").canonicalFile
+    val vcsRoot = File("..").absoluteFile.normalize()
     val relProjDir = File("src/test")
     val absProjDir = relProjDir.absoluteFile
 

@@ -96,7 +96,7 @@ object Askalono : LocalScanner() {
     override fun getConfiguration() = ""
 
     override fun getVersion(dir: File) =
-            getCommandVersion(dir.resolve(scannerExe).canonicalPath, transform = {
+            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
                 // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
                 it.substringAfter("askalono ")
             })
@@ -106,8 +106,8 @@ object Askalono : LocalScanner() {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-                scannerPath.canonicalPath,
-                "crawl", path.canonicalPath
+                scannerPath.absolutePath,
+                "crawl", path.absolutePath
         )
 
         val endTime = Instant.now()

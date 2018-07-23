@@ -422,7 +422,7 @@ class UtilsTest : WordSpec({
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
 
             gitRoot shouldNotBe null
-            gitRoot shouldBe File("..").canonicalFile
+            gitRoot shouldBe File("..").absoluteFile.normalize()
         }
     }
 

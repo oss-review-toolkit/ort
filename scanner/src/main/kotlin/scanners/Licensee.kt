@@ -72,7 +72,7 @@ object Licensee : LocalScanner() {
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override fun getVersion(dir: File) = getCommandVersion(dir.resolve(scannerExe).canonicalPath, "version")
+    override fun getVersion(dir: File) = getCommandVersion(dir.resolve(scannerExe).absolutePath, "version")
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {
@@ -88,7 +88,7 @@ object Licensee : LocalScanner() {
 
         val process = ProcessCapture(
                 parentPath,
-                scannerPath.canonicalPath,
+                scannerPath.absolutePath,
                 "detect",
                 *CONFIGURATION_OPTIONS.toTypedArray(),
                 relativePath

@@ -106,7 +106,7 @@ object BoyterLc : LocalScanner() {
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 
     override fun getVersion(dir: File) =
-            getCommandVersion(dir.resolve(scannerExe).canonicalPath, transform = {
+            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
                 // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
                 it.substringAfter("licensechecker version ")
             })
@@ -116,10 +116,10 @@ object BoyterLc : LocalScanner() {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-                scannerPath.canonicalPath,
+                scannerPath.absolutePath,
                 *CONFIGURATION_OPTIONS.toTypedArray(),
-                "--output", resultsFile.canonicalPath,
-                path.canonicalPath
+                "--output", resultsFile.absolutePath,
+                path.absolutePath
         )
 
         val endTime = Instant.now()
