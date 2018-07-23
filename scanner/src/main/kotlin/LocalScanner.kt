@@ -57,7 +57,7 @@ abstract class LocalScanner : Scanner() {
             getVersion(it) == scannerVersion
         } ?: run {
             if (scannerExe.isNotEmpty()) {
-                println("Bootstrapping scanner '$this' as version $scannerVersion was not found in PATH.")
+                println("Bootstrapping scanner '$this' as required version $scannerVersion was not found in PATH.")
                 bootstrap().also {
                     val actualScannerVersion = getVersion(it)
                     if (actualScannerVersion != scannerVersion) {
@@ -78,7 +78,7 @@ abstract class LocalScanner : Scanner() {
     protected abstract val scannerExe: String
 
     /**
-     * The expected version of the scanner. This is also the version that would get bootstrapped.
+     * The required version of the scanner. This is also the version that would get bootstrapped.
      */
     protected abstract val scannerVersion: String
 
