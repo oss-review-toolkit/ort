@@ -48,6 +48,6 @@ data class ScanRecord(
     /**
      * True if the [analyzerResult] or any of the [scanResults] contain errors.
      */
-    val hasErrors = analyzerResult.createProjectAnalyzerResults().any { it.hasErrors() }
+    val hasErrors = analyzerResult.hasErrors()
             || scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
 }
