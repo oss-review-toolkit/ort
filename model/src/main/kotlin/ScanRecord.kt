@@ -44,10 +44,4 @@ data class ScanRecord(
          * The [CacheStatistics] for the scan results cache.
          */
         val cacheStats: CacheStatistics
-) : CustomData() {
-    /**
-     * True if the [analyzerResult] or any of the [scanResults] contain errors.
-     */
-    val hasErrors = analyzerResult.createProjectAnalyzerResults().any { it.hasErrors() }
-            || scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
-}
+) : CustomData()
