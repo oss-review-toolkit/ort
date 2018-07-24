@@ -60,16 +60,6 @@ data class ProjectAnalyzerResult(
         }
     }
 
-    /**
-     * Return true if there were any errors during the analysis, false otherwise.
-     */
-    fun hasErrors(): Boolean {
-        fun hasErrors(pkgReference: PackageReference): Boolean =
-                pkgReference.errors.isNotEmpty() || pkgReference.dependencies.any { hasErrors(it) }
-
-        return errors.isNotEmpty() || project.scopes.any { it.dependencies.any { hasErrors(it) } }
-    }
-
     fun collectErrors(): Map<Identifier, List<String>> {
         val collectedErrors = mutableMapOf<Identifier, MutableList<String>>()
 
