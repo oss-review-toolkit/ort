@@ -21,14 +21,13 @@ package com.here.ort.scanner
 
 import ch.frankel.slf4k.*
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import com.here.ort.model.CacheStatistics
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.config.CacheConfiguration
 import com.here.ort.utils.log
 
 interface ScanResultsCache {
@@ -76,24 +75,13 @@ interface ScanResultsCache {
 
         var stats = CacheStatistics()
 
-        fun configure(config: JsonNode?) {
-            // Return early if there is no cache configuration.
-            val cacheNode = config?.get(Main.TOOL_NAME)?.get("cache") ?: return
-
-            val type = cacheNode["type"]?.textValue() ?: throw IllegalArgumentException("Cache type is missing.")
-
-            when (type.toLowerCase()) {
+        fun configure(config: CacheConfiguration) {
+            when (config.type.toLowerCase()) {
                 "artifactory" -> {
-                    val apiToken = cacheNode["apiToken"]?.textValue()
-                            ?: throw IllegalArgumentException("API token for Artifactory cache is missing.")
-
-                    val url = cacheNode["url"]?.textValue()
-                            ?: throw IllegalArgumentException("URL for Artifactory cache is missing.")
-
-                    cache = ArtifactoryCache(url, apiToken)
-                    log.info { "Using Artifactory cache '$url'." }
+                    cache = ArtifactoryCache(config.url, config.apiToken)
+                    log.info { "Using Artifactory cache '${config.url}'." }
                 }
-                else -> throw IllegalArgumentException("Cache type '$type' unknown.")
+                else -> throw IllegalArgumentException("Cache type '${config.type}' unknown.")
             }
         }
 

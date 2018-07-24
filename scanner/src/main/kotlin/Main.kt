@@ -38,6 +38,7 @@ import com.here.ort.model.ScanRecord
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
+import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -48,6 +49,8 @@ import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
 import com.here.ort.utils.showStackTrace
+
+import com.uchuhimo.konf.Config
 
 import java.io.File
 import java.time.Instant
@@ -179,7 +182,10 @@ object Main {
         }
 
         configFile?.let {
-            ScanResultsCache.configure(it.mapper().readTree(it))
+            val config = Config { addSpec(ScannerConfiguration) }.from.yaml.file(it)
+            config[ScannerConfiguration.cache]?.let {
+                ScanResultsCache.configure(it)
+            }
         }
 
         println("Using scanner '$scanner'.")

@@ -78,10 +78,14 @@ subprojects {
         funTestCompile project(':utils-test')
     }
 
-    // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
     configurations.all {
         resolutionStrategy {
+            // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
             force 'org.jetbrains.kotlin:kotlin-reflect:1.2.51'
+
+            // Required because Konf dependens on version 1.21 which is incompatible with Jackson 2.9.x:
+            // https://github.com/FasterXML/jackson-dataformats-text/issues/67#issuecomment-384400676
+            force 'org.yaml:snakeyaml:1.18'
         }
     }
 

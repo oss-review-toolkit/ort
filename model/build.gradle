@@ -9,4 +9,6 @@ dependencies {
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+
+    compile "com.uchuhimo:konf:$konfVersion"
 }
