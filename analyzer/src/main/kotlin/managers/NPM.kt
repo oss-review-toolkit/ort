@@ -454,7 +454,7 @@ open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
                 scopes = scopes
         )
 
-        return ProjectAnalyzerResult(config, project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     /**

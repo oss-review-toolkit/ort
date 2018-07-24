@@ -1,7 +1,4 @@
 ---
-config:
-  ignore_tool_versions: false
-  allow_dynamic_versions: false
 project:
   id: "PIP::Example-App:2.4.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip/requirements.txt"

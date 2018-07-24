@@ -1,7 +1,4 @@
 ---
-config:
-  ignore_tool_versions: false
-  allow_dynamic_versions: false
 project:
   id: "Stack:Testing:quickcheck-state-machine:0.3.1"
   definition_file_path: "stack.yaml"
