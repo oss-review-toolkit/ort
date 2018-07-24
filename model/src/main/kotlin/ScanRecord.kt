@@ -48,6 +48,7 @@ data class ScanRecord(
     /**
      * True if the [analyzerResult] or any of the [scanResults] contain errors.
      */
+    @Suppress("UNUSED")
     val hasErrors = analyzerResult.hasErrors()
             || scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
 }
