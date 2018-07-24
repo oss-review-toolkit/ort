@@ -71,6 +71,16 @@ data class AnalyzerResult(
             val projectPackages = packages.filter { it.pkg.id in allDependencies }.toSortedSet()
             ProjectAnalyzerResult(config, project, projectPackages, errors[project.id] ?: emptyList())
         }
+
+    /**
+     * Return true if there were any errors during the analysis, false otherwise.
+     */
+    fun hasErrors(): Boolean {
+        fun hasErrors(pkgReference: PackageReference): Boolean =
+                pkgReference.errors.isNotEmpty() || pkgReference.dependencies.any { hasErrors(it) }
+
+        return errors.isNotEmpty() || projects.any { it.scopes.any { it.dependencies.any { hasErrors(it) } } }
+    }
 }
 
 class AnalyzerResultBuilder(
