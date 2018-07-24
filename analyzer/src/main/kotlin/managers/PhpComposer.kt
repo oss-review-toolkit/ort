@@ -143,7 +143,7 @@ class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
 
             val project = parseProject(definitionFile, scopes)
 
-            return ProjectAnalyzerResult(config, project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
+            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
         } finally {
             // Delete vendor folder to not pollute the scan.
             log.info { "Deleting temporary '$vendorDir'..." }

@@ -19,20 +19,12 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
-
 import java.util.SortedSet
 
 /**
  * A class that bundles all information generated during an analysis.
  */
 data class ProjectAnalyzerResult(
-        /**
-         * The [AnalyzerConfiguration] that was used to generate the result.
-         */
-        @JsonAlias("allowDynamicVersions", "allow_dynamic_versions")
-        val config: AnalyzerConfiguration,
-
         /**
          * The project that was analyzed. The tree of dependencies is implicitly contained in the scopes in the form
          * of package references.

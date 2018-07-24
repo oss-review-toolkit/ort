@@ -64,6 +64,6 @@ class Unmanaged(config: AnalyzerConfiguration) : PackageManager(config) {
                 scopes = sortedSetOf()
         )
 
-        return ProjectAnalyzerResult(config, project, sortedSetOf())
+        return ProjectAnalyzerResult(project, sortedSetOf())
     }
 }

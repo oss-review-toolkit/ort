@@ -122,7 +122,6 @@ class GoDep(config: AnalyzerConfiguration) : PackageManager(config) {
         gopath.safeDeleteRecursively()
 
         return ProjectAnalyzerResult(
-                config = config,
                 project = Project(
                         id = Identifier(provider, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
