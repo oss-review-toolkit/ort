@@ -45,9 +45,9 @@ class AnalyzerResultTest : WordSpec() {
     )
 
     private val config = AnalyzerConfiguration(false, true)
-    private val analyzerResult1 = ProjectAnalyzerResult(config, project1, sortedSetOf(package1.toCuratedPackage()),
+    private val analyzerResult1 = ProjectAnalyzerResult(project1, sortedSetOf(package1.toCuratedPackage()),
             listOf("error-1", "error-2"))
-    private val analyzerResult2 = ProjectAnalyzerResult(config, project2,
+    private val analyzerResult2 = ProjectAnalyzerResult(project2,
             sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
             listOf("error-2"))
 

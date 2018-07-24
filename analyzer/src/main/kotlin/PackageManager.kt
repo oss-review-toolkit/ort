@@ -211,8 +211,7 @@ abstract class PackageManager(protected val config: AnalyzerConfiguration) {
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    result[definitionFile] = ProjectAnalyzerResult(config, errorProject, sortedSetOf(),
-                            e.collectMessages())
+                    result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), e.collectMessages())
 
                     log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
                 }

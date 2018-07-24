@@ -127,7 +127,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
                     scopes = scopes.toSortedSet()
             )
 
-            return ProjectAnalyzerResult(config, project, packages.map { it.toCuratedPackage() }.toSortedSet(), errors)
+            return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet(), errors)
         } finally {
             // Delete vendor folder to not pollute the scan.
             log.info { "Deleting temporary directory '$vendorDir'..." }

@@ -301,7 +301,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.safeDeleteRecursively()
 
-        return ProjectAnalyzerResult(config, project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {

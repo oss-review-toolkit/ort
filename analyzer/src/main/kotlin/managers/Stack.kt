@@ -153,7 +153,7 @@ class Stack(config: AnalyzerConfiguration) : PackageManager(config) {
                 scopes = scopes
         )
 
-        return ProjectAnalyzerResult(config, project, allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(project, allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
     private fun buildDependencyTree(parentName: String, allPackages: MutableMap<Package, Package>,

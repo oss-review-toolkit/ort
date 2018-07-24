@@ -87,7 +87,6 @@ fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
             val provider = YamlFilePackageCurationProvider(it)
             results.mapValues { entry ->
                 ProjectAnalyzerResult(
-                        config = entry.value.config,
                         project = entry.value.project,
                         errors = entry.value.errors,
                         packages = entry.value.packages.map { curatedPackage ->
