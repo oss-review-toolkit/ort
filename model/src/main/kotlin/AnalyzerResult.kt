@@ -64,15 +64,6 @@ data class AnalyzerResult(
         val errors: SortedMap<Identifier, List<String>>
 ) : CustomData() {
     /**
-     * Create the individual [ProjectAnalyzerResult]s this [AnalyzerResult] was built from.
-     */
-    fun createProjectAnalyzerResults() = projects.map { project ->
-            val allDependencies = project.collectDependencyIds()
-            val projectPackages = packages.filter { it.pkg.id in allDependencies }.toSortedSet()
-            ProjectAnalyzerResult(config, project, projectPackages, errors[project.id] ?: emptyList())
-        }
-
-    /**
      * Return true if there were any errors during the analysis, false otherwise.
      */
     fun hasErrors(): Boolean {

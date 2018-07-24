@@ -53,16 +53,6 @@ class AnalyzerResultTest : WordSpec() {
 
     init {
         "AnalyzerResult" should {
-            "create the correct ProjectAnalyzerResults" {
-                val config = AnalyzerConfiguration(false, true)
-                val mergedResults = AnalyzerResultBuilder(config, vcs)
-                        .addResult(analyzerResult1)
-                        .addResult(analyzerResult2)
-                        .build()
-
-                mergedResults.createProjectAnalyzerResults() shouldBe listOf(analyzerResult1, analyzerResult2)
-            }
-
             "be serialized and deserialized correctly" {
                 val config = AnalyzerConfiguration(false, true)
                 val mergedResults = AnalyzerResultBuilder(config, vcs)
