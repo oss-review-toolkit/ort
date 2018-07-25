@@ -228,8 +228,8 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
         override fun getPathForLocalArtifact(artifact: Artifact): String =
                 localRepositoryManager.getPathForLocalArtifact(artifact)
 
-        override fun getPathForLocalMetadata(metadata: Metadata)
-                : String = localRepositoryManager.getPathForLocalMetadata(metadata)
+        override fun getPathForLocalMetadata(metadata: Metadata): String =
+                localRepositoryManager.getPathForLocalMetadata(metadata)
 
         override fun getPathForRemoteArtifact(artifact: Artifact, repository: RemoteRepository, context: String)
                 : String = localRepositoryManager.getPathForRemoteArtifact(artifact, repository, context)
