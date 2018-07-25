@@ -221,8 +221,12 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         // Filter local repositories, as remote artifacts should never point to files on the local disk.
         val remoteRepositories = allRepositories.filterNot { it.url.startsWith("file:/") }
-        log.debug { "Found potential repositories for '$artifact': $remoteRepositories" }
-        log.debug { "Ignoring local repositories: ${allRepositories - remoteRepositories}" }
+        val localRepositories = allRepositories - remoteRepositories
+        if (localRepositories.isNotEmpty()) {
+            log.debug { "Ignoring local repositories $localRepositories." }
+        }
+
+        log.debug { "Searching for '$artifact' in $remoteRepositories." }
 
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
