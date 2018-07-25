@@ -207,10 +207,12 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
                 localRepositoryManager.add(session, request)
 
         override fun find(session: RepositorySystemSession, request: LocalArtifactRequest): LocalArtifactResult {
-            log.debug { "Request to find local artifact: $request" }
+            val id = request.artifact.identifier()
+            projectsByIdentifier[id]?.let {
+                log.debug {
+                    "Request to local repository for artifact '$id' gets forwarded to local project in '${it.pomFile}'."
+                }
 
-            projectsByIdentifier[request.artifact.identifier()]?.let {
-                log.debug { "Found cached artifact: ${it.pomFile}" }
                 val pomFile = File(it.pomFile.absolutePath)
 
                 return LocalArtifactResult(request).apply {
