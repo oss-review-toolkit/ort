@@ -211,10 +211,8 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
             projectsByIdentifier[id]?.let {
                 log.debug { "Artifact '$id' refers to the local project in '${it.pomFile}'." }
 
-                val pomFile = File(it.pomFile.absolutePath)
-
                 return LocalArtifactResult(request).apply {
-                    file = pomFile
+                    file = it.pomFile.absoluteFile
                     isAvailable = true
                 }
             }
