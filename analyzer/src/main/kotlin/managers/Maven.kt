@@ -213,10 +213,8 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
                     "Request to local repository for artifact '$id' gets forwarded to local project in '${it.pomFile}'."
                 }
 
-                val pomFile = File(it.pomFile.absolutePath)
-
                 return LocalArtifactResult(request).apply {
-                    file = pomFile
+                    file = it.pomFile.absoluteFile
                     isAvailable = true
                 }
             }
