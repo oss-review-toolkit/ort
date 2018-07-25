@@ -33,7 +33,6 @@ import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
-import java.io.IOException
 
 class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<SBT>(
@@ -42,6 +41,7 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
             listOf("build.sbt", "build.scala")
     ) {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
+        private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
         // Batch mode (which suppresses interactive prompts) is only supported on non-Windows, see
@@ -80,25 +80,7 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         if (definitionFiles.isEmpty()) return emptyList()
 
-        // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
-        // https://stackoverflow.com/a/20337575/1127485.
-        var workingDir = definitionFiles.first().parentFile
-
-        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated form
-        // "make-pom" and to support declaring Maven-style repositories, see
-        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-        checkCommandVersion(
-                command(workingDir),
-                Requirement.buildIvy("[0.13.0,)"),
-                versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
-                workingDir = workingDir,
-                ignoreActualVersion = config.ignoreToolVersions,
-                transform = this::extractLowestSbtVersion
-        )
-
-        val pomFiles = sortedSetOf<File>()
-
-        if (definitionFiles.count() > 1) {
+        val workingDir = if (definitionFiles.count() > 1) {
             // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
             // project's root directory. In order to determine the root directory, use the common prefix of all
             // definition file paths.
@@ -108,55 +90,44 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
                 prefix.commonPrefixWith(path)
             }
 
-            workingDir = File(projectRoot)
-
-            val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
-            if (sbt.isSuccess()) {
-                // Get the list of POM files created by parsing stdout. A single call might create multiple POM
-                // files in case of sub-projects.
-                sbt.stdout().lines().mapNotNullTo(pomFiles) {
-                    POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
-                }
-            } else {
-                log.warn {
-                    "Running '${sbt.commandLine}' in the determined project root directory '$workingDir' failed. " +
-                            "This might be acceptable if this is not actually the root of an SBT project."
-                }
+            File(projectRoot).also {
+                log.info { "Determined '$it' as the ${toString()} project root directory." }
             }
+        } else {
+            definitionFiles.first().parentFile
         }
 
-        definitionFiles.forEach { definitionFile ->
-            workingDir = definitionFile.parentFile
+        // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
+        // https://stackoverflow.com/a/20337575/1127485.
+        checkCommandVersion(
+                command(workingDir),
+                // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
+                // form "make-pom" and to support declaring Maven-style repositories, see
+                // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+                Requirement.buildIvy("[0.13.0,)"),
+                versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
+                workingDir = workingDir,
+                ignoreActualVersion = config.ignoreToolVersions,
+                transform = this::extractLowestSbtVersion
+        )
 
-            // Check if a POM was already generated if this is a sub-project in a multi-project.
-            val targetDir = File(workingDir, "target")
-            val hasPom = targetDir.isDirectory && targetDir.walkTopDown().filter {
-                it.isFile && it.extension == "pom"
-            }.any()
-
-            if (!hasPom) {
-                val sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "makePom")
-                if (sbt.isSuccess()) {
-                    // Get the list of POM files created by parsing stdout. A single call might create multiple POM
-                    // files in case of sub-projects.
-                    sbt.stdout().lines().mapNotNullTo(pomFiles) {
-                        POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
-                    }
-                } else {
-                    if (pomFiles.isEmpty()) {
-                        throw IOException(sbt.errorMessage)
-                    } else {
-                        log.warn {
-                            "A subsequent run of '${sbt.commandLine}' in directory '$workingDir' failed. " +
-                                    "This might be acceptable if this is a sub-project in a multi-project " +
-                                    "that does not publish any artifacts."
-                        }
-                    }
-                }
-            }
+        // Get the list of project names.
+        var sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "projects")
+                .requireSuccess()
+        val internalProjectNames = sbt.stdout().lines().mapNotNull {
+            PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
         }
 
-        return pomFiles.toList()
+        // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
+        // aggregate projects.
+        val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
+        sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, makePomCommand)
+                .requireSuccess()
+        val pomFiles = sbt.stdout().lines().mapNotNull {
+            POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+        }
+
+        return pomFiles.distinct()
     }
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
