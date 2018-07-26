@@ -23,7 +23,6 @@ import com.here.ort.analyzer.managers.SBT
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.test.USER_DIR
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -33,27 +32,16 @@ import java.io.File
 class SbtTest : StringSpec({
     "Dependencies of the external 'directories' project should be detected correctly" {
         val projectName = "directories"
-        val projectDir = File("src/funTest/assets/projects/external/$projectName")
-        val definitionFile = File(projectDir, "build.sbt")
-        val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
+        val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
+        val expectedOutputFile = projectDir.resolveSibling("$projectName-expected-output.yml")
 
         // Clean any previously generated POM files / target directories.
         Git.run(projectDir, "clean", "-fd")
 
-        // Even if we do not explicit depend on the definitionFile, explicitly check for it before calling
-        // resolveDependencies() to avoid potentially less readable errors from "sbt makePom". Similar for the
-        // expected output file.
-        definitionFile.isFile shouldBe true
-        expectedOutputFile.isFile shouldBe true
-
         val config = AnalyzerConfiguration(false, false)
-        val resolutionResult = SBT.create(config).resolveDependencies(USER_DIR, listOf(definitionFile))
+        val analyzerResultBuilder = analyze(config, projectDir, listOf(SBT))
 
-        // Because of the mapping from SBT to POM files we cannot use definitionFile as the key, so just ensure
-        // there is exactly one entry to take.
-        resolutionResult.size shouldBe 1
-
-        val actualResult = yamlMapper.writeValueAsString(resolutionResult.values.first())
+        val actualResult = yamlMapper.writeValueAsString(analyzerResultBuilder.build())
         val expectedResult = expectedOutputFile.readText()
 
         actualResult shouldBe expectedResult
