@@ -34,3 +34,7 @@
 	path = analyzer/src/funTest/assets/projects/external/quickcheck-state-machine
 	url = https://github.com/advancedtelematic/quickcheck-state-machine.git
 	ignore = untracked
+[submodule "sbt-multi-project-example"]
+	path = analyzer/src/funTest/assets/projects/external/sbt-multi-project-example
+	url = https://github.com/pbassiner/sbt-multi-project-example.git
+	ignore = untracked
