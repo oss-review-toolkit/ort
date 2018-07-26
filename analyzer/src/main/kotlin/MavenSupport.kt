@@ -385,16 +385,20 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
             }
         }
 
-        val binaryRemoteArtifact = requestRemoteArtifact(artifact, repositories)
+        val binaryRemoteArtifact = localProject?.let {
+            RemoteArtifact.EMPTY
+        } ?: requestRemoteArtifact(artifact, repositories)
 
-        val sourceRemoteArtifact = if (artifact.extension == "pom") {
-            binaryRemoteArtifact
-        } else {
-            val sourceArtifact = artifact.let {
-                DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)
+        val sourceRemoteArtifact = when {
+            localProject != null -> RemoteArtifact.EMPTY
+            artifact.extension == "pom" -> binaryRemoteArtifact
+            else -> {
+                val sourceArtifact = artifact.let {
+                    DefaultArtifact(it.groupId, it.artifactId, "sources", "jar", it.version)
+                }
+
+                requestRemoteArtifact(sourceArtifact, repositories)
             }
-
-            requestRemoteArtifact(sourceArtifact, repositories)
         }
 
         val vcsFromPackage = parseVcsInfo(mavenProject)
