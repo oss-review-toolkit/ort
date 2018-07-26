@@ -140,7 +140,7 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
         }
 
         fun runSBT(vararg command: String) =
-                ProcessCapture(workingDir, command(workingDir), "--info", SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, *command)
+                ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, *command)
                         .requireSuccess()
 
         // Get the list of project names.
