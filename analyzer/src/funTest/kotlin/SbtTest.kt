@@ -30,10 +30,27 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class SbtTest : StringSpec({
-    "Dependencies of the external 'directories' project should be detected correctly" {
+    "Dependencies of the single 'directories' project should be detected correctly" {
         val projectName = "directories"
         val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
         val expectedOutputFile = projectDir.resolveSibling("$projectName-expected-output.yml")
+
+        // Clean any previously generated POM files / target directories.
+        Git.run(projectDir, "clean", "-fd")
+
+        val config = AnalyzerConfiguration(false, false)
+        val analyzerResultBuilder = analyze(config, projectDir, listOf(SBT))
+
+        val actualResult = yamlMapper.writeValueAsString(analyzerResultBuilder.build())
+        val expectedResult = expectedOutputFile.readText()
+
+        actualResult shouldBe expectedResult
+    }
+
+    "Dependencies of the 'sbt-multi-project-example' multi-project should be detected correctly" {
+        val projectName = "sbt-multi-project-example"
+        val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
+        val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
 
         // Clean any previously generated POM files / target directories.
         Git.run(projectDir, "clean", "-fd")
