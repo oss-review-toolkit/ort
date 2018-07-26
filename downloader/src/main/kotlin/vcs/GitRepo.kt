@@ -64,7 +64,7 @@ object GitRepo : GitBase() {
         }
     }
 
-    override fun isApplicableUrl(vcsUrl: String) = false
+    override fun isApplicableUrlInternal(vcsUrl: String) = false
 
     /**
      * Clones the Git repositories defined in the manifest file using the Git Repo tool. The manifest file is checked
