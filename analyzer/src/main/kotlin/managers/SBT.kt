@@ -111,19 +111,19 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
                 transform = this::extractLowestSbtVersion
         )
 
+        fun runSBT(vararg command: String) =
+                ProcessCapture(workingDir, command(workingDir), "--info", SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, *command)
+                        .requireSuccess()
+
         // Get the list of project names.
-        var sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, "projects")
-                .requireSuccess()
-        val internalProjectNames = sbt.stdout().lines().mapNotNull {
+        val internalProjectNames = runSBT("projects").stdout().lines().mapNotNull {
             PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
         }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
         // aggregate projects.
         val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        sbt = ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, makePomCommand)
-                .requireSuccess()
-        val pomFiles = sbt.stdout().lines().mapNotNull {
+        val pomFiles = runSBT(makePomCommand).stdout().lines().mapNotNull {
             POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
         }
 
