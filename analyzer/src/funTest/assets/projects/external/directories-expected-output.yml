@@ -1,6 +1,19 @@
 ---
-project:
-  id: "SBT:io.github.soc:directories:10"
+config:
+  ignore_tool_versions: false
+  allow_dynamic_versions: false
+vcs:
+  type: "Git"
+  url: "https://github.com/soc/directories-jvm"
+  revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
+  path: ""
+vcs_processed:
+  type: "git"
+  url: "https://github.com/soc/directories-jvm.git"
+  revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
+  path: ""
+projects:
+- id: "SBT:io.github.soc:directories:10"
   definition_file_path: "target/directories-10.pom"
   declared_licenses:
   - "Mozilla Public License 2.0"
@@ -136,4 +149,5 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors: []
+errors:
+  SBT:io.github.soc:directories:10: []
