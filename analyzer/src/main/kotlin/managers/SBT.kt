@@ -33,6 +33,8 @@ import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
+import java.io.IOException
+import java.util.Properties
 
 class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<SBT>(
@@ -69,9 +71,13 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
             VERSION_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { Semver(it) }
         }
 
+        return checkForSameSbtVersion(versions)
+    }
+
+    private fun checkForSameSbtVersion(versions: List<Semver>): String {
         val uniqueVersions = versions.toSortedSet()
         if (uniqueVersions.size > 1) {
-            log.info { "Different sbt versions used in the same project: $uniqueVersions" }
+            log.warn { "Different sbt versions used in the same project: $uniqueVersions" }
         }
 
         return uniqueVersions.first().toString()
@@ -97,19 +103,41 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
             definitionFiles.first().parentFile
         }
 
-        // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
-        // https://stackoverflow.com/a/20337575/1127485.
-        checkCommandVersion(
-                command(workingDir),
-                // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
-                // form "make-pom" and to support declaring Maven-style repositories, see
-                // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-                Requirement.buildIvy("[0.13.0,)"),
-                versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
-                workingDir = workingDir,
-                ignoreActualVersion = config.ignoreToolVersions,
-                transform = this::extractLowestSbtVersion
-        )
+        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
+        // form "make-pom" and to support declaring Maven-style repositories, see
+        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+        val sbtVersionRequirement = Requirement.buildIvy("[0.13.0,)")
+
+        // Determine the SBT version(s) being used.
+        val rootPropertiesFile = workingDir.resolve("project").resolve("build.properties")
+        val propertiesFiles = workingDir.walkBottomUp().filter { it.isFile && it.name == "build.properties" }.toList()
+
+        if (!propertiesFiles.contains(rootPropertiesFile)) {
+            // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
+            // https://stackoverflow.com/a/20337575/1127485.
+            checkCommandVersion(
+                    command(workingDir),
+                    sbtVersionRequirement,
+                    versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
+                    workingDir = workingDir,
+                    ignoreActualVersion = config.ignoreToolVersions,
+                    transform = this::extractLowestSbtVersion
+            )
+        } else {
+            val versions = mutableListOf<Semver>()
+
+            propertiesFiles.forEach { file ->
+                val props = Properties()
+                file.reader().use { props.load(it) }
+                props.getProperty("sbt.version")?.let { versions += Semver(it) }
+            }
+
+            val lowestSbtVersion = checkForSameSbtVersion(versions)
+            if (!sbtVersionRequirement.isSatisfiedBy(lowestSbtVersion)) {
+                throw IOException("Unsupported ${toString()} version $lowestSbtVersion does not fulfill " +
+                        "$sbtVersionRequirement.")
+            }
+        }
 
         fun runSBT(vararg command: String) =
                 ProcessCapture(workingDir, command(workingDir), "--info", SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, *command)
