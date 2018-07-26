@@ -148,6 +148,13 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
             workingDir
         }
 
+        var vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: "")
+        if (sbtMode && !File(vcsProcessed.path, "build.sbt").isFile) {
+            // This is a programmatically created (aggregate) project which has no sources attached. This means the path
+            // does not actually exist in the VCS, so fall back to the root.
+            vcsProcessed = vcsProcessed.copy(path = "")
+        }
+
         val project = Project(
                 id = Identifier(
                         provider = if (sbtMode) SBT.toString() else Maven.toString(),
@@ -158,7 +165,7 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = maven.parseLicenses(mavenProject),
                 vcs = vcsFromPackage,
-                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: ""),
+                vcsProcessed = vcsProcessed,
                 homepageUrl = mavenProject.url ?: "",
                 scopes = scopes.values.toSortedSet()
         )
