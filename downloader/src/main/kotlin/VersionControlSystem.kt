@@ -342,7 +342,10 @@ abstract class VersionControlSystem {
      * for example when the URL ends on ".git" for Git or contains "/svn/" for SVN, but not when it contains the string
      * "git" as this could also be part of the host or project names.
      */
-    abstract fun isApplicableUrl(vcsUrl: String): Boolean
+    fun isApplicableUrl(vcsUrl: String) =
+            vcsUrl.isNotBlank() && !vcsUrl.endsWith(".html") && isApplicableUrlInternal(vcsUrl)
+
+    protected abstract fun isApplicableUrlInternal(vcsUrl: String): Boolean
 
     /**
      * Download the source code as specified by the [pkg] information to [targetDir]. [allowMovingRevisions] toggles

@@ -162,7 +162,7 @@ object Subversion : VersionControlSystem() {
                 }
             }
 
-    override fun isApplicableUrl(vcsUrl: String) = vcsUrl.isNotBlank() &&
+    override fun isApplicableUrlInternal(vcsUrl: String) =
             (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess())
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
