@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Col, Collapse, Row } from 'antd';
-import { DependencyTable } from './DependencyTable';
+import { PackagesTable } from './PackagesTable';
 
 const Panel = Collapse.Panel;
 
@@ -76,7 +76,7 @@ class TableView extends React.Component {
             <Collapse activeKey={view.showProjects} onChange={this.onChangeProjectCollapse}>
                 {Object.values(data.projects.data).map(project => (
                     <Panel key={`panel-${project.id}`} header={panelHeader(project)}>
-                        <DependencyTable project={project} />
+                        <PackagesTable project={project} />
                     </Panel>
                 ))}
             </Collapse>
