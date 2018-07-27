@@ -209,7 +209,21 @@ object Main {
 
             mutableListOf<Package>().apply {
                 if (DataEntity.PROJECT in entities) {
-                    addAll(analyzerResult.projects.map { it.toPackage() })
+                    // We store VcsInfo per project. As many project definition files actually reside in different
+                    // sub-directories of the same VCS working tree, it does not make sense to download (and scan) all
+                    // of them individually, not even if doing sparse checkouts. Instead, de-duplicate projects based on
+                    // their VcsInfo without taking the path into account, and only keep projects that refer to destinct
+                    // VCS working trees.
+                    val projectPackages = analyzerResult.projects.map { it.toPackage() }
+                    val projectPackagesByVcs = projectPackages.groupBy { it.vcsProcessed.copy(path = "") }
+                    val projectPackagesUniqueVcs = projectPackagesByVcs.map { (_, projectsWithSameVcs) ->
+                        projectsWithSameVcs.first()
+                    }
+                    addAll(projectPackagesUniqueVcs)
+
+                    // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
+                    // Git repositories that contain project definition files, which in many cases is doing duplicate
+                    // work.
                 }
 
                 if (DataEntity.PACKAGES in entities) {
