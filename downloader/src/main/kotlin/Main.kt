@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
+import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
@@ -215,10 +216,22 @@ object Main {
                     // their VcsInfo without taking the path into account, and only keep projects that refer to distinct
                     // VCS working trees.
                     val projectPackages = analyzerResult.projects.map { it.toPackage() }
-                    val projectPackagesByVcs = projectPackages.groupBy { it.vcsProcessed.copy(path = "") }
-                    val projectPackagesUniqueVcs = projectPackagesByVcs.map { (_, projectsWithSameVcs) ->
-                        projectsWithSameVcs.first()
+                    val projectPackagesByVcs = projectPackages.groupBy {
+                        if (it.vcsProcessed.type == GitRepo.toString()) {
+                            it.vcsProcessed
+                        } else {
+                            it.vcsProcessed.copy(path = "")
+                        }
                     }
+
+                    val projectPackagesUniqueVcs = projectPackagesByVcs.map { (sameVcs, projectsWithSameVcs) ->
+                        // Find the original project which has the empty path, if any, or simply take the first project
+                        // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
+                        projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() } ?: run {
+                            projectsWithSameVcs.first().copy(vcsProcessed = sameVcs)
+                        }
+                    }
+
                     addAll(projectPackagesUniqueVcs)
 
                     // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
