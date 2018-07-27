@@ -100,25 +100,23 @@ export const data = (() => {
          * For more details on ES6 proxy please see
          * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
          */
-        const applyProxy = (type, obj) => {
-            return new Proxy(
-                obj,
-                {
-                    get: function (obj, prop) {
-                        // By default behavior return the value; prop is usually an integer
-                        if (prop in obj) {
-                            return obj[prop];
-                        }
-
-                        if (legend[type][prop]) {
-                            return legend[type][prop];
-                        }
-
-                        return undefined;
+        const applyProxy = (type, obj) => new Proxy(
+            obj,
+            {
+                get(obj, prop) {
+                    // By default behavior return the value; prop is usually an integer
+                    if (prop in obj) {
+                        return obj[prop];
                     }
+
+                    if (legend[type][prop]) {
+                        return legend[type][prop];
+                    }
+
+                    return undefined;
                 }
-            );
-        };
+            }
+        );
 
         license.summary = [];
 
@@ -132,15 +130,13 @@ export const data = (() => {
                 title: 'Permissions',
                 color: 'green',
                 provider: 'choosealicense',
-                tags: ((tags = license.permissions) => {
-                    return tags.map((tag) => {
-                        if (legend.permissions[tag]) {
-                            return legend.permissions[tag];
-                        }
+                tags: ((tags = license.permissions) => tags.map((tag) => {
+                    if (legend.permissions[tag]) {
+                        return legend.permissions[tag];
+                    }
 
-                        return undefined;
-                    });
-                })()
+                    return undefined;
+                }))()
             });
         }
 
@@ -151,15 +147,13 @@ export const data = (() => {
                 title: 'Conditions',
                 color: 'orange',
                 provider: 'choosealicense',
-                tags: ((tags = license.conditions) => {
-                    return tags.map((tag) => {
-                        if (legend.conditions[tag]) {
-                            return legend.conditions[tag];
-                        }
+                tags: ((tags = license.conditions) => tags.map((tag) => {
+                    if (legend.conditions[tag]) {
+                        return legend.conditions[tag];
+                    }
 
-                        return undefined;
-                    });
-                })()
+                    return undefined;
+                }))()
             });
         }
 
@@ -170,15 +164,13 @@ export const data = (() => {
                 title: 'Limitations',
                 color: 'red',
                 provider: 'choosealicense',
-                tags: ((tags = license.limitations) => {
-                    return tags.map((tag) => {
-                        if (legend.limitations[tag]) {
-                            return legend.limitations[tag];
-                        }
+                tags: ((tags = license.limitations) => tags.map((tag) => {
+                    if (legend.limitations[tag]) {
+                        return legend.limitations[tag];
+                    }
 
-                        return undefined;
-                    });
-                })()
+                    return undefined;
+                }))()
             });
         }
 

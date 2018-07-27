@@ -33,12 +33,20 @@
             "error",
             "always"
         ],
+        "comma-dangle": ["error", {
+            "arrays": "never",
+            "objects": "never",
+            "imports": "never",
+            "exports": "never",
+            "functions": "ignore"
+        }],
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/jsx-indent": [2, 4],
         "react/jsx-indent-props": [2, 4],
         "react/sort-comp": [2, {
             "order": [
               "static-methods",
+              "instance-variables",
               "lifecycle",
               "/^on.+$/",
               "everything-else",

@@ -39,10 +39,10 @@ export function convertToRenderFormat(reportData) {
     let reportDataScopes = new Set([]);
 
     const addErrorsToPackage = (projectIndex, pkgObj, analyzerErrors) => {
+        const project = projects[projectIndex];
         let errors;
         let errorsAnalyzer = [];
         let errorsScanner = [];
-        let project = projects[projectIndex];
 
         const createErrorObj = (type, error) => {
             return {
@@ -220,7 +220,7 @@ export function convertToRenderFormat(reportData) {
      */
     const addPackageLicensesToReportData = (reportDataLicenses, projectIndex, pkgObj, licenses) => {
         if (Array.isArray(licenses)) {
-            for (let i = licenses.length - 1; i >= 0; i--) {
+            for (let i = licenses.length - 1; i >= 0; i -= 1) {
                 const license = licenses[i];
                 const project = projects[projectIndex];
                 let licenseOccurance = [];
@@ -320,7 +320,7 @@ export function convertToRenderFormat(reportData) {
     const addProjectLicensesToReportData = (projectIndex) => {
         const addLicensesToReportData = (licenses, projectIndex, project, projectLicenses) => {
             if (Array.isArray(projectLicenses)) {
-                for (let i = projectLicenses.length - 1; i >= 0; i--) {
+                for (let i = projectLicenses.length - 1; i >= 0; i -= 1) {
                     const license = projectLicenses[i];
                     const project = projects[projectIndex];
                     let licenseOccurance = [];
@@ -337,7 +337,6 @@ export function convertToRenderFormat(reportData) {
                     if (project && project.id) {
                         licenseOccurances = licenses[projectIndex][license];
 
-                        
                         if (licenseOccurances.has(project.id)) {
                             licenseOccurance = licenseOccurances.get(project.id);
                         }
@@ -408,7 +407,7 @@ export function convertToRenderFormat(reportData) {
     };
     const calculateNrPackagesLicenses = (projectsLicenses) => {
         return Object.values(projectsLicenses).reduce((accumulator, projectLicenses) => {
-            for (let license in projectLicenses) {
+            for (const license in projectLicenses) {
                 const licenseMap = projectLicenses[license];
 
                 if (!accumulator[license]) {
@@ -438,7 +437,7 @@ export function convertToRenderFormat(reportData) {
             reportDataTotalErrors = 0;
             errorsArr = Object.values(reportDataOpenErrors);
 
-            for (let i = errorsArr.length - 1; i >= 0; i--) {
+            for (let i = errorsArr.length - 1; i >= 0; i -= 1) {
                 reportDataTotalErrors += errorsArr[i].length;
             }
 
@@ -493,7 +492,7 @@ export function convertToRenderFormat(reportData) {
     const packagesFromAnalyzer = ((dataArr) => {
         const tmp = {};
 
-        for (let i = dataArr.length - 1; i >= 0; i--) {
+        for (let i = dataArr.length - 1; i >= 0; i -= 1) {
             tmp[dataArr[i].package.id] = {
                 ...dataArr[i].package,
                 curations: dataArr[i].curations
@@ -506,7 +505,7 @@ export function convertToRenderFormat(reportData) {
     const packagesFromScanner = ((dataArr) => {
         const tmp = {};
 
-        for (let i = dataArr.length - 1; i >= 0; i--) {
+        for (let i = dataArr.length - 1; i >= 0; i -= 1) {
             tmp[dataArr[i].id] = dataArr[i].results;
         }
 
@@ -587,7 +586,7 @@ export function convertToRenderFormat(reportData) {
     };
 
     // Traverse over projects
-    for (let i = projectsFromAnalyzer.length - 1; i >= 0; i--) {
+    for (let i = projectsFromAnalyzer.length - 1; i >= 0; i -= 1) {
         const project = projectsFromAnalyzer[i];
         const projectIndex = [i];
         let projectFile = project.definition_file_path;
@@ -626,7 +625,9 @@ export function convertToRenderFormat(reportData) {
 
         // As packages are added recursively to get an array
         // with the right order we need to reverse it
-        projects[projectIndex].packages.list = Object.values(projects[projectIndex].packages.list).reverse();
+        projects[projectIndex].packages.list = Object.values(
+            projects[projectIndex].packages.list
+        ).reverse();
     }
 
     return reportData = {

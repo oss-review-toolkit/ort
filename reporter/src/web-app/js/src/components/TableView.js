@@ -6,7 +6,6 @@ import { DependencyTable } from './DependencyTable';
 const Panel = Collapse.Panel;
 
 class TableView extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -25,10 +24,11 @@ class TableView extends React.Component {
             // Expand all project panels with 0.5 second delay
             // to ensure smooth UI when tabs switching
             window.setTimeout(() => {
+                const { data } = this.state;
                 const projects = Object.values(
-                    this.state.data.projects.data
+                    data.projects.data
                 ).reduce((accumulator, project) => {
-                    accumulator.push('panel-' + project.id);
+                    accumulator.push(`panel-${project.id}`);
                     return accumulator;
                 }, []);
 
@@ -53,14 +53,17 @@ class TableView extends React.Component {
     render() {
         const { data, view } = this.state;
         const panelHeader = (project) => {
-            const nrPackagesText = (nrPackages) => {
-                return (nrPackages + ' package' + ((nrPackages > 1) ? 's' : ''));
-            };
+            const nrPackagesText = nrPackages => (`${nrPackages} package${(nrPackages > 1) ? 's' : ''}`);
 
             return (
                 <Row>
                     <Col span={12}>
-                        Dependencies defined in <b> {project.definition_file_path}</b>
+                        Dependencies defined in
+                        {' '}
+                        <b>
+                            {' '}
+                            {project.definition_file_path}
+                        </b>
                     </Col>
                     <Col span={2} offset={10}>
                         {nrPackagesText(project.packages.total)}
@@ -71,16 +74,17 @@ class TableView extends React.Component {
 
         return (
             <Collapse activeKey={view.showProjects} onChange={this.onChangeProjectCollapse}>
-                {Object.values(data.projects.data).map((project) =>
-                    <Panel key={'panel-' + project.id} header={panelHeader(project)}>
+                {Object.values(data.projects.data).map(project => (
+                    <Panel key={`panel-${project.id}`} header={panelHeader(project)}>
                         <DependencyTable project={project} />
-                    </Panel>)}
+                    </Panel>
+                ))}
             </Collapse>
         );
     }
 }
 
 export default connect(
-    (state) => ({ reportData: state }),
+    state => ({ reportData: state }),
     () => ({})
 )(TableView);

@@ -18,7 +18,9 @@
  */
 
 import React from 'react';
-import { List, Modal, Table, Tabs, Tag, Tooltip } from 'antd';
+import {
+    List, Modal, Table, Tabs, Tag, Tooltip
+} from 'antd';
 import { LicenseSummaryCard } from './LicenseSummaryCard';
 import { LICENSES } from '../data/licenses';
 import 'antd/dist/antd.css';
@@ -62,39 +64,51 @@ export class LicenseTag extends React.Component {
     render() {
         if (this.tagText) {
             return (
-                <Tooltip placement="left" title={this.license 
-                    ? this.license.name : this.tagText}>
-                    <Tag className="ort-license"
+                <Tooltip
+                    placement="left"
+                    title={this.license
+                        ? this.license.name : this.tagText}
+                >
+                    <Tag
+                        className="ort-license"
                         color={this.license ? this.license.color : ''}
                         checked="true"
-                        onClick={this.license && this.showLicenseInfoModal}>
-                        {(this.ellipsisAtChar 
-                            && this.tagText.length >= this.ellipsisAtChar) 
-                            ? this.tagText.substr(0, this.ellipsisAtChar) + '...' : this.tagText}
+                        onClick={this.license && this.showLicenseInfoModal}
+                    >
+                        {(this.ellipsisAtChar
+                            && this.tagText.length >= this.ellipsisAtChar)
+                            ? `${this.tagText.substr(0, this.ellipsisAtChar)}...` : this.tagText}
                     </Tag>
                 </Tooltip>);
-            } else {
-                return(<div>No data</div>);
-            }
         }
-};
+        return (
+            <div>
+                No data
+            </div>
+        );
+    }
+}
 
 // Generates the HTML for the additional license information
 const LicenseInfo = (props) => {
-    const license = props.license;
+    const { license } = props;
     const licenseDescription = license.description
         ? license.description : 'No description available for this license';
 
     if (!license && !license.summary) {
-        return (<div>No summary data for this license</div>);
+        return (
+            <div>
+                No summary data for this license
+            </div>
+        );
     }
 
-    // Transform array of license summaries by provider so 
+    // Transform array of license summaries by provider so
     // we can display and attribute each provider's license summary
-    let summaryProviders = ((summary = license.summary) => {
-        let providers = {};
+    const summaryProviders = ((summary = license.summary) => {
+        const providers = {};
 
-        for (let i = 0; i < summary.length; i++) {
+        for (let i = 0; i < summary.length; i += 1) {
             const provider = summary[i].provider;
 
             if (provider) {
@@ -129,20 +143,22 @@ const LicenseInfo = (props) => {
                             dataSource={summaryProviders}
                             renderItem={summary => (
                                 <List.Item>
-                                    <LicenseSummaryCard summary={summary} /> 
+                                    <LicenseSummaryCard summary={summary} />
                                 </List.Item>
                             )}
                         />
                     </div>
                 </TabPane>
                 <TabPane tab="Fulltext" key="2">
-                    <Table 
+                    <Table
                         columns={[{
                             title: license.name,
                             dataIndex: 'text',
-                            render: (text, row, index) => {
-                                return(<pre className="ort-license-fulltext">{text}</pre>)
-                            }
+                            render: text => (
+                                <pre className="ort-license-fulltext">
+                                    {text}
+                                </pre>
+                            )
                         }]}
                         dataSource={[{
                             key: 1,
@@ -151,11 +167,12 @@ const LicenseInfo = (props) => {
                         }]}
                         pagination={{
                             hideOnSinglePage: true
-                         }}
+                        }}
                         scroll={{
                             y: 365
                         }}
-                        showHeader={false} />
+                        showHeader={false}
+                    />
                 </TabPane>
             </Tabs>
         </div>

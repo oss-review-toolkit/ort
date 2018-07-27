@@ -43,19 +43,17 @@ export const LICENSES = (() => {
     const licenseValueHandler = {
         get: (obj, prop) => {
             let data;
-            let licenseDataFromConfig;
             let licenseDataFromChoosealicense;
             let licenseDataFromSPDX;
             let values = [];
-
-            const spdxId = obj.spdxId;
 
             if (obj[prop]) {
                 return obj[prop];
             }
 
+            const spdxId = obj.spdxId;
             // Check if property name has been defined in Reporter's config
-            licenseDataFromConfig = licensesDataFromConfig[spdxId]
+            const licenseDataFromConfig = licensesDataFromConfig[spdxId]
                 ? licensesDataFromConfig[spdxId] : licensesDataFromConfig[prop];
 
             if (licenseDataFromConfig && licenseDataFromConfig[prop]) {
@@ -72,11 +70,11 @@ export const LICENSES = (() => {
 
             if (licenseDataFromSPDX && licenseDataFromSPDX[prop]) {
                 data = licenseDataFromSPDX[prop];
-            
+
                 if (!Array.isArray(data)) {
                     return obj[prop] = data;
                 }
-                
+
                 values = [...values, ...data];
             }
 
@@ -98,7 +96,7 @@ export const LICENSES = (() => {
         }
     };
 
-    /* Using ES6 Proxy to create Object that with default values for 
+    /* Using ES6 Proxy to create Object that with default values for
      * specific attribute coming for SPDX license list e.g.
      *
      * licenses[Apache-2.0] = {
@@ -123,5 +121,5 @@ export const LICENSES = (() => {
 export const LICENSES_PROVIDERS = window.LICENSES_PROVIDERS = (() => {
     return {
         choosealicense: choosealicenseMetaData
-    }
+    };
 })();
