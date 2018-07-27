@@ -26,6 +26,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
+import com.here.ort.downloader.consolidateProjectPackagesByVcs
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.AnalyzerResult
@@ -197,7 +198,7 @@ object Main {
         val analyzerResult = dependenciesFile.mapper().readValue(dependenciesFile, AnalyzerResult::class.java)
 
         // Add the projects as packages to scan.
-        val projectPackages = analyzerResult.projects.map { it.toPackage().toCuratedPackage() }
+        val projectPackages = consolidateProjectPackagesByVcs(analyzerResult.projects).map { it.toCuratedPackage() }
 
         val projectScanScopes = if (scopesToScan.isNotEmpty()) {
             println("Limiting scan to scopes: $scopesToScan")

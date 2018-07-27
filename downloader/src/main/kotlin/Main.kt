@@ -29,6 +29,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.mapper
@@ -51,6 +52,7 @@ import com.here.ort.utils.unpack
 import java.io.File
 import java.io.IOException
 import java.time.Instant
+import java.util.SortedSet
 
 import kotlin.system.exitProcess
 
@@ -59,6 +61,36 @@ import okhttp3.Request
 import okio.Okio
 
 import org.apache.commons.codec.digest.DigestUtils
+
+/**
+ * Consolidate projects based on their VcsInfo without taking the path into account. As we store VcsInfo per project
+ * but many project definition files actually reside in different sub-directories of the same VCS working tree, it
+ * does not make sense to download (and scan) all of them individually, not even if doing sparse checkouts.
+ *
+ * @param projects A set of projects to consolidate into packages.
+ * @return A list of packages for project that refer to distinct VCS working trees.
+ */
+fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): List<Package> {
+    // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
+    // Git repositories that contain project definition files, which in many cases is doing duplicate
+    // work.
+    val projectPackages = projects.map { it.toPackage() }
+    val projectPackagesByVcs = projectPackages.groupBy {
+        if (it.vcsProcessed.type == GitRepo.toString()) {
+            it.vcsProcessed
+        } else {
+            it.vcsProcessed.copy(path = "")
+        }
+    }
+
+    return projectPackagesByVcs.map { (sameVcs, projectsWithSameVcs) ->
+        // Find the original project which has the empty path, if any, or simply take the first project
+        // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
+        projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() } ?: run {
+            projectsWithSameVcs.first().copy(vcsProcessed = sameVcs)
+        }
+    }
+}
 
 /**
  * The main entry point of the application.
@@ -210,33 +242,8 @@ object Main {
 
             mutableListOf<Package>().apply {
                 if (DataEntity.PROJECT in entities) {
-                    // We store VcsInfo per project. As many project definition files actually reside in different
-                    // sub-directories of the same VCS working tree, it does not make sense to download (and scan) all
-                    // of them individually, not even if doing sparse checkouts. Instead, de-duplicate projects based on
-                    // their VcsInfo without taking the path into account, and only keep projects that refer to distinct
-                    // VCS working trees.
-                    val projectPackages = analyzerResult.projects.map { it.toPackage() }
-                    val projectPackagesByVcs = projectPackages.groupBy {
-                        if (it.vcsProcessed.type == GitRepo.toString()) {
-                            it.vcsProcessed
-                        } else {
-                            it.vcsProcessed.copy(path = "")
-                        }
-                    }
-
-                    val projectPackagesUniqueVcs = projectPackagesByVcs.map { (sameVcs, projectsWithSameVcs) ->
-                        // Find the original project which has the empty path, if any, or simply take the first project
-                        // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
-                        projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() } ?: run {
-                            projectsWithSameVcs.first().copy(vcsProcessed = sameVcs)
-                        }
-                    }
-
+                    val projectPackagesUniqueVcs = consolidateProjectPackagesByVcs(analyzerResult.projects)
                     addAll(projectPackagesUniqueVcs)
-
-                    // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
-                    // Git repositories that contain project definition files, which in many cases is doing duplicate
-                    // work.
                 }
 
                 if (DataEntity.PACKAGES in entities) {
