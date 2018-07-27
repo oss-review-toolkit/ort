@@ -18,7 +18,9 @@
  */
 
 import React from 'react';
-import { Cell, Label, PieChart, Pie, Sector } from 'recharts';
+import {
+    Cell, Label, PieChart, Pie, Sector
+} from 'recharts';
 
 export class LicenseChart extends React.Component {
     constructor(props) {
@@ -52,9 +54,9 @@ export class LicenseChart extends React.Component {
             });
         }
     }
-    
-    render () {
-        const { 
+
+    render() {
+        const {
             activeIndex,
             cx,
             cy,
@@ -65,25 +67,30 @@ export class LicenseChart extends React.Component {
         } = this.state;
 
         return (
-            <PieChart width={width} height={height}
-                onMouseEnter={this.onPieEnter}>
+            <PieChart
+                width={width}
+                height={height}
+                onMouseEnter={this.onPieEnter}
+            >
                 <Pie
-                  activeIndex={activeIndex}
-                  activeShape={renderActiveShape}
-                  data={licenses}
-                  dataKey="value"
-                  cx={cx}
-                  cy={cy}
-                  innerRadius={135}
-                  outerRadius={165}
-                  onMouseEnter={this.onPieEnter}
+                    activeIndex={activeIndex}
+                    activeShape={renderActiveShape}
+                    data={licenses}
+                    dataKey="value"
+                    cx={cx}
+                    cy={cy}
+                    innerRadius={135}
+                    outerRadius={165}
+                    onMouseEnter={this.onPieEnter}
                 >
-                {
-                    licenses.map((entry, index) => <Cell key={entry.name} fill={entry.color}/>)
-                }
-                <Label value={label} offset={0} position="bottom"/>
+                    {
+                        licenses.map((entry, index) => <Cell key={entry.name} fill={entry.color} />)
+                    }
+                    <Label value={label} offset={0} position="bottom" />
                 </Pie>
-                <text x={width / 2 - 80} y={height - 30} dy={8} textAnchor="middle" fill="#333">Move over chart to see license distribution</text>
+                <text x={width / 2 - 80} y={height - 30} dy={8} textAnchor="middle" fill="#333">
+                    Move over chart to see license distribution
+                </text>
             </PieChart>
         );
     }
@@ -91,8 +98,10 @@ export class LicenseChart extends React.Component {
 
 const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180;
-    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-        payload, percent, value } = props;
+    const {
+        cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
+        payload, percent, value
+    } = props;
     const sin = Math.sin(-RADIAN * midAngle);
     const cos = Math.cos(-RADIAN * midAngle);
     const sx = cx + (outerRadius + 10) * cos;
@@ -105,7 +114,9 @@ const renderActiveShape = (props) => {
 
     return (
         <g>
-            <text x={cx} y={cy} dy={8} textAnchor="middle" fill="#333">{payload.name}</text>
+            <text x={cx} y={cy} dy={8} textAnchor="middle" fill="#333">
+                {payload.name}
+            </text>
             <Sector
                 cx={cx}
                 cy={cy}
@@ -126,7 +137,9 @@ const renderActiveShape = (props) => {
             />
             <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={payload.color} fill="none" />
             <circle cx={ex} cy={ey} r={2} fill={payload.color} stroke="none" />
-            <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${value} package(s)`}</text>
+            <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
+                {`${value} package(s)`}
+            </text>
             <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
                 {`${(percent * 100).toFixed(2)}%`}
             </text>

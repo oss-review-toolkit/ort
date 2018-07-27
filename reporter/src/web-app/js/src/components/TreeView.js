@@ -20,7 +20,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import { Tree, Input, Tooltip, Button, Row } from 'antd';
+import {
+    Tree, Input, Tooltip, Button, Row
+} from 'antd';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 
@@ -40,6 +42,8 @@ class TreeView extends React.Component {
         };
     }
 
+    treeNodes = {};
+
     constructor(props) {
         super(props);
         this.state = { search: '' };
@@ -55,42 +59,11 @@ class TreeView extends React.Component {
         }
     }
 
-    treeNodes = {};
-
     componentDidUpdate(_, prevState) {
         const { search } = this.state;
 
         if (prevState.search !== search) {
-            this.calculateSorted();
-        }
-    }
-
-    calculateSorted = () => {
-        const { search } = this.state;
-        const selectedNodes = search ? Object.keys(this.treeNodes).filter(
-            node => this.treeNodes[node].id.indexOf(search) >= 0) : [];
-        const sorted = selectedNodes.sort((a, b) => {
-            const aIndexes = a.split('-');
-            const bIndexes = b.split('-');
-            const maxIndex = Math.min(aIndexes.length, bIndexes.length);
-
-            let diff = 0;
-
-            for (let i = 0; i < maxIndex; i++) {
-                diff += parseInt(aIndexes[i], 10) - parseInt(bIndexes[i], 10);
-                if (diff !== 0) {
-                    return diff;
-                }
-            }
-
-            return aIndexes.length > bIndexes.length ? 1 : -1;
-        });
-
-        if (sorted) {
-            this.scrollTo(sorted[0]);
-            this.setState({
-                sorted
-            });
+            this.onSearchCalculateSorted();
         }
     }
 
@@ -168,6 +141,36 @@ class TreeView extends React.Component {
         });
     }
 
+    onSearchCalculateSorted = () => {
+        const { search } = this.state;
+        const selectedNodes = search ? Object.keys(this.treeNodes).filter(
+            node => this.treeNodes[node].id.indexOf(search) >= 0
+        ) : [];
+        const sorted = selectedNodes.sort((a, b) => {
+            const aIndexes = a.split('-');
+            const bIndexes = b.split('-');
+            const maxIndex = Math.min(aIndexes.length, bIndexes.length);
+
+            let diff = 0;
+
+            for (let i = 0; i < maxIndex; i += 1) {
+                diff += parseInt(aIndexes[i], 10) - parseInt(bIndexes[i], 10);
+                if (diff !== 0) {
+                    return diff;
+                }
+            }
+
+            return aIndexes.length > bIndexes.length ? 1 : -1;
+        });
+
+        if (sorted) {
+            this.scrollTo(sorted[0]);
+            this.setState({
+                sorted
+            });
+        }
+    }
+
     scrollTo = (index) => {
         if (index && this.treeNodes[index].ref) {
             let elem = ReactDOM.findDOMNode(this.treeNodes[index].ref);
@@ -187,7 +190,7 @@ class TreeView extends React.Component {
     }
 
     renderTreeNode = (treeLeaf, indexElem) => {
-        const id = treeLeaf.id;
+        const { id } = treeLeaf;
         const { search, sorted, selectedIndex } = this.state;
 
         let idMapped = (
@@ -206,12 +209,12 @@ class TreeView extends React.Component {
                 <span>
                     {pre}
                     <span
-                      className={classNames({
-                          'ort-tree-searched-item': !selected,
-                          'ort-tree-selected-item': selected
-                      })}
+                        className={classNames({
+                            'ort-tree-searched-item': !selected,
+                            'ort-tree-selected-item': selected
+                        })}
                     >
-                   {search}
+                        {search}
                     </span>
                     {post}
                 </span>
@@ -235,21 +238,22 @@ class TreeView extends React.Component {
         );
 
         return (
-          <TreeNode
-              key={`${indexElem}-${treeLeaf.id}`}
-              title={idWithTooltip}
-              ref={ref => this.treeNodes[`${indexElem}`] = {
-                  ref,
-                  id
-              }}>
-              {treeLeaf.children.map((childLeaf, nodeIndex) => this.renderTreeNode(childLeaf, `${indexElem}-${nodeIndex}`))}
-          </TreeNode>
+            <TreeNode
+                key={`${indexElem}-${treeLeaf.id}`}
+                title={idWithTooltip}
+                ref={ref => this.treeNodes[`${indexElem}`] = {
+                    ref,
+                    id
+                }}
+            >
+                {treeLeaf.children.map((childLeaf, nodeIndex) => this.renderTreeNode(childLeaf, `${indexElem}-${nodeIndex}`))}
+            </TreeNode>
         );
     }
 
     render() {
         const {
-          tree, expandedKeys, autoExpandParent, selectedIndex, sorted
+            tree, expandedKeys, autoExpandParent, selectedIndex, sorted
         } = this.state;
 
         return tree && (
@@ -259,23 +263,28 @@ class TreeView extends React.Component {
                     {
                         sorted.length ? (
                             <Row type="flex" align="middle" style={{ marginLeft: 8, flexWrap: 'nowrap' }}>
-                            <Button onClick={this.onSearchNextClick} icon="arrow-down" />
-                            <Button onClick={this.onSearchPreviousClick} icon="arrow-up" />
-                            <span className="ort-tree-navigation-counter">
-                            {selectedIndex + 1} / {sorted.length}
-                            </span>
+                                <Button onClick={this.onSearchNextClick} icon="arrow-down" />
+                                <Button onClick={this.onSearchPreviousClick} icon="arrow-up" />
+                                <span className="ort-tree-navigation-counter">
+                                    {selectedIndex + 1}
+                                    {' '}
+/
+                                    {sorted.length}
+                                </span>
                             </Row>
                         ) : null
                     }
                 </div>
                 <div
-                    ref={(treeContainer) => this.tree = treeContainer}
-                    className="ort-tree-wrapper">
+                    ref={treeContainer => this.tree = treeContainer}
+                    className="ort-tree-wrapper"
+                >
                     <Tree
                         onExpand={this.onExpand}
                         showLine
                         autoExpandParent={autoExpandParent}
-                        expandedKeys={expandedKeys}>
+                        expandedKeys={expandedKeys}
+                    >
                         {tree.map((rootLeaf, index) => this.renderTreeNode(rootLeaf, index))}
                     </Tree>
                 </div>

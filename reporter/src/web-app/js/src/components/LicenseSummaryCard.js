@@ -18,7 +18,9 @@
  */
 
 import React from 'react';
-import { Badge, Card, Popover, List } from 'antd';
+import {
+    Badge, Card, Popover, List
+} from 'antd';
 import { LICENSES_PROVIDERS } from '../data/licenses';
 
 export const LicenseSummaryCard = (props) => {
@@ -26,7 +28,7 @@ export const LicenseSummaryCard = (props) => {
     let licenseDataAttributed = false;
     const licenseAttributionText = (item) => {
         let provider;
-        let providerName = item.provider;
+        const providerName = item.provider;
 
         if (providerName && !licenseDataAttributed) {
             provider = LICENSES_PROVIDERS[providerName];
@@ -35,14 +37,21 @@ export const LicenseSummaryCard = (props) => {
 
             return (
                 <div className="ort-data-attribution">
-                    <span>Source:
-                        <a href={provider.packageHomePage}
+                    <span>
+                        Source:
+                        <a
+                            href={provider.packageHomePage}
                             rel="noopener noreferrer"
-                            target="_blank">
+                            target="_blank"
+                        >
                             {provider.packageName}
                         </a>
                     </span>
-                    <p>{provider.packageCopyrightText} {provider.packageLicenseDeclared}</p>
+                    <p>
+                        {provider.packageCopyrightText}
+                        {' '}
+                        {provider.packageLicenseDeclared}
+                    </p>
                 </div>
             );
         }
@@ -50,42 +59,42 @@ export const LicenseSummaryCard = (props) => {
         return null;
     };
     const listItemStatus = (color) => {
-        switch(color) {
-            case 'green':
-                return 'success';
-            case 'orange':
-                return 'warning';
-            case 'red':
-                return 'error';
-            default:
-                return 'default';
+        switch (color) {
+        case 'green':
+            return 'success';
+        case 'orange':
+            return 'warning';
+        case 'red':
+            return 'error';
+        default:
+            return 'default';
         }
     };
     let listItems;
 
     if (summary) {
-        listItems = (items, itemColor) => {
-            return items.map((item) => {
-                const content = (
-                    <div style={{ width: 300 }}>
-                        <p>{item.description}</p>
-                    </div>
-                );
-                
-                return (
-                    <li key={item.tag}>
-                        <Popover content={content} title={item.label} arrowPointAtCenter trigger="hover">
-                            <Badge status={listItemStatus(itemColor)} text={item.tag} />
-                        </Popover>
-                    </li>
-                );
-            });
-        };
+        listItems = (items, itemColor) => items.map((item) => {
+            const content = (
+                <div style={{ width: 300 }}>
+                    <p>
+                        {item.description}
+                    </p>
+                </div>
+            );
+
+            return (
+                <li key={item.tag}>
+                    <Popover content={content} title={item.label} arrowPointAtCenter trigger="hover">
+                        <Badge status={listItemStatus(itemColor)} text={item.tag} />
+                    </Popover>
+                </li>
+            );
+        });
 
         return (
             <List
                 grid={
-                    { 
+                    {
                         gutter: 16,
                         xs: 3,
                         sm: 3,

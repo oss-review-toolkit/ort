@@ -31,10 +31,8 @@ export const metadata = {
     packageVersion: 'e642ae332f1b92b6e204df1cd05b930ae61ee79a'
 };
 
-export const UNIQUE_COLORS = (() => {
-    return {
-        ...metadata,
-        data: COLORS,
-        type: 'unique-colors'
-    };
-})();
+export const UNIQUE_COLORS = (() => ({
+    ...metadata,
+    data: COLORS,
+    type: 'unique-colors'
+}))();
