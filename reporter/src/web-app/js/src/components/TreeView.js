@@ -259,7 +259,7 @@ class TreeView extends React.Component {
         return tree && (
             <div className="ort-tree-view">
                 <div className="ort-tree-search">
-                    <Search placeholder="Search" onChange={this.onSearchChange} />
+                    <Search placeholder="Input search text and press Enter" onPressEnter={this.onSearchChange} />
                     {
                         sorted.length ? (
                             <Row type="flex" align="middle" style={{ marginLeft: 8, flexWrap: 'nowrap' }}>
@@ -268,7 +268,7 @@ class TreeView extends React.Component {
                                 <span className="ort-tree-navigation-counter">
                                     {selectedIndex + 1}
                                     {' '}
-/
+                                    /
                                     {sorted.length}
                                 </span>
                             </Row>
