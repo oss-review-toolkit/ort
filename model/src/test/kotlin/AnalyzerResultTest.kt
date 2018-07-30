@@ -23,8 +23,6 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class AnalyzerResultTest : WordSpec() {
-    private val vcs = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
-
     private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
     private val package3 = Package.EMPTY.copy(id = Identifier("provider-3", "namespace-3", "package-3", "version-3"))
@@ -44,7 +42,6 @@ class AnalyzerResultTest : WordSpec() {
             scopes = sortedSetOf(scope1, scope2)
     )
 
-    private val config = AnalyzerConfiguration(false, true)
     private val analyzerResult1 = ProjectAnalyzerResult(project1, sortedSetOf(package1.toCuratedPackage()),
             listOf("error-1", "error-2"))
     private val analyzerResult2 = ProjectAnalyzerResult(project2,
@@ -54,8 +51,7 @@ class AnalyzerResultTest : WordSpec() {
     init {
         "AnalyzerResult" should {
             "be serialized and deserialized correctly" {
-                val config = AnalyzerConfiguration(false, true)
-                val mergedResults = AnalyzerResultBuilder(config, vcs)
+                val mergedResults = AnalyzerResultBuilder()
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)
                         .build()
@@ -70,15 +66,11 @@ class AnalyzerResultTest : WordSpec() {
 
         "AnalyzerResultBuilder" should {
             "merge results from all files" {
-                val config = AnalyzerConfiguration(false, true)
-                val mergedResults = AnalyzerResultBuilder(config, vcs)
+                val mergedResults = AnalyzerResultBuilder()
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)
                         .build()
 
-                mergedResults.config.allowDynamicVersions shouldBe true
-                mergedResults.vcs shouldBe vcs
-                mergedResults.vcsProcessed shouldBe vcs.normalize()
                 mergedResults.projects shouldBe sortedSetOf(project1, project2)
                 mergedResults.packages shouldBe sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(),
                         package3.toCuratedPackage())
