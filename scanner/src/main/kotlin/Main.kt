@@ -39,6 +39,7 @@ import com.here.ort.model.ScanRecord
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
+import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -180,7 +181,15 @@ object Main {
         }
 
         configFile?.let {
-            ScanResultsCache.configure(it.mapper().readTree(it))
+            require(it.isFile) {
+                "Provided configuration file is not a file: ${it.invariantSeparatorsPath}"
+            }
+
+            val config = it.mapper().readValue(it, ScannerConfiguration::class.java)
+
+            config.artifactoryCache?.let {
+                ScanResultsCache.configure(it)
+            }
         }
 
         println("Using scanner '$scanner'.")
