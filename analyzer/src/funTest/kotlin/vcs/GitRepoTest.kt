@@ -19,7 +19,7 @@
 
 package com.here.ort.analyzer.vcs
 
-import com.here.ort.analyzer.analyze
+import com.here.ort.analyzer.Analyzer
 import com.here.ort.analyzer.managers.Bundler
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.AnalyzerConfiguration
@@ -58,7 +58,7 @@ class GitRepoTest : StringSpec() {
 
             GitRepo.download(pkg, outputDir)
             val config = AnalyzerConfiguration(false, false)
-            val analyzerResultBuilder = analyze(config, outputDir, listOf(Bundler))
+            val analyzerResultBuilder = Analyzer().analyze(config, outputDir, listOf(Bundler))
             val analyzerResult = analyzerResultBuilder.build()
             val actualResult = yamlMapper.writeValueAsString(analyzerResult)
             val expectedResult = patchExpectedResult(
