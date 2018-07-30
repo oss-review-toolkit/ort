@@ -26,12 +26,8 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.here.ort.analyzer.managers.Unmanaged
-import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
-import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.OutputFormat
-import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -43,72 +39,6 @@ import com.here.ort.utils.safeMkdirs
 import java.io.File
 
 import kotlin.system.exitProcess
-
-fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
-            packageManagers: List<PackageManagerFactory<PackageManager>> = PackageManager.ALL,
-            packageCurationsFile: File? = null
-): AnalyzerResultBuilder {
-    // Map of files managed by the respective package manager.
-    val managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
-        // If only one package manager is activated, treat the given path as definition file for that package
-        // manager despite its name.
-        mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
-    } else {
-        PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
-    }
-
-    val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any {
-        it.parentFile.absoluteFile == absoluteProjectPath
-    }
-
-    if (managedDefinitionFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-        managedDefinitionFiles[Unmanaged] = listOf(absoluteProjectPath)
-    }
-
-    if (log.isInfoEnabled) {
-        // Log the summary of projects found per package manager.
-        managedDefinitionFiles.forEach { manager, files ->
-            // No need to use curly-braces-syntax for logging here as the log level check is already done above.
-            log.info("$manager projects found in:")
-            log.info(files.joinToString("\n") {
-                "\t${it.toRelativeString(absoluteProjectPath).let { if (it.isEmpty()) "." else it }}"
-            })
-        }
-    }
-
-    val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
-    val analyzerResultBuilder = AnalyzerResultBuilder(config, vcs)
-
-    // Resolve dependencies per package manager.
-    managedDefinitionFiles.forEach { manager, files ->
-        val results = manager.create(config).resolveDependencies(absoluteProjectPath, files)
-
-        val curatedResults = packageCurationsFile?.let {
-            val provider = YamlFilePackageCurationProvider(it)
-            results.mapValues { entry ->
-                ProjectAnalyzerResult(
-                        project = entry.value.project,
-                        errors = entry.value.errors,
-                        packages = entry.value.packages.map { curatedPackage ->
-                            val curations = provider.getCurationsFor(curatedPackage.pkg.id)
-                            curations.fold(curatedPackage) { cur, packageCuration ->
-                                log.debug {
-                                    "Applying curation '$packageCuration' to package '${curatedPackage.pkg.id}'."
-                                }
-                                packageCuration.apply(cur)
-                            }
-                        }.toSortedSet()
-                )
-            }
-        } ?: results
-
-        curatedResults.forEach { _, analyzerResult ->
-            analyzerResultBuilder.addResult(analyzerResult)
-        }
-    }
-
-    return analyzerResultBuilder
-}
 
 /**
  * The main entry point of the application.
@@ -232,7 +162,7 @@ object Main {
         println("Scanning project path:\n\t$absoluteProjectPath")
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
-        val analyzerResultBuilder = analyze(config, absoluteProjectPath, packageManagers,
+        val analyzerResultBuilder = Analyzer().analyze(config, absoluteProjectPath, packageManagers,
                 packageCurationsFile)
 
         analyzerResultBuilder.build().let {

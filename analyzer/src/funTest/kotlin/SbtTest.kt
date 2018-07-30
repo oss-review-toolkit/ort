@@ -39,7 +39,7 @@ class SbtTest : StringSpec({
         Git.run(projectDir, "clean", "-fd")
 
         val config = AnalyzerConfiguration(false, false)
-        val analyzerResultBuilder = analyze(config, projectDir, listOf(SBT))
+        val analyzerResultBuilder = Analyzer().analyze(config, projectDir, listOf(SBT))
 
         val actualResult = yamlMapper.writeValueAsString(analyzerResultBuilder.build())
         val expectedResult = expectedOutputFile.readText()
@@ -56,7 +56,7 @@ class SbtTest : StringSpec({
         Git.run(projectDir, "clean", "-fd")
 
         val config = AnalyzerConfiguration(false, false)
-        val analyzerResultBuilder = analyze(config, projectDir, listOf(SBT))
+        val analyzerResultBuilder = Analyzer().analyze(config, projectDir, listOf(SBT))
 
         val actualResult = yamlMapper.writeValueAsString(analyzerResultBuilder.build())
         val expectedResult = expectedOutputFile.readText()
