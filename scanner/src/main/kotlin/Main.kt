@@ -27,8 +27,6 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
 import com.here.ort.downloader.consolidateProjectPackagesByVcs
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.Identifier
@@ -280,9 +278,7 @@ object Main {
             ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 
-        val vcsInfo = VersionControlSystem.getPathInfo(inputPath)
-        val config = AnalyzerConfiguration(false, true)
-        val analyzerResult = AnalyzerResultBuilder(config, vcsInfo).build()
+        val analyzerResult = AnalyzerResultBuilder().build()
 
         val scanResultContainer = ScanResultContainer(Identifier("", "", inputPath.absolutePath, ""), listOf(result))
 
