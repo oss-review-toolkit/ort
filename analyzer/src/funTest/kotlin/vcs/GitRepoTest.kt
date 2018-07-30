@@ -58,9 +58,8 @@ class GitRepoTest : StringSpec() {
 
             GitRepo.download(pkg, outputDir)
             val config = AnalyzerConfiguration(false, false)
-            val analyzerResultBuilder = Analyzer().analyze(config, outputDir, listOf(Bundler))
-            val analyzerResult = analyzerResultBuilder.build()
-            val actualResult = yamlMapper.writeValueAsString(analyzerResult)
+            val ortResult = Analyzer().analyze(config, outputDir, listOf(Bundler))
+            val actualResult = yamlMapper.writeValueAsString(ortResult.analyzer!!.result)
             val expectedResult = patchExpectedResult(
                     File("src/funTest/assets/projects/external/grpc-bundler-expected-output.yml"),
                     custom = Pair("<REPLACE_TMP>", outputDir.name),
