@@ -21,8 +21,6 @@ package com.here.ort.model
 
 import ch.frankel.slf4k.*
 
-import com.fasterxml.jackson.annotation.JsonAlias
-
 import com.here.ort.utils.log
 
 import java.util.SortedMap
@@ -32,22 +30,6 @@ import java.util.SortedSet
  * A class that merges all information from individual AnalyzerResults created for each found build file
  */
 data class AnalyzerResult(
-        /**
-         * The [AnalyzerConfiguration] that was used to generate the result.
-         */
-        @JsonAlias("allowDynamicVersions", "allow_dynamic_versions")
-        val config: AnalyzerConfiguration,
-
-        /**
-         * The [VcsInfo] of the analyzed repository.
-         */
-        val vcs: VcsInfo,
-
-        /**
-         * The normalized [VcsInfo] of the analyzed repository.
-         */
-        val vcsProcessed: VcsInfo,
-
         /**
          * Sorted set of the projects, as they appear in the individual analyzer results.
          */
@@ -75,16 +57,13 @@ data class AnalyzerResult(
     }
 }
 
-class AnalyzerResultBuilder(
-        private val config: AnalyzerConfiguration,
-        private val vcsInfo: VcsInfo
-) {
+class AnalyzerResultBuilder() {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<String>>()
 
     fun build(): AnalyzerResult {
-        return AnalyzerResult(config, vcsInfo, vcsInfo.normalize(), projects, packages, errors)
+        return AnalyzerResult(projects, packages, errors)
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = this.apply {
