@@ -25,7 +25,12 @@ import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.AnalyzerResultBuilder
+import com.here.ort.model.AnalyzerRun
+import com.here.ort.model.Environment
+import com.here.ort.model.OrtResult
 import com.here.ort.model.ProjectAnalyzerResult
+import com.here.ort.model.Repository
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.log
 
 import java.io.File
@@ -34,7 +39,7 @@ class Analyzer {
     fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
                 packageManagers: List<PackageManagerFactory<PackageManager>> = PackageManager.ALL,
                 packageCurationsFile: File? = null
-    ): AnalyzerResultBuilder {
+    ): OrtResult {
         // Map of files managed by the respective package manager.
         val managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
@@ -94,6 +99,10 @@ class Analyzer {
             }
         }
 
-        return analyzerResultBuilder
+        val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration(null))
+
+        val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())
+
+        return OrtResult(repository, run)
     }
 }

@@ -39,9 +39,9 @@ class SbtTest : StringSpec({
         Git.run(projectDir, "clean", "-fd")
 
         val config = AnalyzerConfiguration(false, false)
-        val analyzerResultBuilder = Analyzer().analyze(config, projectDir, listOf(SBT))
+        val ortResult = Analyzer().analyze(config, projectDir, listOf(SBT))
 
-        val actualResult = yamlMapper.writeValueAsString(analyzerResultBuilder.build())
+        val actualResult = yamlMapper.writeValueAsString(ortResult.analyzer!!.result)
         val expectedResult = expectedOutputFile.readText()
 
         actualResult shouldBe expectedResult
@@ -56,9 +56,9 @@ class SbtTest : StringSpec({
         Git.run(projectDir, "clean", "-fd")
 
         val config = AnalyzerConfiguration(false, false)
-        val analyzerResultBuilder = Analyzer().analyze(config, projectDir, listOf(SBT))
+        val ortResult = Analyzer().analyze(config, projectDir, listOf(SBT))
 
-        val actualResult = yamlMapper.writeValueAsString(analyzerResultBuilder.build())
+        val actualResult = yamlMapper.writeValueAsString(ortResult)
         val expectedResult = expectedOutputFile.readText()
 
         actualResult shouldBe expectedResult
