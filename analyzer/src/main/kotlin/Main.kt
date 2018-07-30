@@ -162,16 +162,15 @@ object Main {
         println("Scanning project path:\n\t$absoluteProjectPath")
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
-        val analyzerResultBuilder = Analyzer().analyze(config, absoluteProjectPath, packageManagers,
-                packageCurationsFile)
 
-        analyzerResultBuilder.build().let {
-            absoluteOutputPath.safeMkdirs()
-            outputFormats.forEach { format ->
-                val outputFile = File(absoluteOutputPath, "all-dependencies.${format.fileExtension}")
-                println("Writing analyzer result to '$outputFile'.")
-                format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, it)
-            }
+        val ortResult = Analyzer().analyze(config, absoluteProjectPath, packageManagers, packageCurationsFile)
+
+        absoluteOutputPath.safeMkdirs()
+
+        outputFormats.forEach { format ->
+            val outputFile = File(absoluteOutputPath, "analyzer-result.${format.fileExtension}")
+            println("Writing analyzer result to '$outputFile'.")
+            format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, ortResult)
         }
     }
 }

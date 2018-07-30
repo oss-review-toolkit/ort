@@ -113,7 +113,7 @@ class MainTest : StringSpec() {
                     "-o", analyzerOutputDir.path
             ))
 
-            val result = File(analyzerOutputDir, "all-dependencies.yml").readText()
+            val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
             result shouldBe expectedResult
         }
@@ -138,7 +138,7 @@ class MainTest : StringSpec() {
                     "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
             ))
 
-            val result = File(analyzerOutputDir, "all-dependencies.yml").readText()
+            val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
             result shouldBe expectedResult
         }
