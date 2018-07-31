@@ -21,6 +21,7 @@ package com.here.ort.reporter
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
+import com.here.ort.model.OrtResult
 
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.mapper
@@ -124,12 +125,16 @@ object Main {
 
         outputDir.safeMkdirs()
 
-        val scanRecord = scanRecordFile.let {
-            it.mapper().readValue(it, ScanRecord::class.java)
+        val ortResult = scanRecordFile.let {
+            it.mapper().readValue(it, OrtResult::class.java)
+        }
+
+        require(ortResult.scanner != null) {
+            "The provided scan-record-file '${scanRecordFile.invariantSeparatorsPath}' does not contain a scan record."
         }
 
         reportFormats.forEach {
-            it.generateReport(scanRecord, outputDir)
+            it.generateReport(ortResult.scanner!!.results, outputDir)
         }
     }
 }
