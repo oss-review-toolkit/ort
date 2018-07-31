@@ -19,6 +19,8 @@
 
 package com.here.ort.scanner
 
+import ch.frankel.slf4k.*
+
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.downloader.DownloadException
@@ -32,6 +34,7 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.mapper
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getPathFromEnvironment
+import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
@@ -118,8 +121,10 @@ abstract class LocalScanner : Scanner() {
             : Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
-        return packages.associate { pkg ->
+        return packages.withIndex().associate { (index, pkg) ->
             val result = try {
+                log.info { "Starting scan of '${pkg.id}' (${index + 1}/${packages.size})." }
+
                 scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory)
             } catch (e: ScanException) {
                 val now = Instant.now()
