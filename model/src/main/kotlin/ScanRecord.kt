@@ -26,11 +26,6 @@ import java.util.SortedSet
  */
 data class ScanRecord(
         /**
-         * The [AnalyzerResult] that was used as input for the scanner.
-         */
-        val analyzerResult: AnalyzerResult,
-
-        /**
          * The scanned and ignored [Scope]s for each scanned [Project] by id.
          */
         val scannedScopes: SortedSet<ProjectScanScopes>,
@@ -46,9 +41,8 @@ data class ScanRecord(
         val cacheStats: CacheStatistics
 ) : CustomData() {
     /**
-     * True if the [analyzerResult] or any of the [scanResults] contain errors.
+     * True if any of the [scanResults] contain errors.
      */
     @Suppress("UNUSED")
-    val hasErrors = analyzerResult.hasErrors()
-            || scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
+    val hasErrors = scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
 }

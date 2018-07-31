@@ -19,13 +19,16 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
 
 import java.io.File
 
 /**
- * A reporter that creates a human readable report from a [ScanRecord].
+ * A reporter that creates a human readable report from the [AnalyzerResult] and [ScanRecord] contained in an
+ * [OrtResult].
  */
 interface Reporter {
-    fun generateReport(scanRecord: ScanRecord, outputDir: File)
+    fun generateReport(ortResult: OrtResult, outputDir: File)
 }
