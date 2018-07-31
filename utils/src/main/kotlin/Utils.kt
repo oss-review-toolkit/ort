@@ -381,6 +381,38 @@ fun File.toSafeURI(): URI {
 }
 
 /**
+ * Populates and returns the [destination] mutable map with key-value pairs provided by [transform] function applied to
+ * each element of the given collection and the sequential index.
+ *
+ * If any of two pairs would have the same key the last one gets added to the map.
+ */
+inline fun <T, K, V, M : MutableMap<in K, in V>> Iterable<T>.associateToIndexed(
+        destination: M,
+        transform: (index: Int, T) -> Pair<K, V>
+): M {
+    var index = 0
+    for (element in this) {
+        destination += transform(index++, element)
+    }
+    return destination
+}
+
+/**
+ * Returns a [Map] containing key-value pairs provided by [transform] function applied to elements of the given
+ * collection and the sequential index.
+ *
+ * If any of two pairs would have the same key the last one gets added to the map.
+ *
+ * The returned map preserves the entry iteration order of the original collection.
+ */
+inline fun <T, K, V> Iterable<T>.associateIndexed(transform: (index: Int, T) -> Pair<K, V>): Map<K, V> {
+    // The helper functions used in the implementation of associate are internal and therefore cannot be used here, but
+    // the calculation of the initial capacity below comes pretty close.
+    val capacity = if (this is Collection<*>) this.size else 16
+    return associateToIndexed(LinkedHashMap(capacity), transform)
+}
+
+/**
  * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object
  * or the text value is null.
  */
