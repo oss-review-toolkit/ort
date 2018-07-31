@@ -19,14 +19,20 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.ScanRecord
+import com.here.ort.model.OrtResult
 import com.here.ort.utils.spdx.getLicenseText
 
 import java.io.File
 import java.util.SortedSet
 
 class NoticeReporter : Reporter {
-    override fun generateReport(scanRecord: ScanRecord, outputDir: File) {
+    override fun generateReport(ortResult: OrtResult, outputDir: File) {
+        require(ortResult.scanner != null) {
+            "The provided ORT result file does not contain a scan record."
+        }
+
+        val scanRecord = ortResult.scanner!!.results
+
         val noticeFile = File(outputDir, "NOTICE")
 
         val allFindings = sortedMapOf<String, SortedSet<String>>()

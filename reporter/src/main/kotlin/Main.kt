@@ -23,7 +23,6 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.here.ort.model.OrtResult
 
-import com.here.ort.model.ScanRecord
 import com.here.ort.model.mapper
 import com.here.ort.reporter.reporters.*
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -48,8 +47,8 @@ object Main {
         NOTICE(NoticeReporter()),
         STATIC_HTML(StaticHtmlReporter());
 
-        override fun generateReport(scanRecord: ScanRecord, outputDir: File) =
-                reporter.generateReport(scanRecord, outputDir)
+        override fun generateReport(ortResult: OrtResult, outputDir: File) =
+                reporter.generateReport(ortResult, outputDir)
     }
 
     @Parameter(description = "The ort result file to use. Must contain a scan record.",
@@ -129,12 +128,8 @@ object Main {
             it.mapper().readValue(it, OrtResult::class.java)
         }
 
-        require(ortResult.scanner != null) {
-            "The provided ort-result-file '${ortResultFile.invariantSeparatorsPath}' does not contain a scan record."
-        }
-
         reportFormats.forEach {
-            it.generateReport(ortResult.scanner!!.results, outputDir)
+            it.generateReport(ortResult, outputDir)
         }
     }
 }
