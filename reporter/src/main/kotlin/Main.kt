@@ -52,11 +52,11 @@ object Main {
                 reporter.generateReport(scanRecord, outputDir)
     }
 
-    @Parameter(description = "The scan record file to use.",
-            names = ["--scan-record-file", "-s"],
+    @Parameter(description = "The ort result file to use. Must contain a scan record.",
+            names = ["--ort-result-file", "-i"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
-    private lateinit var scanRecordFile: File
+    private lateinit var ortResultFile: File
 
     @Parameter(description = "The output directory to store the generated reports in.",
             names = ["--output-dir", "-o"],
@@ -125,12 +125,12 @@ object Main {
 
         outputDir.safeMkdirs()
 
-        val ortResult = scanRecordFile.let {
+        val ortResult = ortResultFile.let {
             it.mapper().readValue(it, OrtResult::class.java)
         }
 
         require(ortResult.scanner != null) {
-            "The provided scan-record-file '${scanRecordFile.invariantSeparatorsPath}' does not contain a scan record."
+            "The provided ort-result-file '${ortResultFile.invariantSeparatorsPath}' does not contain a scan record."
         }
 
         reportFormats.forEach {
