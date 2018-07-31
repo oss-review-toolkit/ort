@@ -30,6 +30,7 @@ import com.here.ort.downloader.consolidateProjectPackagesByVcs
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.ProjectScanScopes
 import com.here.ort.model.Provenance
@@ -202,7 +203,14 @@ object Main {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
 
-        val analyzerResult = dependenciesFile.mapper().readValue(dependenciesFile, AnalyzerResult::class.java)
+        val ortResult = dependenciesFile.mapper().readValue(dependenciesFile, OrtResult::class.java)
+
+        require(ortResult.analyzer != null) {
+            "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
+                    "analyzer result."
+        }
+
+        val analyzerResult = ortResult.analyzer!!.result
 
         // Add the projects as packages to scan.
         val projectPackages = consolidateProjectPackagesByVcs(analyzerResult.projects).map { it.toCuratedPackage() }
