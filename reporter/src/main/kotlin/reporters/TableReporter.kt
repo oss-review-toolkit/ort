@@ -54,7 +54,7 @@ abstract class TableReporter : Reporter {
             val projectDependencies: SortedMap<Project, Table>,
 
             /**
-             * Additional metadata read from the "reporter.metadata" field in [ScanRecord.data].
+             * Additional metadata read from the "reporter.metadata" field in [OrtResult.data].
              */
             val metadata: Map<String, String>,
 
@@ -158,7 +158,7 @@ abstract class TableReporter : Reporter {
         val errorSummaryTable = Table(errorSummaryEntries.values.toList().sortedBy { it.id })
         val summaryTable = Table(summaryEntries.values.toList().sortedBy { it.id })
 
-        val metadata = scanRecord.data["reporter.metadata"]?.let {
+        val metadata = ortResult.data["reporter.metadata"]?.let {
             if (it is Map<*, *>) {
                 it.entries.associate { (key, value) -> key.toString() to value.toString() }
             } else {
