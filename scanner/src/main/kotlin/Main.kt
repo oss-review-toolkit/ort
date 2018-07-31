@@ -27,17 +27,21 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
 import com.here.ort.downloader.consolidateProjectPackagesByVcs
-import com.here.ort.model.AnalyzerResult
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResultBuilder
+import com.here.ort.model.Environment
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.ProjectScanScopes
 import com.here.ort.model.Provenance
+import com.here.ort.model.Repository
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
+import com.here.ort.model.ScannerRun
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.scanner.scanners.ScanCode
@@ -179,26 +183,29 @@ object Main {
             }
         }
 
-        configFile?.let {
+        val config = configFile?.let {
             require(it.isFile) {
                 "Provided configuration file is not a file: ${it.invariantSeparatorsPath}"
             }
 
-            val config = it.mapper().readValue(it, ScannerConfiguration::class.java)
+            it.mapper().readValue(it, ScannerConfiguration::class.java)
 
-            config.artifactoryCache?.let {
-                ScanResultsCache.configure(it)
-            }
+
+        } ?: ScannerConfiguration()
+
+        config.artifactoryCache?.let {
+            ScanResultsCache.configure(it)
         }
 
         println("Using scanner '$scanner'.")
 
-        val scanRecord = dependenciesFile?.let { scanDependenciesFile(it) } ?: scanInputPath(inputPath!!)
+        val ortResult = dependenciesFile?.let { scanDependenciesFile(it, config) }
+                ?: scanInputPath(inputPath!!, config)
 
-        writeScanRecord(outputDir, scanRecord)
+        writeResult(outputDir, ortResult)
     }
 
-    private fun scanDependenciesFile(dependenciesFile: File): ScanRecord {
+    private fun scanDependenciesFile(dependenciesFile: File, config: ScannerConfiguration): OrtResult {
         require(dependenciesFile.isFile) {
             "Provided path is not a file: ${dependenciesFile.absolutePath}"
         }
@@ -256,10 +263,14 @@ object Main {
             ScanResultContainer(pkg.id, results.map { it.copy(rawResult = null) })
         }.toSortedSet()
 
-        return ScanRecord(analyzerResult, projectScanScopes, resultContainers, ScanResultsCache.stats)
+        val scanRecord = ScanRecord(analyzerResult, projectScanScopes, resultContainers, ScanResultsCache.stats)
+
+        val scannerRun = ScannerRun(Environment(), config, scanRecord)
+
+        return OrtResult(ortResult.repository, ortResult.analyzer, scannerRun)
     }
 
-    private fun scanInputPath(inputPath: File): ScanRecord {
+    private fun scanInputPath(inputPath: File, config: ScannerConfiguration): OrtResult {
         require(inputPath.exists()) {
             "Provided path does not exist: ${inputPath.absolutePath}"
         }
@@ -290,14 +301,22 @@ object Main {
 
         val scanResultContainer = ScanResultContainer(Identifier("", "", inputPath.absolutePath, ""), listOf(result))
 
-        return ScanRecord(analyzerResult, sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
+        val scanRecord = ScanRecord(analyzerResult, sortedSetOf(), sortedSetOf(scanResultContainer),
+                ScanResultsCache.stats)
+
+        val scannerRun = ScannerRun(Environment(), config, scanRecord)
+
+        val vcs = VersionControlSystem.getCloneInfo(inputPath)
+        val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration(null))
+
+        return OrtResult(repository, scanner = scannerRun)
     }
 
-    private fun writeScanRecord(outputDirectory: File, scanRecord: ScanRecord) {
+    private fun writeResult(outputDirectory: File, ortResult: OrtResult) {
         outputFormats.forEach { format ->
-            val scanRecordFile = File(outputDirectory, "scan-record.${format.fileExtension}")
+            val scanRecordFile = File(outputDirectory, "scan-result.${format.fileExtension}")
             println("Writing scan record to '${scanRecordFile.absolutePath}'.")
-            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, scanRecord)
+            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, ortResult)
         }
     }
 }
