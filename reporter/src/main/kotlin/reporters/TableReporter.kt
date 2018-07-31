@@ -20,6 +20,7 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
@@ -110,18 +111,30 @@ abstract class TableReporter : Reporter {
                 )
     }
 
-    override fun generateReport(scanRecord: ScanRecord, outputDir: File) {
+    override fun generateReport(ortResult: OrtResult, outputDir: File) {
         val errorSummaryEntries = mutableMapOf<Identifier, TableEntry>()
         val summaryEntries = mutableMapOf<Identifier, TableEntry>()
 
-        val projectTables = scanRecord.analyzerResult.projects.associate { project ->
+        require(ortResult.analyzer != null) {
+            "The provided ORT result does not contain an analyzer result."
+        }
+
+        val analyzerResult = ortResult.analyzer!!.result
+
+        require(ortResult.scanner != null) {
+            "The provided ORT result does not contain a scan record."
+        }
+
+        val scanRecord = ortResult.scanner!!.results
+
+        val projectTables = analyzerResult.projects.associate { project ->
             val tableEntries = (listOf(project.id) + project.collectDependencyIds()).map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.map { it.name }.toSortedSet()
 
-                val declaredLicenses = scanRecord.analyzerResult.projects.find { it.id == id }?.declaredLicenses
-                        ?: scanRecord.analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
+                val declaredLicenses = analyzerResult.projects.find { it.id == id }?.declaredLicenses
+                        ?: analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
                         ?: sortedSetOf()
 
                 val detectedLicenses = scanResult?.results?.flatMap {
@@ -129,7 +142,7 @@ abstract class TableReporter : Reporter {
                 }?.toSortedSet() ?: sortedSetOf()
 
                 val analyzerErrors = project.collectErrors(id).toMutableList()
-                scanRecord.analyzerResult.errors[id]?.let {
+                analyzerResult.errors[id]?.let {
                     analyzerErrors += it
                 }
 
@@ -174,7 +187,7 @@ abstract class TableReporter : Reporter {
             }
         } ?: emptyList()
 
-        generateReport(TabularScanRecord(scanRecord.analyzerResult.vcsProcessed, errorSummaryTable, summaryTable,
+        generateReport(TabularScanRecord(ortResult.repository.vcsProcessed, errorSummaryTable, summaryTable,
                 projectTables, metadata, extraColumns), outputDir)
     }
 

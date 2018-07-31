@@ -28,7 +28,6 @@ import com.beust.jcommander.ParameterException
 
 import com.here.ort.downloader.consolidateProjectPackagesByVcs
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.Environment
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
@@ -189,8 +188,6 @@ object Main {
             }
 
             it.mapper().readValue(it, ScannerConfiguration::class.java)
-
-
         } ?: ScannerConfiguration()
 
         config.artifactoryCache?.let {
@@ -263,7 +260,7 @@ object Main {
             ScanResultContainer(pkg.id, results.map { it.copy(rawResult = null) })
         }.toSortedSet()
 
-        val scanRecord = ScanRecord(analyzerResult, projectScanScopes, resultContainers, ScanResultsCache.stats)
+        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsCache.stats)
 
         val scannerRun = ScannerRun(Environment(), config, scanRecord)
 
@@ -297,12 +294,9 @@ object Main {
             ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 
-        val analyzerResult = AnalyzerResultBuilder().build()
-
         val scanResultContainer = ScanResultContainer(Identifier("", "", inputPath.absolutePath, ""), listOf(result))
 
-        val scanRecord = ScanRecord(analyzerResult, sortedSetOf(), sortedSetOf(scanResultContainer),
-                ScanResultsCache.stats)
+        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
 
         val scannerRun = ScannerRun(Environment(), config, scanRecord)
 
