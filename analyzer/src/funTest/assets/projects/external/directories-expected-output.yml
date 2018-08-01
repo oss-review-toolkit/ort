@@ -1,153 +1,161 @@
 ---
-config:
-  ignore_tool_versions: false
-  allow_dynamic_versions: false
-vcs:
-  type: "Git"
-  url: "https://github.com/soc/directories-jvm"
-  revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
-  path: ""
-vcs_processed:
-  type: "git"
-  url: "https://github.com/soc/directories-jvm.git"
-  revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
-  path: ""
-projects:
-- id: "SBT:io.github.soc:directories:10"
-  definition_file_path: "target/directories-10.pom"
-  declared_licenses:
-  - "Mozilla Public License 2.0"
+repository:
   vcs:
-    type: "git"
-    url: "git@github.com:soc/directories-jvm.git"
-    revision: ""
+    type: "Git"
+    url: "https://github.com/soc/directories-jvm"
+    revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
     path: ""
   vcs_processed:
     type: "git"
     url: "https://github.com/soc/directories-jvm.git"
     revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
     path: ""
-  homepage_url: "https://github.com/soc/directories-jvm"
-  scopes:
-  - name: "test"
-    distributed: false
-    dependencies:
-    - id: "Maven:com.novocode:junit-interface:0.11"
-      dependencies:
-      - id: "Maven:org.scala-sbt:test-interface:1.0"
-        dependencies: []
-        errors: []
-      errors: []
-    - id: "Maven:junit:junit:4.12"
-      dependencies:
-      - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        dependencies: []
-        errors: []
-      errors: []
-packages:
-- package:
-    id: "Maven:com.novocode:junit-interface:0.11"
-    declared_licenses:
-    - "Two-clause BSD-style license"
-    description: "An implementation of sbt's test interface for JUnit 4"
-    homepage_url: "http://github.com/sbt/junit-interface/"
-    binary_artifact:
-      url: "https://repo.maven.apache.org/maven2/com/novocode/junit-interface/0.11/junit-interface-0.11.jar"
-      hash: "38bb853c93abfbe14a0514016f0f70dd73422d9f"
-      hash_algorithm: "SHA-1"
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/com/novocode/junit-interface/0.11/junit-interface-0.11-sources.jar"
-      hash: "c7c1394bbc5718aa256557544d891b3842825a8d"
-      hash_algorithm: "SHA-1"
-    vcs:
-      type: "git"
-      url: "git@github.com:sbt/junit-interface.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "ssh://git@github.com/sbt/junit-interface.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Maven:junit:junit:4.12"
-    declared_licenses:
-    - "Eclipse Public License 1.0"
-    description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
-      \ and Kent Beck."
-    homepage_url: "http://junit.org"
-    binary_artifact:
-      url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar"
-      hash: "2973d150c0dc1fefe998f834810d68f278ea58ec"
-      hash_algorithm: "SHA-1"
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
-      hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
-      hash_algorithm: "SHA-1"
-    vcs:
-      type: "git"
-      url: "git://github.com/junit-team/junit.git"
-      revision: "r4.12"
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "https://github.com/junit-team/junit.git"
-      revision: "r4.12"
-      path: ""
-  curations: []
-- package:
-    id: "Maven:org.hamcrest:hamcrest-core:1.3"
-    declared_licenses:
-    - "New BSD License"
-    description: "This is the core API of hamcrest matcher framework to be used by\
-      \ third-party framework providers. This includes the a foundation set of matcher\
-      \ implementations for common operations."
-    homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
-    binary_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
-      hash: "42a25dc3219429f0e5d060061f71acb49bf010a0"
-      hash_algorithm: "SHA-1"
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
-      hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
-      hash_algorithm: "SHA-1"
-    vcs:
-      type: "git"
-      url: "git@github.com:hamcrest/JavaHamcrest.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Maven:org.scala-sbt:test-interface:1.0"
-    declared_licenses:
-    - "BSD"
-    description: "Uniform test interface to Scala/Java test frameworks (specs, ScalaCheck,\
-      \ ScalaTest, JUnit and other)"
-    homepage_url: "http://www.scala-sbt.org"
-    binary_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar"
-      hash: "0a3f14d010c4cb32071f863d97291df31603b521"
-      hash_algorithm: "SHA-1"
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar"
-      hash: "d44b23e9e3419ad0e00b91bba764a48d43075000"
-      hash_algorithm: "SHA-1"
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-  curations: []
-errors:
-  SBT:io.github.soc:directories:10: []
+  config: {}
+analyzer:
+  environment:
+    os: "<REPLACE_OS>"
+    tool_versions: {}
+  config:
+    ignore_tool_versions: false
+    allow_dynamic_versions: false
+  result:
+    projects:
+    - id: "SBT:io.github.soc:directories:10"
+      definition_file_path: "target/directories-10.pom"
+      declared_licenses:
+      - "Mozilla Public License 2.0"
+      vcs:
+        type: "git"
+        url: "git@github.com:soc/directories-jvm.git"
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "https://github.com/soc/directories-jvm.git"
+        revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
+        path: ""
+      homepage_url: "https://github.com/soc/directories-jvm"
+      scopes:
+      - name: "test"
+        distributed: false
+        dependencies:
+        - id: "Maven:com.novocode:junit-interface:0.11"
+          dependencies:
+          - id: "Maven:org.scala-sbt:test-interface:1.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+    packages:
+    - package:
+        id: "Maven:com.novocode:junit-interface:0.11"
+        declared_licenses:
+        - "Two-clause BSD-style license"
+        description: "An implementation of sbt's test interface for JUnit 4"
+        homepage_url: "http://github.com/sbt/junit-interface/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/com/novocode/junit-interface/0.11/junit-interface-0.11.jar"
+          hash: "38bb853c93abfbe14a0514016f0f70dd73422d9f"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/com/novocode/junit-interface/0.11/junit-interface-0.11-sources.jar"
+          hash: "c7c1394bbc5718aa256557544d891b3842825a8d"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git@github.com:sbt/junit-interface.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "ssh://git@github.com/sbt/junit-interface.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:junit:junit:4.12"
+        declared_licenses:
+        - "Eclipse Public License 1.0"
+        description: "JUnit is a unit testing framework for Java, created by Erich\
+          \ Gamma and Kent Beck."
+        homepage_url: "http://junit.org"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar"
+          hash: "2973d150c0dc1fefe998f834810d68f278ea58ec"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+          hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/junit-team/junit.git"
+          revision: "r4.12"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/junit-team/junit.git"
+          revision: "r4.12"
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        declared_licenses:
+        - "New BSD License"
+        description: "This is the core API of hamcrest matcher framework to be used\
+          \ by third-party framework providers. This includes the a foundation set\
+          \ of matcher implementations for common operations."
+        homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+          hash: "42a25dc3219429f0e5d060061f71acb49bf010a0"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+          hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git@github.com:hamcrest/JavaHamcrest.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.scala-sbt:test-interface:1.0"
+        declared_licenses:
+        - "BSD"
+        description: "Uniform test interface to Scala/Java test frameworks (specs,\
+          \ ScalaCheck, ScalaTest, JUnit and other)"
+        homepage_url: "http://www.scala-sbt.org"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar"
+          hash: "0a3f14d010c4cb32071f863d97291df31603b521"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar"
+          hash: "d44b23e9e3419ad0e00b91bba764a48d43075000"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+      curations: []
+    errors:
+      SBT:io.github.soc:directories:10: []
+scanner: null

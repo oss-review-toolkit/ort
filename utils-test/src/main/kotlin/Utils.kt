@@ -32,6 +32,7 @@ fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, defi
             if (newValue != null) replace(oldValue, newValue) else this
 
     return result.readText()
+            .replaceIfNotNull("<REPLACE_OS>", System.getProperty("os.name"))
             .replaceIfNotNull(custom)
             .replaceIfNotNull("<REPLACE_DEFINITION_FILE_PATH>", definitionFilePath)
             .replaceIfNotNull("<REPLACE_URL>", url)
