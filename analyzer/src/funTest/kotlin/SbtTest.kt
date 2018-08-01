@@ -23,6 +23,7 @@ import com.here.ort.analyzer.managers.SBT
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -41,8 +42,8 @@ class SbtTest : StringSpec({
         val config = AnalyzerConfiguration(false, false)
         val ortResult = Analyzer().analyze(config, projectDir, listOf(SBT))
 
-        val actualResult = yamlMapper.writeValueAsString(ortResult.analyzer!!.result)
-        val expectedResult = expectedOutputFile.readText()
+        val actualResult = yamlMapper.writeValueAsString(ortResult)
+        val expectedResult = patchExpectedResult(expectedOutputFile)
 
         actualResult shouldBe expectedResult
     }
@@ -59,7 +60,7 @@ class SbtTest : StringSpec({
         val ortResult = Analyzer().analyze(config, projectDir, listOf(SBT))
 
         val actualResult = yamlMapper.writeValueAsString(ortResult)
-        val expectedResult = expectedOutputFile.readText()
+        val expectedResult = patchExpectedResult(expectedOutputFile)
 
         actualResult shouldBe expectedResult
     }

@@ -23,6 +23,7 @@ import com.here.ort.model.CacheStatistics
 import com.here.ort.scanner.Main
 import com.here.ort.scanner.ScanResultsCache
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
@@ -56,7 +57,8 @@ class FileCounterTest : StringSpec() {
     init {
         "Gradle project scan results from analyzer result file are correct" {
             val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
-            val expectedResult = File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml").readText()
+            val expectedResult = patchExpectedResult(
+                    File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml"))
 
             Main.main(arrayOf(
                     "-d", analyzerResultFile.path,
@@ -64,7 +66,7 @@ class FileCounterTest : StringSpec() {
                     "-s", "FileCounter"
             ))
 
-            val result = File(outputDir, "scan-record.yml").readText()
+            val result = File(outputDir, "scan-result.yml").readText()
 
             patchActualResult(result) shouldBe expectedResult
         }
