@@ -490,10 +490,6 @@ class UtilsTest : WordSpec({
             ":".fileSystemEncode() shouldBe "%3A"
         }
 
-        "double encode '/'" {
-            "/".fileSystemEncode() shouldBe "%252F"
-        }
-
         "create a valid file name" {
             val tempDir = createTempDir()
             val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
