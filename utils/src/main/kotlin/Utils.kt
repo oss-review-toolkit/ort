@@ -395,6 +395,9 @@ fun String.fileSystemEncode() =
         java.net.URLEncoder.encode(this, "UTF-8")
                 .replace("*", "%2A")
                 .replace(Regex("(^\\.|\\.$)"), "%2E")
+                // Some setups have issues with "%2F" being part of an URL, e.g. when using Apache Redirect, so double
+                // encode it.
+                .replace("%2F", "%252F")
                 .take(255)
 
 /**
