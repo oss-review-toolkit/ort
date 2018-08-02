@@ -70,7 +70,8 @@ data class AnalyzerResult(
         fun hasErrors(pkgReference: PackageReference): Boolean =
                 pkgReference.errors.isNotEmpty() || pkgReference.dependencies.any { hasErrors(it) }
 
-        return errors.isNotEmpty() || projects.any { it.scopes.any { it.dependencies.any { hasErrors(it) } } }
+        return errors.any { it.value.isNotEmpty() }
+                || projects.any { it.scopes.any { it.dependencies.any { hasErrors(it) } } }
     }
 }
 
