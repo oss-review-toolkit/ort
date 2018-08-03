@@ -31,6 +31,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.readValue
 import com.here.ort.utils.log
 
 import java.io.File
@@ -40,6 +41,14 @@ class Analyzer {
                 packageManagers: List<PackageManagerFactory<PackageManager>> = PackageManager.ALL,
                 packageCurationsFile: File? = null
     ): OrtResult {
+        val repositoryConfigurationFile = File(absoluteProjectPath, ".ort.yml")
+
+        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
+            repositoryConfigurationFile.readValue(RepositoryConfiguration::class.java)
+        } else {
+            RepositoryConfiguration(null)
+        }
+
         // Map of files managed by the respective package manager.
         val managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
@@ -99,7 +108,7 @@ class Analyzer {
             }
         }
 
-        val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration(null))
+        val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
         val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())
 
