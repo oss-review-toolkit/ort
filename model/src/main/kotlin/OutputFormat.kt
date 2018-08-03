@@ -50,3 +50,8 @@ fun File.mapper() =
         OutputFormat.values().find { extension in it.fileExtensions }?.mapper ?: throw IllegalArgumentException(
                 "No matching ObjectMapper found for file extension '$extension' of file '$absolutePath'."
         )
+
+/**
+ * Use the mapper returned from [File.mapper] to read the [valueType] object from this file using Jackson.
+ */
+fun <T> File.readValue(valueType: Class<T>): T = this.mapper().readValue(this, valueType)
