@@ -10,7 +10,32 @@ repository:
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
-  config: {}
+  config:
+    excludes:
+      projects:
+      - path: "lib-without-repo/build.gradle"
+        type: "OTHER"
+        reason: "OTHER"
+        comment: "Project not delivered."
+      scopes:
+      - name: "testAnnotationProcessor"
+        reason: "OTHER"
+        comment: "Test dependencies."
+      - name: "testCompile"
+        reason: "OTHER"
+        comment: "Test dependencies."
+      - name: "testCompileClasspath"
+        reason: "OTHER"
+        comment: "Test dependencies."
+      - name: "testCompileOnly"
+        reason: "OTHER"
+        comment: "Test dependencies."
+      - name: "testRuntime"
+        reason: "OTHER"
+        comment: "Test dependencies."
+      - name: "testRuntimeClasspath"
+        reason: "OTHER"
+        comment: "Test dependencies."
 analyzer:
   environment:
     os: "<REPLACE_OS>"
