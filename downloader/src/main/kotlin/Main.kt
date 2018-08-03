@@ -32,7 +32,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.mapper
+import com.here.ort.model.readValue
 import com.here.ort.utils.ARCHIVE_EXTENSIONS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.PARAMETER_ORDER_HELP
@@ -238,7 +238,7 @@ object Main {
                 "Provided path is not a file: ${it.absolutePath}"
             }
 
-            val analyzerResult = it.mapper().readValue(dependenciesFile, AnalyzerResult::class.java)
+            val analyzerResult = it.readValue(AnalyzerResult::class.java)
 
             mutableListOf<Package>().apply {
                 if (DataEntity.PROJECT in entities) {

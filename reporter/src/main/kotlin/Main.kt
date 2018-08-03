@@ -23,7 +23,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.here.ort.model.OrtResult
 
-import com.here.ort.model.mapper
+import com.here.ort.model.readValue
 import com.here.ort.reporter.reporters.*
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -125,7 +125,7 @@ object Main {
         outputDir.safeMkdirs()
 
         val ortResult = ortResultFile.let {
-            it.mapper().readValue(it, OrtResult::class.java)
+            it.readValue(OrtResult::class.java)
         }
 
         reportFormats.forEach {

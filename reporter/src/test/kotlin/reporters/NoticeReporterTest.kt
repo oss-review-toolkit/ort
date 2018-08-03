@@ -20,9 +20,9 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
-import com.here.ort.model.jsonMapper
-import io.kotlintest.shouldBe
+import com.here.ort.model.readValue
 
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
@@ -33,7 +33,7 @@ class NoticeReporterTest : WordSpec({
             val expectedResultFile = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE")
             val expectedText = expectedResultFile.readText()
             val scanRecordFile = File("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
-            val ortResult = jsonMapper.readValue(scanRecordFile, OrtResult::class.java)
+            val ortResult = scanRecordFile.readValue(OrtResult::class.java)
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
             NoticeReporter().generateReport(ortResult, outputDir)
