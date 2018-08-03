@@ -26,11 +26,11 @@ import com.fasterxml.jackson.annotation.JsonInclude
  */
 data class Excludes(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val projects: List<ProjectExclude>,
+        val projects: List<ProjectExclude> = emptyList(),
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val packages: List<PackageExclude>,
+        val packages: List<PackageExclude> = emptyList(),
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val scopes: List<ScopeExclude>,
+        val scopes: List<ScopeExclude> = emptyList(),
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<ErrorExclude>
+        val errors: List<ErrorExclude> = emptyList()
 )
