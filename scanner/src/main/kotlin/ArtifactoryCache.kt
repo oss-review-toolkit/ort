@@ -26,6 +26,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.log
@@ -56,7 +57,7 @@ class ArtifactoryCache(
                 .url("$url/$cachePath")
                 .build()
 
-        val tempFile = createTempFile("scan-results-")
+        val tempFile = createTempFile("scan-results-", ".yml")
 
         try {
             OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
@@ -71,7 +72,7 @@ class ArtifactoryCache(
                         log.info { "Downloaded $cachePath from Artifactory cache." }
                     }
 
-                    return yamlMapper.readValue(tempFile, ScanResultContainer::class.java)
+                    return tempFile.readValue(ScanResultContainer::class.java)
                 } else {
                     log.info {
                         "Could not get $cachePath from Artifactory cache: ${response.code()} - " +

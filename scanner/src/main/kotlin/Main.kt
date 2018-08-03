@@ -42,7 +42,7 @@ import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerRun
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.mapper
+import com.here.ort.model.readValue
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
@@ -187,7 +187,7 @@ object Main {
                 "Provided configuration file is not a file: ${it.invariantSeparatorsPath}"
             }
 
-            it.mapper().readValue(it, ScannerConfiguration::class.java)
+            it.readValue(ScannerConfiguration::class.java)
         } ?: ScannerConfiguration()
 
         config.artifactoryCache?.let {
@@ -207,7 +207,7 @@ object Main {
             "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
         }
 
-        val ortResult = dependenciesFile.mapper().readValue(dependenciesFile, OrtResult::class.java)
+        val ortResult = dependenciesFile.readValue(OrtResult::class.java)
 
         require(ortResult.analyzer != null) {
             "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
