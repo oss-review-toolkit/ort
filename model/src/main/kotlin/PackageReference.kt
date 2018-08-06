@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import java.util.SortedSet
 
 /**
@@ -40,7 +41,14 @@ data class PackageReference(
         /**
          * A list of errors that occurred handling this [PackageReference].
          */
-        val errors: List<Error> = emptyList()
+        val errors: List<Error> = emptyList(),
+
+        /**
+         * A flag to indicate whether this dependency should be excluded. This is set based on the .ort.yml
+         * configuration file.
+         */
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        val excluded: Boolean = false
 ) : CustomData(), Comparable<PackageReference> {
     fun collectDependencyIds(includeErroneous: Boolean = true): SortedSet<Identifier> =
             dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->

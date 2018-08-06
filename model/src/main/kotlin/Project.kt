@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
@@ -65,7 +66,14 @@ data class Project(
         /**
          * The dependency scopes defined by this project.
          */
-        val scopes: SortedSet<Scope>
+        val scopes: SortedSet<Scope>,
+
+        /**
+         * A flag to indicate whether this project should be excluded. This is set based on the .ort.yml configuration
+         * file.
+         */
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        val excluded: Boolean = false
 ) : CustomData(), Comparable<Project> {
     fun collectDependencyIds(includeErroneous: Boolean = true) = scopes.fold(sortedSetOf<Identifier>()) { ids, scope ->
         ids.also { it += scope.collectDependencyIds(includeErroneous) }
