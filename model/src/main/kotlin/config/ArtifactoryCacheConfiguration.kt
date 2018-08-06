@@ -19,7 +19,11 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class ArtifactoryCacheConfiguration(
         val url: String,
-        val apiToken: String
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        val apiToken: String = ""
 )
