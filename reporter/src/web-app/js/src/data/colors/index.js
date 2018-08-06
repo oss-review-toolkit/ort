@@ -22,7 +22,7 @@ import * as COLORS from './json/colors';
 export const metadata = {
     packageName: 'unique-colors',
     packageCopyrightText: 'Federico Spini',
-    packageComment: 'We are not lawyers. Well, most of us anyway. It is not the goal of this site to provide legal advice. The goal of choosealicense.com is to provide a starting point to help you make an informed choice by providing information on popular open source licenses. If you have any questions regarding the right license for your code or any other legal issues relating to it, it’s up to you to do further research or consult with a professional.',
+    packageComment: 'Expanded version for ORT of unique-colors with additional colors',
     packageDescription: 'Perceptually unique colors generator (up to 92)',
     packageDownloadLocation: 'git+https://github.com/federicospini/unique-colors.git@e642ae332f1b92b6e204df1cd05b930ae61ee79a',
     packageHomePage: 'https://github.com/federicospini/unique-colors/',
