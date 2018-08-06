@@ -217,7 +217,8 @@ object Main {
         val analyzerResult = ortResult.analyzer!!.result
 
         // Add the projects as packages to scan.
-        val projectPackages = consolidateProjectPackagesByVcs(analyzerResult.projects).map { it.toCuratedPackage() }
+        val consolidatedProjectPackageMap = consolidateProjectPackagesByVcs(analyzerResult.projects)
+        val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
 
         val projectScanScopes = if (scopesToScan.isNotEmpty()) {
             println("Limiting scan to scopes: $scopesToScan")
@@ -235,11 +236,11 @@ object Main {
         }.toSortedSet()
 
         val packagesToScan = if (scopesToScan.isNotEmpty()) {
-            projectPackages + analyzerResult.packages.filter { pkg ->
+            consolidatedReferencePackages + analyzerResult.packages.filter { pkg ->
                 analyzerResult.projects.any { it.scopes.any { it.name in scopesToScan && pkg.pkg in it } }
             }
         } else {
-            projectPackages + analyzerResult.packages
+            consolidatedReferencePackages + analyzerResult.packages
         }.toSortedSet()
 
         val results = scanner.scan(packagesToScan.map { it.pkg }, outputDir, downloadDir)
@@ -259,6 +260,15 @@ object Main {
             // TODO: Consider adding an option to keep the raw results.
             ScanResultContainer(pkg.id, results.map { it.copy(rawResult = null) })
         }.toSortedSet()
+
+        // Add scan results from de-duplicated project packages to result.
+        consolidatedProjectPackageMap.forEach { referencePackage, deduplicatedPackages ->
+            resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
+                deduplicatedPackages.forEach {
+                    resultContainers += resultContainer.copy(id = it.id)
+                }
+            }
+        }
 
         val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsCache.stats)
 

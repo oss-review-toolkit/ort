@@ -68,9 +68,10 @@ import org.apache.commons.codec.digest.DigestUtils
  * does not make sense to download (and scan) all of them individually, not even if doing sparse checkouts.
  *
  * @param projects A set of projects to consolidate into packages.
- * @return A list of packages for project that refer to distinct VCS working trees.
+ * @return A map of packages for project where the keys refer to distinct VCS working trees and the value contains all
+ *         other projects from the same VCS working tree.
  */
-fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): List<Package> {
+fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, List<Package>> {
     // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
     // Git repositories that contain project definition files, which in many cases is doing duplicate
     // work.
@@ -86,10 +87,13 @@ fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): List<Package>
     return projectPackagesByVcs.map { (sameVcs, projectsWithSameVcs) ->
         // Find the original project which has the empty path, if any, or simply take the first project
         // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
-        projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() } ?: run {
-            projectsWithSameVcs.first().copy(vcsProcessed = sameVcs)
-        }
-    }
+        val referencePackage = projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() }
+                ?: projectsWithSameVcs.first()
+
+        val otherPackages = (projectsWithSameVcs - referencePackage).map { it.copy(vcsProcessed = sameVcs) }
+
+        Pair(referencePackage.copy(vcsProcessed = sameVcs), otherPackages)
+    }.associate { it }
 }
 
 /**
@@ -242,8 +246,8 @@ object Main {
 
             mutableListOf<Package>().apply {
                 if (DataEntity.PROJECT in entities) {
-                    val projectPackagesUniqueVcs = consolidateProjectPackagesByVcs(analyzerResult.projects)
-                    addAll(projectPackagesUniqueVcs)
+                    val consolidatedProjectPackages = consolidateProjectPackagesByVcs(analyzerResult.projects)
+                    addAll(consolidatedProjectPackages.keys)
                 }
 
                 if (DataEntity.PACKAGES in entities) {
