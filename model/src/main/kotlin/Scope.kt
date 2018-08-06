@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
@@ -47,7 +48,14 @@ data class Scope(
          * dependencies would not be test dependencies of the test dependencies, but compile dependencies of test
          * dependencies.
          */
-        val dependencies: SortedSet<PackageReference>
+        val dependencies: SortedSet<PackageReference>,
+
+        /**
+         * A flag to indicate whether this scope should be excluded. This is set based on the .ort.yml configuration
+         * file.
+         */
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        val excluded: Boolean = false
 ) : CustomData(), Comparable<Scope> {
     fun collectDependencyIds(includeErroneous: Boolean = true) =
             dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->

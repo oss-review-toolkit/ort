@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
@@ -43,7 +44,14 @@ data class Error(
         /**
          * The error message.
          */
-        val message: String
+        val message: String,
+
+        /**
+         * A flag to indicate whether this error should be excluded. This is set based on the .ort.yml configuration
+         * file.
+         */
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        val excluded: Boolean = false
 ) {
     override fun toString() = "${if (timestamp == Instant.EPOCH) "n/a" else timestamp.toString()}: $source - $message"
 }
