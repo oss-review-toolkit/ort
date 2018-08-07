@@ -84,7 +84,9 @@ class AnalyzerResultBuilder {
         } else {
             projects += projectAnalyzerResult.project
             packages += projectAnalyzerResult.packages
-            errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+            if (projectAnalyzerResult.errors.isNotEmpty()) {
+                errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+            }
         }
     }
 }

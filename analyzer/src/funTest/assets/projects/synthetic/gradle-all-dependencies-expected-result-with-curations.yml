@@ -684,10 +684,6 @@ analyzer:
           - "curated license a"
           - "curated license b"
           comment: "Declared license in pom.xml is wrong."
-    errors:
-      'Gradle::Gradle-Example:': []
-      Gradle:com.here.ort.gradle.example:app:1.0.0: []
-      Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0: []
-      Gradle:com.here.ort.gradle.example:lib:1.0.0: []
+    errors: {}
     has_errors: true
 scanner: null
