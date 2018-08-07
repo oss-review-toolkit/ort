@@ -158,4 +158,5 @@ analyzer:
       curations: []
     errors:
       SBT:io.github.soc:directories:10: []
+    has_errors: false
 scanner: null

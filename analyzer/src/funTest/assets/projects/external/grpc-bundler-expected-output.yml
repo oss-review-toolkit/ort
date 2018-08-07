@@ -92,4 +92,5 @@ analyzer:
       - "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/test/distrib/ruby,\
         \ dependency versions are unstable."
       'Unmanaged::<REPLACE_TMP>:': []
+    has_errors: true
 scanner: null
