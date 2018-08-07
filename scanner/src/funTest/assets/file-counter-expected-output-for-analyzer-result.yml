@@ -168,6 +168,7 @@ analyzer:
       curations: []
     errors:
       Gradle:com.here.ort.gradle.example:lib:1.0.0: []
+    has_errors: false
 scanner:
   environment:
     os: "<REPLACE_OS>"

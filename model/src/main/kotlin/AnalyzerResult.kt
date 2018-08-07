@@ -46,15 +46,16 @@ data class AnalyzerResult(
         val errors: SortedMap<Identifier, List<String>>
 ) : CustomData() {
     /**
-     * Return true if there were any errors during the analysis, false otherwise.
+     * True if there were any errors during the analysis, false otherwise.
      */
-    fun hasErrors(): Boolean {
+    @Suppress("UNUSED") // Not used in code, but shall be serialized.
+    val hasErrors = {
         fun hasErrors(pkgReference: PackageReference): Boolean =
                 pkgReference.errors.isNotEmpty() || pkgReference.dependencies.any { hasErrors(it) }
 
-        return errors.any { it.value.isNotEmpty() }
+        errors.any { it.value.isNotEmpty() }
                 || projects.any { it.scopes.any { it.dependencies.any { hasErrors(it) } } }
-    }
+    }.invoke()
 }
 
 class AnalyzerResultBuilder {

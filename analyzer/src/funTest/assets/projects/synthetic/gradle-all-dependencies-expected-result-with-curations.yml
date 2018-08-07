@@ -689,4 +689,5 @@ analyzer:
       Gradle:com.here.ort.gradle.example:app:1.0.0: []
       Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0: []
       Gradle:com.here.ort.gradle.example:lib:1.0.0: []
+    has_errors: true
 scanner: null
