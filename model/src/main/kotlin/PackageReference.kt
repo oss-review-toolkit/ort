@@ -40,7 +40,7 @@ data class PackageReference(
         /**
          * A list of errors that occurred handling this [PackageReference].
          */
-        val errors: List<String> = emptyList()
+        val errors: List<Error> = emptyList()
 ) : CustomData(), Comparable<PackageReference> {
     fun collectDependencyIds(includeErroneous: Boolean = true): SortedSet<Identifier> =
             dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->

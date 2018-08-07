@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Main
 import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.Error
 import com.here.ort.model.Package
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -136,7 +137,7 @@ abstract class LocalScanner : Scanner() {
                                 endTime = now,
                                 fileCount = 0,
                                 licenseFindings = sortedSetOf(),
-                                errors = e.collectMessages().toMutableList()
+                                errors = e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
                         ),
                         rawResult = EMPTY_JSON_NODE)
                 )
@@ -190,7 +191,7 @@ abstract class LocalScanner : Scanner() {
                             endTime = now,
                             fileCount = 0,
                             licenseFindings = sortedSetOf(),
-                            errors = e.collectMessages().toMutableList()
+                            errors = e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
                     ),
                     EMPTY_JSON_NODE
             )

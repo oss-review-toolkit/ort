@@ -362,12 +362,12 @@ class StaticHtmlReporter : TableReporter() {
                             <td>${entry.detectedLicenses.joinToString("<br/>")}</td>
                             <td><ul>
                                 ${entry.analyzerErrors.joinToString("\n") {
-                                    "<li>${it.replace("\n", "<br/>")}</li>"
+                                    "<li>${it.toString().replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>
                             <td><ul>
                                 ${entry.scanErrors.joinToString("\n") {
-                                    "<li>${it.replace("\n", "<br/>")}</li>"
+                                    "<li>${it.toString().replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>
                         </tr>""".trimIndent())

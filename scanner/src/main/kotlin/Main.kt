@@ -29,6 +29,7 @@ import com.beust.jcommander.ParameterException
 import com.here.ort.downloader.consolidateProjectPackagesByVcs
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Environment
+import com.here.ort.model.Error
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
@@ -300,7 +301,8 @@ object Main {
             log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
 
             val now = Instant.now()
-            val summary = ScanSummary(now, now, 0, sortedSetOf(), e.collectMessages().toMutableList())
+            val summary = ScanSummary(now, now, 0, sortedSetOf(),
+                    e.collectMessages().map { Error(source = localScanner.javaClass.simpleName, message = it) })
             ScanResult(Provenance(now), localScanner.getDetails(), summary)
         }
 

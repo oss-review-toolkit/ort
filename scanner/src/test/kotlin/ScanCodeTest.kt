@@ -35,9 +35,10 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val errors = summary.errors.toMutableList()
 
-            ScanCode.mapTimeoutErrors(summary.errors) shouldBe true
-            summary.errors.joinToString("\n") shouldBe listOf(
+            ScanCode.mapTimeoutErrors(errors) shouldBe true
+            errors.joinToString("\n") { it.message } shouldBe listOf(
                     "ERROR: Timeout after 300 seconds while scanning file " +
                             "'test/3rdparty/syntax/angular-1.2.5.tokens'.",
                     "ERROR: Timeout after 300 seconds while scanning file " +
@@ -71,7 +72,7 @@ class ScanCodeTest : WordSpec({
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
 
-            ScanCode.mapTimeoutErrors(summary.errors) shouldBe false
+            ScanCode.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
         }
     }
 
@@ -80,9 +81,10 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val errors = summary.errors.toMutableList()
 
-            ScanCode.mapUnknownErrors(summary.errors) shouldBe true
-            summary.errors.joinToString("\n") shouldBe listOf(
+            ScanCode.mapUnknownErrors(errors) shouldBe true
+            errors.joinToString("\n") { it.message } shouldBe listOf(
                     "ERROR: MemoryError while scanning file 'data.json'."
             ).joinToString("\n")
         }
@@ -91,9 +93,10 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val errors = summary.errors.toMutableList()
 
-            ScanCode.mapUnknownErrors(summary.errors) shouldBe false
-            summary.errors.joinToString("\n") shouldBe listOf(
+            ScanCode.mapUnknownErrors(errors) shouldBe false
+            errors.joinToString("\n") { it.message } shouldBe listOf(
                     "ERROR: AttributeError while scanning file 'compiler/testData/cli/js-dce/withSourceMap.js.map' " +
                             "('NoneType' object has no attribute 'splitlines')."
             ).joinToString("\n")
@@ -104,7 +107,7 @@ class ScanCodeTest : WordSpec({
             val result = ScanCode.getResult(resultFile)
             val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
 
-            ScanCode.mapUnknownErrors(summary.errors) shouldBe false
+            ScanCode.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
         }
     }
 

@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -115,7 +116,7 @@ class MainTest : StringSpec() {
 
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            result shouldBe expectedResult
+            patchActualResult(result) shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
@@ -140,7 +141,7 @@ class MainTest : StringSpec() {
 
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            result shouldBe expectedResult
+            patchActualResult(result) shouldBe expectedResult
         }
     }
 }

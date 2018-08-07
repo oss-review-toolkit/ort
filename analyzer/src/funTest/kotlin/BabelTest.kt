@@ -26,6 +26,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -69,7 +70,7 @@ class BabelTest : WordSpec() {
                 )
                 val actualResult = npm.resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
-                yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
+                patchActualResult(yamlMapper.writeValueAsString(actualResult)) shouldBe expectedResult
             }
         }
     }

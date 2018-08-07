@@ -23,12 +23,8 @@ results:
       copyrights:
       - "copyright 2"
     errors:
-    - timestamp: "1970-01-01T00:00:00Z"
-      source: "source-11"
-      message: "error-11"
-    - timestamp: "1970-01-01T00:00:00Z"
-      source: "source-12"
-      message: "error-12"
+    - "error-11"
+    - "error-12"
   raw_result: "key 1"
 - provenance:
     download_time: "1970-01-03T00:00:00Z"
@@ -54,10 +50,6 @@ results:
       copyrights:
       - "copyright 4"
     errors:
-    - timestamp: "1970-01-01T00:00:00Z"
-      source: "source-21"
-      message: "error-21"
-    - timestamp: "1970-01-01T00:00:00Z"
-      source: "source-22"
-      message: "error-22"
+    - "error-21"
+    - "error-22"
   raw_result: "key 2"
