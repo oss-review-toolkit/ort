@@ -58,7 +58,7 @@ class GitRepoTest : StringSpec() {
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
             GitRepo.download(pkg, outputDir)
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val ortResult = Analyzer().analyze(config, outputDir, listOf(Bundler))
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(
