@@ -59,7 +59,7 @@ class BabelTest : WordSpec() {
     init {
         "Babel dependencies" should {
             "be correctly analyzed" {
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val npm = NPM.create(config)
                 val packageFile = File(projectDir, "package.json")
 

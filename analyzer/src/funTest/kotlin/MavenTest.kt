@@ -45,7 +45,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Maven.create(config).resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -62,7 +62,7 @@ class MavenTest : StringSpec() {
             // jgnash-core depends on jgnash-resources, so we also have to pass the pom.xml of jgnash-resources to
             // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
             // of transitive dependencies would not work.
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Maven.create(config)
                     .resolveDependencies(USER_DIR, listOf(pomFileCore, pomFileResources))[pomFileCore]
 
@@ -77,7 +77,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Maven.create(config).resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -95,7 +95,7 @@ class MavenTest : StringSpec() {
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
             // not work.
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Maven.create(config)
                     .resolveDependencies(USER_DIR, listOf(pomFileApp, pomFileLib))[pomFileApp]
 
@@ -110,7 +110,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Maven.create(config).resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -130,7 +130,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Maven.create(config).resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult

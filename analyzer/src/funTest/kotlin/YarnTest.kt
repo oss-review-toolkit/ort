@@ -59,7 +59,7 @@ class YarnTest : WordSpec() {
         "yarn" should {
             "resolve dependencies correctly" {
                 val packageFile = File(projectDir, "package.json")
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val result = Yarn.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(

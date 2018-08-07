@@ -42,7 +42,7 @@ class GoDepTest : WordSpec() {
         "GoDep" should {
             "resolve dependencies from a lockfile correctly" {
                 val manifestFile = File(projectsDir, "external/qmstr/Gopkg.toml")
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val godep = GoDep.create(config)
 
                 val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
@@ -53,7 +53,7 @@ class GoDepTest : WordSpec() {
 
             "show error if no lockfile is present" {
                 val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val godep = GoDep.create(config)
 
                 val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
@@ -70,7 +70,7 @@ class GoDepTest : WordSpec() {
 
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
                 val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
-                val config = AnalyzerConfiguration(false, true)
+                val config = AnalyzerConfiguration(false, true, false)
                 val godep = GoDep.create(config)
 
                 val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
@@ -83,7 +83,7 @@ class GoDepTest : WordSpec() {
 
             "import dependencies from Glide" {
                 val manifestFile = File(projectsDir, "external/sprig/glide.yaml")
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val godep = GoDep.create(config)
 
                 val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
@@ -94,7 +94,7 @@ class GoDepTest : WordSpec() {
 
             "import dependencies from godeps" {
                 val manifestFile = File(projectsDir, "external/godep/Godeps/Godeps.json")
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val godep = GoDep.create(config)
 
                 val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
@@ -104,7 +104,7 @@ class GoDepTest : WordSpec() {
             }
 
             "construct an import path from VCS info" {
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val godep = GoDep.create(config)
                 val gopath = File("/tmp/gopath")
                 val projectDir = File(projectsDir, "external/qmstr")
@@ -116,7 +116,7 @@ class GoDepTest : WordSpec() {
             }
 
             "construct an import path for directories that are not repositories" {
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val godep = GoDep.create(config)
                 val gopath = File("/tmp/gopath")
                 val projectDir = File(projectsDir, "synthetic/godep/no-lockfile")
