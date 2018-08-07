@@ -43,6 +43,6 @@ data class ScanRecord(
     /**
      * True if any of the [scanResults] contain errors.
      */
-    @Suppress("UNUSED")
+    @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasErrors = scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
 }
