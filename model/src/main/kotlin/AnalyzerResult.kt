@@ -57,7 +57,7 @@ data class AnalyzerResult(
     }
 }
 
-class AnalyzerResultBuilder() {
+class AnalyzerResultBuilder {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<String>>()
