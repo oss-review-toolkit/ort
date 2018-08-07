@@ -65,7 +65,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -81,7 +81,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -97,7 +97,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -113,7 +113,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -129,7 +129,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -186,7 +186,7 @@ class GradleTest : StringSpec() {
                         revision = vcsRevision
                 )
 
-                val config = AnalyzerConfiguration(false, false)
+                val config = AnalyzerConfiguration(false, false, false)
                 val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null

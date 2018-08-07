@@ -46,7 +46,7 @@ class PhpComposerTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val definitionFile = File(projectsDir, "lockfile/composer.json")
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = PhpComposer.create(config)
                     .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
@@ -62,7 +62,7 @@ class PhpComposerTest : StringSpec() {
         "Error is shown when no lock file is present" {
             val definitionFile = File(projectsDir, "no-lockfile/composer.json")
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = PhpComposer.create(config)
                     .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
@@ -79,7 +79,7 @@ class PhpComposerTest : StringSpec() {
         "No composer.lock is required for projects without dependencies" {
             val definitionFile = File(projectsDir, "no-deps/composer.json")
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = PhpComposer.create(config)
                     .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
@@ -96,7 +96,7 @@ class PhpComposerTest : StringSpec() {
         "No composer.lock is required for projects with empty dependencies" {
             val definitionFile = File(projectsDir, "empty-deps/composer.json")
 
-            val config = AnalyzerConfiguration(false, false)
+            val config = AnalyzerConfiguration(false, false, false)
             val result = PhpComposer.create(config)
                     .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
