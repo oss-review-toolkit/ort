@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.here.ort.utils.test.patchActualResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -49,6 +50,11 @@ class ScanResultContainerTest : WordSpec() {
     private val scannerStartTime2 = downloadTime2 + Duration.ofMinutes(1)
     private val scannerEndTime2 = scannerStartTime2 + Duration.ofMinutes(1)
 
+    private val error11 = Error(source = "source-11", message = "error-11")
+    private val error12 = Error(source = "source-12", message = "error-12")
+    private val error21 = Error(source = "source-21", message = "error-21")
+    private val error22 = Error(source = "source-22", message = "error-22")
+
     private val scanSummary1 = ScanSummary(
             scannerStartTime1,
             scannerEndTime1,
@@ -57,7 +63,7 @@ class ScanResultContainerTest : WordSpec() {
                     LicenseFinding("license 1.1", sortedSetOf("copyright 1")),
                     LicenseFinding("license 1.2", sortedSetOf("copyright 2")))
             ,
-            mutableListOf("error 1.1", "error 1.2")
+            mutableListOf(error11, error12)
     )
     private val scanSummary2 = ScanSummary(
             scannerStartTime2,
@@ -67,7 +73,7 @@ class ScanResultContainerTest : WordSpec() {
                     LicenseFinding("license 2.1", sortedSetOf("copyright 3")),
                     LicenseFinding("license 2.2", sortedSetOf("copyright 4"))
             ),
-            mutableListOf("error 2.1", "error 2.2")
+            mutableListOf(error21, error22)
     )
 
     private val rawResult1 = jsonMapper.readTree("\"key 1\": \"value 1\"")
@@ -96,15 +102,30 @@ class ScanResultContainerTest : WordSpec() {
 
                 val serializedScanResults = yamlMapper.writeValueAsString(scanResults)
 
-                serializedScanResults shouldBe expectedScanResults
+                patchActualResult(serializedScanResults) shouldBe expectedScanResults
             }
 
             "deprecated licenses field in scan summary can be parsed" {
-                val deprecatedScanResultsFile = File("src/test/assets/deprecated-scan-results.yml")
+                val deprecatedScanResultsFile = File("src/test/assets/deprecated-licenses-scan-results.yml")
                 val scanResults = deprecatedScanResultsFile.readValue(ScanResultContainer::class.java)
 
                 scanResults.results[0].summary.licenses shouldBe sortedSetOf("license 1.1", "license 1.2")
                 scanResults.results[1].summary.licenses shouldBe sortedSetOf("license 2.1", "license 2.2")
+            }
+
+            "deprecated errors field in scan summary can be parsed" {
+                val deprecatedScanResultsFile = File("src/test/assets/deprecated-errors-scan-results.yml")
+                val scanResults = deprecatedScanResultsFile.readValue(ScanResultContainer::class.java)
+
+                scanResults.results[0].summary.errors shouldBe listOf(
+                        Error(timestamp = Instant.EPOCH, source = "", message = "error-11"),
+                        Error(timestamp = Instant.EPOCH, source = "", message = "error-12")
+                )
+
+                scanResults.results[1].summary.errors shouldBe listOf(
+                        Error(timestamp = Instant.EPOCH, source = "", message = "error-21"),
+                        Error(timestamp = Instant.EPOCH, source = "", message = "error-22")
+                )
             }
         }
     }

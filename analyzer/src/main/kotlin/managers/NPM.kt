@@ -29,6 +29,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -393,7 +394,7 @@ open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
         } else if (rootDir == startDir) {
             log.error { "Could not find module '$name'." }
             return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
-                    listOf("Package was not installed."))
+                    listOf(Error(source = javaClass.simpleName, message = "Package was not installed.")))
         } else {
             var parent = startDir.parentFile.parentFile
 

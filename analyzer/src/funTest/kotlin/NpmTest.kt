@@ -26,6 +26,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -111,7 +112,7 @@ class NpmTest : WordSpec() {
                         path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
             }
 
             "resolve dependencies even if the node_modules directory already exists" {

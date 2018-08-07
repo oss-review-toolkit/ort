@@ -25,6 +25,7 @@ import ch.qos.logback.classic.Level
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.Error
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -160,12 +161,14 @@ object ScanCode : LocalScanner() {
         val result = getResult(resultsFile)
         val summary = generateSummary(startTime, endTime, result)
 
-        val hasOnlyMemoryErrors = mapUnknownErrors(summary.errors)
-        val hasOnlyTimeoutErrors = mapTimeoutErrors(summary.errors)
+        val errors = summary.errors.toMutableList()
+
+        val hasOnlyMemoryErrors = mapUnknownErrors(errors)
+        val hasOnlyTimeoutErrors = mapTimeoutErrors(errors)
 
         with(process) {
             if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(provenance, scannerDetails, summary, result)
+                return ScanResult(provenance, scannerDetails, summary.copy(errors = errors), result)
             } else {
                 throw ScanException(errorMessage)
             }
@@ -187,11 +190,13 @@ object ScanCode : LocalScanner() {
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["files_count"].intValue()
         val findings = associateFindings(result)
-        val errors = mutableListOf<String>()
+        val errors = mutableListOf<Error>()
 
         result["files"]?.forEach { file ->
             val path = file["path"].textValue()
-            errors += file["scan_errors"].map { "${it.textValue()} (File: $path)" }
+            errors += file["scan_errors"].map {
+                Error(source = javaClass.simpleName, message = "${it.textValue()} (File: $path)")
+            }
         }
 
         return ScanSummary(startTime, endTime, fileCount, findings, errors)
@@ -201,7 +206,7 @@ object ScanCode : LocalScanner() {
      * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return
      * false otherwise.
      */
-    internal fun mapUnknownErrors(errors: MutableList<String>): Boolean {
+    internal fun mapUnknownErrors(errors: MutableList<Error>): Boolean {
         if (errors.isEmpty()) {
             return false
         }
@@ -209,16 +214,16 @@ object ScanCode : LocalScanner() {
         var onlyMemoryErrors = true
 
         val mappedErrors = errors.map { fullError ->
-            UNKNOWN_ERROR_REGEX.matcher(fullError).let { matcher ->
+            UNKNOWN_ERROR_REGEX.matcher(fullError.message).let { matcher ->
                 if (matcher.matches()) {
                     val file = matcher.group("file")
                     val error = matcher.group("error")
                     if (error == "MemoryError") {
-                        "ERROR: MemoryError while scanning file '$file'."
+                        fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
                     } else {
                         onlyMemoryErrors = false
                         val message = matcher.group("message").trim()
-                        "ERROR: $error while scanning file '$file' ($message)."
+                        fullError.copy(message = "ERROR: $error while scanning file '$file' ($message).")
                     }
                 } else {
                     onlyMemoryErrors = false
@@ -237,7 +242,7 @@ object ScanCode : LocalScanner() {
      * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return
      * false otherwise.
      */
-    internal fun mapTimeoutErrors(errors: MutableList<String>): Boolean {
+    internal fun mapTimeoutErrors(errors: MutableList<Error>): Boolean {
         if (errors.isEmpty()) {
             return false
         }
@@ -245,10 +250,10 @@ object ScanCode : LocalScanner() {
         var onlyTimeoutErrors = true
 
         val mappedErrors = errors.map { fullError ->
-            TIMEOUT_ERROR_REGEX.matcher(fullError).let { matcher ->
+            TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
                 if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
                     val file = matcher.group("file")
-                    "ERROR: Timeout after $TIMEOUT seconds while scanning file '$file'."
+                    fullError.copy(message = "ERROR: Timeout after $TIMEOUT seconds while scanning file '$file'.")
                 } else {
                     onlyTimeoutErrors = false
                     fullError

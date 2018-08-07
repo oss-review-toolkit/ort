@@ -20,7 +20,9 @@
 package com.here.ort.utils.test
 
 import java.io.File
+import java.time.Instant
 
+val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 val USER_DIR = File(System.getProperty("user.dir"))
 
 fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, definitionFilePath: String? = null,
@@ -40,3 +42,6 @@ fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, defi
             .replaceIfNotNull("<REPLACE_PATH>", path)
             .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
 }
+
+fun patchActualResult(result: String) =
+        result.replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }

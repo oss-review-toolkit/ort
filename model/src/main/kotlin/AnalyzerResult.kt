@@ -43,7 +43,7 @@ data class AnalyzerResult(
         /**
          * The list of all errors.
          */
-        val errors: SortedMap<Identifier, List<String>>
+        val errors: SortedMap<Identifier, List<Error>>
 ) : CustomData() {
     /**
      * True if there were any errors during the analysis, false otherwise.
@@ -61,7 +61,7 @@ data class AnalyzerResult(
 class AnalyzerResultBuilder {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
-    private val errors = sortedMapOf<Identifier, List<String>>()
+    private val errors = sortedMapOf<Identifier, List<Error>>()
 
     fun build(): AnalyzerResult {
         return AnalyzerResult(projects, packages, errors)
@@ -73,11 +73,15 @@ class AnalyzerResultBuilder {
         val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
         if (existingProject != null) {
-            val error = "Multiple projects with the same id '${existingProject.id}' found. Not adding the project " +
-                    "defined in '${projectAnalyzerResult.project.definitionFilePath}' to the analyzer results as it " +
-                    "duplicates the project defined in '${existingProject.definitionFilePath}'."
+            val error = Error(
+                    source = "analyzer",
+                    message = "Multiple projects with the same id '${existingProject.id}' found. Not adding the " +
+                            "project defined in '${projectAnalyzerResult.project.definitionFilePath}' to the " +
+                            "analyzer results as it duplicates the project defined in " +
+                            "'${existingProject.definitionFilePath}'."
+            )
 
-            log.error { error }
+            log.error { error.message }
 
             val projectErrors = errors.getOrDefault(existingProject.id, listOf())
             errors[existingProject.id] = projectErrors + error

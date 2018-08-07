@@ -29,6 +29,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -184,7 +185,9 @@ class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
                             buildDependencyTree(transitiveDependencies, lockFile, packages))
                 } catch (e: Exception) {
                     e.showStackTrace()
-                    PackageReference(packageInfo.id, sortedSetOf<PackageReference>(), e.collectMessages())
+                    PackageReference(packageInfo.id, sortedSetOf<PackageReference>(), e.collectMessages().map {
+                        Error(source = javaClass.simpleName, message = it)
+                    })
                 }
             }
         }

@@ -28,6 +28,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -117,7 +118,7 @@ class GradleTest : StringSpec() {
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
         "Fails nicely for Gradle version < 2.14".config(enabled = false) {

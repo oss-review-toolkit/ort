@@ -27,6 +27,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Description
@@ -65,7 +66,7 @@ class GitRepoTest : StringSpec() {
                     custom = Pair("<REPLACE_TMP>", outputDir.name),
                     path = outputDir.invariantSeparatorsPath)
 
-            actualResult shouldBe expectedResult
+            patchActualResult(actualResult) shouldBe expectedResult
         }
     }
 }

@@ -73,7 +73,7 @@ class PhpComposerTest : StringSpec() {
                     "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
             result.packages.size shouldBe 0
             result.errors.size shouldBe 1
-            result.errors.first() should startWith("IllegalArgumentException: No lock file found in")
+            result.errors.first().message should startWith("IllegalArgumentException: No lock file found in")
         }
 
         "No composer.lock is required for projects without dependencies" {

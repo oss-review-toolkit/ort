@@ -28,6 +28,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -105,7 +106,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
 
             val scopes = mutableSetOf<Scope>()
             val packages = mutableSetOf<Package>()
-            val errors = mutableListOf<String>()
+            val errors = mutableListOf<Error>()
 
             installDependencies(workingDir)
 
@@ -145,7 +146,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
     }
 
     private fun parseScope(workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<String>) {
+                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<Error>) {
         log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
@@ -159,7 +160,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
     }
 
     private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
-                                scopeDependencies: MutableSet<PackageReference>, errors: MutableList<String>) {
+                                scopeDependencies: MutableSet<PackageReference>, errors: MutableList<Error>) {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
@@ -202,7 +203,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
 
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.message}"
             log.error { errorMsg }
-            errors += errorMsg
+            errors += Error(source = javaClass.simpleName, message = errorMsg)
         }
     }
 

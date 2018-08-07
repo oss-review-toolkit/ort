@@ -56,7 +56,7 @@ data class ScanSummary(
         /**
          * The list of errors that occurred during the scan.
          */
-        val errors: MutableList<String>
+        val errors: List<Error>
 ) {
     val licenses: SortedSet<String>
         @JsonIgnore
