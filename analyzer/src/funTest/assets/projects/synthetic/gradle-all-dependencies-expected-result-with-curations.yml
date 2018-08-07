@@ -252,16 +252,22 @@ analyzer:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "compileClasspath"
         distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "compileOnly"
         distributed: true
         dependencies: []
@@ -271,24 +277,33 @@ analyzer:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "runtime"
         distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "runtimeClasspath"
         distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "testAnnotationProcessor"
         distributed: true
         dependencies: []
@@ -298,26 +313,36 @@ analyzer:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ junit:junit:4.12 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "testCompileClasspath"
         distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ junit:junit:4.12 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "testCompileOnly"
         distributed: true
         dependencies: []
@@ -327,26 +352,36 @@ analyzer:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ junit:junit:4.12 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
       - name: "testRuntimeClasspath"
         distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ junit:junit:4.12 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
           errors:
-          - "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency\
-            \ org.apache.commons:commons-text:1.1 because no repositories are defined."
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
+              \ dependency org.apache.commons:commons-text:1.1 because no repositories\
+              \ are defined."
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []

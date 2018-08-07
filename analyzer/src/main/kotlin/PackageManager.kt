@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.analyzer.managers.*
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.Error
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -211,7 +212,9 @@ abstract class PackageManager(protected val config: AnalyzerConfiguration) {
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), e.collectMessages())
+                    val errors = e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
+
+                    result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), errors)
 
                     log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
                 }

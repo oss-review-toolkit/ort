@@ -65,7 +65,7 @@ class GoDepTest : WordSpec() {
                         "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
                 result.packages.size shouldBe 0
                 result.errors.size shouldBe 1
-                result.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
+                result.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
             }
 
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {

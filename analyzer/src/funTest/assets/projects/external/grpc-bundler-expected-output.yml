@@ -83,14 +83,19 @@ analyzer:
     packages: []
     errors:
       'Bundler::grpc/Gemfile:':
-      - "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc,\
-        \ dependency versions are unstable."
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Bundler"
+        message: "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc,\
+          \ dependency versions are unstable."
       'Bundler::grpc/examples/ruby/Gemfile:':
-      - "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/examples/ruby,\
-        \ dependency versions are unstable."
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Bundler"
+        message: "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/examples/ruby,\
+          \ dependency versions are unstable."
       'Bundler::grpc/test/distrib/ruby/Gemfile:':
-      - "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/test/distrib/ruby,\
-        \ dependency versions are unstable."
-      'Unmanaged::<REPLACE_TMP>:': []
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Bundler"
+        message: "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/test/distrib/ruby,\
+          \ dependency versions are unstable."
     has_errors: true
 scanner: null

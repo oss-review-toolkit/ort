@@ -19,6 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.Error
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
@@ -93,12 +94,12 @@ abstract class TableReporter : Reporter {
             /**
              * All analyzer errors related to this package.
              */
-            val analyzerErrors: List<String>,
+            val analyzerErrors: List<Error>,
 
             /**
              * All scan errors related to this package.
              */
-            val scanErrors: List<String>
+            val scanErrors: List<Error>
     ) {
         fun merge(other: TableEntry) =
                 TableEntry(

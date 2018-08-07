@@ -24,6 +24,15 @@ import io.kotlintest.specs.StringSpec
 
 class ProjectAnalyzerResultTest : StringSpec({
     "collectErrors should find all errors" {
+        val error1 = Error(source = "source-1", message = "error-1")
+        val error2 = Error(source = "source-2", message = "error-2")
+        val error3 = Error(source = "source-3", message = "error-3")
+        val error4 = Error(source = "source-4", message = "error-4")
+        val error5 = Error(source = "source-5", message = "error-5")
+        val error6 = Error(source = "source-6", message = "error-6")
+        val error7 = Error(source = "source-7", message = "error-7")
+        val error8 = Error(source = "source-8", message = "error-8")
+
         val result = ProjectAnalyzerResult(
                 project = Project(
                         id = Identifier("provider", "namespace", "name", "version"),
@@ -53,10 +62,10 @@ class ProjectAnalyzerResultTest : StringSpec({
                                                                                 version = "version2"
                                                                         ),
                                                                         dependencies = sortedSetOf(),
-                                                                        errors = listOf("2.1", "2.2")
+                                                                        errors = listOf(error1, error2)
                                                                 )
                                                         ),
-                                                        errors = listOf("1.1", "1.2")
+                                                        errors = listOf(error3, error4)
                                                 ),
                                                 PackageReference(
                                                         Identifier(
@@ -66,21 +75,21 @@ class ProjectAnalyzerResultTest : StringSpec({
                                                                 version = "version3"
                                                         ),
                                                         dependencies = sortedSetOf(),
-                                                        errors = listOf("3.1", "3.2")
+                                                        errors = listOf(error5, error6)
                                                 )
                                         )
                                 )
                         )
                 ),
                 packages = sortedSetOf(),
-                errors = listOf("a", "b")
+                errors = listOf(error7, error8)
         )
 
         val errors = result.collectErrors()
         errors.size shouldBe 4
-        errors[Identifier.fromString("provider:namespace:name:version")] shouldBe listOf("a", "b")
-        errors[Identifier.fromString("provider1:namespace1:name1:version1")] shouldBe listOf("1.1", "1.2")
-        errors[Identifier.fromString("provider2:namespace2:name2:version2")] shouldBe listOf("2.1", "2.2")
-        errors[Identifier.fromString("provider3:namespace3:name3:version3")] shouldBe listOf("3.1", "3.2")
+        errors[Identifier.fromString("provider:namespace:name:version")] shouldBe listOf(error7, error8)
+        errors[Identifier.fromString("provider1:namespace1:name1:version1")] shouldBe listOf(error3, error4)
+        errors[Identifier.fromString("provider2:namespace2:name2:version2")] shouldBe listOf(error1, error2)
+        errors[Identifier.fromString("provider3:namespace3:name3:version3")] shouldBe listOf(error5, error6)
     }
 })

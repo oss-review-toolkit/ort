@@ -30,6 +30,7 @@ import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.Error
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -135,8 +136,11 @@ class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
                     scopes = scopes.toSortedSet()
             )
 
-            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(),
-                    dependencyTreeModel.errors)
+            val errors = dependencyTreeModel.errors.map {
+                Error(source = javaClass.simpleName, message = it)
+            }
+
+            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), errors)
         } finally {
             connection.close()
         }
@@ -144,7 +148,8 @@ class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
                                 repositories: List<RemoteRepository>): PackageReference {
-        val errors = dependency.error?.let { mutableListOf(it) } ?: mutableListOf()
+        val errors = dependency.error?.let { mutableListOf(Error(source = javaClass.simpleName, message = it)) }
+                ?: mutableListOf()
 
         // Only look for a package when there was no error resolving the dependency.
         if (dependency.error == null) {
@@ -180,7 +185,7 @@ class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
                             "Could not get package information for dependency '$identifier': ${e.message}"
                         }
 
-                        errors += e.collectMessages()
+                        errors += e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
 
                         rawPackage
                     }

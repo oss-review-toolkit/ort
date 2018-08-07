@@ -78,7 +78,7 @@ class BundlerTest : WordSpec() {
                         "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
                 actualResult.packages.size shouldBe 0
                 actualResult.errors.size shouldBe 1
-                actualResult.errors.first() should startWith("IllegalArgumentException: No lockfile found in")
+                actualResult.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
             }
 
             "resolve dependencies correctly when the project is a Gem" {

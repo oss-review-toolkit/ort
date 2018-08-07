@@ -26,6 +26,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.Error
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -88,12 +89,12 @@ class GoDep(config: AnalyzerConfiguration) : PackageManager(config) {
             val version = project["version"]!!
 
             val vcs = VcsInfo(provider, name, revision)
-            val errors: MutableList<String> = mutableListOf()
+            val errors = mutableListOf<Error>()
 
             val vcsProcessed = try {
                 resolveVcsInfo(vcs, gopath)
             } catch (e: IOException) {
-                errors += e.toString()
+                errors += Error(source = javaClass.simpleName, message = e.toString())
                 VcsInfo.EMPTY
             }
 

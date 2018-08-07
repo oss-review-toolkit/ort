@@ -166,8 +166,8 @@ class ExcelReporter : TableReporter() {
                 CellUtil.createCell(this, 1, entry.scopes.joinWithLimit(), cellStyle)
                 CellUtil.createCell(this, 2, entry.declaredLicenses.joinWithLimit(), cellStyle)
                 CellUtil.createCell(this, 3, entry.detectedLicenses.joinWithLimit(), cellStyle)
-                CellUtil.createCell(this, 4, entry.analyzerErrors.joinWithLimit(), cellStyle)
-                CellUtil.createCell(this, 5, entry.scanErrors.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 4, entry.analyzerErrors.map { it.toString() }.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 5, entry.scanErrors.map { it.toString() }.joinWithLimit(), cellStyle)
 
                 val maxLines = listOf(entry.scopes, entry.declaredLicenses, entry.detectedLicenses,
                         entry.analyzerErrors, entry.scanErrors).map { it.size }.max() ?: 1

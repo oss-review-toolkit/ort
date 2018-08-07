@@ -49,7 +49,7 @@ class FileCounterTest : StringSpec() {
         ScanResultsCache.stats = CacheStatistics()
     }
 
-    private val timeRegex = Regex("((download|end|start)_time): \".*\"")
+    private val timeRegex = Regex("((download|end|start)_time|timestamp): \".*\"")
 
     private fun patchActualResult(result: String) = result
             .replace(timeRegex) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }

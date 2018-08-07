@@ -33,7 +33,7 @@ data class Error(
         /**
          * The timestamp of the error.
          */
-        val timestamp: Instant,
+        val timestamp: Instant = Instant.now(),
 
         /**
          * A description of the error source, e.g. the tool that caused the error.

@@ -39,7 +39,7 @@ data class ProjectAnalyzerResult(
         /**
          * The list of errors that occurred during dependency resolution. Defaults to an empty list.
          */
-        val errors: List<String> = emptyList()
+        val errors: List<Error> = emptyList()
 ) {
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.
@@ -52,8 +52,8 @@ data class ProjectAnalyzerResult(
         }
     }
 
-    fun collectErrors(): Map<Identifier, List<String>> {
-        val collectedErrors = mutableMapOf<Identifier, MutableList<String>>()
+    fun collectErrors(): Map<Identifier, List<Error>> {
+        val collectedErrors = mutableMapOf<Identifier, MutableList<Error>>()
 
         fun addErrors(pkgReference: PackageReference) {
             val errorsForPkg = collectedErrors.getOrPut(pkgReference.id) { mutableListOf() }
@@ -66,7 +66,7 @@ data class ProjectAnalyzerResult(
             it.dependencies.forEach { addErrors(it) }
         }
 
-        return mutableMapOf<Identifier, List<String>>().apply {
+        return mutableMapOf<Identifier, List<Error>>().apply {
             if (errors.isNotEmpty()) {
                 this[project.id] = errors.toMutableList()
             }
