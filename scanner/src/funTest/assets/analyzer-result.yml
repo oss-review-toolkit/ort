@@ -166,7 +166,6 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    errors:
-      Gradle:com.here.ort.gradle.example:lib:1.0.0: []
+    errors: {}
     has_errors: false
 scanner: null

@@ -156,7 +156,6 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    errors:
-      SBT:io.github.soc:directories:10: []
+    errors: {}
     has_errors: false
 scanner: null

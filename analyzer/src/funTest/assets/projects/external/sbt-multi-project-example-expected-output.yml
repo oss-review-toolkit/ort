@@ -1151,10 +1151,6 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    errors:
-      SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT: []
-      SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT: []
-      SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT: []
-      SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT: []
+    errors: {}
     has_errors: false
 scanner: null
