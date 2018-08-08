@@ -23,9 +23,9 @@ import com.here.ort.analyzer.ManagedProjectFiles
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.USER_DIR

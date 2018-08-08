@@ -26,7 +26,6 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.Error
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -34,6 +33,7 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Scope
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
