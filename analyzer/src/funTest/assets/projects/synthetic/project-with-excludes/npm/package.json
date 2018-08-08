@@ -1,0 +1,19 @@
+{
+  "name": "npm-excludes-test-project",
+  "version": "1.0.0",
+  "description": "NPM excludes test project.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heremaps/oss-review-toolkit.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "domutils": "1.5.1",
+    "nth-check": "1.0.1"
+  },
+  "devDependencies": {
+    "safefs": "4.1.0"
+  }
+}
