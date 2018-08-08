@@ -41,9 +41,9 @@ class ExcludesTest : WordSpec() {
 
     init {
         "Project excludes" should {
-            "mark the project as excluded" {
+            "mark excluded components" {
                 val expectedResult = patchExpectedResult(
-                        File(projectPath.parentFile, "excludes-project-expected-result.yml"),
+                        File(projectPath.parentFile, "excludes-expected-result.yml"),
                         url = vcsUrl,
                         revision = vcsRevision,
                         urlProcessed = normalizeVcsUrl(vcsUrl)
@@ -56,9 +56,9 @@ class ExcludesTest : WordSpec() {
         }
 
         "Project excludes with --remove-excludes-from-result" should {
-            "remove excluded projects from result" {
+            "remove excluded components" {
                 val expectedResult = patchExpectedResult(
-                        File(projectPath.parentFile, "excludes-with-remove-project-expected-result.yml"),
+                        File(projectPath.parentFile, "excludes-with-remove-expected-result.yml"),
                         url = vcsUrl,
                         revision = vcsRevision,
                         urlProcessed = normalizeVcsUrl(vcsUrl)
