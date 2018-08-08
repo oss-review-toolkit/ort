@@ -1,7 +1,7 @@
 # Test repository configuration file.
 excludes:
   projects:
-  - path: "lib-without-repo/build.gradle"
+  - path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
     type: "OTHER"
     reason: "OTHER"
     comment: "Project not delivered."
