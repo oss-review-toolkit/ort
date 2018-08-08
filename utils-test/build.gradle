@@ -2,4 +2,6 @@ dependencies {
     compile "io.kotlintest:kotlintest-core:$kotlintestVersion"
     compile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
     compile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
+
+    compile project(':model')
 }

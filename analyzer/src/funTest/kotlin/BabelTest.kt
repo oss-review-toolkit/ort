@@ -21,10 +21,10 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
@@ -59,8 +59,7 @@ class BabelTest : WordSpec() {
     init {
         "Babel dependencies" should {
             "be correctly analyzed" {
-                val config = AnalyzerConfiguration(false, false, false)
-                val npm = NPM.create(config)
+                val npm = NPM.create(DEFAULT_ANALYZER_CONFIGURATION)
                 val packageFile = File(projectDir, "package.json")
 
                 val expectedResult = patchExpectedResult(
