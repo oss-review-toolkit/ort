@@ -1,0 +1,4 @@
+rootProject.name = 'Gradle-Excludes-Example'
+
+include ':app1'
+include ':app2'

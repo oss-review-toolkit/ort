@@ -33,6 +33,7 @@ import com.here.ort.model.Repository
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.readValue
 import com.here.ort.utils.log
 
@@ -119,7 +120,7 @@ class Analyzer {
         var analyzerResult = analyzerResultBuilder.build()
 
         if (!config.removeExcludesFromResult) {
-            val projects = analyzerResult.projects.map { project ->
+            var projects = analyzerResult.projects.map { project ->
                 val projectExclude = repositoryConfiguration.excludes?.projects
                         ?.find { it.path == project.definitionFilePath }
 
@@ -130,6 +131,10 @@ class Analyzer {
                 }
             }
 
+            repositoryConfiguration.excludes?.scopes?.let { scopeExcludes ->
+                projects = applyScopeExcludes(projects, scopeExcludes)
+            }
+
             analyzerResult = analyzerResult.copy(projects = projects.toSortedSet())
         }
 
@@ -138,16 +143,36 @@ class Analyzer {
         return OrtResult(repository, run)
     }
 
-    private fun applyProjectExclude(project: Project, projectExclude: ProjectExclude): Project {
-        var result = project
+    private fun applyProjectExclude(project: Project, projectExclude: ProjectExclude) =
+            if (projectExclude.exclude) {
+                project.copy(excluded = true)
+            } else {
+                val excludedScopeNames = projectExclude.scopes.map { it.name }
+                val scopes = project.scopes.map {
+                    if (it.name in excludedScopeNames) {
+                        it.copy(excluded = true)
+                    } else {
+                        it
+                    }
+                }
 
-        if (projectExclude.exclude) {
-            result = project.copy(excluded = true)
-        } else {
-            // TODO: Implement excluding only parts of the project.
+                project.copy(scopes = scopes.toSortedSet())
+            }
+
+    private fun applyScopeExcludes(projects: List<Project>, scopeExcludes: List<ScopeExclude>): List<Project> {
+        val excludedScopeNames = scopeExcludes.map { it.name }
+
+        return projects.map { project ->
+            val scopes = project.scopes.map {
+                if (it.name in excludedScopeNames && !it.excluded) {
+                    it.copy(excluded = true)
+                } else {
+                    it
+                }
+            }
+
+            project.copy(scopes = scopes.toSortedSet())
         }
-
-        return result
     }
 
     private fun filterExcludedProjects(

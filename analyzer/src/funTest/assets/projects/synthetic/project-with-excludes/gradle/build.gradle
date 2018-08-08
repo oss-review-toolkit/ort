@@ -1,4 +1,6 @@
-apply plugin: 'java'
+subprojects {
+    it.apply plugin: 'java'
 
-group 'com.here.ort.gradle.excludes.example'
-version '1.0.0'
+    group 'com.here.ort.gradle.excludes.example'
+    version '1.0.0'
+}
