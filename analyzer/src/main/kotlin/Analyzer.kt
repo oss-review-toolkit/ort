@@ -27,9 +27,11 @@ import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.utils.log
@@ -110,8 +112,37 @@ class Analyzer {
 
         val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
-        val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())
+        var analyzerResult = analyzerResultBuilder.build()
+
+        if (!config.removeExcludesFromResult) {
+            val projects = analyzerResult.projects.map { project ->
+                val projectExclude = repositoryConfiguration.excludes?.projects
+                        ?.find { it.path == project.definitionFilePath }
+
+                if (projectExclude != null) {
+                    applyProjectExclude(project, projectExclude)
+                } else {
+                    project
+                }
+            }
+
+            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet())
+        }
+
+        val run = AnalyzerRun(Environment(), config, analyzerResult)
 
         return OrtResult(repository, run)
+    }
+
+    private fun applyProjectExclude(project: Project, projectExclude: ProjectExclude): Project {
+        var result = project
+
+        if (projectExclude.exclude) {
+            result = project.copy(excluded = true)
+        } else {
+            // TODO: Implement excluding only parts of the project.
+        }
+
+        return result
     }
 }
