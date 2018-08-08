@@ -20,7 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Stack
-import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OS
 import com.here.ort.utils.test.USER_DIR

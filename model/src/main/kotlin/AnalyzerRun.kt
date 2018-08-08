@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.here.ort.model.config.AnalyzerConfiguration
+
 /**
  * To summary of a single run of the analyzer.
  */

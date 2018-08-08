@@ -19,7 +19,7 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.config.AnalyzerConfiguration
 
 import java.nio.file.FileSystems
 

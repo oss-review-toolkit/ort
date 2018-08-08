@@ -28,7 +28,6 @@ import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
@@ -39,6 +38,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
