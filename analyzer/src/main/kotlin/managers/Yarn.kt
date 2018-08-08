@@ -20,7 +20,7 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.model.AnalyzerConfiguration
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.utils.OS
 import com.here.ort.utils.checkCommandVersion
 

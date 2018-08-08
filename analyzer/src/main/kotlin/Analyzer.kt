@@ -23,13 +23,13 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.utils.log

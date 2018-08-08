@@ -22,9 +22,9 @@ package com.here.ort.analyzer.vcs
 import com.here.ort.analyzer.Analyzer
 import com.here.ort.analyzer.managers.Bundler
 import com.here.ort.downloader.vcs.GitRepo
-import com.here.ort.model.AnalyzerConfiguration
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.patchActualResult
