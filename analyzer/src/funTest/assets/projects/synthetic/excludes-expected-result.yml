@@ -1,0 +1,774 @@
+---
+repository:
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes"
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes"
+  config:
+    excludes:
+      projects:
+      - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm/package.json"
+        type: "OTHER"
+        reason: "OTHER"
+        comment: "Project not delivered."
+      - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app1/build.gradle"
+        type: "OTHER"
+        scopes:
+        - name: "testAnnotationProcessor"
+          reason: "OTHER"
+          comment: "Test dependencies."
+        - name: "testCompile"
+          reason: "OTHER"
+          comment: "Test dependencies."
+        - name: "testCompileClasspath"
+          reason: "OTHER"
+          comment: "Test dependencies."
+        - name: "testCompileOnly"
+          reason: "OTHER"
+          comment: "Test dependencies."
+        - name: "testRuntime"
+          reason: "OTHER"
+          comment: "Test dependencies."
+        - name: "testRuntimeClasspath"
+          reason: "OTHER"
+          comment: "Test dependencies."
+      scopes:
+      - name: "archives"
+        reason: "OTHER"
+        comment: "Scope not published."
+analyzer:
+  environment:
+    os: "<REPLACE_OS>"
+    tool_versions: {}
+  config:
+    ignore_tool_versions: false
+    allow_dynamic_versions: false
+    remove_excludes_from_result: false
+  result:
+    projects:
+    - id: "Gradle::Gradle-Excludes-Example:"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/build.gradle"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle"
+      homepage_url: ""
+      scopes: []
+    - id: "Gradle:com.here.ort.gradle.excludes.example:app1:1.0.0"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app1/build.gradle"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app1"
+      homepage_url: ""
+      scopes:
+      - name: "annotationProcessor"
+        distributed: true
+        dependencies: []
+      - name: "archives"
+        distributed: true
+        dependencies: []
+        excluded: true
+      - name: "compile"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "compileClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "compileOnly"
+        distributed: true
+        dependencies: []
+      - name: "default"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "runtime"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "runtimeClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "testAnnotationProcessor"
+        distributed: true
+        dependencies: []
+        excluded: true
+      - name: "testCompile"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+        excluded: true
+      - name: "testCompileClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+        excluded: true
+      - name: "testCompileOnly"
+        distributed: true
+        dependencies: []
+        excluded: true
+      - name: "testRuntime"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+        excluded: true
+      - name: "testRuntimeClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+        excluded: true
+    - id: "Gradle:com.here.ort.gradle.excludes.example:app2:1.0.0"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2/build.gradle"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2"
+      homepage_url: ""
+      scopes:
+      - name: "annotationProcessor"
+        distributed: true
+        dependencies: []
+      - name: "archives"
+        distributed: true
+        dependencies: []
+        excluded: true
+      - name: "compile"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "compileClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "compileOnly"
+        distributed: true
+        dependencies: []
+      - name: "default"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "runtime"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "runtimeClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "testAnnotationProcessor"
+        distributed: true
+        dependencies: []
+      - name: "testCompile"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "testCompileClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "testCompileOnly"
+        distributed: true
+        dependencies: []
+      - name: "testRuntime"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "testRuntimeClasspath"
+        distributed: true
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+            dependencies: []
+            errors: []
+          errors: []
+    - id: "NPM::npm-excludes-test-project:1.0.0"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm/package.json"
+      declared_licenses:
+      - "Apache-2.0"
+      vcs:
+        type: "git"
+        url: "https://github.com/heremaps/oss-review-toolkit.git"
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm"
+      homepage_url: ""
+      scopes:
+      - name: "dependencies"
+        distributed: true
+        dependencies:
+        - id: "NPM::domutils:1.5.1"
+          dependencies:
+          - id: "NPM::dom-serializer:0.1.0"
+            dependencies:
+            - id: "NPM::domelementtype:1.1.3"
+              dependencies: []
+              errors: []
+            - id: "NPM::entities:1.1.1"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "NPM::domelementtype:1.3.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "NPM::nth-check:1.0.1"
+          dependencies:
+          - id: "NPM::boolbase:1.0.0"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "devDependencies"
+        distributed: false
+        dependencies:
+        - id: "NPM::safefs:4.1.0"
+          dependencies:
+          - id: "NPM::editions:1.3.4"
+            dependencies: []
+            errors: []
+          - id: "NPM::graceful-fs:4.1.11"
+            dependencies: []
+            errors: []
+          errors: []
+      excluded: true
+    - id: "Unmanaged::project-with-excludes:"
+      definition_file_path: ""
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "<REPLACE_URL>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes"
+      homepage_url: ""
+      scopes: []
+    packages:
+    - package:
+        id: "Maven:junit:junit:4.12"
+        declared_licenses:
+        - "Eclipse Public License 1.0"
+        description: "JUnit is a unit testing framework for Java, created by Erich\
+          \ Gamma and Kent Beck."
+        homepage_url: "http://junit.org"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar"
+          hash: "2973d150c0dc1fefe998f834810d68f278ea58ec"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+          hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/junit-team/junit.git"
+          revision: "r4.12"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/junit-team/junit.git"
+          revision: "r4.12"
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.apache.commons:commons-lang3:3.5"
+        declared_licenses:
+        - "Apache License, Version 2.0"
+        description: "Apache Commons Lang, a package of Java utility classes for the\n\
+          \  classes that are in java.lang's hierarchy, or are considered to be so\n\
+          \  standard as to justify existence in java.lang."
+        homepage_url: "http://commons.apache.org/proper/commons-lang/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
+          hash: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+          hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+          revision: "LANG_3_5"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+          revision: "LANG_3_5"
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.apache.commons:commons-text:1.1"
+        declared_licenses:
+        - "Apache License, Version 2.0"
+        description: "Apache Commons Text is a library focused on algorithms working\
+          \ on strings."
+        homepage_url: "http://commons.apache.org/proper/commons-text/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
+          hash: "c336bf600f44b88af356c8a85eef4af822b06a4d"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+          hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        declared_licenses:
+        - "New BSD License"
+        description: "This is the core API of hamcrest matcher framework to be used\
+          \ by third-party framework providers. This includes the a foundation set\
+          \ of matcher implementations for common operations."
+        homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+          hash: "42a25dc3219429f0e5d060061f71acb49bf010a0"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+          hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git@github.com:hamcrest/JavaHamcrest.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::boolbase:1.0.0"
+        declared_licenses:
+        - "ISC"
+        description: "two functions: One that returns true, one that returns false"
+        homepage_url: "https://github.com/fb55/boolbase"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
+          hash: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "https://github.com/fb55/boolbase"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/fb55/boolbase.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::dom-serializer:0.1.0"
+        declared_licenses:
+        - "MIT"
+        description: "render dom nodes to string"
+        homepage_url: "https://github.com/cheeriojs/dom-renderer"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.1.0.tgz"
+          hash: "073c697546ce0780ce23be4a28e293e40bc30c82"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/cheeriojs/dom-renderer.git"
+          revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/cheeriojs/dom-renderer.git"
+          revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::domelementtype:1.1.3"
+        declared_licenses: []
+        description: "all the types of nodes in htmlparser2's dom"
+        homepage_url: "https://github.com/FB55/domelementtype"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.1.3.tgz"
+          hash: "bd28773e2642881aec51544924299c5cd822185b"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/FB55/domelementtype.git"
+          revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/FB55/domelementtype.git"
+          revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::domelementtype:1.3.0"
+        declared_licenses: []
+        description: "all the types of nodes in htmlparser2's dom"
+        homepage_url: "https://github.com/FB55/domelementtype"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.0.tgz"
+          hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/FB55/domelementtype.git"
+          revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/FB55/domelementtype.git"
+          revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::domutils:1.5.1"
+        declared_licenses: []
+        description: "utilities for working with htmlparser2's dom"
+        homepage_url: "https://github.com/FB55/domutils"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
+          hash: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/FB55/domutils.git"
+          revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/FB55/domutils.git"
+          revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::editions:1.3.4"
+        declared_licenses:
+        - "MIT"
+        description: "Publish multiple editions for your JavaScript packages consistently\
+          \ and easily (e.g. source edition, esnext edition, es2015 edition)"
+        homepage_url: "https://github.com/bevry/editions"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/editions/-/editions-1.3.4.tgz"
+          hash: "3662cb592347c3168eb8e498a0ff73271d67f50b"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git+https://github.com/bevry/editions.git"
+          revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/bevry/editions.git"
+          revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::entities:1.1.1"
+        declared_licenses:
+        - "BSD-like"
+        description: "Encode & decode XML/HTML entities with ease"
+        homepage_url: "https://github.com/fb55/node-entities"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz"
+          hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/fb55/node-entities.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/fb55/node-entities.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::graceful-fs:4.1.11"
+        declared_licenses:
+        - "ISC"
+        description: "A drop-in replacement for fs, making various improvements."
+        homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.11.tgz"
+          hash: "0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git+https://github.com/isaacs/node-graceful-fs.git"
+          revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/isaacs/node-graceful-fs.git"
+          revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::nth-check:1.0.1"
+        declared_licenses:
+        - "BSD"
+        description: "performant nth-check parser & compiler"
+        homepage_url: "https://github.com/fb55/nth-check"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/nth-check/-/nth-check-1.0.1.tgz"
+          hash: "9929acdf628fc2c41098deab82ac580cf149aae4"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "https://github.com/fb55/nth-check"
+          revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/fb55/nth-check.git"
+          revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::safefs:4.1.0"
+        declared_licenses:
+        - "MIT"
+        description: "Stop getting EMFILE errors! Open only as many files as the operating\
+          \ system supports."
+        homepage_url: "https://github.com/bevry/safefs"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/safefs/-/safefs-4.1.0.tgz"
+          hash: "f82aeb4bdd7ae51f653eb20f6728b3058c8d6445"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git+ssh://git@github.com/bevry/safefs.git"
+          revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "ssh://git@github.com/bevry/safefs.git"
+          revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+          path: ""
+      curations: []
+    errors: {}
+    has_errors: false
+scanner: null
