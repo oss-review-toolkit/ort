@@ -20,9 +20,9 @@
 package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Stack
-import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OS
+import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 
 import io.kotlintest.shouldBe
@@ -36,8 +36,8 @@ class StackTest : StringSpec({
     "Dependencies should be resolved correctly for quickcheck-state-machine" {
         val definitionFile = File(projectsDir, "external/quickcheck-state-machine/stack.yaml")
 
-        val config = AnalyzerConfiguration(false, false, false)
-        val result = Stack.create(config).resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+        val result = Stack.create(DEFAULT_ANALYZER_CONFIGURATION)
+                .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
         val expectedOutput = if (OS.isWindows) {
             "external/quickcheck-state-machine-expected-output-win32.yml"
         } else {
@@ -52,8 +52,8 @@ class StackTest : StringSpec({
     "Dependencies should be resolved correctly for quickcheck-state-machine-example" {
         val definitionFile = File(projectsDir, "external/quickcheck-state-machine/example/stack.yaml")
 
-        val config = AnalyzerConfiguration(false, false, false)
-        val result = Stack.create(config).resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+        val result = Stack.create(DEFAULT_ANALYZER_CONFIGURATION)
+                .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
         val expectedOutput = if (OS.isWindows) {
             "external/quickcheck-state-machine-example-expected-output-win32.yml"
         } else {

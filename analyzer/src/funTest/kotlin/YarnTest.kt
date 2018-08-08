@@ -21,10 +21,10 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
@@ -59,8 +59,8 @@ class YarnTest : WordSpec() {
         "yarn" should {
             "resolve dependencies correctly" {
                 val packageFile = File(projectDir, "package.json")
-                val config = AnalyzerConfiguration(false, false, false)
-                val result = Yarn.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = Yarn.create(DEFAULT_ANALYZER_CONFIGURATION)
+                        .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
                         File(projectDir.parentFile, "yarn-expected-output.yml"),

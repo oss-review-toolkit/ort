@@ -24,9 +24,9 @@ import com.here.ort.analyzer.managers.Bundler
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
@@ -58,8 +58,7 @@ class GitRepoTest : StringSpec() {
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
             GitRepo.download(pkg, outputDir)
-            val config = AnalyzerConfiguration(false, false, false)
-            val ortResult = Analyzer().analyze(config, outputDir, listOf(Bundler))
+            val ortResult = Analyzer().analyze(DEFAULT_ANALYZER_CONFIGURATION, outputDir, listOf(Bundler))
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(
                     File("src/funTest/assets/projects/external/grpc-bundler-expected-output.yml"),

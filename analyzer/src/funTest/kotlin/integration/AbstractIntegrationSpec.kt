@@ -25,8 +25,8 @@ import com.here.ort.downloader.Main
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
-import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.USER_DIR
 
@@ -111,8 +111,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         "Analyzer creates one non-empty result per definition file".config(tags = setOf(ExpensiveTag)) {
             definitionFilesForTest.forEach { manager, files ->
                 println("Resolving $manager dependencies in $files.")
-                val config = AnalyzerConfiguration(false, false, false)
-                val results = manager.create(config).resolveDependencies(USER_DIR, files)
+                val results = manager.create(DEFAULT_ANALYZER_CONFIGURATION).resolveDependencies(USER_DIR, files)
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->

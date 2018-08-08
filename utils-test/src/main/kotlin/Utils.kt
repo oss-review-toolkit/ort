@@ -19,8 +19,11 @@
 
 package com.here.ort.utils.test
 
+import com.here.ort.model.config.AnalyzerConfiguration
 import java.io.File
 import java.time.Instant
+
+val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(false, false, false)
 
 val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 val USER_DIR = File(System.getProperty("user.dir"))

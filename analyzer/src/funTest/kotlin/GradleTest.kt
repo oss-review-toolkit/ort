@@ -22,10 +22,10 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.Git
-import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchActualResult
@@ -65,8 +65,8 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false, false)
-            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -81,8 +81,8 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false, false)
-            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -97,8 +97,8 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false, false)
-            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -113,8 +113,8 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false, false)
-            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -129,8 +129,8 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val config = AnalyzerConfiguration(false, false, false)
-            val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -186,8 +186,8 @@ class GradleTest : StringSpec() {
                         revision = vcsRevision
                 )
 
-                val config = AnalyzerConfiguration(false, false, false)
-                val result = Gradle.create(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+                        .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
                 result!!.errors shouldBe emptyList()
