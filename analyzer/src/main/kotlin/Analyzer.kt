@@ -52,12 +52,16 @@ class Analyzer {
         }
 
         // Map of files managed by the respective package manager.
-        val managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        var managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
         } else {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
+        }
+
+        if (config.removeExcludesFromResult) {
+            managedDefinitionFiles = filterExcludedProjects(managedDefinitionFiles, repositoryConfiguration)
         }
 
         val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any {
@@ -144,5 +148,38 @@ class Analyzer {
         }
 
         return result
+    }
+
+    private fun filterExcludedProjects(
+            managedDefinitionFiles: MutableMap<PackageManagerFactory<PackageManager>, List<File>>,
+            repositoryConfiguration: RepositoryConfiguration
+    ): MutableMap<PackageManagerFactory<PackageManager>, List<File>> {
+        val excludedProjects = repositoryConfiguration.excludes?.projects?.filter { it.exclude } ?: emptyList()
+        val excludedDefinitionFiles = excludedProjects.map { it.path }
+
+        val definitionFilesToRemove = managedDefinitionFiles.flatMap { it.value }.filter { definitionFile ->
+            val definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
+            definitionFilePath in excludedDefinitionFiles
+        }
+
+        require(definitionFilesToRemove.size == excludedDefinitionFiles.size) {
+            "The following definition files are configured to be excluded in .ort.yml, but do not exist in the " +
+                    "repository:\n${(excludedDefinitionFiles - definitionFilesToRemove).joinToString("\n")}"
+        }
+
+        log.info {
+            "The following definition files are configured to be excluded in .ort.yml:\n" +
+                    definitionFilesToRemove.joinToString("\n") { it.invariantSeparatorsPath }
+        }
+
+        val filteredManagedDefinitionFiles = mutableMapOf<PackageManagerFactory<PackageManager>, List<File>>()
+        managedDefinitionFiles.forEach { packageManager, definitionFiles ->
+            val filteredDefinitionFiles = definitionFiles - definitionFilesToRemove
+            if (filteredDefinitionFiles.isNotEmpty()) {
+                filteredManagedDefinitionFiles[packageManager] = filteredDefinitionFiles
+            }
+        }
+
+        return filteredManagedDefinitionFiles
     }
 }

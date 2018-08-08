@@ -20,7 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Identifier
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -32,7 +32,9 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class ExcludesTest : WordSpec() {
-    val projectPath = File("src/funTest/assets/projects/synthetic/project-with-excludes").absoluteFile
+    private val analyzerConfigurationWithRemove = AnalyzerConfiguration(false, false, true)
+
+    private val projectPath = File("src/funTest/assets/projects/synthetic/project-with-excludes").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectPath)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -48,6 +50,21 @@ class ExcludesTest : WordSpec() {
                 )
 
                 val ortResult = Analyzer().analyze(DEFAULT_ANALYZER_CONFIGURATION, projectPath)
+
+                yamlMapper.writeValueAsString(ortResult) shouldBe expectedResult
+            }
+        }
+
+        "Project excludes with --remove-excludes-from-result" should {
+            "remove excluded projects from result" {
+                val expectedResult = patchExpectedResult(
+                        File(projectPath.parentFile, "excludes-with-remove-project-expected-result.yml"),
+                        url = vcsUrl,
+                        revision = vcsRevision,
+                        urlProcessed = normalizeVcsUrl(vcsUrl)
+                )
+
+                val ortResult = Analyzer().analyze(analyzerConfigurationWithRemove, projectPath)
 
                 yamlMapper.writeValueAsString(ortResult) shouldBe expectedResult
             }
