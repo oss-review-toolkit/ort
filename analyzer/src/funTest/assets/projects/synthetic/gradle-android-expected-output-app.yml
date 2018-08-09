@@ -16,10 +16,8 @@ project:
   homepage_url: ""
   scopes:
   - name: "amazonDemoDebugAndroidTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonDemoDebugAndroidTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -31,7 +29,6 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoDebugAndroidTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -52,10 +49,8 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoDebugAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonDemoDebugCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -67,7 +62,6 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoDebugRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -88,10 +82,8 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoDebugUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonDemoDebugUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -109,7 +101,6 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoDebugUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -136,13 +127,10 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoDebugWearBundling"
-    distributed: true
     dependencies: []
   - name: "amazonDemoReleaseAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonDemoReleaseCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -154,7 +142,6 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoReleaseRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -175,10 +162,8 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoReleaseUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonDemoReleaseUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -196,7 +181,6 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoReleaseUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -223,13 +207,10 @@ project:
         errors: []
       errors: []
   - name: "amazonDemoReleaseWearBundling"
-    distributed: true
     dependencies: []
   - name: "amazonFullDebugAndroidTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonFullDebugAndroidTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -241,7 +222,6 @@ project:
         errors: []
       errors: []
   - name: "amazonFullDebugAndroidTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -262,10 +242,8 @@ project:
         errors: []
       errors: []
   - name: "amazonFullDebugAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonFullDebugCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -277,7 +255,6 @@ project:
         errors: []
       errors: []
   - name: "amazonFullDebugRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -298,10 +275,8 @@ project:
         errors: []
       errors: []
   - name: "amazonFullDebugUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonFullDebugUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -319,7 +294,6 @@ project:
         errors: []
       errors: []
   - name: "amazonFullDebugUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -346,13 +320,10 @@ project:
         errors: []
       errors: []
   - name: "amazonFullDebugWearBundling"
-    distributed: true
     dependencies: []
   - name: "amazonFullReleaseAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonFullReleaseCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -364,7 +335,6 @@ project:
         errors: []
       errors: []
   - name: "amazonFullReleaseRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -385,10 +355,8 @@ project:
         errors: []
       errors: []
   - name: "amazonFullReleaseUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "amazonFullReleaseUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -406,7 +374,6 @@ project:
         errors: []
       errors: []
   - name: "amazonFullReleaseUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -433,31 +400,23 @@ project:
         errors: []
       errors: []
   - name: "amazonFullReleaseWearBundling"
-    distributed: true
     dependencies: []
   - name: "androidTestUtil"
-    distributed: true
     dependencies: []
   - name: "archives"
-    distributed: true
     dependencies: []
   - name: "compile"
-    distributed: true
     dependencies: []
   - name: "default"
-    distributed: true
     dependencies: []
   - name: "googleDemoDebugAndroidTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleDemoDebugAndroidTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
       errors: []
   - name: "googleDemoDebugAndroidTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -472,16 +431,13 @@ project:
         errors: []
       errors: []
   - name: "googleDemoDebugAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleDemoDebugCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
       errors: []
   - name: "googleDemoDebugRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -496,10 +452,8 @@ project:
         errors: []
       errors: []
   - name: "googleDemoDebugUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleDemoDebugUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -511,7 +465,6 @@ project:
         errors: []
       errors: []
   - name: "googleDemoDebugUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -532,19 +485,15 @@ project:
         errors: []
       errors: []
   - name: "googleDemoDebugWearBundling"
-    distributed: true
     dependencies: []
   - name: "googleDemoReleaseAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleDemoReleaseCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
       errors: []
   - name: "googleDemoReleaseRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -559,10 +508,8 @@ project:
         errors: []
       errors: []
   - name: "googleDemoReleaseUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleDemoReleaseUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -574,7 +521,6 @@ project:
         errors: []
       errors: []
   - name: "googleDemoReleaseUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -595,19 +541,15 @@ project:
         errors: []
       errors: []
   - name: "googleDemoReleaseWearBundling"
-    distributed: true
     dependencies: []
   - name: "googleFullDebugAndroidTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleFullDebugAndroidTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
       errors: []
   - name: "googleFullDebugAndroidTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -622,16 +564,13 @@ project:
         errors: []
       errors: []
   - name: "googleFullDebugAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleFullDebugCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
       errors: []
   - name: "googleFullDebugRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -646,10 +585,8 @@ project:
         errors: []
       errors: []
   - name: "googleFullDebugUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleFullDebugUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -661,7 +598,6 @@ project:
         errors: []
       errors: []
   - name: "googleFullDebugUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -682,19 +618,15 @@ project:
         errors: []
       errors: []
   - name: "googleFullDebugWearBundling"
-    distributed: true
     dependencies: []
   - name: "googleFullReleaseAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleFullReleaseCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
       errors: []
   - name: "googleFullReleaseRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -709,10 +641,8 @@ project:
         errors: []
       errors: []
   - name: "googleFullReleaseUnitTestAnnotationProcessorClasspath"
-    distributed: true
     dependencies: []
   - name: "googleFullReleaseUnitTestCompileClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies: []
@@ -724,7 +654,6 @@ project:
         errors: []
       errors: []
   - name: "googleFullReleaseUnitTestRuntimeClasspath"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -745,16 +674,12 @@ project:
         errors: []
       errors: []
   - name: "googleFullReleaseWearBundling"
-    distributed: true
     dependencies: []
   - name: "lintChecks"
-    distributed: true
     dependencies: []
   - name: "lintClassPath"
-    distributed: true
     dependencies: []
   - name: "testCompile"
-    distributed: true
     dependencies: []
 packages:
 - package:

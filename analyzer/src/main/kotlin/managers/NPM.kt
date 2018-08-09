@@ -147,10 +147,9 @@ open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
 
             val packages = parseInstalledModules(workingDir)
 
-            val dependencies = Scope("dependencies", true,
-                    parseDependencies(definitionFile, "dependencies", packages))
-            val devDependencies = Scope("devDependencies", false,
-                    parseDependencies(definitionFile, "devDependencies", packages))
+            val dependencies = Scope("dependencies", parseDependencies(definitionFile, "dependencies", packages))
+            val devDependencies = Scope("devDependencies", parseDependencies(definitionFile, "devDependencies",
+                    packages))
 
             // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
 

@@ -16,7 +16,6 @@ project:
   homepage_url: ""
   scopes:
   - name: "default"
-    distributed: true
     dependencies:
     - id: "GoDep::github.com/dgraph-io/dgo:939c270eac93a70e63162abd53f78dbc9e928ff6"
       dependencies: []

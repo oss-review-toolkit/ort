@@ -280,7 +280,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
 
         // TODO: Handle "extras" and "tests" dependencies.
         val scopes = sortedSetOf(
-                Scope("install", true, installDependencies)
+                Scope("install", installDependencies)
         )
 
         val project = Project(

@@ -16,7 +16,6 @@ project:
   homepage_url: "http://maven.apache.org"
   scopes:
   - name: "compile"
-    distributed: true
     dependencies:
     - id: "Maven:org.apache.beam:beam-parent:2.3.0"
       dependencies: []
@@ -31,7 +30,6 @@ project:
       dependencies: []
       errors: []
   - name: "test"
-    distributed: false
     dependencies:
     - id: "Maven:junit:junit:3.8.1"
       dependencies: []

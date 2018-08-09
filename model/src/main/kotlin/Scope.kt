@@ -19,7 +19,7 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -27,18 +27,13 @@ import java.util.SortedSet
 /**
  * The scope class puts package dependencies into context.
  */
+@JsonIgnoreProperties("delivered", "distributed")
 data class Scope(
         /**
          * The respective package manager's native name for the scope, e.g. "compile", " provided" etc. for Maven, or
          * "dependencies", "devDependencies" etc. for NPM.
          */
         val name: String,
-
-        /**
-         * A flag to indicate whether the dependencies in this scope are distributed along with the product.
-         */
-        @JsonAlias("delivered")
-        val distributed: Boolean,
 
         /**
          * The set of references to packages in this scope. Note that only the first-order packages in this set

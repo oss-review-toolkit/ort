@@ -138,9 +138,9 @@ class Stack(config: AnalyzerConfiguration) : PackageManager(config) {
         buildDependencyTree(projectId.name, allPackages, benchChildren, benchVersions, benchDependencies)
 
         val scopes = sortedSetOf(
-                Scope("external", true, externalDependencies),
-                Scope("test", false, testDependencies),
-                Scope("bench", false, benchDependencies)
+                Scope("external", externalDependencies),
+                Scope("test", testDependencies),
+                Scope("bench", benchDependencies)
         )
 
         val project = Project(

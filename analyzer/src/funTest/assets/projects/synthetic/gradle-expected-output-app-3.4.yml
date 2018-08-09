@@ -16,10 +16,8 @@ project:
   homepage_url: ""
   scopes:
   - name: "archives"
-    distributed: true
     dependencies: []
   - name: "compile"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -34,10 +32,8 @@ project:
         errors: []
       errors: []
   - name: "compileOnly"
-    distributed: true
     dependencies: []
   - name: "default"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -52,7 +48,6 @@ project:
         errors: []
       errors: []
   - name: "runtime"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -67,7 +62,6 @@ project:
         errors: []
       errors: []
   - name: "testCompile"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
@@ -82,10 +76,8 @@ project:
         errors: []
       errors: []
   - name: "testCompileOnly"
-    distributed: true
     dependencies: []
   - name: "testRuntime"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:

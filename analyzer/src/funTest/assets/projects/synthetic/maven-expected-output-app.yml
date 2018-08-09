@@ -16,7 +16,6 @@ project:
   homepage_url: "http://maven.apache.org"
   scopes:
   - name: "compile"
-    distributed: true
     dependencies:
     - id: "Maven:com.here.ort.maven:maven-lib:1.0-SNAPSHOT"
       dependencies:

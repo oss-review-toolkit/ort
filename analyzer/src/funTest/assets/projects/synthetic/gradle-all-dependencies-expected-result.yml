@@ -77,13 +77,10 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        distributed: true
         dependencies: []
       - name: "archives"
-        distributed: true
         dependencies: []
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -98,7 +95,6 @@ analyzer:
             errors: []
           errors: []
       - name: "compileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -113,10 +109,8 @@ analyzer:
             errors: []
           errors: []
       - name: "compileOnly"
-        distributed: true
         dependencies: []
       - name: "default"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -131,7 +125,6 @@ analyzer:
             errors: []
           errors: []
       - name: "runtime"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -146,7 +139,6 @@ analyzer:
             errors: []
           errors: []
       - name: "runtimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -161,11 +153,9 @@ analyzer:
             errors: []
           errors: []
       - name: "testAnnotationProcessor"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testCompile"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -181,7 +171,6 @@ analyzer:
           errors: []
         excluded: true
       - name: "testCompileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -197,11 +186,9 @@ analyzer:
           errors: []
         excluded: true
       - name: "testCompileOnly"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testRuntime"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -217,7 +204,6 @@ analyzer:
           errors: []
         excluded: true
       - name: "testRuntimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
           dependencies:
@@ -248,13 +234,10 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        distributed: true
         dependencies: []
       - name: "archives"
-        distributed: true
         dependencies: []
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
@@ -265,7 +248,6 @@ analyzer:
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
       - name: "compileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
@@ -276,10 +258,8 @@ analyzer:
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
       - name: "compileOnly"
-        distributed: true
         dependencies: []
       - name: "default"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
@@ -290,7 +270,6 @@ analyzer:
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
       - name: "runtime"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
@@ -301,7 +280,6 @@ analyzer:
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
       - name: "runtimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies: []
@@ -312,11 +290,9 @@ analyzer:
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
       - name: "testAnnotationProcessor"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testCompile"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
@@ -335,7 +311,6 @@ analyzer:
               \ are defined."
         excluded: true
       - name: "testCompileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
@@ -354,11 +329,9 @@ analyzer:
               \ are defined."
         excluded: true
       - name: "testCompileOnly"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testRuntime"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
@@ -377,7 +350,6 @@ analyzer:
               \ are defined."
         excluded: true
       - name: "testRuntimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies: []
@@ -412,13 +384,10 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        distributed: true
         dependencies: []
       - name: "archives"
-        distributed: true
         dependencies: []
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -430,7 +399,6 @@ analyzer:
           dependencies: []
           errors: []
       - name: "compileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -442,10 +410,8 @@ analyzer:
           dependencies: []
           errors: []
       - name: "compileOnly"
-        distributed: true
         dependencies: []
       - name: "default"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -457,7 +423,6 @@ analyzer:
           dependencies: []
           errors: []
       - name: "runtime"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -469,7 +434,6 @@ analyzer:
           dependencies: []
           errors: []
       - name: "runtimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -481,11 +445,9 @@ analyzer:
           dependencies: []
           errors: []
       - name: "testAnnotationProcessor"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testCompile"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -504,7 +466,6 @@ analyzer:
           errors: []
         excluded: true
       - name: "testCompileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -523,11 +484,9 @@ analyzer:
           errors: []
         excluded: true
       - name: "testCompileOnly"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testRuntime"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -546,7 +505,6 @@ analyzer:
           errors: []
         excluded: true
       - name: "testRuntimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:

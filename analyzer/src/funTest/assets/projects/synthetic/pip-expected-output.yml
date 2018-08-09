@@ -17,7 +17,6 @@ project:
   homepage_url: "https://example.org/app"
   scopes:
   - name: "install"
-    distributed: true
     dependencies:
     - id: "PyPI::Flask:0.12.4"
       dependencies:
