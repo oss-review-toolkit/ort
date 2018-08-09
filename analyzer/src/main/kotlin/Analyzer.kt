@@ -25,6 +25,7 @@ import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
+import com.here.ort.model.CuratedPackage
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
@@ -38,6 +39,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.log
 
 import java.io.File
+import java.util.SortedSet
 
 class Analyzer {
     fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
@@ -119,7 +121,22 @@ class Analyzer {
 
         var analyzerResult = analyzerResultBuilder.build()
 
-        if (!config.removeExcludesFromResult) {
+        if (config.removeExcludesFromResult) {
+            val globalExcludedScopeNames = repositoryConfiguration.excludes?.scopes?.map { it.name } ?: emptyList()
+
+            val projects = analyzerResult.projects.map { project ->
+                val excludedScopeNames = repositoryConfiguration.excludes?.projects
+                        ?.find { it.path == project.definitionFilePath }
+                        ?.let { projectExclude ->
+                            projectExclude.scopes.map { it.name }
+                        } ?: emptyList()
+                filterExcludedScopes(project, globalExcludedScopeNames + excludedScopeNames)
+            }
+
+            val packages = filterUnreferencedPackages(projects, analyzerResult.packages)
+
+            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet(), packages = packages)
+        } else {
             var projects = analyzerResult.projects.map { project ->
                 val projectExclude = repositoryConfiguration.excludes?.projects
                         ?.find { it.path == project.definitionFilePath }
@@ -207,4 +224,18 @@ class Analyzer {
 
         return filteredManagedDefinitionFiles
     }
+
+    private fun filterExcludedScopes(project: Project, excludedScopeNames: List<String>): Project {
+        val filteredScopes = project.scopes.filter { it.name !in excludedScopeNames }
+
+        return project.copy(scopes = filteredScopes.toSortedSet())
+    }
+
+    private fun filterUnreferencedPackages(projects: List<Project>, packages: SortedSet<CuratedPackage>) =
+            // TODO: This implementation is inefficient as it repeatedly parses all dependency trees. Collecting all
+            // referenced package identifiers and then creating the intersection with the provided packages would
+            // perform better.
+            packages.filter { pkg ->
+                projects.any { it.scopes.any { it.contains(pkg.pkg.id) } }
+            }.toSortedSet()
 }
