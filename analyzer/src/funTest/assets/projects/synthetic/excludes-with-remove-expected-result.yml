@@ -85,9 +85,6 @@ analyzer:
       - name: "annotationProcessor"
         distributed: true
         dependencies: []
-      - name: "archives"
-        distributed: true
-        dependencies: []
       - name: "compile"
         distributed: true
         dependencies:
@@ -136,72 +133,6 @@ analyzer:
             dependencies: []
             errors: []
           errors: []
-      - name: "testAnnotationProcessor"
-        distributed: true
-        dependencies: []
-      - name: "testCompile"
-        distributed: true
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
-      - name: "testCompileClasspath"
-        distributed: true
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
-      - name: "testCompileOnly"
-        distributed: true
-        dependencies: []
-      - name: "testRuntime"
-        distributed: true
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
-      - name: "testRuntimeClasspath"
-        distributed: true
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
     - id: "Gradle:com.here.ort.gradle.excludes.example:app2:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2/build.gradle"
       declared_licenses: []
@@ -218,9 +149,6 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        distributed: true
-        dependencies: []
-      - name: "archives"
         distributed: true
         dependencies: []
       - name: "compile"

@@ -87,7 +87,10 @@ analyzer:
         dependencies: []
       - name: "archives"
         distributed: true
-        dependencies: []
+        dependencies:
+        - id: "Maven:org.javassist:javassist:3.21.0-GA"
+          dependencies: []
+          errors: []
         excluded: true
       - name: "compile"
         distributed: true
@@ -229,7 +232,10 @@ analyzer:
         dependencies: []
       - name: "archives"
         distributed: true
-        dependencies: []
+        dependencies:
+        - id: "Maven:org.javassist:javassist:3.21.0-GA"
+          dependencies: []
+          errors: []
         excluded: true
       - name: "compile"
         distributed: true
@@ -517,6 +523,34 @@ analyzer:
         vcs_processed:
           type: "git"
           url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.javassist:javassist:3.21.0-GA"
+        declared_licenses:
+        - "Apache License 2.0"
+        - "LGPL 2.1"
+        - "MPL 1.1"
+        description: "Javassist (JAVA programming ASSISTant) makes Java bytecode manipulation\n\
+          \    simple.  It is a class library for editing bytecodes in Java."
+        homepage_url: "http://www.javassist.org/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/javassist/javassist/3.21.0-GA/javassist-3.21.0-GA.jar"
+          hash: "598244f595db5c5fb713731eddbb1c91a58d959b"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/javassist/javassist/3.21.0-GA/javassist-3.21.0-GA-sources.jar"
+          hash: "81fefbd46ba6a18fc7af83b9c60b28c0862cd492"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git@github.com:jboss-javassist/javassist.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "ssh://git@github.com/jboss-javassist/javassist.git"
           revision: ""
           path: ""
       curations: []

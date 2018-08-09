@@ -3,6 +3,7 @@ repositories {
 }
 
 dependencies {
+    archives 'org.javassist:javassist:3.21.0-GA'
     compile 'org.apache.commons:commons-text:1.1'
     testCompile 'junit:junit:4.12'
 }
