@@ -117,7 +117,7 @@ class GoDep(config: AnalyzerConfiguration) : PackageManager(config) {
                     errors = errors)
         }
 
-        val scope = Scope("default", true, packageRefs.toSortedSet())
+        val scope = Scope("default", packageRefs.toSortedSet())
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively()

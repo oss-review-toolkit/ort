@@ -83,17 +83,14 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        distributed: true
         dependencies: []
       - name: "archives"
-        distributed: true
         dependencies:
         - id: "Maven:org.javassist:javassist:3.21.0-GA"
           dependencies: []
           errors: []
         excluded: true
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -102,7 +99,6 @@ analyzer:
             errors: []
           errors: []
       - name: "compileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -111,10 +107,8 @@ analyzer:
             errors: []
           errors: []
       - name: "compileOnly"
-        distributed: true
         dependencies: []
       - name: "default"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -123,7 +117,6 @@ analyzer:
             errors: []
           errors: []
       - name: "runtime"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -132,7 +125,6 @@ analyzer:
             errors: []
           errors: []
       - name: "runtimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -141,11 +133,9 @@ analyzer:
             errors: []
           errors: []
       - name: "testAnnotationProcessor"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testCompile"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -161,7 +151,6 @@ analyzer:
           errors: []
         excluded: true
       - name: "testCompileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -177,11 +166,9 @@ analyzer:
           errors: []
         excluded: true
       - name: "testCompileOnly"
-        distributed: true
         dependencies: []
         excluded: true
       - name: "testRuntime"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -197,7 +184,6 @@ analyzer:
           errors: []
         excluded: true
       - name: "testRuntimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -228,17 +214,14 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        distributed: true
         dependencies: []
       - name: "archives"
-        distributed: true
         dependencies:
         - id: "Maven:org.javassist:javassist:3.21.0-GA"
           dependencies: []
           errors: []
         excluded: true
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -247,7 +230,6 @@ analyzer:
             errors: []
           errors: []
       - name: "compileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -256,10 +238,8 @@ analyzer:
             errors: []
           errors: []
       - name: "compileOnly"
-        distributed: true
         dependencies: []
       - name: "default"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -268,7 +248,6 @@ analyzer:
             errors: []
           errors: []
       - name: "runtime"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -277,7 +256,6 @@ analyzer:
             errors: []
           errors: []
       - name: "runtimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
@@ -286,10 +264,8 @@ analyzer:
             errors: []
           errors: []
       - name: "testAnnotationProcessor"
-        distributed: true
         dependencies: []
       - name: "testCompile"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -304,7 +280,6 @@ analyzer:
             errors: []
           errors: []
       - name: "testCompileClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -319,10 +294,8 @@ analyzer:
             errors: []
           errors: []
       - name: "testCompileOnly"
-        distributed: true
         dependencies: []
       - name: "testRuntime"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -337,7 +310,6 @@ analyzer:
             errors: []
           errors: []
       - name: "testRuntimeClasspath"
-        distributed: true
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
@@ -368,7 +340,6 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "dependencies"
-        distributed: true
         dependencies:
         - id: "NPM::domutils:1.5.1"
           dependencies:
@@ -392,7 +363,6 @@ analyzer:
             errors: []
           errors: []
       - name: "devDependencies"
-        distributed: false
         dependencies:
         - id: "NPM::safefs:4.1.0"
           dependencies:

@@ -131,8 +131,8 @@ class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
                 val lockFile = jsonMapper.readTree(File(workingDir, LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
                 val scopes = sortedSetOf(
-                        parseScope("require", true, manifest, lockFile, packages),
-                        parseScope("require-dev", false, manifest, lockFile, packages)
+                        parseScope("require", manifest, lockFile, packages),
+                        parseScope("require-dev", manifest, lockFile, packages)
                 )
 
                 Pair(packages, scopes)
@@ -161,11 +161,11 @@ class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
         }
     }
 
-    private fun parseScope(scopeName: String, distributed: Boolean, manifest: JsonNode, lockFile: JsonNode,
-                           packages: Map<String, Package>): Scope {
+    private fun parseScope(scopeName: String, manifest: JsonNode, lockFile: JsonNode, packages: Map<String, Package>)
+            : Scope {
         val requiredPackages = manifest[scopeName]?.fieldNames() ?: listOf<String>().iterator()
         val dependencies = buildDependencyTree(requiredPackages, lockFile, packages)
-        return Scope(scopeName, distributed, dependencies)
+        return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(dependencies: Iterator<String>, lockFile: JsonNode,

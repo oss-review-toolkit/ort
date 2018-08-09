@@ -17,10 +17,8 @@ project:
   homepage_url: "https://github.com/advancedtelematic/quickcheck-state-machine#readme"
   scopes:
   - name: "bench"
-    distributed: false
     dependencies: []
   - name: "external"
-    distributed: true
     dependencies:
     - id: "Hackage:Concurrency:async:2.1.1.1"
       dependencies:
@@ -2636,7 +2634,6 @@ project:
         errors: []
       errors: []
   - name: "test"
-    distributed: false
     dependencies: []
 packages:
 - package:

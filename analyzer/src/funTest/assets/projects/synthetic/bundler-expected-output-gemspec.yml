@@ -16,7 +16,6 @@ project:
   homepage_url: ""
   scopes:
   - name: "default"
-    distributed: true
     dependencies:
     - id: "Bundler::rack:1.6.10"
       dependencies: []
@@ -43,7 +42,6 @@ project:
         errors: []
       errors: []
   - name: "development"
-    distributed: false
     dependencies:
     - id: "Bundler::rspec:3.7.0"
       dependencies:

@@ -44,7 +44,6 @@ class ProjectAnalyzerResultTest : StringSpec({
                         scopes = sortedSetOf(
                                 Scope(
                                         name = "scope 1",
-                                        distributed = true,
                                         dependencies = sortedSetOf(
                                                 PackageReference(
                                                         Identifier(

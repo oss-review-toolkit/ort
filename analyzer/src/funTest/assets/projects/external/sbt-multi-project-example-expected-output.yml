@@ -37,7 +37,6 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
           dependencies:
@@ -91,7 +90,6 @@ analyzer:
           dependencies: []
           errors: []
       - name: "test"
-        distributed: false
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
           dependencies:
@@ -127,7 +125,6 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
           dependencies:
@@ -196,7 +193,6 @@ analyzer:
           dependencies: []
           errors: []
       - name: "test"
-        distributed: false
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
           dependencies:
@@ -232,7 +228,6 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
           dependencies:
@@ -304,7 +299,6 @@ analyzer:
           dependencies: []
           errors: []
       - name: "test"
-        distributed: false
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
           dependencies:
@@ -340,7 +334,6 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "compile"
-        distributed: true
         dependencies:
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
           dependencies: []

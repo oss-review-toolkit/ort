@@ -17,7 +17,6 @@ project:
   homepage_url: ""
   scopes:
   - name: "dependencies"
-    distributed: true
     dependencies:
     - id: "NPM::cheerio:1.0.0-rc.1"
       dependencies:
@@ -137,7 +136,6 @@ project:
       dependencies: []
       errors: []
   - name: "devDependencies"
-    distributed: false
     dependencies:
     - id: "NPM::cson:4.1.0"
       dependencies:

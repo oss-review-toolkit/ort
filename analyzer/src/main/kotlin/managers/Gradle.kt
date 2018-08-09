@@ -118,7 +118,7 @@ class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
                     parseDependency(dependency, packages, repositories)
                 }
 
-                Scope(configuration.name, true, dependencies.toSortedSet())
+                Scope(configuration.name, dependencies.toSortedSet())
             }
 
             val project = Project(

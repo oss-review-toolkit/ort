@@ -68,12 +68,6 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
         override fun create(config: AnalyzerConfiguration) = Maven(config)
     }
 
-    /**
-     * Set of scope names for which [Scope.distributed] will be set to false by default. This can be changed later by
-     * manually editing the output file.
-     */
-    private val assumedNonDeliveredScopes = setOf("test")
-
     private val maven = MavenSupport { localRepositoryManager ->
         LocalRepositoryManagerWrapper(localRepositoryManager)
     }
@@ -133,7 +127,7 @@ class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
         projectBuildingResult.dependencyResolutionResult.dependencyGraph.children.forEach { node ->
             val scopeName = node.dependency.scope
             val scope = scopes.getOrPut(scopeName) {
-                Scope(scopeName, scopeName !in assumedNonDeliveredScopes, sortedSetOf())
+                Scope(scopeName, sortedSetOf())
             }
 
             scope.dependencies += parseDependency(node, packages)

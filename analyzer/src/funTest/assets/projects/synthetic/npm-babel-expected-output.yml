@@ -17,7 +17,6 @@ project:
   homepage_url: ""
   scopes:
   - name: "dependencies"
-    distributed: true
     dependencies:
     - id: "NPM::babel-cli:6.26.0"
       dependencies:
@@ -1634,7 +1633,6 @@ project:
         errors: []
       errors: []
   - name: "devDependencies"
-    distributed: false
     dependencies: []
 packages:
 - package:
