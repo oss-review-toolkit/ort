@@ -32,6 +32,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.PackageExclude
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScopeExclude
@@ -152,6 +153,10 @@ class Analyzer {
                 projects = applyScopeExcludes(projects, scopeExcludes)
             }
 
+            repositoryConfiguration.excludes?.packages?.let { packageExcludes ->
+                projects = applyPackageExcludes(projects, packageExcludes)
+            }
+
             analyzerResult = analyzerResult.copy(projects = projects.toSortedSet())
         }
 
@@ -160,21 +165,30 @@ class Analyzer {
         return OrtResult(repository, run)
     }
 
-    private fun applyProjectExclude(project: Project, projectExclude: ProjectExclude) =
-            if (projectExclude.exclude) {
-                project.copy(excluded = true)
-            } else {
-                val excludedScopeNames = projectExclude.scopes.map { it.name }
-                val scopes = project.scopes.map {
-                    if (it.name in excludedScopeNames) {
+    private fun applyProjectExclude(project: Project, projectExclude: ProjectExclude): Project {
+        val excludedScopeNames = projectExclude.scopes.map { it.name }
+        val excludedPackageIds = projectExclude.packages.map { it.id }
+
+        val scopes = project.scopes.map { scope ->
+            val dependencies = scope.dependencies.map { pkgRef ->
+                pkgRef.traverse {
+                    if (it.id in excludedPackageIds) {
                         it.copy(excluded = true)
                     } else {
                         it
                     }
                 }
+            }.toSortedSet()
 
-                project.copy(scopes = scopes.toSortedSet())
+            if (scope.name in excludedScopeNames) {
+                scope.copy(excluded = true, dependencies = dependencies)
+            } else {
+                scope.copy(dependencies = dependencies)
             }
+        }
+
+        return project.copy(excluded = projectExclude.exclude, scopes = scopes.toSortedSet())
+    }
 
     private fun applyScopeExcludes(projects: List<Project>, scopeExcludes: List<ScopeExclude>): List<Project> {
         val excludedScopeNames = scopeExcludes.map { it.name }
@@ -186,6 +200,28 @@ class Analyzer {
                 } else {
                     it
                 }
+            }
+
+            project.copy(scopes = scopes.toSortedSet())
+        }
+    }
+
+    private fun applyPackageExcludes(projects: List<Project>, packageExcludes: List<PackageExclude>): List<Project> {
+        val excludedPackageIds = packageExcludes.map { it.id }
+
+        return projects.map { project ->
+            val scopes = project.scopes.map { scope ->
+                val dependencies = scope.dependencies.map { pkgRef ->
+                    pkgRef.traverse {
+                        if (it.id in excludedPackageIds) {
+                            it.copy(excluded = true)
+                        } else {
+                            it
+                        }
+                    }
+                }
+
+                scope.copy(dependencies = dependencies.toSortedSet())
             }
 
             project.copy(scopes = scopes.toSortedSet())

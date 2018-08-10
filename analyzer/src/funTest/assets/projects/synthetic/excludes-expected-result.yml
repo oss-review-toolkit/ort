@@ -19,6 +19,10 @@ repository:
         comment: "Project not delivered."
       - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app1/build.gradle"
         type: "OTHER"
+        packages:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          reason: "OTHER"
+          comment: "Undelivered dependency."
         scopes:
         - name: "testAnnotationProcessor"
           reason: "OTHER"
@@ -38,6 +42,10 @@ repository:
         - name: "testRuntimeClasspath"
           reason: "OTHER"
           comment: "Test dependencies."
+      packages:
+      - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        reason: "OTHER"
+        comment: "Undelivered dependency."
       scopes:
       - name: "archives"
         reason: "OTHER"
@@ -97,7 +105,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -105,7 +115,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "compileOnly"
         dependencies: []
       - name: "default"
@@ -115,7 +127,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "runtime"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -123,7 +137,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -131,7 +147,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "testAnnotationProcessor"
         dependencies: []
         excluded: true
@@ -148,7 +166,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
         excluded: true
       - name: "testCompileClasspath"
         dependencies:
@@ -163,7 +183,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
         excluded: true
       - name: "testCompileOnly"
         dependencies: []
@@ -181,7 +203,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
         excluded: true
       - name: "testRuntimeClasspath"
         dependencies:
@@ -196,7 +220,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
         excluded: true
     - id: "Gradle:com.here.ort.gradle.excludes.example:app2:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2/build.gradle"
@@ -228,6 +254,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "compileClasspath"
         dependencies:
@@ -236,6 +263,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "compileOnly"
         dependencies: []
@@ -246,6 +274,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "runtime"
         dependencies:
@@ -254,6 +283,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "runtimeClasspath"
         dependencies:
@@ -262,6 +292,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testAnnotationProcessor"
         dependencies: []
@@ -278,6 +309,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testCompileClasspath"
         dependencies:
@@ -292,6 +324,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testCompileOnly"
         dependencies: []
@@ -308,6 +341,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testRuntimeClasspath"
         dependencies:
@@ -322,6 +356,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
     - id: "NPM::npm-excludes-test-project:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm/package.json"
