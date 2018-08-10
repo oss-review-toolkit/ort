@@ -19,6 +19,10 @@ repository:
         comment: "Project not delivered."
       - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app1/build.gradle"
         type: "OTHER"
+        packages:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          reason: "OTHER"
+          comment: "Undelivered dependency."
         scopes:
         - name: "testAnnotationProcessor"
           reason: "OTHER"
@@ -38,6 +42,10 @@ repository:
         - name: "testRuntimeClasspath"
           reason: "OTHER"
           comment: "Test dependencies."
+      packages:
+      - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        reason: "OTHER"
+        comment: "Undelivered dependency."
       scopes:
       - name: "archives"
         reason: "OTHER"
