@@ -231,11 +231,9 @@ class Analyzer {
         return project.copy(scopes = filteredScopes.toSortedSet())
     }
 
-    private fun filterUnreferencedPackages(projects: List<Project>, packages: SortedSet<CuratedPackage>) =
-            // TODO: This implementation is inefficient as it repeatedly parses all dependency trees. Collecting all
-            // referenced package identifiers and then creating the intersection with the provided packages would
-            // perform better.
-            packages.filter { pkg ->
-                projects.any { it.scopes.any { it.contains(pkg.pkg.id) } }
-            }.toSortedSet()
+    private fun filterUnreferencedPackages(projects: List<Project>, packages: SortedSet<CuratedPackage>)
+            : SortedSet<CuratedPackage> {
+        val packageIdentifiers = projects.flatMap { it.scopes.flatMap { it.collectDependencyIds() } }.toSet()
+        return packages.filter { it.pkg.id in packageIdentifiers }.toSortedSet()
+    }
 }
