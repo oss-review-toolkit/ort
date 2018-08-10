@@ -78,4 +78,15 @@ data class PackageReference(
             pkgRef.id == pkgId || pkgRef.dependsOn(pkgId)
         } != null
     }
+
+    /**
+     * Apply the provided [transform] to each node in the dependency tree represented by this [PackageReference] and
+     * return the modified [PackageReference]. The tree is traversed depth-first (post-order).
+     */
+    fun traverse(transform: (PackageReference) -> PackageReference): PackageReference {
+        val transformedDependencies = dependencies.map {
+            it.traverse(transform)
+        }
+        return transform(copy(dependencies = transformedDependencies.toSortedSet()))
+    }
 }
