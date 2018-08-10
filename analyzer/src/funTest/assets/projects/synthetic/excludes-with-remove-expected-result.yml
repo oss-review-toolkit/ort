@@ -99,7 +99,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -107,7 +109,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "compileOnly"
         dependencies: []
       - name: "default"
@@ -117,7 +121,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "runtime"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -125,7 +131,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -133,7 +141,9 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
+          excluded: true
     - id: "Gradle:com.here.ort.gradle.excludes.example:app2:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2/build.gradle"
       declared_licenses: []
@@ -158,6 +168,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "compileClasspath"
         dependencies:
@@ -166,6 +177,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "compileOnly"
         dependencies: []
@@ -176,6 +188,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "runtime"
         dependencies:
@@ -184,6 +197,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "runtimeClasspath"
         dependencies:
@@ -192,6 +206,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testAnnotationProcessor"
         dependencies: []
@@ -208,6 +223,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testCompileClasspath"
         dependencies:
@@ -222,6 +238,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testCompileOnly"
         dependencies: []
@@ -238,6 +255,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
       - name: "testRuntimeClasspath"
         dependencies:
@@ -252,6 +270,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
             dependencies: []
             errors: []
+            excluded: true
           errors: []
     - id: "Unmanaged::project-with-excludes:"
       definition_file_path: ""
@@ -293,33 +312,6 @@ analyzer:
           type: "git"
           url: "https://github.com/junit-team/junit.git"
           revision: "r4.12"
-          path: ""
-      curations: []
-    - package:
-        id: "Maven:org.apache.commons:commons-lang3:3.5"
-        declared_licenses:
-        - "Apache License, Version 2.0"
-        description: "Apache Commons Lang, a package of Java utility classes for the\n\
-          \  classes that are in java.lang's hierarchy, or are considered to be so\n\
-          \  standard as to justify existence in java.lang."
-        homepage_url: "http://commons.apache.org/proper/commons-lang/"
-        binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
-          hash: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
-          hash_algorithm: "SHA-1"
-        source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
-          hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
-          hash_algorithm: "SHA-1"
-        vcs:
-          type: "git"
-          url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
-          revision: "LANG_3_5"
-          path: ""
-        vcs_processed:
-          type: "git"
-          url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
-          revision: "LANG_3_5"
           path: ""
       curations: []
     - package:

@@ -50,11 +50,11 @@ data class PackageReference(
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         val excluded: Boolean = false
 ) : CustomData(), Comparable<PackageReference> {
-    fun collectDependencyIds(includeErroneous: Boolean = true): SortedSet<Identifier> =
+    fun collectDependencyIds(includeErroneous: Boolean = true, includeExcluded: Boolean = true): SortedSet<Identifier> =
             dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
                 ids.also {
-                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
-                    it += ref.collectDependencyIds(includeErroneous)
+                    if ((ref.errors.isEmpty() || includeErroneous) && (!ref.excluded || includeExcluded)) it += ref.id
+                    it += ref.collectDependencyIds(includeErroneous, includeExcluded)
                 }
             }
 
