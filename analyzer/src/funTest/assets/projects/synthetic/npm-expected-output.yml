@@ -67,7 +67,7 @@ project:
         - id: "NPM::domelementtype:1.3.0"
           dependencies: []
           errors: []
-        - id: "NPM::domhandler:2.4.1"
+        - id: "NPM::domhandler:2.4.2"
           dependencies:
           - id: "NPM::domelementtype:1.3.0"
             dependencies: []
@@ -94,7 +94,7 @@ project:
         - id: "NPM::inherits:2.0.3"
           dependencies: []
           errors: []
-        - id: "NPM::readable-stream:2.3.3"
+        - id: "NPM::readable-stream:2.3.6"
           dependencies:
           - id: "NPM::core-util-is:1.0.2"
             dependencies: []
@@ -105,15 +105,15 @@ project:
           - id: "NPM::isarray:1.0.0"
             dependencies: []
             errors: []
-          - id: "NPM::process-nextick-args:1.0.7"
+          - id: "NPM::process-nextick-args:2.0.0"
             dependencies: []
             errors: []
-          - id: "NPM::safe-buffer:5.1.1"
+          - id: "NPM::safe-buffer:5.1.2"
             dependencies: []
             errors: []
-          - id: "NPM::string_decoder:1.0.3"
+          - id: "NPM::string_decoder:1.1.1"
             dependencies:
-            - id: "NPM::safe-buffer:5.1.1"
+            - id: "NPM::safe-buffer:5.1.2"
               dependencies: []
               errors: []
             errors: []
@@ -122,12 +122,12 @@ project:
             errors: []
           errors: []
         errors: []
-      - id: "NPM::lodash:4.17.4"
+      - id: "NPM::lodash:4.17.10"
         dependencies: []
         errors: []
-      - id: "NPM::parse5:3.0.2"
+      - id: "NPM::parse5:3.0.3"
         dependencies:
-        - id: "NPM:@types:node:6.0.79"
+        - id: "NPM:@types:node:10.5.8"
           dependencies: []
           errors: []
         errors: []
@@ -139,12 +139,12 @@ project:
     dependencies:
     - id: "NPM::cson:4.1.0"
       dependencies:
-      - id: "NPM::coffee-script:1.12.6"
+      - id: "NPM::coffee-script:1.12.7"
         dependencies: []
         errors: []
       - id: "NPM::cson-parser:1.3.5"
         dependencies:
-        - id: "NPM::coffee-script:1.12.6"
+        - id: "NPM::coffee-script:1.12.7"
           dependencies: []
           errors: []
         errors: []
@@ -152,35 +152,35 @@ project:
         dependencies:
         - id: "NPM::eachr:3.2.0"
           dependencies:
-          - id: "NPM::editions:1.3.3"
+          - id: "NPM::editions:1.3.4"
             dependencies: []
             errors: []
-          - id: "NPM::typechecker:4.4.1"
+          - id: "NPM::typechecker:4.5.0"
             dependencies:
-            - id: "NPM::editions:1.3.3"
+            - id: "NPM::editions:1.3.4"
               dependencies: []
               errors: []
             errors: []
           errors: []
-        - id: "NPM::editions:1.3.3"
+        - id: "NPM::editions:1.3.4"
           dependencies: []
           errors: []
-        - id: "NPM::typechecker:4.4.1"
+        - id: "NPM::typechecker:4.5.0"
           dependencies:
-          - id: "NPM::editions:1.3.3"
+          - id: "NPM::editions:1.3.4"
             dependencies: []
             errors: []
           errors: []
         errors: []
       - id: "NPM::requirefresh:2.1.0"
         dependencies:
-        - id: "NPM::editions:1.3.3"
+        - id: "NPM::editions:1.3.4"
           dependencies: []
           errors: []
         errors: []
       - id: "NPM::safefs:4.1.0"
         dependencies:
-        - id: "NPM::editions:1.3.3"
+        - id: "NPM::editions:1.3.4"
           dependencies: []
           errors: []
         - id: "NPM::graceful-fs:4.1.11"
@@ -190,7 +190,7 @@ project:
       errors: []
 packages:
 - package:
-    id: "NPM::asap:2.0.5"
+    id: "NPM::asap:2.0.6"
     declared_licenses:
     - "MIT"
     description: "High-priority task queue for Node.js and browsers"
@@ -200,18 +200,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/asap/-/asap-2.0.5.tgz"
-      hash: "522765b50c3510490e52d7dcfe085ef9ba96958f"
+      url: "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz"
+      hash: "e50347611d7e690943208bbdafebcbc2fb866d46"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/kriskowal/asap.git"
-      revision: "e7f3d29eed4967ecfcaddbfc9542e2ee12b76227"
+      revision: "3e3d99381444379bb0483cb9216caa39ac67bebb"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/kriskowal/asap.git"
-      revision: "e7f3d29eed4967ecfcaddbfc9542e2ee12b76227"
+      revision: "3e3d99381444379bb0483cb9216caa39ac67bebb"
       path: ""
   curations: []
 - package:
@@ -266,7 +266,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::coffee-script:1.12.6"
+    id: "NPM::coffee-script:1.12.7"
     declared_licenses:
     - "MIT"
     description: "Unfancy JavaScript"
@@ -276,18 +276,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.6.tgz"
-      hash: "285a3f7115689065064d6bf9ef4572db66695cbf"
+      url: "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.7.tgz"
+      hash: "c05dae0cb79591d05b3070a8433a98c9a89ccc53"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jashkenas/coffeescript.git"
-      revision: "f0e9837dca51244ef994ff535768d3a606912020"
+      revision: "492111ccfb9b703b49a443c1aa68fb41dc8a2271"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jashkenas/coffeescript.git"
-      revision: "f0e9837dca51244ef994ff535768d3a606912020"
+      revision: "492111ccfb9b703b49a443c1aa68fb41dc8a2271"
       path: ""
   curations: []
 - package:
@@ -490,7 +490,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::domhandler:2.4.1"
+    id: "NPM::domhandler:2.4.2"
     declared_licenses:
     - "BSD-2-Clause"
     description: "handler for htmlparser2 that turns pages into a dom"
@@ -500,18 +500,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/domhandler/-/domhandler-2.4.1.tgz"
-      hash: "892e47000a99be55bbf3774ffea0561d8879c259"
+      url: "https://registry.npmjs.org/domhandler/-/domhandler-2.4.2.tgz"
+      hash: "8805097e933d65e85546f726d60f5eb88b44f803"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/fb55/DomHandler.git"
-      revision: "9b17cc6cc9387a87dde6eb8ddbae11c753e7d23d"
+      revision: "045bd8d634dca30192fbd23fee0c530adc9c6f52"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/fb55/DomHandler.git"
-      revision: "9b17cc6cc9387a87dde6eb8ddbae11c753e7d23d"
+      revision: "045bd8d634dca30192fbd23fee0c530adc9c6f52"
       path: ""
   curations: []
 - package:
@@ -566,7 +566,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::editions:1.3.3"
+    id: "NPM::editions:1.3.4"
     declared_licenses:
     - "MIT"
     description: "Publish multiple editions for your JavaScript packages consistently\
@@ -577,18 +577,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/editions/-/editions-1.3.3.tgz"
-      hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
+      url: "https://registry.npmjs.org/editions/-/editions-1.3.4.tgz"
+      hash: "3662cb592347c3168eb8e498a0ff73271d67f50b"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/bevry/editions.git"
-      revision: "272530079d941652a2679cf2152e83ed2f3f2129"
+      revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/bevry/editions.git"
-      revision: "272530079d941652a2679cf2152e83ed2f3f2129"
+      revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
       path: ""
   curations: []
 - package:
@@ -743,7 +743,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::lodash:4.17.4"
+    id: "NPM::lodash:4.17.10"
     declared_licenses:
     - "MIT"
     description: "Lodash modular utilities."
@@ -753,8 +753,8 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
-      hash: "78203a4d1c328ae1d86dca6460e369b57f4055ae"
+      url: "https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz"
+      hash: "1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
@@ -819,7 +819,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::parse5:3.0.2"
+    id: "NPM::parse5:3.0.3"
     declared_licenses:
     - "MIT"
     description: "HTML parsing/serialization toolset for Node.js. WHATWG HTML Living\
@@ -830,22 +830,22 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/parse5/-/parse5-3.0.2.tgz"
-      hash: "05eff57f0ef4577fb144a79f8b9a967a6cc44510"
+      url: "https://registry.npmjs.org/parse5/-/parse5-3.0.3.tgz"
+      hash: "042f792ffdd36851551cf4e9e066b3874ab45b5c"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/inikulin/parse5.git"
-      revision: "969ed22f53db38c101449e05a1b804ea456d4e04"
+      revision: "723d782abee65aaab9c50f92e73ac2029ae853df"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/inikulin/parse5.git"
-      revision: "969ed22f53db38c101449e05a1b804ea456d4e04"
+      revision: "723d782abee65aaab9c50f92e73ac2029ae853df"
       path: ""
   curations: []
 - package:
-    id: "NPM::process-nextick-args:1.0.7"
+    id: "NPM::process-nextick-args:2.0.0"
     declared_licenses:
     - "MIT"
     description: "process.nextTick but always with args"
@@ -855,18 +855,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz"
-      hash: "150e20b756590ad3f91093f25a4f2ad8bff30ba3"
+      url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.0.tgz"
+      hash: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
-      url: "https://github.com/calvinmetcalf/process-nextick-args.git"
-      revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
+      url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
+      revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/calvinmetcalf/process-nextick-args.git"
-      revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
+      revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
       path: ""
   curations: []
 - package:
@@ -895,7 +895,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::readable-stream:2.3.3"
+    id: "NPM::readable-stream:2.3.6"
     declared_licenses:
     - "MIT"
     description: "Streams3, a user-land copy of the stream library from Node.js"
@@ -905,18 +905,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.3.tgz"
-      hash: "368f2512d79f9d46fdfc71349ae7878bbc1eb95c"
+      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
+      hash: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/nodejs/readable-stream.git"
-      revision: "cd59995050105b946884ee20e3bcadc252feda8c"
+      revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/nodejs/readable-stream.git"
-      revision: "cd59995050105b946884ee20e3bcadc252feda8c"
+      revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
       path: ""
   curations: []
 - package:
@@ -945,7 +945,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::safe-buffer:5.1.1"
+    id: "NPM::safe-buffer:5.1.2"
     declared_licenses:
     - "MIT"
     description: "Safer Node.js Buffer API"
@@ -955,18 +955,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.1.tgz"
-      hash: "893312af69b2123def71f57889001671eeb2c853"
+      url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
+      hash: "991ec69d296e0313747d59bdfd2b745c35f8828d"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/feross/safe-buffer.git"
-      revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
+      revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/feross/safe-buffer.git"
-      revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
+      revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
       path: ""
   curations: []
 - package:
@@ -996,32 +996,32 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::string_decoder:1.0.3"
+    id: "NPM::string_decoder:1.1.1"
     declared_licenses:
     - "MIT"
     description: "The string_decoder module from Node core"
-    homepage_url: "https://github.com/rvagg/string_decoder"
+    homepage_url: "https://github.com/nodejs/string_decoder"
     binary_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.3.tgz"
-      hash: "0fc67d7c141825de94282dd536bec6b9bce860ab"
+      url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz"
+      hash: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
-      url: "git://github.com/rvagg/string_decoder.git"
-      revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
+      url: "git://github.com/nodejs/string_decoder.git"
+      revision: "18c7f89c894ced5f610505bb006dfde9a3d1ac5e"
       path: ""
     vcs_processed:
       type: "git"
-      url: "https://github.com/rvagg/string_decoder.git"
-      revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
+      url: "https://github.com/nodejs/string_decoder.git"
+      revision: "18c7f89c894ced5f610505bb006dfde9a3d1ac5e"
       path: ""
   curations: []
 - package:
-    id: "NPM::typechecker:4.4.1"
+    id: "NPM::typechecker:4.5.0"
     declared_licenses:
     - "MIT"
     description: "Utilities to get and check variable types (isString, isPlainObject,\
@@ -1032,18 +1032,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/typechecker/-/typechecker-4.4.1.tgz"
-      hash: "f97b95f51b038417212d677d45a373ee7bced7e6"
+      url: "https://registry.npmjs.org/typechecker/-/typechecker-4.5.0.tgz"
+      hash: "c382920097812364bbaf4595b0ab6588244117a6"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
-      url: "git+ssh://git@github.com/bevry/typechecker.git"
-      revision: "ab3925bc0270f8df65f5c05ae1ba09e648aaff8e"
+      url: "git+https://github.com/bevry/typechecker.git"
+      revision: "2f40cd40a2694f70bd8aaa94cccd4a2ae907fb18"
       path: ""
     vcs_processed:
       type: "git"
-      url: "ssh://git@github.com/bevry/typechecker.git"
-      revision: "ab3925bc0270f8df65f5c05ae1ba09e648aaff8e"
+      url: "https://github.com/bevry/typechecker.git"
+      revision: "2f40cd40a2694f70bd8aaa94cccd4a2ae907fb18"
       path: ""
   curations: []
 - package:
@@ -1072,7 +1072,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM:@types:node:6.0.79"
+    id: "NPM:@types:node:10.5.8"
     declared_licenses:
     - "MIT"
     description: "TypeScript definitions for Node.js"
@@ -1082,12 +1082,12 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/@types/node/-/node-6.0.79.tgz"
-      hash: "5efe7d4a6d8c453c7e9eaf55d931f4a22fac5169"
+      url: "https://registry.npmjs.org/@types/node/-/node-10.5.8.tgz"
+      hash: "6f14ccecad1d19332f063a6a764f8907801fece0"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
-      url: "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+      url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
       revision: ""
       path: ""
     vcs_processed:
