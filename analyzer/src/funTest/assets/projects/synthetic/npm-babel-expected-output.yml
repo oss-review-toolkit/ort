@@ -20,7 +20,7 @@ project:
     dependencies:
     - id: "NPM::babel-cli:6.26.0"
       dependencies:
-      - id: "NPM::babel-core:6.26.0"
+      - id: "NPM::babel-core:6.26.3"
         dependencies:
         - id: "NPM::babel-code-frame:6.26.0"
           dependencies:
@@ -55,13 +55,13 @@ project:
             dependencies: []
             errors: []
           errors: []
-        - id: "NPM::babel-generator:6.26.0"
+        - id: "NPM::babel-generator:6.26.1"
           dependencies:
           - id: "NPM::babel-messages:6.23.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -71,7 +71,7 @@ project:
             errors: []
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
@@ -82,7 +82,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -92,7 +92,7 @@ project:
             - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             - id: "NPM::to-fast-properties:1.0.3"
@@ -114,7 +114,7 @@ project:
           - id: "NPM::jsesc:1.3.0"
             dependencies: []
             errors: []
-          - id: "NPM::lodash:4.17.4"
+          - id: "NPM::lodash:4.17.10"
             dependencies: []
             errors: []
           - id: "NPM::source-map:0.5.7"
@@ -128,7 +128,7 @@ project:
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
@@ -139,7 +139,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -185,7 +185,7 @@ project:
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.5.2"
+                  - id: "NPM::core-js:2.5.7"
                     dependencies: []
                     errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
@@ -195,7 +195,7 @@ project:
                 errors: []
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -206,7 +206,7 @@ project:
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.5.2"
+                  - id: "NPM::core-js:2.5.7"
                     dependencies: []
                     errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
@@ -216,7 +216,7 @@ project:
                 - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - id: "NPM::lodash:4.17.4"
+                - id: "NPM::lodash:4.17.10"
                   dependencies: []
                   errors: []
                 - id: "NPM::to-fast-properties:1.0.3"
@@ -235,16 +235,16 @@ project:
               - id: "NPM::globals:9.18.0"
                 dependencies: []
                 errors: []
-              - id: "NPM::invariant:2.2.2"
+              - id: "NPM::invariant:2.2.4"
                 dependencies:
-                - id: "NPM::loose-envify:1.3.1"
+                - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               errors: []
@@ -252,7 +252,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -262,7 +262,7 @@ project:
               - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               - id: "NPM::to-fast-properties:1.0.3"
@@ -272,7 +272,7 @@ project:
             - id: "NPM::babylon:6.18.0"
               dependencies: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             errors: []
@@ -281,7 +281,7 @@ project:
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
@@ -293,14 +293,14 @@ project:
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
               dependencies: []
               errors: []
             errors: []
-          - id: "NPM::core-js:2.5.2"
+          - id: "NPM::core-js:2.5.7"
             dependencies: []
             errors: []
           - id: "NPM::home-or-tmp:2.0.0"
@@ -312,7 +312,7 @@ project:
               dependencies: []
               errors: []
             errors: []
-          - id: "NPM::lodash:4.17.4"
+          - id: "NPM::lodash:4.17.10"
             dependencies: []
             errors: []
           - id: "NPM::mkdirp:0.5.1"
@@ -330,7 +330,7 @@ project:
           errors: []
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - id: "NPM::core-js:2.5.2"
+          - id: "NPM::core-js:2.5.7"
             dependencies: []
             errors: []
           - id: "NPM::regenerator-runtime:0.11.1"
@@ -341,7 +341,7 @@ project:
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
@@ -387,7 +387,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -397,7 +397,7 @@ project:
               errors: []
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -408,7 +408,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -418,7 +418,7 @@ project:
               - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               - id: "NPM::to-fast-properties:1.0.3"
@@ -437,16 +437,16 @@ project:
             - id: "NPM::globals:9.18.0"
               dependencies: []
               errors: []
-            - id: "NPM::invariant:2.2.2"
+            - id: "NPM::invariant:2.2.4"
               dependencies:
-              - id: "NPM::loose-envify:1.3.1"
+              - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             errors: []
@@ -454,7 +454,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -464,7 +464,7 @@ project:
             - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             - id: "NPM::to-fast-properties:1.0.3"
@@ -474,7 +474,7 @@ project:
           - id: "NPM::babylon:6.18.0"
             dependencies: []
             errors: []
-          - id: "NPM::lodash:4.17.4"
+          - id: "NPM::lodash:4.17.10"
             dependencies: []
             errors: []
           errors: []
@@ -517,7 +517,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -527,7 +527,7 @@ project:
             errors: []
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
@@ -538,7 +538,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -548,7 +548,7 @@ project:
             - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             - id: "NPM::to-fast-properties:1.0.3"
@@ -567,16 +567,16 @@ project:
           - id: "NPM::globals:9.18.0"
             dependencies: []
             errors: []
-          - id: "NPM::invariant:2.2.2"
+          - id: "NPM::invariant:2.2.4"
             dependencies:
-            - id: "NPM::loose-envify:1.3.1"
+            - id: "NPM::loose-envify:1.4.0"
               dependencies:
               - id: "NPM::js-tokens:3.0.2"
                 dependencies: []
                 errors: []
               errors: []
             errors: []
-          - id: "NPM::lodash:4.17.4"
+          - id: "NPM::lodash:4.17.10"
             dependencies: []
             errors: []
           errors: []
@@ -584,7 +584,7 @@ project:
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
@@ -594,7 +594,7 @@ project:
           - id: "NPM::esutils:2.0.2"
             dependencies: []
             errors: []
-          - id: "NPM::lodash:4.17.4"
+          - id: "NPM::lodash:4.17.10"
             dependencies: []
             errors: []
           - id: "NPM::to-fast-properties:1.0.3"
@@ -616,12 +616,12 @@ project:
         - id: "NPM::json5:0.5.1"
           dependencies: []
           errors: []
-        - id: "NPM::lodash:4.17.4"
+        - id: "NPM::lodash:4.17.10"
           dependencies: []
           errors: []
         - id: "NPM::minimatch:3.0.4"
           dependencies:
-          - id: "NPM::brace-expansion:1.1.8"
+          - id: "NPM::brace-expansion:1.1.11"
             dependencies:
             - id: "NPM::balanced-match:1.0.0"
               dependencies: []
@@ -648,14 +648,14 @@ project:
         dependencies:
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - id: "NPM::core-js:2.5.2"
+          - id: "NPM::core-js:2.5.7"
             dependencies: []
             errors: []
           - id: "NPM::regenerator-runtime:0.11.1"
             dependencies: []
             errors: []
           errors: []
-        - id: "NPM::core-js:2.5.2"
+        - id: "NPM::core-js:2.5.7"
           dependencies: []
           errors: []
         - id: "NPM::regenerator-runtime:0.10.5"
@@ -664,7 +664,7 @@ project:
         errors: []
       - id: "NPM::babel-register:6.26.0"
         dependencies:
-        - id: "NPM::babel-core:6.26.0"
+        - id: "NPM::babel-core:6.26.3"
           dependencies:
           - id: "NPM::babel-code-frame:6.26.0"
             dependencies:
@@ -699,13 +699,13 @@ project:
               dependencies: []
               errors: []
             errors: []
-          - id: "NPM::babel-generator:6.26.0"
+          - id: "NPM::babel-generator:6.26.1"
             dependencies:
             - id: "NPM::babel-messages:6.23.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -715,7 +715,7 @@ project:
               errors: []
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -726,7 +726,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -736,7 +736,7 @@ project:
               - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               - id: "NPM::to-fast-properties:1.0.3"
@@ -758,7 +758,7 @@ project:
             - id: "NPM::jsesc:1.3.0"
               dependencies: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             - id: "NPM::source-map:0.5.7"
@@ -772,7 +772,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -783,7 +783,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -829,7 +829,7 @@ project:
                   dependencies:
                   - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
-                    - id: "NPM::core-js:2.5.2"
+                    - id: "NPM::core-js:2.5.7"
                       dependencies: []
                       errors: []
                     - id: "NPM::regenerator-runtime:0.11.1"
@@ -839,7 +839,7 @@ project:
                   errors: []
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.5.2"
+                  - id: "NPM::core-js:2.5.7"
                     dependencies: []
                     errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
@@ -850,7 +850,7 @@ project:
                   dependencies:
                   - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
-                    - id: "NPM::core-js:2.5.2"
+                    - id: "NPM::core-js:2.5.7"
                       dependencies: []
                       errors: []
                     - id: "NPM::regenerator-runtime:0.11.1"
@@ -860,7 +860,7 @@ project:
                   - id: "NPM::esutils:2.0.2"
                     dependencies: []
                     errors: []
-                  - id: "NPM::lodash:4.17.4"
+                  - id: "NPM::lodash:4.17.10"
                     dependencies: []
                     errors: []
                   - id: "NPM::to-fast-properties:1.0.3"
@@ -879,16 +879,16 @@ project:
                 - id: "NPM::globals:9.18.0"
                   dependencies: []
                   errors: []
-                - id: "NPM::invariant:2.2.2"
+                - id: "NPM::invariant:2.2.4"
                   dependencies:
-                  - id: "NPM::loose-envify:1.3.1"
+                  - id: "NPM::loose-envify:1.4.0"
                     dependencies:
                     - id: "NPM::js-tokens:3.0.2"
                       dependencies: []
                       errors: []
                     errors: []
                   errors: []
-                - id: "NPM::lodash:4.17.4"
+                - id: "NPM::lodash:4.17.10"
                   dependencies: []
                   errors: []
                 errors: []
@@ -896,7 +896,7 @@ project:
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.5.2"
+                  - id: "NPM::core-js:2.5.7"
                     dependencies: []
                     errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
@@ -906,7 +906,7 @@ project:
                 - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - id: "NPM::lodash:4.17.4"
+                - id: "NPM::lodash:4.17.10"
                   dependencies: []
                   errors: []
                 - id: "NPM::to-fast-properties:1.0.3"
@@ -916,7 +916,7 @@ project:
               - id: "NPM::babylon:6.18.0"
                 dependencies: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               errors: []
@@ -925,7 +925,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -935,7 +935,7 @@ project:
             errors: []
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
-            - id: "NPM::core-js:2.5.2"
+            - id: "NPM::core-js:2.5.7"
               dependencies: []
               errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
@@ -946,7 +946,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -992,7 +992,7 @@ project:
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.5.2"
+                  - id: "NPM::core-js:2.5.7"
                     dependencies: []
                     errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
@@ -1002,7 +1002,7 @@ project:
                 errors: []
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -1013,7 +1013,7 @@ project:
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
-                  - id: "NPM::core-js:2.5.2"
+                  - id: "NPM::core-js:2.5.7"
                     dependencies: []
                     errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
@@ -1023,7 +1023,7 @@ project:
                 - id: "NPM::esutils:2.0.2"
                   dependencies: []
                   errors: []
-                - id: "NPM::lodash:4.17.4"
+                - id: "NPM::lodash:4.17.10"
                   dependencies: []
                   errors: []
                 - id: "NPM::to-fast-properties:1.0.3"
@@ -1042,16 +1042,16 @@ project:
               - id: "NPM::globals:9.18.0"
                 dependencies: []
                 errors: []
-              - id: "NPM::invariant:2.2.2"
+              - id: "NPM::invariant:2.2.4"
                 dependencies:
-                - id: "NPM::loose-envify:1.3.1"
+                - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
                     dependencies: []
                     errors: []
                   errors: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               errors: []
@@ -1059,7 +1059,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -1069,7 +1069,7 @@ project:
               - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               - id: "NPM::to-fast-properties:1.0.3"
@@ -1079,7 +1079,7 @@ project:
             - id: "NPM::babylon:6.18.0"
               dependencies: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             errors: []
@@ -1122,7 +1122,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -1132,7 +1132,7 @@ project:
               errors: []
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -1143,7 +1143,7 @@ project:
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
-                - id: "NPM::core-js:2.5.2"
+                - id: "NPM::core-js:2.5.7"
                   dependencies: []
                   errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
@@ -1153,7 +1153,7 @@ project:
               - id: "NPM::esutils:2.0.2"
                 dependencies: []
                 errors: []
-              - id: "NPM::lodash:4.17.4"
+              - id: "NPM::lodash:4.17.10"
                 dependencies: []
                 errors: []
               - id: "NPM::to-fast-properties:1.0.3"
@@ -1172,16 +1172,16 @@ project:
             - id: "NPM::globals:9.18.0"
               dependencies: []
               errors: []
-            - id: "NPM::invariant:2.2.2"
+            - id: "NPM::invariant:2.2.4"
               dependencies:
-              - id: "NPM::loose-envify:1.3.1"
+              - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
                   dependencies: []
                   errors: []
                 errors: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             errors: []
@@ -1189,7 +1189,7 @@ project:
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
-              - id: "NPM::core-js:2.5.2"
+              - id: "NPM::core-js:2.5.7"
                 dependencies: []
                 errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
@@ -1199,7 +1199,7 @@ project:
             - id: "NPM::esutils:2.0.2"
               dependencies: []
               errors: []
-            - id: "NPM::lodash:4.17.4"
+            - id: "NPM::lodash:4.17.10"
               dependencies: []
               errors: []
             - id: "NPM::to-fast-properties:1.0.3"
@@ -1221,12 +1221,12 @@ project:
           - id: "NPM::json5:0.5.1"
             dependencies: []
             errors: []
-          - id: "NPM::lodash:4.17.4"
+          - id: "NPM::lodash:4.17.10"
             dependencies: []
             errors: []
           - id: "NPM::minimatch:3.0.4"
             dependencies:
-            - id: "NPM::brace-expansion:1.1.8"
+            - id: "NPM::brace-expansion:1.1.11"
               dependencies:
               - id: "NPM::balanced-match:1.0.0"
                 dependencies: []
@@ -1251,14 +1251,14 @@ project:
           errors: []
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
-          - id: "NPM::core-js:2.5.2"
+          - id: "NPM::core-js:2.5.7"
             dependencies: []
             errors: []
           - id: "NPM::regenerator-runtime:0.11.1"
             dependencies: []
             errors: []
           errors: []
-        - id: "NPM::core-js:2.5.2"
+        - id: "NPM::core-js:2.5.7"
           dependencies: []
           errors: []
         - id: "NPM::home-or-tmp:2.0.0"
@@ -1270,7 +1270,7 @@ project:
             dependencies: []
             errors: []
           errors: []
-        - id: "NPM::lodash:4.17.4"
+        - id: "NPM::lodash:4.17.10"
           dependencies: []
           errors: []
         - id: "NPM::mkdirp:0.5.1"
@@ -1288,7 +1288,7 @@ project:
         errors: []
       - id: "NPM::babel-runtime:6.26.0"
         dependencies:
-        - id: "NPM::core-js:2.5.2"
+        - id: "NPM::core-js:2.5.7"
           dependencies: []
           errors: []
         - id: "NPM::regenerator-runtime:0.11.1"
@@ -1314,7 +1314,7 @@ project:
               dependencies:
               - id: "NPM::expand-range:1.8.2"
                 dependencies:
-                - id: "NPM::fill-range:2.2.3"
+                - id: "NPM::fill-range:2.2.4"
                   dependencies:
                   - id: "NPM::is-number:2.1.0"
                     dependencies:
@@ -1331,22 +1331,16 @@ project:
                       dependencies: []
                       errors: []
                     errors: []
-                  - id: "NPM::randomatic:1.1.7"
+                  - id: "NPM::randomatic:3.1.0"
                     dependencies:
-                    - id: "NPM::is-number:3.0.0"
-                      dependencies:
-                      - id: "NPM::kind-of:3.2.2"
-                        dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
-                          dependencies: []
-                          errors: []
-                        errors: []
+                    - id: "NPM::is-number:4.0.0"
+                      dependencies: []
                       errors: []
-                    - id: "NPM::kind-of:4.0.0"
-                      dependencies:
-                      - id: "NPM::is-buffer:1.1.6"
-                        dependencies: []
-                        errors: []
+                    - id: "NPM::kind-of:6.0.2"
+                      dependencies: []
+                      errors: []
+                    - id: "NPM::math-random:1.0.1"
+                      dependencies: []
                       errors: []
                     errors: []
                   - id: "NPM::repeat-element:1.1.2"
@@ -1505,7 +1499,7 @@ project:
             errors: []
           - id: "NPM::minimatch:3.0.4"
             dependencies:
-            - id: "NPM::brace-expansion:1.1.8"
+            - id: "NPM::brace-expansion:1.1.11"
               dependencies:
               - id: "NPM::balanced-match:1.0.0"
                 dependencies: []
@@ -1515,7 +1509,7 @@ project:
                 errors: []
               errors: []
             errors: []
-          - id: "NPM::readable-stream:2.3.3"
+          - id: "NPM::readable-stream:2.3.6"
             dependencies:
             - id: "NPM::core-util-is:1.0.2"
               dependencies: []
@@ -1526,15 +1520,15 @@ project:
             - id: "NPM::isarray:1.0.0"
               dependencies: []
               errors: []
-            - id: "NPM::process-nextick-args:1.0.7"
+            - id: "NPM::process-nextick-args:2.0.0"
               dependencies: []
               errors: []
-            - id: "NPM::safe-buffer:5.1.1"
+            - id: "NPM::safe-buffer:5.1.2"
               dependencies: []
               errors: []
-            - id: "NPM::string_decoder:1.0.3"
+            - id: "NPM::string_decoder:1.1.1"
               dependencies:
-              - id: "NPM::safe-buffer:5.1.1"
+              - id: "NPM::safe-buffer:5.1.2"
                 dependencies: []
                 errors: []
               errors: []
@@ -1547,7 +1541,7 @@ project:
             errors: []
           errors: []
         errors: []
-      - id: "NPM::commander:2.12.2"
+      - id: "NPM::commander:2.17.1"
         dependencies: []
         errors: []
       - id: "NPM::convert-source-map:1.5.1"
@@ -1578,7 +1572,7 @@ project:
           errors: []
         - id: "NPM::minimatch:3.0.4"
           dependencies:
-          - id: "NPM::brace-expansion:1.1.8"
+          - id: "NPM::brace-expansion:1.1.11"
             dependencies:
             - id: "NPM::balanced-match:1.0.0"
               dependencies: []
@@ -1598,7 +1592,7 @@ project:
           dependencies: []
           errors: []
         errors: []
-      - id: "NPM::lodash:4.17.4"
+      - id: "NPM::lodash:4.17.10"
         dependencies: []
         errors: []
       - id: "NPM::output-file-sync:1.1.2"
@@ -1864,7 +1858,7 @@ packages:
       path: "packages/babel-code-frame"
   curations: []
 - package:
-    id: "NPM::babel-core:6.26.0"
+    id: "NPM::babel-core:6.26.3"
     declared_licenses:
     - "MIT"
     description: "Babel compiler core."
@@ -1874,8 +1868,8 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/babel-core/-/babel-core-6.26.0.tgz"
-      hash: "af32f78b31a6fcef119c87b0fd8d9753f03a0bb8"
+      url: "https://registry.npmjs.org/babel-core/-/babel-core-6.26.3.tgz"
+      hash: "b2e2f09e342d0f0c88e2f02e067794125e75c207"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
@@ -1889,7 +1883,7 @@ packages:
       path: "packages/babel-core"
   curations: []
 - package:
-    id: "NPM::babel-generator:6.26.0"
+    id: "NPM::babel-generator:6.26.1"
     declared_licenses:
     - "MIT"
     description: "Turns an AST into code."
@@ -1899,8 +1893,8 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/babel-generator/-/babel-generator-6.26.0.tgz"
-      hash: "ac1ae20070b79f6e3ca1d3269613053774f20dc5"
+      url: "https://registry.npmjs.org/babel-generator/-/babel-generator-6.26.1.tgz"
+      hash: "1844408d3b8f0d35a404ea7ac180f087a601bd90"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
@@ -2190,7 +2184,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::brace-expansion:1.1.8"
+    id: "NPM::brace-expansion:1.1.11"
     declared_licenses:
     - "MIT"
     description: "Brace expansion as known from sh/bash"
@@ -2200,18 +2194,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.8.tgz"
-      hash: "c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
+      url: "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
+      hash: "3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/juliangruber/brace-expansion.git"
-      revision: "8f59e68bd5c915a0d624e8e39354e1ccf672edf6"
+      revision: "01a21de7441549d26ac0c0a9ff91385d16e5c21c"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/juliangruber/brace-expansion.git"
-      revision: "8f59e68bd5c915a0d624e8e39354e1ccf672edf6"
+      revision: "01a21de7441549d26ac0c0a9ff91385d16e5c21c"
       path: ""
   curations: []
 - package:
@@ -2291,7 +2285,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::commander:2.12.2"
+    id: "NPM::commander:2.17.1"
     declared_licenses:
     - "MIT"
     description: "the complete solution for node.js command-line programs"
@@ -2301,18 +2295,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/commander/-/commander-2.12.2.tgz"
-      hash: "0f5946c427ed9ec0d91a46bb9def53e54650e555"
+      url: "https://registry.npmjs.org/commander/-/commander-2.17.1.tgz"
+      hash: "bd77ab7de6de94205ceacc72f1716d29f20a77bf"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/tj/commander.js.git"
-      revision: "6864c953d781d4f665afecbdace84d9d80e45060"
+      revision: "e5b27cc553c0c55eb2f8890dc83034d3a3eee531"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/tj/commander.js.git"
-      revision: "6864c953d781d4f665afecbdace84d9d80e45060"
+      revision: "e5b27cc553c0c55eb2f8890dc83034d3a3eee531"
       path: ""
   curations: []
 - package:
@@ -2367,7 +2361,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::core-js:2.5.2"
+    id: "NPM::core-js:2.5.7"
     declared_licenses:
     - "MIT"
     description: "Standard library"
@@ -2377,18 +2371,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/core-js/-/core-js-2.5.2.tgz"
-      hash: "bc4648656e7dc9dc80d7d3c7bbc172d96e744e63"
+      url: "https://registry.npmjs.org/core-js/-/core-js-2.5.7.tgz"
+      hash: "f972608ff0cead68b841a16a932d0b183791814e"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/zloirock/core-js.git"
-      revision: "a03fd191eaea071fa56eb6a1a806470272deb9d7"
+      revision: "5bbe230036de55b7f969487da9f3b15e5839359f"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/zloirock/core-js.git"
-      revision: "a03fd191eaea071fa56eb6a1a806470272deb9d7"
+      revision: "5bbe230036de55b7f969487da9f3b15e5839359f"
       path: ""
   curations: []
 - package:
@@ -2619,7 +2613,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::fill-range:2.2.3"
+    id: "NPM::fill-range:2.2.4"
     declared_licenses:
     - "MIT"
     description: "Fill in a range of numbers or letters, optionally passing an increment\
@@ -2630,18 +2624,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/fill-range/-/fill-range-2.2.3.tgz"
-      hash: "50b77dfd7e469bc7492470963699fe7a8485a723"
+      url: "https://registry.npmjs.org/fill-range/-/fill-range-2.2.4.tgz"
+      hash: "eb1e773abb056dcd8df2bfdf6af59b8b3a936565"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/fill-range.git"
-      revision: "6cb50d5c679d9e6d9e8ad97bb2efd63a8c8da610"
+      revision: "516e5ad9e40486c168b14062158d136aa3163f2b"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/fill-range.git"
-      revision: "6cb50d5c679d9e6d9e8ad97bb2efd63a8c8da610"
+      revision: "516e5ad9e40486c168b14062158d136aa3163f2b"
       path: ""
   curations: []
 - package:
@@ -2976,9 +2970,9 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::invariant:2.2.2"
+    id: "NPM::invariant:2.2.4"
     declared_licenses:
-    - "BSD-3-Clause"
+    - "MIT"
     description: "invariant"
     homepage_url: "https://github.com/zertosh/invariant#readme"
     binary_artifact:
@@ -2986,18 +2980,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/invariant/-/invariant-2.2.2.tgz"
-      hash: "9e1f56ac0acdb6bf303306f338be3b204ae60360"
+      url: "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
+      hash: "610f3c92c9359ce1db616e538008d23ff35158e6"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/zertosh/invariant.git"
-      revision: "49ae54d5a09c99a447e7dafa46bd3aa8f6923d98"
+      revision: "ce95a9badeee1c97daff1bca0d1f6cec5dda4fe8"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/zertosh/invariant.git"
-      revision: "49ae54d5a09c99a447e7dafa46bd3aa8f6923d98"
+      revision: "ce95a9badeee1c97daff1bca0d1f6cec5dda4fe8"
       path: ""
   curations: []
 - package:
@@ -3233,7 +3227,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::is-number:3.0.0"
+    id: "NPM::is-number:4.0.0"
     declared_licenses:
     - "MIT"
     description: "Returns true if the value is a number. comprehensive tests."
@@ -3243,18 +3237,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/is-number/-/is-number-3.0.0.tgz"
-      hash: "24fd6201a4782cf50561c810276afc7d12d71195"
+      url: "https://registry.npmjs.org/is-number/-/is-number-4.0.0.tgz"
+      hash: "0026e37f5454d73e356dfe6564699867c6a7f0ff"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/is-number.git"
-      revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
+      revision: "0c6b15a88bc10cd47f67a09506399dfc9ddc075d"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/is-number.git"
-      revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
+      revision: "0c6b15a88bc10cd47f67a09506399dfc9ddc075d"
       path: ""
   curations: []
 - package:
@@ -3460,7 +3454,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::kind-of:4.0.0"
+    id: "NPM::kind-of:6.0.2"
     declared_licenses:
     - "MIT"
     description: "Get the native type of a value."
@@ -3470,22 +3464,22 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/kind-of/-/kind-of-4.0.0.tgz"
-      hash: "20813df3d712928b207378691a45066fae72dd57"
+      url: "https://registry.npmjs.org/kind-of/-/kind-of-6.0.2.tgz"
+      hash: "01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/kind-of.git"
-      revision: "30bee16e8dffa67417ba35d31bd9bc31517a2d83"
+      revision: "1491da72e8d276479f5f6198a9e79c1379c5d0c7"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/kind-of.git"
-      revision: "30bee16e8dffa67417ba35d31bd9bc31517a2d83"
+      revision: "1491da72e8d276479f5f6198a9e79c1379c5d0c7"
       path: ""
   curations: []
 - package:
-    id: "NPM::lodash:4.17.4"
+    id: "NPM::lodash:4.17.10"
     declared_licenses:
     - "MIT"
     description: "Lodash modular utilities."
@@ -3495,8 +3489,8 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
-      hash: "78203a4d1c328ae1d86dca6460e369b57f4055ae"
+      url: "https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz"
+      hash: "1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
@@ -3510,7 +3504,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::loose-envify:1.3.1"
+    id: "NPM::loose-envify:1.4.0"
     declared_licenses:
     - "MIT"
     description: "Fast (and loose) selective `process.env` replacer using js-tokens\
@@ -3521,18 +3515,44 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/loose-envify/-/loose-envify-1.3.1.tgz"
-      hash: "d1a8ad33fa9ce0e713d65fdd0ac8b748d478c848"
+      url: "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz"
+      hash: "71ee51fa7be4caec1a63839f7e682d8132d30caf"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/zertosh/loose-envify.git"
-      revision: "7b2d41e61a7ddba5335154b4aba327f6e850f7fd"
+      revision: "a8fdd02e3a435195f526053882d64537d627b3e6"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/zertosh/loose-envify.git"
-      revision: "7b2d41e61a7ddba5335154b4aba327f6e850f7fd"
+      revision: "a8fdd02e3a435195f526053882d64537d627b3e6"
+      path: ""
+  curations: []
+- package:
+    id: "NPM::math-random:1.0.1"
+    declared_licenses:
+    - "MIT"
+    description: "a drop-in replacement for Math.random that uses cryptographically\
+      \ secure random number generation, where available"
+    homepage_url: "https://github.com/michaelrhodes/math-random"
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/math-random/-/math-random-1.0.1.tgz"
+      hash: "8b3aac588b8a66e4975e3cdea67f7bb329601fac"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "git@github.com:michaelrhodes/math-random"
+      revision: "14f9d4cb231e26156e1295d4d55b624dfdb54d3c"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "ssh://git@github.com/michaelrhodes/math-random.git"
+      revision: "14f9d4cb231e26156e1295d4d55b624dfdb54d3c"
       path: ""
   curations: []
 - package:
@@ -3968,7 +3988,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::process-nextick-args:1.0.7"
+    id: "NPM::process-nextick-args:2.0.0"
     declared_licenses:
     - "MIT"
     description: "process.nextTick but always with args"
@@ -3978,49 +3998,48 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz"
-      hash: "150e20b756590ad3f91093f25a4f2ad8bff30ba3"
+      url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.0.tgz"
+      hash: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
-      url: "https://github.com/calvinmetcalf/process-nextick-args.git"
-      revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
+      url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
+      revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/calvinmetcalf/process-nextick-args.git"
-      revision: "5c00899ab01dd32f93ad4b5743da33da91404f39"
+      revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
       path: ""
   curations: []
 - package:
-    id: "NPM::randomatic:1.1.7"
+    id: "NPM::randomatic:3.1.0"
     declared_licenses:
     - "MIT"
-    description: "Generate randomized strings of a specified length, fast. Only the\
-      \ length is necessary, but you can optionally generate patterns using any combination\
-      \ of numeric, alpha-numeric, alphabetical, special or custom characters."
+    description: "Generate randomized strings of a specified length using simple character\
+      \ sequences. The original generate-password."
     homepage_url: "https://github.com/jonschlinkert/randomatic"
     binary_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/randomatic/-/randomatic-1.1.7.tgz"
-      hash: "c7abe9cc8b87c0baa876b19fde83fd464797e38c"
+      url: "https://registry.npmjs.org/randomatic/-/randomatic-3.1.0.tgz"
+      hash: "36f2ca708e9e567f5ed2ec01949026d50aa10116"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/randomatic.git"
-      revision: "d91c5f90e785db08a9b9e518926b444671092f26"
+      revision: "4d76cd1ec91d0ac0ff33fa112efb806ab96295b9"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/randomatic.git"
-      revision: "d91c5f90e785db08a9b9e518926b444671092f26"
+      revision: "4d76cd1ec91d0ac0ff33fa112efb806ab96295b9"
       path: ""
   curations: []
 - package:
-    id: "NPM::readable-stream:2.3.3"
+    id: "NPM::readable-stream:2.3.6"
     declared_licenses:
     - "MIT"
     description: "Streams3, a user-land copy of the stream library from Node.js"
@@ -4030,18 +4049,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.3.tgz"
-      hash: "368f2512d79f9d46fdfc71349ae7878bbc1eb95c"
+      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
+      hash: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/nodejs/readable-stream.git"
-      revision: "cd59995050105b946884ee20e3bcadc252feda8c"
+      revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/nodejs/readable-stream.git"
-      revision: "cd59995050105b946884ee20e3bcadc252feda8c"
+      revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
       path: ""
   curations: []
 - package:
@@ -4248,7 +4267,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::safe-buffer:5.1.1"
+    id: "NPM::safe-buffer:5.1.2"
     declared_licenses:
     - "MIT"
     description: "Safer Node.js Buffer API"
@@ -4258,18 +4277,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.1.tgz"
-      hash: "893312af69b2123def71f57889001671eeb2c853"
+      url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
+      hash: "991ec69d296e0313747d59bdfd2b745c35f8828d"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/feross/safe-buffer.git"
-      revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
+      revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/feross/safe-buffer.git"
-      revision: "5261e0c19dd820c31dd21cb4116902b0ed0f9e57"
+      revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
       path: ""
   curations: []
 - package:
@@ -4373,28 +4392,28 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::string_decoder:1.0.3"
+    id: "NPM::string_decoder:1.1.1"
     declared_licenses:
     - "MIT"
     description: "The string_decoder module from Node core"
-    homepage_url: "https://github.com/rvagg/string_decoder"
+    homepage_url: "https://github.com/nodejs/string_decoder"
     binary_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.0.3.tgz"
-      hash: "0fc67d7c141825de94282dd536bec6b9bce860ab"
+      url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz"
+      hash: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
-      url: "git://github.com/rvagg/string_decoder.git"
-      revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
+      url: "git://github.com/nodejs/string_decoder.git"
+      revision: "18c7f89c894ced5f610505bb006dfde9a3d1ac5e"
       path: ""
     vcs_processed:
       type: "git"
-      url: "https://github.com/rvagg/string_decoder.git"
-      revision: "e97f24dd3d047b72b9836518e2a0788e2a6a2fdb"
+      url: "https://github.com/nodejs/string_decoder.git"
+      revision: "18c7f89c894ced5f610505bb006dfde9a3d1ac5e"
       path: ""
   curations: []
 - package:
