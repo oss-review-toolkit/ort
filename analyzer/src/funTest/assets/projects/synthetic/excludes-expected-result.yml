@@ -42,6 +42,18 @@ repository:
         - name: "testRuntimeClasspath"
           reason: "OTHER"
           comment: "Test dependencies."
+      - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2/build.gradle"
+        type: "OTHER"
+        errors:
+        - message: ".*Could not find org.example:another-nonexistent-package:1.0.*"
+          reason: "OTHER"
+          comment: "Undelivered dependency."
+      - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken1/pom.xml"
+        type: "OTHER"
+        errors:
+        - message: ".*The groupId cannot be empty."
+          reason: "OTHER"
+          comment: "Undelivered project."
       packages:
       - id: "Maven:org.apache.commons:commons-lang3:3.5"
         reason: "OTHER"
@@ -50,6 +62,13 @@ repository:
       - name: "archives"
         reason: "OTHER"
         comment: "Scope not published."
+      errors:
+      - message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0.*"
+        reason: "OTHER"
+        comment: "Undelivered dependency."
+      - message: ".*The artifactId cannot be empty."
+        reason: "OTHER"
+        comment: "Undelivered project."
 analyzer:
   environment:
     os: "<REPLACE_OS>"
@@ -108,6 +127,22 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0.\n\
+              Searched in the following locations:\n    https://jcenter.bintray.com/org/example/another-nonexistent-package/1.0/another-nonexistent-package-1.0.pom\n\
+              \    https://jcenter.bintray.com/org/example/another-nonexistent-package/1.0/another-nonexistent-package-1.0.jar"
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0.\n\
+              Searched in the following locations:\n    https://jcenter.bintray.com/org/example/nonexistent-package/1.0/nonexistent-package-1.0.pom\n\
+              \    https://jcenter.bintray.com/org/example/nonexistent-package/1.0/nonexistent-package-1.0.jar"
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -118,6 +153,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "compileOnly"
         dependencies: []
       - name: "default"
@@ -130,6 +177,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "runtime"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -140,6 +199,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -150,6 +221,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "testAnnotationProcessor"
         dependencies: []
         excluded: true
@@ -169,6 +252,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
         excluded: true
       - name: "testCompileClasspath"
         dependencies:
@@ -186,6 +281,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
         excluded: true
       - name: "testCompileOnly"
         dependencies: []
@@ -206,6 +313,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
         excluded: true
       - name: "testRuntimeClasspath"
         dependencies:
@@ -223,6 +342,18 @@ analyzer:
             excluded: true
           errors: []
           excluded: true
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
         excluded: true
     - id: "Gradle:com.here.ort.gradle.excludes.example:app2:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2/build.gradle"
@@ -256,6 +387,22 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0.\n\
+              Searched in the following locations:\n    https://jcenter.bintray.com/org/example/another-nonexistent-package/1.0/another-nonexistent-package-1.0.pom\n\
+              \    https://jcenter.bintray.com/org/example/another-nonexistent-package/1.0/another-nonexistent-package-1.0.jar"
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0.\n\
+              Searched in the following locations:\n    https://jcenter.bintray.com/org/example/nonexistent-package/1.0/nonexistent-package-1.0.pom\n\
+              \    https://jcenter.bintray.com/org/example/nonexistent-package/1.0/nonexistent-package-1.0.jar"
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -265,6 +412,18 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "compileOnly"
         dependencies: []
       - name: "default"
@@ -276,6 +435,18 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "runtime"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -285,6 +456,18 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -294,6 +477,18 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "testAnnotationProcessor"
         dependencies: []
       - name: "testCompile"
@@ -311,6 +506,18 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -326,6 +533,18 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "testCompileOnly"
         dependencies: []
       - name: "testRuntime"
@@ -343,6 +562,18 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -358,6 +589,63 @@ analyzer:
             errors: []
             excluded: true
           errors: []
+        - id: "Maven:org.example:another-nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:another-nonexistent-package:1.0."
+        - id: "Maven:org.example:nonexistent-package:1.0"
+          dependencies: []
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "Gradle"
+            message: "Unresolved: ModuleVersionNotFoundException: Could not find org.example:nonexistent-package:1.0."
+    - id: "Maven::maven/broken1/pom.xml:"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken1/pom.xml"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken1"
+      homepage_url: ""
+      scopes: []
+    - id: "Maven::maven/broken2/pom.xml:"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken2/pom.xml"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken2"
+      homepage_url: ""
+      scopes: []
+    - id: "Maven::maven/broken3/pom.xml:"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken3/pom.xml"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "<REPLACE_URL_PROCESSED>"
+        revision: "<REPLACE_REVISION>"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken3"
+      homepage_url: ""
+      scopes: []
     - id: "NPM::npm-excludes-test-project:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm/package.json"
       declared_licenses:
@@ -808,6 +1096,21 @@ analyzer:
           revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
           path: ""
       curations: []
-    errors: {}
-    has_errors: false
+    errors:
+      'Maven::maven/broken1/pom.xml:':
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Maven"
+        message: "InvalidArtifactRTException: For artifact {null:null:null:jar}: The\
+          \ groupId cannot be empty."
+      'Maven::maven/broken2/pom.xml:':
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Maven"
+        message: "InvalidArtifactRTException: For artifact {com.here.ort:null:null:jar}:\
+          \ The artifactId cannot be empty."
+      'Maven::maven/broken3/pom.xml:':
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Maven"
+        message: "InvalidArtifactRTException: For artifact {null:null:null:jar}: The\
+          \ groupId cannot be empty."
+    has_errors: true
 scanner: null
