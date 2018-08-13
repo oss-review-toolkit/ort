@@ -50,11 +50,8 @@ data class AnalyzerResult(
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasErrors = {
-        fun hasErrors(pkgReference: PackageReference): Boolean =
-                pkgReference.errors.isNotEmpty() || pkgReference.dependencies.any { hasErrors(it) }
-
         errors.any { it.value.isNotEmpty() }
-                || projects.any { it.scopes.any { it.dependencies.any { hasErrors(it) } } }
+                || projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
     }.invoke()
 }
 
