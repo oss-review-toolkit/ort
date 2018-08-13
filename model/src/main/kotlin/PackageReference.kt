@@ -51,6 +51,9 @@ data class PackageReference(
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         val excluded: Boolean = false
 ) : CustomData(), Comparable<PackageReference> {
+    /**
+     * Return the set of identifiers for all packages references this package reference depends on.
+     */
     fun collectDependencyIds(includeErroneous: Boolean = true, includeExcluded: Boolean = true): SortedSet<Identifier> =
             dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
                 ids.also {
