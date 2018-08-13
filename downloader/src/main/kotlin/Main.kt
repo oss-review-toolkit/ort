@@ -84,7 +84,7 @@ fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, 
         }
     }
 
-    return projectPackagesByVcs.map { (sameVcs, projectsWithSameVcs) ->
+    return projectPackagesByVcs.entries.associate { (sameVcs, projectsWithSameVcs) ->
         // Find the original project which has the empty path, if any, or simply take the first project
         // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
         val referencePackage = projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() }
@@ -93,7 +93,7 @@ fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, 
         val otherPackages = (projectsWithSameVcs - referencePackage).map { it.copy(vcsProcessed = sameVcs) }
 
         Pair(referencePackage.copy(vcsProcessed = sameVcs), otherPackages)
-    }.associate { it }
+    }
 }
 
 /**
