@@ -34,6 +34,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.ErrorExclude
 import com.here.ort.model.config.PackageExclude
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.RepositoryConfiguration
@@ -183,7 +184,31 @@ class Analyzer {
                 projects = applyPackageExcludes(projects, packageExcludes)
             }
 
-            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet())
+            repositoryConfiguration.excludes?.errors?.let { errorExcludes ->
+                projects = applyErrorExcludes(projects, errorExcludes)
+            }
+
+            val globalExcludedErrorMessages = repositoryConfiguration.excludes?.errors
+                    ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) } ?: emptyList()
+
+            val errors = analyzerResult.errors.mapValues { (id, errors) ->
+                val project = analyzerResult.projects.find { it.id == id }
+                val projectExclude = repositoryConfiguration.excludes?.projects
+                        ?.find { it.path == project?.definitionFilePath }
+                val excludedErrorMessages = (projectExclude?.errors
+                        ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
+                        ?: emptyList()) + globalExcludedErrorMessages
+
+                errors.map { error ->
+                    if (excludedErrorMessages.any { it.matches(error.message) }) {
+                        error.copy(excluded = true)
+                    } else {
+                        error
+                    }
+                }
+            }
+
+            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet(), errors = errors.toSortedMap())
         }
 
         val run = AnalyzerRun(Environment(), config, analyzerResult)
@@ -194,14 +219,23 @@ class Analyzer {
     private fun applyProjectExclude(project: Project, projectExclude: ProjectExclude): Project {
         val excludedScopeNames = projectExclude.scopes.map { it.name }
         val excludedPackageIds = projectExclude.packages.map { it.id }
+        val excludedErrorMessages = projectExclude.errors.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
 
         val scopes = project.scopes.map { scope ->
             val dependencies = scope.dependencies.map { pkgRef ->
                 pkgRef.traverse {
+                    val errors = it.errors.map { error ->
+                        if (excludedErrorMessages.any { it.matches(error.message) }) {
+                            error.copy(excluded = true)
+                        } else {
+                            error
+                        }
+                    }
+
                     if (it.id in excludedPackageIds) {
-                        it.copy(excluded = true)
+                        it.copy(errors = errors, excluded = true)
                     } else {
-                        it
+                        it.copy(errors = errors)
                     }
                 }
             }.toSortedSet()
@@ -244,6 +278,32 @@ class Analyzer {
                         } else {
                             it
                         }
+                    }
+                }
+
+                scope.copy(dependencies = dependencies.toSortedSet())
+            }
+
+            project.copy(scopes = scopes.toSortedSet())
+        }
+    }
+
+    private fun applyErrorExcludes(projects: List<Project>, errorExcludes: List<ErrorExclude>): List<Project> {
+        val excludedErrorMessages = errorExcludes.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
+
+        return projects.map { project ->
+            val scopes = project.scopes.map { scope ->
+                val dependencies = scope.dependencies.map { pkgRef ->
+                    pkgRef.traverse {
+                        val errors = it.errors.map { error ->
+                            if (excludedErrorMessages.any { it.matches(error.message) }) {
+                                error.copy(excluded = true)
+                            } else {
+                                error
+                            }
+                        }
+
+                        it.copy(errors = errors)
                     }
                 }
 
