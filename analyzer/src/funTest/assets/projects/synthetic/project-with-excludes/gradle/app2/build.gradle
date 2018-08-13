@@ -5,5 +5,7 @@ repositories {
 dependencies {
     archives 'org.javassist:javassist:3.21.0-GA'
     compile 'org.apache.commons:commons-text:1.1'
+    compile 'org.example:nonexistent-package:1.0'
+    compile 'org.example:another-nonexistent-package:1.0'
     testCompile 'junit:junit:4.12'
 }

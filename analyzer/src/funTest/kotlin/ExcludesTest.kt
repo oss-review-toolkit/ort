@@ -24,6 +24,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
@@ -51,7 +52,7 @@ class ExcludesTest : WordSpec() {
 
                 val ortResult = Analyzer().analyze(DEFAULT_ANALYZER_CONFIGURATION, projectPath)
 
-                yamlMapper.writeValueAsString(ortResult) shouldBe expectedResult
+                patchActualResult(yamlMapper.writeValueAsString(ortResult)) shouldBe expectedResult
             }
         }
 
@@ -66,7 +67,7 @@ class ExcludesTest : WordSpec() {
 
                 val ortResult = Analyzer().analyze(analyzerConfigurationWithRemove, projectPath)
 
-                yamlMapper.writeValueAsString(ortResult) shouldBe expectedResult
+                patchActualResult(yamlMapper.writeValueAsString(ortResult)) shouldBe expectedResult
             }
         }
     }
