@@ -84,6 +84,11 @@ data class PackageReference(
     }
 
     /**
+     * Return whether this package reference or any of its dependencies has errors.
+     */
+    fun hasErrors(): Boolean = errors.isNotEmpty() || dependencies.any { it.hasErrors() }
+
+    /**
      * Apply the provided [transform] to each node in the dependency tree represented by this [PackageReference] and
      * return the modified [PackageReference]. The tree is traversed depth-first (post-order).
      */
