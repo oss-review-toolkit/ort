@@ -68,8 +68,8 @@ import org.apache.commons.codec.digest.DigestUtils
  * does not make sense to download (and scan) all of them individually, not even if doing sparse checkouts.
  *
  * @param projects A set of projects to consolidate into packages.
- * @return A map of packages for project where the keys refer to distinct VCS working trees and the value contains all
- *         other projects from the same VCS working tree.
+ * @return A map that associates packages for projects with distinct VCS working trees to all other projects from the
+ *         same VCS working tree.
  */
 fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, List<Package>> {
     // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
