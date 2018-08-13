@@ -27,6 +27,7 @@ import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.CuratedPackage
 import com.here.ort.model.Environment
+import com.here.ort.model.Error
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
@@ -126,6 +127,8 @@ class Analyzer {
         if (config.removeExcludesFromResult) {
             val globalExcludedScopeNames = repositoryConfiguration.excludes?.scopes?.map { it.name } ?: emptyList()
             val globalExcludedPackageIds = repositoryConfiguration.excludes?.packages?.map { it.id } ?: emptyList()
+            val globalExcludedErrorMessages = repositoryConfiguration.excludes?.errors
+                    ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) } ?: emptyList()
 
             val projects = analyzerResult.projects.map { project ->
                 val projectExclude = repositoryConfiguration.excludes?.projects
@@ -133,14 +136,33 @@ class Analyzer {
 
                 val excludedScopeNames = projectExclude?.scopes?.map { it.name } ?: emptyList()
                 val excludedPackageIds = projectExclude?.packages?.map { it.id } ?: emptyList()
+                val excludedErrorMessages = projectExclude?.errors
+                        ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) } ?: emptyList()
 
-                val filteredProject = filterExcludedScopes(project, globalExcludedScopeNames + excludedScopeNames)
-                filterExcludedPackages(filteredProject, globalExcludedPackageIds + excludedPackageIds)
+                var filteredProject = filterExcludedScopes(project, globalExcludedScopeNames + excludedScopeNames)
+                filteredProject = filterExcludedPackages(filteredProject, globalExcludedPackageIds + excludedPackageIds)
+                filterExcludedErrors(filteredProject, globalExcludedErrorMessages + excludedErrorMessages)
             }
 
             val packages = filterUnreferencedPackages(projects, analyzerResult.packages)
 
-            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet(), packages = packages)
+            val filteredErrors = mutableMapOf<Identifier, List<Error>>()
+            analyzerResult.errors.forEach { id, errors ->
+                val project = analyzerResult.projects.find { it.id == id }
+                val projectExclude = repositoryConfiguration.excludes?.projects
+                        ?.find { it.path == project?.definitionFilePath }
+                val excludedErrorMessages = (projectExclude?.errors
+                        ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
+                        ?: emptyList()) + globalExcludedErrorMessages
+
+                val filtered = errors.filter { error -> excludedErrorMessages.none { it.matches(error.message) } }
+                if (filtered.isNotEmpty()) {
+                    filteredErrors[id] = filtered
+                }
+            }
+
+            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet(), packages = packages,
+                    errors = filteredErrors.toSortedMap())
         } else {
             var projects = analyzerResult.projects.map { project ->
                 val projectExclude = repositoryConfiguration.excludes?.projects
@@ -280,6 +302,24 @@ class Analyzer {
                     } else {
                         it
                     }
+                }
+            }
+
+            scope.copy(dependencies = dependencies.toSortedSet())
+        }
+
+        return project.copy(scopes = filteredScopes.toSortedSet())
+    }
+
+    private fun filterExcludedErrors(project: Project, excludedErrorMessages: List<Regex>): Project {
+        val filteredScopes = project.scopes.map { scope ->
+            val dependencies = scope.dependencies.map { pkgRef ->
+                pkgRef.traverse {
+                    val filteredErrors = it.errors.filter { error ->
+                        excludedErrorMessages.none { it.matches(error.message) }
+                    }
+
+                    it.copy(errors = filteredErrors)
                 }
             }
 
