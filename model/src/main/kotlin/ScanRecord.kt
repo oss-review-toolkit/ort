@@ -19,11 +19,14 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import java.util.SortedSet
 
 /**
  * A record of a single run of the scanner tool, containing the input and the scan results for all scanned packages.
  */
+@JsonIgnoreProperties(value = ["has_errors"], allowGetters = true)
 data class ScanRecord(
         /**
          * The scanned and ignored [Scope]s for each scanned [Project] by id.
@@ -44,5 +47,5 @@ data class ScanRecord(
      * True if any of the [scanResults] contain errors.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
-    val hasErrors = scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } }
+    val hasErrors by lazy { scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } } }
 }
