@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import com.here.ort.utils.log
 
 import java.util.SortedMap
@@ -29,6 +31,7 @@ import java.util.SortedSet
 /**
  * A class that merges all information from individual AnalyzerResults created for each found build file
  */
+@JsonIgnoreProperties(value = ["has_errors"], allowGetters = true)
 data class AnalyzerResult(
         /**
          * Sorted set of the projects, as they appear in the individual analyzer results.
@@ -49,10 +52,10 @@ data class AnalyzerResult(
      * True if there were any errors during the analysis, false otherwise.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
-    val hasErrors = {
+    val hasErrors by lazy {
         errors.any { it.value.isNotEmpty() }
                 || projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
-    }.invoke()
+    }
 }
 
 class AnalyzerResultBuilder {
