@@ -68,7 +68,7 @@ export class PackagesTableErrors extends React.Component {
                     <Icon type="minus-square-o" />
                 </h4>
                 {pkgObj.errors.map(error => (
-                    <p key={`package-error-${error.hash}`}>
+                    <p key={`package-error-${error.code}`}>
                         {error.message}
                     </p>
                 ))}
