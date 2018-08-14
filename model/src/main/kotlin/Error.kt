@@ -20,10 +20,15 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.databind.ser.std.StdSerializer
+
+import com.here.ort.utils.normalizeLineBreaks
 
 import java.time.Instant
 
@@ -66,5 +71,18 @@ class ErrorDeserializer : StdDeserializer<Error>(Error::class.java) {
             Error(Instant.parse(node.get("timestamp").textValue()), node.get("source").textValue(),
                     node.get("message").textValue())
         }
+    }
+}
+
+class ErrorSerializer : StdSerializer<Error>(Error::class.java) {
+    override fun serialize(value: Error, gen: JsonGenerator, provider: SerializerProvider) {
+        gen.writeStartObject()
+        gen.writeObjectField("timestamp", value.timestamp)
+        gen.writeStringField("source", value.source)
+        gen.writeStringField("message", value.message.normalizeLineBreaks())
+        if (value.excluded) {
+            gen.writeBooleanField("excluded", value.excluded)
+        }
+        gen.writeEndObject()
     }
 }
