@@ -51,6 +51,8 @@ class Yarn(config: AnalyzerConfiguration) : NPM(config) {
         checkCommandVersion(command(workingDir), Requirement.buildIvy("1.3.+"),
                 ignoreActualVersion = config.ignoreToolVersions)
 
-        return definitionFiles
+        // Map "yarn.lock" files to existing "package.json" files for use by the NPM class (which in this case calls
+        // "yarn" to install the dependencies).
+        return definitionFiles.mapNotNull { File(it.parentFile, "package.json").takeIf { it.isFile } }
     }
 }
