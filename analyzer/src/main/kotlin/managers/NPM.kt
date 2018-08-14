@@ -62,6 +62,9 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
+import org.apache.commons.codec.binary.Base64
+import org.apache.commons.codec.binary.Hex
+
 @Suppress("LargeClass", "TooManyFunctions")
 open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
     companion object : PackageManagerFactory<NPM>(
@@ -202,11 +205,21 @@ open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
             var downloadUrl = json["_resolved"].textValueOrEmpty()
-            var hash = json["_integrity"].textValueOrEmpty()
             var vcsFromPackage = parseVcsInfo(json)
 
-            val hashAlgorithm = HashAlgorithm.SHA1
             val identifier = "$rawName@$version"
+
+            var hash = json["_integrity"].textValueOrEmpty()
+            val splitHash = hash.split('-')
+
+            var hashAlgorithm = if (splitHash.count() == 2) {
+                // Support Subresource Integrity (SRI) hashes, see
+                // https://w3c.github.io/webappsec-subresource-integrity/
+                hash = Hex.encodeHexString(Base64.decodeBase64(splitHash.last()))
+                HashAlgorithm.fromString(splitHash.first())
+            } else {
+                HashAlgorithm.SHA1
+            }
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
@@ -242,6 +255,7 @@ open class NPM(config: AnalyzerConfiguration) : PackageManager(config) {
                             versionInfo["dist"]?.let { dist ->
                                 downloadUrl = dist["tarball"].textValueOrEmpty()
                                 hash = dist["shasum"].textValueOrEmpty()
+                                hashAlgorithm = HashAlgorithm.SHA1
                             }
 
                             vcsFromPackage = parseVcsInfo(versionInfo)
