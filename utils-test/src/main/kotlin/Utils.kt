@@ -48,3 +48,4 @@ fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, defi
 
 fun patchActualResult(result: String) =
         result.replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
+                .replace("\r\n", "\n")
