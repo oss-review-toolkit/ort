@@ -414,6 +414,11 @@ fun String.isValidUrl() =
         }
 
 /**
+ * Replace "\r\n" and "\r" line breaks with "\n".
+ */
+fun String.normalizeLineBreaks() = this.replace("\r\n", "\n").replace("\r", "\n")
+
+/**
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
  */
 fun Throwable.showStackTrace() {
