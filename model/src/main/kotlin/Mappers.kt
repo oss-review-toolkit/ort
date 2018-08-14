@@ -38,6 +38,7 @@ val ortModelModule = SimpleModule("OrtModelModule").apply {
     addDeserializer(Identifier::class.java, IdentifierFromStringDeserializer())
     addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
 
+    addSerializer(Error::class.java, ErrorSerializer())
     addSerializer(Identifier::class.java, IdentifierToStringSerializer())
 
     addKeyDeserializer(Identifier::class.java, IdentifierFromStringKeyDeserializer())

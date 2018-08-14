@@ -414,6 +414,16 @@ fun String.isValidUrl() =
         }
 
 /**
+ * A regular expression matching the non-linux line breaks "\r\n" and "\r".
+ */
+val NON_LINUX_LINE_BREAKS = Regex("\\r\\n?")
+
+/**
+ * Replace "\r\n" and "\r" line breaks with "\n".
+ */
+fun String.normalizeLineBreaks() = this.replace(NON_LINUX_LINE_BREAKS, "\n")
+
+/**
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.
  */
 fun Throwable.showStackTrace() {
