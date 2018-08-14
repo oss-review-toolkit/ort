@@ -261,6 +261,7 @@ class SummaryView extends React.Component {
                         <span>
                             {' '}
                             Detected
+                            {' '}
                             <b>
                                 {nrDeclaredLicenses}
                             </b>

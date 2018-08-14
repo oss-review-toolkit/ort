@@ -24,9 +24,10 @@ export function isNumeric(n) {
 
 export function convertToRenderFormat(reportData) {
     if (!reportData
-        || !reportData.analyzer_result
-        || !reportData.analyzer_result.projects
-        || !reportData.analyzer_result.packages) {
+        || !reportData.analyzer.result
+        || !reportData.analyzer.result.projects
+        || !reportData.analyzer.result.packages
+        || !reportData.repository) {
         return {};
     }
 
@@ -47,7 +48,9 @@ export function convertToRenderFormat(reportData) {
         const createErrorObj = (type, error) => {
             return {
                 id: project.id,
-                code: hashCode(project.id) + 'x' + hashCode(pkgObj.id + error),
+                code: hashCode(project.id) + 'x' + hashCode(pkgObj.id) + error.message.length,
+                source: error.source,
+                timestamp: error.timestamp,
                 type: type,
                 package: {
                     id: pkgObj.id,
@@ -56,7 +59,7 @@ export function convertToRenderFormat(reportData) {
                     scope: pkgObj.scope
                 },
                 file: project.definition_file_path,
-                message: error
+                message: error.message
             };
         };
         const packageFromScanner = packagesFromScanner[pkgObj.id] || false;
@@ -162,6 +165,8 @@ export function convertToRenderFormat(reportData) {
                 pkgObj,
                 pkgObj.detected_licenses
             );
+        } else {
+            console.error('Package' + pkgObj.id + 'was detected by Analyzer but not scanned');
         }
 
         return pkgObj;
@@ -180,7 +185,7 @@ export function convertToRenderFormat(reportData) {
             projectLevels = project.packages.levels;
             projectScopes = project.packages.scopes;
 
-            if (level && !projectLevels.has(level)) {
+            if (level !== undefined && !projectLevels.has(level)) {
                 projectLevels.add(level);
             }
 
@@ -226,7 +231,7 @@ export function convertToRenderFormat(reportData) {
                 let licenseOccurance = [];
                 let licenseOccurances;
 
-                if (!reportDataLicenses[projectIndex]) {
+                if (!Object.prototype.hasOwnProperty.call(reportDataLicenses, projectIndex)) {
                     reportDataLicenses[projectIndex] = {};
                 }
 
@@ -274,7 +279,10 @@ export function convertToRenderFormat(reportData) {
         if (!projectsListPkg) {
             pkgObj.levels = [pkgObj.level];
             pkgObj.paths = [];
-            pkgObj.scopes = [pkgObj.scope];
+            pkgObj.scopes = [];
+            if (pkgObj.scope !== '') {
+                pkgObj.scopes.push(pkgObj.scope);
+            }
 
             projectsListPkg = pkgObj;
             projects[projectIndex].packages.list[pkgObj.id] = pkgObj;
@@ -285,9 +293,11 @@ export function convertToRenderFormat(reportData) {
                 projectsListPkg.levels.push(pkgObj.level);
             }
 
-            // Ensure each scope only occurs once
-            if (!projectsListPkg.scopes.includes(pkgObj.scope)) {
-                projectsListPkg.scopes.push(pkgObj.scope);
+            if (pkgObj.scope !== '') {
+                // Ensure each scope only occurs once
+                if (!projectsListPkg.scopes.includes(pkgObj.scope)) {
+                    projectsListPkg.scopes.push(pkgObj.scope);
+                }
             }
         }
 
@@ -326,7 +336,7 @@ export function convertToRenderFormat(reportData) {
                     let licenseOccurance = [];
                     let licenseOccurances;
 
-                    if (!licenses[projectIndex]) {
+                    if (!Object.prototype.hasOwnProperty.call(licenses, projectIndex)) {
                         licenses[projectIndex] = {};
                     }
 
@@ -475,12 +485,12 @@ export function convertToRenderFormat(reportData) {
         get: (pkgObj, prop) => {
             const packageFromAnalyzer = packagesFromAnalyzer[pkgObj.id];
 
-            if (pkgObj[prop]) {
+            if (Object.prototype.hasOwnProperty.call(pkgObj, prop)) {
                 return pkgObj[prop];
             }
 
             if (packageFromAnalyzer) {
-                if (packageFromAnalyzer[prop]) {
+                if (Object.prototype.hasOwnProperty.call(packageFromAnalyzer, prop)) {
                     return packageFromAnalyzer[prop];
                 }
             }
@@ -500,7 +510,7 @@ export function convertToRenderFormat(reportData) {
         }
 
         return tmp;
-    })(reportData.analyzer_result.packages || []);
+    })(reportData.analyzer.result.packages || []);
     // Transform Scanner results to be indexed by package Id for faster lookups
     const packagesFromScanner = ((dataArr) => {
         const tmp = {};
@@ -510,9 +520,9 @@ export function convertToRenderFormat(reportData) {
         }
 
         return tmp;
-    })(reportData.scan_results || []);
-    const packageErrorsFromAnalyzer = reportData.analyzer_result.errors;
-    const projectsFromAnalyzer = reportData.analyzer_result.projects;
+    })(reportData.scanner.results.scan_results || []);
+    const packageErrorsFromAnalyzer = reportData.analyzer.result.errors;
+    const projectsFromAnalyzer = reportData.analyzer.result.projects;
     /* Helper function to recursive traverse over the packages
      * found by the Analyzer so they can be transformed
      * into a format that suitable for use in the WebApp
@@ -547,55 +557,51 @@ export function convertToRenderFormat(reportData) {
 
             return accumulator;
         }, []);
-        const pkgObj = new Proxy((() => {
-            let obj = {
-                id: pkg.id || pkg.name,
-                children,
-                errors: pkg.errors || [],
-                level: dependencyPathFromRoot.length,
-                path: dependencyPathFromRoot,
-                scope: scp
-            };
+        let pkgObj = {
+            id: pkg.id || pkg.name,
+            children,
+            errors: pkg.errors || [],
+            level: dependencyPathFromRoot.length,
+            path: dependencyPathFromRoot,
+            scope: scp
+        };
 
-            obj = addLicensesToPackage(projectIndex, obj);
+        pkgObj = addLicensesToPackage(projectIndex, pkgObj);
 
-            if (delivered) {
-                obj.delivered = delivered;
-            }
+        if (delivered) {
+            pkgObj.delivered = delivered;
+        }
 
-            // Copy over relevant info for a package that is a project
-            // For regular packages this info is looked up
-            // via an ES6 Proxy, see packageProxyHandler
-            if (pkg.definition_file_path) {
-                obj.definition_file_path = pkg.definition_file_path;
-                obj.homepage_url = pkg.homepage_url;
-                obj.vcs = pkg.vcs;
-                obj.vcs_processed = pkg.vcs_processed;
-            }
+        // Copy over relevant info for a package that is a project
+        // For regular packages this info is looked up
+        // via an ES6 Proxy, see packageProxyHandler
+        if (pkg.definition_file_path) {
+            pkgObj.definition_file_path = pkg.definition_file_path;
+            pkgObj.homepage_url = pkg.homepage_url;
+            pkgObj.vcs = pkg.vcs;
+            pkgObj.vcs_processed = pkg.vcs_processed;
+        }
 
-            obj = addErrorsToPackage(projectIndex, obj, pkg.errors || []);
-
-            return obj;
-        })(), packageProxyHandler);
+        pkgObj = addErrorsToPackage(projectIndex, pkgObj, pkg.errors || []);
 
         // Project list is merges multiple occurrances of the same package
         // into same listing modifying pkgObj therefore we make a copy
-        addPackageToProjectList(projectIndex, new Proxy({ ...pkgObj }, packageProxyHandler));
+        addPackageToProjectList(projectIndex, new Proxy({...pkgObj}, packageProxyHandler));
 
-        return pkgObj;
+        return new Proxy(pkgObj, packageProxyHandler);
     };
 
     // Traverse over projects
     for (let i = projectsFromAnalyzer.length - 1; i >= 0; i -= 1) {
         const project = projectsFromAnalyzer[i];
-        const projectIndex = [i];
+        const projectIndex = i;
         let projectFile = project.definition_file_path;
 
         // Add ./ so we never have empty string
         projectFile = './' + projectFile;
         project.definition_file_path = projectFile;
 
-        if (!projects[projectIndex]) {
+        if (!Object.prototype.hasOwnProperty.call(projects, projectIndex)) {
             projects[projectIndex] = addScanResultsToProject({
                 id: project.id,
                 index: i,
@@ -671,8 +677,8 @@ export function convertToRenderFormat(reportData) {
             data: reportDataScopes,
             total: calculateReportDataTotalScopes()
         },
-        vcs: reportData.analyzer_result.vcs || {},
-        vcs_processed: reportData.analyzer_result.vcs_processed || {}
+        vcs: reportData.repository.vcs || {},
+        vcs_processed: reportData.repository.vcs_processed || {}
     };
 }
 
