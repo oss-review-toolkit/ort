@@ -17,18 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
-/**
- * Defines an error message that should be excluded.
- */
-data class ErrorExclude(
-        val message: String,
-        val reason: ExcludeReason,
-        val comment: String
-) {
-    @JsonIgnore
-    val regex = Regex(message, RegexOption.DOT_MATCHES_ALL)
+interface AnalyzerResultPostProcessor {
+    fun postProcess(analyzerResult: AnalyzerResult): AnalyzerResult
 }
