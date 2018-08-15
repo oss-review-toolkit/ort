@@ -59,7 +59,7 @@ object Main {
         }
     }
 
-    @Parameter(description = "A list of package managers to activate.",
+    @Parameter(description = "The list of package managers to activate, in order.",
             names = ["--package-managers", "-m"],
             converter = PackageManagerConverter::class,
             order = PARAMETER_ORDER_OPTIONAL)
