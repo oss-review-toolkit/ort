@@ -245,17 +245,6 @@ object Main {
         }.toSortedSet()
 
         val results = scanner.scan(packagesToScan.map { it.pkg }, outputDir, downloadDir)
-        results.forEach { pkg, result ->
-            outputFormats.forEach { format ->
-                File(outputDir, "scanResults/${pkg.id.toPath()}/scan-results.${format.fileExtension}").also {
-                    format.mapper.writeValue(it, ScanResultContainer(pkg.id, result))
-                }
-            }
-
-            log.debug { "Declared licenses for '${pkg.id}': ${pkg.declaredLicenses.joinToString()}" }
-            log.debug { "Detected licenses for '${pkg.id}': ${result.flatMap { it.summary.licenses }.joinToString()}" }
-        }
-
         val resultContainers = results.map { (pkg, results) ->
             // Remove the raw results from the scan results to reduce the size of the scan result.
             // TODO: Consider adding an option to keep the raw results.
