@@ -25,25 +25,18 @@ import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
-import com.here.ort.model.CuratedPackage
 import com.here.ort.model.Environment
-import com.here.ort.model.Error
-import com.here.ort.model.Identifier
+import com.here.ort.model.ExcludesMarker
+import com.here.ort.model.ExcludesRemover
 import com.here.ort.model.OrtResult
-import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
 import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.ErrorExclude
-import com.here.ort.model.config.PackageExclude
-import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.readValue
 import com.here.ort.utils.log
 
 import java.io.File
-import java.util.SortedSet
 
 class Analyzer {
     fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
@@ -123,195 +116,21 @@ class Analyzer {
 
         val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
-        var analyzerResult = analyzerResultBuilder.build()
-
-        if (config.removeExcludesFromResult) {
-            val globalExcludedScopeNames = repositoryConfiguration.excludes?.scopes?.map { it.name } ?: emptyList()
-            val globalExcludedPackageIds = repositoryConfiguration.excludes?.packages?.map { it.id } ?: emptyList()
-            val globalExcludedErrorMessages = repositoryConfiguration.excludes?.errors
-                    ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) } ?: emptyList()
-
-            val projects = analyzerResult.projects.map { project ->
-                val projectExclude = repositoryConfiguration.excludes?.projects
-                        ?.find { it.path == project.definitionFilePath }
-
-                val excludedScopeNames = projectExclude?.scopes?.map { it.name } ?: emptyList()
-                val excludedPackageIds = projectExclude?.packages?.map { it.id } ?: emptyList()
-                val excludedErrorMessages = projectExclude?.errors
-                        ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) } ?: emptyList()
-
-                var filteredProject = filterExcludedScopes(project, globalExcludedScopeNames + excludedScopeNames)
-                filteredProject = filterExcludedPackages(filteredProject, globalExcludedPackageIds + excludedPackageIds)
-                filterExcludedErrors(filteredProject, globalExcludedErrorMessages + excludedErrorMessages)
-            }
-
-            val packages = filterUnreferencedPackages(projects, analyzerResult.packages)
-
-            val filteredErrors = mutableMapOf<Identifier, List<Error>>()
-            analyzerResult.errors.forEach { id, errors ->
-                val project = analyzerResult.projects.find { it.id == id }
-                val projectExclude = repositoryConfiguration.excludes?.projects
-                        ?.find { it.path == project?.definitionFilePath }
-                val excludedErrorMessages = (projectExclude?.errors
-                        ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
-                        ?: emptyList()) + globalExcludedErrorMessages
-
-                val filtered = errors.filter { error -> excludedErrorMessages.none { it.matches(error.message) } }
-                if (filtered.isNotEmpty()) {
-                    filteredErrors[id] = filtered
-                }
-            }
-
-            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet(), packages = packages,
-                    errors = filteredErrors.toSortedMap())
-        } else {
-            var projects = analyzerResult.projects.map { project ->
-                val projectExclude = repositoryConfiguration.excludes?.projects
-                        ?.find { it.path == project.definitionFilePath }
-
-                if (projectExclude != null) {
-                    applyProjectExclude(project, projectExclude)
+        val analyzerResult = analyzerResultBuilder.build().let { analyzerResult ->
+            repositoryConfiguration.excludes?.let { excludes ->
+                val excludesProcessor = if (config.removeExcludesFromResult) {
+                    ExcludesRemover(excludes)
                 } else {
-                    project
+                    ExcludesMarker(excludes)
                 }
-            }
 
-            repositoryConfiguration.excludes?.scopes?.let { scopeExcludes ->
-                projects = applyScopeExcludes(projects, scopeExcludes)
-            }
-
-            repositoryConfiguration.excludes?.packages?.let { packageExcludes ->
-                projects = applyPackageExcludes(projects, packageExcludes)
-            }
-
-            repositoryConfiguration.excludes?.errors?.let { errorExcludes ->
-                projects = applyErrorExcludes(projects, errorExcludes)
-            }
-
-            val globalExcludedErrorMessages = repositoryConfiguration.excludes?.errors
-                    ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) } ?: emptyList()
-
-            val errors = analyzerResult.errors.mapValues { (id, errors) ->
-                val project = analyzerResult.projects.find { it.id == id }
-                val projectExclude = repositoryConfiguration.excludes?.projects
-                        ?.find { it.path == project?.definitionFilePath }
-                val excludedErrorMessages = (projectExclude?.errors
-                        ?.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
-                        ?: emptyList()) + globalExcludedErrorMessages
-
-                errors.map { error ->
-                    if (excludedErrorMessages.any { it.matches(error.message) }) {
-                        error.copy(excluded = true)
-                    } else {
-                        error
-                    }
-                }
-            }
-
-            analyzerResult = analyzerResult.copy(projects = projects.toSortedSet(), errors = errors.toSortedMap())
+                excludesProcessor.postProcess(analyzerResult)
+            } ?: analyzerResult
         }
 
         val run = AnalyzerRun(Environment(), config, analyzerResult)
 
         return OrtResult(repository, run)
-    }
-
-    private fun applyProjectExclude(project: Project, projectExclude: ProjectExclude): Project {
-        val excludedScopeNames = projectExclude.scopes.map { it.name }
-        val excludedPackageIds = projectExclude.packages.map { it.id }
-        val excludedErrorMessages = projectExclude.errors.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
-
-        val scopes = project.scopes.map { scope ->
-            val dependencies = scope.dependencies.map { pkgRef ->
-                pkgRef.traverse {
-                    val errors = it.errors.map { error ->
-                        if (excludedErrorMessages.any { it.matches(error.message) }) {
-                            error.copy(excluded = true)
-                        } else {
-                            error
-                        }
-                    }
-
-                    if (it.id in excludedPackageIds) {
-                        it.copy(errors = errors, excluded = true)
-                    } else {
-                        it.copy(errors = errors)
-                    }
-                }
-            }.toSortedSet()
-
-            if (scope.name in excludedScopeNames) {
-                scope.copy(excluded = true, dependencies = dependencies)
-            } else {
-                scope.copy(dependencies = dependencies)
-            }
-        }
-
-        return project.copy(excluded = projectExclude.exclude, scopes = scopes.toSortedSet())
-    }
-
-    private fun applyScopeExcludes(projects: List<Project>, scopeExcludes: List<ScopeExclude>): List<Project> {
-        val excludedScopeNames = scopeExcludes.map { it.name }
-
-        return projects.map { project ->
-            val scopes = project.scopes.map {
-                if (it.name in excludedScopeNames && !it.excluded) {
-                    it.copy(excluded = true)
-                } else {
-                    it
-                }
-            }
-
-            project.copy(scopes = scopes.toSortedSet())
-        }
-    }
-
-    private fun applyPackageExcludes(projects: List<Project>, packageExcludes: List<PackageExclude>): List<Project> {
-        val excludedPackageIds = packageExcludes.map { it.id }
-
-        return projects.map { project ->
-            val scopes = project.scopes.map { scope ->
-                val dependencies = scope.dependencies.map { pkgRef ->
-                    pkgRef.traverse {
-                        if (it.id in excludedPackageIds) {
-                            it.copy(excluded = true)
-                        } else {
-                            it
-                        }
-                    }
-                }
-
-                scope.copy(dependencies = dependencies.toSortedSet())
-            }
-
-            project.copy(scopes = scopes.toSortedSet())
-        }
-    }
-
-    private fun applyErrorExcludes(projects: List<Project>, errorExcludes: List<ErrorExclude>): List<Project> {
-        val excludedErrorMessages = errorExcludes.map { Regex(it.message, RegexOption.DOT_MATCHES_ALL) }
-
-        return projects.map { project ->
-            val scopes = project.scopes.map { scope ->
-                val dependencies = scope.dependencies.map { pkgRef ->
-                    pkgRef.traverse {
-                        val errors = it.errors.map { error ->
-                            if (excludedErrorMessages.any { it.matches(error.message) }) {
-                                error.copy(excluded = true)
-                            } else {
-                                error
-                            }
-                        }
-
-                        it.copy(errors = errors)
-                    }
-                }
-
-                scope.copy(dependencies = dependencies.toSortedSet())
-            }
-
-            project.copy(scopes = scopes.toSortedSet())
-        }
     }
 
     private fun filterExcludedProjects(
@@ -345,55 +164,5 @@ class Analyzer {
         }
 
         return filteredManagedDefinitionFiles
-    }
-
-    private fun filterExcludedScopes(project: Project, excludedScopeNames: List<String>): Project {
-        val filteredScopes = project.scopes.filter { it.name !in excludedScopeNames }
-
-        return project.copy(scopes = filteredScopes.toSortedSet())
-    }
-
-    private fun filterExcludedPackages(project: Project, excludedPackageIds: List<Identifier>): Project {
-        val filteredScopes = project.scopes.map { scope ->
-            val dependencies = scope.dependencies.map { pkgRef ->
-                pkgRef.traverse {
-                    if (it.id in excludedPackageIds) {
-                        it.copy(excluded = true)
-                    } else {
-                        it
-                    }
-                }
-            }
-
-            scope.copy(dependencies = dependencies.toSortedSet())
-        }
-
-        return project.copy(scopes = filteredScopes.toSortedSet())
-    }
-
-    private fun filterExcludedErrors(project: Project, excludedErrorMessages: List<Regex>): Project {
-        val filteredScopes = project.scopes.map { scope ->
-            val dependencies = scope.dependencies.map { pkgRef ->
-                pkgRef.traverse {
-                    val filteredErrors = it.errors.filter { error ->
-                        excludedErrorMessages.none { it.matches(error.message) }
-                    }
-
-                    it.copy(errors = filteredErrors)
-                }
-            }
-
-            scope.copy(dependencies = dependencies.toSortedSet())
-        }
-
-        return project.copy(scopes = filteredScopes.toSortedSet())
-    }
-
-    private fun filterUnreferencedPackages(projects: List<Project>, packages: SortedSet<CuratedPackage>)
-            : SortedSet<CuratedPackage> {
-        val packageIdentifiers = projects.flatMap { project ->
-            project.scopes.flatMap { it.collectDependencyIds(includeExcluded = false) }
-        }.toSet()
-        return packages.filter { it.pkg.id in packageIdentifiers }.toSortedSet()
     }
 }
