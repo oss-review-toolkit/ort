@@ -1,11 +1,9 @@
 excludes:
   projects:
   - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm/package.json"
-    type: "OTHER"
     reason: "OTHER"
     comment: "Project not delivered."
   - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app1/build.gradle"
-    type: "OTHER"
     scopes:
     - name: "testAnnotationProcessor"
       reason: "OTHER"
@@ -30,13 +28,11 @@ excludes:
       reason: "OTHER"
       comment: "Undelivered dependency."
   - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/gradle/app2/build.gradle"
-    type: "OTHER"
     errors:
     - message: ".*Could not find org.example:another-nonexistent-package:1.0.*"
       reason: "OTHER"
       comment: "Undelivered dependency."
   - path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/maven/broken1/pom.xml"
-    type: "OTHER"
     errors:
     - message: ".*The groupId cannot be empty."
       reason: "OTHER"

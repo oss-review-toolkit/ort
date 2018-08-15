@@ -28,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
  */
 data class ProjectExclude(
         val path: String,
-        val type: ProjectType,
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val reason: ExcludeReason?,
         @JsonInclude(JsonInclude.Include.NON_NULL)
