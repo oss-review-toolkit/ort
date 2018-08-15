@@ -233,7 +233,7 @@ object ScanCode : LocalScanner() {
         }
 
         errors.clear()
-        errors += mappedErrors.distinct()
+        errors += mappedErrors.distinctBy { it.message }
 
         return onlyMemoryErrors
     }
