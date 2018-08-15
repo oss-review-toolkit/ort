@@ -52,6 +52,7 @@ import com.here.ort.utils.unpack
 import java.io.File
 import java.io.IOException
 import java.time.Instant
+import java.util.EnumSet
 import java.util.SortedSet
 
 import kotlin.system.exitProcess
@@ -176,7 +177,7 @@ object Main {
     @Parameter(description = "The data entities from the dependencies analysis file to download.",
             names = ["--entities", "-e"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var entities = enumValues<DataEntity>().asList()
+    private var entities = EnumSet.allOf(DataEntity::class.java)
 
     @Parameter(description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
             "these revision are forbidden because they are not pointing to a stable revision of the source code.",
