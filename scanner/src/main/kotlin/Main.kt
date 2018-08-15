@@ -200,7 +200,11 @@ object Main {
         val ortResult = dependenciesFile?.let { scanDependenciesFile(it, config) }
                 ?: scanInputPath(inputPath!!, config)
 
-        writeResult(outputDir, ortResult)
+        outputFormats.forEach { format ->
+            val scanRecordFile = File(outputDir, "scan-result.${format.fileExtension}")
+            println("Writing scan record to '${scanRecordFile.absolutePath}'.")
+            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, ortResult)
+        }
     }
 
     private fun scanDependenciesFile(dependenciesFile: File, config: ScannerConfiguration): OrtResult {
@@ -316,13 +320,5 @@ object Main {
         val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration(null))
 
         return OrtResult(repository, scanner = scannerRun)
-    }
-
-    private fun writeResult(outputDirectory: File, ortResult: OrtResult) {
-        outputFormats.forEach { format ->
-            val scanRecordFile = File(outputDirectory, "scan-result.${format.fileExtension}")
-            println("Writing scan record to '${scanRecordFile.absolutePath}'.")
-            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, ortResult)
-        }
     }
 }
