@@ -48,11 +48,9 @@ class RepositoryConfigurationTest : WordSpec() {
                     excludes:
                       projects:
                       - path: "project1/path"
-                        type: "OTHER"
                         reason: "OTHER"
                         comment: "project comment"
                       - path: "project2/path"
-                        type: "OTHER"
                         packages:
                         - id: "provider:namespace:name:version"
                           reason: "OTHER"
@@ -89,7 +87,6 @@ class RepositoryConfigurationTest : WordSpec() {
 
                 val project1 = projects[0]
                 project1.path shouldBe "project1/path"
-                project1.type shouldBe ProjectType.OTHER
                 project1.reason shouldBe ExcludeReason.OTHER
                 project1.comment shouldBe "project comment"
                 project1.exclude shouldBe true
@@ -99,7 +96,6 @@ class RepositoryConfigurationTest : WordSpec() {
 
                 val project2 = projects[1]
                 project2.path shouldBe "project2/path"
-                project2.type shouldBe ProjectType.OTHER
                 project2.reason shouldBe null
                 project2.comment shouldBe null
                 project2.exclude shouldBe false

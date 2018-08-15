@@ -2,7 +2,6 @@
 excludes:
   projects:
   - path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
-    type: "OTHER"
     reason: "OTHER"
     comment: "Project not delivered."
   scopes:
