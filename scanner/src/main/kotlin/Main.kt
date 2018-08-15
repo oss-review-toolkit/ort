@@ -86,11 +86,11 @@ object Main {
             order = PARAMETER_ORDER_OPTIONAL)
     private var inputPath: File? = null
 
-    @Parameter(description = "The list of scopes that shall be scanned. Works only with the " +
+    @Parameter(description = "The set of scopes that shall be scanned. Works only with the " +
             "--dependencies-file parameter. If empty, all scopes are scanned.",
             names = ["--scopes"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var scopesToScan = listOf<String>()
+    private var scopesToScan = setOf<String>()
 
     @Parameter(description = "The output directory to store the scan results in.",
             names = ["--output-dir", "-o"],
@@ -116,10 +116,10 @@ object Main {
     @Suppress("LateinitUsage")
     private var configFile: File? = null
 
-    @Parameter(description = "The list of output formats used for the result file(s).",
+    @Parameter(description = "The set of output formats used for the result file(s).",
             names = ["--output-formats", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var outputFormats = listOf(OutputFormat.YAML)
+    private var outputFormats = setOf(OutputFormat.YAML)
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
