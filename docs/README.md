@@ -110,15 +110,15 @@ The Analyzer determines the dependencies of software projects inside the specifi
 querying whatever [supported package manager](../analyzer/src/main/kotlin/managers) is found. No modifications to your
 existing project source code, or especially to the build system, are necessary for that to work. The tree of transitive
 dependencies per project is written out as [ABCD](https://github.com/nexB/aboutcode/tree/master/aboutcode-data)-style
-YAML (or JSON, see `-f`) files to the specified output directory (`-o`) whose inner structure mirrors the one from the
-input directory. The output files exactly document the status quo of all package-related meta-data. They can and
-probably need to be further processed or manually edited before passing them to one of the other tools.
+YAML (or JSON, see `-f`) file named `analyzer-result.yml` to the specified output directory (`-o`). The output file
+exactly documents the status quo of all package-related meta-data. It can be further processed or manually edited before
+passing it to one of the other tools.
 
 ### [downloader](../downloader/src/main/kotlin)
 
-Taking a single ABCD-syle dependencies file as the input (`-d`), the Downloader retrieves the source code of all
-contained packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs
-and using the [appropriate VCS tool](../downloader/src/main/kotlin/vcs) to checkout source code from version control.
+Taking the ABCD-syle dependencies file as the input (`-d`), the Downloader retrieves the source code of all contained
+packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs and using
+the [appropriate VCS tool](../downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
 ### [scanner](../scanner/src/main/kotlin)
 
@@ -126,15 +126,14 @@ This tool wraps underlying license / copyright scanners with a common API. This 
 in the same way to easily run them and compare their results. If passed a dependencies analysis file (`-d`), the Scanner
 will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In order to not
 download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote cache, hosted
-e.g. on [Artifactory](../scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented). Using the example of
-configuring an Artifactory cache, the YAML-based configuration file would look like:
+e.g. on [Artifactory](../scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented, see
+[#752](https://github.com/heremaps/oss-review-toolkit/issues/752)). Using the example of configuring an Artifactory
+cache, the YAML-based configuration file would look like:
 
 ```yaml
-scanner:
-  cache:
-    type: Artifactory
-    url: "https://artifactory.domain.com/artifactory/generic-repository-name"
-    apiToken: $ARTIFACTORY_API_KEY
+artifactory_cache:
+  url: "https://artifactory.domain.com/artifactory/generic-repository-name"
+  apiToken: $ARTIFACTORY_API_KEY
 ```
 
 ### [reporter](../reporter/src/main/kotlin)
