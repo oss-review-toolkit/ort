@@ -64,11 +64,11 @@ object Main {
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The set of report formats that will be generated.",
+    @Parameter(description = "The list of report formats that will be generated.",
             names = ["--report-formats", "-f"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
-    private lateinit var reportFormats: Set<ReportFormat>
+    private lateinit var reportFormats: List<ReportFormat>
 
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
