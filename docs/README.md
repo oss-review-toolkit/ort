@@ -39,7 +39,7 @@ The toolkit is envisioned to consist of the following libraries:
 * *Documenter* * - Generates the outcome of the review, e.g. Open Source notices and annotated [SPDX](https://spdx.org/)
   files that can be included into your distribution.
 
-\* Libraries to be completed by Q3 2018.
+\* Libraries to be be implemented see our [roadmap](https://github.com/heremaps/oss-review-toolkit/projects/1) for details. 
 
 ## Installation
 
