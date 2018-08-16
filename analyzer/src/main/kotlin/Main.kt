@@ -79,10 +79,10 @@ object Main {
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The set of output formats used for the result file(s).",
+    @Parameter(description = "The list of output formats used for the result file(s).",
             names = ["--output-formats", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var outputFormats = setOf(OutputFormat.YAML)
+    private var outputFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
             names = ["--ignore-tool-versions"],
