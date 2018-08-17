@@ -39,7 +39,7 @@ import com.here.ort.utils.log
 import java.io.File
 
 class Analyzer {
-    fun analyze(config: AnalyzerConfiguration, absoluteProjectPath: File,
+    fun analyze(analyzerConfiguration: AnalyzerConfiguration, absoluteProjectPath: File,
                 packageManagers: List<PackageManagerFactory<PackageManager>> = PackageManager.ALL,
                 packageCurationsFile: File? = null
     ): OrtResult {
@@ -60,7 +60,7 @@ class Analyzer {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
         }
 
-        if (config.removeExcludesFromResult) {
+        if (analyzerConfiguration.removeExcludesFromResult) {
             managedDefinitionFiles = filterExcludedProjects(managedDefinitionFiles, repositoryConfiguration)
         }
 
@@ -88,7 +88,8 @@ class Analyzer {
 
         // Resolve dependencies per package manager.
         managedDefinitionFiles.forEach { manager, files ->
-            val results = manager.create(config).resolveDependencies(absoluteProjectPath, files)
+            val results = manager.create(analyzerConfiguration, repositoryConfiguration)
+                    .resolveDependencies(absoluteProjectPath, files)
 
             val curatedResults = packageCurationsFile?.let {
                 val provider = YamlFilePackageCurationProvider(it)
@@ -118,7 +119,7 @@ class Analyzer {
 
         val analyzerResult = analyzerResultBuilder.build().let { analyzerResult ->
             repositoryConfiguration.excludes?.let { excludes ->
-                val excludesProcessor = if (config.removeExcludesFromResult) {
+                val excludesProcessor = if (analyzerConfiguration.removeExcludesFromResult) {
                     ExcludesRemover(excludes)
                 } else {
                     ExcludesMarker(excludes)
@@ -128,7 +129,7 @@ class Analyzer {
             } ?: analyzerResult
         }
 
-        val run = AnalyzerRun(Environment(), config, analyzerResult)
+        val run = AnalyzerRun(Environment(), analyzerConfiguration, analyzerResult)
 
         return OrtResult(repository, run)
     }

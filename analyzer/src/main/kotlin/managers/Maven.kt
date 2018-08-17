@@ -34,6 +34,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
@@ -59,13 +60,15 @@ import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
 
-class Maven(config: AnalyzerConfiguration) : PackageManager(config) {
+class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<Maven>(
             "https://maven.apache.org/",
             "Java",
             listOf("pom.xml")
     ) {
-        override fun create(config: AnalyzerConfiguration) = Maven(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Maven(analyzerConfig, repoConfig)
     }
 
     private val maven = MavenSupport { localRepositoryManager ->

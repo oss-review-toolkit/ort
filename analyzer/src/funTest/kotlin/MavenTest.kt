@@ -25,6 +25,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
@@ -45,7 +46,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
-            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -62,7 +63,7 @@ class MavenTest : StringSpec() {
             // jgnash-core depends on jgnash-resources, so we also have to pass the pom.xml of jgnash-resources to
             // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
             // of transitive dependencies would not work.
-            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(pomFileCore, pomFileResources))[pomFileCore]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -76,7 +77,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -94,7 +95,7 @@ class MavenTest : StringSpec() {
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
             // not work.
-            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(pomFileApp, pomFileLib))[pomFileApp]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -108,7 +109,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -128,7 +129,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Maven.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult

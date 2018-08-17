@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.checkCommandVersion
@@ -36,7 +37,8 @@ import java.io.File
 import java.io.IOException
 import java.util.Properties
 
-class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
+class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<SBT>(
             "http://www.scala-sbt.org/",
             "Scala",
@@ -59,7 +61,8 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
             }
         }
 
-        override fun create(config: AnalyzerConfiguration) = SBT(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                SBT(analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File) = if (OS.isWindows) "sbt.bat" else "sbt"
@@ -120,7 +123,7 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
                     sbtVersionRequirement,
                     versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
                     workingDir = workingDir,
-                    ignoreActualVersion = config.ignoreToolVersions,
+                    ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                     transform = this::extractLowestSbtVersion
             )
         } else {
@@ -160,5 +163,6 @@ class SBT(config: AnalyzerConfiguration) : PackageManager(config) {
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            Maven.create(config).enableSbtMode().resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
+            Maven.create(analyzerConfig, repoConfig).enableSbtMode()
+                    .resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
 }

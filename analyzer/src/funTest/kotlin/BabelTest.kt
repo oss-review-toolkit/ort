@@ -25,9 +25,10 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
+import com.here.ort.utils.test.USER_DIR
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
@@ -59,7 +60,7 @@ class BabelTest : WordSpec() {
     init {
         "Babel dependencies" should {
             "be correctly analyzed" {
-                val npm = NPM.create(DEFAULT_ANALYZER_CONFIGURATION)
+                val npm = NPM.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 val packageFile = File(projectDir, "package.json")
 
                 val expectedResult = patchExpectedResult(

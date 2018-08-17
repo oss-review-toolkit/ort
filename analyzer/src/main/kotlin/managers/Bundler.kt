@@ -38,6 +38,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
@@ -60,14 +61,16 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
+class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<Bundler>(
             "http://bundler.io/",
             "Ruby",
             // See http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
             listOf("Gemfile")
     ) {
-        override fun create(config: AnalyzerConfiguration) = Bundler(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Bundler(analyzerConfig, repoConfig)
 
         val bundle = if (OS.isWindows) "bundle.bat" else "bundle"
     }
@@ -82,7 +85,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
         checkCommandVersion(
                 bundle,
                 Requirement.buildIvy("1.16.+"),
-                ignoreActualVersion = config.ignoreToolVersions,
+                ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                 transform = { it.substringAfter("Bundler version ") }
         )
 
@@ -240,7 +243,7 @@ class Bundler(config: AnalyzerConfiguration) : PackageManager(config) {
             workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
-        require(config.allowDynamicVersions || File(workingDir, "Gemfile.lock").isFile) {
+        require(analyzerConfig.allowDynamicVersions || File(workingDir, "Gemfile.lock").isFile) {
             "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
         }
 

@@ -25,9 +25,10 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
+import com.here.ort.utils.test.USER_DIR
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
@@ -62,7 +63,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION)
+                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                         .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
@@ -81,7 +82,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "package-lock")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION)
+                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                         .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
@@ -100,7 +101,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION)
+                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                         .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
@@ -119,7 +120,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION)
+                val result = NPM.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                         .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(

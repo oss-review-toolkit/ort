@@ -35,6 +35,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -51,13 +52,15 @@ import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.util.SortedSet
 
-class Stack(config: AnalyzerConfiguration) : PackageManager(config) {
+class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<Stack>(
             "http://haskellstack.org/",
             "Haskell",
             listOf("stack.yaml")
     ) {
-        override fun create(config: AnalyzerConfiguration) = Stack(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Stack(analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File) = "stack"
