@@ -135,7 +135,7 @@ class SummaryView extends React.Component {
                                     </dt>
                                     <dd>
                                         Dependency defined in
-                                        {''}
+                                        {' '}
                                         {row.file}
                                     </dd>
                                 </dl>
