@@ -39,6 +39,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
@@ -57,13 +58,15 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
-class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
+class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<PhpComposer>(
             "https://getcomposer.org/",
             "PHP",
             listOf("composer.json")
     ) {
-        override fun create(config: AnalyzerConfiguration) = PhpComposer(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                PhpComposer(analyzerConfig, repoConfig)
 
         private const val PHAR_BINARY = "composer.phar"
         private const val LOCK_FILE = "composer.lock"
@@ -99,7 +102,7 @@ class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
                 command(workingDir),
                 Requirement.buildIvy("[1.5,)"),
                 "--no-ansi --version",
-                ignoreActualVersion = config.ignoreToolVersions,
+                ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                 transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
         )
 
@@ -287,7 +290,7 @@ class PhpComposer(config: AnalyzerConfiguration) : PackageManager(config) {
     }
 
     private fun installDependencies(workingDir: File) {
-        require(config.allowDynamicVersions || File(workingDir, LOCK_FILE).isFile) {
+        require(analyzerConfig.allowDynamicVersions || File(workingDir, LOCK_FILE).isFile) {
             "No lock file found in $workingDir, dependency versions are unstable."
         }
 

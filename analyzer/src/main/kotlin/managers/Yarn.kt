@@ -21,6 +21,7 @@ package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.OS
 import com.here.ort.utils.checkCommandVersion
 
@@ -28,13 +29,15 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 
-class Yarn(config: AnalyzerConfiguration) : NPM(config) {
+class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        NPM(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<Yarn>(
             "https://www.yarnpkg.com/",
             "JavaScript",
             listOf("yarn.lock")
     ) {
-        override fun create(config: AnalyzerConfiguration) = Yarn(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Yarn(analyzerConfig, repoConfig)
     }
 
     override val recognizedLockFiles = listOf("yarn.lock")
@@ -49,7 +52,7 @@ class Yarn(config: AnalyzerConfiguration) : NPM(config) {
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
         checkCommandVersion(command(workingDir), Requirement.buildIvy("1.3.+"),
-                ignoreActualVersion = config.ignoreToolVersions)
+                ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         // Map "yarn.lock" files to existing "package.json" files for use by the NPM class (which in this case calls
         // "yarn" to install the dependencies).

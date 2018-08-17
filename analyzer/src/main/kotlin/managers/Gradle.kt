@@ -39,6 +39,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.OS
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
@@ -64,13 +65,15 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.gradle.tooling.GradleConnector
 
-class Gradle(config: AnalyzerConfiguration) : PackageManager(config) {
+class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<Gradle>(
             "https://gradle.org/",
             "Java",
             listOf("build.gradle", "settings.gradle")
     ) {
-        override fun create(config: AnalyzerConfiguration) = Gradle(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Gradle(analyzerConfig, repoConfig)
 
         val gradle = if (OS.isWindows) "gradle.bat" else "gradle"
         val wrapper = if (OS.isWindows) "gradlew.bat" else "gradlew"

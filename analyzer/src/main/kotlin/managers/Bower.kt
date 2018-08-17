@@ -22,16 +22,19 @@ package com.here.ort.analyzer.managers
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 
 import java.io.File
 
-class Bower(config: AnalyzerConfiguration) : PackageManager(config) {
+class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<Bower>(
             "https://bower.io/",
             "JavaScript",
             listOf("bower.json")
     ) {
-        override fun create(config: AnalyzerConfiguration) = Bower(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Bower(analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File) = "bower"

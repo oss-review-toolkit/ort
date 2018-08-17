@@ -26,6 +26,7 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
@@ -48,7 +49,7 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
                 try {
-                    val actualResult = Bundler.create(DEFAULT_ANALYZER_CONFIGURATION)
+                    val actualResult = Bundler.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                             .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
@@ -66,7 +67,7 @@ class BundlerTest : WordSpec() {
             "show error if no lockfile is present" {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
 
-                val actualResult = Bundler.create(DEFAULT_ANALYZER_CONFIGURATION)
+                val actualResult = Bundler.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                         .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
@@ -83,7 +84,7 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "gemspec/Gemfile")
 
                 try {
-                    val actualResult = Bundler.create(DEFAULT_ANALYZER_CONFIGURATION)
+                    val actualResult = Bundler.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                             .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),

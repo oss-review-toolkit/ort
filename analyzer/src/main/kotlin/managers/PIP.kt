@@ -39,6 +39,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
@@ -57,7 +58,8 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
+class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<PIP>(
             "https://pip.pypa.io/",
             "Python",
@@ -65,7 +67,8 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
             // https://caremad.io/posts/2013/07/setup-vs-requirement/.
             listOf("requirements*.txt", "setup.py")
     ) {
-        override fun create(config: AnalyzerConfiguration) = PIP(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                PIP(analyzerConfig, repoConfig)
 
         private const val PIP_VERSION = "9.0.3"
 
@@ -113,7 +116,7 @@ class PIP(config: AnalyzerConfiguration) : PackageManager(config) {
         // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
         checkCommandVersion("virtualenv", Requirement.buildIvy("15.1.+"),
-                ignoreActualVersion = config.ignoreToolVersions)
+                ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         return definitionFiles
     }

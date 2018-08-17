@@ -27,15 +27,18 @@ import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 
 import java.io.File
 
 /**
  * A fake [PackageManager] for projects that do not use any of the known package managers.
  */
-class Unmanaged(config: AnalyzerConfiguration) : PackageManager(config) {
+class Unmanaged(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<Unmanaged>("", "", emptyList()) {
-        override fun create(config: AnalyzerConfiguration) = Unmanaged(config)
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Unmanaged(analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File) = throw NotImplementedError()

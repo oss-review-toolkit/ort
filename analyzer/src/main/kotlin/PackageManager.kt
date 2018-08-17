@@ -29,6 +29,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
@@ -50,7 +51,8 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
 /**
  * A class representing a package manager that handles software dependencies.
  */
-abstract class PackageManager(protected val config: AnalyzerConfiguration) {
+abstract class PackageManager(protected val analyzerConfig: AnalyzerConfiguration,
+                              protected val repoConfig: RepositoryConfiguration) {
     companion object {
         /**
          * The prioritized list of all available package managers. This needs to be initialized lazily to ensure the

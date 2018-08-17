@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
@@ -48,7 +49,7 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -64,7 +65,7 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -80,7 +81,7 @@ class GradleLibraryTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION)
+            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
