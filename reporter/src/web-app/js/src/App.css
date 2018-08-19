@@ -49,6 +49,24 @@ https://ant.design/docs/react/customize-theme
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.ort-app .ort-metadata-props {
+    font-size: 10px;
+}
+
+.ort-app .ort-metadata-props .ort-clickable {
+    font-weight: 400;
+    margin: 3px 0px 5px 0px;
+}
+
+.ort-app .ort-metadata-props th, .ort-app .ort-metadata-props td {
+    vertical-align: top;
+}
+
+.ort-app .ort-metadata-props th {
+    font-weight: 400;
+    width: 90px;
+}
+
 .ort-app ul.ort-table-list {
     list-style-type: none;
     margin: 0;

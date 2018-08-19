@@ -662,6 +662,7 @@ export function convertToRenderFormat(reportData) {
                 detected: calculateReportDataTotalLicenses(detectedLicensesFromScanner)
             }
         },
+        metadata: (reportData.data) ? reportData.data['reporter.metadata'] : {},
         packages: {
             data: {
                 analyzer: packagesFromAnalyzer || {},

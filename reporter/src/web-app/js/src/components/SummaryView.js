@@ -43,7 +43,8 @@ class SummaryView extends React.Component {
         if (props.reportData) {
             this.state = {
                 ...this.state,
-                data: props.reportData
+                data: props.reportData,
+                expandedMetadata: false
             };
             const { data } = this.state;
 
@@ -116,8 +117,12 @@ class SummaryView extends React.Component {
         }, []).reverse();
     }
 
+    onClickReviewMetadata = () => {
+        this.setState(prevState => ({ expandedMetadata: !prevState.expandedMetadata }));
+    };
+
     render() {
-        const { data, viewData } = this.state;
+        const { data, expandedMetadata, viewData } = this.state;
         const nrDetectedLicenses = viewData.charts.totalDetectedLicenses;
         const nrDeclaredLicenses = viewData.charts.totalDeclaredLicenses;
         const nrErrors = viewData.errors.totalOpen;
@@ -317,6 +322,68 @@ class SummaryView extends React.Component {
                     </span>
                 );
             };
+            const renderMetadataTable = () => {
+                if (!data.metadata) {
+                    return null;
+                }
+                
+                if (!expandedMetadata) {
+                    return (
+                        <div className="ort-metadata-props">
+                            <div onClick={this.onClickReviewMetadata} className="ort-clickable">
+                                Show metadata
+                            </div>
+                        </div>
+                    );
+                }
+                
+                return (
+                    <div className="ort-metadata-props">
+                        <div onClick={this.onClickReviewMetadata} className="ort-clickable">
+                            Hide metadata
+                        </div>
+                        <table>
+                            <tbody>
+                                {Object.entries(data.metadata).map(([key, value]) => {
+                                    if (value.length > 0) {
+                                        if (value.startsWith('http')) {
+                                            return (
+                                                <tr key={`metadata-${key}`}>
+                                                <th>
+                                                    {`${key}:`}
+                                                </th>
+                                                <td>
+                                                    <a
+                                                        href={value}
+                                                        rel="noopener noreferrer"
+                                                        target="_blank"
+                                                    >
+                                                        {value}
+                                                    </a>
+                                                </td>
+                                                </tr>
+                                            );
+                                        }
+                                    
+                                        return (
+                                            <tr key={`metadata-${key}`}>
+                                            <th>
+                                                {`${key}:`}
+                                            </th>
+                                            <td>
+                                                {value}
+                                            </td>
+                                            </tr>
+                                        );
+                                    }
+
+                                    return null;
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+              );
+            };
             let vcs;
 
             if (data && data.vcs && data.vcs_processed) {
@@ -344,6 +411,7 @@ class SummaryView extends React.Component {
                             <b>
                                 {vcs.url}
                             </b>
+                            {renderMetadataTable()}
                         </Timeline.Item>
                         <Timeline.Item>
                             Found
