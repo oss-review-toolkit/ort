@@ -2,7 +2,7 @@ import { convertToRenderFormat } from '../utils';
 const protobuf = require("protobufjs");
 
 // Parse JSON report data embedded in HTML page
-const reportDataNode = document.querySelector('script[role="ort-report-data"]');
+const reportDataNode = document.querySelector('script[id="ort-report-data"]');
 const reportDataText = reportDataNode ? reportDataNode.textContent : undefined;
 let reportData = {};
 

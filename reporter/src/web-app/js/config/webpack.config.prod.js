@@ -375,7 +375,7 @@ module.exports = {
                 return console.log(err);
               }
 
-              const result = data.replace(/(<script.*? role="ort-report-data">)([\s\S]*?)(<\/script>)/g,'$1$3');
+              const result = data.replace(/(<script.*? id="ort-report-data">)([\s\S]*?)(<\/script>)/g,'$1$3');
 
               fs.writeFile('./build/scan-report-template.html', result, 'utf8', (err) => {
                  if (err) return console.log(err);
