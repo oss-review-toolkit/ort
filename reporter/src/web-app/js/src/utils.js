@@ -23,7 +23,7 @@ export function isNumeric(n) {
 }
 
 export function convertToRenderFormat(reportData) {
-    if (!reportData
+    if (Object.keys(reportData).length === 0
         || !reportData.analyzer.result
         || !reportData.analyzer.result.projects
         || !reportData.analyzer.result.packages

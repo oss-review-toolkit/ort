@@ -18,7 +18,7 @@
  */
 
 import React, { Component } from 'react';
-import { Row, Tabs } from 'antd';
+import { Alert, Row, Tabs } from 'antd';
 import { connect } from 'react-redux';
 import SummaryView from './components/SummaryView';
 import TableView from './components/TableView';
@@ -43,6 +43,22 @@ class ReporterApp extends Component {
     }
 
     render() {
+        if (Object.keys(this.props.reportData).length === 0) {
+            return (
+                <Row className="ort-app">
+                    <Tabs>
+                        <TabPane tab="Summary" key="1">
+                            <Alert
+                                message="No review results found"
+                                description="Either something went wrong or you are looking at an ORT report template file."
+                                type="error"
+                            />
+                        </TabPane>
+                    </Tabs>
+                </Row>
+            );
+        }
+
         return (
             <Row className="ort-app">
                 <Tabs>
