@@ -149,31 +149,6 @@ const LicenseInfo = (props) => {
                         />
                     </div>
                 </TabPane>
-                <TabPane tab="Fulltext" key="2">
-                    <Table
-                        columns={[{
-                            title: license.name,
-                            dataIndex: 'text',
-                            render: text => (
-                                <pre className="ort-license-fulltext">
-                                    {text}
-                                </pre>
-                            )
-                        }]}
-                        dataSource={[{
-                            key: 1,
-                            dataIndex: 'text',
-                            text: license.licenseText
-                        }]}
-                        pagination={{
-                            hideOnSinglePage: true
-                        }}
-                        scroll={{
-                            y: 365
-                        }}
-                        showHeader={false}
-                    />
-                </TabPane>
             </Tabs>
         </div>
     );

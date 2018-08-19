@@ -2,9 +2,9 @@ import { data as choosealicenseLicenses } from '../data/choosealicense/index';
 import { metadata as choosealicenseMetaData } from '../data/choosealicense/index';
 import { config } from '../config';
 
-const licensesDataFromSPDX = require('spdx-license-list/full');
+const licensesDataFromSPDX = require('spdx-license-list');
 
-export const LICENSES = (() => {
+export const LICENSES = window.licenses = (() => {
     const correctToSPDX = require('spdx-correct');
     const licensesDataFromConfig = (config && config.licenses) ? config.licenses : {};
     const licensesDataFromChoosealicense = choosealicenseLicenses.data;
