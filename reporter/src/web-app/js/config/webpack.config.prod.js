@@ -1,6 +1,8 @@
 'use strict';
 
 const autoprefixer = require('autoprefixer');
+const fs = require('fs');
+const fse = require('fs-extra');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -11,6 +13,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const WebpackEventPlugin = require('webpack-event-plugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -248,10 +251,10 @@ module.exports = {
       inject: true,
       template: paths.appHtml,
       minify: {
-        removeComments: true,
-        collapseWhitespace: true,
+        removeComments: false,
+        collapseWhitespace: false,
         removeRedundantAttributes: true,
-        useShortDoctype: true,
+        useShortDoctype: false,
         removeEmptyAttributes: true,
         removeStyleLinkTypeAttributes: true,
         keepClosingSlash: true,
@@ -286,6 +289,8 @@ module.exports = {
       },
       sourceMap: shouldUseSourceMap,
     }),
+    // Merge chunks
+    new webpack.optimize.AggressiveMergingPlugin(),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
       filename: cssFilename,
@@ -333,6 +338,52 @@ module.exports = {
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new HtmlWebpackInlineSourcePlugin(),
+    new WebpackEventPlugin([
+        {
+          hook: 'after-emit',
+          callback: (compilation) => {
+            console.log('Removing unneeded files...');
+            fse.remove('./build/static')
+            .catch(err => {
+              console.error(err);
+            })
+
+            fse.remove('./build/asset-manifest.json')
+            .catch(err => {
+              console.error(err);
+            })
+
+            fse.remove('./build/favicon.ico')
+            .catch(err => {
+              console.error(err);
+            })
+
+            fse.remove('./build/manifest.json')
+            .catch(err => {
+              console.error(err);
+            })
+
+            fse.remove('./build/service-worker.js')
+            .catch(err => {
+              console.error(err);
+            })
+
+            console.log('Creating ORT template file...');
+
+            fs.readFile('./build/index.html', 'utf8', (err, data) => {
+              if (err) {
+                return console.log(err);
+              }
+
+              const result = data.replace(/(<script.*? role="ort-report-data">)([\s\S]*?)(<\/script>)/g,'$1$3');
+
+              fs.writeFile('./build/scan-report-template.html', result, 'utf8', (err) => {
+                 if (err) return console.log(err);
+              });
+            });
+          }
+        }
+    ])
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
