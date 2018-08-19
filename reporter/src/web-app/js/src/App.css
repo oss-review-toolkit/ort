@@ -28,6 +28,7 @@ body {
     font-size: 14px;
     padding: 0em 1em 0.5em 1em;
     margin: 1em 2em 1em 2em;
+    min-height: 600px;
 }
 
 .ort-app h1, h2, h3, h4 {
