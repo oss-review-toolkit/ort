@@ -113,7 +113,6 @@ object Main {
     @Parameter(description = "The path to the configuration file.",
             names = ["--config", "-c"],
             order = PARAMETER_ORDER_OPTIONAL)
-    @Suppress("LateinitUsage")
     private var configFile: File? = null
 
     @Parameter(description = "The list of output formats used for the result file(s).",
