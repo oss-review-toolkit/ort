@@ -132,9 +132,18 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                 log.info { "Reading $COMPOSER_LOCK_FILE file in ${workingDir.absolutePath}..." }
                 val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
+
+                // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as 
+                // required, but are not listed in composer.lock as installed.  
+                // If we didn't handle them specifically, we would report them as missing when trying to load the 
+                // dependency information for them. We can't simply put these "virtual" packages in the normal package 
+                // map as this would cause us to report a package which is not actually installed with the contents of 
+                // the "replacing" package.
+                val virtualPackages = parseVirtualPackageNames(packages, manifest, lockFile)
+
                 val scopes = sortedSetOf(
-                        parseScope("require", manifest, lockFile, packages),
-                        parseScope("require-dev", manifest, lockFile, packages)
+                        parseScope("require", manifest, lockFile, packages, virtualPackages),
+                        parseScope("require-dev", manifest, lockFile, packages, virtualPackages)
                 )
 
                 Pair(packages, scopes)
@@ -163,29 +172,31 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
         }
     }
 
-    private fun parseScope(scopeName: String, manifest: JsonNode, lockFile: JsonNode, packages: Map<String, Package>)
-            : Scope {
+    private fun parseScope(scopeName: String, manifest: JsonNode, lockFile: JsonNode, packages: Map<String, Package>,
+                           virtualPackages: Set<String>): Scope {
         val requiredPackages = manifest[scopeName]?.fieldNames() ?: listOf<String>().iterator()
-        val dependencies = buildDependencyTree(requiredPackages, lockFile, packages)
+        val dependencies = buildDependencyTree(requiredPackages, lockFile, packages, virtualPackages)
         return Scope(scopeName, dependencies)
     }
 
-    private fun buildDependencyTree(dependencies: Iterator<String>, lockFile: JsonNode,
-                                    packages: Map<String, Package>): SortedSet<PackageReference> {
+    private fun buildDependencyTree(dependencies: Iterator<String>, lockFile: JsonNode, packages: Map<String, Package>,
+                                    virtualPackages: Set<String>): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
 
         dependencies.forEach { packageName ->
             // Composer allows declaring the required PHP version including any extensions, such as "ext-curl". Language
             // implementations are not included in the results from other analyzer modules, so we want to skip them here
             // as well. The special package "composer-plugin-api" is also excluded since it's only used to specify the
-            // supported composer plugin versions. 
-            if (packageName != "php" && !packageName.startsWith("ext-") && packageName != "composer-plugin-api") {
+            // supported composer plugin versions.
+            // Virtual packages are also ignored, since otherwise we would mark them as missing.
+            if (packageName != "php" && !packageName.startsWith("ext-") && packageName != "composer-plugin-api"
+                    && packageName !in virtualPackages) {
                 val packageInfo = packages[packageName]
                         ?: throw IOException("Could not find package info for $packageName")
                 try {
                     val transitiveDependencies = getRuntimeDependencies(packageName, lockFile)
                     packageReferences += packageInfo.toReference(
-                            buildDependencyTree(transitiveDependencies, lockFile, packages))
+                            buildDependencyTree(transitiveDependencies, lockFile, packages, virtualPackages))
                 } catch (e: Exception) {
                     e.showStackTrace()
                     packageInfo.toReference(errors = e.collectMessages().map {
@@ -254,6 +265,38 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
         }
         return packages
     }
+
+    /**
+     * Get all names of "virtual" (replaced or provided) packages in the package or lock file.
+     *
+     * While Composer also takes the versions of the virtual packages into account, we simply use priorities here. Since
+     * Composer can't handle the same package in multiple version, we can assume that as soon as a package is found in
+     * composer.lock we can ignore any virtual package with the same name. Since the code later depends on the virtual
+     * packages not accidentally containing a package which is actually installed, we make sure to only return virtual
+     * packages for which are not in the installed package map.
+     */
+    private fun parseVirtualPackageNames(packages: Map<String, Package>, manifest: JsonNode, lockFile: JsonNode)
+            : Set<String> {
+        val replacedNames = mutableSetOf<String>()
+
+        // The contents of the manifest file, which can also define replacements, is not included in the lock file, so 
+        // we parse the manifest file as well. 
+        replacedNames += parseVirtualNames(manifest)
+
+        listOf("packages", "packages-dev").forEach { type ->
+            lockFile[type]?.flatMap { pkgInfo ->
+                parseVirtualNames(pkgInfo)
+            }?.let {
+                replacedNames += it
+            }
+        }
+        return replacedNames - packages.keys
+    }
+
+    private fun parseVirtualNames(packageInfo: JsonNode) =
+            listOf("replace", "provide").flatMap {
+                packageInfo[it]?.fieldNames()?.asSequence()?.toSet() ?: emptySet()
+            }.toSet()
 
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
             packageInfo["license"]?.mapNotNull { it?.textValue() }?.toSortedSet() ?: sortedSetOf<String>()
