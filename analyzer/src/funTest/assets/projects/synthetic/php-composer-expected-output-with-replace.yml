@@ -1,0 +1,79 @@
+---
+project:
+  id: "PhpComposer:ort:composer-test-project:0.1.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/with-replace/composer.json"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://github.com/heremaps/oss-review-toolkit"
+  scopes:
+  - name: "require"
+    dependencies:
+    - id: "PhpComposer:ort:child2:1.0.0"
+      dependencies: []
+      errors: []
+    - id: "PhpComposer:ort:child4:2.0.0"
+      dependencies: []
+      errors: []
+  - name: "require-dev"
+    dependencies: []
+packages:
+- package:
+    id: "PhpComposer:ort:child2:1.0.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: "composer.phar"
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PhpComposer:ort:child4:2.0.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: "composer.phar"
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+errors: []
