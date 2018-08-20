@@ -178,8 +178,9 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
         dependencies.forEach { packageName ->
             // Composer allows declaring the required PHP version including any extensions, such as "ext-curl". Language
             // implementations are not included in the results from other analyzer modules, so we want to skip them here
-            // as well.
-            if (packageName != "php" && !packageName.startsWith("ext-")) {
+            // as well. The special package "composer-plugin-api" is also excluded since it's only used to specify the
+            // supported composer plugin versions. 
+            if (packageName != "php" && !packageName.startsWith("ext-") && packageName != "composer-plugin-api") {
                 val packageInfo = packages[packageName]
                         ?: throw IOException("Could not find package info for $packageName")
                 try {
