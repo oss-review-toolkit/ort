@@ -70,7 +70,7 @@ object Main {
         override fun convert(scannerName: String): Scanner {
             // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
             return Scanner.ALL.find { it.toString().equals(scannerName, true) }
-                    ?: throw ParameterException("The scanner must be one of ${Scanner.ALL}.")
+                    ?: throw ParameterException("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
         }
     }
 
