@@ -42,7 +42,7 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
-object Licensee : LocalScanner() {
+class Licensee : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
     override val scannerVersion = "9.9.1"
     override val resultFileExt = "json"

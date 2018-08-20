@@ -30,14 +30,16 @@ import java.io.File
 import java.time.Instant
 
 class ScanCodeTest : WordSpec({
+    val scanner = ScanCode()
+
     "mapTimeoutErrors()" should {
         "return true for scan results with only timeout errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
-            val result = ScanCode.getResult(resultFile)
-            val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val result = scanner.getResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
-            ScanCode.mapTimeoutErrors(errors) shouldBe true
+            scanner.mapTimeoutErrors(errors) shouldBe true
             errors.joinToString("\n") { it.message } shouldBe listOf(
                     "ERROR: Timeout after 300 seconds while scanning file " +
                             "'test/3rdparty/syntax/angular-1.2.5.tokens'.",
@@ -69,21 +71,21 @@ class ScanCodeTest : WordSpec({
 
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = ScanCode.getResult(resultFile)
-            val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val result = scanner.getResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
-            ScanCode.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
+            scanner.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
         }
     }
 
     "mapUnknownErrors()" should {
         "return true for scan results with only memory errors" {
             val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
-            val result = ScanCode.getResult(resultFile)
-            val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val result = scanner.getResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
-            ScanCode.mapUnknownErrors(errors) shouldBe true
+            scanner.mapUnknownErrors(errors) shouldBe true
             errors.joinToString("\n") { it.message } shouldBe listOf(
                     "ERROR: MemoryError while scanning file 'data.json'."
             ).joinToString("\n")
@@ -91,11 +93,11 @@ class ScanCodeTest : WordSpec({
 
         "return false for scan results with other unknown errors" {
             val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
-            val result = ScanCode.getResult(resultFile)
-            val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val result = scanner.getResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
-            ScanCode.mapUnknownErrors(errors) shouldBe false
+            scanner.mapUnknownErrors(errors) shouldBe false
             errors.joinToString("\n") { it.message } shouldBe listOf(
                     "ERROR: AttributeError while scanning file 'compiler/testData/cli/js-dce/withSourceMap.js.map' " +
                             "('NoneType' object has no attribute 'splitlines')."
@@ -104,10 +106,10 @@ class ScanCodeTest : WordSpec({
 
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = ScanCode.getResult(resultFile)
-            val summary = ScanCode.generateSummary(Instant.now(), Instant.now(), result)
+            val result = scanner.getResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
-            ScanCode.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
+            scanner.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
         }
     }
 
@@ -116,14 +118,14 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/oss-review-toolkit-license-and-readme_scancode-2.9.2.json")
             val result = jsonMapper.readTree(resultFile)
 
-            ScanCode.getRootLicense(result) shouldBe "Apache-2.0"
+            scanner.getRootLicense(result) shouldBe "Apache-2.0"
         }
 
         "succeed for a result containing a LICENSE.BSD file" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
             val result = jsonMapper.readTree(resultFile)
 
-            ScanCode.getRootLicense(result) shouldBe "BSD-2-Clause"
+            scanner.getRootLicense(result) shouldBe "BSD-2-Clause"
         }
     }
 
@@ -135,9 +137,9 @@ class ScanCodeTest : WordSpec({
                 it["path"].asText() == "test/3rdparty/jquery-1.9.1.js"
             }!!.get("copyrights")
 
-            ScanCode.getClosestCopyrightStatements(copyrights, 5) shouldBe
+            scanner.getClosestCopyrightStatements(copyrights, 5) shouldBe
                     sortedSetOf("Copyright 2005, 2012 jQuery Foundation, Inc.")
-            ScanCode.getClosestCopyrightStatements(copyrights, 3690) shouldBe
+            scanner.getClosestCopyrightStatements(copyrights, 3690) shouldBe
                     sortedSetOf("Copyright 2012 jQuery Foundation")
         }
 
@@ -148,7 +150,7 @@ class ScanCodeTest : WordSpec({
                 it["path"].asText() == "test/3rdparty/mootools-1.4.5.js"
             }!!.get("copyrights")
 
-            ScanCode.getClosestCopyrightStatements(copyrights, 28) shouldBe sortedSetOf(
+            scanner.getClosestCopyrightStatements(copyrights, 28) shouldBe sortedSetOf(
                     "Copyright (c) 2005-2007 Sam Stephenson",
                     "Copyright (c) 2006 Dean Edwards, GNU Lesser General Public",
                     "Copyright (c) 2006-2012 Valerio Proietti"
@@ -161,14 +163,14 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/oss-review-toolkit-license-and-readme_scancode-2.9.2.json")
             val result = jsonMapper.readTree(resultFile)
 
-            ScanCode.associateFindings(result) shouldBe sortedSetOf(
+            scanner.associateFindings(result) shouldBe sortedSetOf(
                     LicenseFinding("Apache-2.0", sortedSetOf("Copyright (c) 2017-2018 HERE Europe B.V."))
             )
         }
 
         "properly associate licenses to copyrights" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = ScanCode.getResult(resultFile)
+            val result = scanner.getResult(resultFile)
 
             val expectedFindings = sortedSetOf(
                     LicenseFinding(
@@ -225,7 +227,7 @@ class ScanCodeTest : WordSpec({
                             )
                     )
             )
-            val actualFindings = ScanCode.associateFindings(result)
+            val actualFindings = scanner.associateFindings(result)
 
             actualFindings shouldBe expectedFindings
         }

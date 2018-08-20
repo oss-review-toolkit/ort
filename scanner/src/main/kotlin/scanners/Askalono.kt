@@ -48,7 +48,7 @@ import okhttp3.Request
 
 import okio.Okio
 
-object Askalono : LocalScanner() {
+class Askalono : LocalScanner() {
     private val extension = when {
         OS.isLinux -> "linux"
         OS.isMac -> "osx"

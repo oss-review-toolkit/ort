@@ -49,7 +49,7 @@ import okhttp3.Request
 
 import okio.Okio
 
-object BoyterLc : LocalScanner() {
+class BoyterLc : LocalScanner() {
     override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
     override val scannerVersion = "1.3.1"
     override val resultFileExt = "json"
