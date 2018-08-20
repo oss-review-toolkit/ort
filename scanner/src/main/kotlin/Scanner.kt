@@ -43,15 +43,10 @@ abstract class Scanner {
     }
 
     /**
-     * Scan the [packages] using this [Scanner].
-     *
-     * @param packages The packages to scan.
-     * @param outputDirectory Where to store the scan results.
-     * @param downloadDirectory Where to store the downloaded source code. If null the source code is downloaded to the
-     *                          outputDirectory.
-     *
-     * @return The scan results by identifier. It can contain multiple results for one identifier if the
-     *         cache contains more than one result for the specification of this scanner.
+     * Scan the list of [packages] using this [Scanner] and store the scan results in [outputDirectory]. If
+     * [downloadDirectory] is specified, it is used instead of [outputDirectory] to download the source code to.
+     * [ScanResult]s are returned associated by the [Package]. The map may contain multiple results for the same
+     * [Package] if the cache contains more than one result for the specification of this scanner.
      */
     abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null)
             : Map<Package, List<ScanResult>>
