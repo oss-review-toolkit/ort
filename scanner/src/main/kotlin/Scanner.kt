@@ -21,25 +21,18 @@ package com.here.ort.scanner
 
 import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
-import com.here.ort.scanner.scanners.*
 
 import java.io.File
+import java.util.ServiceLoader
 
 abstract class Scanner {
     companion object {
+        private val LOADER by lazy { ServiceLoader.load(Scanner::class.java)!! }
+
         /**
-         * The list of all available scanners. This needs to be initialized lazily to ensure the referred objects,
-         * which derive from this class, exist.
+         * The sequence of all available scanners in the classpath.
          */
-        val ALL by lazy {
-            listOf(
-                    Askalono,
-                    BoyterLc,
-                    FileCounter,
-                    Licensee,
-                    ScanCode
-            )
-        }
+        val ALL = LOADER.iterator().asSequence()
     }
 
     /**

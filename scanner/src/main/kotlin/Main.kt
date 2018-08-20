@@ -108,7 +108,7 @@ object Main {
             names = ["--scanner", "-s"],
             converter = ScannerConverter::class,
             order = PARAMETER_ORDER_OPTIONAL)
-    private var scanner: Scanner = ScanCode
+    private var scanner: Scanner = ScanCode()
 
     @Parameter(description = "The path to the configuration file.",
             names = ["--config", "-c"],

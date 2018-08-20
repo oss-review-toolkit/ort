@@ -37,7 +37,7 @@ import java.time.Instant
  * scanners it is useful for testing the scanner tool, for example during development or when integrating it with other
  * tools.
  */
-object FileCounter : LocalScanner() {
+class FileCounter : LocalScanner() {
     data class FileCountResult(val fileCount: Int)
 
     override val resultFileExt = "json"

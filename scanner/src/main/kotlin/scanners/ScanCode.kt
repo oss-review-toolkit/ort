@@ -52,9 +52,9 @@ import java.util.SortedSet
 
 import kotlin.math.absoluteValue
 
-object ScanCode : LocalScanner() {
-    private const val OUTPUT_FORMAT = "json-pp"
-    private const val TIMEOUT = 300
+class ScanCode : LocalScanner() {
+    private val OUTPUT_FORMAT = "json-pp"
+    private val TIMEOUT = 300
 
     /**
      * Configuration options that are relevant for [getConfiguration] because they change the result file.
