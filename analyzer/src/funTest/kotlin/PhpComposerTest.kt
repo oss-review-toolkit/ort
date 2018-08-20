@@ -106,5 +106,35 @@ class PhpComposerTest : StringSpec() {
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
         }
+
+        "Packages defined as provided are not reported as missing" {
+            val definitionFile = File(projectsDir, "with-provide/composer.json")
+
+            val result = PhpComposer.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val expectedResults = patchExpectedResult(
+                    File(projectsDir.parentFile, "php-composer-expected-output-with-provide.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+            )
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+        }
+
+        "Packages defined as replaced are not reported as missing" {
+            val definitionFile = File(projectsDir, "with-replace/composer.json")
+
+            val result = PhpComposer.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val expectedResults = patchExpectedResult(
+                    File(projectsDir.parentFile, "php-composer-expected-output-with-replace.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+            )
+
+            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+        }
     }
 }
