@@ -4,6 +4,20 @@ apply plugin: 'application'
 applicationName = 'reporter'
 mainClassName = 'com.here.ort.reporter.Main'
 
+sourceSets {
+    main {
+        output.dir("$buildDir/generated-resources/main", builtBy: 'copyWebAppTemplate')
+    }
+}
+
+task copyWebAppTemplate(type: Copy, dependsOn: ':reporter-web-app:build') {
+    from(project(':reporter-web-app').file('build')) {
+        include 'scan-report-template.html'
+    }
+
+    into "$buildDir/generated-resources/main"
+}
+
 dependencies {
     compile project(':model')
 
