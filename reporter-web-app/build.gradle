@@ -9,6 +9,12 @@ node {
     nodeModulesDir = file("${project.projectDir}/node")
 }
 
+task clean(type: Delete) {
+    delete 'build'
+    delete 'node_modules'
+    delete 'yarn-error.log'
+}
+
 task install(type: YarnTask) {
     description 'Use Yarn to install the node dependencies. Similar to the "yarn" task but with up-to-date checks.'
     group = 'Node'
