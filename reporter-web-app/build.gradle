@@ -8,3 +8,15 @@ node {
 
     nodeModulesDir = file("${project.projectDir}/node")
 }
+
+task install(type: YarnTask) {
+    description 'Run yarn install to install the node dependencies. Similar to the yarn task but with up-to-date ' +
+            'checks.'
+    group = 'Node'
+    args = ['install']
+
+    inputs.file 'package.json'
+    inputs.file 'yarn.lock'
+
+    outputs.dir 'node_modules'
+}
