@@ -56,6 +56,30 @@ data class AnalyzerResult(
         errors.any { it.value.isNotEmpty() }
                 || projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
     }
+
+    /**
+     * A sorted set containing the [Identifier]s of all packages which are not excluded by the repository configuration.
+     */
+    private val includedPackageIds by lazy {
+        projects.flatMap { project ->
+            if (project.excluded) {
+                emptyList()
+            } else {
+                project.scopes.flatMap { scope ->
+                    if (scope.excluded) {
+                        sortedSetOf()
+                    } else {
+                        scope.collectDependencyIds(includeExcluded = false)
+                    }
+                } + project.id
+            }
+        }.toSortedSet()
+    }
+
+    /**
+     * True if the the analyzer result contains a reference to [id] which is not excluded.
+     */
+    fun includesPackage(id: Identifier) = id in includedPackageIds
 }
 
 class AnalyzerResultBuilder {

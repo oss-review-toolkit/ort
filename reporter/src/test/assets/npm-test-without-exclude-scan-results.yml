@@ -1,0 +1,641 @@
+---
+repository:
+  vcs:
+    type: "Git"
+    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    revision: "70236a25e11bdc59815842aa228a581b2971845a"
+    path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm"
+  vcs_processed:
+    type: "git"
+    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    revision: "70236a25e11bdc59815842aa228a581b2971845a"
+    path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm"
+  config: {}
+analyzer:
+  environment:
+    os: "Linux"
+    tool_versions: {}
+  config:
+    ignore_tool_versions: false
+    allow_dynamic_versions: false
+    remove_excludes_from_result: false
+  result:
+    projects:
+    - id: "NPM::npm-excludes-test-project:1.0.0"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm/package.json"
+      declared_licenses:
+      - "Apache-2.0"
+      vcs:
+        type: "git"
+        url: "https://github.com/heremaps/oss-review-toolkit.git"
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "https://github.com/heremaps/oss-review-toolkit.git"
+        revision: "70236a25e11bdc59815842aa228a581b2971845a"
+        path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm"
+      homepage_url: ""
+      scopes:
+      - name: "dependencies"
+        dependencies:
+        - id: "NPM::domutils:1.5.1"
+          dependencies:
+          - id: "NPM::dom-serializer:0.1.0"
+            dependencies:
+            - id: "NPM::domelementtype:1.1.3"
+              dependencies: []
+              errors: []
+            - id: "NPM::entities:1.1.1"
+              dependencies: []
+              errors: []
+            errors: []
+          - id: "NPM::domelementtype:1.3.0"
+            dependencies: []
+            errors: []
+          errors: []
+        - id: "NPM::nth-check:1.0.1"
+          dependencies:
+          - id: "NPM::boolbase:1.0.0"
+            dependencies: []
+            errors: []
+          errors: []
+      - name: "devDependencies"
+        dependencies:
+        - id: "NPM::safefs:4.1.0"
+          dependencies:
+          - id: "NPM::editions:1.3.4"
+            dependencies: []
+            errors: []
+          - id: "NPM::graceful-fs:4.1.11"
+            dependencies: []
+            errors: []
+          errors: []
+    packages:
+    - package:
+        id: "NPM::boolbase:1.0.0"
+        declared_licenses:
+        - "ISC"
+        description: "two functions: One that returns true, one that returns false"
+        homepage_url: "https://github.com/fb55/boolbase"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
+          hash: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "https://github.com/fb55/boolbase"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/fb55/boolbase.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::dom-serializer:0.1.0"
+        declared_licenses:
+        - "MIT"
+        description: "render dom nodes to string"
+        homepage_url: "https://github.com/cheeriojs/dom-renderer"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.1.0.tgz"
+          hash: "073c697546ce0780ce23be4a28e293e40bc30c82"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/cheeriojs/dom-renderer.git"
+          revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/cheeriojs/dom-renderer.git"
+          revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::domelementtype:1.1.3"
+        declared_licenses: []
+        description: "all the types of nodes in htmlparser2's dom"
+        homepage_url: "https://github.com/FB55/domelementtype"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.1.3.tgz"
+          hash: "bd28773e2642881aec51544924299c5cd822185b"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/FB55/domelementtype.git"
+          revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/FB55/domelementtype.git"
+          revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::domelementtype:1.3.0"
+        declared_licenses: []
+        description: "all the types of nodes in htmlparser2's dom"
+        homepage_url: "https://github.com/FB55/domelementtype"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.0.tgz"
+          hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/FB55/domelementtype.git"
+          revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/FB55/domelementtype.git"
+          revision: "2a95eed4c829ef479a88984d117cb5f4b379e6e8"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::domutils:1.5.1"
+        declared_licenses: []
+        description: "utilities for working with htmlparser2's dom"
+        homepage_url: "https://github.com/FB55/domutils"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
+          hash: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/FB55/domutils.git"
+          revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/FB55/domutils.git"
+          revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::editions:1.3.4"
+        declared_licenses:
+        - "MIT"
+        description: "Publish multiple editions for your JavaScript packages consistently\
+          \ and easily (e.g. source edition, esnext edition, es2015 edition)"
+        homepage_url: "https://github.com/bevry/editions"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/editions/-/editions-1.3.4.tgz"
+          hash: "3662cb592347c3168eb8e498a0ff73271d67f50b"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git+https://github.com/bevry/editions.git"
+          revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/bevry/editions.git"
+          revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::entities:1.1.1"
+        declared_licenses:
+        - "BSD-like"
+        description: "Encode & decode XML/HTML entities with ease"
+        homepage_url: "https://github.com/fb55/node-entities"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz"
+          hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git://github.com/fb55/node-entities.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/fb55/node-entities.git"
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::graceful-fs:4.1.11"
+        declared_licenses:
+        - "ISC"
+        description: "A drop-in replacement for fs, making various improvements."
+        homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.11.tgz"
+          hash: "0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git+https://github.com/isaacs/node-graceful-fs.git"
+          revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/isaacs/node-graceful-fs.git"
+          revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::nth-check:1.0.1"
+        declared_licenses:
+        - "BSD"
+        description: "performant nth-check parser & compiler"
+        homepage_url: "https://github.com/fb55/nth-check"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/nth-check/-/nth-check-1.0.1.tgz"
+          hash: "9929acdf628fc2c41098deab82ac580cf149aae4"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "https://github.com/fb55/nth-check"
+          revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "https://github.com/fb55/nth-check.git"
+          revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+          path: ""
+      curations: []
+    - package:
+        id: "NPM::safefs:4.1.0"
+        declared_licenses:
+        - "MIT"
+        description: "Stop getting EMFILE errors! Open only as many files as the operating\
+          \ system supports."
+        homepage_url: "https://github.com/bevry/safefs"
+        binary_artifact:
+          url: ""
+          hash: ""
+          hash_algorithm: ""
+        source_artifact:
+          url: "https://registry.npmjs.org/safefs/-/safefs-4.1.0.tgz"
+          hash: "f82aeb4bdd7ae51f653eb20f6728b3058c8d6445"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: "git"
+          url: "git+ssh://git@github.com/bevry/safefs.git"
+          revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+          path: ""
+        vcs_processed:
+          type: "git"
+          url: "ssh://git@github.com/bevry/safefs.git"
+          revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+          path: ""
+      curations: []
+    errors: {}
+    has_errors: false
+scanner:
+  environment:
+    os: "Linux"
+    tool_versions: {}
+  config:
+    artifactory_cache: null
+  results:
+    scanned_scopes:
+    - id: "NPM::npm-excludes-test-project:1.0.0"
+      scanned_scopes:
+      - "dependencies"
+      - "devDependencies"
+      ignored_scopes: []
+    scan_results:
+    - id: "NPM::boolbase:1.0.0"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:18:03.477Z"
+          source_artifact:
+            url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
+            hash: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+            hash_algorithm: "SHA-1"
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:18:03.655Z"
+          end_time: "2018-08-21T16:19:07.982Z"
+          file_count: 3
+          license_findings: []
+          errors: []
+    - id: "NPM::dom-serializer:0.1.0"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:19:07.992Z"
+          vcs_info:
+            type: "Git"
+            url: "https://github.com/cheeriojs/dom-renderer.git"
+            revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+            resolved_revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "https://github.com/cheeriojs/dom-renderer.git"
+            revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:19:11.776Z"
+          end_time: "2018-08-21T16:19:18.803Z"
+          file_count: 6
+          license_findings:
+          - license: "MIT"
+            copyrights:
+            - "Copyright (c) 2014"
+          errors: []
+    - id: "NPM::domelementtype:1.1.3"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:19:18.808Z"
+          vcs_info:
+            type: "Git"
+            url: "https://github.com/FB55/domelementtype.git"
+            revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+            resolved_revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "https://github.com/FB55/domelementtype.git"
+            revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:19:22.400Z"
+          end_time: "2018-08-21T16:19:28.061Z"
+          file_count: 4
+          license_findings:
+          - license: "BSD-2-Clause"
+            copyrights:
+            - "Copyright (c) Felix Bohm"
+          errors: []
+    - id: "NPM::domelementtype:1.3.0"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:19:32.272Z"
+          source_artifact:
+            url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.0.tgz"
+            hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
+            hash_algorithm: "SHA-1"
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:19:32.275Z"
+          end_time: "2018-08-21T16:19:37.899Z"
+          file_count: 4
+          license_findings:
+          - license: "BSD-2-Clause"
+            copyrights:
+            - "Copyright (c) Felix Bohm"
+          errors: []
+    - id: "NPM::domutils:1.5.1"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:19:37.901Z"
+          vcs_info:
+            type: "Git"
+            url: "https://github.com/FB55/domutils.git"
+            revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+            resolved_revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "https://github.com/FB55/domutils.git"
+            revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:19:41.516Z"
+          end_time: "2018-08-21T16:19:48.668Z"
+          file_count: 15
+          license_findings:
+          - license: "BSD-2-Clause"
+            copyrights:
+            - "Copyright (c) Felix Bohm"
+          errors: []
+    - id: "NPM::editions:1.3.4"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:19:48.671Z"
+          vcs_info:
+            type: "Git"
+            url: "https://github.com/bevry/editions.git"
+            revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+            resolved_revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "https://github.com/bevry/editions.git"
+            revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:19:52.958Z"
+          end_time: "2018-08-21T16:20:00.707Z"
+          file_count: 16
+          license_findings:
+          - license: "MIT"
+            copyrights: []
+          errors: []
+    - id: "NPM::entities:1.1.1"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:20:00.710Z"
+          vcs_info:
+            type: "Git"
+            url: "https://github.com/fb55/node-entities.git"
+            revision: "40063d9eb44858a78dc33b4e7680f32a87981582"
+            resolved_revision: "40063d9eb44858a78dc33b4e7680f32a87981582"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "https://github.com/fb55/node-entities.git"
+            revision: ""
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:20:07.184Z"
+          end_time: "2018-08-21T16:20:14.326Z"
+          file_count: 14
+          license_findings:
+          - license: "BSD-2-Clause"
+            copyrights:
+            - "(c) http://mathiasbynens.be/notes/javascript-encoding"
+            - "Copyright (c) Felix Bohm"
+          - license: "BSD-3-Clause"
+            copyrights: []
+          errors: []
+    - id: "NPM::graceful-fs:4.1.11"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:20:14.329Z"
+          vcs_info:
+            type: "Git"
+            url: "https://github.com/isaacs/node-graceful-fs.git"
+            revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+            resolved_revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "https://github.com/isaacs/node-graceful-fs.git"
+            revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:20:18.211Z"
+          end_time: "2018-08-21T16:20:25.187Z"
+          file_count: 22
+          license_findings:
+          - license: "ISC"
+            copyrights:
+            - "Copyright (c) Isaac Z. Schlueter, Ben Noordhuis, and Contributors"
+          errors: []
+    - id: "NPM::npm-excludes-test-project:1.0.0"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:20:45.663Z"
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:20:45.663Z"
+          end_time: "2018-08-21T16:20:45.663Z"
+          file_count: 0
+          license_findings: []
+          errors:
+          - timestamp: "2018-08-21T16:20:45.663Z"
+            source: "ScanCode"
+            message: "DownloadException: No source artifact URL provided for 'NPM::npm-excludes-test-project:1.0.0'."
+          - timestamp: "2018-08-21T16:20:45.663Z"
+            source: "ScanCode"
+            message: "DownloadException: Git failed to download from URL 'https://github.com/heremaps/oss-review-toolkit.git'."
+          - timestamp: "2018-08-21T16:20:45.663Z"
+            source: "ScanCode"
+            message: "IOException: Unable to determine a revision to checkout."
+    - id: "NPM::nth-check:1.0.1"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:20:45.664Z"
+          vcs_info:
+            type: "Git"
+            url: "https://github.com/fb55/nth-check.git"
+            revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+            resolved_revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "https://github.com/fb55/nth-check.git"
+            revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:20:49.321Z"
+          end_time: "2018-08-21T16:20:56.137Z"
+          file_count: 7
+          license_findings:
+          - license: "BSD-3-Clause"
+            copyrights: []
+          errors: []
+    - id: "NPM::safefs:4.1.0"
+      results:
+      - provenance:
+          download_time: "2018-08-21T16:20:56.138Z"
+          vcs_info:
+            type: "Git"
+            url: "ssh://git@github.com/bevry/safefs.git"
+            revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+            resolved_revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+            path: ""
+          original_vcs_info:
+            type: "git"
+            url: "ssh://git@github.com/bevry/safefs.git"
+            revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
+            path: ""
+        scanner:
+          name: "scancode"
+          version: "2.9.2"
+          configuration: "--copyright --license --info --strip-root --timeout 300\
+            \ --json-pp"
+        summary:
+          start_time: "2018-08-21T16:21:01.542Z"
+          end_time: "2018-08-21T16:21:08.734Z"
+          file_count: 12
+          license_findings:
+          - license: "MIT"
+            copyrights:
+            - "Copyright (c) 2011-2012 http://balupton.com' Benjamin Lupton"
+          errors: []
+    cache_stats:
+      num_reads: 11
+      num_hits: 0
+    has_errors: true
