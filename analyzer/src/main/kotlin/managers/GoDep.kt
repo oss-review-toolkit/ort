@@ -47,22 +47,17 @@ import java.io.IOException
 import java.net.URI
 import java.nio.file.Paths
 
+val GO_LEGACY_MANIFESTS = mapOf(
+        "glide.yaml" to "glide.lock",
+        "Godeps.json" to null
+)
+
 /**
  * The Dep package manager for Go, see https://golang.github.io/dep/.
  */
 class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<GoDep>(
-            // FIXME DRY names of legacy manifest files
-            listOf("Gopkg.toml", "glide.yaml", "Godeps.json")
-    ) {
-        private const val NO_LOCKFILE = "NO_LOCKFILE"
-
-        private val LEGACY_MANIFESTS = mapOf(
-                "glide.yaml" to "glide.lock",
-                "Godeps.json" to NO_LOCKFILE
-        )
-
+    companion object : PackageManagerFactory<GoDep>(listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 GoDep(analyzerConfig, repoConfig)
     }
@@ -77,7 +72,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
-        if (definitionFile.name in LEGACY_MANIFESTS.keys) {
+        if (definitionFile.name in GO_LEGACY_MANIFESTS.keys) {
             importLegacyManifest(definitionFile, projectDir, workingDir, gopath)
         }
 
@@ -160,9 +155,9 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     }
 
     private fun importLegacyManifest(definitionFile: File, projectDir: File, workingDir: File, gopath: File) {
-        val lockfileName = LEGACY_MANIFESTS[definitionFile.name]
+        val lockfileName = GO_LEGACY_MANIFESTS[definitionFile.name]
 
-        if (lockfileName != NO_LOCKFILE && !File(workingDir, lockfileName).isFile &&
+        if (lockfileName != null && !File(workingDir, lockfileName).isFile &&
                 !analyzerConfig.allowDynamicVersions) {
             throw IllegalArgumentException("No lockfile found in ${projectDir.invariantSeparatorsPath}, dependency " +
                     "versions are unstable.")
