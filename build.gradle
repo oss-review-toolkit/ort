@@ -18,6 +18,8 @@ subprojects {
         }
     }
 
+    if (it.name == 'reporter-web-app') return
+
     // Apply third-party plugins.
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.jetbrains.dokka'

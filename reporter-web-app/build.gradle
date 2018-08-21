@@ -1,0 +1,10 @@
+plugins {
+    id 'com.moowork.node' version '1.2.0'
+}
+
+node {
+    version = '8.11.4'
+    yarnVersion = '1.9.4'
+
+    nodeModulesDir = file("${project.projectDir}/node")
+}
