@@ -205,36 +205,25 @@ class SummaryView extends React.Component {
             return null;
         };
         const SummaryLicenseCharts = () => {
-            const renderDetectedLicenseTab = () => {
-                if (nrDeclaredLicenses !== 0) {
-                    return (
-                        <TabPane
-                            tab={(
-                                <span>
-                                    Detected licenses (
-                                    {nrDetectedLicenses}
-                                    )
-                                </span>
-                            )}
-                            key="1"
-                        >
-                            <LicenseChart
-                                label="Detected licenses"
-                                licenses={viewData.charts.detectedLicenses}
-                                width={800}
-                                height={500}
-                            />
-                        </TabPane>
-                    );
-                }
-
-                // If return empty span to prevent React render error
-                return null;
-            };
-
             return (
                 <Tabs tabPosition="top">
-                    {renderDetectedLicenseTab()}
+                    <TabPane
+                        tab={(
+                            <span>
+                                Detected licenses (
+                                {nrDetectedLicenses}
+                                )
+                            </span>
+                        )}
+                        key="1"
+                    >
+                        <LicenseChart
+                            label="Detected licenses"
+                            licenses={viewData.charts.detectedLicenses}
+                            width={800}
+                            height={500}
+                        />
+                    </TabPane>
                     <TabPane
                         tab={(
                             <span>
