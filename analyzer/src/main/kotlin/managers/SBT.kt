@@ -37,13 +37,12 @@ import java.io.File
 import java.io.IOException
 import java.util.Properties
 
+/**
+ * The SBT package manager for Scala, see https://www.scala-sbt.org/.
+ */
 class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<SBT>(
-            "http://www.scala-sbt.org/",
-            "Scala",
-            listOf("build.sbt", "build.scala")
-    ) {
+    companion object : PackageManagerFactory<SBT>(listOf("build.sbt", "build.scala")) {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")

@@ -58,15 +58,14 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
+/**
+ * The PIP package manager for Python, see https://pip.pypa.io/. Also see
+ * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
+ * https://caremad.io/posts/2013/07/setup-vs-requirement/.
+ */
 class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<PIP>(
-            "https://pip.pypa.io/",
-            "Python",
-            // See https://packaging.python.org/discussions/install-requires-vs-requirements/ and
-            // https://caremad.io/posts/2013/07/setup-vs-requirement/.
-            listOf("requirements*.txt", "setup.py")
-    ) {
+    companion object : PackageManagerFactory<PIP>(listOf("requirements*.txt", "setup.py")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 PIP(analyzerConfig, repoConfig)
 

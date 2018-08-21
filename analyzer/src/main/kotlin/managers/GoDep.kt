@@ -47,11 +47,12 @@ import java.io.IOException
 import java.net.URI
 import java.nio.file.Paths
 
+/**
+ * The Dep package manager for Go, see https://golang.github.io/dep/.
+ */
 class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<GoDep>(
-            "https://golang.github.io/dep/",
-            "Go",
             // FIXME DRY names of legacy manifest files
             listOf("Gopkg.toml", "glide.yaml", "Godeps.json")
     ) {

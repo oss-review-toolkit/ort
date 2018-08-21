@@ -60,13 +60,12 @@ import org.eclipse.aether.repository.LocalRepository
 import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
 
+/**
+ * The Maven package manager for Java, see https://maven.apache.org/.
+ */
 class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Maven>(
-            "https://maven.apache.org/",
-            "Java",
-            listOf("pom.xml")
-    ) {
+    companion object : PackageManagerFactory<Maven>(listOf("pom.xml")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Maven(analyzerConfig, repoConfig)
     }

@@ -26,13 +26,12 @@ import com.here.ort.model.config.RepositoryConfiguration
 
 import java.io.File
 
+/**
+ * The CocoaPods package manager for Objective-C, see https://cocoapods.org/.
+ */
 class CocoaPods(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<CocoaPods>(
-            "https://cocoapods.org/",
-            "Objective-C",
-            listOf("Podfile.lock", "Podfile")
-    ) {
+    companion object : PackageManagerFactory<CocoaPods>(listOf("Podfile.lock", "Podfile")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 CocoaPods(analyzerConfig, repoConfig)
     }

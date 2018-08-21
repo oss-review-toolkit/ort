@@ -26,13 +26,12 @@ import com.here.ort.model.config.RepositoryConfiguration
 
 import java.io.File
 
+/**
+ * The Bower package manager for JavaScript, see https://bower.io/.
+ */
 class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Bower>(
-            "https://bower.io/",
-            "JavaScript",
-            listOf("bower.json")
-    ) {
+    companion object : PackageManagerFactory<Bower>(listOf("bower.json")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Bower(analyzerConfig, repoConfig)
     }

@@ -28,16 +28,10 @@ import java.nio.file.FileSystems
  * A factory to create new instances of [T]. It also stores some static information about the [PackageManager] type it
  * creates.
  *
- * @property homepageUrl The URL to the package manager's homepage.
- * @property primaryLanguage The name of the programming language this package manager is primarily used with.
  * @param globsForDefinitionFiles A prioritized list of glob patterns of definition files supported by this package
  *                                manager. Only all matches of the first glob having any matches is considered.
  */
-abstract class PackageManagerFactory<out T : PackageManager>(
-        val homepageUrl: String,
-        val primaryLanguage: String,
-        globsForDefinitionFiles: List<String>
-) {
+abstract class PackageManagerFactory<out T : PackageManager>(globsForDefinitionFiles: List<String>) {
     /**
      * Create a new instance of the [PackageManager].
      */
