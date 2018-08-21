@@ -18,3 +18,17 @@ task install(type: YarnTask) {
 
     outputs.dir 'node_modules'
 }
+
+task build(type: YarnTask, dependsOn: install) {
+    description 'Use Yarn to build the package. Similar to the "yarn_build" task but with up-to-date checks.'
+    group = 'Node'
+    args = ['build']
+
+    inputs.dir 'config'
+    inputs.dir 'node_modules'
+    inputs.dir 'public'
+    inputs.dir 'scripts'
+    inputs.dir 'src'
+
+    outputs.dir 'build'
+}
