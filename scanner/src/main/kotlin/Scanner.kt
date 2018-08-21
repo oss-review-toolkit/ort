@@ -30,9 +30,9 @@ abstract class Scanner {
         private val LOADER by lazy { ServiceLoader.load(Scanner::class.java)!! }
 
         /**
-         * The sequence of all available scanners in the classpath.
+         * The list of all available scanners in the classpath.
          */
-        val ALL = LOADER.iterator().asSequence()
+        val ALL = LOADER.iterator().asSequence().toList()
     }
 
     /**
