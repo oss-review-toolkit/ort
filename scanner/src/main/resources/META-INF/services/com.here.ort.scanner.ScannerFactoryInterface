@@ -1,0 +1,5 @@
+com.here.ort.scanner.scanners.Askalono$Factory
+com.here.ort.scanner.scanners.BoyterLc$Factory
+com.here.ort.scanner.scanners.FileCounter$Factory
+com.here.ort.scanner.scanners.Licensee$Factory
+com.here.ort.scanner.scanners.ScanCode$Factory

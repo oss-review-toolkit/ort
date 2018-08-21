@@ -19,29 +19,12 @@
 
 package com.here.ort.scanner
 
-import ch.frankel.slf4k.*
-
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 
-import com.here.ort.downloader.consolidateProjectPackagesByVcs
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Environment
-import com.here.ort.model.Error
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
-import com.here.ort.model.ProjectScanScopes
-import com.here.ort.model.Provenance
-import com.here.ort.model.Repository
-import com.here.ort.model.ScanRecord
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerRun
-import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.scanner.scanners.ScanCode
@@ -49,13 +32,10 @@ import com.here.ort.utils.PARAMETER_ORDER_HELP
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
-import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
-import com.here.ort.utils.showStackTrace
 
 import java.io.File
-import java.time.Instant
 
 import kotlin.system.exitProcess
 
@@ -66,8 +46,8 @@ object Main {
     const val TOOL_NAME = "scanner"
     const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
-    private class ScannerConverter : IStringConverter<Scanner> {
-        override fun convert(scannerName: String): Scanner {
+    private class ScannerConverter : IStringConverter<ScannerFactoryInterface> {
+        override fun convert(scannerName: String): ScannerFactoryInterface {
             // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
             return Scanner.ALL.find { it.toString().equals(scannerName, true) }
                     ?: throw ParameterException("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
@@ -108,7 +88,7 @@ object Main {
             names = ["--scanner", "-s"],
             converter = ScannerConverter::class,
             order = PARAMETER_ORDER_OPTIONAL)
-    private var scanner: Scanner = ScanCode()
+    private var scannerFactory: ScannerFactoryInterface? = null
 
     @Parameter(description = "The path to the configuration file.",
             names = ["--config", "-c"],
@@ -194,119 +174,27 @@ object Main {
             ScanResultsCache.configure(it)
         }
 
+        val scanner = scannerFactory?.let {
+            it.create(config)
+        } ?: ScanCode(config)
+
         println("Using scanner '$scanner'.")
 
-        val ortResult = dependenciesFile?.let { scanDependenciesFile(it, config) }
-                ?: scanInputPath(inputPath!!, config)
+        val ortResult = dependenciesFile?.let {
+            scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan)
+        } ?: run {
+            require(scanner is LocalScanner) {
+                "To scan local files the chosen scanner must be a local scanner."
+            }
+
+            val localScanner = scanner as LocalScanner
+            localScanner.scanInputPath(inputPath!!, outputDir)
+        }
 
         outputFormats.forEach { format ->
             val scanRecordFile = File(outputDir, "scan-result.${format.fileExtension}")
             println("Writing scan record to '${scanRecordFile.absolutePath}'.")
             format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, ortResult)
         }
-    }
-
-    private fun scanDependenciesFile(dependenciesFile: File, config: ScannerConfiguration): OrtResult {
-        require(dependenciesFile.isFile) {
-            "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
-        }
-
-        val ortResult = dependenciesFile.readValue(OrtResult::class.java)
-
-        require(ortResult.analyzer != null) {
-            "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
-                    "analyzer result."
-        }
-
-        val analyzerResult = ortResult.analyzer!!.result
-
-        // Add the projects as packages to scan.
-        val consolidatedProjectPackageMap = consolidateProjectPackagesByVcs(analyzerResult.projects)
-        val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
-
-        val projectScanScopes = if (scopesToScan.isNotEmpty()) {
-            println("Limiting scan to scopes: $scopesToScan")
-
-            analyzerResult.projects.map { project ->
-                project.scopes.map { it.name }.partition { it in scopesToScan }.let {
-                    ProjectScanScopes(project.id, it.first.toSortedSet(), it.second.toSortedSet())
-                }
-            }
-        } else {
-            analyzerResult.projects.map {
-                val scopes = it.scopes.map { it.name }
-                ProjectScanScopes(it.id, scopes.toSortedSet(), sortedSetOf())
-            }
-        }.toSortedSet()
-
-        val packagesToScan = if (scopesToScan.isNotEmpty()) {
-            consolidatedReferencePackages + analyzerResult.packages.filter { pkg ->
-                analyzerResult.projects.any { it.scopes.any { it.name in scopesToScan && pkg.pkg in it } }
-            }
-        } else {
-            consolidatedReferencePackages + analyzerResult.packages
-        }.toSortedSet()
-
-        val results = scanner.scan(packagesToScan.map { it.pkg }, outputDir, downloadDir)
-        val resultContainers = results.map { (pkg, results) ->
-            // Remove the raw results from the scan results to reduce the size of the scan result.
-            // TODO: Consider adding an option to keep the raw results.
-            ScanResultContainer(pkg.id, results.map { it.copy(rawResult = null) })
-        }.toSortedSet()
-
-        // Add scan results from de-duplicated project packages to result.
-        consolidatedProjectPackageMap.forEach { referencePackage, deduplicatedPackages ->
-            resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
-                deduplicatedPackages.forEach {
-                    resultContainers += resultContainer.copy(id = it.id)
-                }
-            }
-        }
-
-        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsCache.stats)
-
-        val scannerRun = ScannerRun(Environment(), config, scanRecord)
-
-        return OrtResult(ortResult.repository, ortResult.analyzer, scannerRun)
-    }
-
-    private fun scanInputPath(inputPath: File, config: ScannerConfiguration): OrtResult {
-        require(inputPath.exists()) {
-            "Provided path does not exist: ${inputPath.absolutePath}"
-        }
-
-        require(scanner is LocalScanner) {
-            "To scan local files the chosen scanner must be a local scanner."
-        }
-
-        val localScanner = scanner as LocalScanner
-
-        println("Scanning path '${inputPath.absolutePath}'...")
-
-        val result = try {
-            localScanner.scanPath(inputPath, outputDir).also {
-                println("Detected licenses for path '${inputPath.absolutePath}': ${it.summary.licenses.joinToString()}")
-            }
-        } catch (e: ScanException) {
-            e.showStackTrace()
-
-            log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
-
-            val now = Instant.now()
-            val summary = ScanSummary(now, now, 0, sortedSetOf(),
-                    e.collectMessages().map { Error(source = localScanner.javaClass.simpleName, message = it) })
-            ScanResult(Provenance(now), localScanner.getDetails(), summary)
-        }
-
-        val scanResultContainer = ScanResultContainer(Identifier("", "", inputPath.absolutePath, ""), listOf(result))
-
-        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
-
-        val scannerRun = ScannerRun(Environment(), config, scanRecord)
-
-        val vcs = VersionControlSystem.getCloneInfo(inputPath)
-        val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration(null))
-
-        return OrtResult(repository, scanner = scannerRun)
     }
 }

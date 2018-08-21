@@ -29,10 +29,12 @@ import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.Main
 import com.here.ort.scanner.ScanException
+import com.here.ort.scanner.ScannerFactory
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
@@ -48,7 +50,11 @@ import okhttp3.Request
 
 import okio.Okio
 
-class Askalono : LocalScanner() {
+class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
+    class Factory : ScannerFactory<Askalono>() {
+        override fun create(config: ScannerConfiguration) = Askalono(config)
+    }
+
     private val extension = when {
         OS.isLinux -> "linux"
         OS.isMac -> "osx"

@@ -29,9 +29,11 @@ import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
+import com.here.ort.scanner.ScannerFactory
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getCommandVersion
@@ -42,7 +44,11 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
-class Licensee : LocalScanner() {
+class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
+    class Factory : ScannerFactory<Licensee>() {
+        override fun create(config: ScannerConfiguration) = Licensee(config)
+    }
+
     override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
     override val scannerVersion = "9.9.1"
     override val resultFileExt = "json"
