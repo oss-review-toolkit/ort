@@ -166,7 +166,7 @@ export function convertToRenderFormat(reportData) {
                 pkgObj.detected_licenses
             );
         } else {
-            console.error('Package' + pkgObj.id + 'was detected by Analyzer but not scanned');
+            console.error('Package ' + pkgObj.id + ' was detected by Analyzer but not scanned');
         }
 
         return pkgObj;
