@@ -20,6 +20,7 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.LicenseFinding
+import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.scanners.ScanCode
 
@@ -30,7 +31,7 @@ import java.io.File
 import java.time.Instant
 
 class ScanCodeTest : WordSpec({
-    val scanner = ScanCode()
+    val scanner = ScanCode(ScannerConfiguration())
 
     "mapTimeoutErrors()" should {
         "return true for scan results with only timeout errors" {
