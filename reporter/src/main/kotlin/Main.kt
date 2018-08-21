@@ -44,6 +44,7 @@ object Main {
 
     private enum class ReportFormat(private val reporter: Reporter) : Reporter {
         EXCEL(ExcelReporter()),
+        DYNAMIC_HTML(DynamicHtmlReporter()),
         NOTICE(NoticeReporter()),
         STATIC_HTML(StaticHtmlReporter());
 
