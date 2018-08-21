@@ -52,13 +52,12 @@ import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.util.SortedSet
 
+/**
+ * The Stack package manager for Haskell, see https://haskellstack.org/.
+ */
 class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Stack>(
-            "http://haskellstack.org/",
-            "Haskell",
-            listOf("stack.yaml")
-    ) {
+    companion object : PackageManagerFactory<Stack>(listOf("stack.yaml")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Stack(analyzerConfig, repoConfig)
     }

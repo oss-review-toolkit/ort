@@ -36,7 +36,7 @@ import java.io.File
  */
 class Unmanaged(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Unmanaged>("", "", emptyList()) {
+    companion object : PackageManagerFactory<Unmanaged>(emptyList()) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Unmanaged(analyzerConfig, repoConfig)
     }

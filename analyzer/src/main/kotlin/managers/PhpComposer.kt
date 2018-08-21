@@ -58,13 +58,12 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
+/**
+ * The Composer package manager for PHP, see https://getcomposer.org/.
+ */
 class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<PhpComposer>(
-            "https://getcomposer.org/",
-            "PHP",
-            listOf("composer.json")
-    ) {
+    companion object : PackageManagerFactory<PhpComposer>(listOf("composer.json")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 PhpComposer(analyzerConfig, repoConfig)
 

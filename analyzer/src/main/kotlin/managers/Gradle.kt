@@ -65,13 +65,12 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.gradle.tooling.GradleConnector
 
+/**
+ * The Gradle package manager for Java, see https://gradle.org/.
+ */
 class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Gradle>(
-            "https://gradle.org/",
-            "Java",
-            listOf("build.gradle", "settings.gradle")
-    ) {
+    companion object : PackageManagerFactory<Gradle>(listOf("build.gradle", "settings.gradle")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Gradle(analyzerConfig, repoConfig)
 

@@ -61,14 +61,13 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
+/**
+ * The Bundler package manager for Ruby, see https://bundler.io/. Also see
+ * http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
+ */
 class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Bundler>(
-            "http://bundler.io/",
-            "Ruby",
-            // See http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
-            listOf("Gemfile")
-    ) {
+    companion object : PackageManagerFactory<Bundler>(listOf("Gemfile")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Bundler(analyzerConfig, repoConfig)
 

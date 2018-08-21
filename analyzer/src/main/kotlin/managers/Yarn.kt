@@ -29,13 +29,12 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 
+/**
+ * The Yarn package manager for JavaScript, see https://www.yarnpkg.com/.
+ */
 class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         NPM(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Yarn>(
-            "https://www.yarnpkg.com/",
-            "JavaScript",
-            listOf("yarn.lock")
-    ) {
+    companion object : PackageManagerFactory<Yarn>(listOf("yarn.lock")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Yarn(analyzerConfig, repoConfig)
     }

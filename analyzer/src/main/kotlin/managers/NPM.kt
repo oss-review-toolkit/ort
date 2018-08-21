@@ -66,14 +66,13 @@ import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.Hex
 
+/**
+ * The Node package manager for JavaScript, see https://www.npmjs.com/.
+ */
 @Suppress("LargeClass", "TooManyFunctions")
 open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<NPM>(
-            "https://www.npmjs.com/",
-            "JavaScript",
-            listOf("package.json")
-    ) {
+    companion object : PackageManagerFactory<NPM>(listOf("package.json")) {
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 NPM(analyzerConfig, repoConfig)
 
