@@ -36,6 +36,11 @@ abstract class Scanner {
     }
 
     /**
+     * Return the Java class name as a simple way to refer to the scanner.
+     */
+    override fun toString(): String = javaClass.simpleName
+
+    /**
      * Scan the list of [packages] using this [Scanner] and store the scan results in [outputDirectory]. If
      * [downloadDirectory] is specified, it is used instead of [outputDirectory] to download the source code to.
      * [ScanResult]s are returned associated by the [Package]. The map may contain multiple results for the same
@@ -43,9 +48,4 @@ abstract class Scanner {
      */
     abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null)
             : Map<Package, List<ScanResult>>
-
-    /**
-     * Return the Java class name as a simple way to refer to the scanner.
-     */
-    override fun toString(): String = javaClass.simpleName
 }
