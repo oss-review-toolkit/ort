@@ -333,11 +333,13 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 url = map["source-repository-this-location"] ?: map["source-repository-head-location"] ?: ""
         )
 
+        val homepageUrl = map["homepage"] ?: ""
+
         return Package(
                 id = id,
                 declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
                 description = map["description"] ?: "",
-                homepageUrl = map["homepage"] ?: "",
+                homepageUrl = homepageUrl,
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = artifact,
                 vcs = vcs,
