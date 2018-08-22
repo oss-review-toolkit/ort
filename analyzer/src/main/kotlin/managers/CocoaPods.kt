@@ -20,7 +20,7 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
@@ -31,7 +31,9 @@ import java.io.File
  */
 class CocoaPods(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<CocoaPods>(listOf("Podfile.lock", "Podfile")) {
+    class Factory : AbstractPackageManagerFactory<CocoaPods>() {
+        override val globsForDefinitionFiles = listOf("Podfile.lock", "Podfile")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 CocoaPods(analyzerConfig, repoConfig)
     }

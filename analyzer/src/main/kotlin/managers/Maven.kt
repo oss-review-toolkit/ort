@@ -23,7 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
@@ -65,7 +65,9 @@ import org.eclipse.aether.repository.RemoteRepository
  */
 class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Maven>(listOf("pom.xml")) {
+    class Factory : AbstractPackageManagerFactory<Maven>() {
+        override val globsForDefinitionFiles = listOf("pom.xml")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Maven(analyzerConfig, repoConfig)
     }
@@ -145,7 +147,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         val project = Project(
                 id = Identifier(
-                        provider = if (sbtMode) SBT.toString() else Maven.toString(),
+                        provider = if (sbtMode) "SBT" else "Maven",
                         namespace = mavenProject.groupId,
                         name = mavenProject.artifactId,
                         version = mavenProject.version

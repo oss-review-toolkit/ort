@@ -19,7 +19,6 @@
 
 package com.here.ort.analyzer.integration
 
-import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.Bundler
 import com.here.ort.model.Identifier
@@ -53,7 +52,7 @@ class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
     override val expectedManagedFiles by lazy {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
-                Bundler as PackageManagerFactory<PackageManager> to listOf(
+                Bundler.Factory() as PackageManagerFactory to listOf(
                         File(downloadDir, "Gemfile")
                 )
         )

@@ -19,7 +19,6 @@
 
 package com.here.ort.analyzer.integration
 
-import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.analyzer.managers.Maven
@@ -62,14 +61,16 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
             it.name == "settings.gradle" && File(it.parent, "build.gradle") in gradleFiles
         }
 
+        val pomFiles = downloadResult.downloadDirectory.walkTopDown().filter { it.name == "pom.xml" }.toList()
+
         mapOf(
-                Gradle to gradleFiles,
-                Maven to downloadResult.downloadDirectory.walkTopDown().filter { it.name == "pom.xml" }.toList()
+                Gradle.Factory() as PackageManagerFactory to gradleFiles,
+                Maven.Factory() as PackageManagerFactory to pomFiles
         )
     }
 
     override val managedFilesForTest by lazy {
-        mapOf(Gradle as PackageManagerFactory<PackageManager> to
+        mapOf(Gradle.Factory() as PackageManagerFactory to
                 listOf(File(downloadResult.downloadDirectory, "buildSrc/build.gradle")))
     }
 }

@@ -22,7 +22,7 @@ package com.here.ort.analyzer.managers
 import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.OS
@@ -42,26 +42,30 @@ import java.util.Properties
  */
 class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<SBT>(listOf("build.sbt", "build.scala")) {
+    class Factory : AbstractPackageManagerFactory<SBT>() {
+        override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
+
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                SBT(analyzerConfig, repoConfig)
+    }
+
+    companion object {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
         // Batch mode (which suppresses interactive prompts) is only supported on non-Windows, see
         // https://github.com/sbt/sbt-launcher-package/blob/d251388/src/universal/bin/sbt#L86.
-        private val SBT_BATCH_MODE = if (!OS.isWindows) "-batch" else ""
+        private val BATCH_MODE = if (!OS.isWindows) "-batch" else ""
 
         // See https://github.com/sbt/sbt/issues/2695.
-        private val SBT_LOG_NO_FORMAT = "-Dsbt.log.noformat=true".let {
+        private val LOG_NO_FORMAT = "-Dsbt.log.noformat=true".let {
             if (OS.isWindows) {
                 "\"$it\""
             } else {
                 it
             }
         }
-
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                SBT(analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File) = if (OS.isWindows) "sbt.bat" else "sbt"
@@ -118,7 +122,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             checkCommandVersion(
                     command(workingDir),
                     sbtVersionRequirement,
-                    versionArguments = "$SBT_BATCH_MODE $SBT_LOG_NO_FORMAT sbtVersion",
+                    versionArguments = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion",
                     workingDir = workingDir,
                     ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                     transform = this::extractLowestSbtVersion
@@ -140,7 +144,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         }
 
         fun runSBT(vararg command: String) =
-                ProcessCapture(workingDir, command(workingDir), SBT_BATCH_MODE, SBT_LOG_NO_FORMAT, *command)
+                ProcessCapture(workingDir, command(workingDir), BATCH_MODE, LOG_NO_FORMAT, *command)
                         .requireSuccess()
 
         // Get the list of project names.
@@ -160,6 +164,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            Maven.create(analyzerConfig, repoConfig).enableSbtMode()
+            Maven(analyzerConfig, repoConfig)
+                    .enableSbtMode()
                     .resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
 }

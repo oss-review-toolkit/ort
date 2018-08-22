@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
@@ -71,10 +71,14 @@ import org.apache.commons.codec.binary.Hex
  */
 open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<NPM>(listOf("package.json")) {
+    class Factory : AbstractPackageManagerFactory<NPM>() {
+        override val globsForDefinitionFiles = listOf("package.json")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 NPM(analyzerConfig, repoConfig)
+    }
 
+    companion object {
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
          *
@@ -270,7 +274,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
             val module = Package(
                     id = Identifier(
-                            provider = NPM.toString(),
+                            provider = "NPM",
                             namespace = namespace,
                             name = name,
                             version = version

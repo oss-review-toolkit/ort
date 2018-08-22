@@ -21,7 +21,6 @@ package com.here.ort.analyzer
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.analyzer.managers.*
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
 import com.here.ort.model.Identifier
@@ -42,38 +41,30 @@ import java.nio.file.FileSystems
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
+import java.util.ServiceLoader
 
 import kotlin.system.measureTimeMillis
 
-typealias ManagedProjectFiles = Map<PackageManagerFactory<PackageManager>, List<File>>
+typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
 typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
 
 /**
  * A class representing a package manager that handles software dependencies.
+ *
+ * @param analyzerConfig The configuration of the analyzer to use.
+ * @param repoConfig The configuration of the repository to use.
  */
-abstract class PackageManager(protected val analyzerConfig: AnalyzerConfiguration,
-                              protected val repoConfig: RepositoryConfiguration) {
+abstract class PackageManager(
+        protected val analyzerConfig: AnalyzerConfiguration,
+        protected val repoConfig: RepositoryConfiguration
+) {
     companion object {
+        private val LOADER by lazy { ServiceLoader.load(PackageManagerFactory::class.java)!! }
+
         /**
-         * The prioritized list of all available package managers. This needs to be initialized lazily to ensure the
-         * referred objects, which derive from this class, exist.
+         * The (prioritized) list of all available package managers in the classpath.
          */
-        val ALL by lazy {
-            listOf(
-                    Gradle,
-                    Maven,
-                    SBT,
-                    NPM,
-                    Yarn,
-                    // TODO: CocoaPods,
-                    GoDep,
-                    // TODO: Bower,
-                    PIP,
-                    Bundler,
-                    PhpComposer,
-                    Stack
-            )
-        }
+        val ALL = LOADER.iterator().asSequence().toList()
 
         private val IGNORED_DIRECTORY_MATCHERS = listOf(
                 // Ignore resources in a standard Maven / Gradle project layout.
@@ -92,13 +83,13 @@ abstract class PackageManager(protected val analyzerConfig: AnalyzerConfiguratio
          * @param directory The root directory to search for managed files.
          * @param packageManagers A list of package managers to use, defaults to [ALL].
          */
-        fun findManagedFiles(directory: File, packageManagers: List<PackageManagerFactory<PackageManager>> = ALL)
+        fun findManagedFiles(directory: File, packageManagers: List<PackageManagerFactory> = ALL)
                 : ManagedProjectFiles {
             require(directory.isDirectory) {
                 "The provided path is not a directory: ${directory.absolutePath}"
             }
 
-            val result = mutableMapOf<PackageManagerFactory<PackageManager>, MutableList<File>>()
+            val result = mutableMapOf<PackageManagerFactory, MutableList<File>>()
 
             Files.walkFileTree(directory.toPath(), object : SimpleFileVisitor<Path>() {
                 override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {

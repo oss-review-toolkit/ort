@@ -26,7 +26,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.MavenSupport
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
@@ -70,19 +70,26 @@ import org.gradle.tooling.GradleConnector
  */
 class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Gradle>(listOf("build.gradle", "settings.gradle")) {
+    class Factory : AbstractPackageManagerFactory<Gradle>() {
+        override val globsForDefinitionFiles = listOf("build.gradle", "settings.gradle")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Gradle(analyzerConfig, repoConfig)
-
-        val gradle = if (OS.isWindows) "gradle.bat" else "gradle"
-        val wrapper = if (OS.isWindows) "gradlew.bat" else "gradlew"
     }
 
     val maven = MavenSupport { localRepositoryManager ->
         GradleLocalRepositoryManager(localRepositoryManager)
     }
 
-    override fun command(workingDir: File) = if (File(workingDir, wrapper).isFile) wrapper else gradle
+    override fun command(workingDir: File): String {
+        val (gradle, wrapper) = if (OS.isWindows) {
+            Pair("gradle.bat", "gradlew.bat")
+        } else {
+            Pair("gradle", "gradlew")
+        }
+
+        return if (File(workingDir, wrapper).isFile) wrapper else gradle
+    }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val connection = GradleConnector
@@ -158,7 +165,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
             val rawPackage by lazy {
                 Package(
                         id = Identifier(
-                                provider = Maven.toString(),
+                                provider = "Maven",
                                 namespace = dependency.groupId,
                                 name = dependency.artifactId,
                                 version = dependency.version
@@ -199,7 +206,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
         }
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-        return PackageReference(Identifier(Maven.toString(), dependency.groupId, dependency.artifactId,
+        return PackageReference(Identifier("Maven", dependency.groupId, dependency.artifactId,
                 dependency.version), transitiveDependencies.toSortedSet(), errors)
     }
 

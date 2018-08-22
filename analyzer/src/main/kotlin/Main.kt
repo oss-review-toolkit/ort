@@ -47,13 +47,13 @@ object Main {
     const val TOOL_NAME = "analyzer"
     const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
-    private class PackageManagerConverter : IStringConverter<PackageManagerFactory<PackageManager>> {
+    private class PackageManagerConverter : IStringConverter<PackageManagerFactory> {
         companion object {
             // Map upper-cased package manager class names to their instances.
             val PACKAGE_MANAGER_NAMES = PackageManager.ALL.associateBy { it.toString().toUpperCase() }
         }
 
-        override fun convert(name: String): PackageManagerFactory<PackageManager> {
+        override fun convert(name: String): PackageManagerFactory {
             return PACKAGE_MANAGER_NAMES[name.toUpperCase()]
                     ?: throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGER_NAMES.keys}.")
         }

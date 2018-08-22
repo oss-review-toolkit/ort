@@ -40,7 +40,7 @@ import java.io.File
 
 class Analyzer(private val config: AnalyzerConfiguration) {
     fun analyze(absoluteProjectPath: File,
-                packageManagers: List<PackageManagerFactory<PackageManager>> = PackageManager.ALL,
+                packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
                 packageCurationsFile: File? = null
     ): OrtResult {
         val repositoryConfigurationFile = File(absoluteProjectPath, ".ort.yml")
@@ -69,7 +69,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         if (managedFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-            managedFiles[Unmanaged] = listOf(absoluteProjectPath)
+            managedFiles[Unmanaged.Factory()] = listOf(absoluteProjectPath)
         }
 
         if (log.isInfoEnabled) {
@@ -135,9 +135,9 @@ class Analyzer(private val config: AnalyzerConfiguration) {
     }
 
     private fun filterExcludedProjects(
-            managedDefinitionFiles: MutableMap<PackageManagerFactory<PackageManager>, List<File>>,
+            managedDefinitionFiles: MutableMap<PackageManagerFactory, List<File>>,
             repositoryConfiguration: RepositoryConfiguration
-    ): MutableMap<PackageManagerFactory<PackageManager>, List<File>> {
+    ): MutableMap<PackageManagerFactory, List<File>> {
         val excludedProjects = repositoryConfiguration.excludes?.projects?.filter { it.exclude } ?: emptyList()
         val excludedDefinitionFiles = excludedProjects.map { it.path }
 
@@ -156,7 +156,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                     definitionFilesToRemove.joinToString("\n") { it.invariantSeparatorsPath }
         }
 
-        val filteredManagedDefinitionFiles = mutableMapOf<PackageManagerFactory<PackageManager>, List<File>>()
+        val filteredManagedDefinitionFiles = mutableMapOf<PackageManagerFactory, List<File>>()
         managedDefinitionFiles.forEach { packageManager, definitionFiles ->
             val filteredDefinitionFiles = definitionFiles - definitionFilesToRemove
             if (filteredDefinitionFiles.isNotEmpty()) {

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
@@ -58,22 +58,24 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
+const val COMPOSER_PHAR_BINARY = "composer.phar"
+const val COMPOSER_LOCK_FILE = "composer.lock"
+
 /**
  * The Composer package manager for PHP, see https://getcomposer.org/.
  */
 class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<PhpComposer>(listOf("composer.json")) {
+    class Factory : AbstractPackageManagerFactory<PhpComposer>() {
+        override val globsForDefinitionFiles = listOf("composer.json")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 PhpComposer(analyzerConfig, repoConfig)
-
-        private const val PHAR_BINARY = "composer.phar"
-        private const val LOCK_FILE = "composer.lock"
     }
 
     override fun command(workingDir: File) =
-            if (File(workingDir, PHAR_BINARY).isFile) {
-                "php $PHAR_BINARY"
+            if (File(workingDir, COMPOSER_PHAR_BINARY).isFile) {
+                "php $COMPOSER_PHAR_BINARY"
             } else {
                 if (OS.isWindows) {
                     "composer.bat"
@@ -85,7 +87,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
-        if (definitionFiles.all { File(it.parentFile, PHAR_BINARY).isFile }) {
+        if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) {
             return definitionFiles
         }
 
@@ -127,8 +129,8 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
             val (packages, scopes) = if (hasDependencies) {
                 installDependencies(workingDir)
 
-                log.info { "Reading $LOCK_FILE file in ${workingDir.absolutePath}..." }
-                val lockFile = jsonMapper.readTree(File(workingDir, LOCK_FILE))
+                log.info { "Reading $COMPOSER_LOCK_FILE file in ${workingDir.absolutePath}..." }
+                val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
                 val scopes = sortedSetOf(
                         parseScope("require", manifest, lockFile, packages),
@@ -288,7 +290,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
     }
 
     private fun installDependencies(workingDir: File) {
-        require(analyzerConfig.allowDynamicVersions || File(workingDir, LOCK_FILE).isFile) {
+        require(analyzerConfig.allowDynamicVersions || File(workingDir, COMPOSER_LOCK_FILE).isFile) {
             "No lock file found in $workingDir, dependency versions are unstable."
         }
 

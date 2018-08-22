@@ -39,25 +39,26 @@ class PackageManagerTest : WordSpec({
             // entry for each package manager.
             result.keys shouldBe PackageManager.ALL.toSet()
 
-            result[Bundler] shouldBe listOf(File(projectDir, "Gemfile"))
-            result[GoDep] shouldBe listOf(File(projectDir, "Gopkg.toml"))
-            result[Gradle] shouldBe listOf(File(projectDir, "build.gradle"))
-            result[Maven] shouldBe listOf(File(projectDir, "pom.xml"))
-            result[NPM] shouldBe listOf(File(projectDir, "package.json"))
-            result[PhpComposer] shouldBe listOf(File(projectDir, "composer.json"))
-            result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
-            result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
-            result[Stack] shouldBe listOf(File(projectDir, "stack.yaml"))
-            result[Yarn] shouldBe listOf(File(projectDir, "yarn.lock"))
+            result[Bundler.Factory()] shouldBe listOf(File(projectDir, "Gemfile"))
+            result[GoDep.Factory()] shouldBe listOf(File(projectDir, "Gopkg.toml"))
+            result[Gradle.Factory()] shouldBe listOf(File(projectDir, "build.gradle"))
+            result[Maven.Factory()] shouldBe listOf(File(projectDir, "pom.xml"))
+            result[NPM.Factory()] shouldBe listOf(File(projectDir, "package.json"))
+            result[PhpComposer.Factory()] shouldBe listOf(File(projectDir, "composer.json"))
+            result[PIP.Factory()] shouldBe listOf(File(projectDir, "setup.py"))
+            result[SBT.Factory()] shouldBe listOf(File(projectDir, "build.sbt"))
+            result[Stack.Factory()] shouldBe listOf(File(projectDir, "stack.yaml"))
+            result[Yarn.Factory()] shouldBe listOf(File(projectDir, "yarn.lock"))
         }
 
         "find only files for active package managers" {
-            val result = PackageManager.findManagedFiles(projectDir, listOf(Gradle, SBT, PIP))
+            val result = PackageManager.findManagedFiles(projectDir,
+                    listOf(Gradle.Factory(), PIP.Factory(), SBT.Factory()))
 
             result.size shouldBe 3
-            result[Gradle] shouldBe listOf(File(projectDir, "build.gradle"))
-            result[PIP] shouldBe listOf(File(projectDir, "setup.py"))
-            result[SBT] shouldBe listOf(File(projectDir, "build.sbt"))
+            result[Gradle.Factory()] shouldBe listOf(File(projectDir, "build.gradle"))
+            result[PIP.Factory()] shouldBe listOf(File(projectDir, "setup.py"))
+            result[SBT.Factory()] shouldBe listOf(File(projectDir, "build.sbt"))
         }
 
         "find no files if no package managers are active" {

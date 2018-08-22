@@ -20,7 +20,7 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
@@ -31,7 +31,9 @@ import java.io.File
  */
 class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Bower>(listOf("bower.json")) {
+    class Factory : AbstractPackageManagerFactory<Bower>() {
+        override val globsForDefinitionFiles = listOf("bower.json")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Bower(analyzerConfig, repoConfig)
     }
