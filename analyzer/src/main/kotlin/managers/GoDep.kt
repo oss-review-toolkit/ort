@@ -108,10 +108,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
             packages += pkg
 
-            packageRefs += PackageReference(
-                    id = Identifier(provider, "", pkg.id.name, pkg.id.version),
-                    dependencies = sortedSetOf(),
-                    errors = errors)
+            packageRefs += pkg.toReference(errors = errors)
         }
 
         val scope = Scope("default", packageRefs.toSortedSet())
