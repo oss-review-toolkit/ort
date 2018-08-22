@@ -102,7 +102,12 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             managedFiles.forEach { manager, files ->
                 println("Verifying definition files for $manager.")
 
-                val expectedFiles = expectedManagedFiles[manager]
+                // The keys in expected and actual maps of definition files are different instances of package manager
+                // factories. So to compare values use the package manager names as keys instead.
+                val expectedManagedFilesByName = expectedManagedFiles.mapKeys { (manager, _) ->
+                    manager.toString()
+                }
+                val expectedFiles = expectedManagedFilesByName[manager.toString()]
 
                 expectedFiles shouldNotBe null
                 files.sorted().joinToString("\n") shouldBe expectedFiles!!.sorted().joinToString("\n")

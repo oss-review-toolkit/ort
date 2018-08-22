@@ -23,7 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
@@ -57,7 +57,9 @@ import java.util.SortedSet
  */
 class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Stack>(listOf("stack.yaml")) {
+    class Factory : AbstractPackageManagerFactory<Stack>() {
+        override val globsForDefinitionFiles = listOf("stack.yaml")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Stack(analyzerConfig, repoConfig)
     }

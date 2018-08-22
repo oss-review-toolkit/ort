@@ -1,0 +1,10 @@
+com.here.ort.analyzer.managers.Gradle$Factory
+com.here.ort.analyzer.managers.Maven$Factory
+com.here.ort.analyzer.managers.SBT$Factory
+com.here.ort.analyzer.managers.NPM$Factory
+com.here.ort.analyzer.managers.Yarn$Factory
+com.here.ort.analyzer.managers.GoDep$Factory
+com.here.ort.analyzer.managers.PIP$Factory
+com.here.ort.analyzer.managers.Bundler$Factory
+com.here.ort.analyzer.managers.PhpComposer$Factory
+com.here.ort.analyzer.managers.Stack$Factory

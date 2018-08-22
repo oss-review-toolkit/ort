@@ -19,7 +19,7 @@
 
 package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.OS
@@ -34,7 +34,9 @@ import java.io.File
  */
 class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         NPM(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Yarn>(listOf("yarn.lock")) {
+    class Factory : AbstractPackageManagerFactory<Yarn>() {
+        override val globsForDefinitionFiles = listOf("yarn.lock")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Yarn(analyzerConfig, repoConfig)
     }

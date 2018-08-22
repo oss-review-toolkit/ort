@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.HashAlgorithm
@@ -58,6 +58,13 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
+const val PIP_VERSION = "9.0.3"
+
+const val PIPDEPTREE_VERSION = "0.13.0"
+val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
+
+const val PYDEP_REVISION = "license-and-classifiers"
+
 /**
  * The PIP package manager for Python, see https://pip.pypa.io/. Also see
  * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
@@ -65,16 +72,11 @@ import okhttp3.Request
  */
 class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<PIP>(listOf("requirements*.txt", "setup.py")) {
+    class Factory : AbstractPackageManagerFactory<PIP>() {
+        override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 PIP(analyzerConfig, repoConfig)
-
-        private const val PIP_VERSION = "9.0.3"
-
-        private const val PIPDEPTREE_VERSION = "0.13.0"
-        private val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
-
-        private const val PYDEP_REVISION = "license-and-classifiers"
     }
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.

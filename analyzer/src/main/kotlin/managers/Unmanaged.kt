@@ -20,7 +20,7 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
@@ -36,7 +36,9 @@ import java.io.File
  */
 class Unmanaged(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Unmanaged>(emptyList()) {
+    class Factory : AbstractPackageManagerFactory<Unmanaged>() {
+        override val globsForDefinitionFiles = emptyList<String>()
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Unmanaged(analyzerConfig, repoConfig)
     }

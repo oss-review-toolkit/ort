@@ -23,30 +23,44 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
 import java.nio.file.FileSystems
+import java.nio.file.PathMatcher
 
 /**
- * A factory to create new instances of [T]. It also stores some static information about the [PackageManager] type it
- * creates.
- *
- * @param globsForDefinitionFiles A prioritized list of glob patterns of definition files supported by this package
- *                                manager. Only all matches of the first glob having any matches is considered.
+ * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
  */
-abstract class PackageManagerFactory<out T : PackageManager>(globsForDefinitionFiles: List<String>) {
-    /**
-     * Create a new instance of the [PackageManager].
-     */
-    abstract fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): T
-
-    /**
-     * Return the Java class name to make JCommander display a proper name in list parameters of this custom type.
-     */
-    override fun toString() =
-            javaClass.name.substringBefore('$').substringAfterLast('.')
-
+interface PackageManagerFactory {
     /**
      * The glob matchers for all definition files.
      */
-    val matchersForDefinitionFiles = globsForDefinitionFiles.map {
-        FileSystems.getDefault().getPathMatcher("glob:**/$it")
+    val matchersForDefinitionFiles: List<PathMatcher>
+
+    /**
+     * Create a [PackageManager] using the specified [analyzerConfig] and [repoConfig].
+     */
+    fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): PackageManager
+}
+
+/**
+ * A generic factory class for a [PackageManager].
+ */
+abstract class AbstractPackageManagerFactory<out T : PackageManager> : PackageManagerFactory {
+    /**
+     * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
+     * the first glob having any matches are considered.
+     */
+    abstract val globsForDefinitionFiles: List<String>
+
+    override val matchersForDefinitionFiles by lazy {
+        globsForDefinitionFiles.map {
+            FileSystems.getDefault().getPathMatcher("glob:**/$it")
+        }
     }
+
+    abstract override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): T
+
+    /**
+     * Return the Java class name as a simple way to refer to the [AbstractPackageManagerFactory]. As factories are
+     * supposed to be implemented as inner classes we need to manually strip unwanted parts of the fully qualified name.
+     */
+    override fun toString() = javaClass.name.substringBefore('$').substringAfterLast('.')
 }
