@@ -85,7 +85,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             val revision = project["revision"]!!
             val version = project["version"]!!
 
-            val vcs = VcsInfo(provider, name, revision)
+            val vcs = VcsInfo("git", name, revision)
             val errors = mutableListOf<Error>()
 
             val vcsProcessed = try {
