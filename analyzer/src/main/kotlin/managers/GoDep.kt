@@ -23,7 +23,7 @@ import ch.frankel.slf4k.debug
 import ch.frankel.slf4k.warn
 
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
 import com.here.ort.model.Identifier
@@ -57,7 +57,9 @@ val GO_LEGACY_MANIFESTS = mapOf(
  */
 class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<GoDep>(listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())) {
+    class Factory : AbstractPackageManagerFactory<GoDep>() {
+        override val globsForDefinitionFiles = listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 GoDep(analyzerConfig, repoConfig)
     }

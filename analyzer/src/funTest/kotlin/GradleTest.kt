@@ -66,7 +66,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -82,7 +82,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -98,7 +98,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -114,7 +114,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -130,7 +130,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -187,7 +187,7 @@ class GradleTest : StringSpec() {
                         revision = vcsRevision
                 )
 
-                val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+                val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                         .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
@@ -202,7 +202,9 @@ class GradleTest : StringSpec() {
 
         // When calling Windows batch files directly (without passing them to "cmd" as an argument), Windows requires
         // the absolute path to the batch file to be passed to the underlying ProcessBuilder for some reason.
-        val wrapperAbsolutePath = File(projectDir, Gradle.wrapper).absolutePath
+        val wrapperAbsolutePath =
+                File(Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION).command(projectDir))
+                        .absolutePath
 
         ProcessCapture(projectDir, wrapperAbsolutePath, "wrapper", "--gradle-version", version, "--no-daemon")
                 .requireSuccess()

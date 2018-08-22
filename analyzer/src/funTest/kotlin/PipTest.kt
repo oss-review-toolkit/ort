@@ -39,7 +39,7 @@ class PipTest : StringSpec({
     "setup.py dependencies should be resolved correctly for spdx-tools-python" {
         val definitionFile = File(projectsDir, "external/spdx-tools-python/setup.py")
 
-        val result = PIP.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
         val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
 
@@ -49,7 +49,7 @@ class PipTest : StringSpec({
     "requirements.txt dependencies should be resolved correctly for example-python-flask" {
         val definitionFile = File(projectsDir, "external/example-python-flask/requirements.txt")
 
-        val result = PIP.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
         val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
 
@@ -68,7 +68,7 @@ class PipTest : StringSpec({
                 revision = vcsRevision,
                 path = vcsPath)
 
-        val result = PIP.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
         yamlMapper.writeValueAsString(result) shouldBe expectedResult

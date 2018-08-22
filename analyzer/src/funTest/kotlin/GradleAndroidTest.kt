@@ -50,7 +50,7 @@ class GradleAndroidTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -66,7 +66,7 @@ class GradleAndroidTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -82,7 +82,7 @@ class GradleAndroidTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null

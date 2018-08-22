@@ -25,7 +25,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.Main
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
@@ -67,20 +67,22 @@ import okhttp3.Request
  */
 class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
-    companion object : PackageManagerFactory<Bundler>(listOf("Gemfile")) {
+    class Factory : AbstractPackageManagerFactory<Bundler>() {
+        override val globsForDefinitionFiles = listOf("Gemfile")
+
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Bundler(analyzerConfig, repoConfig)
-
-        val bundle = if (OS.isWindows) "bundle.bat" else "bundle"
     }
 
-    override fun command(workingDir: File) = bundle
+    override fun command(workingDir: File) = if (OS.isWindows) "bundle.bat" else "bundle"
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
+        val workingDir = definitionFiles.first().parentFile
+
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
         // fixed versions to be sure to get consistent results.
         checkCommandVersion(
-                bundle,
+                command(workingDir),
                 Requirement.buildIvy("1.16.+"),
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                 transform = { it.substringAfter("Bundler version ") }
