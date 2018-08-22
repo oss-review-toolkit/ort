@@ -20,7 +20,6 @@
 package com.here.ort.analyzer
 
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -33,8 +32,6 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class ExcludesTest : WordSpec() {
-    private val analyzerConfigurationWithRemove = AnalyzerConfiguration(false, false, true)
-
     private val projectPath = File("src/funTest/assets/projects/synthetic/project-with-excludes").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectPath)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -50,7 +47,7 @@ class ExcludesTest : WordSpec() {
                         urlProcessed = normalizeVcsUrl(vcsUrl)
                 )
 
-                val ortResult = Analyzer().analyze(DEFAULT_ANALYZER_CONFIGURATION, projectPath)
+                val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectPath)
 
                 patchActualResult(yamlMapper.writeValueAsString(ortResult)) shouldBe expectedResult
             }
@@ -65,7 +62,8 @@ class ExcludesTest : WordSpec() {
                         urlProcessed = normalizeVcsUrl(vcsUrl)
                 )
 
-                val ortResult = Analyzer().analyze(analyzerConfigurationWithRemove, projectPath)
+                val configWithRemove = DEFAULT_ANALYZER_CONFIGURATION.copy(removeExcludesFromResult = true)
+                val ortResult = Analyzer(configWithRemove).analyze(projectPath)
 
                 patchActualResult(yamlMapper.writeValueAsString(ortResult)) shouldBe expectedResult
             }

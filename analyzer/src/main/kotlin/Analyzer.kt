@@ -38,8 +38,8 @@ import com.here.ort.utils.log
 
 import java.io.File
 
-class Analyzer {
-    fun analyze(analyzerConfiguration: AnalyzerConfiguration, absoluteProjectPath: File,
+class Analyzer(private val config: AnalyzerConfiguration) {
+    fun analyze(absoluteProjectPath: File,
                 packageManagers: List<PackageManagerFactory<PackageManager>> = PackageManager.ALL,
                 packageCurationsFile: File? = null
     ): OrtResult {
@@ -60,7 +60,7 @@ class Analyzer {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
         }
 
-        if (analyzerConfiguration.removeExcludesFromResult) {
+        if (config.removeExcludesFromResult) {
             managedDefinitionFiles = filterExcludedProjects(managedDefinitionFiles, repositoryConfiguration)
         }
 
@@ -88,7 +88,7 @@ class Analyzer {
 
         // Resolve dependencies per package manager.
         managedDefinitionFiles.forEach { manager, files ->
-            val results = manager.create(analyzerConfiguration, repositoryConfiguration)
+            val results = manager.create(config, repositoryConfiguration)
                     .resolveDependencies(absoluteProjectPath, files)
 
             val curatedResults = packageCurationsFile?.let {
@@ -119,7 +119,7 @@ class Analyzer {
 
         val analyzerResult = analyzerResultBuilder.build().let { analyzerResult ->
             repositoryConfiguration.excludes?.let { excludes ->
-                val excludesProcessor = if (analyzerConfiguration.removeExcludesFromResult) {
+                val excludesProcessor = if (config.removeExcludesFromResult) {
                     ExcludesRemover(excludes)
                 } else {
                     ExcludesMarker(excludes)
@@ -129,7 +129,7 @@ class Analyzer {
             } ?: analyzerResult
         }
 
-        val run = AnalyzerRun(Environment(), analyzerConfiguration, analyzerResult)
+        val run = AnalyzerRun(Environment(), config, analyzerResult)
 
         return OrtResult(repository, run)
     }
