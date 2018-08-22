@@ -50,7 +50,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
             )
     )
 
-    override val expectedDefinitionFiles by lazy {
+    override val expectedManagedFiles by lazy {
         // The Gradle project contains far too many definition files to list them all here. Use this tests to double
         // check that all of them are found, and that they are assigned to the correct package manager.
         val gradleFilenames = listOf("build.gradle", "settings.gradle")
@@ -68,7 +68,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
         )
     }
 
-    override val definitionFilesForTest by lazy {
+    override val managedFilesForTest by lazy {
         mapOf(Gradle as PackageManagerFactory<PackageManager> to
                 listOf(File(downloadResult.downloadDirectory, "buildSrc/build.gradle")))
     }

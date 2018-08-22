@@ -52,13 +52,13 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     /**
      * The definition files that are expected to be found by the [PackageManager].
      */
-    protected abstract val expectedDefinitionFiles: ManagedProjectFiles
+    protected abstract val expectedManagedFiles: ManagedProjectFiles
 
     /**
-     * The definition files that shall be used for dependency resolution. Defaults to [expectedDefinitionFiles], but
-     * can be reduced for large projects that have a lot of definition files to speed up the test.
+     * The definition files by package manager that are to be used for testing dependency resolution. Defaults to
+     * [expectedManagedFiles], but can be e.g. limited to a subset of files in big projects to speed up the test.
      */
-    protected open val definitionFilesForTest by lazy { expectedDefinitionFiles }
+    protected open val managedFilesForTest by lazy { expectedManagedFiles }
 
     /**
      * The list of package identifiers for which errors are expected.
@@ -96,13 +96,13 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         }
 
         "All package manager definition files are found".config(tags = setOf(ExpensiveTag)) {
-            val definitionFiles = PackageManager.findManagedFiles(downloadResult.downloadDirectory)
+            val managedFiles = PackageManager.findManagedFiles(downloadResult.downloadDirectory)
 
-            definitionFiles.size shouldBe expectedDefinitionFiles.size
-            definitionFiles.forEach { manager, files ->
+            managedFiles.size shouldBe expectedManagedFiles.size
+            managedFiles.forEach { manager, files ->
                 println("Verifying definition files for $manager.")
 
-                val expectedFiles = expectedDefinitionFiles[manager]
+                val expectedFiles = expectedManagedFiles[manager]
 
                 expectedFiles shouldNotBe null
                 files.sorted().joinToString("\n") shouldBe expectedFiles!!.sorted().joinToString("\n")
@@ -110,7 +110,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         }
 
         "Analyzer creates one non-empty result per definition file".config(tags = setOf(ExpensiveTag)) {
-            definitionFilesForTest.forEach { manager, files ->
+            managedFilesForTest.forEach { manager, files ->
                 println("Resolving $manager dependencies in $files.")
                 val results = manager.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                         .resolveDependencies(USER_DIR, files)

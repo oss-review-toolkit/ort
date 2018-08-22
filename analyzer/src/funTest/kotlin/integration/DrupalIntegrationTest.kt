@@ -52,7 +52,7 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
             )
     )
 
-    override val expectedDefinitionFiles by lazy {
+    override val expectedManagedFiles by lazy {
         val downloadDir = downloadResult.downloadDirectory
 
         mapOf(
@@ -93,7 +93,7 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
         )
     }
 
-    override val definitionFilesForTest by lazy {
+    override val managedFilesForTest by lazy {
         mapOf(PhpComposer as PackageManagerFactory<PackageManager> to
                 // Limit to definition files that come long with a lock file.
                 listOf(File(downloadResult.downloadDirectory, "composer.json")))

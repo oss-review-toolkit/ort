@@ -52,7 +52,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         // Map of files managed by the respective package manager.
-        var managedDefinitionFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        var managedFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
@@ -61,20 +61,20 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         if (config.removeExcludesFromResult) {
-            managedDefinitionFiles = filterExcludedProjects(managedDefinitionFiles, repositoryConfiguration)
+            managedFiles = filterExcludedProjects(managedFiles, repositoryConfiguration)
         }
 
-        val hasDefinitionFileInRootDirectory = managedDefinitionFiles.values.flatten().any {
+        val hasDefinitionFileInRootDirectory = managedFiles.values.flatten().any {
             it.parentFile.absoluteFile == absoluteProjectPath
         }
 
-        if (managedDefinitionFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-            managedDefinitionFiles[Unmanaged] = listOf(absoluteProjectPath)
+        if (managedFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
+            managedFiles[Unmanaged] = listOf(absoluteProjectPath)
         }
 
         if (log.isInfoEnabled) {
             // Log the summary of projects found per package manager.
-            managedDefinitionFiles.forEach { manager, files ->
+            managedFiles.forEach { manager, files ->
                 // No need to use curly-braces-syntax for logging here as the log level check is already done above.
                 log.info("$manager projects found in:")
                 log.info(files.joinToString("\n") {
@@ -87,7 +87,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
         // Resolve dependencies per package manager.
-        managedDefinitionFiles.forEach { manager, files ->
+        managedFiles.forEach { manager, files ->
             val results = manager.create(config, repositoryConfiguration)
                     .resolveDependencies(absoluteProjectPath, files)
 

@@ -50,7 +50,7 @@ class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
             )
     )
 
-    override val expectedDefinitionFiles by lazy {
+    override val expectedManagedFiles by lazy {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
                 Bundler as PackageManagerFactory<PackageManager> to listOf(
