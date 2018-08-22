@@ -186,7 +186,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                             buildDependencyTree(transitiveDependencies, lockFile, packages))
                 } catch (e: Exception) {
                     e.showStackTrace()
-                    PackageReference(packageInfo.id, sortedSetOf<PackageReference>(), e.collectMessages().map {
+                    packageInfo.toReference(errors = e.collectMessages().map {
                         Error(source = javaClass.simpleName, message = it)
                     })
                 }
