@@ -69,7 +69,6 @@ import org.apache.commons.codec.binary.Hex
 /**
  * The Node package manager for JavaScript, see https://www.npmjs.com/.
  */
-@Suppress("LargeClass", "TooManyFunctions")
 open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
     companion object : PackageManagerFactory<NPM>(listOf("package.json")) {
