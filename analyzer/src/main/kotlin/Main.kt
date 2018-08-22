@@ -169,8 +169,8 @@ object Main {
         println("Scanning project path:\n\t$absoluteProjectPath")
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions, removeExcludesFromResult)
-
-        val ortResult = Analyzer().analyze(config, absoluteProjectPath, packageManagers, packageCurationsFile)
+        val analyzer = Analyzer(config)
+        val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile)
 
         absoluteOutputPath.safeMkdirs()
 
