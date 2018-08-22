@@ -37,6 +37,4 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     }
 
     override fun command(workingDir: File) = "bower"
-
-    override fun toString() = Bower.toString()
 }

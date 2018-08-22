@@ -43,8 +43,6 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
 
     override fun command(workingDir: File) = if (OS.isWindows) { "yarn.cmd" } else { "yarn" }
 
-    override fun toString() = Yarn.toString()
-
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val workingDir = definitionFiles.first().parentFile
 

@@ -85,8 +85,6 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
     override fun command(workingDir: File) = "mvn"
 
-    override fun toString() = Maven.toString()
-
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = maven.createProjectBuildingRequest(false)

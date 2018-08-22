@@ -116,8 +116,6 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
     override fun command(workingDir: File) = if (OS.isWindows) { "npm.cmd" } else { "npm" }
 
-    override fun toString() = NPM.toString()
-
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val workingDir = definitionFiles.first().parentFile
 
