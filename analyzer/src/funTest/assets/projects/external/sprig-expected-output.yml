@@ -59,9 +59,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/Masterminds/semver"
-      revision: "59c29afe1a994eacb71c833025ca7acf874bb1da"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -83,9 +83,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/aokoli/goutils"
-      revision: "9c37978a95bd5c709a15883b6242714ea6709e64"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -107,9 +107,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/davecgh/go-spew"
-      revision: "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -131,9 +131,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/huandu/xstrings"
-      revision: "3959339b333561bf62a38b424fd41517c2c90f40"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -155,9 +155,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/imdario/mergo"
-      revision: "3e95a51e0639b4cf372f2ccf74c86749d747fbdc"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -179,9 +179,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/pmezard/go-difflib"
-      revision: "d8ed2627bdf02c080bf22230dbb337003b7aba2d"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -203,9 +203,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/satori/go.uuid"
-      revision: "879c5887cd475cd7864858769793b2ceb0d44feb"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -227,9 +227,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "github.com/stretchr/testify"
-      revision: "e3a8ff8ce36581f87a15341206f205b1da467059"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"
@@ -251,9 +251,9 @@ packages:
       hash: ""
       hash_algorithm: ""
     vcs:
-      type: "GoDep"
-      url: "golang.org/x/crypto"
-      revision: "d172538b2cfce0c13cee31e647d0367aa8cd2486"
+      type: ""
+      url: ""
+      revision: ""
       path: ""
     vcs_processed:
       type: "git"

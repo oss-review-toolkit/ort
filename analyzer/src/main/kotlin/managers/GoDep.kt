@@ -85,11 +85,10 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             val revision = project["revision"]!!
             val version = project["version"]!!
 
-            val vcs = VcsInfo(provider, name, revision)
             val errors = mutableListOf<Error>()
 
             val vcsProcessed = try {
-                resolveVcsInfo(vcs, gopath)
+                resolveVcsInfo(name, revision, gopath)
             } catch (e: IOException) {
                 errors += Error(source = toString(), message = e.toString())
                 VcsInfo.EMPTY
@@ -102,7 +101,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                     homepageUrl = "",
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcs,
+                    vcs = VcsInfo.EMPTY,
                     vcsProcessed = vcsProcessed
             )
 
@@ -220,8 +219,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         return projects
     }
 
-    private fun resolveVcsInfo(vcs: VcsInfo, gopath: File): VcsInfo {
-        val importPath = vcs.url
+    private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
         val env = mapOf("GOPATH" to gopath.absolutePath)
         val pc = ProcessCapture(null, env, "go", "get", "-d", importPath)
 
@@ -245,6 +243,6 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()
 
         // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
-        return processProjectVcs(repoRoot, vcs).copy(revision = vcs.revision)
+        return processProjectVcs(repoRoot).copy(revision = revision)
     }
 }
