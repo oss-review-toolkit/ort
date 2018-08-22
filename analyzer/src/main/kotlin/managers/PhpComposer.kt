@@ -82,8 +82,6 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                 }
             }
 
-    override fun toString() = PhpComposer.toString()
-
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.

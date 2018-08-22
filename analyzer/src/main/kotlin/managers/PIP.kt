@@ -85,8 +85,6 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
     override fun command(workingDir: File) = "pip"
 
-    override fun toString() = PIP.toString()
-
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
             runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 

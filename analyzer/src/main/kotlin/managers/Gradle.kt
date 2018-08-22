@@ -84,8 +84,6 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
     override fun command(workingDir: File) = if (File(workingDir, wrapper).isFile) wrapper else gradle
 
-    override fun toString() = Gradle.toString()
-
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val connection = GradleConnector
                 .newConnector()

@@ -76,8 +76,6 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
     override fun command(workingDir: File) = bundle
 
-    override fun toString() = Bundler.toString()
-
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
         // fixed versions to be sure to get consistent results.

@@ -178,6 +178,11 @@ abstract class PackageManager(protected val analyzerConfig: AnalyzerConfiguratio
     }
 
     /**
+     * Return the Java class name as a simple way to refer to the [PackageManager].
+     */
+    override fun toString(): String = javaClass.simpleName
+
+    /**
      * Return the name of the package manager's command line application. As the preferred command might depend on the
      * working directory it needs to be provided.
      */

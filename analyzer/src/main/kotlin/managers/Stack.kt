@@ -64,8 +64,6 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
     override fun command(workingDir: File) = "stack"
 
-    override fun toString() = Stack.toString()
-
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
 

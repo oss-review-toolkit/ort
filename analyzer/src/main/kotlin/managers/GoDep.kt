@@ -64,8 +64,6 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
     override fun command(workingDir: File) = "dep"
 
-    override fun toString() = GoDep.toString()
-
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)

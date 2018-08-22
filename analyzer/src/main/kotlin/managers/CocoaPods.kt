@@ -37,6 +37,4 @@ class CocoaPods(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryCon
     }
 
     override fun command(workingDir: File) = "pod"
-
-    override fun toString() = CocoaPods.toString()
 }

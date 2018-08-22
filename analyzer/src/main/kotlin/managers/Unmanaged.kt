@@ -43,8 +43,6 @@ class Unmanaged(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryCon
 
     override fun command(workingDir: File) = throw NotImplementedError()
 
-    override fun toString() = Unmanaged.toString()
-
     /**
      * Return a [ProjectAnalyzerResult] for the [Project] contained in the [definitionFile] directory, but does not
      * perform any dependency resolution.
