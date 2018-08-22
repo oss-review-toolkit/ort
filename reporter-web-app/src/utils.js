@@ -149,9 +149,10 @@ export function convertToRenderFormat(reportData) {
             pkgObj.license_findings = packageFromScanner.reduce((accumulator, scanResult) =>
                 accumulator.concat(scanResult.summary.license_findings), []);
 
-            pkgObj.detected_licenses = removeDuplicatesInArray(
-                pkgObj.license_findings.map(finding => finding.license)
-            );
+            pkgObj.detected_licenses = pkgObj.license_findings.reduce((accumulator, finding) => {
+                accumulator.push(finding.license);
+                return accumulator;
+            }, []);
 
             addPackageLicensesToProject(
                 projectIndex,
@@ -166,6 +167,9 @@ export function convertToRenderFormat(reportData) {
                 pkgObj.detected_licenses
             );
         } else {
+            pkgObj.results = [];
+            pkgObj.license_findings = [];
+            pkgObj.detected_licenses = [];
             console.error('Package ' + pkgObj.id + ' was detected by Analyzer but not scanned');
         }
 
