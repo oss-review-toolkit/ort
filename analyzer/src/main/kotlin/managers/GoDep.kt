@@ -91,7 +91,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             val vcsProcessed = try {
                 resolveVcsInfo(vcs, gopath)
             } catch (e: IOException) {
-                errors += Error(source = javaClass.simpleName, message = e.toString())
+                errors += Error(source = toString(), message = e.toString())
                 VcsInfo.EMPTY
             }
 

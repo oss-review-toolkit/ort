@@ -187,7 +187,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                 } catch (e: Exception) {
                     e.showStackTrace()
                     packageInfo.toReference(errors = e.collectMessages().map {
-                        Error(source = javaClass.simpleName, message = it)
+                        Error(source = toString(), message = it)
                     })
                 }
             }

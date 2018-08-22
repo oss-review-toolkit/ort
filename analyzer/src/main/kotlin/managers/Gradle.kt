@@ -137,7 +137,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
             )
 
             val errors = dependencyTreeModel.errors.map {
-                Error(source = javaClass.simpleName, message = it)
+                Error(source = toString(), message = it)
             }
 
             return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), errors)
@@ -148,7 +148,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
                                 repositories: List<RemoteRepository>): PackageReference {
-        val errors = dependency.error?.let { mutableListOf(Error(source = javaClass.simpleName, message = it)) }
+        val errors = dependency.error?.let { mutableListOf(Error(source = toString(), message = it)) }
                 ?: mutableListOf()
 
         // Only look for a package when there was no error resolving the dependency.
@@ -185,7 +185,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
                             "Could not get package information for dependency '$identifier': ${e.message}"
                         }
 
-                        errors += e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
+                        errors += e.collectMessages().map { Error(source = toString(), message = it) }
 
                         rawPackage
                     }

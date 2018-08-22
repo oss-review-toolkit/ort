@@ -406,7 +406,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         } else if (rootDir == startDir) {
             log.error { "Could not find module '$name'." }
             return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
-                    listOf(Error(source = javaClass.simpleName, message = "Package was not installed.")))
+                    listOf(Error(source = toString(), message = "Package was not installed.")))
         } else {
             var parent = startDir.parentFile.parentFile
 
