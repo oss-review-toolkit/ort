@@ -200,7 +200,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.message}"
             log.error { errorMsg }
-            errors += Error(source = javaClass.simpleName, message = errorMsg)
+            errors += Error(source = toString(), message = errorMsg)
         }
     }
 
