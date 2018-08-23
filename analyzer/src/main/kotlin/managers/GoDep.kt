@@ -75,8 +75,8 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         }
 
         val projects = parseProjects(workingDir, gopath)
-        val packages: MutableList<Package> = mutableListOf()
-        val packageRefs: MutableList<PackageReference> = mutableListOf()
+        val packages = mutableListOf<Package>()
+        val packageRefs = mutableListOf<PackageReference>()
         val provider = toString()
 
         for (project in projects) {
@@ -200,7 +200,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             return listOf()
         }
 
-        val projects: MutableList<Map<String, String>> = mutableListOf()
+        val projects = mutableListOf<Map<String, String>>()
 
         for (entry in entries as List<*>) {
             val project = entry as? Map<*, *> ?: continue
