@@ -59,12 +59,12 @@ abstract class PackageManager(
         protected val repoConfig: RepositoryConfiguration
 ) {
     companion object {
-        private val LOADER by lazy { ServiceLoader.load(PackageManagerFactory::class.java)!! }
+        private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
 
         /**
          * The (prioritized) list of all available package managers in the classpath.
          */
-        val ALL = LOADER.iterator().asSequence().toList()
+        val ALL by lazy { LOADER.iterator().asSequence().toList() }
 
         private val IGNORED_DIRECTORY_MATCHERS = listOf(
                 // Ignore resources in a standard Maven / Gradle project layout.

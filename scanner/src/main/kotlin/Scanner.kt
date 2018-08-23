@@ -36,12 +36,12 @@ import java.util.ServiceLoader
 
 abstract class Scanner(protected val config: ScannerConfiguration) {
     companion object {
-        private val LOADER by lazy { ServiceLoader.load(ScannerFactory::class.java)!! }
+        private val LOADER = ServiceLoader.load(ScannerFactory::class.java)!!
 
         /**
          * The list of all available scanners in the classpath.
          */
-        val ALL = LOADER.iterator().asSequence().toList()
+        val ALL by lazy { LOADER.iterator().asSequence().toList() }
     }
 
     /**
