@@ -89,7 +89,7 @@ data class SubversionPathEntry(
         val commit: SubversionInfoCommit,
         val lock: SubversionInfoLock?)
 
-object Subversion : VersionControlSystem() {
+class Subversion : VersionControlSystem() {
     override val aliases = listOf("subversion", "svn")
     override val commandName = "svn"
     override val latestRevisionNames = listOf("HEAD")

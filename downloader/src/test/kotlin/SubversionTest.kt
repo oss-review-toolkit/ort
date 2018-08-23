@@ -33,6 +33,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class SubversionTest : StringSpec() {
+    private val svn = Subversion()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(description: Description, spec: Spec) {
@@ -49,23 +50,23 @@ class SubversionTest : StringSpec() {
     }
 
     init {
-        "Detected Subversion version is not empty".config(enabled = Subversion.isInPath()) {
-            val version = Subversion.getVersion()
+        "Detected Subversion version is not empty".config(enabled = svn.isInPath()) {
+            val version = svn.getVersion()
             println("Subversion version $version detected.")
             version shouldNotBe ""
         }
 
-        "Subversion detects non-working-trees".config(enabled = Subversion.isInPath()) {
-            Subversion.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+        "Subversion detects non-working-trees".config(enabled = svn.isInPath()) {
+            svn.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
         }
 
-        "Subversion correctly detects URLs to remote repositories".config(enabled = Subversion.isInPath()) {
-            Subversion.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe true
-            Subversion.isApplicableUrl("https://bitbucket.org/facebook/lz4revlog") shouldBe false
+        "Subversion correctly detects URLs to remote repositories".config(enabled = svn.isInPath()) {
+            svn.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe true
+            svn.isApplicableUrl("https://bitbucket.org/facebook/lz4revlog") shouldBe false
         }
 
-        "Detected Subversion working tree information is correct".config(enabled = Subversion.isInPath()) {
-            val workingTree = Subversion.getWorkingTree(zipContentDir)
+        "Detected Subversion working tree information is correct".config(enabled = svn.isInPath()) {
+            val workingTree = svn.getWorkingTree(zipContentDir)
 
             workingTree.getType() shouldBe "Subversion"
             workingTree.isValid() shouldBe true
@@ -75,7 +76,7 @@ class SubversionTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
         }
 
-        "Subversion correctly lists remote branches".config(enabled = Subversion.isInPath()) {
+        "Subversion correctly lists remote branches".config(enabled = svn.isInPath()) {
             val expectedBranches = listOf(
                     "address-rendering",
                     "index-bug",
@@ -85,11 +86,11 @@ class SubversionTest : StringSpec() {
                     "subdocs"
             )
 
-            val workingTree = Subversion.getWorkingTree(zipContentDir)
+            val workingTree = svn.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "Subversion correctly lists remote tags".config(enabled = Subversion.isInPath()) {
+        "Subversion correctly lists remote tags".config(enabled = svn.isInPath()) {
             val expectedTags = listOf(
                     "docutils-0.10",
                     "docutils-0.11",
@@ -117,7 +118,7 @@ class SubversionTest : StringSpec() {
                     "start"
             )
 
-            val workingTree = Subversion.getWorkingTree(zipContentDir)
+            val workingTree = svn.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
         }
     }

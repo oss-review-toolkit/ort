@@ -35,7 +35,7 @@ import com.here.ort.utils.showStackTrace
 import java.io.File
 import java.io.IOException
 
-object GitRepo : GitBase() {
+class GitRepo : GitBase() {
     override val aliases = listOf("gitrepo", "git-repo", "repo")
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {

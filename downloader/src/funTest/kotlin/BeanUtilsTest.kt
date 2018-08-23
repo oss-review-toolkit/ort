@@ -46,7 +46,7 @@ class BeanUtilsTest : StringSpec() {
     }
 
     init {
-        "BeanUtils SVN tag should be correctly downloaded".config(enabled = Subversion.isInPath()) {
+        "BeanUtils SVN tag should be correctly downloaded".config(enabled = Subversion().isInPath()) {
             val vcsFromCuration = VcsInfo(
                     type = "svn",
                     url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",

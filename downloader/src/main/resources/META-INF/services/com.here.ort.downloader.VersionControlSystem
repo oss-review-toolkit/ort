@@ -1,0 +1,5 @@
+com.here.ort.downloader.vcs.Git
+com.here.ort.downloader.vcs.GitRepo
+com.here.ort.downloader.vcs.Mercurial
+com.here.ort.downloader.vcs.Subversion
+com.here.ort.downloader.vcs.Cvs

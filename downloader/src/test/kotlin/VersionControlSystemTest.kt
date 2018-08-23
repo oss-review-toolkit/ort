@@ -65,7 +65,7 @@ class VersionControlSystemTest : WordSpec({
     }
 
     "splitUrl for Bitbucket" should {
-        "not modify URLs without a path".config(enabled = Mercurial.isInPath()) {
+        "not modify URLs without a path".config(enabled = Mercurial().isInPath()) {
             val actual = VersionControlSystem.splitUrl(
                     "https://bitbucket.org/paniq/masagin"
             )

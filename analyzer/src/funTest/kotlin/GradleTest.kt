@@ -54,7 +54,7 @@ class GradleTest : StringSpec() {
 
     override fun afterSpec(description: Description, spec: Spec) {
         // Reset the Gradle version in the test project to clean up after the tests.
-        Git.run(projectDir, "checkout", ".")
+        Git().run(projectDir, "checkout", ".")
     }
 
     init {

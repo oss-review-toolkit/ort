@@ -32,6 +32,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class GitTest : StringSpec() {
+    private val git = Git()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(description: Description, spec: Spec) {
@@ -49,24 +50,24 @@ class GitTest : StringSpec() {
 
     init {
         "Detected Git version is not empty" {
-            val version = Git.getVersion()
+            val version = git.getVersion()
             println("Git version $version detected.")
             version shouldNotBe ""
         }
 
         "Git detects non-working-trees" {
-            Git.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+            git.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
         }
 
         "Git correctly detects URLs to remote repositories" {
             // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
-            Git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe true
+            git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe true
 
-            Git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
+            git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
         }
 
         "Detected Git working tree information is correct" {
-            val workingTree = Git.getWorkingTree(zipContentDir)
+            val workingTree = git.getWorkingTree(zipContentDir)
 
             workingTree.getType() shouldBe "Git"
             workingTree.isValid() shouldBe true
@@ -86,7 +87,7 @@ class GitTest : StringSpec() {
                     "reverse-mode"
             )
 
-            val workingTree = Git.getWorkingTree(zipContentDir)
+            val workingTree = git.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
@@ -105,7 +106,7 @@ class GitTest : StringSpec() {
                     "0.9.0"
             )
 
-            val workingTree = Git.getWorkingTree(zipContentDir)
+            val workingTree = git.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
         }
     }

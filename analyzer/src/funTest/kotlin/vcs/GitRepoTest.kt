@@ -57,7 +57,7 @@ class GitRepoTest : StringSpec() {
             val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
-            GitRepo.download(pkg, outputDir)
+            GitRepo().download(pkg, outputDir)
             val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir, listOf(Bundler.Factory()))
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(

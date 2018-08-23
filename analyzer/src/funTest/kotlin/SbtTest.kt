@@ -37,7 +37,7 @@ class SbtTest : StringSpec({
         val expectedOutputFile = projectDir.resolveSibling("$projectName-expected-output.yml")
 
         // Clean any previously generated POM files / target directories.
-        Git.run(projectDir, "clean", "-fd")
+        Git().run(projectDir, "clean", "-fd")
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(SBT.Factory()))
 
@@ -53,7 +53,7 @@ class SbtTest : StringSpec({
         val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
 
         // Clean any previously generated POM files / target directories.
-        Git.run(projectDir, "clean", "-fd")
+        Git().run(projectDir, "clean", "-fd")
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(SBT.Factory()))
 

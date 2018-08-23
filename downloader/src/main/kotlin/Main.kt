@@ -77,7 +77,7 @@ fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, 
     // work.
     val projectPackages = projects.map { it.toPackage() }
     val projectPackagesByVcs = projectPackages.groupBy {
-        if (it.vcsProcessed.type == GitRepo.toString()) {
+        if (it.vcsProcessed.type == GitRepo().toString()) {
             it.vcsProcessed
         } else {
             it.vcsProcessed.copy(path = "")
