@@ -321,7 +321,7 @@ class SummaryView extends React.Component {
                     return (
                         <div className="ort-metadata-props">
                             <div onClick={this.onClickReviewMetadata} className="ort-clickable">
-                                Show metadata
+                                Show metadata <Icon type="right" />
                             </div>
                         </div>
                     );
@@ -330,7 +330,7 @@ class SummaryView extends React.Component {
                 return (
                     <div className="ort-metadata-props">
                         <div onClick={this.onClickReviewMetadata} className="ort-clickable">
-                            Hide metadata
+                            Hide metadata <Icon type="down" />
                         </div>
                         <table>
                             <tbody>
