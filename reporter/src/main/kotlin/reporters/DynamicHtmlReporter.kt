@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.jsonMapper
+import com.here.ort.reporter.Reporter
 
 import java.io.File
 

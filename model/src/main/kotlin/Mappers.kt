@@ -32,7 +32,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.AnalyzerConfigurationDeserializer
 
-val ortModelModule = SimpleModule("OrtModelModule").apply {
+private val ortModelModule = SimpleModule("OrtModelModule").apply {
     addDeserializer(AnalyzerConfiguration::class.java, AnalyzerConfigurationDeserializer())
     addDeserializer(Error::class.java, ErrorDeserializer())
     addDeserializer(Identifier::class.java, IdentifierFromStringDeserializer())

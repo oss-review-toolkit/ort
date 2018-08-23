@@ -24,7 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 
-import com.here.ort.analyzer.Main
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
@@ -218,7 +218,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                         .url("https://pypi.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
                         .build()
 
-                OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, pkgRequest).use { response ->
+                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     val body = response.body()?.string()?.trim()
 
                     if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {

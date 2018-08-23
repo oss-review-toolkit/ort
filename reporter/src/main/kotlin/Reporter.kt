@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package com.here.ort.reporter
 
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
@@ -27,7 +27,7 @@ import java.io.File
 
 /**
  * A reporter that creates a human readable report from the [AnalyzerResult] and [ScanRecord] contained in an
- * [OrtResult].
+ * [OrtResult]. The signatures of public functions in this class define the library API.
  */
 interface Reporter {
     fun generateReport(ortResult: OrtResult, outputDir: File)

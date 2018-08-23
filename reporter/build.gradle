@@ -1,8 +1,5 @@
 // Apply core plugins.
-apply plugin: 'application'
-
-applicationName = 'reporter'
-mainClassName = 'com.here.ort.reporter.Main'
+apply plugin: 'java-library'
 
 sourceSets {
     main {
@@ -19,9 +16,10 @@ task copyWebAppTemplate(type: Copy, dependsOn: ':reporter-web-app:build') {
 }
 
 dependencies {
-    compile project(':model')
+    api project(':model')
 
-    compile "com.beust:jcommander:$jcommanderVersion"
-    compile 'org.apache.poi:ooxml-schemas:1.3'
-    compile 'org.apache.poi:poi-ooxml:3.17'
+    implementation project(':utils')
+
+    implementation 'org.apache.poi:ooxml-schemas:1.3'
+    implementation 'org.apache.poi:poi-ooxml:3.17'
 }

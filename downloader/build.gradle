@@ -1,12 +1,10 @@
 // Apply core plugins.
-apply plugin: 'application'
-
-applicationName = 'downloader'
-mainClassName = 'com.here.ort.downloader.Main'
+apply plugin: 'java-library'
 
 dependencies {
-    compile project(':model')
-    compile project(':utils')
+    api project(':model')
 
-    compile "com.beust:jcommander:$jcommanderVersion"
+    implementation project(':utils')
+
+    implementation "commons-codec:commons-codec:$commonsCodecVersion"
 }

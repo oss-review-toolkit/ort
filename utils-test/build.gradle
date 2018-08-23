@@ -1,7 +1,8 @@
-dependencies {
-    compile "io.kotlintest:kotlintest-core:$kotlintestVersion"
-    compile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
-    compile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
+// Apply core plugins.
+apply plugin: 'java-library'
 
-    compile project(':model')
+dependencies {
+    api project(':model')
+
+    api "io.kotlintest:kotlintest-core:$kotlintestVersion"
 }

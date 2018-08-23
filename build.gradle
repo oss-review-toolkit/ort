@@ -61,18 +61,36 @@ subprojects {
         jcenter()
     }
 
-    dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    plugins.withType(JavaLibraryPlugin) {
+        dependencies {
+            api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 
-        testCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
-        testCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
-        testCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
-        testCompile project(':utils-test')
+            testImplementation "io.kotlintest:kotlintest-core:$kotlintestVersion"
+            testImplementation "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
+            testImplementation "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
+            testImplementation project(':utils-test')
 
-        funTestCompile sourceSets.main.output
-        funTestCompile sourceSets.test.output
-        funTestCompile configurations.testCompile
-        funTestRuntime configurations.testRuntime
+            funTestImplementation sourceSets.main.output
+            funTestImplementation sourceSets.test.output
+            funTestImplementation configurations.testImplementation
+            funTestRuntime configurations.testRuntime
+        }
+    }
+
+    plugins.withType(ApplicationPlugin) {
+        dependencies {
+            compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+
+            testCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
+            testCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
+            testCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
+            testCompile project(':utils-test')
+
+            funTestCompile sourceSets.main.output
+            funTestCompile sourceSets.test.output
+            funTestCompile configurations.testCompile
+            funTestRuntime configurations.testRuntime
+        }
     }
 
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.

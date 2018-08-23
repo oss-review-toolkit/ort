@@ -1,8 +1,5 @@
 // Apply core plugins.
-apply plugin: 'application'
-
-applicationName = 'analyzer'
-mainClassName = 'com.here.ort.analyzer.Main'
+apply plugin: 'java-library'
 
 repositories {
     maven {
@@ -11,24 +8,25 @@ repositories {
 }
 
 dependencies {
-    compile project(':downloader')
-    compile project(':model')
-    compile project(':utils')
+    api project(':model')
 
-    compile "com.beust:jcommander:$jcommanderVersion"
-    compile "com.vdurmont:semver4j:$semverVersion"
-    compile "com.moandjiezana.toml:toml4j:$toml4jVersion"
-    compile "com.paypal.digraph:digraph-parser:$digraphVersion"
+    implementation project(':downloader')
+    implementation project(':utils')
 
-    compile "org.apache.maven:maven-core:$mavenVersion"
-    compile "org.apache.maven:maven-compat:$mavenVersion"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    implementation "com.vdurmont:semver4j:$semverVersion"
+    implementation "com.moandjiezana.toml:toml4j:$toml4jVersion"
+    implementation "com.paypal.digraph:digraph-parser:$digraphVersion"
+
+    implementation "org.apache.maven:maven-core:$mavenVersion"
+    implementation "org.apache.maven:maven-compat:$mavenVersion"
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
-    compile "org.apache.maven.resolver:maven-resolver-connector-basic:$mavenResolverVersion"
-    compile "org.apache.maven.resolver:maven-resolver-transport-file:$mavenResolverVersion"
-    compile "org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion"
-    compile "org.apache.maven.resolver:maven-resolver-transport-wagon:$mavenResolverVersion"
+    implementation "org.apache.maven.resolver:maven-resolver-connector-basic:$mavenResolverVersion"
+    implementation "org.apache.maven.resolver:maven-resolver-transport-file:$mavenResolverVersion"
+    implementation "org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion"
+    implementation "org.apache.maven.resolver:maven-resolver-transport-wagon:$mavenResolverVersion"
 
-    compile "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
+    implementation "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
 }

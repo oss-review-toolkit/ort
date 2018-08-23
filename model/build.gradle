@@ -1,12 +1,16 @@
+// Apply core plugins.
+apply plugin: 'java-library'
+
 dependencies {
-    compile project(':utils')
+    api "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
 
-    compile "com.vdurmont:semver4j:$semverVersion"
+    implementation project(':utils')
 
-    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
-    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+
+    implementation "com.vdurmont:semver4j:$semverVersion"
 }

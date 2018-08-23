@@ -25,6 +25,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
+import com.here.ort.reporter.Reporter
 
 import java.io.File
 import java.util.SortedMap
