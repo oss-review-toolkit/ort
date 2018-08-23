@@ -20,7 +20,8 @@
 package com.here.ort.scanner.scanners
 
 import com.here.ort.model.CacheStatistics
-import com.here.ort.scanner.Main
+import com.here.ort.model.config.ScannerConfiguration
+import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.ScanResultsCache
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.patchExpectedResult
@@ -60,13 +61,8 @@ class FileCounterTest : StringSpec() {
             val expectedResult = patchExpectedResult(
                     File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml"))
 
-            Main.main(arrayOf(
-                    "-d", analyzerResultFile.path,
-                    "-o", outputDir.path,
-                    "-s", "FileCounter"
-            ))
-
-            val result = File(outputDir, "scan-result.yml").readText()
+            val ortResult = FileCounter(ScannerConfiguration()).scanDependenciesFile(analyzerResultFile, outputDir)
+            val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result) shouldBe expectedResult
         }
