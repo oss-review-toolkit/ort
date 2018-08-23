@@ -23,7 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.here.ort.analyzer.Main
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
@@ -257,7 +257,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
                     .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
                     .build()
 
-            OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+            OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
                 val body = response.body()?.string()?.trim()
 
                 if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {

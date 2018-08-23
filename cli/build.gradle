@@ -1,0 +1,24 @@
+// Apply core plugins.
+apply plugin: 'application'
+
+applicationName = 'ort'
+mainClassName = 'com.here.ort.Main'
+
+repositories {
+    // Need to repeat the analyzer's custom repository definition here, see
+    // https://github.com/gradle/gradle/issues/4106.
+    maven {
+        url 'https://repo.gradle.org/gradle/libs-releases-local/'
+    }
+}
+
+dependencies {
+    compile project(':analyzer')
+    compile project(':downloader')
+    compile project(':model')
+    compile project(':reporter')
+    compile project(':scanner')
+    compile project(':utils')
+
+    compile "com.beust:jcommander:$jcommanderVersion"
+}

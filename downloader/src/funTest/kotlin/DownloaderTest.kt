@@ -68,7 +68,7 @@ class DownloaderTest : StringSpec() {
                     vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Main.download(pkg, outputDir)
+            val downloadResult = Downloader().download(pkg, outputDir)
             downloadResult.vcsInfo shouldBe null
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
@@ -103,7 +103,7 @@ class DownloaderTest : StringSpec() {
             )
 
             val exception = shouldThrow<DownloadException> {
-                Main.download(pkg, outputDir)
+                Downloader().download(pkg, outputDir)
             }
 
             exception.message shouldBe "Calculated SHA-1 hash 'a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa' differs " +
@@ -134,7 +134,7 @@ class DownloaderTest : StringSpec() {
                     )
             )
 
-            val downloadResult = Main.download(pkg, outputDir)
+            val downloadResult = Downloader().download(pkg, outputDir)
             downloadResult.vcsInfo shouldBe null
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
@@ -169,7 +169,7 @@ class DownloaderTest : StringSpec() {
                     vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Main.download(pkg, outputDir)
+            val downloadResult = Downloader().download(pkg, outputDir)
             downloadResult.vcsInfo shouldBe null
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url

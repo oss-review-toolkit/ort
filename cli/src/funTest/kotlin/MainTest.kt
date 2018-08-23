@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort
 
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.normalizeVcsUrl
@@ -38,7 +38,7 @@ import java.io.PrintStream
  * A test for the main entry point of the application.
  */
 class MainTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic")
+    private val projectDir = File("../analyzer/src/funTest/assets/projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -63,6 +63,7 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             Main.main(arrayOf(
+                    "analyze",
                     "-m", "Gradle",
                     "-i", inputDir.path,
                     "-o", File(outputDir, "gradle").path
@@ -85,6 +86,7 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             Main.main(arrayOf(
+                    "analyze",
                     "-m", "NPM",
                     "-i", inputDir.path,
                     "-o", File(outputDir, "package-lock").path
@@ -109,6 +111,7 @@ class MainTest : StringSpec() {
             )
 
             Main.main(arrayOf(
+                    "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
                     "-o", analyzerOutputDir.path
@@ -133,6 +136,7 @@ class MainTest : StringSpec() {
             // the feature because JCommander just switches the value of boolean options, and the option was already set
             // to true by the test before. See: https://github.com/cbeust/jcommander/issues/378
             Main.main(arrayOf(
+                    "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
                     "-o", analyzerOutputDir.path,

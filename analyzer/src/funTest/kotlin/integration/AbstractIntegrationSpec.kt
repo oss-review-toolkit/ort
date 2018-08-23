@@ -21,7 +21,7 @@ package com.here.ort.analyzer.integration
 
 import com.here.ort.analyzer.ManagedProjectFiles
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.Main
+import com.here.ort.downloader.Downloader
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -73,11 +73,11 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     /**
      * The directory where the source code of [pkg] was downloaded to.
      */
-    protected lateinit var downloadResult: Main.DownloadResult
+    protected lateinit var downloadResult: Downloader.DownloadResult
 
     override fun beforeSpec(description: Description, spec: Spec) {
         outputDir = createTempDir()
-        downloadResult = Main.download(pkg, outputDir)
+        downloadResult = Downloader().download(pkg, outputDir)
     }
 
     override fun afterSpec(description: Description, spec: Spec) {

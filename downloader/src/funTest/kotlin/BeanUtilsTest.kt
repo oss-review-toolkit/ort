@@ -68,7 +68,7 @@ class BeanUtilsTest : StringSpec() {
                     vcs = vcsFromCuration
             )
 
-            val downloadResult = Main.download(pkg, outputDir)
+            val downloadResult = Downloader().download(pkg, outputDir)
             downloadResult.sourceArtifact shouldBe null
             downloadResult.vcsInfo shouldNotBe null
             downloadResult.vcsInfo!!.type shouldBe "Subversion"

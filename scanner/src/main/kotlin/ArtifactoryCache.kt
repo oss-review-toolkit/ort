@@ -60,7 +60,7 @@ class ArtifactoryCache(
         val tempFile = createTempFile("scan-results-", ".yml")
 
         try {
-            OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+            OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
                 if (response.code() == HttpURLConnection.HTTP_OK) {
                     response.body()?.let { body ->
                         Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
@@ -160,7 +160,7 @@ class ArtifactoryCache(
                 .build()
 
         try {
-            return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+            return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
                 (response.code() == HttpURLConnection.HTTP_CREATED).also {
                     log.info {
                         if (it) {

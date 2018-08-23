@@ -20,6 +20,7 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
+import com.here.ort.reporter.Reporter
 import com.here.ort.utils.spdx.getLicenseText
 
 import java.io.File

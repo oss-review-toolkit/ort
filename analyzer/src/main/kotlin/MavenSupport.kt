@@ -91,7 +91,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
-                DiskCache(File(getUserConfigDirectory(), "${Main.TOOL_NAME}/cache/remote_artifacts"),
+                DiskCache(File(getUserConfigDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
                         GIGABYTE, 6 * HOUR)
     }
 
