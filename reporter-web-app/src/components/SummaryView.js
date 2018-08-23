@@ -306,7 +306,7 @@ class SummaryView extends React.Component {
                     }
                     >
                         <b>
-                            Completed scan
+                            Completed scan successfully
                         </b>
                     </span>
                 );
