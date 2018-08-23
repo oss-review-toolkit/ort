@@ -40,6 +40,7 @@ private const val REPO_REV_FOR_VERSION = "562fed42b4f3dceaacf6f1051963c865c0241e
 private const val REPO_PATH_FOR_VERSION = "Resources"
 
 class MercurialDownloadTest : StringSpec() {
+    private val hg = Mercurial()
     private lateinit var outputDir: File
 
     override fun beforeTest(description: Description) {
@@ -51,7 +52,7 @@ class MercurialDownloadTest : StringSpec() {
     }
 
     init {
-        "Mercurial can download a given revision".config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag)) {
+        "Mercurial can download a given revision".config(enabled = hg.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                     ".hg",
@@ -65,7 +66,7 @@ class MercurialDownloadTest : StringSpec() {
                     "Script"
             )
 
-            val workingTree = Mercurial.download(pkg, outputDir)
+            val workingTree = hg.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
@@ -74,7 +75,7 @@ class MercurialDownloadTest : StringSpec() {
         }
 
         "Mercurial can download only a single path"
-                .config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"),
+                .config(enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
                         tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
@@ -91,7 +92,7 @@ class MercurialDownloadTest : StringSpec() {
                     File("Script", "uninstall_bridge.sh")
             )
 
-            val workingTree = Mercurial.download(pkg, outputDir)
+            val workingTree = hg.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }
@@ -103,20 +104,20 @@ class MercurialDownloadTest : StringSpec() {
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
-        "Mercurial can download based on a version".config(enabled = Mercurial.isInPath(), tags = setOf(ExpensiveTag)) {
+        "Mercurial can download based on a version".config(enabled = hg.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
                     vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
             )
 
-            val workingTree = Mercurial.download(pkg, outputDir)
+            val workingTree = hg.download(pkg, outputDir)
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
         "Mercurial can download only a single path based on a version"
-                .config(enabled = Mercurial.isInPath() && Mercurial.isAtLeastVersion("4.3"),
+                .config(enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
                         tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                     id = Identifier.EMPTY.copy(version = REPO_VERSION),
@@ -137,7 +138,7 @@ class MercurialDownloadTest : StringSpec() {
                     File("Script", "uninstall_bridge.sh")
             )
 
-            val workingTree = Mercurial.download(pkg, outputDir)
+            val workingTree = hg.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }

@@ -40,7 +40,7 @@ import org.apache.commons.codec.digest.DigestUtils
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 
-object Cvs : VersionControlSystem() {
+class Cvs : VersionControlSystem() {
     override val aliases = listOf("cvs")
     override val commandName = "cvs"
     override val latestRevisionNames = emptyList<String>()

@@ -71,7 +71,7 @@ class GitRepoDownloadTest : StringSpec() {
                     "vsprojects"
             ).map { File(grpcDir, it) }
 
-            val workingTree = GitRepo.download(pkg, outputDir)
+            val workingTree = GitRepo().download(pkg, outputDir)
             val actualFiles = grpcDir.listFiles(FileFilter {
                 it.isDirectory
             }).sorted()

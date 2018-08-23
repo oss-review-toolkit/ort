@@ -32,6 +32,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class CvsTest : StringSpec() {
+    private val cvs = Cvs()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(description: Description, spec: Spec) {
@@ -48,24 +49,24 @@ class CvsTest : StringSpec() {
     }
 
     init {
-        "Detected CVS version is not empty".config(enabled = Cvs.isInPath()) {
-            val version = Cvs.getVersion()
+        "Detected CVS version is not empty".config(enabled = cvs.isInPath()) {
+            val version = cvs.getVersion()
             println("CVS version $version detected.")
             version shouldNotBe ""
         }
 
-        "CVS detects non-working-trees".config(enabled = Cvs.isInPath()) {
-            Cvs.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+        "CVS detects non-working-trees".config(enabled = cvs.isInPath()) {
+            cvs.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
         }
 
-        "CVS correctly detects URLs to remote repositories".config(enabled = Cvs.isInPath() && false) {
-            Cvs.isApplicableUrl(":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
-            Cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
-            Cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
+        "CVS correctly detects URLs to remote repositories".config(enabled = cvs.isInPath() && false) {
+            cvs.isApplicableUrl(":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
+            cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
+            cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
         }
 
-        "Detected CVS working tree information is correct".config(enabled = Cvs.isInPath() && false) {
-            val workingTree = Cvs.getWorkingTree(zipContentDir)
+        "Detected CVS working tree information is correct".config(enabled = cvs.isInPath() && false) {
+            val workingTree = cvs.getWorkingTree(zipContentDir)
 
             workingTree.getType() shouldBe "Cvs"
             workingTree.isValid() shouldBe true
@@ -75,16 +76,16 @@ class CvsTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tomcat")) shouldBe "tomcat"
         }
 
-        "CVS correctly lists remote branches".config(enabled = Cvs.isInPath() && false) {
+        "CVS correctly lists remote branches".config(enabled = cvs.isInPath() && false) {
             val expectedBranches = listOf(
                     "Exoffice"
             )
 
-            val workingTree = Cvs.getWorkingTree(zipContentDir)
+            val workingTree = cvs.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "CVS correctly lists remote tags".config(enabled = Cvs.isInPath() && false) {
+        "CVS correctly lists remote tags".config(enabled = cvs.isInPath() && false) {
             val expectedTags = listOf(
                     "A02",
                     "A03",
@@ -99,7 +100,7 @@ class CvsTest : StringSpec() {
                     "before_debug_changes"
             )
 
-            val workingTree = Cvs.getWorkingTree(zipContentDir)
+            val workingTree = cvs.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
         }
     }

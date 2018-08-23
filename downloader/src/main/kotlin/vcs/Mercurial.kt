@@ -34,10 +34,10 @@ import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
 
-object Mercurial : VersionControlSystem() {
-    private const val EXTENSION_LARGE_FILES = "largefiles = "
-    private const val EXTENSION_SPARSE = "sparse = "
+const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
+const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
 
+class Mercurial : VersionControlSystem() {
     override val aliases = listOf("mercurial", "hg")
     override val commandName = "hg"
     override val latestRevisionNames = listOf("tip")
@@ -103,12 +103,12 @@ object Mercurial : VersionControlSystem() {
 
         try {
             // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
-            val extensionsList = mutableListOf(EXTENSION_LARGE_FILES)
+            val extensionsList = mutableListOf(MERCURIAL_LARGE_FILES_EXTENSION)
 
             if (pkg.vcsProcessed.path.isNotBlank() && isAtLeastVersion("4.3")) {
                 // Starting with version 4.3 Mercurial has experimental built-in support for sparse checkouts, see
                 // https://www.mercurial-scm.org/wiki/WhatsNew#Mercurial_4.3_.2F_4.3.1_.282017-08-10.29
-                extensionsList += EXTENSION_SPARSE
+                extensionsList += MERCURIAL_SPARSE_EXTENSION
             }
 
             run(targetDir, "init")
@@ -119,7 +119,7 @@ object Mercurial : VersionControlSystem() {
 
                 """.trimIndent() + extensionsList.joinToString("\n"))
 
-            if (EXTENSION_SPARSE in extensionsList) {
+            if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
                 run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
                         *LICENSE_FILE_NAMES.flatMap { listOf("-I", it) }.toTypedArray())
