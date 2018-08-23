@@ -312,7 +312,8 @@ class SummaryView extends React.Component {
                 );
             };
             const renderMetadataTable = () => {
-                if (!data.metadata) {
+                if (!data.metadata 
+                    || Object.keys(data.metadata).length == 0) {
                     return null;
                 }
                 
