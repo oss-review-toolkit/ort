@@ -24,7 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.downloader.DownloadException
-import com.here.ort.downloader.Main
+import com.here.ort.downloader.Downloader
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Environment
@@ -225,7 +225,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
         }
 
         val downloadResult = try {
-            Main.download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
+            Downloader().download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
         } catch (e: DownloadException) {
             e.showStackTrace()
 

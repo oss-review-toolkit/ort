@@ -32,9 +32,9 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
-import com.here.ort.scanner.Main
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
+import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
@@ -79,7 +79,7 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
 
         val request = Request.Builder().get().url(url).build()
 
-        return OkHttpClientHelper.execute(Main.HTTP_CACHE_PATH, request).use { response ->
+        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
             val body = response.body()
 
             if (response.code() != HttpURLConnection.HTTP_OK || body == null) {

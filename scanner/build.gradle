@@ -1,13 +1,9 @@
 // Apply core plugins.
-apply plugin: 'application'
-
-applicationName = 'scanner'
-mainClassName = 'com.here.ort.scanner.Main'
+apply plugin: 'java-library'
 
 dependencies {
-    compile project(':downloader')
-    compile project(':model')
-    compile project(':utils')
+    api project(':model')
 
-    compile "com.beust:jcommander:$jcommanderVersion"
+    implementation project(':downloader')
+    implementation project(':utils')
 }
