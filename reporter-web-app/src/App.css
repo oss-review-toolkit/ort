@@ -49,8 +49,20 @@ https://ant.design/docs/react/customize-theme
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.ort-app .ort-clickable {
+    cursor: pointer;
+}
+
+.ort-app .ort-clickable .anticon {
+    font-size: 9px;
+}
+
 .ort-app .ort-metadata-props {
     font-size: 10px;
+}
+
+.ort-app .ort-metadata-props .anticon {
+    font-size: 7px;
 }
 
 .ort-app .ort-metadata-props .ort-clickable {
@@ -129,10 +141,6 @@ https://ant.design/docs/react/customize-theme
 .ort-app .ort-package-props th {
     font-weight: 400;
     width: 110px;
-}
-
-.ort-app .ort-clickable {
-    cursor: pointer;
 }
 
 .ort-app .ort-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {

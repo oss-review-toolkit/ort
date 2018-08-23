@@ -57,7 +57,7 @@ export class PackagesTablePaths extends React.Component {
                         Package Dependency Paths
                         {' '}
                     </span>
-                    <Icon type="plus-square-o" />
+                    <Icon type="right" />
                 </h4>
             );
         }
@@ -67,7 +67,7 @@ export class PackagesTablePaths extends React.Component {
                 <h4 onClick={this.onClick} className="ort-clickable">
                     Package Dependency Paths
                     {' '}
-                    <Icon type="minus-square-o" />
+                    <Icon type="down" />
                 </h4>
                 <List
                     grid={{

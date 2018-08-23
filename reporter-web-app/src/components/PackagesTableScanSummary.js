@@ -57,7 +57,7 @@ export class PackagesTableScanSummary extends React.Component {
                        Package Scan Summary
                        {' '}
                    </span>
-                   <Icon type="plus-square-o" />
+                   <Icon type="right" />
                </h4>
            );
        }
@@ -69,7 +69,7 @@ export class PackagesTableScanSummary extends React.Component {
                        Package Scan Summary
                        {' '}
                    </span>
-                   <Icon type="minus-square-o" />
+                   <Icon type="down" />
                </h4>
                <Tabs tabPosition="top">
                    {pkgObj.results.map(scan => (

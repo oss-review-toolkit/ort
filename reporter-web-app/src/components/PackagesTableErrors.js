@@ -55,7 +55,7 @@ export class PackagesTableErrors extends React.Component {
                         Package Errors
                         {' '}
                     </span>
-                    <Icon type="plus-square-o" />
+                    <Icon type="right" />
                 </h4>
             );
         }
@@ -65,7 +65,7 @@ export class PackagesTableErrors extends React.Component {
                 <h4 onClick={this.onClick} className="ort-clickable">
                     Package Errors
                     {' '}
-                    <Icon type="minus-square-o" />
+                    <Icon type="down" />
                 </h4>
                 {pkgObj.errors.map(error => (
                     <p key={`package-error-${error.code}`}>
