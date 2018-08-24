@@ -391,8 +391,8 @@ fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
  * length in most modern filesystems: https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
  */
 fun String.fileSystemEncode() =
-// URLEncoder does not encode "." and "*", so do that manually.
         java.net.URLEncoder.encode(this, "UTF-8")
+                // URLEncoder does not encode "*" and ".", so do that manually.
                 .replace("*", "%2A")
                 .replace(Regex("(^\\.|\\.$)"), "%2E")
                 .take(255)
