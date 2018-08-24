@@ -114,14 +114,14 @@ object Main {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var packageManagers = PackageManager.ALL
 
-        @Parameter(description = "The project directory to scan.",
+        @Parameter(description = "The project directory to analyze.",
                 names = ["--input-dir", "-i"],
                 required = true,
                 order = PARAMETER_ORDER_MANDATORY)
         @Suppress("LateinitUsage")
         private lateinit var inputDir: File
 
-        @Parameter(description = "The directory to write dependency information to.",
+        @Parameter(description = "The directory to write the analyzer result file to.",
                 names = ["--output-dir", "-o"],
                 required = true,
                 order = PARAMETER_ORDER_MANDATORY)
@@ -147,7 +147,7 @@ object Main {
 
         @Parameter(description = "By default the components configured to be excluded in the .ort.yml file of the " +
                 "input directory will still be analyzed, but marked as excluded in the result. With this option " +
-                "enabled they will not be analyzed and not appear in the result.",
+                "enabled they will not appear in the result.",
                 names = ["--remove-excludes-from-result"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var removeExcludesFromResult = false
@@ -186,7 +186,7 @@ object Main {
 
     @Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
     private object DownloaderCommand : Runnable {
-        @Parameter(description = "A dependencies analysis file to use. Must not be used together with '--project-url'.",
+        @Parameter(description = "An analyzer result file to use. Must not be used together with '--project-url'.",
                 names = ["--dependencies-file", "-d"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var dependenciesFile: File? = null
@@ -197,8 +197,8 @@ object Main {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var projectUrl: String? = null
 
-        @Parameter(description = "The speaking name of the project to download. Will be ignored if " +
-                "'--dependencies-file' is also specified.",
+        @Parameter(description = "The speaking name of the project to download. For use together with " +
+                "'--project-url'. Will be ignored if '--dependencies-file' is also specified.",
                 names = ["--project-name"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var projectName: String? = null
@@ -233,7 +233,7 @@ object Main {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var archive = false
 
-        @Parameter(description = "The data entities from the dependencies analysis file to download.",
+        @Parameter(description = "The data entities from the analyzer result file to download.",
                 names = ["--entities", "-e"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var entities = enumValues<Downloader.DataEntity>().asList()
@@ -349,7 +349,7 @@ object Main {
                     reporter.generateReport(ortResult, outputDir)
         }
 
-        @Parameter(description = "The ort result file to use. Must contain a scan record.",
+        @Parameter(description = "The ORT result file to use. Must contain a scan result.",
                 names = ["--ort-result-file", "-i"],
                 required = true,
                 order = PARAMETER_ORDER_MANDATORY)
@@ -395,8 +395,8 @@ object Main {
             }
         }
 
-        @Parameter(description = "The dependencies analysis file to use. Source code will be downloaded " +
-                "automatically if needed. This parameter and --input-path are mutually exclusive.",
+        @Parameter(description = "The analyzer result file to use. Source code will be downloaded automatically if " +
+                "needed. This parameter and --input-path are mutually exclusive.",
                 names = ["--dependencies-file", "-d"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var dependenciesFile: File? = null
