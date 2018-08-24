@@ -144,7 +144,7 @@ are supported.
 
 ## Getting Started
 
-Please see [GettingStarted.md](./GettingStarted.md) for an introduction to the tools.
+Please see [GettingStarted.md](./GettingStarted.md) for an introduction to the individual tools.
 
 ## Development
 
