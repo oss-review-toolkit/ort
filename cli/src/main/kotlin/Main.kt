@@ -187,36 +187,36 @@ object Main {
     @Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
     private object DownloaderCommand : Runnable {
         @Parameter(description = "An analyzer result file to use. Must not be used together with '--project-url'.",
-                names = ["--dependencies-file", "-d"],
+                names = ["--analyzer-result-file", "-a"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var dependenciesFile: File? = null
 
         @Parameter(description = "A VCS or archive URL of a project to download. Must not be used together with " +
-                "'--dependencies-file'.",
+                "'--analyzer-result-file'.",
                 names = ["--project-url"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var projectUrl: String? = null
 
         @Parameter(description = "The speaking name of the project to download. For use together with " +
-                "'--project-url'. Will be ignored if '--dependencies-file' is also specified.",
+                "'--project-url'. Will be ignored if '--analyzer-result-file' is also specified.",
                 names = ["--project-name"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var projectName: String? = null
 
         @Parameter(description = "The VCS type if '--project-url' points to a VCS. Will be ignored if " +
-                "'--dependencies-file' is also specified.",
+                "'--analyzer-result-file' is also specified.",
                 names = ["--vcs-type"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var vcsType = ""
 
         @Parameter(description = "The VCS revision if '--project-url' points to a VCS. Will be ignored if " +
-                "'--dependencies-file' is also specified.",
+                "'--analyzer-result-file' is also specified.",
                 names = ["--vcs-revision"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var vcsRevision = ""
 
         @Parameter(description = "The VCS path if '--project-url' points to a VCS. Will be ignored if " +
-                "'--dependencies-file' is also specified.",
+                "'--analyzer-result-file' is also specified.",
                 names = ["--vcs-path"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var vcsPath = ""
@@ -248,7 +248,7 @@ object Main {
         override fun run() {
             if ((dependenciesFile != null) == (projectUrl != null)) {
                 throw IllegalArgumentException(
-                        "Either '--dependencies-file' or '--project-url' must be specified.")
+                        "Either '--analyzer-result-file' or '--project-url' must be specified.")
             }
 
             val packages = dependenciesFile?.let {
@@ -397,18 +397,18 @@ object Main {
 
         @Parameter(description = "The analyzer result file to use. Source code will be downloaded automatically if " +
                 "needed. This parameter and --input-path are mutually exclusive.",
-                names = ["--dependencies-file", "-d"],
+                names = ["--analyzer-result-file", "-a"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var dependenciesFile: File? = null
 
-        @Parameter(description = "The input directory or file to scan. This parameter and --dependencies-file are " +
+        @Parameter(description = "The input directory or file to scan. This parameter and --analyzer-result-file are " +
                 "mutually exclusive.",
                 names = ["--input-path", "-i"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var inputPath: File? = null
 
         @Parameter(description = "The list of scopes that shall be scanned. Works only with the " +
-                "--dependencies-file parameter. If empty, all scopes are scanned.",
+                "--analyzer-result-file parameter. If empty, all scopes are scanned.",
                 names = ["--scopes"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var scopesToScan = listOf<String>()
@@ -443,7 +443,7 @@ object Main {
 
         override fun run() {
             require((dependenciesFile == null) != (inputPath == null)) {
-                "Either --dependencies-file or --input-path must be specified."
+                "Either --analyzer-result-file or --input-path must be specified."
             }
 
             require(!outputDir.exists()) {
