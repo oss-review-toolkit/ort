@@ -21,6 +21,7 @@ package com.here.ort.utils.test
 
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+
 import java.io.File
 import java.time.Instant
 
