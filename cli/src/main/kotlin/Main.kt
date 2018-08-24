@@ -509,12 +509,9 @@ object Main {
             parse(*args)
         }
 
-        if (info) {
-            log.level = ch.qos.logback.classic.Level.INFO
-        }
-
-        if (debug) {
-            log.level = ch.qos.logback.classic.Level.DEBUG
+        when {
+            debug -> log.level = ch.qos.logback.classic.Level.DEBUG
+            info -> log.level = ch.qos.logback.classic.Level.INFO
         }
 
         // Make the parameter globally available.
