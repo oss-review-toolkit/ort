@@ -73,11 +73,6 @@ subprojects {
         funTestCompile sourceSets.test.output
         funTestCompile configurations.testCompile
         funTestRuntime configurations.testRuntime
-
-        funTestCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
-        funTestCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
-        funTestCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
-        funTestCompile project(':utils-test')
     }
 
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
