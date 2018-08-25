@@ -20,9 +20,8 @@ project source code and dependencies.
 At a high level, it works by analyzing the source code for dependencies, downloading the
 source code of the dependencies, scanning all source code for license information, and summarizing the results.
 
-The different tools that make up ORT are designed as libraries (for programmatic use) with minimal command line
-interfaces (for scripted use,
-[doing one thing and doing it well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)).
+The different tools that make up ORT are designed as libraries (for programmatic use) with a minimal command line
+interface (for scripted use).
 
 The toolkit is envisioned to consist of the following libraries:
 
