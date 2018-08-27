@@ -62,19 +62,22 @@ class MainTest : StringSpec() {
             val streamOut = ByteArrayOutputStream()
             System.setOut(PrintStream(streamOut))
 
-            Main.main(arrayOf(
-                    "analyze",
-                    "-m", "Gradle",
-                    "-i", inputDir.path,
-                    "-o", File(outputDir, "gradle").path
-            ))
+            try {
+                Main.main(arrayOf(
+                        "analyze",
+                        "-m", "Gradle",
+                        "-i", inputDir.path,
+                        "-o", File(outputDir, "gradle").path
+                ))
 
-            // Restore standard output.
-            System.setOut(standardOut)
-            val lines = streamOut.toString().lineSequence().iterator()
+                val lines = streamOut.toString().lineSequence().iterator()
 
-            lines.next() shouldBe "The following package managers are activated:"
-            lines.next() shouldBe "\tGradle"
+                lines.next() shouldBe "The following package managers are activated:"
+                lines.next() shouldBe "\tGradle"
+            } finally {
+                // Restore standard output.
+                System.setOut(standardOut)
+            }
         }
 
         "Activating only NPM works" {
@@ -85,19 +88,22 @@ class MainTest : StringSpec() {
             val streamOut = ByteArrayOutputStream()
             System.setOut(PrintStream(streamOut))
 
-            Main.main(arrayOf(
-                    "analyze",
-                    "-m", "NPM",
-                    "-i", inputDir.path,
-                    "-o", File(outputDir, "package-lock").path
-            ))
+            try {
+                Main.main(arrayOf(
+                        "analyze",
+                        "-m", "NPM",
+                        "-i", inputDir.path,
+                        "-o", File(outputDir, "package-lock").path
+                ))
 
-            // Restore standard output.
-            System.setOut(standardOut)
-            val lines = streamOut.toString().lineSequence().iterator()
+                val lines = streamOut.toString().lineSequence().iterator()
 
-            lines.next() shouldBe "The following package managers are activated:"
-            lines.next() shouldBe "\tNPM"
+                lines.next() shouldBe "The following package managers are activated:"
+                lines.next() shouldBe "\tNPM"
+            } finally {
+                // Restore standard output.
+                System.setOut(standardOut)
+            }
         }
 
         "Output formats are deduplicated" {
@@ -108,19 +114,22 @@ class MainTest : StringSpec() {
             val streamOut = ByteArrayOutputStream()
             System.setOut(PrintStream(streamOut))
 
-            Main.main(arrayOf(
-                    "analyze",
-                    "-m", "Gradle",
-                    "-i", inputDir.path,
-                    "-o", File(outputDir, "gradle").path,
-                    "-f", "json,yaml,json"
-            ))
+            try {
+                Main.main(arrayOf(
+                        "analyze",
+                        "-m", "Gradle",
+                        "-i", inputDir.path,
+                        "-o", File(outputDir, "gradle").path,
+                        "-f", "json,yaml,json"
+                ))
 
-            // Restore standard output.
-            System.setOut(standardOut)
-            val lines = streamOut.toString().lines().filter { it.startsWith("Writing analyzer result to ") }
+                val lines = streamOut.toString().lines().filter { it.startsWith("Writing analyzer result to ") }
 
-            lines.count() shouldBe 2
+                lines.count() shouldBe 2
+            } finally {
+                // Restore standard output.
+                System.setOut(standardOut)
+            }
         }
 
         "Analyzer creates correct output" {
