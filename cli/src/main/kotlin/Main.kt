@@ -170,7 +170,17 @@ object Main {
                 exitProcess(1)
             }
 
+            require(packageCurationsFile?.isFile ?: true) {
+                "The package curations file '${packageCurationsFile!!.invariantSeparatorsPath}' could not be found."
+            }
+
+            require(repositoryConfigurationFile?.isFile ?: true) {
+                "The repository configuration file '${repositoryConfigurationFile!!.invariantSeparatorsPath}' could " +
+                        "not be found."
+            }
+
             packageManagers = packageManagers.distinct()
+
             println("The following package managers are activated:")
             println("\t" + packageManagers.joinToString(", "))
 
