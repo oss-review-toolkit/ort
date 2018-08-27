@@ -16,7 +16,7 @@
 [5]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
 [6]: https://codecov.io/gh/heremaps/oss-review-toolkit/
 [7]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LWQwMDU3NDBjYmEzNGJkM2JiYTE2MmI0MzdhZDRiZjI0MWM3YjZlZGU2ODFhNjgwOTAyZTc5ZGRhZGEyNjMwYTc
-[8]: https://img.shields.io/badge/style-ORT_Talk-green.svg?longCache=false&logo=slack&label=Slack
+[8]: https://img.shields.io/badge/style-ort--talk-blue.svg?longCache=false&logo=slack&label=Slack
 
 # Introduction
 
