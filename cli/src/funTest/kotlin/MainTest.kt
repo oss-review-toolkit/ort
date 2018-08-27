@@ -100,6 +100,29 @@ class MainTest : StringSpec() {
             lines.next() shouldBe "\tNPM"
         }
 
+        "Output formats are deduplicated" {
+            val inputDir = File(projectDir, "gradle")
+
+            // Redirect standard output to a stream.
+            val standardOut = System.out
+            val streamOut = ByteArrayOutputStream()
+            System.setOut(PrintStream(streamOut))
+
+            Main.main(arrayOf(
+                    "analyze",
+                    "-m", "Gradle",
+                    "-i", inputDir.path,
+                    "-o", File(outputDir, "gradle").path,
+                    "-f", "json,yaml,json"
+            ))
+
+            // Restore standard output.
+            System.setOut(standardOut)
+            val lines = streamOut.toString().lines().filter { it.startsWith("Writing analyzer result to ") }
+
+            lines.count() shouldBe 2
+        }
+
         "Analyzer creates correct output" {
             val analyzerOutputDir = File(outputDir, "merged-results")
 
