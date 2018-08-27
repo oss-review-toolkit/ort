@@ -5,12 +5,17 @@
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] |
 | [![Linux code coverage][5]][6] |                                 |
 
+| Interact with us!      |
+| ---------------------- |
+| Slack: [ort-talk][7] |
+
 [1]: https://travis-ci.com/heremaps/oss-review-toolkit.svg?branch=master
 [2]: https://travis-ci.com/heremaps/oss-review-toolkit
 [3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
 [4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
 [5]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
 [6]: https://codecov.io/gh/heremaps/oss-review-toolkit/
+[7]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LWQwMDU3NDBjYmEzNGJkM2JiYTE2MmI0MzdhZDRiZjI0MWM3YjZlZGU2ODFhNjgwOTAyZTc5ZGRhZGEyNjMwYTc
 
 # Introduction
 
