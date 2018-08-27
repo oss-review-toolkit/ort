@@ -157,6 +157,12 @@ object Main {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var packageCurationsFile: File? = null
 
+        @Parameter(description = "A file containing the repository configuration. If set the .ort.yml file from the" +
+                "repository will be ignored.",
+                names = ["--repository-configuration-file"],
+                order = PARAMETER_ORDER_OPTIONAL)
+        private var repositoryConfigurationFile: File? = null
+
         override fun run() {
             val absoluteOutputPath = outputDir.absoluteFile
             if (absoluteOutputPath.exists()) {
@@ -173,7 +179,8 @@ object Main {
 
             val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions, removeExcludesFromResult)
             val analyzer = Analyzer(config)
-            val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile)
+            val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile,
+                    repositoryConfigurationFile)
 
             absoluteOutputPath.safeMkdirs()
 

@@ -45,14 +45,16 @@ const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
 class Analyzer(private val config: AnalyzerConfiguration) {
-    fun analyze(absoluteProjectPath: File,
-                packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
-                packageCurationsFile: File? = null
+    fun analyze(
+            absoluteProjectPath: File,
+            packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
+            packageCurationsFile: File? = null,
+            repositoryConfigurationFile: File? = null
     ): OrtResult {
-        val repositoryConfigurationFile = File(absoluteProjectPath, ".ort.yml")
+        val actualRepositoryConfigurationFile = repositoryConfigurationFile ?: File(absoluteProjectPath, ".ort.yml")
 
-        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
-            repositoryConfigurationFile.readValue(RepositoryConfiguration::class.java)
+        val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
+            actualRepositoryConfigurationFile.readValue(RepositoryConfiguration::class.java)
         } else {
             RepositoryConfiguration(null)
         }
