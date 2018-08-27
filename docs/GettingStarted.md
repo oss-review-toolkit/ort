@@ -28,8 +28,8 @@ For some of the supported package managers and SCMs additional tools need to be 
 * [Godep](https://github.com/tools/godep)
 * [Maven](http://maven.apache.org)
 * [Mercurial](https://www.mercurial-scm.org)
-* [NPM](https://www.npmjs.com) 5.5.1 and [Node.js](https://nodejs.org) 8.x (required for this tutorial because we scan
-  `mime-types` which is an NPM project)
+* [NPM](https://www.npmjs.com) 5.5.* - 6.4.* and [Node.js](https://nodejs.org) 8.* (required for this tutorial because
+  we scan `mime-types` which is an NPM project)
 * [PHP Composer](https://getcomposer.org) >= 1.5
 * [SBT](https://www.scala-sbt.org/)
 * [Stack](https://docs.haskellstack.org/en/stable/README)
