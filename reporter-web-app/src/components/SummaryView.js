@@ -75,15 +75,13 @@ class SummaryView extends React.Component {
                 && data.errors.total) {
                 if (data.errors.data.open
                     && Number.isInteger(data.errors.total.open)) {
-                    viewData.errors.open = this.convertErrorsToTableFormat(data.errors.data.open);
+                    viewData.errors.open = data.errors.data.open;
                     viewData.errors.totalOpen = data.errors.total.open;
                 }
 
                 if (data.errors.data.addressed
                     && Number.isInteger(data.errors.total.addressed)) {
-                    viewData.errors.addressed = this.convertErrorsToTableFormat(
-                        data.errors.data.addressed
-                    );
+                        viewData.errors.addressed = data.errors.data.addressed;
                     viewData.errors.totalAddressed = data.errors.total.addressed;
                 }
             }
@@ -93,10 +91,6 @@ class SummaryView extends React.Component {
             ...this.state,
             viewData
         };
-    }
-
-    convertErrorsToTableFormat(errors) {
-        return Object.values(errors).reduce((accumulator, error) => [...accumulator, ...error], []);
     }
 
     convertLicensesToChartFormat(licenses) {

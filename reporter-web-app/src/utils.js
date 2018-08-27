@@ -34,8 +34,8 @@ export function convertToRenderFormat(reportData) {
     const projects = {};
     const declaredLicensesFromAnalyzer = {};
     const detectedLicensesFromScanner = {};
-    const reportDataOpenErrors = {};
-    const reportDataResolvedErrors = {};
+    let reportDataOpenErrors = {};
+    let reportDataAddressedErrors = {};
     let reportDataLevels = new Set([]);
     let reportDataScopes = new Set([]);
 
@@ -85,11 +85,11 @@ export function convertToRenderFormat(reportData) {
 
         if (packageFromScanner) {
             errors = packageFromScanner.reduce((accumulator, scanResult) => {
-                if (!scanResult.errors) {
+                if (!scanResult.summary.errors) {
                     return accumulator;
                 }
 
-                return accumulator.concat(scanResult.errors);
+                return accumulator.concat(scanResult.summary.errors);
             }, []);
 
             errorsScanner = errors.map((error) => {
@@ -102,18 +102,18 @@ export function convertToRenderFormat(reportData) {
         if (errors.length !== 0) {
             pkgObj.errors = errors;
 
-            addErrorsToReportDataReportData(projectIndex, pkgObj.errors);
+            addErrorsToReportDataReportData(projectIndex, pkgObj.id, pkgObj.errors);
         }
 
         return pkgObj;
     };
-    const addErrorsToReportDataReportData = (projectIndex, errors) => {
+    const addErrorsToReportDataReportData = (projectIndex, pkgId, errors) => {
         if (Array.isArray(errors) && errors.length !== 0) {
             if (!reportDataOpenErrors[projectIndex]) {
-                reportDataOpenErrors[projectIndex] = [];
+                reportDataOpenErrors[projectIndex] = {};
             }
 
-            reportDataOpenErrors[projectIndex] = [...reportDataOpenErrors[projectIndex], ...errors];
+            reportDataOpenErrors[projectIndex][pkgId] = errors;
         }
     };
     // Helper function to add license results
@@ -443,23 +443,6 @@ export function convertToRenderFormat(reportData) {
             return accumulator;
         }, licensesSet).size || undefined;
     };
-    const calculateReportDataTotalErrors = () => {
-        let errorsArr;
-        let reportDataTotalErrors;
-
-        if (reportDataOpenErrors.length !== 0) {
-            reportDataTotalErrors = 0;
-            errorsArr = Object.values(reportDataOpenErrors);
-
-            for (let i = errorsArr.length - 1; i >= 0; i -= 1) {
-                reportDataTotalErrors += errorsArr[i].length;
-            }
-
-            return reportDataTotalErrors;
-        }
-
-        return undefined;
-    };
     const calculateReportDataTotalLevels = () => {
         if (reportDataLevels && reportDataLevels.size) {
             return reportDataLevels.size;
@@ -640,16 +623,30 @@ export function convertToRenderFormat(reportData) {
         ).reverse();
     }
 
+    // Flatten errors per project into a flat array of errors
+    reportDataOpenErrors = Object.values(reportDataOpenErrors).reduce((accumulator, errors) => {
+        accumulator = accumulator.concat(...Object.values(errors));
+    
+        return accumulator;
+    }, []);
+    
+    // Flatten addressed errors per project into a flat array of errors
+    reportDataAddressedErrors = Object.values(reportDataAddressedErrors).reduce((accumulator, errors) => {
+        accumulator = accumulator.concat(...Object.values(errors));
+    
+        return accumulator;
+    }, []);
+
     return reportData = {
         hasErrors: reportData.has_errors || false,
         errors: {
             data: {
-                addressed: reportDataResolvedErrors,
+                addressed: reportDataAddressedErrors,
                 open: reportDataOpenErrors
             },
             total: {
-                addressed: 0,
-                open: calculateReportDataTotalErrors()
+                addressed: reportDataAddressedErrors.length,
+                open: reportDataOpenErrors.length
             }
         },
         levels: {
