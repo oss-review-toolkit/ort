@@ -22,7 +22,7 @@ clone_depth: 50
 
 install:
   - git submodule update --init --recursive
-  - npm install -g npm@5.5.1 yarn@1.3.2
+  - npm install -g npm@5.5.1 yarn@1.9.4
   - pip install virtualenv==15.1.0
   - cinst haskell-stack --version 1.7.1 -y
   - stack setup > nul # This installs the whole GHC to an isolated location!

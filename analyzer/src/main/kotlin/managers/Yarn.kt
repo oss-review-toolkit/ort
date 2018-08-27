@@ -50,7 +50,7 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
 
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
-        checkCommandVersion(command(workingDir), Requirement.buildIvy("1.3.+"),
+        checkCommandVersion(command(workingDir), Requirement.buildNPM("1.3.* - 1.9.*"),
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         // Map "yarn.lock" files to existing "package.json" files for use by the NPM class (which in this case calls
