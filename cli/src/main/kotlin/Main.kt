@@ -164,6 +164,7 @@ object Main {
                 exitProcess(1)
             }
 
+            packageManagers = packageManagers.distinct()
             println("The following package managers are activated:")
             println("\t" + packageManagers.joinToString(", "))
 
@@ -176,7 +177,7 @@ object Main {
 
             absoluteOutputPath.safeMkdirs()
 
-            outputFormats.forEach { format ->
+            outputFormats.distinct().forEach { format ->
                 val outputFile = File(absoluteOutputPath, "analyzer-result.${format.fileExtension}")
                 println("Writing analyzer result to '$outputFile'.")
                 format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, ortResult)
@@ -259,6 +260,8 @@ object Main {
                 val analyzerResult = it.readValue(AnalyzerResult::class.java)
 
                 mutableListOf<Package>().apply {
+                    entities = entities.distinct()
+
                     if (Downloader.DataEntity.PROJECT in entities) {
                         Downloader().consolidateProjectPackagesByVcs(analyzerResult.projects).let {
                             addAll(it.keys)
@@ -379,7 +382,7 @@ object Main {
                 it.readValue(OrtResult::class.java)
             }
 
-            reportFormats.forEach {
+            reportFormats.distinct().forEach {
                 it.generateReport(ortResult, outputDir)
             }
         }
@@ -475,7 +478,7 @@ object Main {
             println("Using scanner '$scanner'.")
 
             val ortResult = dependenciesFile?.let {
-                scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan)
+                scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet())
             } ?: run {
                 require(scanner is LocalScanner) {
                     "To scan local files the chosen scanner must be a local scanner."
@@ -485,7 +488,7 @@ object Main {
                 localScanner.scanInputPath(inputPath!!, outputDir)
             }
 
-            outputFormats.forEach { format ->
+            outputFormats.distinct().forEach { format ->
                 val scanRecordFile = File(outputDir, "scan-result.${format.fileExtension}")
                 println("Writing scan record to '${scanRecordFile.absolutePath}'.")
                 format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, ortResult)
