@@ -229,7 +229,7 @@ object Main {
         private lateinit var outputDir: File
 
         @Parameter(description = "Archive the downloaded source code as ZIP files.",
-                names = ["--archive", "-a"],
+                names = ["--archive"],
                 order = PARAMETER_ORDER_OPTIONAL)
         private var archive = false
 
