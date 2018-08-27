@@ -25,14 +25,14 @@ import com.here.ort.reporter.Reporter
 
 import java.io.File
 
-class DynamicHtmlReporter : Reporter {
+class WebAppReporter : Reporter {
     override fun generateReport(ortResult: OrtResult, outputDir: File) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val json = jsonMapper.writeValueAsString(ortResult)
         val result = template.replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$json<")
 
-        val outputFile = File(outputDir, "dynamic-scan-report.html")
-        println("Writing dynamic HTML report to '${outputFile.absolutePath}'.")
+        val outputFile = File(outputDir, "scan-report-web-app.html")
+        println("Writing web app report to '${outputFile.absolutePath}'.")
         outputFile.writeText(result)
     }
 }
