@@ -71,7 +71,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
      * download the source code to. Return scan results as an [OrtResult].
      */
     fun scanDependenciesFile(dependenciesFile: File, outputDirectory: File, downloadDirectory: File? = null,
-                             scopesToScan: List<String> = emptyList()): OrtResult {
+                             scopesToScan: Set<String> = emptySet()): OrtResult {
         require(dependenciesFile.isFile) {
             "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
         }
