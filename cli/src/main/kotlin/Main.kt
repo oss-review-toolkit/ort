@@ -341,9 +341,9 @@ object Main {
     private object ReporterCommand : Runnable {
         private enum class ReportFormat(private val reporter: Reporter) : Reporter {
             EXCEL(ExcelReporter()),
-            DYNAMIC_HTML(DynamicHtmlReporter()),
             NOTICE(NoticeReporter()),
-            STATIC_HTML(StaticHtmlReporter());
+            STATIC_HTML(StaticHtmlReporter()),
+            WEB_APP(WebAppReporter());
 
             override fun generateReport(ortResult: OrtResult, outputDir: File) =
                     reporter.generateReport(ortResult, outputDir)
