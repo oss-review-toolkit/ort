@@ -34,7 +34,7 @@ For some of the supported package managers and SCMs additional tools need to be 
 * [SBT](https://www.scala-sbt.org/)
 * [Stack](https://docs.haskellstack.org/en/stable/README)
 * [Subversion](https://subversion.apache.org)
-* [Yarn](https://yarnpkg.com) 1.3.2
+* [Yarn](https://yarnpkg.com) 1.3.* - 1.9.*
 
 ## 2. Download & Install ORT
 
