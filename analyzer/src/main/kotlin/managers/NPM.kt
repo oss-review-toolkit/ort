@@ -126,7 +126,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
-        checkCommandVersion(command(workingDir), Requirement.buildIvy("5.5.+"),
+        checkCommandVersion(command(workingDir), Requirement.buildNPM("5.5.* - 6.4.*"),
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         return definitionFiles
