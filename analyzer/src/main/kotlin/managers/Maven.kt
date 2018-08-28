@@ -206,7 +206,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         override fun find(session: RepositorySystemSession, request: LocalArtifactRequest): LocalArtifactResult {
             val id = request.artifact.identifier()
             projectsByIdentifier[id]?.let {
-                log.debug {
+                log.info {
                     "Request to local repository for artifact '$id' gets forwarded to local project in '${it.pomFile}'."
                 }
 
