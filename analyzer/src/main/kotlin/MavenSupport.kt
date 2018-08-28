@@ -69,8 +69,8 @@ import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.impl.RemoteRepositoryManager
 import org.eclipse.aether.impl.RepositoryConnectorProvider
-import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
 import org.eclipse.aether.spi.connector.ArtifactDownload
 import org.eclipse.aether.spi.connector.layout.RepositoryLayoutProvider
@@ -83,7 +83,7 @@ import org.eclipse.aether.transfer.TransferEvent
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
-class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> LocalRepositoryManager) {
+class MavenSupport(workspaceReader: WorkspaceReader) {
     companion object {
         private const val GIGABYTE = 1024L * 1024L
         private const val HOUR = 60 * 60
@@ -96,7 +96,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
     }
 
     val container = createContainer()
-    private val repositorySystemSession = createRepositorySystemSession(localRepositoryManagerConverter)
+    private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
     private fun createContainer(): PlexusContainer {
         val configuration = DefaultContainerConfiguration().apply {
@@ -137,9 +137,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         return request
     }
 
-    private fun createRepositorySystemSession(
-            localRepositoryManagerConverter: (LocalRepositoryManager) -> LocalRepositoryManager = { it })
-            : RepositorySystemSession {
+    private fun createRepositorySystemSession(workspaceReader: WorkspaceReader): RepositorySystemSession {
         val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
         val aetherRepositorySystem = container.lookup(RepositorySystem::class.java, "default")
         val repositorySystemSessionFactory = container.lookup(DefaultRepositorySystemSessionFactory::class.java,
@@ -154,12 +152,8 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
         val session = LegacyLocalRepositoryManager.overlay(localRepository, repositorySystemSession,
                 aetherRepositorySystem)
 
-        val localRepositoryManager = localRepositoryManagerConverter(session.localRepositoryManager)
-
-        return if (localRepositoryManager == session.localRepositoryManager) {
-            session
-        } else {
-            DefaultRepositorySystemSession(session).setLocalRepositoryManager(localRepositoryManager)
+        return DefaultRepositorySystemSession(session).apply {
+            setWorkspaceReader(workspaceReader)
         }
     }
 
