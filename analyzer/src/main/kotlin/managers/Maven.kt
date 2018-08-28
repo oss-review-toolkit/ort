@@ -166,8 +166,8 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
         try {
             val pkg = packages.getOrPut(node.artifact.identifier()) {
-                maven.parsePackage(node.artifact, node.repositories,
-                        localProjectBuildingResults.mapValues { it.value.project }, sbtMode)
+                val localProjects = localProjectBuildingResults.mapValues { it.value.project }
+                maven.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
             }
 
             val dependencies = node.children.map { parseDependency(it, packages) }.toSortedSet()
