@@ -76,7 +76,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         LocalRepositoryManagerWrapper(localRepositoryManager)
     }
 
-    private val projectsByIdentifier = mutableMapOf<String, ProjectBuildingResult>()
+    private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
     private var sbtMode = false
 
@@ -112,7 +112,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 val project = projectBuildingResult.project
                 val identifier = "${project.groupId}:${project.artifactId}:${project.version}"
 
-                projectsByIdentifier[identifier] = projectBuildingResult
+                localProjectBuildingResults[identifier] = projectBuildingResult
             }
         }
 
@@ -166,7 +166,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
         try {
             val pkg = packages.getOrPut(node.artifact.identifier()) {
-                val localProjects = projectsByIdentifier.mapValues { it.value.project }
+                val localProjects = localProjectBuildingResults.mapValues { it.value.project }
                 maven.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
             }
 
@@ -205,7 +205,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         override fun find(session: RepositorySystemSession, request: LocalArtifactRequest): LocalArtifactResult {
             val id = request.artifact.identifier()
-            projectsByIdentifier[id]?.let {
+            localProjectBuildingResults[id]?.let {
                 log.info {
                     "Request to local repository for artifact '$id' gets forwarded to local project in '${it.pomFile}'."
                 }
