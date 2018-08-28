@@ -49,19 +49,11 @@ import java.io.File
 
 import org.apache.maven.project.ProjectBuildingException
 
-import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
-import org.eclipse.aether.metadata.Metadata
-import org.eclipse.aether.repository.LocalArtifactRegistration
-import org.eclipse.aether.repository.LocalArtifactRequest
-import org.eclipse.aether.repository.LocalArtifactResult
-import org.eclipse.aether.repository.LocalMetadataRegistration
-import org.eclipse.aether.repository.LocalMetadataRequest
-import org.eclipse.aether.repository.LocalMetadataResult
-import org.eclipse.aether.repository.LocalRepository
-import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.repository.WorkspaceReader
+import org.eclipse.aether.repository.WorkspaceRepository
 
 import org.gradle.tooling.GradleConnector
 
@@ -77,9 +69,34 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
                 Gradle(analyzerConfig, repoConfig)
     }
 
-    val maven = MavenSupport { localRepositoryManager ->
-        GradleLocalRepositoryManager(localRepositoryManager)
-    }
+    val maven = MavenSupport(object : WorkspaceReader {
+        private val gradleCacheRoot = File(System.getProperty("user.home"), ".gradle/caches/modules-2/files-2.1")
+
+        override fun findArtifact(artifact: Artifact): File? {
+            val artifactRootDir = File(gradleCacheRoot,
+                    "${artifact.groupId}/${artifact.artifactId}/${artifact.version}")
+
+            val pomFile = artifactRootDir.walkTopDown().find {
+                val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"
+                it.isFile && it.name == "${artifact.artifactId}-$classifier${artifact.version}.${artifact.extension}"
+            }
+
+            log.debug {
+                "Gradle cache result for '${artifact.identifier()}:${artifact.classifier}:${artifact.extension}': " +
+                        pomFile?.absolutePath
+            }
+
+            return pomFile
+        }
+
+        override fun findVersions(artifact: Artifact): List<String> {
+            return if (findArtifact(artifact)?.isFile == true) listOf(artifact.version) else emptyList()
+        }
+
+        override fun getRepository(): WorkspaceRepository {
+            return WorkspaceRepository()
+        }
+    })
 
     override fun command(workingDir: File): String {
         val (gradle, wrapper) = if (OS.isWindows) {
@@ -208,72 +225,5 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
         return PackageReference(Identifier("Maven", dependency.groupId, dependency.artifactId,
                 dependency.version), transitiveDependencies.toSortedSet(), errors)
-    }
-
-    /**
-     * An implementation of [LocalRepositoryManager] that provides artifacts from the Gradle cache. This is required
-     * to parse POM files from the Gradle cache, because Maven needs to be able to resolve parent POMs. Once the POM
-     * has been parsed correctly all dependencies required to build the project model can be resolved by Maven using
-     * the local repository.
-     */
-    private class GradleLocalRepositoryManager(private val localRepositoryManager: LocalRepositoryManager)
-        : LocalRepositoryManager {
-
-        private val gradleCacheRoot = File(System.getProperty("user.home"), ".gradle/caches/modules-2/files-2.1")
-
-        override fun add(session: RepositorySystemSession, request: LocalArtifactRegistration) =
-                localRepositoryManager.add(session, request)
-
-        override fun add(session: RepositorySystemSession, request: LocalMetadataRegistration) =
-                localRepositoryManager.add(session, request)
-
-        override fun find(session: RepositorySystemSession, request: LocalArtifactRequest): LocalArtifactResult {
-            log.debug { "Request to find local artifact: $request" }
-
-            val file = findArtifactInGradleCache(request.artifact)
-
-            if (file != null && file.isFile) {
-                return LocalArtifactResult(request).apply {
-                    this.file = file
-                    isAvailable = true
-                }
-            }
-
-            return localRepositoryManager.find(session, request)
-        }
-
-        override fun find(session: RepositorySystemSession, request: LocalMetadataRequest): LocalMetadataResult =
-                localRepositoryManager.find(session, request)
-
-        override fun getPathForLocalArtifact(artifact: Artifact): String =
-                localRepositoryManager.getPathForLocalArtifact(artifact)
-
-        override fun getPathForLocalMetadata(metadata: Metadata): String =
-                localRepositoryManager.getPathForLocalMetadata(metadata)
-
-        override fun getPathForRemoteArtifact(artifact: Artifact, repository: RemoteRepository, context: String)
-                : String = localRepositoryManager.getPathForRemoteArtifact(artifact, repository, context)
-
-        override fun getPathForRemoteMetadata(metadata: Metadata, repository: RemoteRepository, context: String)
-                : String = localRepositoryManager.getPathForRemoteMetadata(metadata, repository, context)
-
-        override fun getRepository(): LocalRepository = localRepositoryManager.repository
-
-        private fun findArtifactInGradleCache(artifact: Artifact): File? {
-            val artifactRootDir = File(gradleCacheRoot,
-                    "${artifact.groupId}/${artifact.artifactId}/${artifact.version}")
-
-            val pomFile = artifactRootDir.walkTopDown().find {
-                val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"
-                it.isFile && it.name == "${artifact.artifactId}-$classifier${artifact.version}.${artifact.extension}"
-            }
-
-            log.debug {
-                "Gradle cache result for '${artifact.identifier()}:${artifact.classifier}:${artifact.extension}': " +
-                        pomFile?.absolutePath
-            }
-
-            return pomFile
-        }
     }
 }

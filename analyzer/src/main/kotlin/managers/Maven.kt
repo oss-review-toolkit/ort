@@ -46,19 +46,10 @@ import org.apache.maven.project.ProjectBuilder
 import org.apache.maven.project.ProjectBuildingException
 import org.apache.maven.project.ProjectBuildingResult
 
-import org.eclipse.aether.RepositorySystemSession
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.graph.DependencyNode
-import org.eclipse.aether.metadata.Metadata
-import org.eclipse.aether.repository.LocalArtifactRegistration
-import org.eclipse.aether.repository.LocalArtifactRequest
-import org.eclipse.aether.repository.LocalArtifactResult
-import org.eclipse.aether.repository.LocalMetadataRegistration
-import org.eclipse.aether.repository.LocalMetadataRequest
-import org.eclipse.aether.repository.LocalMetadataResult
-import org.eclipse.aether.repository.LocalRepository
-import org.eclipse.aether.repository.LocalRepositoryManager
-import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.repository.WorkspaceReader
+import org.eclipse.aether.repository.WorkspaceRepository
 
 /**
  * The Maven package manager for Java, see https://maven.apache.org/.
@@ -72,9 +63,19 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 Maven(analyzerConfig, repoConfig)
     }
 
-    private val maven = MavenSupport { localRepositoryManager ->
-        LocalRepositoryManagerWrapper(localRepositoryManager)
-    }
+    private val maven = MavenSupport(object : WorkspaceReader {
+        override fun findArtifact(artifact: Artifact): File? {
+            return localProjectBuildingResults[artifact.identifier()]?.pomFile?.absoluteFile
+        }
+
+        override fun findVersions(artifact: Artifact): List<String> {
+            return if (findArtifact(artifact)?.isFile == true) listOf(artifact.version) else emptyList()
+        }
+
+        override fun getRepository(): WorkspaceRepository {
+            return WorkspaceRepository()
+        }
+    })
 
     private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
@@ -186,58 +187,5 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                     errors = e.collectMessages().map { Error(source = toString(), message = it) }
             )
         }
-    }
-
-    /**
-     * A wrapper for the [LocalRepositoryManager] used in [MavenSupport.repositorySystemSession] that pretends that the
-     * POM files of the currently analyzed project are available in the local repository. Without it the resolution of
-     * transitive dependencies of project dependencies would not work without installing the project in the local
-     * repository first.
-     */
-    private inner class LocalRepositoryManagerWrapper(private val localRepositoryManager: LocalRepositoryManager)
-        : LocalRepositoryManager {
-
-        override fun add(session: RepositorySystemSession, request: LocalArtifactRegistration) =
-                localRepositoryManager.add(session, request)
-
-        override fun add(session: RepositorySystemSession, request: LocalMetadataRegistration) =
-                localRepositoryManager.add(session, request)
-
-        override fun find(session: RepositorySystemSession, request: LocalArtifactRequest): LocalArtifactResult {
-            val id = request.artifact.identifier()
-            localProjectBuildingResults[id]?.let {
-                log.info {
-                    "Request to local repository for artifact '$id' gets forwarded to local project in '${it.pomFile}'."
-                }
-
-                return LocalArtifactResult(request).apply {
-                    file = it.pomFile.absoluteFile
-                    isAvailable = true
-                }
-            }
-
-            return localRepositoryManager.find(session, request)
-        }
-
-        override fun find(session: RepositorySystemSession, request: LocalMetadataRequest): LocalMetadataResult =
-                localRepositoryManager.find(session, request)
-
-        override fun getPathForLocalArtifact(artifact: Artifact): String {
-            val id = artifact.identifier()
-            return localProjectBuildingResults[id]?.let {
-                it.pomFile.absolutePath
-            } ?: localRepositoryManager.getPathForLocalArtifact(artifact)
-        }
-
-        override fun getPathForLocalMetadata(metadata: Metadata): String =
-                localRepositoryManager.getPathForLocalMetadata(metadata)
-
-        override fun getPathForRemoteArtifact(artifact: Artifact, repository: RemoteRepository, context: String)
-                : String = localRepositoryManager.getPathForRemoteArtifact(artifact, repository, context)
-
-        override fun getPathForRemoteMetadata(metadata: Metadata, repository: RemoteRepository, context: String)
-                : String = localRepositoryManager.getPathForRemoteMetadata(metadata, repository, context)
-
-        override fun getRepository(): LocalRepository = localRepositoryManager.repository
     }
 }
