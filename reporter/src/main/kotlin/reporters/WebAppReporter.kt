@@ -19,9 +19,12 @@
 
 package com.here.ort.reporter.reporters
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.model.OrtResult
 import com.here.ort.model.jsonMapper
 import com.here.ort.reporter.Reporter
+import com.here.ort.utils.log
 
 import java.io.File
 
@@ -32,7 +35,9 @@ class WebAppReporter : Reporter {
         val result = template.replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$json<")
 
         val outputFile = File(outputDir, "scan-report-web-app.html")
-        println("Writing web app report to '${outputFile.absolutePath}'.")
+
+        log.info { "Writing web app report to '${outputFile.absolutePath}'." }
+
         outputFile.writeText(result)
     }
 }

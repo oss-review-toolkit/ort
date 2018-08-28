@@ -160,10 +160,9 @@ class Downloader {
         }
 
         if (target.vcsProcessed != target.vcs) {
-            println("Using processed ${target.vcsProcessed}.")
-            println("Original was ${target.vcs}.")
+            log.info { "Using processed ${target.vcsProcessed}. Original was ${target.vcs}." }
         } else {
-            println("Using ${target.vcsProcessed}.")
+            log.info { "Using ${target.vcsProcessed}." }
         }
 
         var applicableVcs: VersionControlSystem? = null

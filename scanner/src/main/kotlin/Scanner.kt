@@ -19,6 +19,8 @@
 
 package com.here.ort.scanner
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.downloader.Downloader
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
@@ -30,6 +32,7 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerRun
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.readValue
+import com.here.ort.utils.log
 
 import java.io.File
 import java.util.ServiceLoader
@@ -90,7 +93,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
         val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
 
         val projectScanScopes = if (scopesToScan.isNotEmpty()) {
-            println("Limiting scan to scopes: $scopesToScan")
+            log.info { "Limiting scan to scopes $scopesToScan." }
 
             analyzerResult.projects.map { project ->
                 project.scopes.map { it.name }.partition { it in scopesToScan }.let {

@@ -19,9 +19,12 @@
 
 package com.here.ort.reporter.reporters
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.isValidUrl
+import com.here.ort.utils.log
 
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
@@ -112,7 +115,9 @@ class ExcelReporter : TableReporter() {
         }
 
         val outputFile = File(outputDir, "scan-report.xlsx")
-        println("Writing Excel report to '${outputFile.absolutePath}'.")
+
+        log.info { "Writing Excel report to '${outputFile.absolutePath}'." }
+
         outputFile.outputStream().use {
             workbook.write(it)
         }
