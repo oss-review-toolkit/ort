@@ -71,7 +71,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
             getVersion(it) == scannerVersion
         } ?: run {
             if (scannerExe.isNotEmpty()) {
-                println("Bootstrapping scanner '$this' as required version $scannerVersion was not found in PATH.")
+                log.info { "Bootstrapping scanner '$this' as required version $scannerVersion was not found in PATH." }
+
                 bootstrap().also {
                     val actualScannerVersion = getVersion(it)
                     if (actualScannerVersion != scannerVersion) {
@@ -80,7 +81,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
                     }
                 }
             } else {
-                println("Skipping to bootstrap scanner '$this' as it has no executable.")
+                log.info { "Skipping to bootstrap scanner '$this' as it has no executable." }
+
                 File("")
             }
         }
@@ -165,11 +167,13 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
             "Provided path does not exist: ${inputPath.absolutePath}"
         }
 
-        println("Scanning path '${inputPath.absolutePath}'...")
+        log.info { "Scanning path '${inputPath.absolutePath}'..." }
 
         val result = try {
             scanPath(inputPath, outputDirectory).also {
-                println("Detected licenses for path '${inputPath.absolutePath}': ${it.summary.licenses.joinToString()}")
+                log.info {
+                    "Detected licenses for path '${inputPath.absolutePath}': ${it.summary.licenses.joinToString()}"
+                }
             }
         } catch (e: ScanException) {
             e.showStackTrace()
@@ -245,8 +249,10 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
             return listOf(scanResult)
         }
 
-        println("Running $this version ${scannerDetails.version} on directory " +
-                "'${downloadResult.downloadDirectory.absolutePath}'.")
+        log.info {
+            "Running $this version ${scannerDetails.version} on directory " +
+                    "'${downloadResult.downloadDirectory.absolutePath}'."
+        }
 
         val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
                 downloadResult.originalVcsInfo)
@@ -274,10 +280,11 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
         val resultsFile = File(scanResultsDirectory,
                 "${path.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
 
-        println("Running $this version ${scannerDetails.version} on path '${path.absolutePath}'.")
+        log.info { "Running $this version ${scannerDetails.version} on path '${path.absolutePath}'." }
 
-        return scanPath(scannerDetails, path, Provenance(downloadTime = Instant.now()), resultsFile)
-                .also { println("Stored $this results in '${resultsFile.absolutePath}'.") }
+        return scanPath(scannerDetails, path, Provenance(downloadTime = Instant.now()), resultsFile).also {
+            log.info { "Stored $this results in '${resultsFile.absolutePath}'." }
+        }
     }
 
     /**

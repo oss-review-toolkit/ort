@@ -163,7 +163,7 @@ fun checkCommandVersion(
     if (!requirement.isSatisfiedBy(actualVersion)) {
         val message = "Unsupported $command version $actualVersion does not fulfill $requirement."
         if (ignoreActualVersion) {
-            println("Still continuing because you chose to ignore the actual version.")
+            log.warn { "$message Still continuing because you chose to ignore the actual version." }
         } else {
             throw IOException(message)
         }

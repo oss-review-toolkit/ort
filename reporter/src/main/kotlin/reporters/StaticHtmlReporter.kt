@@ -19,8 +19,11 @@
 
 package com.here.ort.reporter.reporters
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.isValidUrl
+import com.here.ort.utils.log
 
 import java.io.File
 
@@ -263,7 +266,9 @@ class StaticHtmlReporter : TableReporter() {
             """.trimIndent()
 
         val outputFile = File(outputDir, "scan-report.html")
-        println("Writing static HTML report to '${outputFile.absolutePath}'.")
+
+        log.info { "Writing static HTML report to '${outputFile.absolutePath}'." }
+
         outputFile.writeText(html)
     }
 
