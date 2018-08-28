@@ -117,9 +117,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
 
         val results = scan(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory)
         val resultContainers = results.map { (pkg, results) ->
-            // Remove the raw results from the scan results to reduce the size of the scan result.
-            // TODO: Consider adding an option to keep the raw results.
-            ScanResultContainer(pkg.id, results.map { it.copy(rawResult = null) })
+            ScanResultContainer(pkg.id, results)
         }.toSortedSet()
 
         // Add scan results from de-duplicated project packages to result.

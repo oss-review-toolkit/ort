@@ -138,7 +138,10 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
             val result = try {
                 log.info { "Starting scan of '${pkg.id}' (${index + 1}/${packages.size})." }
 
-                scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory)
+                scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).map {
+                    // Remove the now unneeded reference to rawResult here to allow garbage collection to clean it up.
+                    it.copy(rawResult = null)
+                }
             } catch (e: ScanException) {
                 val now = Instant.now()
                 listOf(ScanResult(
