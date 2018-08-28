@@ -400,7 +400,13 @@ object Main {
             }
 
             reportFormats.distinct().forEach {
-                it.generateReport(ortResult, outputDir)
+                try {
+                    it.generateReport(ortResult, outputDir)
+                } catch (e: Exception) {
+                    e.showStackTrace()
+
+                    log.error { "Could not create '$it' report: ${e.message}" }
+                }
             }
         }
     }
