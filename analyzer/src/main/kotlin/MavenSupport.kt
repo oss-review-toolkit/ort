@@ -33,6 +33,7 @@ import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
+import org.apache.maven.artifact.handler.DefaultArtifactHandler
 
 import java.io.File
 import java.util.regex.Pattern
@@ -71,6 +72,8 @@ import org.eclipse.aether.impl.RemoteRepositoryManager
 import org.eclipse.aether.impl.RepositoryConnectorProvider
 import org.eclipse.aether.repository.LocalRepositoryManager
 import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.repository.WorkspaceReader
+import org.eclipse.aether.repository.WorkspaceRepository
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
 import org.eclipse.aether.spi.connector.ArtifactDownload
 import org.eclipse.aether.spi.connector.layout.RepositoryLayoutProvider
@@ -156,10 +159,28 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         val localRepositoryManager = localRepositoryManagerConverter(session.localRepositoryManager)
 
+        val localWorspaceReader = object : WorkspaceReader {
+            override fun findArtifact(artifact: Artifact): File? {
+                val path = File(localRepositoryManager.getPathForLocalArtifact(artifact))
+                return if (path.isFile) path else null
+            }
+
+            override fun findVersions(artifact: Artifact): List<String> {
+                return if (artifact.version.endsWith("-SNAPSHOT")) listOf(artifact.version) else emptyList()
+            }
+
+            override fun getRepository(): WorkspaceRepository {
+                return WorkspaceRepository()
+            }
+        }
+
         return if (localRepositoryManager == session.localRepositoryManager) {
             session
         } else {
-            DefaultRepositorySystemSession(session).setLocalRepositoryManager(localRepositoryManager)
+            DefaultRepositorySystemSession(session).apply {
+                setLocalRepositoryManager(localRepositoryManager)
+                setWorkspaceReader(localWorspaceReader)
+            }
         }
     }
 
@@ -169,6 +190,7 @@ class MavenSupport(localRepositoryManagerConverter: (LocalRepositoryManager) -> 
 
         return try {
             wrapMavenSession {
+                projectBuildingRequest.repositorySession.workspaceReader
                 projectBuilder.build(pomFile, projectBuildingRequest)
             }
         } catch (e: ProjectBuildingException) {

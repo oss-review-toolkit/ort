@@ -222,8 +222,12 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         override fun find(session: RepositorySystemSession, request: LocalMetadataRequest): LocalMetadataResult =
                 localRepositoryManager.find(session, request)
 
-        override fun getPathForLocalArtifact(artifact: Artifact): String =
-                localRepositoryManager.getPathForLocalArtifact(artifact)
+        override fun getPathForLocalArtifact(artifact: Artifact): String {
+            val id = artifact.identifier()
+            return localProjectBuildingResults[id]?.let {
+                it.pomFile.absolutePath
+            } ?: localRepositoryManager.getPathForLocalArtifact(artifact)
+        }
 
         override fun getPathForLocalMetadata(metadata: Metadata): String =
                 localRepositoryManager.getPathForLocalMetadata(metadata)
