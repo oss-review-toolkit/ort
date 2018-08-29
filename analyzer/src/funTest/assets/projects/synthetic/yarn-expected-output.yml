@@ -753,7 +753,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
+      url: "http://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz"
       hash: "78203a4d1c328ae1d86dca6460e369b57f4055ae"
       hash_algorithm: "SHA-1"
     vcs:
