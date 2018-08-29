@@ -2245,7 +2245,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/chalk/-/chalk-1.1.3.tgz"
+      url: "http://registry.npmjs.org/chalk/-/chalk-1.1.3.tgz"
       hash: "a8115c55e4a702fe4d150abd3872822a7e09fc98"
       hash_algorithm: "SHA-1"
     vcs:
@@ -3642,7 +3642,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
+      url: "http://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
       hash: "30057438eac6cf7f8c4767f38648d6697d75c903"
       hash_algorithm: "SHA-1"
     vcs:
