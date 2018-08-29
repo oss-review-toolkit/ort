@@ -68,7 +68,7 @@ class NoticeReporter : Reporter {
 
             if (copyrights.isNotEmpty()) noticeBuilder.append("\n")
 
-            noticeBuilder.append("${getLicenseText(license)}\n")
+            noticeBuilder.append("${getLicenseText(license, true)}\n")
 
             // Trim lines and remove consecutive blank lines as the license text formatting in SPDX JSON files is
             // broken, see https://github.com/spdx/LicenseListPublisher/issues/30.
