@@ -68,11 +68,16 @@ fun calculatePackageVerificationCode(files: List<File>) =
         })
 
 /**
- * Retrieve the full text for the license with the provided SPDX [id].
+ * Retrieve the full text for the license with the provided SPDX [id]. If [handleExceptions] is enabled, the [id] may
+ * also refer to an exception instead of a license.
  */
-fun getLicenseText(id: String): String {
+fun getLicenseText(id: String, handleExceptions: Boolean = false): String {
     val version = "v3.1.1"
-    val url = "https://github.com/spdx/license-list-data/raw/$version/json/details/$id.json"
+    val (url, key) = if (handleExceptions && id.contains("-exception") && !id.contains("-with")) {
+        Pair("https://github.com/spdx/license-list-data/raw/$version/json/exceptions/$id.json", "licenseExceptionText")
+    } else {
+        Pair("https://github.com/spdx/license-list-data/raw/$version/json/details/$id.json", "licenseText")
+    }
     val request = Request.Builder().get().url(url).build()
 
     return OkHttpClientHelper.execute("utils/cache/http", request).use { response ->
@@ -82,6 +87,6 @@ fun getLicenseText(id: String): String {
             throw IOException("Failed to download the text for license '$id' from $url.")
         }
 
-        ObjectMapper().readTree(body.string())["licenseText"].textValue()
+        ObjectMapper().readTree(body.string())[key].textValue()
     }
 }
