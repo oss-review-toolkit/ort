@@ -63,7 +63,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 Maven(analyzerConfig, repoConfig)
     }
 
-    private val maven = MavenSupport(object : WorkspaceReader {
+    private inner class LocalProjectWorkspaceReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository()
 
         override fun findArtifact(artifact: Artifact): File? {
@@ -79,7 +79,9 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) } ?: emptyList()
 
         override fun getRepository() = workspaceRepository
-    })
+    }
+
+    private val maven = MavenSupport(LocalProjectWorkspaceReader())
 
     private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
