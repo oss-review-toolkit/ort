@@ -19,12 +19,17 @@
 
 package com.here.ort.reporter.reporters
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.model.OrtResult
 import com.here.ort.reporter.Reporter
+import com.here.ort.utils.log
 import com.here.ort.utils.spdx.getLicenseText
 
 import java.io.File
 import java.util.SortedSet
+
+const val NOTICE_FILE_NAME = "NOTICE"
 
 class NoticeReporter : Reporter {
     override fun generateReport(ortResult: OrtResult, outputDir: File) {
@@ -34,7 +39,7 @@ class NoticeReporter : Reporter {
 
         val scanRecord = ortResult.scanner!!.results
 
-        val noticeFile = File(outputDir, "NOTICE")
+        val outputFile = File(outputDir, NOTICE_FILE_NAME)
 
         val allFindings = sortedMapOf<String, SortedSet<String>>()
 
@@ -54,6 +59,13 @@ class NoticeReporter : Reporter {
             // For now, just skip license references for which SPDX has no license text.
             license.startsWith("LicenseRef-")
         }.iterator()
+
+        if (!findingsIterator.hasNext()) {
+            log.info { "Not writing a $NOTICE_FILE_NAME file as it would be empty." }
+            return
+        } else {
+            log.info { "Writing $NOTICE_FILE_NAME file to '${outputFile.absolutePath}'." }
+        }
 
         // Note: Do not use appendln() here as that would write out platform-native line endings, but we want to
         // normalize on Unix-style line endings for consistency.
@@ -84,7 +96,7 @@ class NoticeReporter : Reporter {
             // Separate notice entries.
             if (findingsIterator.hasNext()) noticeBuilder.append("\n----\n\n")
 
-            noticeFile.appendText(noticeBuilder.toString())
+            outputFile.appendText(noticeBuilder.toString())
         }
     }
 }
