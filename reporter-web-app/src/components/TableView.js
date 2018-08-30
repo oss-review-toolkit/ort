@@ -21,21 +21,25 @@ class TableView extends React.Component {
                 data: props.reportData
             };
 
-            // Expand all project panels with 0.5 second delay
-            // to ensure smooth UI when tabs switching
-            window.setTimeout(() => {
-                const { data } = this.state;
-                const projects = Object.values(
-                    data.projects.data
-                ).reduce((accumulator, project) => {
-                    accumulator.push(`panel-${project.id}`);
-                    return accumulator;
-                }, []);
+            // Limit when to automatically expand project panels
+            // to avoid hitting browser JavaScript timeouts
+            if (Object.values(props.reportData.projects.data).length < 40) {
+                // Expand all project panels with 0.5 second delay
+                // to ensure smooth UI when tabs switching
+                window.setTimeout(() => {
+                    const { data } = this.state;
+                    const projects = Object.values(
+                        data.projects.data
+                    ).reduce((accumulator, project) => {
+                        accumulator.push(`panel-${project.id}`);
+                        return accumulator;
+                    }, []);
 
-                this.setState({
-                    view: { showProjects: projects }
-                });
-            }, 500);
+                    this.setState({
+                        view: { showProjects: projects }
+                    });
+                }, 500);
+            }
         }
 
         // Bind so `this` works in the Collapse's onChange callback
