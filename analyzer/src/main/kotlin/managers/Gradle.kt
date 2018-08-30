@@ -114,12 +114,12 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        val connection = GradleConnector
+        val gradleConnection = GradleConnector
                 .newConnector()
                 .forProjectDirectory(definitionFile.parentFile)
                 .connect()
 
-        try {
+        gradleConnection.use { connection ->
             val initScriptFile = File.createTempFile("init", ".gradle")
             initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
 
@@ -170,8 +170,6 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
             }
 
             return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), errors)
-        } finally {
-            connection.close()
         }
     }
 
