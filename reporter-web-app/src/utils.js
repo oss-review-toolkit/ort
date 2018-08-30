@@ -149,10 +149,14 @@ export function convertToRenderFormat(reportData) {
             pkgObj.license_findings = packageFromScanner.reduce((accumulator, scanResult) =>
                 accumulator.concat(scanResult.summary.license_findings), []);
 
+            // Merge scan results from different scanners into array of license names
             pkgObj.detected_licenses = pkgObj.license_findings.reduce((accumulator, finding) => {
                 accumulator.push(finding.license);
                 return accumulator;
             }, []);
+
+            // Remove duplicate license names after merging
+            pkgObj.detected_licenses = removeDuplicatesInArray(pkgObj.detected_licenses);
 
             addPackageLicensesToProject(
                 projectIndex,
