@@ -128,6 +128,9 @@ export function convertToRenderFormat(reportData) {
             pkgObj.declared_licenses = projectsFromAnalyzer[projectIndex].declared_licenses;
         } else if (packageFromAnalyzer) {
             pkgObj.declared_licenses = packageFromAnalyzer.declared_licenses;
+        } else {
+            pkgObj.declared_licenses = [];
+            console.error('Package ' + pkgObj.id + ' can not be found in Analyzer results');
         }
 
         addPackageLicensesToProject(
