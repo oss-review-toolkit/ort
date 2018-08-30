@@ -101,15 +101,17 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
                 }
             }
         } else {
-            analyzerResult.projects.map {
-                val scopes = it.scopes.map { it.name }
-                ProjectScanScopes(it.id, scopes.toSortedSet(), sortedSetOf())
+            analyzerResult.projects.map { project ->
+                val scopes = project.scopes.map { it.name }
+                ProjectScanScopes(project.id, scopes.toSortedSet(), sortedSetOf())
             }
         }.toSortedSet()
 
         val packagesToScan = if (scopesToScan.isNotEmpty()) {
             consolidatedReferencePackages + analyzerResult.packages.filter { pkg ->
-                analyzerResult.projects.any { it.scopes.any { it.name in scopesToScan && pkg.pkg in it } }
+                analyzerResult.projects.any { project ->
+                    project.scopes.any { it.name in scopesToScan && pkg.pkg in it }
+                }
             }
         } else {
             consolidatedReferencePackages + analyzerResult.packages

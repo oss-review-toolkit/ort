@@ -71,8 +71,8 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
     override fun command(workingDir: File) = if (OS.isWindows) "sbt.bat" else "sbt"
 
     private fun extractLowestSbtVersion(stdout: String): String {
-        val versions = stdout.lines().mapNotNull {
-            VERSION_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { Semver(it) }
+        val versions = stdout.lines().mapNotNull { line ->
+            VERSION_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { Semver(it) }
         }
 
         return checkForSameSbtVersion(versions)
@@ -155,8 +155,8 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
         // aggregate projects.
         val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        val pomFiles = runSBT(makePomCommand).stdout().lines().mapNotNull {
-            POM_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)?.let { File(it) }
+        val pomFiles = runSBT(makePomCommand).stdout().lines().mapNotNull { line ->
+            POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
         }
 
         return pomFiles.distinct()

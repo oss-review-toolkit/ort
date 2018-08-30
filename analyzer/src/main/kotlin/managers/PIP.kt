@@ -340,8 +340,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         val declaredLicenses = sortedSetOf<String>()
 
         // Use the top-level license field as well as the license classifiers as the declared licenses.
-        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) {
-            it?.textValue()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) { license ->
+            license?.textValue()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
         }
 
         // Example license classifier:

@@ -97,8 +97,8 @@ class Subversion : VersionControlSystem() {
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
-        return getCommandVersion("svn") {
-            versionRegex.matcher(it.lineSequence().first()).let {
+        return getCommandVersion("svn") { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
                 if (it.matches()) {
                     it.group("version")
                 } else {

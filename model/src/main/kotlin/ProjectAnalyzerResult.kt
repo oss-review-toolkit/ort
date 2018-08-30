@@ -62,8 +62,10 @@ data class ProjectAnalyzerResult(
             pkgReference.dependencies.forEach { addErrors(it) }
         }
 
-        project.scopes.forEach {
-            it.dependencies.forEach { addErrors(it) }
+        for (scope in project.scopes) {
+            for (dependency in scope.dependencies) {
+                addErrors(dependency)
+            }
         }
 
         return mutableMapOf<Identifier, List<Error>>().apply {

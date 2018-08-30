@@ -295,8 +295,8 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             FileSystems.getDefault().getPathMatcher("glob:$it")
         }
 
-        val rootLicenseFile = result["files"].singleOrNull {
-            val path = it["path"].asText()
+        val rootLicenseFile = result["files"].singleOrNull { file ->
+            val path = file["path"].asText()
             matchersForLicenseFiles.any { it.matches(Paths.get(path)) }
         } ?: return ""
 

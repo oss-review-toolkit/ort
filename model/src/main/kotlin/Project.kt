@@ -93,7 +93,11 @@ data class Project(
             pkgRef.dependencies.forEach { addErrors(it) }
         }
 
-        scopes.forEach { it.dependencies.forEach { addErrors(it) } }
+        for (scope in scopes) {
+            for (dependency in scope.dependencies) {
+                addErrors(dependency)
+            }
+        }
 
         return collectedErrors.distinct()
     }

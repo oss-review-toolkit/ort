@@ -181,9 +181,9 @@ abstract class TableReporter : Reporter {
             }
         } ?: emptyMap()
 
-        val extraColumns = scanRecord.data["reporter.extraColumns"]?.let {
-            if (it is List<*>) {
-                it.map { it.toString() }
+        val extraColumns = scanRecord.data["reporter.extraColumns"]?.let { extraColumns ->
+            if (extraColumns is List<*>) {
+                extraColumns.map { it.toString() }
             } else {
                 null
             }

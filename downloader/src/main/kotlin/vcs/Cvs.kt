@@ -48,8 +48,8 @@ class Cvs : VersionControlSystem() {
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
 
-        return getCommandVersion("cvs") {
-            versionRegex.matcher(it.lineSequence().first()).let {
+        return getCommandVersion("cvs") { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
                 if (it.matches()) {
                     it.group("version")
                 } else {
@@ -120,10 +120,10 @@ class Cvs : VersionControlSystem() {
                     val cvsLog = run(workingDir, "log", "-h")
                     var tagsSectionStarted = false
 
-                    return cvsLog.stdout().lines().mapNotNull {
+                    return cvsLog.stdout().lines().mapNotNull { line ->
                         if (tagsSectionStarted) {
-                            if (it.startsWith('\t')) {
-                                it.split(':', limit = 2).let {
+                            if (line.startsWith('\t')) {
+                                line.split(':', limit = 2).let {
                                     Pair(it.first().trim(), it.last().trim())
                                 }
                             } else {
@@ -131,7 +131,7 @@ class Cvs : VersionControlSystem() {
                                 null
                             }
                         } else {
-                            if (it == "symbolic names:") {
+                            if (line == "symbolic names:") {
                                 tagsSectionStarted = true
                             }
                             null
