@@ -144,7 +144,7 @@ class ArtifactoryCache(
             return false
         }
 
-        val scanResults = read(id).let { ScanResultContainer(id, it.results + scanResult) }
+        val scanResults = ScanResultContainer(id, read(id).results + scanResult)
 
         val tempFile = createTempFile("scan-results-")
         yamlMapper.writeValue(tempFile, scanResults)

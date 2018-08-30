@@ -107,7 +107,7 @@ class ExcludesMarker(excludes: Excludes) : ExcludesProcessor(excludes) {
             scope.copy(dependencies = dependencies, excluded = excluded)
         }.toSortedSet()
 
-        val excluded = projectExclude?.let { it.exclude } ?: false
+        val excluded = projectExclude?.exclude ?: false
 
         return project.copy(scopes = scopes, excluded = excluded)
     }

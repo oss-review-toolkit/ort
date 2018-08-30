@@ -280,9 +280,7 @@ object Main {
                     entities = entities.distinct()
 
                     if (Downloader.DataEntity.PROJECT in entities) {
-                        Downloader().consolidateProjectPackagesByVcs(analyzerResult.projects).let {
-                            addAll(it.keys)
-                        }
+                        addAll(Downloader().consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
                     }
 
                     if (Downloader.DataEntity.PACKAGES in entities) {
@@ -395,9 +393,7 @@ object Main {
 
             outputDir.safeMkdirs()
 
-            val ortResult = ortResultFile.let {
-                it.readValue(OrtResult::class.java)
-            }
+            val ortResult = ortResultFile.readValue(OrtResult::class.java)
 
             reportFormats.distinct().forEach {
                 try {
@@ -494,9 +490,7 @@ object Main {
                 ScanResultsCache.configure(it)
             }
 
-            val scanner = scannerFactory?.let {
-                it.create(config)
-            } ?: ScanCode(config)
+            val scanner = scannerFactory?.create(config) ?: ScanCode(config)
 
             println("Using scanner '$scanner'.")
 
