@@ -45,8 +45,8 @@ class Mercurial : VersionControlSystem() {
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
-        return getCommandVersion("hg") {
-            versionRegex.matcher(it.lineSequence().first()).let {
+        return getCommandVersion("hg") { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
                 if (it.matches()) {
                     it.group("version")
                 } else {

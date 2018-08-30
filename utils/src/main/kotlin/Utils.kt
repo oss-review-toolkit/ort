@@ -170,7 +170,7 @@ fun getPathFromEnvironment(executable: String): File? {
     val executables = if (OS.isWindows) {
         // Get the list of executable file extensions without the leading dot each.
         val pathExt = System.getenv("PATHEXT")?.let {
-            it.split(File.pathSeparatorChar).map { it.toLowerCase().removePrefix(".") }
+            it.split(File.pathSeparatorChar).map { ext -> ext.toLowerCase().removePrefix(".") }
         } ?: emptyList()
 
         if (executable.substringAfterLast(".").toLowerCase() !in pathExt) {

@@ -442,8 +442,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         while (parent != null) {
             parent.scm?.let {
-                it.connection?.let {
-                    if (it.isNotBlank() && scm.connection.startsWith(it)) {
+                it.connection?.let { connection ->
+                    if (connection.isNotBlank() && scm.connection.startsWith(connection)) {
                         scm = parent.scm
                     }
                 }

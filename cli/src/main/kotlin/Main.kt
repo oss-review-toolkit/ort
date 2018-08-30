@@ -284,7 +284,7 @@ object Main {
                     }
 
                     if (Downloader.DataEntity.PACKAGES in entities) {
-                        addAll(analyzerResult.packages.map { it.pkg })
+                        addAll(analyzerResult.packages.map { curatedPackage -> curatedPackage.pkg })
                     }
                 }
             } ?: run {

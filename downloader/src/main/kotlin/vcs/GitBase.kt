@@ -33,8 +33,8 @@ abstract class GitBase : VersionControlSystem() {
     override fun getVersion(): String {
         val versionRegex = Pattern.compile("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
-        return getCommandVersion("git") {
-            versionRegex.matcher(it.lineSequence().first()).let {
+        return getCommandVersion("git") { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
                 if (it.matches()) {
                     it.group("version")
                 } else {

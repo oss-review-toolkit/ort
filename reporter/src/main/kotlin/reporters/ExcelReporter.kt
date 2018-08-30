@@ -292,6 +292,6 @@ private const val ELLIPSIS = "[...]"
 private fun Collection<String>.joinWithLimit(
         separator: String = " \n",
         maxLength: Int = 32767 /* This is the maximum Excel cell content length. */
-) = joinToString(separator).let {
-    it.takeIf { it.length <= maxLength } ?: "${it.take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
+) = joinToString(separator).let { cellContent ->
+    cellContent.takeIf { it.length <= maxLength } ?: "${cellContent.take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
 }
