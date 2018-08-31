@@ -31,7 +31,7 @@ import java.util.SortedSet
 
 const val NOTICE_FILE_NAME = "NOTICE"
 
-class NoticeReporter : Reporter {
+class NoticeReporter : Reporter() {
     override fun generateReport(ortResult: OrtResult, outputDir: File) {
         require(ortResult.scanner != null) {
             "The provided ORT result file does not contain a scan record."

@@ -44,7 +44,6 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.reporters.*
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanResultsCache
 import com.here.ort.scanner.Scanner
@@ -357,14 +356,16 @@ object Main {
     @Parameters(commandNames = ["report"],
             commandDescription = "Present Analyzer and Scanner results in various formats.")
     private object ReporterCommand : Runnable {
-        private enum class ReportFormat(private val reporter: Reporter) : Reporter {
-            EXCEL(ExcelReporter()),
-            NOTICE(NoticeReporter()),
-            STATIC_HTML(StaticHtmlReporter()),
-            WEB_APP(WebAppReporter());
+        private class ReporterConverter : IStringConverter<Reporter> {
+            companion object {
+                // Map upper-cased reporter names without the "Reporter" suffix names to their instances.
+                val REPORTERS = Reporter.ALL.associateBy { it.toString().removeSuffix("Reporter").toUpperCase() }
+            }
 
-            override fun generateReport(ortResult: OrtResult, outputDir: File) =
-                    reporter.generateReport(ortResult, outputDir)
+            override fun convert(name: String): Reporter {
+                return REPORTERS[name.toUpperCase()]
+                        ?: throw ParameterException("Reporters must be contained in ${REPORTERS.keys}.")
+            }
         }
 
         @Parameter(description = "The ORT result file to use. Must contain a scan result.",
@@ -382,9 +383,10 @@ object Main {
 
         @Parameter(description = "The list of report formats that will be generated.",
                 names = ["--report-formats", "-f"],
+                converter = ReporterConverter::class,
                 required = true,
                 order = PARAMETER_ORDER_MANDATORY)
-        private lateinit var reportFormats: List<ReportFormat>
+        private lateinit var reportFormats: List<Reporter>
 
         override fun run() {
             require(!outputDir.exists()) {

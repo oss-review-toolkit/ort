@@ -24,11 +24,26 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
 
 import java.io.File
+import java.util.ServiceLoader
 
 /**
  * A reporter that creates a human readable report from the [AnalyzerResult] and [ScanRecord] contained in an
  * [OrtResult]. The signatures of public functions in this class define the library API.
  */
-interface Reporter {
-    fun generateReport(ortResult: OrtResult, outputDir: File)
+abstract class Reporter {
+    companion object {
+        private val LOADER = ServiceLoader.load(Reporter::class.java)!!
+
+        /**
+         * The list of all available reporters in the classpath.
+         */
+        val ALL by lazy { LOADER.iterator().asSequence().toList() }
+    }
+
+    /**
+     * Return the Java class name as a simple way to refer to the [Reporter].
+     */
+    override fun toString(): String = javaClass.simpleName
+
+    abstract fun generateReport(ortResult: OrtResult, outputDir: File)
 }

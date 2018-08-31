@@ -28,7 +28,7 @@ import com.here.ort.utils.log
 
 import java.io.File
 
-class WebAppReporter : Reporter {
+class WebAppReporter : Reporter() {
     override fun generateReport(ortResult: OrtResult, outputDir: File) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val json = jsonMapper.writeValueAsString(ortResult)
