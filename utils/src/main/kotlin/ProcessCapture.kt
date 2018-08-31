@@ -38,6 +38,15 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
     companion object {
         private const val MAX_LOG_LINES = 20
         private const val MAX_LOG_LINES_MESSAGE = "(Above output is limited to $MAX_LOG_LINES lines.)"
+
+        private fun logLinesLimited(prefix: String, lines: Sequence<String>, limit: Int, logLine: (String) -> Unit) {
+            val chunkIterator = lines.chunked(limit).iterator()
+            chunkIterator.next().forEach { logLine("$prefix: $it") }
+
+            // This actually already evaluates the next element, but since that is also only a chunk, not the whole
+            // rest, we can live with that.
+            if (chunkIterator.hasNext()) { logLine(MAX_LOG_LINES_MESSAGE) }
+        }
     }
 
     val commandLine = command.joinToString(" ")
@@ -89,23 +98,17 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
         process.waitFor()
 
         if (log.isDebugEnabled) {
-            // No need to use curly-braces-syntax for logging here as the log level check is already done above.
+            // No need to use curly-braces-syntax for logging below as the log level check is already done above.
 
             if (stdoutFile.length() > 0L) {
                 stdoutFile.useLines { lines ->
-                    lines.take(MAX_LOG_LINES).forEach { line ->
-                        log.debug("stdout: $line")
-                    }
-                    log.debug(MAX_LOG_LINES_MESSAGE)
+                    logLinesLimited("stdout", lines, MAX_LOG_LINES) { log.debug(it) }
                 }
             }
 
             if (stderrFile.length() > 0L) {
                 stderrFile.useLines { lines ->
-                    lines.take(MAX_LOG_LINES).forEach { line ->
-                        log.debug("stderr: $line")
-                    }
-                    log.debug(MAX_LOG_LINES_MESSAGE)
+                    logLinesLimited("stderr", lines, MAX_LOG_LINES) { log.debug(it) }
                 }
             }
         }
