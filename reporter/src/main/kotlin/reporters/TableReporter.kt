@@ -34,7 +34,7 @@ import java.util.SortedSet
 /**
  * An abstract [Reporter] that converts the [ScanRecord] to a table representation.
  */
-abstract class TableReporter : Reporter {
+abstract class TableReporter : Reporter() {
     data class TabularScanRecord(
             /**
              * The [VcsInfo] for the scanned project.
