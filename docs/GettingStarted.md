@@ -45,18 +45,18 @@ download the source code from GitHub:
 git clone https://github.com/heremaps/oss-review-toolkit.git
 ```
 
-To build the tools run:
+To build the command line interface run:
 
 ```bash
 cd oss-review-toolkit
 ./gradlew installDist
 ```
 
-This will create binaries of the tools in their builds folders, for example the analyzer binary can be found in
-`analyzer/build/install/analyzer/bin/analyzer`. To get the command line help for tool run it with the `--help` option:
+This will create the script to run ORT at `cli/build/install/ort/bin/ort`. To get the general command line help run it
+with the `--help` option:
 
 ```bash
-analyzer/build/install/analyzer/bin/analyzer --help
+cli/build/install/ort/bin/ort --help
 ```
 
 ## 3. Download the `mime-types` source code
@@ -76,14 +76,17 @@ The next step is to run the `analyzer`. It will create a JSON or YAML output fil
 `mime-types` including the meta-data of `mime-types` and its dependencies.
 
 ```bash
+# Command line help specific to the analyzer.
+cli/build/install/ort/bin/ort analyze --help
+
 # The easiest way to run the analyzer. Be aware that the [output-path] directory must not exist.
-analyzer/build/install/analyzer/bin/analyzer -i [mime-types-path] -o [output-path]
+cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [output-path]
 
 # The command above will create the default YAML output. If you prefer JSON run:
-analyzer/build/install/analyzer/bin/analyzer -i [mime-types-path] -o [output-path] -f JSON
+cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [output-path] -f JSON
 
 # To get the maximum log output run:
-analyzer/build/install/analyzer/bin/analyzer -i [mime-types-path] -o [output-path] --debug --stacktrace
+cli/build/install/ort/bin/ort --debug --stacktrace analyze -i [mime-types-path] -o [output-path]
 ```
 
 The `analyzer` will search for build files of all supported package managers. In case of `mime-types` it will find the
@@ -104,7 +107,7 @@ dependencies that are defined with version ranges could change at any time, lead
 analyzer. To override this check use the `--allow-dynamic-versions` option:
 
 ```bash
-$ analyzer/build/install/analyzer/bin/analyzer -i [mime-types-path] -o [output-path] --allow-dynamic-versions
+$ cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [output-path] --allow-dynamic-versions
 The following package managers are activated:
         Gradle, Maven, SBT, NPM, Yarn, GoDep, PIP, Bundler, PhpComposer, Stack
 Scanning project path:
@@ -231,7 +234,7 @@ bootstrapped by the `scanner`.
 As for the `analyzer` you can get the command line options for the `scanner` using the `--help` option:
 
 ```bash
-scanner/build/install/scanner/bin/scanner --help
+cli/build/install/ort/bin/ort scan --help
 ```
 
 The `mime-types` package has only one dependency in the `depenencies` scope, but a lot of dependencies in the
@@ -240,7 +243,7 @@ scanner on the `dependencies` scope in this tutorial. If you also want to scan t
 advised to configure a cache for the scan results as documented in the README to speed up repeated scans.
 
 ```bash
-$ scanner/build/install/scanner/bin/scanner -d [analyzer-output-path]/all-dependencies.yml -o [scanner-output-path] --scopes dependencies
+$ cli/build/install/ort/bin/ort scan -d [analyzer-output-path]/all-dependencies.yml -o [scanner-output-path] --scopes dependencies
 Using scanner 'ScanCode'.
 Limiting scan to scopes: [dependencies]
 Bootstrapping scanner 'ScanCode' as required version 2.9.2 was not found in PATH.
@@ -267,7 +270,7 @@ The `scan-result.yml` file can now be used as input for the reporter to generate
 generate both, the static HTML report and the Excel record, use:
 
 ```bash
-reporter/build/install/reporter/bin/reporter -f StaticHtml,Excel -s [scanner-output-path]/mime-types/scan-record.yml -o [reporter-output-path]/mime-types
+cli/build/install/ort/bin/ort report -f StaticHtml,Excel -s [scanner-output-path]/mime-types/scan-record.yml -o [reporter-output-path]/mime-types
 Writing static HTML report to '[reporter-output-path]/mime-types/scan-report.html'.
 Writing Excel report to '[reporter-output-path]/mime-types/scan-report.xlsx'.
 ```
@@ -329,7 +332,7 @@ provide the location of source artifacts. The structure of the curations file is
 To use the curations file pass it to the `--package-curations-file` option of the `analyzer`:
 
 ```
-analyzer/build/install/analyzer/bin/analyzer -i [input-path] -o [output-path] --package-curations-file [curations-file-path]
+cli/build/install/ort/bin/ort analyze -i [input-path] -o [output-path] --package-curations-file [curations-file-path]
 ```
 
 In future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until then,
