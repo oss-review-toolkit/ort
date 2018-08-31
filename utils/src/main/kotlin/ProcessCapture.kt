@@ -36,8 +36,8 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
     constructor(workingDir: File?, vararg command: String) : this(workingDir, mapOf(), *command)
 
     companion object {
-        private const val DEBUG_LINES = 20
-        private const val DEBUG_LINES_MESSAGE = "(Above output is limited to $DEBUG_LINES lines.)"
+        private const val MAX_LOG_LINES = 20
+        private const val MAX_LOG_LINES_MESSAGE = "(Above output is limited to $MAX_LOG_LINES lines.)"
     }
 
     val commandLine = command.joinToString(" ")
@@ -68,10 +68,10 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
 
             // Insert ellipsis in the middle of a long error message.
             val lines = message.lines()
-            if (lines.count() > DEBUG_LINES) {
-                val prefix = lines.take(DEBUG_LINES / 2)
-                val suffix = lines.takeLast(DEBUG_LINES / 2)
-                message = (prefix + "[...]" + suffix + DEBUG_LINES_MESSAGE).joinToString("\n")
+            if (lines.count() > MAX_LOG_LINES) {
+                val prefix = lines.take(MAX_LOG_LINES / 2)
+                val suffix = lines.takeLast(MAX_LOG_LINES / 2)
+                message = (prefix + "[...]" + suffix + MAX_LOG_LINES_MESSAGE).joinToString("\n")
             }
 
             return "Running '$commandLine' in '$usedWorkingDir' failed with exit code ${exitValue()}:\n$message"
@@ -93,19 +93,19 @@ class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg
 
             if (stdoutFile.length() > 0L) {
                 stdoutFile.useLines { lines ->
-                    lines.take(DEBUG_LINES).forEach { line ->
+                    lines.take(MAX_LOG_LINES).forEach { line ->
                         log.debug("stdout: $line")
                     }
-                    log.debug(DEBUG_LINES_MESSAGE)
+                    log.debug(MAX_LOG_LINES_MESSAGE)
                 }
             }
 
             if (stderrFile.length() > 0L) {
                 stderrFile.useLines { lines ->
-                    lines.take(DEBUG_LINES).forEach { line ->
+                    lines.take(MAX_LOG_LINES).forEach { line ->
                         log.debug("stderr: $line")
                     }
-                    log.debug(DEBUG_LINES_MESSAGE)
+                    log.debug(MAX_LOG_LINES_MESSAGE)
                 }
             }
         }
