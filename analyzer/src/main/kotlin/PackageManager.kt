@@ -62,7 +62,7 @@ abstract class PackageManager(
         private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
 
         /**
-         * The (prioritized) list of all available package managers in the classpath.
+         * The list of all available package managers in the classpath.
          */
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
 
