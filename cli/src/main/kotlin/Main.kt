@@ -68,10 +68,34 @@ import kotlin.system.exitProcess
 
 const val TOOL_NAME = "ort"
 
+abstract class CommandWithHelp {
+    @Parameter(description = "Display the command line help.",
+            names = ["--help", "-h"],
+            help = true,
+            order = PARAMETER_ORDER_HELP)
+    private var help = false
+
+    fun run(jc: JCommander) {
+        if (jc.parsedCommand == null) {
+            jc.usage()
+            exitProcess(0)
+        }
+
+        if (help) {
+            jc.usageFormatter.usage(jc.parsedCommand)
+            exitProcess(0)
+        }
+
+        runCommand(jc)
+    }
+
+    protected abstract fun runCommand(jc: JCommander)
+}
+
 /**
  * The main entry point of the application.
  */
-object Main {
+object Main : CommandWithHelp() {
     @Parameter(description = "Enable info logging.",
             names = ["--info"],
             order = PARAMETER_ORDER_LOGGING)
@@ -87,14 +111,8 @@ object Main {
             order = PARAMETER_ORDER_LOGGING)
     private var stacktrace = false
 
-    @Parameter(description = "Display the command line help.",
-            names = ["--help", "-h"],
-            help = true,
-            order = PARAMETER_ORDER_HELP)
-    private var help = false
-
     @Parameters(commandNames = ["analyze"], commandDescription = "Determine dependencies of a software project.")
-    private object AnalyzerCommand : Runnable {
+    private object AnalyzerCommand : CommandWithHelp() {
         private class PackageManagerConverter : IStringConverter<PackageManagerFactory> {
             companion object {
                 // Map upper-cased package manager names to their instances.
@@ -162,7 +180,7 @@ object Main {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var repositoryConfigurationFile: File? = null
 
-        override fun run() {
+        override fun runCommand(jc: JCommander) {
             val absoluteOutputPath = outputDir.absoluteFile
             if (absoluteOutputPath.exists()) {
                 log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
@@ -202,7 +220,7 @@ object Main {
     }
 
     @Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
-    private object DownloaderCommand : Runnable {
+    private object DownloaderCommand : CommandWithHelp() {
         @Parameter(description = "An analyzer result file to use. Must not be used together with '--project-url'.",
                 names = ["--analyzer-result-file", "-a"],
                 order = PARAMETER_ORDER_OPTIONAL)
@@ -262,7 +280,7 @@ object Main {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var allowMovingRevisions = false
 
-        override fun run() {
+        override fun runCommand(jc: JCommander) {
             if ((dependenciesFile != null) == (projectUrl != null)) {
                 throw IllegalArgumentException(
                         "Either '--analyzer-result-file' or '--project-url' must be specified.")
@@ -355,7 +373,7 @@ object Main {
 
     @Parameters(commandNames = ["report"],
             commandDescription = "Present Analyzer and Scanner results in various formats.")
-    private object ReporterCommand : Runnable {
+    private object ReporterCommand : CommandWithHelp() {
         private class ReporterConverter : IStringConverter<Reporter> {
             companion object {
                 // Map upper-cased reporter names without the "Reporter" suffix names to their instances.
@@ -388,7 +406,7 @@ object Main {
                 order = PARAMETER_ORDER_MANDATORY)
         private lateinit var reportFormats: List<Reporter>
 
-        override fun run() {
+        override fun runCommand(jc: JCommander) {
             require(!outputDir.exists()) {
                 "The output directory '${outputDir.absolutePath}' must not exist yet."
             }
@@ -410,7 +428,7 @@ object Main {
     }
 
     @Parameters(commandNames = ["scan"], commandDescription = "Run existing copyright / license scanners.")
-    private object ScannerCommand : Runnable {
+    private object ScannerCommand : CommandWithHelp() {
         private class ScannerConverter : IStringConverter<ScannerFactory> {
             override fun convert(scannerName: String): ScannerFactory {
                 // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
@@ -465,7 +483,7 @@ object Main {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var outputFormats = listOf(OutputFormat.YAML)
 
-        override fun run() {
+        override fun runCommand(jc: JCommander) {
             require((dependenciesFile == null) != (inputPath == null)) {
                 "Either --analyzer-result-file or --input-path must be specified."
             }
@@ -531,6 +549,10 @@ object Main {
             parse(*args)
         }
 
+        run(jc)
+    }
+
+    override fun runCommand(jc: JCommander) {
         when {
             debug -> log.level = ch.qos.logback.classic.Level.DEBUG
             info -> log.level = ch.qos.logback.classic.Level.INFO
@@ -539,16 +561,11 @@ object Main {
         // Make the parameter globally available.
         printStackTrace = stacktrace
 
-        if (help || jc.parsedCommand == null) {
-            jc.usage()
-            exitProcess(0)
-        }
-
         // JCommander already validates the command names.
         val command = jc.commands[jc.parsedCommand]!!
-        val commandObject = command.objects.first() as Runnable
+        val commandObject = command.objects.first() as CommandWithHelp
 
         // Delegate running actions to the specified command.
-        commandObject.run()
+        commandObject.run(jc)
     }
 }
