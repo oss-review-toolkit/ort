@@ -349,7 +349,9 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         val localProject = localProjects[artifact.identifier()]
 
-        val mavenProject = localProject ?: artifact.let {
+        val mavenProject = localProject?.also {
+            log.info { "'${artifact.identifier()}' refers to a local project." }
+        } ?: artifact.let {
             val pomArtifact = mavenRepositorySystem
                     .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
 
