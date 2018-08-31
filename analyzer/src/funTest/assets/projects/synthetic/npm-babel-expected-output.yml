@@ -3617,7 +3617,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
+      url: "http://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
       hash: "857fcabfc3397d2625b8228262e86aa7a011b05d"
       hash_algorithm: "SHA-1"
     vcs:
