@@ -206,7 +206,7 @@ abstract class VersionControlSystem {
     }
 
     /**
-     * Return a simple string representation for this VCS.
+     * Return the Java class name as a simple way to refer to the [VersionControlSystem].
      */
     override fun toString(): String = javaClass.simpleName
 
