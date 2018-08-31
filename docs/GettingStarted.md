@@ -267,7 +267,7 @@ The `scan-result.yml` file can now be used as input for the reporter to generate
 generate both, the static HTML report and the Excel record, use:
 
 ```bash
-reporter/build/install/reporter/bin/reporter  -f STATIC_HTML,EXCEL -s [scanner-output-path]/mime-types/scan-record.yml -o [reporter-output-path]/mime-types
+reporter/build/install/reporter/bin/reporter -f StaticHtml,Excel -s [scanner-output-path]/mime-types/scan-record.yml -o [reporter-output-path]/mime-types
 Writing static HTML report to '[reporter-output-path]/mime-types/scan-report.html'.
 Writing Excel report to '[reporter-output-path]/mime-types/scan-report.xlsx'.
 ```
