@@ -165,7 +165,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             // So the best we can do is to map this the project's homepage URL.
             jsonMapper.readTree(pydep.stdout()).let {
                 declaredLicenses = getDeclaredLicenses(it)
-                listOf(it["project_name"].textValue(), it["version"].textValue(), it["repo_url"].textValueOrEmpty())
+                listOf(it["project_name"].textValue(), it["version"].textValueOrEmpty(),
+                        it["repo_url"].textValueOrEmpty())
             }
         } else {
             // In case of "requirements*.txt" there is no meta-data at all available, so use the parent directory name
