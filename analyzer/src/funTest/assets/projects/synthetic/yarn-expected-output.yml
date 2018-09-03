@@ -577,7 +577,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/editions/-/editions-1.3.3.tgz"
+      url: "http://registry.npmjs.org/editions/-/editions-1.3.3.tgz"
       hash: "0907101bdda20fac3cbe334c27cbd0688dc99a5b"
       hash_algorithm: "SHA-1"
     vcs:
