@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.time.Instant
 import java.util.SortedSet
@@ -56,7 +57,13 @@ data class ScanSummary(
         /**
          * The list of errors that occurred during the scan.
          */
-        val errors: List<Error>
+        val errors: List<Error>,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
 ) {
     val licenses: SortedSet<String>
         @JsonIgnore
