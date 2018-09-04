@@ -306,11 +306,11 @@ class SummaryView extends React.Component {
                 );
             };
             const renderMetadataTable = () => {
-                if (!data.metadata 
+                if (!data.metadata
                     || Object.keys(data.metadata).length == 0) {
                     return null;
                 }
-                
+
                 if (!expandedMetadata) {
                     return (
                         <div className="ort-metadata-props">
@@ -320,7 +320,7 @@ class SummaryView extends React.Component {
                         </div>
                     );
                 }
-                
+
                 return (
                     <div className="ort-metadata-props">
                         <div onClick={this.onClickReviewMetadata} className="ort-clickable">
@@ -348,7 +348,7 @@ class SummaryView extends React.Component {
                                                 </tr>
                                             );
                                         }
-                                    
+
                                         return (
                                             <tr key={`metadata-${key}`}>
                                             <th>

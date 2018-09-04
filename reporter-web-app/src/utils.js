@@ -633,14 +633,14 @@ export function convertToRenderFormat(reportData) {
     // Flatten errors per project into a flat array of errors
     reportDataOpenErrors = Object.values(reportDataOpenErrors).reduce((accumulator, errors) => {
         accumulator = accumulator.concat(...Object.values(errors));
-    
+
         return accumulator;
     }, []);
-    
+
     // Flatten addressed errors per project into a flat array of errors
     reportDataAddressedErrors = Object.values(reportDataAddressedErrors).reduce((accumulator, errors) => {
         accumulator = accumulator.concat(...Object.values(errors));
-    
+
         return accumulator;
     }, []);
 
