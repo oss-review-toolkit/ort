@@ -1,0 +1,8 @@
+rootProject.name = 'plugin-example'
+
+// There are no published ORT binaries that this example could depend on, so use a Gradle composite build.
+includeBuild('../..') {
+    dependencySubstitution {
+        substitute module('com.here.ort:cli') with project(':cli')
+    }
+}

@@ -61,6 +61,8 @@ script:
       echo "Some tests seemingly have been aborted.";
       exit 1;
     fi
+  - cd examples/plugin
+  - ./gradlew check
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*'
