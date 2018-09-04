@@ -83,7 +83,8 @@ data class Provenance(
             return sourceArtifact == pkg.sourceArtifact
         }
 
-        // If vcsInfo does not have a resolved revision it means that there was an issue with downloading the code.
+        // If the VCS information does not have a resolved revision it means that there was an issue with downloading
+        // the source code.
         if (vcsInfo?.resolvedRevision == null) {
             return false
         }
