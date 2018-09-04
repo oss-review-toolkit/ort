@@ -163,6 +163,22 @@ The most important root project Gradle tasks are listed in the table below.
 | funTest     | Run functional tests for all projects                             |
 | installDist | Build all projects and install the start scripts for distribution |
 
+### Extending ORT
+
+ORT uses the [ServiceLoader API](https://docs.oracle.com/javase/tutorial/ext/basics/spi.html) to support plugins for
+extending its functionality. For details about the extension points see the
+[readme of the example plugin project](../examples/plugin/README.md).
+
+In general it is preferred that extensions to ORT are contributed directly to this repository. But there are exceptions
+where this might not be possible, for example:
+* If the extension depends on code that uses an incompatible license.
+* If the extension implements a feature that does not fit into the default feature set of ORT (like demonstrated in the
+  example project).
+* If the extension is used to integrate ORT with a companies infrastructure, for example a reporter that pushes the
+  results into a companies software catalog.
+  
+In such cases it is possible to implement the extension as a separate plugin.
+
 ## License
 
 Copyright (C) 2017-2018 HERE Europe B.V.

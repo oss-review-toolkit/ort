@@ -73,6 +73,8 @@ test_script:
     ) else (
       gradlew -Dkotlintest.tags.exclude=ExpensiveTag --stacktrace check
     )
+  - cd examples\plugin
+  - gradlew check
 
 on_finish:
   - gradlew --stop # Fix "fileHashes.bin" being used by another process.
