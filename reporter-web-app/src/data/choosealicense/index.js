@@ -17,40 +17,40 @@
  * License-Filename: LICENSE
  */
 
-import * as RULES from './json/rules.json';
-import * as AFL_3_0 from './json/AFL-3.0';
-import * as AGPL_3_0 from './json/AGPL-3.0';
-import * as Apache_2_0 from './json/Apache-2.0';
-import * as Artistic_2_0 from './json/Artistic-2.0';
-import * as BSD_2_Clause from './json/BSD-2-Clause';
-import * as BSD_3_Clause from './json/BSD-3-Clause';
-import * as BSL_1_0 from './json/BSL-1.0';
-import * as CC_BY_4_0 from './json/CC-BY-4.0';
-import * as CC_BY_SA_4_0 from './json/CC-BY-SA-4.0';
-import * as CC0_1_0 from './json/CC0-1.0';
-import * as ECL_2_0 from './json/ECL-2.0';
-import * as EPL_1_0 from './json/EPL-1.0';
-import * as EPL_2_0 from './json/EPL-2.0';
-import * as EUPL_1_1 from './json/EUPL-1.1';
-import * as EUPL_1_2 from './json/EUPL-1.2';
-import * as GPL_2_0 from './json/GPL-2.0';
-import * as GPL_3_0 from './json/GPL-3.0';
-import * as ISC from './json/ISC';
-import * as LGPL_2_1 from './json/LGPL-2.1';
-import * as LGPL_3_0 from './json/LGPL-3.0';
-import * as LPPL_1_3c from './json/LPPL-1.3c';
-import * as MIT from './json/MIT';
-import * as MPL_2_0 from './json/MPL-2.0';
-import * as MS_PL from './json/MS-PL';
-import * as MS_RL from './json/MS-RL';
-import * as NCSA from './json/NCSA';
-import * as OFL_1_1 from './json/OFL-1.1';
-import * as OSL_3_0 from './json/OSL-3.0';
-import * as PostgreSQL from './json/PostgreSQL';
-import * as Unlicense from './json/Unlicense';
-import * as UPL_1_0 from './json/UPL-1.0';
-import * as WTFPL from './json/WTFPL';
-import * as Zlib from './json/Zlib';
+import RULES from './json/rules.json';
+import AFL_3_0 from './json/AFL-3.0';
+import AGPL_3_0 from './json/AGPL-3.0';
+import Apache_2_0 from './json/Apache-2.0';
+import Artistic_2_0 from './json/Artistic-2.0';
+import BSD_2_Clause from './json/BSD-2-Clause';
+import BSD_3_Clause from './json/BSD-3-Clause';
+import BSL_1_0 from './json/BSL-1.0';
+import CC_BY_4_0 from './json/CC-BY-4.0';
+import CC_BY_SA_4_0 from './json/CC-BY-SA-4.0';
+import CC0_1_0 from './json/CC0-1.0';
+import ECL_2_0 from './json/ECL-2.0';
+import EPL_1_0 from './json/EPL-1.0';
+import EPL_2_0 from './json/EPL-2.0';
+import EUPL_1_1 from './json/EUPL-1.1';
+import EUPL_1_2 from './json/EUPL-1.2';
+import GPL_2_0 from './json/GPL-2.0';
+import GPL_3_0 from './json/GPL-3.0';
+import ISC from './json/ISC';
+import LGPL_2_1 from './json/LGPL-2.1';
+import LGPL_3_0 from './json/LGPL-3.0';
+import LPPL_1_3c from './json/LPPL-1.3c';
+import MIT from './json/MIT';
+import MPL_2_0 from './json/MPL-2.0';
+import MS_PL from './json/MS-PL';
+import MS_RL from './json/MS-RL';
+import NCSA from './json/NCSA';
+import OFL_1_1 from './json/OFL-1.1';
+import OSL_3_0 from './json/OSL-3.0';
+import PostgreSQL from './json/PostgreSQL';
+import Unlicense from './json/Unlicense';
+import UPL_1_0 from './json/UPL-1.0';
+import WTFPL from './json/WTFPL';
+import Zlib from './json/Zlib';
 
 export const metadata = {
     packageName: 'choosealicense.com',
