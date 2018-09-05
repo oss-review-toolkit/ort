@@ -24,7 +24,20 @@ package com.here.ort.model
  * analyzer and scanner will add their result to it.
  */
 data class OrtResult(
+        /**
+         * Information about the repository that was used as input.
+         */
         val repository: Repository,
+
+        /**
+         * An [AnalyzerRun] containing details about the analyzer that was run using [repository] as input. Can be null
+         * if the [repository] was not yet analyzed.
+         */
         val analyzer: AnalyzerRun? = null,
+
+        /**
+         * A [ScannerRun] containing details about the scanner that was run using the result from [analyzer] as input.
+         * Can be null if no scanner was run.
+         */
         val scanner: ScannerRun? = null
 ) : CustomData()
