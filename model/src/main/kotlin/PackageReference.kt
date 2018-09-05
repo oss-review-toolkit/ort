@@ -49,8 +49,14 @@ data class PackageReference(
          * configuration file.
          */
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        val excluded: Boolean = false
-) : CustomData(), Comparable<PackageReference> {
+        val excluded: Boolean = false,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+) : Comparable<PackageReference> {
     /**
      * Return the set of identifiers for all packages references this package reference depends on.
      */

@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
@@ -39,5 +41,11 @@ data class OrtResult(
          * A [ScannerRun] containing details about the scanner that was run using the result from [analyzer] as input.
          * Can be null if no scanner was run.
          */
-        val scanner: ScannerRun? = null
-) : CustomData()
+        val scanner: ScannerRun? = null,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+)

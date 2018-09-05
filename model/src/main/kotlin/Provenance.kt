@@ -58,8 +58,14 @@ data class Provenance(
          */
         @JsonAlias("originalVcsInfo")
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val originalVcsInfo: VcsInfo? = null
-) : CustomData() {
+        val originalVcsInfo: VcsInfo? = null,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+) {
     init {
         require(sourceArtifact == null || vcsInfo == null) {
             "Provenance does not allow both 'sourceArtifact' and 'vcsInfo' to be set, otherwise it is ambiguous " +

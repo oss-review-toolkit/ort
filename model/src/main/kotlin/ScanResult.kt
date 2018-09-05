@@ -48,5 +48,11 @@ data class ScanResult(
          */
         @JsonAlias("rawResult")
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val rawResult: JsonNode? = null
-) : CustomData()
+        val rawResult: JsonNode? = null,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+)

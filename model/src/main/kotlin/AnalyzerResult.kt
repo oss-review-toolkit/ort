@@ -22,6 +22,7 @@ package com.here.ort.model
 import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.utils.log
 
@@ -46,8 +47,14 @@ data class AnalyzerResult(
         /**
          * The list of all errors.
          */
-        val errors: SortedMap<Identifier, List<Error>>
-) : CustomData() {
+        val errors: SortedMap<Identifier, List<Error>>,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+) {
     /**
      * True if there were any errors during the analysis, false otherwise.
      */

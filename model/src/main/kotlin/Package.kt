@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import java.util.SortedSet
 
 /**
@@ -70,8 +72,14 @@ data class Package(
         /**
          * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
          */
-        val vcsProcessed: VcsInfo = vcs.normalize()
-) : CustomData(), Comparable<Package> {
+        val vcsProcessed: VcsInfo = vcs.normalize(),
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+) : Comparable<Package> {
     /**
      * A comparison function to sort packages by their identifier.
      */

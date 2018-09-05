@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
@@ -41,8 +42,14 @@ data class ScanRecord(
         /**
          * The [CacheStatistics] for the scan results cache.
          */
-        val cacheStats: CacheStatistics
-) : CustomData() {
+        val cacheStats: CacheStatistics,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+) {
     /**
      * True if any of the [scanResults] contain errors.
      */
