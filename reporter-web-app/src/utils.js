@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: CC-BY-3.0
 // Author KimKha
 // https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
 export function hashCode(str) {
