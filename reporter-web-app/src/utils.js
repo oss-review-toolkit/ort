@@ -17,6 +17,21 @@
  * License-Filename: LICENSE
  */
 
+// SPDX-License-Identifier: MIT
+// Author KimKha
+// https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
+export function hashCode(str) {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        const character = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + character;
+        // Convert to 32bit integer
+        hash = hash & hash;
+    }
+    return hash;
+}
+
 // Utility boolean function to determine if input is a number
 export function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -695,19 +710,4 @@ export function convertToRenderFormat(reportData) {
 // https://codehandbook.org/how-to-remove-duplicates-from-javascript-array/
 export function removeDuplicatesInArray(arr) {
     return Array.from(new Set(arr));
-}
-
-// SPDX-License-Identifier: MIT
-// Author KimKha
-// https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
-export function hashCode(str) {
-    let hash = 0;
-
-    for (let i = 0; i < str.length; i++) {
-        const character = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + character;
-        // Convert to 32bit integer
-        hash = hash & hash;
-    }
-    return hash;
 }
