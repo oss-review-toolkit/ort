@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 /**
  * A container for [ScanResult]s for the package identified by [id].
  */
@@ -31,8 +33,14 @@ data class ScanResultContainer(
         /**
          * The list of [ScanResult]s from potentially multiple scanners and / or with different package provenance.
          */
-        val results: List<ScanResult>
-) : CustomData(), Comparable<ScanResultContainer> {
+        val results: List<ScanResult>,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+) : Comparable<ScanResultContainer> {
     /**
      * A comparison function to sort scan result containers by their identifier.
      */

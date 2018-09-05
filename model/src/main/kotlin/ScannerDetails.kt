@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import com.vdurmont.semver4j.Semver
 
 import java.util.EnumSet
@@ -40,8 +42,14 @@ data class ScannerDetails(
         /**
          * The configuration of the scanner, could be command line arguments for example.
          */
-        val configuration: String
-) : CustomData() {
+        val configuration: String,
+
+        /**
+         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val data: Map<String, Any> = emptyMap()
+) {
     private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)
 
     /**
