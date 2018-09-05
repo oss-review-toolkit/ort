@@ -25,6 +25,7 @@
             "error",
             "unix"
         ],
+        "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
         "quotes": [
             "error",
             "single"
