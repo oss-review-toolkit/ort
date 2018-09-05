@@ -25,6 +25,7 @@
             "error",
             "unix"
         ],
+        "max-len": ["error", { "code": 120 }],
         "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
         "quotes": [
             "error",
