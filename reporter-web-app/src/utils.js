@@ -25,16 +25,16 @@ export function hashCode(str) {
 
     for (let i = 0; i < str.length; i++) {
         const character = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + character;
+        hash = ((hash << 5) - hash) + character; // eslint-disable-line
         // Convert to 32bit integer
-        hash = hash & hash;
+        hash &= hash; // eslint-disable-line
     }
     return hash;
 }
 
 // Utility boolean function to determine if input is a number
 export function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+    return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
 }
 
 export function convertToRenderFormat(reportData) {
@@ -60,29 +60,25 @@ export function convertToRenderFormat(reportData) {
         let errorsAnalyzer = [];
         let errorsScanner = [];
 
-        const createErrorObj = (type, error) => {
-            return {
-                id: project.id,
-                code: hashCode(project.id) + 'x' + hashCode(pkgObj.id) + error.message.length,
-                source: error.source,
-                timestamp: error.timestamp,
-                type: type,
-                package: {
-                    id: pkgObj.id,
-                    path: pkgObj.path,
-                    level: pkgObj.level,
-                    scope: pkgObj.scope
-                },
-                file: project.definition_file_path,
-                message: error.message
-            };
-        };
+        const createErrorObj = (type, error) => ({
+            id: project.id,
+            code: `${hashCode(project.id)}x${hashCode(pkgObj.id)}${error.message.length}`,
+            source: error.source,
+            timestamp: error.timestamp,
+            type,
+            package: {
+                id: pkgObj.id,
+                path: pkgObj.path,
+                level: pkgObj.level,
+                scope: pkgObj.scope
+            },
+            file: project.definition_file_path,
+            message: error.message
+        });
         const packageFromScanner = packagesFromScanner[pkgObj.id] || false;
 
         if (analyzerErrors && project) {
-            errorsAnalyzer = analyzerErrors.map((error) => {
-                return createErrorObj('ANALYZER_PACKAGE_ERROR', error);
-            });
+            errorsAnalyzer = analyzerErrors.map(error => createErrorObj('ANALYZER_PACKAGE_ERROR', error));
         }
 
         if (packageErrorsFromAnalyzer && project) {
@@ -90,9 +86,7 @@ export function convertToRenderFormat(reportData) {
                 errorsAnalyzer = [
                     ...errorsAnalyzer,
                     ...packageErrorsFromAnalyzer[pkgObj.id].map(
-                        (error) => {
-                            return createErrorObj('ANALYZER_PACKAGE_ERROR', error);
-                        }
+                        error => createErrorObj('ANALYZER_PACKAGE_ERROR', error)
                     )
                 ];
             }
@@ -107,9 +101,7 @@ export function convertToRenderFormat(reportData) {
                 return accumulator.concat(scanResult.summary.errors);
             }, []);
 
-            errorsScanner = errors.map((error) => {
-                return createErrorObj('SCANNER_PACKAGE_ERROR', error);
-            });
+            errorsScanner = errors.map(error => createErrorObj('SCANNER_PACKAGE_ERROR', error));
         }
 
         errors = [...errorsAnalyzer, ...errorsScanner];
@@ -145,7 +137,7 @@ export function convertToRenderFormat(reportData) {
             pkgObj.declared_licenses = packageFromAnalyzer.declared_licenses;
         } else {
             pkgObj.declared_licenses = [];
-            console.error('Package ' + pkgObj.id + ' can not be found in Analyzer results');
+            console.error(`Package ${pkgObj.id} can not be found in Analyzer results`);
         }
 
         addPackageLicensesToProject(
@@ -164,8 +156,8 @@ export function convertToRenderFormat(reportData) {
         if (packageFromScanner) {
             pkgObj.results = packageFromScanner;
 
-            pkgObj.license_findings = packageFromScanner.reduce((accumulator, scanResult) =>
-                accumulator.concat(scanResult.summary.license_findings), []);
+            pkgObj.license_findings = packageFromScanner
+                .reduce((accumulator, scanResult) => accumulator.concat(scanResult.summary.license_findings), []);
 
             // Merge scan results from different scanners into array of license names
             pkgObj.detected_licenses = pkgObj.license_findings.reduce((accumulator, finding) => {
@@ -192,7 +184,7 @@ export function convertToRenderFormat(reportData) {
             pkgObj.results = [];
             pkgObj.license_findings = [];
             pkgObj.detected_licenses = [];
-            console.error('Package ' + pkgObj.id + ' was detected by Analyzer but not scanned');
+            console.error(`Package ${pkgObj.id} was detected by Analyzer but not scanned`);
         }
 
         return pkgObj;
@@ -312,7 +304,7 @@ export function convertToRenderFormat(reportData) {
 
             projectsListPkg = pkgObj;
             projects[projectIndex].packages.list[pkgObj.id] = pkgObj;
-            projects[projectIndex].packages.total = ++projects[projectIndex].packages.total;
+            projects[projectIndex].packages.total += 1;
         } else {
             // Ensure each level only occurs once
             if (!projectsListPkg.levels.includes(pkgObj.level)) {
@@ -441,9 +433,9 @@ export function convertToRenderFormat(reportData) {
 
         return project;
     };
-    const calculateNrPackagesLicenses = (projectsLicenses) => {
-        return Object.values(projectsLicenses).reduce((accumulator, projectLicenses) => {
-            for (const license in projectLicenses) {
+    const calculateNrPackagesLicenses = projectsLicenses => Object.values(projectsLicenses)
+        .reduce((accumulator, projectLicenses) => {
+            Object.values(projectLicenses).forEach((license) => {
                 const licenseMap = projectLicenses[license];
 
                 if (!accumulator[license]) {
@@ -451,17 +443,16 @@ export function convertToRenderFormat(reportData) {
                 }
 
                 accumulator[license] += licenseMap.size;
-            }
+            });
             return accumulator;
         }, {});
-    };
     const calculateReportDataTotalLicenses = (projectsLicenses) => {
         const licensesSet = new Set([]);
 
         return Object.values(projectsLicenses).reduce((accumulator, projectLicenses) => {
-            for (const license in projectLicenses) {
+            Object.values(projectLicenses).forEach((license) => {
                 accumulator.add(license);
-            }
+            });
             return accumulator;
         }, licensesSet).size || undefined;
     };
@@ -479,9 +470,7 @@ export function convertToRenderFormat(reportData) {
 
         return undefined;
     };
-    const calculatReportDataTotalProjects = () => {
-        return Object.keys(projects).length;
-    };
+    const calculatReportDataTotalProjects = () => Object.keys(projects).length;
     const calculateReportDataTotalScopes = () => {
         if (reportDataScopes && reportDataScopes.size) {
             return reportDataScopes.size;
@@ -540,7 +529,7 @@ export function convertToRenderFormat(reportData) {
         const children = Object.entries(pkg).reduce((accumulator, [key, value]) => {
             // Only recursively traverse objects which can hold packages
             if (key === 'dependencies') {
-                const depsChildren = value.map((dep) => recursivePackageAnalyzer(
+                const depsChildren = value.map(dep => recursivePackageAnalyzer(
                     projectIndex,
                     dep,
                     [...dependencyPathFromRoot, pkg.id || pkg.name],
@@ -550,15 +539,13 @@ export function convertToRenderFormat(reportData) {
             }
 
             if (key === 'scopes') {
-                const scopeChildren = value.map((scope) => {
-                    return scope.dependencies.map((dep) => recursivePackageAnalyzer(
-                        projectIndex,
-                        dep,
-                        [...dependencyPathFromRoot, pkg.name || pkg.id],
-                        scope.name,
-                        scope.delivered
-                    ));
-                }).reduce((acc, scopeDeps) => [...acc, ...scopeDeps], []);
+                const scopeChildren = value.map(scope => scope.dependencies.map(dep => recursivePackageAnalyzer(
+                    projectIndex,
+                    dep,
+                    [...dependencyPathFromRoot, pkg.name || pkg.id],
+                    scope.name,
+                    scope.delivered
+                ))).reduce((acc, scopeDeps) => [...acc, ...scopeDeps], []);
                 // Abve reduces removes empty arrays resulting from scopes without dependencies
 
                 accumulator.push(...scopeChildren);
@@ -595,7 +582,7 @@ export function convertToRenderFormat(reportData) {
 
         // Project list is merges multiple occurrances of the same package
         // into same listing modifying pkgObj therefore we make a copy
-        addPackageToProjectList(projectIndex, new Proxy({...pkgObj}, packageProxyHandler));
+        addPackageToProjectList(projectIndex, new Proxy({ ...pkgObj }, packageProxyHandler));
 
         return new Proxy(pkgObj, packageProxyHandler);
     };
@@ -607,7 +594,7 @@ export function convertToRenderFormat(reportData) {
         let projectFile = project.definition_file_path;
 
         // Add ./ so we never have empty string
-        projectFile = './' + projectFile;
+        projectFile = `./${projectFile}`;
         project.definition_file_path = projectFile;
 
         if (!Object.prototype.hasOwnProperty.call(projects, projectIndex)) {
@@ -646,20 +633,14 @@ export function convertToRenderFormat(reportData) {
     }
 
     // Flatten errors per project into a flat array of errors
-    reportDataOpenErrors = Object.values(reportDataOpenErrors).reduce((accumulator, errors) => {
-        accumulator = accumulator.concat(...Object.values(errors));
-
-        return accumulator;
-    }, []);
+    reportDataOpenErrors = Object.values(reportDataOpenErrors)
+        .reduce((accumulator, errors) => accumulator.concat(...Object.values(errors)), []);
 
     // Flatten addressed errors per project into a flat array of errors
-    reportDataAddressedErrors = Object.values(reportDataAddressedErrors).reduce((accumulator, errors) => {
-        accumulator = accumulator.concat(...Object.values(errors));
+    reportDataAddressedErrors = Object.values(reportDataAddressedErrors)
+        .reduce((accumulator, errors) => accumulator.concat(...Object.values(errors)), []);
 
-        return accumulator;
-    }, []);
-
-    return reportData = {
+    return {
         hasErrors: reportData.has_errors || false,
         errors: {
             data: {
