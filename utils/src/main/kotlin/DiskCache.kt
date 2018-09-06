@@ -35,12 +35,12 @@ class DiskCache(
         /**
          * The directory to store the cache data, must be exclusive to the cache.
          */
-        val directory: File,
+        directory: File,
 
         /**
          * The maximum size of the disk cache.
          */
-        val maxSize: Long,
+        maxSize: Long,
 
         /**
          * Duration in seconds that cache entries are valid.
