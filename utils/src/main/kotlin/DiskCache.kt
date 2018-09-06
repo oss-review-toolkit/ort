@@ -113,7 +113,7 @@ class DiskCache(
         try {
             diskLruCache[diskKey]?.use { entry ->
                 val time = entry.getString(INDEX_TIMESTAMP).toLong()
-                if (time + maxCacheEntryAgeInSeconds >= timeInSeconds()) {
+                if (time + maxCacheEntryAgeInSeconds >= currentTimeInSeconds()) {
                     return entry.getString(INDEX_DATA)
                 }
             }
@@ -131,7 +131,7 @@ class DiskCache(
         try {
             diskLruCache.edit(diskKey).apply {
                 set(INDEX_FULL_KEY, key)
-                set(INDEX_TIMESTAMP, timeInSeconds().toString())
+                set(INDEX_TIMESTAMP, currentTimeInSeconds().toString())
                 set(INDEX_DATA, data)
                 commit()
             }
@@ -142,5 +142,5 @@ class DiskCache(
         return false
     }
 
-    private fun timeInSeconds() = System.currentTimeMillis() / 1000L
+    private fun currentTimeInSeconds() = System.currentTimeMillis() / 1000L
 }
