@@ -45,7 +45,7 @@ class DiskCache(
         /**
          * Duration in seconds that cache entries are valid.
          */
-        private val timeToLive: Int
+        private val maxCacheEntryAgeInSeconds: Int
 ) {
     companion object {
         const val INDEX_FULL_KEY = 0
@@ -113,7 +113,7 @@ class DiskCache(
         try {
             diskLruCache[diskKey]?.use { entry ->
                 val time = entry.getString(INDEX_TIMESTAMP).toLong()
-                if (time + timeToLive >= timeInSeconds()) {
+                if (time + maxCacheEntryAgeInSeconds >= timeInSeconds()) {
                     return entry.getString(INDEX_DATA)
                 }
             }
