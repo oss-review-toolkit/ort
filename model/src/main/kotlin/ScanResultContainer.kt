@@ -39,7 +39,7 @@ data class ScanResultContainer(
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: Map<String, Any> = emptyMap()
+        val data: CustomData = emptyMap()
 ) : Comparable<ScanResultContainer> {
     /**
      * A comparison function to sort scan result containers by their identifier.
