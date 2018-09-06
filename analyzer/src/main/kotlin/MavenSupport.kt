@@ -86,13 +86,13 @@ fun Artifact.identifier() = "$groupId:$artifactId:$version"
 class MavenSupport(workspaceReader: WorkspaceReader) {
     companion object {
         private const val MAX_DISK_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
-        private const val HOUR = 60 * 60
+        private const val MAX_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
 
         val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
                 DiskCache(File(getUserConfigDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
-                        MAX_DISK_CACHE_SIZE_IN_BYTES, 6 * HOUR)
+                        MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_CACHE_ENTRY_AGE_SECONDS)
     }
 
     val container = createContainer()
