@@ -38,9 +38,9 @@ class DiskCache(
         directory: File,
 
         /**
-         * The maximum size of the disk cache.
+         * The maximum size of the disk cache in bytes.
          */
-        maxSize: Long,
+        maxCacheSizeInBytes: Long,
 
         /**
          * Duration in seconds that cache entries are valid.
@@ -74,7 +74,7 @@ class DiskCache(
         private val ILLEGAL_KEY_CHARS = Regex("[^a-z0-9_-]")
     }
 
-    private val diskLruCache = DiskLruCache.open(directory, 0, VALUE_COUNT, maxSize)
+    private val diskLruCache = DiskLruCache.open(directory, 0, VALUE_COUNT, maxCacheSizeInBytes)
 
     /**
      * Shorten the string to be usable as a key for [DiskLruCache] which has a maximum length of [MAX_KEY_LENGTH].
