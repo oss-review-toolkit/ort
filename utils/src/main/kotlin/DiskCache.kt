@@ -45,7 +45,7 @@ class DiskCache(
         /**
          * Duration in seconds that cache entries are valid.
          */
-        val timeToLive: Int
+        private val timeToLive: Int
 ) {
     companion object {
         const val INDEX_FULL_KEY = 0
