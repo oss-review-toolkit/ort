@@ -46,11 +46,9 @@ class NoticeReporter : Reporter() {
         // TODO: Decide whether we want to merge the list of detected licenses with declared licenses (which do not come
         // with a copyright).
         scanRecord.scanResults.forEach { container ->
-            if (ortResult.analyzer?.result?.includesPackage(container.id) == true) {
-                container.results.forEach { result ->
-                    result.summary.licenseFindings.forEach { licenseFinding ->
-                        allFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
-                    }
+            container.results.forEach { result ->
+                result.summary.licenseFindings.forEach { licenseFinding ->
+                    allFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
                 }
             }
         }

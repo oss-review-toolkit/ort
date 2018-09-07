@@ -45,13 +45,6 @@ data class PackageReference(
         val errors: List<Error> = emptyList(),
 
         /**
-         * A flag to indicate whether this dependency should be excluded. This is set based on the .ort.yml
-         * configuration file.
-         */
-        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        val excluded: Boolean = false,
-
-        /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -60,11 +53,11 @@ data class PackageReference(
     /**
      * Return the set of identifiers for all packages references this package reference depends on.
      */
-    fun collectDependencyIds(includeErroneous: Boolean = true, includeExcluded: Boolean = true): SortedSet<Identifier> =
+    fun collectDependencyIds(includeErroneous: Boolean = true): SortedSet<Identifier> =
             dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
                 ids.also {
-                    if ((ref.errors.isEmpty() || includeErroneous) && (!ref.excluded || includeExcluded)) it += ref.id
-                    it += ref.collectDependencyIds(includeErroneous, includeExcluded)
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
+                    it += ref.collectDependencyIds(includeErroneous)
                 }
             }
 

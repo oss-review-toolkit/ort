@@ -46,23 +46,16 @@ data class Scope(
         val dependencies: SortedSet<PackageReference>,
 
         /**
-         * A flag to indicate whether this scope should be excluded. This is set based on the .ort.yml configuration
-         * file.
-         */
-        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        val excluded: Boolean = false,
-
-        /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) : Comparable<Scope> {
-    fun collectDependencyIds(includeErroneous: Boolean = true, includeExcluded: Boolean = true) =
+    fun collectDependencyIds(includeErroneous: Boolean = true) =
             dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
                 ids.also {
-                    if ((ref.errors.isEmpty() || includeErroneous) && (!ref.excluded || includeExcluded)) it += ref.id
-                    it += ref.collectDependencyIds(includeErroneous, includeExcluded)
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
+                    it += ref.collectDependencyIds(includeErroneous)
                 }
             }
 
