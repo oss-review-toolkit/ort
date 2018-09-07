@@ -19,12 +19,11 @@
 
 package com.here.ort.model.config
 
-import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
+
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
-
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.WordSpec
@@ -51,30 +50,14 @@ class RepositoryConfigurationTest : WordSpec() {
                         reason: "OTHER"
                         comment: "project comment"
                       - path: "project2/path"
-                        packages:
-                        - id: "provider:namespace:name:version"
-                          reason: "OTHER"
-                          comment: "package comment"
                         scopes:
                         - name: "scope"
                           reason: "OTHER"
                           comment: "scope comment"
-                        errors:
-                        - message: "error message"
-                          reason: "OTHER"
-                          comment: "error comment"
-                      packages:
-                      - id: "provider:namespace:name:version"
-                        reason: "OTHER"
-                        comment: "package comment"
                       scopes:
                       - name: "scope"
                         reason: "OTHER"
                         comment: "scope comment"
-                      errors:
-                      - message: "error message"
-                        reason: "OTHER"
-                        comment: "error comment"
                     """.trimIndent()
 
                 val repositoryConfiguration = yamlMapper.readValue(configuration, RepositoryConfiguration::class.java)
@@ -90,9 +73,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 project1.reason shouldBe ExcludeReason.OTHER
                 project1.comment shouldBe "project comment"
                 project1.exclude shouldBe true
-                project1.packages should beEmpty()
                 project1.scopes should beEmpty()
-                project1.errors should beEmpty()
 
                 val project2 = projects[1]
                 project2.path shouldBe "project2/path"
@@ -100,32 +81,16 @@ class RepositoryConfigurationTest : WordSpec() {
                 project2.comment shouldBe null
                 project2.exclude shouldBe false
 
-                project2.packages should haveSize(1)
-                project2.packages.first().id shouldBe Identifier.fromString("provider:namespace:name:version")
-                project2.packages.first().reason shouldBe ExcludeReason.OTHER
-                project2.packages.first().comment shouldBe "package comment"
-
                 project2.scopes should haveSize(1)
                 project2.scopes.first().name shouldBe "scope"
                 project2.scopes.first().reason shouldBe ExcludeReason.OTHER
                 project2.scopes.first().comment shouldBe "scope comment"
-
-                project2.errors should haveSize(1)
-                project2.errors.first().message shouldBe "error message"
-                project2.errors.first().reason shouldBe ExcludeReason.OTHER
-                project2.errors.first().comment shouldBe "error comment"
 
                 val scopes = repositoryConfiguration.excludes!!.scopes
                 scopes should haveSize(1)
                 scopes.first().name shouldBe "scope"
                 scopes.first().reason shouldBe ExcludeReason.OTHER
                 scopes.first().comment shouldBe "scope comment"
-
-                val errors = repositoryConfiguration.excludes!!.errors
-                errors should haveSize(1)
-                errors.first().message shouldBe "error message"
-                errors.first().reason shouldBe ExcludeReason.OTHER
-                errors.first().comment shouldBe "error comment"
             }
         }
     }
