@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.config.Excludes
 import com.here.ort.utils.log
 
 import java.util.SortedMap
@@ -63,6 +64,16 @@ data class AnalyzerResult(
         errors.any { it.value.isNotEmpty() }
                 || projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
     }
+
+    fun includesPackage(id: Identifier, excludes: Excludes? = null) =
+            projects.any { project ->
+                if (excludes?.isExcluded(project) == true) {
+                    false
+                } else {
+                    val excludedScopes = excludes?.excludedScopes(project) ?: sortedSetOf()
+                    project.scopes.any { it.name !in excludedScopes && it.contains(id) }
+                }
+            }
 }
 
 class AnalyzerResultBuilder {

@@ -46,9 +46,13 @@ class NoticeReporter : Reporter() {
         // TODO: Decide whether we want to merge the list of detected licenses with declared licenses (which do not come
         // with a copyright).
         scanRecord.scanResults.forEach { container ->
-            container.results.forEach { result ->
-                result.summary.licenseFindings.forEach { licenseFinding ->
-                    allFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
+            val excludes = ortResult.repository.config.excludes
+
+            if (ortResult.analyzer?.result?.includesPackage(container.id, excludes) == true) {
+                container.results.forEach { result ->
+                    result.summary.licenseFindings.forEach { licenseFinding ->
+                        allFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
+                    }
                 }
             }
         }

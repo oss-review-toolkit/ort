@@ -21,6 +21,10 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.Project
+
+import java.util.SortedSet
+
 /**
  * Defines which parts of a repository should be excluded.
  */
@@ -36,4 +40,14 @@ data class Excludes(
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val scopes: List<ScopeExclude> = emptyList()
-)
+) {
+    fun isExcluded(project: Project) = projects.any { it.path == project.definitionFilePath && it.exclude }
+
+    fun excludedScopes(project: Project): SortedSet<String> {
+        val projectExclude = projects.find { it.path == project.definitionFilePath }
+        val scopesExcludedFromProject = projectExclude?.scopes?.map { it.name } ?: emptyList()
+        val scopesExcludedGlobally = scopes.map { it.name }
+
+        return (scopesExcludedGlobally + scopesExcludedFromProject).toSortedSet()
+    }
+}
