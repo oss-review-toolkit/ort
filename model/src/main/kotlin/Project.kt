@@ -69,13 +69,6 @@ data class Project(
         val scopes: SortedSet<Scope>,
 
         /**
-         * A flag to indicate whether this project should be excluded. This is set based on the .ort.yml configuration
-         * file.
-         */
-        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        val excluded: Boolean = false,
-
-        /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)

@@ -19,7 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -49,14 +48,7 @@ data class Error(
         /**
          * The error message.
          */
-        val message: String,
-
-        /**
-         * A flag to indicate whether this error should be excluded. This is set based on the .ort.yml configuration
-         * file.
-         */
-        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        val excluded: Boolean = false
+        val message: String
 ) {
     override fun toString() = "${if (timestamp == Instant.EPOCH) "n/a" else timestamp.toString()}: $source - $message"
 }
@@ -80,9 +72,6 @@ class ErrorSerializer : StdSerializer<Error>(Error::class.java) {
         gen.writeObjectField("timestamp", value.timestamp)
         gen.writeStringField("source", value.source)
         gen.writeStringField("message", value.message.normalizeLineBreaks())
-        if (value.excluded) {
-            gen.writeBooleanField("excluded", value.excluded)
-        }
         gen.writeEndObject()
     }
 }

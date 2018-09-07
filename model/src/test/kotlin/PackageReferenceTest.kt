@@ -52,14 +52,12 @@ class PackageReferenceTest : WordSpec() {
                     val name = "${it.id.name}_suffix"
                     it.copy(
                             id = it.id.copy(name = name),
-                            excluded = true,
                             errors = listOf(com.here.ort.model.Error(source = "test", message = "error $name"))
                     )
                 }
 
                 modifiedTree.traverse {
                     it.id.name should endWith("_suffix")
-                    it.excluded shouldBe true
                     it.errors should haveSize(1)
                     it.errors.first().message shouldBe "error ${it.id.name}"
                     it
