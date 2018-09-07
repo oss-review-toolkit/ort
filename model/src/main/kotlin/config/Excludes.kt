@@ -21,6 +21,11 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.Identifier
+import com.here.ort.model.Project
+import com.here.ort.model.Scope
+
 /**
  * Defines which parts of a repository should be excluded.
  */
@@ -36,4 +41,32 @@ data class Excludes(
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val scopes: List<ScopeExclude> = emptyList()
-)
+) {
+    /**
+     * Return the [ProjectExclude] for this [project], or null if there is none.
+     */
+    fun findProjectExclude(project: Project) = projects.find { it.path == project.definitionFilePath }
+
+    /**
+     * True if all occurrences of the package identified by [id] in the [analyzerResult] are excluded by this [Excludes]
+     * configuration.
+     */
+    fun isPackageExcluded(id: Identifier, analyzerResult: AnalyzerResult) =
+            analyzerResult.projects.all { project ->
+                isProjectExcluded(project) || project.scopes.all { scope ->
+                    isScopeExcluded(scope, project) || !scope.contains(id)
+                }
+            }
+
+    /**
+     * True if the [project] is excluded by this [Excludes] configuration.
+     */
+    fun isProjectExcluded(project: Project) = projects.any { it.path == project.definitionFilePath && it.exclude }
+
+    /**
+     * True if the [scope] is excluded in [project] by this [Excludes] configuration.
+     */
+    fun isScopeExcluded(scope: Scope, project: Project) =
+            scopes.any { it.name == scope.name }
+                    || findProjectExclude(project)?.scopes?.any { it.name == scope.name } ?: false
+}
