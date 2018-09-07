@@ -28,9 +28,5 @@ data class Excludes(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val projects: List<ProjectExclude> = emptyList(),
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val packages: List<PackageExclude> = emptyList(),
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val scopes: List<ScopeExclude> = emptyList(),
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<ErrorExclude> = emptyList()
+        val scopes: List<ScopeExclude> = emptyList()
 )
