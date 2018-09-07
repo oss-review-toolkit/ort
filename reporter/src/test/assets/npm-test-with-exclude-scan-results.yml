@@ -14,12 +14,8 @@ repository:
     excludes:
       scopes:
       - name: "devDependencies"
-        reason: "OTHER"
+        reason: "TEST_CASE_OF"
         comment: "Test dependencies."
-      packages:
-      - id: "NPM::dom-serializer:0.1.0"
-        reason: "OTHER"
-        comment: "Not distributed."
 analyzer:
   environment:
     os: "Linux"
@@ -58,7 +54,6 @@ analyzer:
               dependencies: []
               errors: []
             errors: []
-            excluded: true
           - id: "NPM::domelementtype:1.3.0"
             dependencies: []
             errors: []
@@ -80,7 +75,6 @@ analyzer:
             dependencies: []
             errors: []
           errors: []
-        excluded: true
     packages:
     - package:
         id: "NPM::boolbase:1.0.0"
