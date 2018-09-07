@@ -18,7 +18,6 @@ analyzer:
   config:
     ignore_tool_versions: false
     allow_dynamic_versions: false
-    remove_excludes_from_result: false
   result:
     projects:
     - id: "NPM::npm-excludes-test-project:1.0.0"

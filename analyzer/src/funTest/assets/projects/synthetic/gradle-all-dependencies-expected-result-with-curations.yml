@@ -42,7 +42,6 @@ analyzer:
   config:
     ignore_tool_versions: false
     allow_dynamic_versions: false
-    remove_excludes_from_result: false
   result:
     projects:
     - id: "Gradle::Gradle-Example:"
@@ -153,7 +152,6 @@ analyzer:
           errors: []
       - name: "testAnnotationProcessor"
         dependencies: []
-        excluded: true
       - name: "testCompile"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -168,7 +166,6 @@ analyzer:
             dependencies: []
             errors: []
           errors: []
-        excluded: true
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -183,10 +180,8 @@ analyzer:
             dependencies: []
             errors: []
           errors: []
-        excluded: true
       - name: "testCompileOnly"
         dependencies: []
-        excluded: true
       - name: "testRuntime"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -201,7 +196,6 @@ analyzer:
             dependencies: []
             errors: []
           errors: []
-        excluded: true
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -216,7 +210,6 @@ analyzer:
             dependencies: []
             errors: []
           errors: []
-        excluded: true
     - id: "Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
       declared_licenses: []
@@ -290,7 +283,6 @@ analyzer:
               \ are defined."
       - name: "testAnnotationProcessor"
         dependencies: []
-        excluded: true
       - name: "testCompile"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -308,7 +300,6 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
-        excluded: true
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -326,10 +317,8 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
-        excluded: true
       - name: "testCompileOnly"
         dependencies: []
-        excluded: true
       - name: "testRuntime"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -347,7 +336,6 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
-        excluded: true
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -365,8 +353,6 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
-        excluded: true
-      excluded: true
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
@@ -445,7 +431,6 @@ analyzer:
           errors: []
       - name: "testAnnotationProcessor"
         dependencies: []
-        excluded: true
       - name: "testCompile"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -463,7 +448,6 @@ analyzer:
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
           dependencies: []
           errors: []
-        excluded: true
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -481,10 +465,8 @@ analyzer:
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
           dependencies: []
           errors: []
-        excluded: true
       - name: "testCompileOnly"
         dependencies: []
-        excluded: true
       - name: "testRuntime"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -502,7 +484,6 @@ analyzer:
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
           dependencies: []
           errors: []
-        excluded: true
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -520,7 +501,6 @@ analyzer:
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
           dependencies: []
           errors: []
-        excluded: true
     packages:
     - package:
         id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
