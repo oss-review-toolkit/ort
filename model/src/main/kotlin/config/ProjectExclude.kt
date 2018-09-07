@@ -33,12 +33,8 @@ data class ProjectExclude(
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val comment: String?,
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val packages: List<PackageExclude> = emptyList(),
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val scopes: List<ScopeExclude> = emptyList(),
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<ErrorExclude> = emptyList()
+        val scopes: List<ScopeExclude> = emptyList()
 ) {
     @JsonIgnore
-    val exclude = packages.isEmpty() && scopes.isEmpty() && errors.isEmpty()
+    val exclude = scopes.isEmpty()
 }
