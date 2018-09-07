@@ -26,8 +26,6 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.Environment
-import com.here.ort.model.ExcludesMarker
-import com.here.ort.model.ExcludesRemover
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
@@ -66,10 +64,6 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
         } else {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
-        }
-
-        if (config.removeExcludesFromResult) {
-            managedFiles = filterExcludedProjects(managedFiles, repositoryConfiguration)
         }
 
         val hasDefinitionFileInRootDirectory = managedFiles.values.flatten().any {
@@ -125,53 +119,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
-        val analyzerResult = analyzerResultBuilder.build().let { analyzerResult ->
-            repositoryConfiguration.excludes?.let { excludes ->
-                val excludesProcessor = if (config.removeExcludesFromResult) {
-                    ExcludesRemover(excludes)
-                } else {
-                    ExcludesMarker(excludes)
-                }
-
-                excludesProcessor.postProcess(analyzerResult)
-            } ?: analyzerResult
-        }
-
-        val run = AnalyzerRun(Environment(), config, analyzerResult)
+        val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())
 
         return OrtResult(repository, run)
-    }
-
-    private fun filterExcludedProjects(
-            managedDefinitionFiles: MutableMap<PackageManagerFactory, List<File>>,
-            repositoryConfiguration: RepositoryConfiguration
-    ): MutableMap<PackageManagerFactory, List<File>> {
-        val excludedProjects = repositoryConfiguration.excludes?.projects?.filter { it.exclude } ?: emptyList()
-        val excludedDefinitionFiles = excludedProjects.map { it.path }
-
-        val definitionFilesToRemove = managedDefinitionFiles.flatMap { it.value }.filter { definitionFile ->
-            val definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path
-            definitionFilePath in excludedDefinitionFiles
-        }
-
-        require(definitionFilesToRemove.size == excludedDefinitionFiles.size) {
-            "The following definition files are configured to be excluded in .ort.yml, but do not exist in the " +
-                    "repository:\n${(excludedDefinitionFiles - definitionFilesToRemove).joinToString("\n")}"
-        }
-
-        log.info {
-            "The following definition files are configured to be excluded in .ort.yml:\n" +
-                    definitionFilesToRemove.joinToString("\n") { it.invariantSeparatorsPath }
-        }
-
-        val filteredManagedDefinitionFiles = mutableMapOf<PackageManagerFactory, List<File>>()
-        managedDefinitionFiles.forEach { packageManager, definitionFiles ->
-            val filteredDefinitionFiles = definitionFiles - definitionFilesToRemove
-            if (filteredDefinitionFiles.isNotEmpty()) {
-                filteredManagedDefinitionFiles[packageManager] = filteredDefinitionFiles
-            }
-        }
-
-        return filteredManagedDefinitionFiles
     }
 }

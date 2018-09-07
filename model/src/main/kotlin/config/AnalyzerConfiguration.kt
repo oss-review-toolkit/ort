@@ -38,13 +38,7 @@ data class AnalyzerConfiguration(
          * (transitive) dependencies are declared using version ranges and a new version of such a dependency was
          * published in the meantime. If set to false, analysis of projects that use version ranges will fail.
          */
-        val allowDynamicVersions: Boolean,
-
-        /**
-         * If true excludes defined in the ".ort.yml" file of the repository will not be analyzed and not appear in the
-         * result. If false they will be analyzed but marked as "excluded" in the result.
-         */
-        val removeExcludesFromResult: Boolean
+        val allowDynamicVersions: Boolean
 )
 
 class AnalyzerConfigurationDeserializer : StdDeserializer<AnalyzerConfiguration>(AnalyzerConfiguration::class.java) {
@@ -52,11 +46,12 @@ class AnalyzerConfigurationDeserializer : StdDeserializer<AnalyzerConfiguration>
         val node = p.codec.readTree<JsonNode>(p)
         return if (node.isBoolean) {
             // For backward-compatibility if only "allowDynamicVersions" / "allow_dynamic_versions" is specified.
-            AnalyzerConfiguration(false, node.booleanValue(), false)
+            AnalyzerConfiguration(false, node.booleanValue())
         } else {
-            AnalyzerConfiguration(node.get("ignore_tool_versions").booleanValue(),
-                    node.get("allow_dynamic_versions").booleanValue(),
-                    node.get("remove_excludes_from_result")?.booleanValue() ?: false)
+            AnalyzerConfiguration(
+                    node.get("ignore_tool_versions").booleanValue(),
+                    node.get("allow_dynamic_versions").booleanValue()
+            )
         }
     }
 }

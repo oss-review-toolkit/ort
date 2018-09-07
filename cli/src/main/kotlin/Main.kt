@@ -162,13 +162,6 @@ object Main : CommandWithHelp() {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var allowDynamicVersions = false
 
-        @Parameter(description = "By default the components configured to be excluded in the .ort.yml file of the " +
-                "input directory will still be analyzed, but marked as excluded in the result. With this option " +
-                "enabled they will not appear in the result.",
-                names = ["--remove-excludes-from-result"],
-                order = PARAMETER_ORDER_OPTIONAL)
-        private var removeExcludesFromResult = false
-
         @Parameter(description = "A YAML file that contains package curation data.",
                 names = ["--package-curations-file"],
                 order = PARAMETER_ORDER_OPTIONAL)
@@ -204,7 +197,7 @@ object Main : CommandWithHelp() {
             val absoluteProjectPath = inputDir.absoluteFile
             println("Scanning project path:\n\t$absoluteProjectPath")
 
-            val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions, removeExcludesFromResult)
+            val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
             val analyzer = Analyzer(config)
             val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile,
                     repositoryConfigurationFile)
