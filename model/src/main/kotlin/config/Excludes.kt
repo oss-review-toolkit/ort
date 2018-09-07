@@ -25,8 +25,15 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * Defines which parts of a repository should be excluded.
  */
 data class Excludes(
+        /**
+         * Project specific excludes.
+         */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val projects: List<ProjectExclude> = emptyList(),
+
+        /**
+         * Scope that will be excluded from all projects.
+         */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val scopes: List<ScopeExclude> = emptyList()
 )

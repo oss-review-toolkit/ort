@@ -23,7 +23,18 @@ package com.here.ort.model.config
  * Defines a scope that should be excluded.
  */
 data class ScopeExclude(
+        /**
+         * The name of the scope.
+         */
         val name: String,
+
+        /**
+         * The reason why the scope is excluded.
+         */
         val reason: ExcludeReason,
+
+        /**
+         * A textual explanation why the project is excluded.
+         */
         val comment: String
 )

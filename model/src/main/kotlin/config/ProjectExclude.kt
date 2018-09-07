@@ -27,14 +27,32 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * inside the repository. If [packages], [scopes], and [errors] are all empty the whole project is excluded.
  */
 data class ProjectExclude(
+        /**
+         * The path of the project definition file, relative to the root of the repository.
+         */
         val path: String,
         @JsonInclude(JsonInclude.Include.NON_NULL)
+
+        /**
+         * The reason why the project is excluded.
+         */
         val reason: ExcludeReason?,
         @JsonInclude(JsonInclude.Include.NON_NULL)
+
+        /**
+         * A textual explanation why the project is excluded.
+         */
         val comment: String?,
+
+        /**
+         * Scopes that will excluded from this project.
+         */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val scopes: List<ScopeExclude> = emptyList()
 ) {
+    /**
+     * True if the whole project will be excluded. This is the case if no specific scopes to exclude are defined.
+     */
     @JsonIgnore
     val exclude = scopes.isEmpty()
 }
