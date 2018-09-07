@@ -57,8 +57,7 @@ class NoticeReporterTest : WordSpec({
             resultFile.readText() shouldBe expectedResultFile.readText()
         }
 
-        // The test will be enabled again after re-implementing the exclusion logic in NoticeReporter.
-        "not contain licenses of excluded packages".config(enabled = false) {
+        "not contain licenses of excluded packages" {
             val expectedResultFile = File("src/test/assets/npm-test-with-exclude-NOTICE")
             val scanRecordFile = File("src/test/assets/npm-test-with-exclude-scan-results.yml")
             val ortResult = scanRecordFile.readValue(OrtResult::class.java)

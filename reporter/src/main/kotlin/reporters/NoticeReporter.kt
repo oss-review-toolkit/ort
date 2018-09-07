@@ -37,6 +37,8 @@ class NoticeReporter : Reporter() {
             "The provided ORT result file does not contain a scan record."
         }
 
+        val excludes = ortResult.repository.config.excludes
+        val analyzerResult = ortResult.analyzer!!.result
         val scanRecord = ortResult.scanner!!.results
 
         val outputFile = File(outputDir, NOTICE_FILE_NAME)
@@ -46,9 +48,11 @@ class NoticeReporter : Reporter() {
         // TODO: Decide whether we want to merge the list of detected licenses with declared licenses (which do not come
         // with a copyright).
         scanRecord.scanResults.forEach { container ->
-            container.results.forEach { result ->
-                result.summary.licenseFindings.forEach { licenseFinding ->
-                    allFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
+            if (excludes == null || !excludes.isPackageExcluded(container.id, analyzerResult)) {
+                container.results.forEach { result ->
+                    result.summary.licenseFindings.forEach { licenseFinding ->
+                        allFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
+                    }
                 }
             }
         }
