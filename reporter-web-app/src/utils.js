@@ -435,7 +435,7 @@ export function convertToRenderFormat(reportData) {
     };
     const calculateNrPackagesLicenses = projectsLicenses => Object.values(projectsLicenses)
         .reduce((accumulator, projectLicenses) => {
-            Object.values(projectLicenses).forEach((license) => {
+            for (const license in projectLicenses) {
                 const licenseMap = projectLicenses[license];
 
                 if (!accumulator[license]) {
@@ -443,16 +443,16 @@ export function convertToRenderFormat(reportData) {
                 }
 
                 accumulator[license] += licenseMap.size;
-            });
+            }
             return accumulator;
         }, {});
     const calculateReportDataTotalLicenses = (projectsLicenses) => {
         const licensesSet = new Set([]);
 
         return Object.values(projectsLicenses).reduce((accumulator, projectLicenses) => {
-            Object.values(projectLicenses).forEach((license) => {
+            for (const license in projectLicenses) {
                 accumulator.add(license);
-            });
+            }
             return accumulator;
         }, licensesSet).size || undefined;
     };
