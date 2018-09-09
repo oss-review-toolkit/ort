@@ -161,8 +161,8 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         log.debug { "Running 'dep init' to import legacy manifest file ${definitionFile.name}" }
 
-        val env = mapOf("GOPATH" to gopath.absolutePath)
-        ProcessCapture(workingDir, env, "dep", "init").requireSuccess()
+        ProcessCapture("dep", "init", workingDir = workingDir,
+                environment = mapOf("GOPATH" to gopath.absolutePath)).requireSuccess()
     }
 
     private fun setUpWorkspace(projectDir: File, vcs: VcsInfo, gopath: File): File {
@@ -192,8 +192,8 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
             log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
 
-            val env = mapOf("GOPATH" to gopath.absolutePath)
-            ProcessCapture(workingDir, env, "dep", "ensure").requireSuccess()
+            ProcessCapture("dep", "ensure", workingDir = workingDir,
+                    environment = mapOf("GOPATH" to gopath.absolutePath)).requireSuccess()
         }
 
         val entries = Toml().read(lockfile).toMap()["projects"]
@@ -222,8 +222,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     }
 
     private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
-        val env = mapOf("GOPATH" to gopath.absolutePath)
-        val pc = ProcessCapture(null, env, "go", "get", "-d", importPath)
+        val pc = ProcessCapture("go", "get", "-d", importPath, environment = mapOf("GOPATH" to gopath.absolutePath))
 
         // HACK Some failure modes from "go get" can be ignored:
         // 1. repositories that don't have .go files in the root directory

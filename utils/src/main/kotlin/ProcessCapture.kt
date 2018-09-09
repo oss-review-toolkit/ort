@@ -31,9 +31,11 @@ import java.io.IOException
  * An (almost) drop-in replacement for ProcessBuilder that is able to capture huge outputs to the standard output and
  * standard error streams by redirecting output to temporary files.
  */
-class ProcessCapture(workingDir: File?, environment: Map<String, String>, vararg command: String) {
-    constructor(vararg command: String) : this(null, *command)
-    constructor(workingDir: File?, vararg command: String) : this(workingDir, mapOf(), *command)
+class ProcessCapture(vararg command: String, workingDir: File? = null, environment: Map<String, String> = emptyMap()) {
+    // A convenience constructor to avoid the need for a named parameter if only the [workingDir] argument needs to be
+    // specified. Even in unambiguous cases Kotlin unfortunately requires named parameters for arguments that follow
+    // vararg parameters, see https://stackoverflow.com/a/46456379/1127485.
+    constructor(workingDir: File?, vararg command: String) : this(*command, workingDir = workingDir)
 
     companion object {
         private const val MAX_LOG_LINES = 20
