@@ -387,6 +387,11 @@ fun File.toSafeURI(): URI {
 fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
 
 /**
+ * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
+ */
+fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+
+/**
  * Return the string encoded for safe use as a file name. Also limit the length to 255 characters which is the maximum
  * length in most modern filesystems: https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
  */
@@ -396,11 +401,6 @@ fun String.fileSystemEncode() =
                 .replace("*", "%2A")
                 .replace(Regex("(^\\.|\\.$)"), "%2E")
                 .take(255)
-
-/**
- * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
- */
-fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
 
 /**
  * True if the string is a valid URL, false otherwise.
