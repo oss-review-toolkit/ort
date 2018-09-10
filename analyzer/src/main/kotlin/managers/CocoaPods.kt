@@ -24,8 +24,6 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
-import java.io.File
-
 /**
  * The CocoaPods package manager for Objective-C, see https://cocoapods.org/.
  */
@@ -37,6 +35,4 @@ class CocoaPods(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryCon
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 CocoaPods(analyzerConfig, repoConfig)
     }
-
-    override fun command(workingDir: File) = "pod"
 }

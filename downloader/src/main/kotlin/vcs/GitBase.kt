@@ -20,29 +20,29 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getCommandVersion
 
 import java.io.File
 import java.util.regex.Pattern
 
-abstract class GitBase : VersionControlSystem() {
-    override val commandName = "git"
+abstract class GitBase : VersionControlSystem(), CommandLineTool {
+    private val versionRegex = Pattern.compile("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
+
     override val latestRevisionNames = listOf("HEAD", "@")
 
-    override fun getVersion(): String {
-        val versionRegex = Pattern.compile("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
+    override fun command(workingDir: File?) = "git"
 
-        return getCommandVersion("git") { output ->
-            versionRegex.matcher(output.lineSequence().first()).let {
-                if (it.matches()) {
-                    it.group("version")
-                } else {
-                    ""
+    override fun getVersion() =
+            getVersion { output ->
+                versionRegex.matcher(output.lineSequence().first()).let {
+                    if (it.matches()) {
+                        it.group("version")
+                    } else {
+                        ""
+                    }
                 }
             }
-        }
-    }
 
     open inner class GitWorkingTree(workingDir: File) : WorkingTree(workingDir) {
         override fun isValid(): Boolean {

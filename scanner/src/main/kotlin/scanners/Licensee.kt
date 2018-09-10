@@ -36,7 +36,6 @@ import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 
@@ -49,11 +48,14 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
         override fun create(config: ScannerConfiguration) = Licensee(config)
     }
 
-    override val scannerExe = if (OS.isWindows) "licensee.bat" else "licensee"
     override val scannerVersion = "9.9.1"
     override val resultFileExt = "json"
 
     val CONFIGURATION_OPTIONS = listOf("--json")
+
+    override fun command(workingDir: File?) = if (OS.isWindows) "licensee.bat" else "licensee"
+
+    override fun getVersion(dir: File) = getVersion("version", workingDir = dir)
 
     override fun bootstrap(): File {
         val gem = if (OS.isWindows) "gem.cmd" else "gem"
@@ -64,7 +66,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
         val isTravisCi = listOf("TRAVIS", "CI").all { java.lang.Boolean.parseBoolean(System.getenv(it)) }
         return if (isTravisCi) {
             ProcessCapture(gem, "install", "licensee", "-v", scannerVersion).requireSuccess()
-            getPathFromEnvironment(scannerExe)?.parentFile
+            getPathFromEnvironment(command())?.parentFile
                     ?: throw IOException("Install directory for licensee not found.")
         } else {
             ProcessCapture(gem, "install", "--user-install", "licensee", "-v", scannerVersion).requireSuccess()
@@ -77,8 +79,6 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
-
-    override fun getVersion(dir: File) = getCommandVersion(dir.resolve(scannerExe).absolutePath, "version")
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {

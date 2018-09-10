@@ -36,6 +36,7 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -56,7 +57,7 @@ val GO_LEGACY_MANIFESTS = mapOf(
  * The Dep package manager for Go, see https://golang.github.io/dep/.
  */
 class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
+        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<GoDep>() {
         override val globsForDefinitionFiles = listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())
 
@@ -64,7 +65,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 GoDep(analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File) = "dep"
+    override fun command(workingDir: File?) = "dep"
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
@@ -161,8 +162,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         log.debug { "Running 'dep init' to import legacy manifest file ${definitionFile.name}" }
 
-        ProcessCapture("dep", "init", workingDir = workingDir,
-                environment = mapOf("GOPATH" to gopath.absolutePath)).requireSuccess()
+        run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.absolutePath))
     }
 
     private fun setUpWorkspace(projectDir: File, vcs: VcsInfo, gopath: File): File {
@@ -192,8 +192,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
             log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
 
-            ProcessCapture("dep", "ensure", workingDir = workingDir,
-                    environment = mapOf("GOPATH" to gopath.absolutePath)).requireSuccess()
+            run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.absolutePath))
         }
 
         val entries = Toml().read(lockfile).toMap()["projects"]

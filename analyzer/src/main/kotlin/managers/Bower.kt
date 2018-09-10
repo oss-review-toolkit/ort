@@ -24,8 +24,6 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
-import java.io.File
-
 /**
  * The Bower package manager for JavaScript, see https://bower.io/.
  */
@@ -37,6 +35,4 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Bower(analyzerConfig, repoConfig)
     }
-
-    override fun command(workingDir: File) = "bower"
 }

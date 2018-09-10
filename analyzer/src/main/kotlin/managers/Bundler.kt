@@ -41,11 +41,10 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
-import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.textValueOrEmpty
-import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
@@ -66,7 +65,7 @@ import okhttp3.Request
  * http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
  */
 class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
+        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Bundler>() {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
@@ -74,15 +73,12 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
                 Bundler(analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File) = if (OS.isWindows) "bundle.bat" else "bundle"
+    override fun command(workingDir: File?) = if (OS.isWindows) "bundle.bat" else "bundle"
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        val workingDir = definitionFiles.first().parentFile
-
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
         // fixed versions to be sure to get consistent results.
-        checkCommandVersion(
-                command(workingDir),
+        checkVersion(
                 Requirement.buildIvy("1.16.+"),
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                 transform = { it.substringAfter("Bundler version ") }
@@ -210,10 +206,9 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
         val scriptFile = File.createTempFile("bundler_dependencies", ".rb")
         scriptFile.writeBytes(javaClass.classLoader.getResource("bundler_dependencies.rb").readBytes())
 
-        val scriptCmd = ProcessCapture(workingDir, command(workingDir), "exec", "ruby", scriptFile.absolutePath)
-
         try {
-            return jsonMapper.readValue(scriptCmd.requireSuccess().stdout)
+            val scriptCmd = run(workingDir, "exec", "ruby", scriptFile.absolutePath)
+            return jsonMapper.readValue(scriptCmd.stdout)
         } finally {
             if (!scriptFile.delete()) {
                 log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
@@ -232,8 +227,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
     }
 
     private fun getGemspec(gemName: String, workingDir: File): GemSpec {
-        val spec = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
-                gemName).requireSuccess().stdout
+        val spec = run(workingDir, "exec", "gem", "specification", gemName).stdout
 
         return GemSpec.createFromYaml(spec)
     }
@@ -246,7 +240,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
             "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
         }
 
-        ProcessCapture(workingDir, command(workingDir), "install", "--path", "vendor/bundle").requireSuccess()
+        run(workingDir, "install", "--path", "vendor/bundle")
     }
 
     private fun queryRubygems(name: String, version: String): GemSpec? {

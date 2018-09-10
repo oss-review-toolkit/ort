@@ -41,10 +41,10 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.textValueOrEmpty
@@ -71,7 +71,7 @@ const val PYDEP_REVISION = "license-and-classifiers"
  * https://caremad.io/posts/2013/07/setup-vs-requirement/.
  */
 class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
+        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<PIP>() {
         override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
 
@@ -85,7 +85,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             "pypi.python.org" // Legacy
     ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
 
-    override fun command(workingDir: File) = "pip"
+    override fun command(workingDir: File?) = "pip"
 
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
             runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
@@ -114,8 +114,11 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
-        checkCommandVersion("virtualenv", Requirement.buildIvy("15.1.+"),
-                ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        val virtualEnv = object : CommandLineTool {
+            override fun command(workingDir: File?) = "virtualenv"
+        }
+
+        virtualEnv.checkVersion(Requirement.buildIvy("15.1.+"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         return definitionFiles
     }

@@ -41,10 +41,10 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.textValueOrEmpty
-import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -65,7 +65,7 @@ const val COMPOSER_LOCK_FILE = "composer.lock"
  * The Composer package manager for PHP, see https://getcomposer.org/.
  */
 class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
+        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<PhpComposer>() {
         override val globsForDefinitionFiles = listOf("composer.json")
 
@@ -73,8 +73,8 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                 PhpComposer(analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File) =
-            if (File(workingDir, COMPOSER_PHAR_BINARY).isFile) {
+    override fun command(workingDir: File?) =
+            if (workingDir?.resolve(COMPOSER_PHAR_BINARY)?.isFile == true) {
                 "php $COMPOSER_PHAR_BINARY"
             } else {
                 if (OS.isWindows) {
@@ -84,6 +84,9 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                 }
             }
 
+    override fun run(workingDir: File?, vararg args: String) =
+            ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args).requireSuccess()
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
@@ -91,14 +94,11 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
             return definitionFiles
         }
 
-        val workingDir = definitionFiles.first().parentFile
-
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
         // fixed versions to be sure to get consistent results. The version string can be something like:
         // Composer version 1.5.1 2017-08-09 16:07:22
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
-        checkCommandVersion(
-                command(workingDir),
+        checkVersion(
                 Requirement.buildIvy("[1.5,)"),
                 "--no-ansi --version",
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions,
@@ -339,7 +339,6 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
         // The "install" command creates a "composer.lock" file (if not yet present) except for projects without any
         // dependencies, see https://getcomposer.org/doc/01-basic-usage.md#installing-without-composer-lock.
-        ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), "install")
-                .requireSuccess()
+        run(workingDir, "install")
     }
 }

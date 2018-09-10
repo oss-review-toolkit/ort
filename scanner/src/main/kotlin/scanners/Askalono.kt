@@ -38,7 +38,6 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 
 import java.io.File
@@ -55,18 +54,28 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
         override fun create(config: ScannerConfiguration) = Askalono(config)
     }
 
-    private val extension = when {
-        OS.isLinux -> "linux"
-        OS.isMac -> "osx"
-        OS.isWindows -> "exe"
-        else -> throw IllegalArgumentException("Unsupported operating system.")
-    }
-
-    override val scannerExe = "askalono.$extension"
     override val scannerVersion = "0.2.0"
     override val resultFileExt = "txt"
 
+    override fun command(workingDir: File?): String {
+        val extension = when {
+            OS.isLinux -> "linux"
+            OS.isMac -> "osx"
+            OS.isWindows -> "exe"
+            else -> throw IllegalArgumentException("Unsupported operating system.")
+        }
+
+        return "askalono.$extension"
+    }
+
+    override fun getVersion(dir: File) =
+            getVersion(workingDir = dir, transform = {
+                // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
+                it.substringAfter("askalono ")
+            })
+
     override fun bootstrap(): File {
+        val scannerExe = command()
         val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$scannerExe"
 
         log.info { "Downloading $this from '$url'... " }
@@ -100,12 +109,6 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun getConfiguration() = ""
-
-    override fun getVersion(dir: File) =
-            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
-                // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
-                it.substringAfter("askalono ")
-            })
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {

@@ -43,6 +43,7 @@ import com.here.ort.model.ScannerRun
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
@@ -57,7 +58,7 @@ import java.time.Instant
  * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scan] are processed in serial
  * order. Scan results can be cached in a [ScanResultsCache].
  */
-abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
+abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), CommandLineTool {
     /**
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
@@ -67,6 +68,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
      * The directory the scanner was bootstrapped to, if so.
      */
     protected val scannerDir by lazy {
+        val scannerExe = command()
+
         getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
             getVersion(it) == scannerVersion
         } ?: run {
@@ -89,11 +92,6 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
     }
 
     /**
-     * The scanner's executable file name.
-     */
-    protected abstract val scannerExe: String
-
-    /**
      * The required version of the scanner. This is also the version that would get bootstrapped.
      */
     protected abstract val scannerVersion: String
@@ -101,7 +99,12 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
     /**
      * The full path to the scanner executable.
      */
-    protected val scannerPath by lazy { File(scannerDir, scannerExe) }
+    protected val scannerPath by lazy { File(scannerDir, command()) }
+
+    /**
+     * Return the actual version of the scanner, or an empty string in case of failure.
+     */
+    abstract fun getVersion(dir: File = scannerDir): String
 
     /**
      * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.
@@ -124,11 +127,6 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config) {
      * Return the [ScannerDetails] of this [LocalScanner].
      */
     fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
-
-    /**
-     * Return the actual version of the scanner, or an empty string in case of failure.
-     */
-    abstract fun getVersion(dir: File = scannerDir): String
 
     override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File?)
             : Map<Package, List<ScanResult>> {
