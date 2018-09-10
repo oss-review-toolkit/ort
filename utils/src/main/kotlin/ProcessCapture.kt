@@ -41,8 +41,8 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         private const val MAX_LOG_LINES = 20
         private const val MAX_LOG_LINES_MESSAGE = "(Above output is limited to $MAX_LOG_LINES lines.)"
 
-        private fun logLinesLimited(prefix: String, lines: Sequence<String>, limit: Int, logLine: (String) -> Unit) {
-            val chunkIterator = lines.chunked(limit).iterator()
+        private fun logLinesLimited(prefix: String, lines: Sequence<String>, logLine: (String) -> Unit) {
+            val chunkIterator = lines.chunked(MAX_LOG_LINES).iterator()
             chunkIterator.next().forEach { logLine("$prefix: $it") }
 
             // This actually already evaluates the next element, but since that is also only a chunk, not the whole
@@ -104,13 +104,13 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
 
             if (stdoutFile.length() > 0L) {
                 stdoutFile.useLines { lines ->
-                    logLinesLimited("stdout", lines, MAX_LOG_LINES) { log.debug(it) }
+                    logLinesLimited("stdout", lines) { log.debug(it) }
                 }
             }
 
             if (stderrFile.length() > 0L) {
                 stderrFile.useLines { lines ->
-                    logLinesLimited("stderr", lines, MAX_LOG_LINES) { log.debug(it) }
+                    logLinesLimited("stderr", lines) { log.debug(it) }
                 }
             }
         }
