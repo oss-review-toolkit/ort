@@ -90,7 +90,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     /**
      * Enable compatibility mode with POM files generated from SBT using "sbt makePom".
      */
-    fun enableSbtMode() = this.apply { sbtMode = true }
+    fun enableSbtMode() = also { sbtMode = true }
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
