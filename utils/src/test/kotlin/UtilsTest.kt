@@ -511,4 +511,78 @@ class UtilsTest : WordSpec({
             tempDir.safeDeleteRecursively()
         }
     }
+
+    "Map.zip" should {
+        val operation = { left: Int?, right: Int? -> (left ?: 0) + (right ?: 0) }
+
+        "correctly merge maps" {
+            val map = mapOf(
+                    "1" to 1,
+                    "2" to 2,
+                    "3" to 3
+            )
+            val other = mapOf(
+                    "3" to 3,
+                    "4" to 4
+            )
+
+            val expectedResult = mapOf(
+                    "1" to 1,
+                    "2" to 2,
+                    "3" to 6,
+                    "4" to 4
+            )
+
+            map.zip(other, operation) shouldBe expectedResult
+        }
+
+        "not fail if this map is empty" {
+            val other = mapOf("1" to 1)
+
+            emptyMap<String, Int>().zip(other, operation) shouldBe mapOf("1" to 1)
+        }
+
+        "not fail if other map is empty" {
+            val map = mapOf("1" to 1)
+
+            map.zip(emptyMap(), operation) shouldBe mapOf("1" to 1)
+        }
+    }
+
+    "Map.zipWithDefault" should {
+        val operation = { left: Int, right: Int -> left + right }
+
+        "correctly merge maps" {
+            val map = mapOf(
+                    "1" to 1,
+                    "2" to 2,
+                    "3" to 3
+            )
+            val other = mapOf(
+                    "3" to 3,
+                    "4" to 4
+            )
+
+            val expectedResult = mapOf(
+                    "1" to 2,
+                    "2" to 3,
+                    "3" to 6,
+                    "4" to 5
+            )
+
+            map.zipWithDefault(other, 1, operation) shouldBe expectedResult
+        }
+
+        "not fail if this map is empty" {
+            val other = mapOf("1" to 1)
+
+            emptyMap<String, Int>().zipWithDefault(other, 1, operation) shouldBe mapOf("1" to 2)
+        }
+
+        "not fail if other map is empty" {
+            val map = mapOf("1" to 1)
+
+            map.zipWithDefault(emptyMap(), 1, operation) shouldBe mapOf("1" to 2)
+        }
+    }
 })
