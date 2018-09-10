@@ -1032,7 +1032,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/typechecker/-/typechecker-4.5.0.tgz"
+      url: "http://registry.npmjs.org/typechecker/-/typechecker-4.5.0.tgz"
       hash: "c382920097812364bbaf4595b0ab6588244117a6"
       hash_algorithm: "SHA-1"
     vcs:
