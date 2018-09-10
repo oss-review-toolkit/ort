@@ -155,10 +155,7 @@ class Subversion : VersionControlSystem() {
 
                 private fun runSvnInfoCommand(): SubversionInfoEntry? {
                     val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
-                    if (info.isError) {
-                        return null
-                    }
-                    return svnInfoReader.readValue(info.stdout)
+                    return if (info.isSuccess) svnInfoReader.readValue(info.stdout) else null
                 }
             }
 
