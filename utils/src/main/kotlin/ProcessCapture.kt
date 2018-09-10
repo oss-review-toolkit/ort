@@ -142,10 +142,5 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     /**
      * Throw an [IOException] in case [exitValue] is not 0.
      */
-    fun requireSuccess(): ProcessCapture {
-        if (isError) {
-            throw IOException(errorMessage)
-        }
-        return this
-    }
+    fun requireSuccess() = also { if (isError) throw IOException(errorMessage) }
 }
