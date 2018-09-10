@@ -24,8 +24,8 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
@@ -37,24 +37,24 @@ import java.util.regex.Pattern
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
 
-class Mercurial : VersionControlSystem() {
+class Mercurial : VersionControlSystem(), CommandLineTool {
+    private val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
+
     override val aliases = listOf("mercurial", "hg")
-    override val commandName = "hg"
     override val latestRevisionNames = listOf("tip")
 
-    override fun getVersion(): String {
-        val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
+    override fun command(workingDir: File?) = "hg"
 
-        return getCommandVersion("hg") { output ->
-            versionRegex.matcher(output.lineSequence().first()).let {
-                if (it.matches()) {
-                    it.group("version")
-                } else {
-                    ""
+    override fun getVersion() =
+            getVersion { output ->
+                versionRegex.matcher(output.lineSequence().first()).let {
+                    if (it.matches()) {
+                        it.group("version")
+                    } else {
+                        ""
+                    }
                 }
             }
-        }
-    }
 
     override fun getWorkingTree(vcsDirectory: File) =
             object : WorkingTree(vcsDirectory) {

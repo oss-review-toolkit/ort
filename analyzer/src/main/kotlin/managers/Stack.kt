@@ -36,6 +36,7 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -56,7 +57,7 @@ import java.util.SortedSet
  * The Stack package manager for Haskell, see https://haskellstack.org/.
  */
 class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
+        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Stack>() {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 
@@ -64,7 +65,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 Stack(analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File) = "stack"
+    override fun command(workingDir: File?) = "stack"
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
@@ -90,7 +91,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             // Delete any left-overs from interrupted stack runs.
             File(workingDir, ".stack-work").safeDeleteRecursively()
 
-            return ProcessCapture(workingDir, command(workingDir), *command).requireSuccess()
+            return run(workingDir, *command)
         }
 
         fun mapParentsToChildren(scope: String): Map<String, List<String>> {

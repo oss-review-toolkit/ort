@@ -21,9 +21,6 @@ package com.here.ort.utils
 
 import ch.frankel.slf4k.*
 
-import com.vdurmont.semver4j.Requirement
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 
@@ -151,49 +148,4 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         }
         return this
     }
-}
-
-/**
- * Run a [command] to check its version against a [requirement].
- */
-fun checkCommandVersion(
-        command: String,
-        requirement: Requirement,
-        versionArguments: String = "--version",
-        workingDir: File? = null,
-        ignoreActualVersion: Boolean = false,
-        transform: (String) -> String = { it }
-) {
-    val toolVersionOutput = getCommandVersion(command, versionArguments, workingDir, transform)
-    val actualVersion = Semver(toolVersionOutput, Semver.SemverType.LOOSE)
-    if (!requirement.isSatisfiedBy(actualVersion)) {
-        val message = "Unsupported $command version $actualVersion does not fulfill $requirement."
-        if (ignoreActualVersion) {
-            log.warn { "$message Still continuing because you chose to ignore the actual version." }
-        } else {
-            throw IOException(message)
-        }
-    }
-}
-
-/**
- * Run a [command] to get its version.
- */
-fun getCommandVersion(
-        command: String,
-        versionArguments: String = "--version",
-        workingDir: File? = null,
-        transform: (String) -> String = { it }
-): String {
-    val commandLine = arrayOf(command) + versionArguments.split(' ')
-    val version = ProcessCapture(workingDir, *commandLine).requireSuccess()
-
-    // Some tools, like pipdeptree, actually report the version to stderr.
-    val versionString = sequenceOf(version.stdout, version.stderr).map {
-        transform(it.trim())
-    }.find {
-        it.isNotBlank()
-    }
-
-    return versionString ?: ""
 }

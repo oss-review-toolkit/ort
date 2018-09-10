@@ -38,7 +38,6 @@ import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
@@ -107,9 +106,17 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
                     "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
 
-    override val scannerExe = if (OS.isWindows) "scancode.bat" else "scancode"
     override val scannerVersion = "2.9.2"
     override val resultFileExt = "json"
+
+    override fun command(workingDir: File?) = if (OS.isWindows) "scancode.bat" else "scancode"
+
+    override fun getVersion(dir: File) =
+            getVersion(workingDir = dir, transform = {
+                // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
+                // the prefix.
+                it.substringAfter("ScanCode version ")
+            })
 
     override fun bootstrap(): File {
         val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
@@ -131,13 +138,6 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         }
         joinToString(" ")
     }
-
-    override fun getVersion(dir: File) =
-            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
-                // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
-                // the prefix.
-                it.substringAfter("ScanCode version ")
-            })
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {

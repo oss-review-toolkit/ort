@@ -38,7 +38,6 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.unpack
 
@@ -56,7 +55,6 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
         override fun create(config: ScannerConfiguration) = BoyterLc(config)
     }
 
-    override val scannerExe = if (OS.isWindows) "lc.exe" else "lc"
     override val scannerVersion = "1.3.1"
     override val resultFileExt = "json"
 
@@ -64,6 +62,14 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.
             "--format", "json"
     )
+
+    override fun command(workingDir: File?) = if (OS.isWindows) "lc.exe" else "lc"
+
+    override fun getVersion(dir: File) =
+            getVersion(workingDir = dir, transform = {
+                // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
+                it.substringAfter("licensechecker version ")
+            })
 
     override fun bootstrap(): File {
         val platform = when {
@@ -102,7 +108,7 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
             if (!OS.isWindows) {
                 // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
                 // Unix mode bits.
-                File(unpackDir, scannerExe).setExecutable(true)
+                File(unpackDir, command()).setExecutable(true)
             }
 
             unpackDir
@@ -110,12 +116,6 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
-
-    override fun getVersion(dir: File) =
-            getCommandVersion(dir.resolve(scannerExe).absolutePath, transform = {
-                // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
-                it.substringAfter("licensechecker version ")
-            })
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {

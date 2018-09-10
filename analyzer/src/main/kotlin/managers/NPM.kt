@@ -42,11 +42,10 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.textValueOrEmpty
-import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 
@@ -71,7 +70,7 @@ import org.apache.commons.codec.binary.Hex
  * The Node package manager for JavaScript, see https://www.npmjs.com/.
  */
 open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
+        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<NPM>() {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -119,15 +118,12 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
     protected open val recognizedLockFiles = listOf("npm-shrinkwrap.json", "package-lock.json")
 
-    override fun command(workingDir: File) = if (OS.isWindows) { "npm.cmd" } else { "npm" }
+    override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        val workingDir = definitionFiles.first().parentFile
-
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
-        checkCommandVersion(command(workingDir), Requirement.buildNPM("5.5.* - 6.4.*"),
-                ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        checkVersion(Requirement.buildNPM("5.5.* - 6.4.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         return definitionFiles
     }
@@ -493,10 +489,8 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             }
         }
 
-        val managerCommand = command(workingDir)
-
         // Install all NPM dependencies to enable NPM to list dependencies.
-        ProcessCapture(workingDir, managerCommand, "install", "--ignore-scripts").requireSuccess()
+        run(workingDir, "install", "--ignore-scripts")
 
         // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         // platforms except for Mac.

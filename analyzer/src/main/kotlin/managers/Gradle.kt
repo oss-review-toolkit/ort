@@ -40,7 +40,6 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.utils.OS
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
@@ -102,16 +101,6 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
     }
 
     private val maven = MavenSupport(GradleCacheReader())
-
-    override fun command(workingDir: File): String {
-        val (gradle, wrapper) = if (OS.isWindows) {
-            Pair("gradle.bat", "gradlew.bat")
-        } else {
-            Pair("gradle", "gradlew")
-        }
-
-        return if (File(workingDir, wrapper).isFile) wrapper else gradle
-    }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val gradleConnection = GradleConnector

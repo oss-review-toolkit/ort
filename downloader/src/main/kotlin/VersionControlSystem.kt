@@ -23,9 +23,8 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.filterVersionNames
-import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 
 import com.vdurmont.semver4j.Semver
@@ -64,7 +63,13 @@ abstract class VersionControlSystem {
         fun forUrl(vcsUrl: String) = if (vcsUrl in urlToVcsMap) {
             urlToVcsMap[vcsUrl]
         } else {
-            ALL.find { it.isInPath() && it.isApplicableUrl(vcsUrl) }.also { urlToVcsMap[vcsUrl] = it }
+            ALL.find {
+                if (it is CommandLineTool) {
+                    it.isInPath() && it.isApplicableUrl(vcsUrl)
+                } else {
+                    it.isApplicableUrl(vcsUrl)
+                }
+            }.also { urlToVcsMap[vcsUrl] = it }
         }
 
         /**
@@ -83,7 +88,11 @@ abstract class VersionControlSystem {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
                 ALL.asSequence().mapNotNull {
-                    if (it.isInPath()) it.getWorkingTree(absoluteVcsDirectory) else null
+                    if (it is CommandLineTool) {
+                        if (it.isInPath()) it.getWorkingTree(absoluteVcsDirectory) else null
+                    } else {
+                        it.getWorkingTree(absoluteVcsDirectory)
+                    }
                 }.find {
                     try {
                         it.isValid()
@@ -295,25 +304,9 @@ abstract class VersionControlSystem {
     protected abstract val aliases: List<String>
 
     /**
-     * The name of the command line program to run for this VCS implementation.
-     */
-    protected abstract val commandName: String
-
-    /**
      * A list of symbolic names that point to the latest revision.
      */
     protected abstract val latestRevisionNames: List<String>
-
-    /**
-     * Return whether the command for this VCS implementation is available in the system PATH.
-     */
-    fun isInPath() = getPathFromEnvironment(commandName) != null
-
-    /**
-     * A convenience function to run the command line program for this VCS implementation.
-     */
-    fun run(workingDir: File, vararg args: String) =
-            ProcessCapture(workingDir, commandName, *args).requireSuccess()
 
     /**
      * Return the VCS command's version string, or an empty string if the version cannot be determined.

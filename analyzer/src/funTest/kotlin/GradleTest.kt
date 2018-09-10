@@ -23,6 +23,7 @@ import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -178,7 +179,7 @@ class GradleTest : StringSpec() {
             val gradleVersionTable = table(headers("version", "resultsFileSuffix"), *gradleVersions)
 
             forAll(gradleVersionTable) { version, resultsFileSuffix ->
-                gradleWrapper(version)
+                installGradleWrapper(version)
 
                 val packageFile = File(projectDir, "app/build.gradle")
                 val expectedResult = patchExpectedResult(
@@ -197,16 +198,20 @@ class GradleTest : StringSpec() {
         }
     }
 
-    private fun gradleWrapper(version: String) {
+    private fun installGradleWrapper(version: String) {
         println("Installing Gradle wrapper version $version.")
+
+        val (gradle, wrapper) = if (OS.isWindows) {
+            Pair("gradle.bat", "gradlew.bat")
+        } else {
+            Pair("gradle", "gradlew")
+        }
+
+        val command = if (projectDir.resolve(wrapper).isFile) wrapper else gradle
 
         // When calling Windows batch files directly (without passing them to "cmd" as an argument), Windows requires
         // the absolute path to the batch file to be passed to the underlying ProcessBuilder for some reason.
-        val wrapperAbsolutePath =
-                File(Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION).command(projectDir))
-                        .absolutePath
-
-        ProcessCapture(projectDir, wrapperAbsolutePath, "wrapper", "--gradle-version", version, "--no-daemon")
+        ProcessCapture(projectDir, File(command).absolutePath, "--no-daemon", "wrapper", "--gradle-version", version)
                 .requireSuccess()
     }
 }

@@ -30,8 +30,8 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Package
 import com.here.ort.model.xmlMapper
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getCommandVersion
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
@@ -89,24 +89,24 @@ data class SubversionPathEntry(
         val commit: SubversionInfoCommit,
         val lock: SubversionInfoLock?)
 
-class Subversion : VersionControlSystem() {
+class Subversion : VersionControlSystem(), CommandLineTool {
+    private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
+
     override val aliases = listOf("subversion", "svn")
-    override val commandName = "svn"
     override val latestRevisionNames = listOf("HEAD")
 
-    override fun getVersion(): String {
-        val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
+    override fun command(workingDir: File?) = "svn"
 
-        return getCommandVersion("svn") { output ->
-            versionRegex.matcher(output.lineSequence().first()).let {
-                if (it.matches()) {
-                    it.group("version")
-                } else {
-                    ""
+    override fun getVersion() =
+            getVersion { output ->
+                versionRegex.matcher(output.lineSequence().first()).let {
+                    if (it.matches()) {
+                        it.group("version")
+                    } else {
+                        ""
+                    }
                 }
             }
-        }
-    }
 
     override fun getWorkingTree(vcsDirectory: File) =
             object : WorkingTree(vcsDirectory) {

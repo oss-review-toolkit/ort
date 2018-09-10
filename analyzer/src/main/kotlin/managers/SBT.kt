@@ -25,9 +25,8 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.checkCommandVersion
 import com.here.ort.utils.log
 
 import com.vdurmont.semver4j.Requirement
@@ -41,7 +40,7 @@ import java.util.Properties
  * The SBT package manager for Scala, see https://www.scala-sbt.org/.
  */
 class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
+        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<SBT>() {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
@@ -68,7 +67,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         }
     }
 
-    override fun command(workingDir: File) = if (OS.isWindows) "sbt.bat" else "sbt"
+    override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
 
     private fun extractLowestSbtVersion(stdout: String): String {
         val versions = stdout.lines().mapNotNull { line ->
@@ -119,8 +118,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         if (!propertiesFiles.contains(rootPropertiesFile)) {
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
             // https://stackoverflow.com/a/20337575/1127485.
-            checkCommandVersion(
-                    command(workingDir),
+            checkVersion(
                     sbtVersionRequirement,
                     versionArguments = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion",
                     workingDir = workingDir,
@@ -143,9 +141,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             }
         }
 
-        fun runSBT(vararg command: String) =
-                ProcessCapture(workingDir, command(workingDir), BATCH_MODE, LOG_NO_FORMAT, *command)
-                        .requireSuccess()
+        fun runSBT(vararg command: String) = run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
 
         // Get the list of project names.
         val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {

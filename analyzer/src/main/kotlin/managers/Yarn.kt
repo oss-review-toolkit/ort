@@ -23,7 +23,6 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.OS
-import com.here.ort.utils.checkCommandVersion
 
 import com.vdurmont.semver4j.Requirement
 
@@ -43,15 +42,12 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
 
     override val recognizedLockFiles = listOf("yarn.lock")
 
-    override fun command(workingDir: File) = if (OS.isWindows) { "yarn.cmd" } else { "yarn" }
+    override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        val workingDir = definitionFiles.first().parentFile
-
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a fixed
         // minor version to be sure to get consistent results.
-        checkCommandVersion(command(workingDir), Requirement.buildNPM("1.3.* - 1.9.*"),
-                ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        checkVersion(Requirement.buildNPM("1.3.* - 1.9.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         // Map "yarn.lock" files to existing "package.json" files for use by the NPM class (which in this case calls
         // "yarn" to install the dependencies).
