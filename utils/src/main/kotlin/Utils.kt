@@ -504,6 +504,24 @@ fun JsonNode?.fieldsOrEmpty(): Iterator<Map.Entry<String, JsonNode>> = this?.fie
 fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
 
 /**
+ * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
+ * same key. Parameters passed to [operation] can be null if there is no entry for a key in one of the maps.
+ */
+inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): Map<K, W> =
+        (this.keys + other.keys).associate { key ->
+            Pair(key, operation(this[key], other[key]))
+        }
+
+/**
+ * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
+ * same key. If there is no entry for a key in one of the maps, [default] is used.
+ */
+inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, operation: (V, V) -> W): Map<K, W> =
+        (this.keys + other.keys).associate { key ->
+            Pair(key, operation(this[key] ?: default, other[key] ?: default))
+        }
+
+/**
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
  */
 fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
