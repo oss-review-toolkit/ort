@@ -148,14 +148,14 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                         .requireSuccess()
 
         // Get the list of project names.
-        val internalProjectNames = runSBT("projects").stdout().lines().mapNotNull {
+        val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {
             PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
         }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
         // aggregate projects.
         val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        val pomFiles = runSBT(makePomCommand).stdout().lines().mapNotNull { line ->
+        val pomFiles = runSBT(makePomCommand).stdout.lines().mapNotNull { line ->
             POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
         }
 

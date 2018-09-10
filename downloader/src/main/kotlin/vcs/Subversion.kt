@@ -143,7 +143,7 @@ class Subversion : VersionControlSystem() {
                     val svnPathInfo = run(workingDir, "info", "--xml", "--depth=immediates", "$projectRoot/$namespace")
                     val valueType = xmlMapper.typeFactory
                             .constructCollectionType(List::class.java, SubversionPathEntry::class.java)
-                    val pathEntries: List<SubversionPathEntry> = xmlMapper.readValue(svnPathInfo.stdout(), valueType)
+                    val pathEntries: List<SubversionPathEntry> = xmlMapper.readValue(svnPathInfo.stdout, valueType)
 
                     // As the "immediates" depth includes the parent namespace itself, too, drop it.
                     return pathEntries.drop(1).map { it.path }.sorted()
@@ -155,15 +155,15 @@ class Subversion : VersionControlSystem() {
 
                 private fun runSvnInfoCommand(): SubversionInfoEntry? {
                     val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
-                    if (info.isError()) {
+                    if (info.isError) {
                         return null
                     }
-                    return svnInfoReader.readValue(info.stdout())
+                    return svnInfoReader.readValue(info.stdout)
                 }
             }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-            (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess())
+            (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess)
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {

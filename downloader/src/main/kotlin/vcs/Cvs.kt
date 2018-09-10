@@ -68,7 +68,7 @@ class Cvs : VersionControlSystem() {
                         return false
                     }
 
-                    return ProcessCapture(workingDir, "cvs", "status", "-l").isSuccess()
+                    return ProcessCapture(workingDir, "cvs", "status", "-l").isSuccess
                 }
 
                 override fun isShallow() = false
@@ -85,7 +85,7 @@ class Cvs : VersionControlSystem() {
                     val cvsLog = run(workingDir, "log", "-h")
 
                     var currentWorkingFile = ""
-                    return cvsLog.stdout().lines().mapNotNull { line ->
+                    return cvsLog.stdout.lines().mapNotNull { line ->
                         var value = line.removePrefix("Working file: ")
                         if (value.length < line.length) {
                             currentWorkingFile = value
@@ -120,7 +120,7 @@ class Cvs : VersionControlSystem() {
                     val cvsLog = run(workingDir, "log", "-h")
                     var tagsSectionStarted = false
 
-                    return cvsLog.stdout().lines().mapNotNull { line ->
+                    return cvsLog.stdout.lines().mapNotNull { line ->
                         if (tagsSectionStarted) {
                             if (line.startsWith('\t')) {
                                 line.split(':', limit = 2).let {

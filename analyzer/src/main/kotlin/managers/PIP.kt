@@ -107,7 +107,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // TODO: Maybe work around long shebang paths in generated scripts within a virtualenv by calling the Python
         // executable in the virtualenv directly, see https://github.com/pypa/virtualenv/issues/997.
         val process = ProcessCapture(workingDir, command.path, *commandArgs)
-        log.debug { process.stdout() }
+        log.debug { process.stdout }
         return process
     }
 
@@ -163,7 +163,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             // - "url", denoting the "home page for the package", or
             // - "download_url", denoting the "location where the package may be downloaded".
             // So the best we can do is to map this the project's homepage URL.
-            jsonMapper.readTree(pydep.stdout()).let {
+            jsonMapper.readTree(pydep.stdout).let {
                 declaredLicenses = getDeclaredLicenses(it)
                 listOf(it["project_name"].textValue(), it["version"].textValueOrEmpty(),
                         it["repo_url"].textValueOrEmpty())
@@ -188,8 +188,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
 
-        if (pipdeptree.isSuccess()) {
-            val fullDependencyTree = jsonMapper.readTree(pipdeptree.stdout())
+        if (pipdeptree.isSuccess) {
+            val fullDependencyTree = jsonMapper.readTree(pipdeptree.stdout)
 
             val projectDependencies = if (definitionFile.name == "setup.py") {
                 // The tree contains a root node for the project itself and pipdeptree's dependencies are also at the
@@ -277,7 +277,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             }
         } else {
             log.error {
-                "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr()}"
+                "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr}"
             }
         }
 
@@ -401,7 +401,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
         // to a test.
         with(pip) {
-            if (isError()) {
+            if (isError) {
                 log.error { errorMessage }
             }
         }

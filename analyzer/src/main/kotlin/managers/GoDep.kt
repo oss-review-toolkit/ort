@@ -227,8 +227,8 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         // HACK Some failure modes from "go get" can be ignored:
         // 1. repositories that don't have .go files in the root directory
         // 2. all files in the root directory have certain "build constraints" (like "// +build ignore")
-        if (pc.isError()) {
-            val msg = pc.stderr()
+        if (pc.isError) {
+            val msg = pc.stderr
 
             val errorMessagesToIgnore = listOf(
                     "no Go files in",

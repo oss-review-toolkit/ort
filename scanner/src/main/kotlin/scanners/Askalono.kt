@@ -118,12 +118,12 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
 
         val endTime = Instant.now()
 
-        if (process.stderr().isNotBlank()) {
-            log.debug { process.stderr() }
+        if (process.stderr.isNotBlank()) {
+            log.debug { process.stderr }
         }
 
         with(process) {
-            if (isSuccess()) {
+            if (isSuccess) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, result)

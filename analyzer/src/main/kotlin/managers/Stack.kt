@@ -94,7 +94,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         }
 
         fun mapParentsToChildren(scope: String): Map<String, List<String>> {
-            val dotGraph = runStack("dot", "--$scope").stdout()
+            val dotGraph = runStack("dot", "--$scope").stdout
 
             // Strip any leading garbage in case Stack was bootstrapping itself, resulting in unrelated output.
             val dotLines = dotGraph.lineSequence().dropWhile { !it.startsWith("strict digraph deps") }
@@ -114,7 +114,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         }
 
         fun mapNamesToVersions(scope: String): Map<String, String> {
-            val dependencies = runStack("ls", "dependencies", "--$scope").stdout()
+            val dependencies = runStack("ls", "dependencies", "--$scope").stdout
             return dependencies.lines().associate {
                 Pair(it.substringBefore(" "), it.substringAfter(" "))
             }.also {

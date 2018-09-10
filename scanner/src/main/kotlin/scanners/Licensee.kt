@@ -70,7 +70,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
             ProcessCapture(gem, "install", "--user-install", "licensee", "-v", scannerVersion).requireSuccess()
 
             val ruby = ProcessCapture("ruby", "-r", "rubygems", "-e", "puts Gem.user_dir").requireSuccess()
-            val userDir = ruby.stdout().trimEnd()
+            val userDir = ruby.stdout.trimEnd()
 
             File(userDir, "bin")
         }
@@ -102,12 +102,12 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
 
         val endTime = Instant.now()
 
-        if (process.stderr().isNotBlank()) {
-            log.debug { process.stderr() }
+        if (process.stderr.isNotBlank()) {
+            log.debug { process.stderr }
         }
 
         with(process) {
-            if (isSuccess()) {
+            if (isSuccess) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, result)
