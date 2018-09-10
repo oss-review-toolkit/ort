@@ -4074,7 +4074,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/readdirp/-/readdirp-2.1.0.tgz"
+      url: "http://registry.npmjs.org/readdirp/-/readdirp-2.1.0.tgz"
       hash: "4ed0ad060df3073300c48440373f72d1cc642d78"
       hash_algorithm: "SHA-1"
     vcs:
