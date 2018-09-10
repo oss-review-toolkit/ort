@@ -4049,7 +4049,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
+      url: "http://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
       hash: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
       hash_algorithm: "SHA-1"
     vcs:
