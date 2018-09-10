@@ -54,8 +54,8 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     private val tempDir = createTempDir("ort")
     private val tempPrefix = command.first().substringAfterLast(File.separatorChar)
 
-    val stdoutFile = File(tempDir, "$tempPrefix.stdout")
-    val stderrFile = File(tempDir, "$tempPrefix.stderr")
+    val stdoutFile = File(tempDir, "$tempPrefix.stdout").apply { deleteOnExit() }
+    val stderrFile = File(tempDir, "$tempPrefix.stderr").apply { deleteOnExit() }
 
     private val builder = ProcessBuilder(*command)
             .directory(workingDir)
@@ -92,9 +92,6 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         log.info {
             "Running '$commandLine' in '$usedWorkingDir'..."
         }
-
-        stdoutFile.deleteOnExit()
-        stderrFile.deleteOnExit()
 
         process.waitFor()
 
