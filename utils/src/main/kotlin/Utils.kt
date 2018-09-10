@@ -299,13 +299,13 @@ fun File.realFile(): File = toPath().toRealPath().toFile()
  * @throws IOException if the directory could not be deleted.
  */
 fun File.safeDeleteRecursively() {
-    if (!this.exists()) {
+    if (!exists()) {
         return
     }
 
     // This call to walkFileTree() implicitly uses EnumSet.noneOf(FileVisitOption.class), i.e.
     // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
-    Files.walkFileTree(this.toPath(), object : SimpleFileVisitor<Path>() {
+    Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
             if (OS.isWindows && attrs.isOther) {
                 // Unlink junctions to turn them into empty directories.
@@ -335,8 +335,8 @@ fun File.safeDeleteRecursively() {
                 FileVisitResult.CONTINUE.also { Files.delete(dir) }
     })
 
-    if (this.exists()) {
-        throw IOException("Could not delete directory '${this.absolutePath}'.")
+    if (exists()) {
+        throw IOException("Could not delete directory '$absolutePath'.")
     }
 }
 
@@ -349,11 +349,11 @@ fun File.safeMkdirs() {
     // Do not blindly trust mkdirs() returning "false" as it can fail for edge-cases like
     // File(File("/tmp/parent1/parent2"), "/").mkdirs() if parent1 does not exist, although the directory is
     // successfully created.
-    if (this.isDirectory || this.mkdirs() || this.isDirectory) {
+    if (isDirectory || mkdirs() || isDirectory) {
         return
     }
 
-    throw IOException("Could not create directory '${this.absolutePath}'.")
+    throw IOException("Could not create directory '$absolutePath'.")
 }
 
 /**
@@ -361,9 +361,9 @@ fun File.safeMkdirs() {
  * return the parent of [searchDirName], or return null if no such directory is found.
  */
 fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
-    if (!this.isDirectory) return null
+    if (!isDirectory) return null
 
-    var currentDir: File? = this.absoluteFile
+    var currentDir: File? = absoluteFile
 
     while (currentDir != null && !File(currentDir, searchDirName).isDirectory) {
         currentDir = currentDir.parentFile
@@ -376,7 +376,7 @@ fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
  * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
  */
 fun File.toSafeURI(): URI {
-    val fileUri = this.toURI()
+    val fileUri = toURI()
     return URI("file", "", fileUri.path, fileUri.query, fileUri.fragment)
 }
 
@@ -421,7 +421,7 @@ val NON_LINUX_LINE_BREAKS = Regex("\\r\\n?")
 /**
  * Replace "\r\n" and "\r" line breaks with "\n".
  */
-fun String.normalizeLineBreaks() = this.replace(NON_LINUX_LINE_BREAKS, "\n")
+fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
 
 /**
  * Print the stack trace of the [Throwable] if [printStackTrace] is set to true.

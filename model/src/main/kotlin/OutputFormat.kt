@@ -54,4 +54,4 @@ fun File.mapper() =
 /**
  * Use the mapper returned from [File.mapper] to read the [valueType] object from this file using Jackson.
  */
-fun <T> File.readValue(valueType: Class<T>): T = this.mapper().readValue(this, valueType)
+fun <T> File.readValue(valueType: Class<T>): T = mapper().readValue(this, valueType)
