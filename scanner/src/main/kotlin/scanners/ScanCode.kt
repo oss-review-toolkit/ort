@@ -160,8 +160,8 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
 
         val endTime = Instant.now()
 
-        if (process.stderr().isNotBlank()) {
-            log.debug { process.stderr() }
+        if (process.stderr.isNotBlank()) {
+            log.debug { process.stderr }
         }
 
         val result = getResult(resultsFile)
@@ -173,7 +173,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         val hasOnlyTimeoutErrors = mapTimeoutErrors(errors)
 
         with(process) {
-            if (isSuccess() || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
+            if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
                 return ScanResult(provenance, scannerDetails, summary.copy(errors = errors), result)
             } else {
                 throw ScanException(errorMessage)

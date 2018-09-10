@@ -57,6 +57,18 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     val stdoutFile = File(tempDir, "$tempPrefix.stdout").apply { deleteOnExit() }
     val stderrFile = File(tempDir, "$tempPrefix.stderr").apply { deleteOnExit() }
 
+    /**
+     * Get the standard output stream of the terminated process as a string.
+     */
+    val stdout
+        get() = stdoutFile.readText()
+
+    /**
+     * Get the standard errors stream of the terminated process as a string.
+     */
+    val stderr
+        get() = stderrFile.readText()
+
     private val builder = ProcessBuilder(*command)
             .directory(workingDir)
             .redirectOutput(stdoutFile)
@@ -71,11 +83,29 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     private val process = builder.start()
 
     /**
+     * Get the exit value of the terminated process.
+     */
+    val exitValue
+        get() = process.exitValue()
+
+    /**
+     * Is true if the process terminated with an error, i.e. the [exitValue] is not 0.
+     */
+    val isError
+        get() = exitValue != 0
+
+    /**
+     * Is true if the process terminated without an error, i.e. the [exitValue] is 0.
+     */
+    val isSuccess
+        get() = exitValue == 0
+
+    /**
      * A generic error message, can be used when [exitValue] is not 0.
      */
     val errorMessage
         get(): String {
-            var message = stderr().takeUnless { it.isBlank() } ?: stdout()
+            var message = stderr.takeUnless { it.isBlank() } ?: stdout
 
             // Insert ellipsis in the middle of a long error message.
             val lines = message.lines()
@@ -85,7 +115,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
                 message = (prefix + "[...]" + suffix + MAX_LOG_LINES_MESSAGE).joinToString("\n")
             }
 
-            return "Running '$commandLine' in '$usedWorkingDir' failed with exit code ${exitValue()}:\n$message"
+            return "Running '$commandLine' in '$usedWorkingDir' failed with exit code $exitValue:\n$message"
         }
 
     init {
@@ -113,35 +143,10 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     }
 
     /**
-     * Return the exit value of the terminated process.
-     */
-    fun exitValue() = process.exitValue()
-
-    /**
-     * Return true if the [exitValue] is not 0.
-     */
-    fun isError() = exitValue() != 0
-
-    /**
-     * Return true if the [exitValue] is 0.
-     */
-    fun isSuccess() = exitValue() == 0
-
-    /**
-     * Return the standard output stream of the terminated process as a string.
-     */
-    fun stdout() = stdoutFile.readText()
-
-    /**
-     * Return the standard errors stream of the terminated process as a string.
-     */
-    fun stderr() = stderrFile.readText()
-
-    /**
      * Throw an [IOException] in case [exitValue] is not 0.
      */
     fun requireSuccess(): ProcessCapture {
-        if (isError()) {
+        if (isError) {
             throw IOException(errorMessage)
         }
         return this
@@ -184,7 +189,7 @@ fun getCommandVersion(
     val version = ProcessCapture(workingDir, *commandLine).requireSuccess()
 
     // Some tools, like pipdeptree, actually report the version to stderr.
-    val versionString = sequenceOf(version.stdout(), version.stderr()).map {
+    val versionString = sequenceOf(version.stdout, version.stderr).map {
         transform(it.trim())
     }.find {
         it.isNotBlank()

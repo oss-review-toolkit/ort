@@ -130,12 +130,12 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
 
         val endTime = Instant.now()
 
-        if (process.stderr().isNotBlank()) {
-            log.debug { process.stderr() }
+        if (process.stderr.isNotBlank()) {
+            log.debug { process.stderr }
         }
 
         with(process) {
-            if (isSuccess()) {
+            if (isSuccess) {
                 val result = getResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, result)
                 return ScanResult(provenance, scannerDetails, summary, result)

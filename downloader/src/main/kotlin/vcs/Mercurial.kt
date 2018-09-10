@@ -65,19 +65,19 @@ class Mercurial : VersionControlSystem() {
 
                     // Do not use runMercurialCommand() here as we do not require the command to succeed.
                     val hgRootPath = ProcessCapture(workingDir, "hg", "root")
-                    return hgRootPath.isSuccess() && workingDir.path.startsWith(hgRootPath.stdout().trimEnd())
+                    return hgRootPath.isSuccess && workingDir.path.startsWith(hgRootPath.stdout.trimEnd())
                 }
 
                 override fun isShallow() = false
 
-                override fun getRemoteUrl() = run(workingDir, "paths", "default").stdout().trimEnd()
+                override fun getRemoteUrl() = run(workingDir, "paths", "default").stdout.trimEnd()
 
-                override fun getRevision() = run(workingDir, "--debug", "id", "-i").stdout().trimEnd()
+                override fun getRevision() = run(workingDir, "--debug", "id", "-i").stdout.trimEnd()
 
-                override fun getRootPath() = File(run(workingDir, "root").stdout().trimEnd())
+                override fun getRootPath() = File(run(workingDir, "root").stdout.trimEnd())
 
                 override fun listRemoteBranches(): List<String> {
-                    val branches = run(workingDir, "branches").stdout().trimEnd()
+                    val branches = run(workingDir, "branches").stdout.trimEnd()
                     return branches.lines().map {
                         it.split(' ').first()
                     }.sorted()
@@ -87,7 +87,7 @@ class Mercurial : VersionControlSystem() {
                     // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
                     // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
                     run(workingDir, "pull", "-r", "default")
-                    val tags = run(workingDir, "cat", "-r", "default", ".hgtags").stdout().trimEnd()
+                    val tags = run(workingDir, "cat", "-r", "default", ".hgtags").stdout.trimEnd()
                     return tags.lines().map {
                         it.split(' ').last()
                     }.sorted()
@@ -95,7 +95,7 @@ class Mercurial : VersionControlSystem() {
             }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-            ProcessCapture("hg", "identify", vcsUrl).isSuccess()
+            ProcessCapture("hg", "identify", vcsUrl).isSuccess
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {

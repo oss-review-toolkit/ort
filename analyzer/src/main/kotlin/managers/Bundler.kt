@@ -213,7 +213,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
         val scriptCmd = ProcessCapture(workingDir, command(workingDir), "exec", "ruby", scriptFile.absolutePath)
 
         try {
-            return jsonMapper.readValue(scriptCmd.requireSuccess().stdout())
+            return jsonMapper.readValue(scriptCmd.requireSuccess().stdout)
         } finally {
             if (!scriptFile.delete()) {
                 log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
@@ -233,7 +233,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
     private fun getGemspec(gemName: String, workingDir: File): GemSpec {
         val spec = ProcessCapture(workingDir, command(workingDir), "exec", "gem", "specification",
-                gemName).requireSuccess().stdout()
+                gemName).requireSuccess().stdout
 
         return GemSpec.createFromYaml(spec)
     }

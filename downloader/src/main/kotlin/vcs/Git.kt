@@ -40,7 +40,7 @@ class Git : GitBase() {
     override val aliases = listOf("git")
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-            ProcessCapture("git", "ls-remote", vcsUrl).isSuccess()
+            ProcessCapture("git", "ls-remote", vcsUrl).isSuccess
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
