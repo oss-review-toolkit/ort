@@ -51,8 +51,6 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         }
     }
 
-    val commandLine = command.joinToString(" ")
-
     private val tempDir = createTempDir("ort")
     private val tempPrefix = command.first().substringAfterLast(File.separatorChar)
 
@@ -67,6 +65,9 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
                 environment().putAll(environment)
             }
 
+    val commandLine = command.joinToString(" ")
+    val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
+
     private val process = builder.start()
 
     /**
@@ -74,7 +75,6 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
      */
     val errorMessage
         get(): String {
-            val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
             var message = stderr().takeUnless { it.isBlank() } ?: stdout()
 
             // Insert ellipsis in the middle of a long error message.
@@ -90,7 +90,6 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
 
     init {
         log.info {
-            val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")
             "Running '$commandLine' in '$usedWorkingDir'..."
         }
 
