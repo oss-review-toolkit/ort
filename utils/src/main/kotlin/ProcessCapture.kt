@@ -64,7 +64,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         get() = stdoutFile.readText()
 
     /**
-     * Get the standard errors stream of the terminated process as a string.
+     * Get the standard error stream of the terminated process as a string.
      */
     val stderr
         get() = stderrFile.readText()
