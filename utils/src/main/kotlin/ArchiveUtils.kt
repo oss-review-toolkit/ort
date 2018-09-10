@@ -44,7 +44,7 @@ private val SEVENZIP_EXTENSIONS = listOf(".7z")
 val ARCHIVE_EXTENSIONS = TAR_EXTENSIONS + ZIP_EXTENSIONS + SEVENZIP_EXTENSIONS
 
 fun File.unpack(targetDirectory: File) {
-    val lowerName = this.name.toLowerCase()
+    val lowerName = name.toLowerCase()
     when {
         UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {}
         TAR_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackTar(targetDirectory)
@@ -61,7 +61,7 @@ fun File.unpack(targetDirectory: File) {
  * @param targetDirectory The target directory to store the unpacked content of this archive.
  */
 fun File.unpackTar(targetDirectory: File) {
-    val lowerExtension = this.extension.toLowerCase()
+    val lowerExtension = extension.toLowerCase()
 
     val inputStream = when (lowerExtension) {
         "gz", "tgz" -> GzipCompressorInputStream(inputStream())
@@ -151,7 +151,7 @@ fun File.packZip(targetFile: File, prefix: String = "") {
 
     ZipArchiveOutputStream(targetFile).use { output ->
         output.setLevel(Deflater.BEST_COMPRESSION)
-        Files.walkFileTree(this.toPath(), object : SimpleFileVisitor<Path>() {
+        Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                 if (attrs.isRegularFile) {
                     val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
