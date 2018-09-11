@@ -60,7 +60,7 @@ interface CommandLineTool {
      */
     fun getVersion(versionArguments: String = "--version", workingDir: File? = null,
                    transform: (String) -> String = { it }): String {
-        val version = run(*versionArguments.split(' ').toTypedArray())
+        val version = run(workingDir, *versionArguments.split(' ').toTypedArray())
 
         // Some tools actually report the version to stderr, so try that as a fallback.
         val versionString = sequenceOf(version.stdout, version.stderr).map {
