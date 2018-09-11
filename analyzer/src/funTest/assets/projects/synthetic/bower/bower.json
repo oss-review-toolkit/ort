@@ -1,0 +1,27 @@
+{
+  "name": "a-test-project",
+  "authors": [
+    "author-xyz"
+  ],
+  "description": "This string describes the test project.",
+  "main": "",
+  "keywords": [
+    "keyword-test"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/heremaps/oss-review-toolkit",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "2.4.0"
+  },
+  "devDependencies": {
+    "jquery": "3.3.1"
+  }
+}

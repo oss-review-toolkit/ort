@@ -20,6 +20,7 @@
 package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.util.ClassUtil
 
 import java.io.File
 import java.io.IOException
@@ -390,6 +391,12 @@ fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
  */
 fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+
+/*
+ * Convenience function for [JsonNode] that returns the an empty iterator
+ * if [JsonNode.fieldNames] is called on a null object or the field names otherwise.
+ */
+fun JsonNode?.fieldNamesOrEmpty(): Iterator<String> = this?.fieldNames() ?: ClassUtil.emptyIterator()
 
 /**
  * Return the string encoded for safe use as a file name. Also limit the length to 255 characters which is the maximum

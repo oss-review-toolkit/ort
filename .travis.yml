@@ -31,6 +31,7 @@ install:
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh
   - npm install -g npm@6.4.0 yarn@1.9.4
+  - npm install -g bower@1.8.2
   - phpenv global 7.1
   - curl -Ls https://git.io/sbt > ~/bin/sbt
   - chmod a+x ~/bin/sbt
@@ -41,6 +42,7 @@ install:
   - wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
   - unzip -q sdk-tools-linux-3859397.zip -d $ANDROID_HOME
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
+  - gem install licensee -v 9.8.0
 
 script:
   - if git grep -L "Copyright" -- "*.kt"; then
