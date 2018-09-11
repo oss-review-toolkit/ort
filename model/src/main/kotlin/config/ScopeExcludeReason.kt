@@ -20,8 +20,23 @@
 package com.here.ort.model.config
 
 /**
- * Possible reasons for an exclude.
+ * Possible reasons for excluding a scope.
  */
-enum class ExcludeReason {
-    OTHER
+enum class ScopeExcludeReason {
+    /**
+     * The scope only contains packages used for building source code which are not included in distributed build
+     * artifacts.
+     */
+    BUILD_TOOL_OF,
+
+    /**
+     * The scope only contains packages that have to be provided by the user of distributed build artifacts.
+     */
+    PROVIDED_BY,
+
+    /**
+     * The scope only contains packages used for testing source code which are not included in distributed build
+     * artifacts.
+     */
+    TEST_CASE_OF
 }
