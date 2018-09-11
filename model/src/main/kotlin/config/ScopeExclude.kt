@@ -31,7 +31,7 @@ data class ScopeExclude(
         /**
          * The reason why the scope is excluded, out of a predefined choice.
          */
-        val reason: ExcludeReason,
+        val reason: ScopeExcludeReason,
 
         /**
          * A comment to further explain why the [reason] is applicable here.

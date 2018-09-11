@@ -47,16 +47,16 @@ class RepositoryConfigurationTest : WordSpec() {
                     excludes:
                       projects:
                       - path: "project1/path"
-                        reason: "OTHER"
+                        reason: "BUILD_TOOL_OF"
                         comment: "project comment"
                       - path: "project2/path"
                         scopes:
                         - name: "scope"
-                          reason: "OTHER"
+                          reason: "PROVIDED_BY"
                           comment: "scope comment"
                       scopes:
                       - name: "scope"
-                        reason: "OTHER"
+                        reason: "TEST_CASE_OF"
                         comment: "scope comment"
                     """.trimIndent()
 
@@ -70,7 +70,7 @@ class RepositoryConfigurationTest : WordSpec() {
 
                 val project1 = projects[0]
                 project1.path shouldBe "project1/path"
-                project1.reason shouldBe ExcludeReason.OTHER
+                project1.reason shouldBe ProjectExcludeReason.BUILD_TOOL_OF
                 project1.comment shouldBe "project comment"
                 project1.exclude shouldBe true
                 project1.scopes should beEmpty()
@@ -83,13 +83,13 @@ class RepositoryConfigurationTest : WordSpec() {
 
                 project2.scopes should haveSize(1)
                 project2.scopes.first().name shouldBe "scope"
-                project2.scopes.first().reason shouldBe ExcludeReason.OTHER
+                project2.scopes.first().reason shouldBe ScopeExcludeReason.PROVIDED_BY
                 project2.scopes.first().comment shouldBe "scope comment"
 
                 val scopes = repositoryConfiguration.excludes!!.scopes
                 scopes should haveSize(1)
                 scopes.first().name shouldBe "scope"
-                scopes.first().reason shouldBe ExcludeReason.OTHER
+                scopes.first().reason shouldBe ScopeExcludeReason.TEST_CASE_OF
                 scopes.first().comment shouldBe "scope comment"
             }
         }

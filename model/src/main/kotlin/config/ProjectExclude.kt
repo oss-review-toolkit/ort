@@ -37,7 +37,7 @@ data class ProjectExclude(
          * The reason why the project is excluded, out of a predefined choice.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val reason: ExcludeReason?,
+        val reason: ProjectExcludeReason?,
 
         /**
          * A comment to further explain why the [reason] is applicable here.

@@ -14,26 +14,26 @@ repository:
     excludes:
       projects:
       - path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
-        reason: "OTHER"
+        reason: "OPTIONAL_COMPONENT_OF"
         comment: "Project not delivered."
       scopes:
       - name: "testAnnotationProcessor"
-        reason: "OTHER"
+        reason: "TEST_CASE_OF"
         comment: "Test dependencies."
       - name: "testCompile"
-        reason: "OTHER"
+        reason: "TEST_CASE_OF"
         comment: "Test dependencies."
       - name: "testCompileClasspath"
-        reason: "OTHER"
+        reason: "TEST_CASE_OF"
         comment: "Test dependencies."
       - name: "testCompileOnly"
-        reason: "OTHER"
+        reason: "TEST_CASE_OF"
         comment: "Test dependencies."
       - name: "testRuntime"
-        reason: "OTHER"
+        reason: "TEST_CASE_OF"
         comment: "Test dependencies."
       - name: "testRuntimeClasspath"
-        reason: "OTHER"
+        reason: "TEST_CASE_OF"
         comment: "Test dependencies."
 analyzer:
   environment:
