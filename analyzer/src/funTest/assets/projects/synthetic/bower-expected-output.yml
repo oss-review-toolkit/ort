@@ -1,0 +1,135 @@
+---
+project:
+  id: "Bower::a-test-project:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses:
+  - "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://github.com/heremaps/oss-review-toolkit"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Bower::polymer:2.4.0"
+      dependencies:
+      - id: "Bower::shadycss:1.5.0"
+        dependencies: []
+        errors: []
+      - id: "Bower::webcomponentsjs:1.2.6"
+        dependencies: []
+        errors: []
+      errors: []
+  - name: "devDependencies"
+    dependencies:
+    - id: "Bower::jquery:3.3.1"
+      dependencies: []
+      errors: []
+packages:
+- package:
+    id: "Bower::jquery:3.3.1"
+    declared_licenses:
+    - "MIT"
+    description: ""
+    homepage_url: "https://github.com/jquery/jquery-dist"
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: "https://github.com/jquery/jquery-dist.git"
+      revision: "9e8ec3d10fad04748176144f108d7355662ae75e"
+      path: ""
+    vcs_processed:
+      type: ""
+      url: "https://github.com/jquery/jquery-dist.git"
+      revision: "9e8ec3d10fad04748176144f108d7355662ae75e"
+      path: ""
+  curations: []
+- package:
+    id: "Bower::polymer:2.4.0"
+    declared_licenses:
+    - "http://polymer.github.io/LICENSE.txt"
+    description: ""
+    homepage_url: "https://github.com/Polymer/polymer"
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/Polymer/polymer.git"
+      revision: "a474d40c843e2b00a5c0cea818c36b1a89e2a66e"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/Polymer/polymer.git"
+      revision: "a474d40c843e2b00a5c0cea818c36b1a89e2a66e"
+      path: ""
+  curations: []
+- package:
+    id: "Bower::shadycss:1.5.0"
+    declared_licenses: []
+    description: ""
+    homepage_url: "https://github.com/webcomponents/shadycss"
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: "https://github.com/webcomponents/shadycss.git"
+      revision: "b71741bfb593ea313d6095f7fc101778ec87202c"
+      path: ""
+    vcs_processed:
+      type: ""
+      url: "https://github.com/webcomponents/shadycss.git"
+      revision: "b71741bfb593ea313d6095f7fc101778ec87202c"
+      path: ""
+  curations: []
+- package:
+    id: "Bower::webcomponentsjs:1.2.6"
+    declared_licenses:
+    - "BSD-3-Clause"
+    description: "Web components polyfill"
+    homepage_url: "http://webcomponents.org"
+    binary_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: "git"
+      url: "https://github.com/webcomponents/webcomponentsjs.git"
+      revision: "9de0f8438485eea4da07086d3237a0400ee30e91"
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/webcomponents/webcomponentsjs.git"
+      revision: "9de0f8438485eea4da07086d3237a0400ee30e91"
+      path: ""
+  curations: []
+errors: []

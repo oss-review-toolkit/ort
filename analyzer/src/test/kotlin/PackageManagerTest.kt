@@ -45,6 +45,7 @@ class PackageManagerTest : WordSpec({
                 manager.toString()
             }
 
+            managedFilesByName["Bower"] shouldBe listOf(File(projectDir, "bower.json"))
             managedFilesByName["Bundler"] shouldBe listOf(File(projectDir, "Gemfile"))
             managedFilesByName["GoDep"] shouldBe listOf(File(projectDir, "Gopkg.toml"))
             managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
