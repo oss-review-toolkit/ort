@@ -35,6 +35,7 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.HTTP_CACHE_PATH
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
@@ -68,11 +69,17 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
         return "askalono.$extension"
     }
 
-    override fun getVersion(dir: File) =
-            getVersion(workingDir = dir, transform = {
-                // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
-                it.substringAfter("askalono ")
-            })
+    override fun getVersion(dir: File): String {
+        val cmd = command()
+        val tool = object : CommandLineTool {
+            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
+        }
+
+        return tool.getVersion(transform = {
+            // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
+            it.substringAfter("askalono ")
+        })
+    }
 
     override fun bootstrap(): File {
         val scannerExe = command()
