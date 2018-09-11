@@ -20,6 +20,7 @@
 package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.util.ClassUtil
 
 import java.io.File
 import java.io.IOException
@@ -483,6 +484,18 @@ fun File.toSafeURI(): URI {
     val fileUri = toURI()
     return URI("file", "", fileUri.path, fileUri.query, fileUri.fragment)
 }
+
+/*
+ * Convenience function for [JsonNode] that returns an empty iterator if [JsonNode.fieldNames] is called on a null
+ * object, or the field names otherwise.
+ */
+fun JsonNode?.fieldNamesOrEmpty(): Iterator<String> = this?.fieldNames() ?: ClassUtil.emptyIterator()
+
+/*
+ * Convenience function for [JsonNode] that returns an empty iterator if [JsonNode.fields] is called on a null object,
+ * or the fields otherwise.
+ */
+fun JsonNode?.fieldsOrEmpty(): Iterator<Map.Entry<String, JsonNode>> = this?.fields() ?: ClassUtil.emptyIterator()
 
 /**
  * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object,

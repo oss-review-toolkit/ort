@@ -1,3 +1,4 @@
+com.here.ort.analyzer.managers.Bower$Factory
 com.here.ort.analyzer.managers.Gradle$Factory
 com.here.ort.analyzer.managers.Maven$Factory
 com.here.ort.analyzer.managers.SBT$Factory
