@@ -32,17 +32,17 @@ data class ProjectExclude(
          * The path of the project definition file, relative to the root of the repository.
          */
         val path: String,
-        @JsonInclude(JsonInclude.Include.NON_NULL)
 
         /**
          * The reason why the project is excluded, out of a predefined choice.
          */
-        val reason: ExcludeReason?,
         @JsonInclude(JsonInclude.Include.NON_NULL)
+        val reason: ExcludeReason?,
 
         /**
          * A comment to further explain why the [reason] is applicable here.
          */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         val comment: String?,
 
         /**
