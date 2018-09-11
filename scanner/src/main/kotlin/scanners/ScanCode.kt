@@ -36,6 +36,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -111,12 +112,18 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun command(workingDir: File?) = if (OS.isWindows) "scancode.bat" else "scancode"
 
-    override fun getVersion(dir: File) =
-            getVersion(workingDir = dir, transform = {
-                // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
-                // the prefix.
-                it.substringAfter("ScanCode version ")
-            })
+    override fun getVersion(dir: File): String {
+        val cmd = command()
+        val tool = object : CommandLineTool {
+            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
+        }
+
+        return tool.getVersion(transform = {
+            // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
+            // the prefix.
+            it.substringAfter("ScanCode version ")
+        })
+    }
 
     override fun bootstrap(): File {
         val gitRoot = File(".").searchUpwardsForSubdirectory(".git")

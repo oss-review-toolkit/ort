@@ -34,6 +34,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
@@ -55,7 +56,14 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun command(workingDir: File?) = if (OS.isWindows) "licensee.bat" else "licensee"
 
-    override fun getVersion(dir: File) = getVersion("version", workingDir = dir)
+    override fun getVersion(dir: File): String {
+        val cmd = command()
+        val tool = object : CommandLineTool {
+            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
+        }
+
+        return tool.getVersion("version")
+    }
 
     override fun bootstrap(): File {
         val gem = if (OS.isWindows) "gem.cmd" else "gem"

@@ -35,6 +35,7 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.HTTP_CACHE_PATH
+import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
@@ -65,11 +66,17 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun command(workingDir: File?) = if (OS.isWindows) "lc.exe" else "lc"
 
-    override fun getVersion(dir: File) =
-            getVersion(workingDir = dir, transform = {
-                // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
-                it.substringAfter("licensechecker version ")
-            })
+    override fun getVersion(dir: File): String {
+        val cmd = command()
+        val tool = object : CommandLineTool {
+            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
+        }
+
+        return tool.getVersion(transform = {
+            // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
+            it.substringAfter("licensechecker version ")
+        })
+    }
 
     override fun bootstrap(): File {
         val platform = when {
