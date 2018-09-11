@@ -25,9 +25,12 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
 import com.here.ort.utils.log
+import com.here.ort.utils.redirectStderr
+import com.here.ort.utils.redirectStdout
+import com.here.ort.utils.suppressInput
+import com.here.ort.utils.temporaryProperties
+import com.here.ort.utils.trapSystemExitCall
 
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
@@ -40,7 +43,7 @@ import java.util.Properties
  * The SBT package manager for Scala, see https://www.scala-sbt.org/.
  */
 class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
+        PackageManager(analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<SBT>() {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
@@ -49,32 +52,8 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
     }
 
     companion object {
-        private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
-
-        // Batch mode (which suppresses interactive prompts) is only supported on non-Windows, see
-        // https://github.com/sbt/sbt-launcher-package/blob/d251388/src/universal/bin/sbt#L86.
-        private val BATCH_MODE = if (!OS.isWindows) "-batch" else ""
-
-        // See https://github.com/sbt/sbt/issues/2695.
-        private val LOG_NO_FORMAT = "-Dsbt.log.noformat=true".let {
-            if (OS.isWindows) {
-                "\"$it\""
-            } else {
-                it
-            }
-        }
-    }
-
-    override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
-
-    private fun extractLowestSbtVersion(stdout: String): String {
-        val versions = stdout.lines().mapNotNull { line ->
-            VERSION_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { Semver(it) }
-        }
-
-        return checkForSameSbtVersion(versions)
     }
 
     private fun checkForSameSbtVersion(versions: List<Semver>): String {
@@ -115,17 +94,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         val rootPropertiesFile = workingDir.resolve("project").resolve("build.properties")
         val propertiesFiles = workingDir.walkBottomUp().filter { it.isFile && it.name == "build.properties" }.toList()
 
-        if (!propertiesFiles.contains(rootPropertiesFile)) {
-            // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
-            // https://stackoverflow.com/a/20337575/1127485.
-            checkVersion(
-                    sbtVersionRequirement,
-                    versionArguments = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion",
-                    workingDir = workingDir,
-                    ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-                    transform = this::extractLowestSbtVersion
-            )
-        } else {
+        if (propertiesFiles.contains(rootPropertiesFile)) {
             val versions = mutableListOf<Semver>()
 
             propertiesFiles.forEach { file ->
@@ -141,17 +110,33 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             }
         }
 
-        fun runSBT(vararg command: String) = run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
+        fun runSBT(vararg command: String): Pair<String, String> {
+            var stderr = ""
+
+            val stdout = redirectStdout {
+                stderr = redirectStderr {
+                    suppressInput {
+                        temporaryProperties("sbt.log.noformat" to "true", "user.dir" to workingDir.absolutePath) {
+                            trapSystemExitCall {
+                                xsbt.boot.Boot.main(command)
+                            }
+                        }
+                    }
+                }
+            }
+
+            return Pair(stdout, stderr)
+        }
 
         // Get the list of project names.
-        val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {
+        val internalProjectNames = runSBT("projects").first.lines().mapNotNull {
             PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
         }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
         // aggregate projects.
         val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        val pomFiles = runSBT(makePomCommand).stdout.lines().mapNotNull { line ->
+        val pomFiles = runSBT(makePomCommand).first.lines().mapNotNull { line ->
             POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
         }
 

@@ -35,6 +35,9 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
+import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
+import java.io.PrintStream
 import java.net.MalformedURLException
 import java.net.URL
 import java.nio.file.FileVisitResult
@@ -42,6 +45,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
+import java.security.Permission
 
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
@@ -272,6 +276,100 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     }
 
     return url
+}
+
+private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
+    val byteStream = ByteArrayOutputStream()
+
+    PrintStream(byteStream).use {
+        setOutput(it)
+        block()
+    }
+
+    setOutput(originalOutput)
+
+    // Although the byte stream gets implicitly closed with the print stream this does not flush the byte stream. That
+    // is different from the print stream which gets flushed when closed. So explicitly flush the byte stream here after
+    // the print stream has been flushed.
+    byteStream.flush()
+
+    return byteStream.toString()
+}
+
+/**
+ * Redirect the standard error stream to a [String] during the execution of [block].
+ */
+fun redirectStderr(block: () -> Unit) = redirectOutput(System.err, System::setErr, block)
+
+/**
+ * Redirect the standard output stream to a [String] during the execution of [block].
+ */
+fun redirectStdout(block: () -> Unit) = redirectOutput(System.out, System::setOut, block)
+
+/**
+ * Suppress any prompts for input by redirecting standard input to the null device.
+ */
+fun suppressInput(block: () -> Unit) {
+    val originalInput = System.`in`
+
+    val nullDevice = FileInputStream(if (OS.isWindows) "NUL" else "/dev/null")
+    System.setIn(nullDevice)
+
+    block()
+
+    System.setIn(originalInput)
+}
+
+/**
+ * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
+ * their original values restored and previously unset properties are cleared.
+ */
+fun temporaryProperties(vararg properties: Pair<String, String>, block: () -> Unit) {
+    val originalProperties = mutableListOf<Pair<String, String?>>()
+
+    properties.forEach { (key, value) ->
+        originalProperties += key to System.getProperty(key)
+        System.setProperty(key, value)
+    }
+
+    block()
+
+    originalProperties.forEach { (key, value) ->
+        value?.let { System.setProperty(key, it) } ?: System.clearProperty(key)
+    }
+}
+
+/**
+ * Trap a system exit call in [block]. This is useful e.g. when calling the Main class of a command line tool
+ * programmatically. Returns the exit code or null if no system exit call was trapped.
+ */
+fun trapSystemExitCall(block: () -> Unit): Int? {
+    // Define a custom security exception which we can catch in order to ignore it.
+    class ExitTrappedException : SecurityException()
+
+    var exitCode: Int? = null
+    val originalSecurityManager = System.getSecurityManager()
+
+    System.setSecurityManager(object : SecurityManager() {
+        override fun checkPermission(perm: Permission) {
+            if (perm.name.startsWith("exitVM")) {
+                exitCode = perm.name.substringAfter('.').toIntOrNull()
+                throw ExitTrappedException()
+            }
+
+            originalSecurityManager?.checkPermission(perm)
+        }
+    })
+
+    try {
+        block()
+    } catch (e: ExitTrappedException) {
+        // Ignore.
+    }
+
+    System.setSecurityManager(originalSecurityManager)
+
+    return exitCode
 }
 
 /**
