@@ -381,7 +381,7 @@ fun File.toSafeURI(): URI {
 }
 
 /**
- * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object
+ * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object,
  * or the text value is null.
  */
 fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
