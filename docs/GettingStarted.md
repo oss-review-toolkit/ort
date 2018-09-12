@@ -226,7 +226,7 @@ cli/build/install/ort/bin/ort scan --help
 The `mime-types` package has only one dependency in the `depenencies` scope, but a lot of dependencies in the
 `devDependencies` scope. Scanning all of the `devDependencies` would take a lot of time, so we will only run the
 scanner on the `dependencies` scope in this tutorial. If you also want to scan the `devDependencies` it is strongly
-advised to configure a cache for the scan results as documented in the README to speed up repeated scans.
+advised to configure a cache for the scan results as documented in the [README](./README.md) to speed up repeated scans.
 
 ```bash
 $ cli/build/install/ort/bin/ort scan --analyzer-result-file [analyzer-output-path]/analyzer-result.yml -o [scanner-output-path] --scopes dependencies
