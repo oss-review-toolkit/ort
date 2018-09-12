@@ -13,28 +13,14 @@ ORT:
 ORT is tested to run on Linux, macOS, and Windows. This tutorial assumes that you are running on Linux, but it should be
 easy to adapt the commands to macOS or Windows.
 
-To run ORT the following tools are required:
+In addition to Java (version >= 8), for some of the supported package managers and Version Control Systems additional
+tools need to be installed. In the context of this tutorial the following tools are required:
 
-* Java (version >= 8)
-* Git
+* Git (any recent version will do)
+* [Node.js](https://nodejs.org) 8.*
+* [NPM](https://www.npmjs.com) 5.5.* - 6.4.*
 
-For some of the supported package managers and SCMs additional tools need to be installed:
-
-* [Bundler](http://bundler.io)
-* [CVS](http://savannah.nongnu.org/projects/cvs)
-* [dep](https://github.com/golang/dep) 0.4.1
-* [Glide](https://glide.sh)
-* [Go](https://golang.org) (tested with 1.10)
-* [Godep](https://github.com/tools/godep)
-* [Maven](http://maven.apache.org)
-* [Mercurial](https://www.mercurial-scm.org)
-* [NPM](https://www.npmjs.com) 5.5.* - 6.4.* and [Node.js](https://nodejs.org) 8.* (required for this tutorial because
-  we scan `mime-types` which is an NPM project)
-* [PHP Composer](https://getcomposer.org) >= 1.5
-* [SBT](https://www.scala-sbt.org/)
-* [Stack](https://docs.haskellstack.org/en/stable/README)
-* [Subversion](https://subversion.apache.org)
-* [Yarn](https://yarnpkg.com) 1.3.* - 1.9.*
+For the full list of supported package managers and Version Control Systems see the [README](./README.md).
 
 ## 2. Download & Install ORT
 
