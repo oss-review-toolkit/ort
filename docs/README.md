@@ -75,6 +75,7 @@ Follow these steps to get started with the OSS Review Toolkit:
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
 
+* [Bower](http://bower.io/) (JavaScript)
 * [Bundler](http://bundler.io/) (Ruby)
 * [dep](https://golang.github.io/dep/) (Go)
 * [Glide](https://glide.sh/) (Go)
