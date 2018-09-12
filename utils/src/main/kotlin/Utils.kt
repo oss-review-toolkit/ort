@@ -282,7 +282,7 @@ fun Throwable.collectMessages(): List<String> {
     var cause: Throwable? = this
     while (cause != null) {
         messages += "${cause.javaClass.simpleName}: ${cause.message}"
-        cause = cause.cause
+        cause = cause.cause.takeIf { it != cause }
     }
     return messages
 }
