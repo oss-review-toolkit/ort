@@ -275,9 +275,9 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 }
 
 /**
- * Recursively collect the exception messages of this [Exception] and all its causes.
+ * Recursively collect the messages of this [Throwable] and all its causes.
  */
-fun Exception.collectMessages(): List<String> {
+fun Throwable.collectMessages(): List<String> {
     val messages = mutableListOf<String>()
     var cause: Throwable? = this
     while (cause != null) {
