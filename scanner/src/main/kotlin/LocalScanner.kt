@@ -141,6 +141,10 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                     it.copy(rawResult = null)
                 }
             } catch (e: ScanException) {
+                e.showStackTrace()
+
+                log.error { "Could not scan '${pkg.id}': ${e.collectMessagesAsString()}" }
+
                 val now = Instant.now()
                 listOf(ScanResult(
                         provenance = Provenance(now),
@@ -234,6 +238,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
             Downloader().download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
         } catch (e: DownloadException) {
             e.showStackTrace()
+
+            log.error { "Could not download '${pkg.id}': ${e.collectMessagesAsString()}" }
 
             val now = Instant.now()
             val scanResult = ScanResult(

@@ -199,6 +199,9 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                             buildDependencyTree(transitiveDependencies, lockFile, packages, virtualPackages))
                 } catch (e: Exception) {
                     e.showStackTrace()
+
+                    log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
+
                     packageInfo.toReference(errors = listOf(Error(source = toString(),
                             message = e.collectMessagesAsString())))
                 }

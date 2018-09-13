@@ -27,7 +27,6 @@ import com.here.ort.model.Package
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
-import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
 
 import java.io.File
@@ -153,8 +152,6 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
             return workingTree
         } catch (e: IOException) {
-            e.showStackTrace()
-
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }

@@ -30,7 +30,6 @@ import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -90,8 +89,6 @@ class GitRepo : GitBase() {
 
             return getWorkingTree(targetDir)
         } catch (e: IOException) {
-            e.showStackTrace()
-
             throw DownloadException("Could not clone from ${pkg.vcsProcessed.url} using manifest '$manifestPath'.", e)
         }
     }

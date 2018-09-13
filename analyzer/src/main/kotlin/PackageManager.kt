@@ -191,6 +191,8 @@ abstract class PackageManager(
                 } catch (e: Exception) {
                     e.showStackTrace()
 
+                    log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
+
                     val relativePath = definitionFile.absoluteFile.relativeTo(analyzerRoot).invariantSeparatorsPath
 
                     val errorProject = Project.EMPTY.copy(
@@ -207,8 +209,6 @@ abstract class PackageManager(
                     val errors = listOf(Error(source = javaClass.simpleName, message = e.collectMessagesAsString()))
 
                     result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), errors)
-
-                    log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
                 }
             }
 
