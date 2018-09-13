@@ -428,6 +428,70 @@ class UtilsTest : WordSpec({
         }
     }
 
+    "redirecting output" should {
+        "work for stdout only" {
+            val stdout = redirectStdout {
+                for (i in 1..10000) System.out.println("stdout: $i")
+            }
+
+            // The last printed line has a newline, resulting in a trailing blank line.
+            val stdoutLines = stdout.lines().dropLastWhile { it.isEmpty() }
+            stdoutLines.count() shouldBe 10000
+            stdoutLines.last() shouldBe "stdout: 10000"
+        }
+
+        "work for stderr only" {
+            val stderr = redirectStderr {
+                for (i in 1..10000) System.err.println("stderr: $i")
+            }
+
+            // The last printed line has a newline, resulting in a trailing blank line.
+            val stderrLines = stderr.lines().dropLastWhile { it.isEmpty() }
+            stderrLines.count() shouldBe 10000
+            stderrLines.last() shouldBe "stderr: 10000"
+        }
+
+        "work for stdout and stderr at the same time" {
+            var stderr = ""
+            val stdout = redirectStdout {
+                stderr = redirectStderr {
+                    for (i in 1..10000) {
+                        System.out.println("stdout: $i")
+                        System.err.println("stderr: $i")
+                    }
+                }
+            }
+
+            // The last printed line has a newline, resulting in a trailing blank line.
+            val stdoutLines = stdout.lines().dropLastWhile { it.isEmpty() }
+            stdoutLines.count() shouldBe 10000
+            stdoutLines.last() shouldBe "stdout: 10000"
+
+            // The last printed line has a newline, resulting in a trailing blank line.
+            val stderrLines = stderr.lines().dropLastWhile { it.isEmpty() }
+            stderrLines.count() shouldBe 10000
+            stderrLines.last() shouldBe "stderr: 10000"
+        }
+
+        "work when trapping exit calls" {
+            var exitCode : Int? = null
+
+            val stdout = redirectStdout {
+                exitCode = trapSystemExitCall {
+                    for (i in 1..10000) System.out.println("stdout: $i")
+                    System.exit(42)
+                }
+            }
+
+            exitCode shouldBe 42
+
+            // The last printed line has a newline, resulting in a trailing blank line.
+            val stdoutLines = stdout.lines().dropLastWhile { it.isEmpty() }
+            stdoutLines.count() shouldBe 10000
+            stdoutLines.last() shouldBe "stdout: 10000"
+        }
+    }
+
     "searchUpwardsForSubdirectory" should {
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
