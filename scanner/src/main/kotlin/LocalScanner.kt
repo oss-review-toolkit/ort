@@ -44,7 +44,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -150,7 +150,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                                 endTime = now,
                                 fileCount = 0,
                                 licenseFindings = sortedSetOf(),
-                                errors = e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
+                                errors = listOf(Error(source = javaClass.simpleName,
+                                        message = e.collectMessagesAsString()))
                         ),
                         rawResult = EMPTY_JSON_NODE)
                 )
@@ -183,7 +184,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
             val now = Instant.now()
             val summary = ScanSummary(now, now, 0, sortedSetOf(),
-                    e.collectMessages().map { Error(source = toString(), message = it) })
+                    listOf(Error(source = toString(), message = e.collectMessagesAsString())))
             ScanResult(Provenance(now), getDetails(), summary)
         }
 
@@ -243,7 +244,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                             endTime = now,
                             fileCount = 0,
                             licenseFindings = sortedSetOf(),
-                            errors = e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
+                            errors = listOf(Error(source = javaClass.simpleName, message = e.collectMessagesAsString()))
                     ),
                     EMPTY_JSON_NODE
             )

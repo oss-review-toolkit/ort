@@ -38,6 +38,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 
@@ -93,7 +94,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             val vcsProcessed = try {
                 resolveVcsInfo(name, revision, gopath)
             } catch (e: IOException) {
-                errors += Error(source = toString(), message = e.toString())
+                errors += Error(source = toString(), message = e.collectMessagesAsString())
                 VcsInfo.EMPTY
             }
 
