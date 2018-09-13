@@ -199,6 +199,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.collectMessagesAsString()}"
             log.error { errorMsg }
+
             errors += Error(source = toString(), message = errorMsg)
         }
     }
@@ -265,7 +266,10 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
                 return GemSpec.createFromJson(body!!)
             }
         } catch (e: IOException) {
+            e.showStackTrace()
+
             log.warn { "Unable to parse rubygems.org meta-data for gem '$name': ${e.message}" }
+
             null
         }
     }

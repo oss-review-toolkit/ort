@@ -104,6 +104,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 "There have been issues building the Maven project models, this could lead to errors during " +
                         "dependency analysis: ${e.message}"
             }
+
             e.results
         }
 

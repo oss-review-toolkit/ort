@@ -29,7 +29,6 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -211,8 +210,6 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
             return workingTree
         } catch (e: IOException) {
-            e.showStackTrace()
-
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }

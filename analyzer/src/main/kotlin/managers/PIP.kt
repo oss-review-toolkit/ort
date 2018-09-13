@@ -47,6 +47,7 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
@@ -238,6 +239,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                     val pkgData = try {
                         jsonMapper.readTree(body)!!
                     } catch (e: IOException) {
+                        e.showStackTrace()
+
                         log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
 
                         // Fall back to returning the original package data.
@@ -271,6 +274,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                                 vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
                         )
                     } catch (e: NullPointerException) {
+                        e.showStackTrace()
+
                         log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
 
                         // Fall back to returning the original package data.
