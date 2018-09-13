@@ -293,8 +293,8 @@ class StaticHtmlReporter : TableReporter() {
                 if (tabularScanRecord.errorSummary.entries.isNotEmpty()) {
                     append("<li><a href=\"#error-summary\">Error Summary</a></li>")
                 }
-                tabularScanRecord.projectDependencies.keys.forEachIndexed { index, project ->
-                    append("<li><a href=\"#$index\">${project.id}</a></li>")
+                tabularScanRecord.projectDependencies.keys.forEach { project ->
+                    append("<li><a href=\"#${project.id}\">${project.id}</a></li>")
                 }
                 append("</ul>")
 
@@ -302,11 +302,9 @@ class StaticHtmlReporter : TableReporter() {
                     append(createTable("Error Summary", null, tabularScanRecord.errorSummary, "error-summary"))
                 }
 
-                var index = 0
                 tabularScanRecord.projectDependencies.forEach { project, entry ->
                     append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, entry,
-                            index.toString()))
-                    ++index
+                            project.id.toString()))
                 }
             }
 
