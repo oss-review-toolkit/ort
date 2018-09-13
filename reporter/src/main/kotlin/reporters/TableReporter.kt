@@ -26,6 +26,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
 import com.here.ort.reporter.Reporter
+import com.here.ort.utils.zipWithDefault
 
 import java.io.File
 import java.util.SortedMap
@@ -44,7 +45,7 @@ abstract class TableReporter : Reporter() {
             /**
              * A [ProjectTable] containing all dependencies that caused errors.
              */
-            val errorSummary: ProjectTable,
+            val errorSummary: ErrorTable,
 
             /**
              * A [ProjectTable] containing the dependencies of all [Project]s.
@@ -113,8 +114,40 @@ abstract class TableReporter : Reporter() {
                 )
     }
 
+    data class ErrorTable(
+            val rows: List<ErrorRow>
+    )
+
+    data class ErrorRow(
+            /**
+             * The identifier of the package.
+             */
+            val id: Identifier,
+
+            /**
+             * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
+             */
+            val analyzerErrors: SortedMap<Identifier, List<Error>>,
+
+            /**
+             * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
+             */
+            val scanErrors: SortedMap<Identifier, List<Error>>
+    ) {
+        fun merge(other: ErrorRow): ErrorRow {
+            val plus = { left: List<Error>, right: List<Error> -> left + right }
+
+            return ErrorRow(
+                    id = id,
+                    analyzerErrors = analyzerErrors.zipWithDefault(other.analyzerErrors, emptyList(), plus)
+                            .toSortedMap(),
+                    scanErrors = scanErrors.zipWithDefault(other.scanErrors, emptyList(), plus).toSortedMap()
+            )
+        }
+    }
+
     override fun generateReport(ortResult: OrtResult, outputDir: File) {
-        val errorSummaryRows = mutableMapOf<Identifier, DependencyRow>()
+        val errorSummaryRows = mutableMapOf<Identifier, ErrorRow>()
         val summaryRows = mutableMapOf<Identifier, DependencyRow>()
 
         require(ortResult.analyzer?.result != null) {
@@ -162,7 +195,15 @@ abstract class TableReporter : Reporter() {
                 ).also { row ->
                     summaryRows[row.id] = summaryRows[row.id]?.merge(row) ?: row
                     if (row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty()) {
-                        errorSummaryRows[row.id] = errorSummaryRows[row.id]?.merge(row) ?: row
+                        val errorRow = ErrorRow(
+                                id = row.id,
+                                analyzerErrors = if (row.analyzerErrors.isNotEmpty())
+                                    sortedMapOf(project.id to row.analyzerErrors) else sortedMapOf(),
+                                scanErrors = if (row.scanErrors.isNotEmpty())
+                                    sortedMapOf(project.id to row.scanErrors) else sortedMapOf()
+                        )
+
+                        errorSummaryRows[row.id] = errorSummaryRows[errorRow.id]?.merge(errorRow) ?: errorRow
                     }
                 }
             }
@@ -170,7 +211,7 @@ abstract class TableReporter : Reporter() {
             Pair(project, ProjectTable(tableRows))
         }.toSortedMap()
 
-        val errorSummaryTable = ProjectTable(errorSummaryRows.values.toList().sortedBy { it.id })
+        val errorSummaryTable = ErrorTable(errorSummaryRows.values.toList().sortedBy { it.id })
         val summaryTable = ProjectTable(summaryRows.values.toList().sortedBy { it.id })
 
         val metadata = ortResult.data["reporter.metadata"]?.let {

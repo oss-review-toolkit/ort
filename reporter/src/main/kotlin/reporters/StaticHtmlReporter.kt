@@ -299,13 +299,69 @@ class StaticHtmlReporter : TableReporter() {
                 append("</ul>")
 
                 if (tabularScanRecord.errorSummary.rows.isNotEmpty()) {
-                    append(createTable("Error Summary", null, tabularScanRecord.errorSummary, "error-summary"))
+                    append(createErrorTable("Error Summary", tabularScanRecord.errorSummary, "error-summary"))
                 }
 
                 tabularScanRecord.projectDependencies.forEach { project, table ->
                     append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, table,
                             project.id.toString()))
                 }
+            }
+
+    private fun createErrorTable(title: String, errors: TableReporter.ErrorTable, anchor: String) =
+            buildString {
+                append("""
+                    <h2><a id="$anchor"></a>$title</h2>
+                    <h3>Packages</h3>
+                    <table class="report-packages">
+                    <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Analyzer Errors</th>
+                        <th>Scanner Errors</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    """.trimIndent())
+
+                errors.rows.forEach { row ->
+                    val cssClass = "error"
+
+                    append("""
+                        <tr class="$cssClass">
+                            <td>${row.id}</td>
+                            <td>""".trimIndent())
+
+                    row.analyzerErrors.forEach { id, errors ->
+                        append("""
+                                <a href="#$id">$id</a>
+                                <ul>
+                                    ${errors.joinToString("\n") {
+                                        "<li>${it.toString().replace("\n", "<br/>")}</li>"
+                                    }}
+                                </ul>""".trimIndent())
+                    }
+
+                    append("""
+                            </td>
+                            <td>""".trimIndent())
+
+                    row.scanErrors.forEach { id, errors ->
+                        append("""
+                                <a href="#$id">$id</a>
+                                <ul>
+                                    ${errors.joinToString("\n") {
+                            "<li>${it.toString().replace("\n", "<br/>")}</li>"
+                        }}
+                                </ul>""".trimIndent())
+                    }
+
+                    append("""
+                            </td>
+                        </tr>""".trimIndent())
+                }
+
+                append("</tbody></table>")
             }
 
     private fun createTable(title: String, vcsInfo: VcsInfo?, summary: TableReporter.ProjectTable, anchor: String) =
