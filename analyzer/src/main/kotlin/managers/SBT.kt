@@ -129,16 +129,30 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         }
 
         // Get the list of project names.
-        val internalProjectNames = runSBT("projects").first.lines().mapNotNull {
+        val (stdoutProjects, stderrProjects) = runSBT("projects")
+        val internalProjectNames = stdoutProjects.lines().mapNotNull {
             PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
         }
+
+        if (internalProjectNames.isEmpty()) {
+            log.warn { "No SBT projects found inside the ${workingDir.absolutePath} directory." }
+        }
+
+        log.debug { stderrProjects }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
         // aggregate projects.
         val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        val pomFiles = runSBT(makePomCommand).first.lines().mapNotNull { line ->
+        val (stdoutMakePom, stderrMakePom) = runSBT(makePomCommand)
+        val pomFiles = stdoutMakePom.lines().mapNotNull { line ->
             POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
         }
+
+        if (pomFiles.isEmpty()) {
+            log.warn { "No generated POM files found inside the ${workingDir.absolutePath} directory." }
+        }
+
+        log.debug { stderrMakePom }
 
         return pomFiles.distinct()
     }
