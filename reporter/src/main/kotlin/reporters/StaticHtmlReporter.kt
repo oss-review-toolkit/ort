@@ -290,7 +290,7 @@ class StaticHtmlReporter : TableReporter() {
 
                 append("<h2>Index</h2>")
                 append("<ul>")
-                if (tabularScanRecord.errorSummary.entries.isNotEmpty()) {
+                if (tabularScanRecord.errorSummary.rows.isNotEmpty()) {
                     append("<li><a href=\"#error-summary\">Error Summary</a></li>")
                 }
                 tabularScanRecord.projectDependencies.keys.forEach { project ->
@@ -298,17 +298,17 @@ class StaticHtmlReporter : TableReporter() {
                 }
                 append("</ul>")
 
-                if (tabularScanRecord.errorSummary.entries.isNotEmpty()) {
+                if (tabularScanRecord.errorSummary.rows.isNotEmpty()) {
                     append(createTable("Error Summary", null, tabularScanRecord.errorSummary, "error-summary"))
                 }
 
-                tabularScanRecord.projectDependencies.forEach { project, entry ->
-                    append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, entry,
+                tabularScanRecord.projectDependencies.forEach { project, table ->
+                    append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, table,
                             project.id.toString()))
                 }
             }
 
-    private fun createTable(title: String, vcsInfo: VcsInfo?, summary: TableReporter.Table, anchor: String) =
+    private fun createTable(title: String, vcsInfo: VcsInfo?, summary: TableReporter.ProjectTable, anchor: String) =
             buildString {
                 append("<h2><a id=\"$anchor\"></a>$title</h2>")
 
@@ -353,26 +353,26 @@ class StaticHtmlReporter : TableReporter() {
                     <tbody>
                     """.trimIndent())
 
-                summary.entries.forEach { entry ->
+                summary.rows.forEach { row ->
                     val cssClass = when {
-                        entry.analyzerErrors.isNotEmpty() || entry.scanErrors.isNotEmpty() -> "error"
-                        entry.declaredLicenses.isEmpty() && entry.detectedLicenses.isEmpty() -> "warning"
+                        row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty() -> "error"
+                        row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "warning"
                         else -> "success"
                     }
 
                     append("""
                         <tr class="$cssClass">
-                            <td>${entry.id}</td>
-                            <td>${entry.scopes.joinToString("<br/>")}</td>
-                            <td>${entry.declaredLicenses.joinToString("<br/>")}</td>
-                            <td>${entry.detectedLicenses.joinToString("<br/>")}</td>
+                            <td>${row.id}</td>
+                            <td>${row.scopes.joinToString("<br/>")}</td>
+                            <td>${row.declaredLicenses.joinToString("<br/>")}</td>
+                            <td>${row.detectedLicenses.joinToString("<br/>")}</td>
                             <td><ul>
-                                ${entry.analyzerErrors.joinToString("\n") {
+                                ${row.analyzerErrors.joinToString("\n") {
                                     "<li>${it.toString().replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>
                             <td><ul>
-                                ${entry.scanErrors.joinToString("\n") {
+                                ${row.scanErrors.joinToString("\n") {
                                     "<li>${it.toString().replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>

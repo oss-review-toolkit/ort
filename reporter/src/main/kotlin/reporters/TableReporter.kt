@@ -42,19 +42,19 @@ abstract class TableReporter : Reporter() {
             val vcsInfo: VcsInfo,
 
             /**
-             * A [Table] containing all dependencies that caused errors.
+             * A [ProjectTable] containing all dependencies that caused errors.
              */
-            val errorSummary: Table,
+            val errorSummary: ProjectTable,
 
             /**
-             * A [Table] containing the dependencies of all [Project]s.
+             * A [ProjectTable] containing the dependencies of all [Project]s.
              */
-            val summary: Table,
+            val summary: ProjectTable,
 
             /**
-             * The [Table]s containing the dependencies for each [Project].
+             * The [ProjectTable]s containing the dependencies for each [Project].
              */
-            val projectDependencies: SortedMap<Project, Table>,
+            val projectDependencies: SortedMap<Project, ProjectTable>,
 
             /**
              * Additional metadata read from the "reporter.metadata" field in [OrtResult.data].
@@ -67,11 +67,11 @@ abstract class TableReporter : Reporter() {
             val extraColumns: List<String>
     )
 
-    data class Table(
-            val entries: List<TableEntry>
+    data class ProjectTable(
+            val rows: List<DependencyRow>
     )
 
-    data class TableEntry(
+    data class DependencyRow(
             /**
              * The identifier of the package.
              */
@@ -102,8 +102,8 @@ abstract class TableReporter : Reporter() {
              */
             val scanErrors: List<Error>
     ) {
-        fun merge(other: TableEntry) =
-                TableEntry(
+        fun merge(other: DependencyRow) =
+                DependencyRow(
                         id = id,
                         scopes = (scopes + other.scopes).toSortedSet(),
                         declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
@@ -114,8 +114,8 @@ abstract class TableReporter : Reporter() {
     }
 
     override fun generateReport(ortResult: OrtResult, outputDir: File) {
-        val errorSummaryEntries = mutableMapOf<Identifier, TableEntry>()
-        val summaryEntries = mutableMapOf<Identifier, TableEntry>()
+        val errorSummaryRows = mutableMapOf<Identifier, DependencyRow>()
+        val summaryRows = mutableMapOf<Identifier, DependencyRow>()
 
         require(ortResult.analyzer?.result != null) {
             "The provided ORT result does not contain an analyzer result."
@@ -130,7 +130,7 @@ abstract class TableReporter : Reporter() {
         val scanRecord = ortResult.scanner!!.results
 
         val projectTables = analyzerResult.projects.associate { project ->
-            val tableEntries = (listOf(project.id) + project.collectDependencyIds()).map { id ->
+            val tableRows = (listOf(project.id) + project.collectDependencyIds()).map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.map { it.name }.toSortedSet()
@@ -152,26 +152,26 @@ abstract class TableReporter : Reporter() {
                     it.summary.errors
                 }?.distinct() ?: emptyList()
 
-                TableEntry(
+                DependencyRow(
                         id = id,
                         scopes = scopes,
                         declaredLicenses = declaredLicenses,
                         detectedLicenses = detectedLicenses,
                         analyzerErrors = analyzerErrors,
                         scanErrors = scanErrors
-                ).also { entry ->
-                    summaryEntries[entry.id] = summaryEntries[entry.id]?.merge(entry) ?: entry
-                    if (entry.analyzerErrors.isNotEmpty() || entry.scanErrors.isNotEmpty()) {
-                        errorSummaryEntries[entry.id] = errorSummaryEntries[entry.id]?.merge(entry) ?: entry
+                ).also { row ->
+                    summaryRows[row.id] = summaryRows[row.id]?.merge(row) ?: row
+                    if (row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty()) {
+                        errorSummaryRows[row.id] = errorSummaryRows[row.id]?.merge(row) ?: row
                     }
                 }
             }
 
-            Pair(project, Table(tableEntries))
+            Pair(project, ProjectTable(tableRows))
         }.toSortedMap()
 
-        val errorSummaryTable = Table(errorSummaryEntries.values.toList().sortedBy { it.id })
-        val summaryTable = Table(summaryEntries.values.toList().sortedBy { it.id })
+        val errorSummaryTable = ProjectTable(errorSummaryRows.values.toList().sortedBy { it.id })
+        val summaryTable = ProjectTable(summaryRows.values.toList().sortedBy { it.id })
 
         val metadata = ortResult.data["reporter.metadata"]?.let {
             if (it is Map<*, *>) {
