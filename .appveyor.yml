@@ -49,21 +49,20 @@ install:
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
+  - echo org.gradle.daemon=false>>%HOME%\.gradle\gradle.properties
   - echo org.gradle.java.home=C:/Program Files/Java/jdk9>>%HOME%\.gradle\gradle.properties
-  - gradlew dokkaJar
+
+test_script:
+  - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
+      gradlew --stacktrace dokkaJar check
+    ) else (
+      gradlew -Dkotlintest.tags.exclude=ExpensiveTag --stacktrace dokkaJar check
+    )
 
 artifacts:
   - path: '**\build\libs\*-dokka.jar'
 
-test_script:
-  - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
-      gradlew --stacktrace check
-    ) else (
-      gradlew -Dkotlintest.tags.exclude=ExpensiveTag --stacktrace check
-    )
-
 on_finish:
-  - gradlew --stop # Fix "fileHashes.bin" being used by another process.
   - ps: |
       $url = "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)"
       $pattern = '**\build\test-results\**\TEST-*.xml'
