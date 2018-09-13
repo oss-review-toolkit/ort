@@ -135,7 +135,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         }
 
         if (internalProjectNames.isEmpty()) {
-            log.warn { "No SBT projects found inside the ${workingDir.absolutePath} directory." }
+            log.warn { "No SBT projects found inside the '${workingDir.absolutePath}' directory." }
         }
 
         log.debug { stderrProjects }
@@ -149,7 +149,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         }
 
         if (pomFiles.isEmpty()) {
-            log.warn { "No generated POM files found inside the ${workingDir.absolutePath} directory." }
+            log.warn { "No generated POM files found inside the '${workingDir.absolutePath}' directory." }
         }
 
         log.debug { stderrMakePom }
