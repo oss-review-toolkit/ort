@@ -95,7 +95,7 @@ class NoticeReporter : Reporter() {
 
             noticeBuilder = StringBuilder(trimmedNoticeLines.joinToString("\n"))
 
-            // Separate notice entries.
+            // Separate notice rows.
             if (findingsIterator.hasNext()) noticeBuilder.append("\n----\n\n")
 
             outputFile.appendText(noticeBuilder.toString())

@@ -150,8 +150,8 @@ class ExcelReporter : TableReporter() {
         (0..1).forEach { sheet.autoSizeColumn(it) }
     }
 
-    private fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: Table, vcsInfo: VcsInfo,
-                    extraColumns: List<String>) {
+    private fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: ProjectTable, vcsInfo: VcsInfo,
+                            extraColumns: List<String>) {
         val sheetName = createUniqueSheetName(workbook, name)
 
         val sheet = workbook.createSheet(sheetName)
@@ -159,23 +159,23 @@ class ExcelReporter : TableReporter() {
         val headerRows = createHeader(sheet, name, file, vcsInfo, extraColumns)
         var currentRow = headerRows
 
-        table.entries.forEach { entry ->
+        table.rows.forEach { row ->
             val cellStyle = when {
-                entry.analyzerErrors.isNotEmpty() || entry.scanErrors.isNotEmpty() -> errorStyle
-                entry.declaredLicenses.isEmpty() && entry.detectedLicenses.isEmpty() -> warningStyle
+                row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty() -> errorStyle
+                row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> warningStyle
                 else -> successStyle
             }
 
             sheet.createRow(currentRow).apply {
-                CellUtil.createCell(this, 0, entry.id.toString(), cellStyle)
-                CellUtil.createCell(this, 1, entry.scopes.joinWithLimit(), cellStyle)
-                CellUtil.createCell(this, 2, entry.declaredLicenses.joinWithLimit(), cellStyle)
-                CellUtil.createCell(this, 3, entry.detectedLicenses.joinWithLimit(), cellStyle)
-                CellUtil.createCell(this, 4, entry.analyzerErrors.map { it.toString() }.joinWithLimit(), cellStyle)
-                CellUtil.createCell(this, 5, entry.scanErrors.map { it.toString() }.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 0, row.id.toString(), cellStyle)
+                CellUtil.createCell(this, 1, row.scopes.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 2, row.declaredLicenses.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 3, row.detectedLicenses.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 4, row.analyzerErrors.map { it.toString() }.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 5, row.scanErrors.map { it.toString() }.joinWithLimit(), cellStyle)
 
-                val maxLines = listOf(entry.scopes, entry.declaredLicenses, entry.detectedLicenses,
-                        entry.analyzerErrors, entry.scanErrors).map { it.size }.max() ?: 1
+                val maxLines = listOf(row.scopes, row.declaredLicenses, row.detectedLicenses,
+                        row.analyzerErrors, row.scanErrors).map { it.size }.max() ?: 1
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }
             ++currentRow
