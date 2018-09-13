@@ -121,6 +121,8 @@ class DiskCache(
             // Remove the expired entry after the snapshot was closed.
             diskLruCache.remove(diskKey)
         } catch (e: IOException) {
+            e.showStackTrace()
+
             log.error { "Could not read cache entry for key '$diskKey': ${e.message}" }
         }
         return null
@@ -137,6 +139,8 @@ class DiskCache(
             }
             return true
         } catch (e: IOException) {
+            e.showStackTrace()
+
             log.error { "Could not write to disk cache for key '$diskKey': ${e.message}" }
         }
         return false

@@ -26,6 +26,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.filterVersionNames
 import com.here.ort.utils.log
+import com.here.ort.utils.showStackTrace
 
 import com.vdurmont.semver4j.Semver
 
@@ -97,6 +98,8 @@ abstract class VersionControlSystem {
                     try {
                         it.isValid()
                     } catch (e: IOException) {
+                        e.showStackTrace()
+
                         log.debug {
                             "Exception while validating ${it.getType()} working tree, treating it as non-applicable: " +
                                     e.message

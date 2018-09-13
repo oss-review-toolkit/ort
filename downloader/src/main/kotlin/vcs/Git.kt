@@ -53,8 +53,6 @@ class Git : GitBase() {
                 }
             }
         } catch (e: IOException) {
-            e.showStackTrace()
-
             throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
@@ -96,6 +94,8 @@ class Git : GitBase() {
                 log.info { "Found $this revision '$revision' for version '${pkg.id.version}'." }
             }
         } catch (e: IOException) {
+            e.showStackTrace()
+
             log.info { "No $this revision for version '${pkg.id.version}' found: ${e.message}" }
         }
 
