@@ -40,7 +40,7 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
@@ -201,7 +201,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
                             "Could not get package information for dependency '$identifier': ${e.message}"
                         }
 
-                        errors += e.collectMessages().map { Error(source = toString(), message = it) }
+                        errors += Error(source = toString(), message = e.collectMessagesAsString())
 
                         rawPackage
                     }
