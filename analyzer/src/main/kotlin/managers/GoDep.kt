@@ -19,8 +19,7 @@
 
 package com.here.ort.analyzer.managers
 
-import ch.frankel.slf4k.debug
-import ch.frankel.slf4k.warn
+import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
@@ -41,6 +40,7 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.showStackTrace
 
 import com.moandjiezana.toml.Toml
 
@@ -94,6 +94,10 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             val vcsProcessed = try {
                 resolveVcsInfo(name, revision, gopath)
             } catch (e: IOException) {
+                e.showStackTrace()
+
+                log.error { "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}" }
+
                 errors += Error(source = toString(), message = e.collectMessagesAsString())
                 VcsInfo.EMPTY
             }
