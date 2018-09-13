@@ -44,11 +44,11 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.textValueOrEmpty
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
@@ -199,9 +199,8 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                             buildDependencyTree(transitiveDependencies, lockFile, packages, virtualPackages))
                 } catch (e: Exception) {
                     e.showStackTrace()
-                    packageInfo.toReference(errors = e.collectMessages().map {
-                        Error(source = toString(), message = it)
-                    })
+                    packageInfo.toReference(errors = listOf(Error(source = toString(),
+                            message = e.collectMessagesAsString())))
                 }
             }
         }

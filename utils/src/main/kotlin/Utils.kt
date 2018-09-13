@@ -393,6 +393,18 @@ fun Throwable.collectMessages(): List<String> {
 }
 
 /**
+ * Recursively collect the messages of this [Throwable] and all its causes and join them to a single [String].
+ */
+fun Throwable.collectMessagesAsString() =
+        collectMessages().let { messages ->
+            if (messages.size == 1) {
+                messages.first()
+            } else {
+                messages.joinToString(", caused by ") { "\"$it\"" }
+            }
+        }
+
+/**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
  * resolve symbolic links on Windows.
  */
