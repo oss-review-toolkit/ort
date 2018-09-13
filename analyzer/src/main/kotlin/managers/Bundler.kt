@@ -42,12 +42,13 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
-import com.here.ort.utils.textValueOrEmpty
+import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
@@ -196,7 +197,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
         } catch (e: Exception) {
             e.showStackTrace()
 
-            val errorMsg = "Failed to parse package (gem) $gemName: ${e.message}"
+            val errorMsg = "Failed to parse package (gem) $gemName: ${e.collectMessagesAsString()}"
             log.error { errorMsg }
             errors += Error(source = toString(), message = errorMsg)
         }

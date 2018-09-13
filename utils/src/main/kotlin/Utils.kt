@@ -393,6 +393,11 @@ fun Throwable.collectMessages(): List<String> {
 }
 
 /**
+ * Recursively collect the messages of this [Throwable] and all its causes and join them to a single [String].
+ */
+fun Throwable.collectMessagesAsString() = collectMessages().joinToString("\nCaused by: ")
+
+/**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
  * resolve symbolic links on Windows.
  */

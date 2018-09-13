@@ -29,7 +29,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
@@ -204,7 +204,7 @@ abstract class PackageManager(
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    val errors = e.collectMessages().map { Error(source = javaClass.simpleName, message = it) }
+                    val errors = listOf(Error(source = javaClass.simpleName, message = e.collectMessagesAsString()))
 
                     result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), errors)
 

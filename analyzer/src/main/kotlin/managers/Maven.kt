@@ -35,7 +35,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
@@ -188,7 +188,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             return PackageReference(
                     Identifier(toString(), node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
                     dependencies = sortedSetOf(),
-                    errors = e.collectMessages().map { Error(source = toString(), message = it) }
+                    errors = listOf(Error(source = toString(), message = e.collectMessagesAsString()))
             )
         }
     }
