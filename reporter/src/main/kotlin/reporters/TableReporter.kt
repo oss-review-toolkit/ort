@@ -117,14 +117,14 @@ abstract class TableReporter : Reporter() {
         val errorSummaryEntries = mutableMapOf<Identifier, TableEntry>()
         val summaryEntries = mutableMapOf<Identifier, TableEntry>()
 
-        require(ortResult.analyzer != null) {
+        require(ortResult.analyzer?.result != null) {
             "The provided ORT result does not contain an analyzer result."
         }
 
         val analyzerResult = ortResult.analyzer!!.result
 
-        require(ortResult.scanner != null) {
-            "The provided ORT result does not contain a scan record."
+        require(ortResult.scanner?.results != null) {
+            "The provided ORT result does not contain any scan results."
         }
 
         val scanRecord = ortResult.scanner!!.results
