@@ -37,13 +37,13 @@ data class ProjectExclude(
          * The reason why the project is excluded, out of a predefined choice.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val reason: ProjectExcludeReason?,
+        val reason: ProjectExcludeReason? = null,
 
         /**
          * A comment to further explain why the [reason] is applicable here.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val comment: String?,
+        val comment: String? = null,
 
         /**
          * Scopes that will be excluded from this project.
