@@ -36,8 +36,8 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
-import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.PrintStream
 import java.net.MalformedURLException
 import java.net.URL
@@ -280,10 +280,11 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 }
 
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val byteStream = ByteArrayOutputStream()
+    val tempFile = createTempFile().apply { deleteOnExit() }
+    val fileStream = FileOutputStream(tempFile)
 
     try {
-        PrintStream(byteStream).use {
+        PrintStream(fileStream).use {
             setOutput(it)
             block()
         }
@@ -291,12 +292,7 @@ private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream)
         setOutput(originalOutput)
     }
 
-    // Although the byte stream gets implicitly closed with the print stream this does not flush the byte stream. That
-    // is different from the print stream which gets flushed when closed. So explicitly flush the byte stream here after
-    // the print stream has been flushed.
-    byteStream.flush()
-
-    return byteStream.toString()
+    return tempFile.readText()
 }
 
 /**
