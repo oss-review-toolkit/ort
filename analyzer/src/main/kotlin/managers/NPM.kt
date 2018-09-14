@@ -341,7 +341,8 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             log.debug { "Looking for dependencies in scope '$scope'." }
             val dependencyMap = json[scope]
             dependencyMap.fields().forEach { (name, _) ->
-                buildTree(packageJson.parentFile, packageJson.parentFile, name, packages)?.let { dependency ->
+                val modulesDir = packageJson.resolveSibling("node_modules")
+                buildTree(modulesDir, modulesDir, name, packages)?.let { dependency ->
                     dependencies += dependency
                 }
             }
@@ -363,16 +364,14 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         } ?: VcsInfo("", "", head)
     }
 
-    private fun buildTree(rootDir: File, startDir: File, name: String, packages: Map<String, Package>,
+    private fun buildTree(rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
                           dependencyBranch: List<String> = listOf()): PackageReference? {
-        log.debug { "Building dependency tree for '$name' from directory '${startDir.absolutePath}'." }
+        log.debug { "Building dependency tree for '$name' from directory '${startModulesDir.absolutePath}'." }
 
-        val nodeModulesDir = File(startDir, "node_modules")
-        val moduleDir = File(nodeModulesDir, name)
-        val packageFile = File(moduleDir, "package.json")
+        val packageFile = startModulesDir.resolve(name).resolve("package.json")
 
         if (packageFile.isFile) {
-            log.debug { "Found package file for module '$name' in '${packageFile.absolutePath}'." }
+            log.debug { "Found package file for module '$name' at '${packageFile.absolutePath}'." }
 
             val packageJson = jsonMapper.readTree(packageFile)
             val rawName = packageJson["name"].textValue()
@@ -395,8 +394,8 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             if (packageJson["dependencies"] != null) {
                 val dependencyMap = packageJson["dependencies"]
                 dependencyMap.fields().forEach { (dependencyName, _) ->
-                    val dependency = buildTree(rootDir, packageFile.parentFile, dependencyName, packages,
-                            newDependencyBranch)
+                    val dependency = buildTree(rootModulesDir, packageFile.resolveSibling("node_modules"),
+                            dependencyName, packages, newDependencyBranch)
                     if (dependency != null) {
                         dependencies += dependency
                     }
@@ -404,24 +403,25 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             }
 
             return packageInfo.toReference(dependencies)
-        } else if (rootDir == startDir) {
+        } else if (rootModulesDir == startModulesDir) {
             log.error { "Could not find module '$name'." }
             return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
                     listOf(Error(source = toString(), message = "Package was not installed.")))
         } else {
-            var parent = startDir.parentFile.parentFile
+            // Skip the package name directory when going up.
+            var parentModulesDir = startModulesDir.parentFile.parentFile
 
-            // For scoped packages we need to go one more dir up.
-            if (parent.name == "node_modules") {
-                parent = parent.parentFile
+            // For scoped packages we need to go one more directory up.
+            if (parentModulesDir.name.startsWith("@")) {
+                parentModulesDir = parentModulesDir.parentFile
             }
 
             log.debug {
-                "Could not find package file for '$name' in '${startDir.absolutePath}', looking in " +
-                        "'${parent.absolutePath}' instead."
+                "Could not find package file for '$name' in '${startModulesDir.absolutePath}', looking in " +
+                        "'${parentModulesDir.absolutePath}' instead."
             }
 
-            return buildTree(rootDir, parent, name, packages, dependencyBranch)
+            return buildTree(rootModulesDir, parentModulesDir, name, packages, dependencyBranch)
         }
     }
 
