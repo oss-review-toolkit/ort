@@ -404,7 +404,11 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
             return packageInfo.toReference(dependencies)
         } else if (rootModulesDir == startModulesDir) {
-            log.error { "Could not find module '$name'." }
+            log.warn {
+                "Could not find package file for '$name' anywhere in '${rootModulesDir.absolutePath}'. This might be " +
+                        "fine if the module was not installed because it is specific to a different platform."
+            }
+
             return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
                     listOf(Error(source = toString(), message = "Package was not installed.")))
         } else {
@@ -416,7 +420,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 parentModulesDir = parentModulesDir.parentFile
             }
 
-            log.debug {
+            log.info {
                 "Could not find package file for '$name' in '${startModulesDir.absolutePath}', looking in " +
                         "'${parentModulesDir.absolutePath}' instead."
             }
