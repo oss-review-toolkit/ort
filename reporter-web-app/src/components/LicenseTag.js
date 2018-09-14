@@ -19,7 +19,7 @@
 
 import React from 'react';
 import {
-    List, Modal, Table, Tabs, Tag, Tooltip
+    List, Modal, Tabs, Tag, Tooltip
 } from 'antd';
 import { LicenseSummaryCard } from './LicenseSummaryCard';
 import { LICENSES } from '../data/licenses';

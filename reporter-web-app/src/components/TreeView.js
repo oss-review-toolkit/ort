@@ -241,12 +241,21 @@ class TreeView extends React.Component {
             <TreeNode
                 key={`${indexElem}-${treeLeaf.id}`}
                 title={idWithTooltip}
-                ref={ref => this.treeNodes[`${indexElem}`] = {
-                    ref,
-                    id
-                }}
+                ref={
+                    (ref) => {
+                        this.treeNodes[`${indexElem}`] = {
+                            ref,
+                            id
+                        };
+                    }
+                }
             >
-                {treeLeaf.children.map((childLeaf, nodeIndex) => this.renderTreeNode(childLeaf, `${indexElem}-${nodeIndex}`))}
+                {
+                    treeLeaf.children.map((childLeaf, nodeIndex) => this.renderTreeNode(
+                        childLeaf,
+                        `${indexElem}-${nodeIndex}`
+                    ))
+                }
             </TreeNode>
         );
     }
@@ -276,7 +285,11 @@ class TreeView extends React.Component {
                     }
                 </div>
                 <div
-                    ref={treeContainer => this.tree = treeContainer}
+                    ref={
+                        (treeContainer) => {
+                            this.tree = treeContainer;
+                        }
+                    }
                     className="ort-tree-wrapper"
                 >
                     <Tree
