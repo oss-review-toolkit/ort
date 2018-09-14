@@ -81,7 +81,7 @@ class SummaryView extends React.Component {
 
                 if (data.errors.data.addressed
                     && Number.isInteger(data.errors.total.addressed)) {
-                        viewData.errors.addressed = data.errors.data.addressed;
+                    viewData.errors.addressed = data.errors.data.addressed;
                     viewData.errors.totalAddressed = data.errors.total.addressed;
                 }
             }
@@ -168,7 +168,7 @@ class SummaryView extends React.Component {
                             tab={(
                                 <span>
                                     Errors (
-                                        {viewData.errors.totalOpen}
+                                    {viewData.errors.totalOpen}
                                     )
                                 </span>
                             )}
@@ -180,7 +180,7 @@ class SummaryView extends React.Component {
                             tab={(
                                 <span>
                                     Addressed Errors (
-                                        {viewData.errors.totalAddressed}
+                                    {viewData.errors.totalAddressed}
                                     )
                                 </span>
                             )}
@@ -222,7 +222,7 @@ class SummaryView extends React.Component {
                         tab={(
                             <span>
                                 Declared licenses (
-                                    {nrDeclaredLicenses}
+                                {nrDeclaredLicenses}
                                 )
                             </span>
                         )}
@@ -307,7 +307,7 @@ class SummaryView extends React.Component {
             };
             const renderMetadataTable = () => {
                 if (!data.metadata
-                    || Object.keys(data.metadata).length == 0) {
+                    || Object.keys(data.metadata).length === 0) {
                     return null;
                 }
 
@@ -315,7 +315,9 @@ class SummaryView extends React.Component {
                     return (
                         <div className="ort-metadata-props">
                             <div onClick={this.onClickReviewMetadata} className="ort-clickable">
-                                Show metadata <Icon type="right" />
+                                Show metadata
+                                {' '}
+                                <Icon type="right" />
                             </div>
                         </div>
                     );
@@ -324,7 +326,9 @@ class SummaryView extends React.Component {
                 return (
                     <div className="ort-metadata-props">
                         <div onClick={this.onClickReviewMetadata} className="ort-clickable">
-                            Hide metadata <Icon type="down" />
+                            Hide metadata
+                            {''}
+                            <Icon type="down" />
                         </div>
                         <table>
                             <tbody>
@@ -333,30 +337,30 @@ class SummaryView extends React.Component {
                                         if (value.startsWith('http')) {
                                             return (
                                                 <tr key={`metadata-${key}`}>
-                                                <th>
-                                                    {`${key}:`}
-                                                </th>
-                                                <td>
-                                                    <a
-                                                        href={value}
-                                                        rel="noopener noreferrer"
-                                                        target="_blank"
-                                                    >
-                                                        {value}
-                                                    </a>
-                                                </td>
+                                                    <th>
+                                                        {`${key}:`}
+                                                    </th>
+                                                    <td>
+                                                        <a
+                                                            href={value}
+                                                            rel="noopener noreferrer"
+                                                            target="_blank"
+                                                        >
+                                                            {value}
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             );
                                         }
 
                                         return (
                                             <tr key={`metadata-${key}`}>
-                                            <th>
-                                                {`${key}:`}
-                                            </th>
-                                            <td>
-                                                {value}
-                                            </td>
+                                                <th>
+                                                    {`${key}:`}
+                                                </th>
+                                                <td>
+                                                    {value}
+                                                </td>
                                             </tr>
                                         );
                                     }
@@ -366,7 +370,7 @@ class SummaryView extends React.Component {
                             </tbody>
                         </table>
                     </div>
-              );
+                );
             };
             let vcs;
 
