@@ -24,9 +24,9 @@ package com.here.ort.model.config
  */
 data class ScopeExclude(
         /**
-         * The name of the scope.
+         * A regular expression to match the names of scopes to exclude.
          */
-        val name: String,
+        val name: Regex,
 
         /**
          * The reason why the scope is excluded, out of a predefined choice.
@@ -37,4 +37,9 @@ data class ScopeExclude(
          * A comment to further explain why the [reason] is applicable here.
          */
         val comment: String
-)
+) {
+    /**
+     * True if [ScopeExclude.name] matches [scopeName].
+     */
+    fun matches(scopeName: String) = name.matches(scopeName)
+}

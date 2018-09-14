@@ -82,13 +82,13 @@ class RepositoryConfigurationTest : WordSpec() {
                 project2.exclude shouldBe false
 
                 project2.scopes should haveSize(1)
-                project2.scopes.first().name shouldBe "scope"
+                project2.scopes.first().name.toString() shouldBe "scope"
                 project2.scopes.first().reason shouldBe ScopeExcludeReason.PROVIDED_BY
                 project2.scopes.first().comment shouldBe "scope comment"
 
                 val scopes = repositoryConfiguration.excludes!!.scopes
                 scopes should haveSize(1)
-                scopes.first().name shouldBe "scope"
+                scopes.first().name.toString() shouldBe "scope"
                 scopes.first().reason shouldBe ScopeExcludeReason.TEST_CASE_OF
                 scopes.first().comment shouldBe "scope comment"
             }

@@ -79,7 +79,7 @@ class ExcludesTest : WordSpec() {
             "return true if all occurrences of the package are excluded" {
                 val excludes = Excludes(
                         projects = listOf(ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "comment")),
-                        scopes = listOf(ScopeExclude("testScope", ScopeExcludeReason.PROVIDED_BY, "comment"))
+                        scopes = listOf(ScopeExclude(Regex("testScope"), ScopeExcludeReason.PROVIDED_BY, "comment"))
                 )
 
                 val analyzerResult = AnalyzerResult(
@@ -100,7 +100,7 @@ class ExcludesTest : WordSpec() {
             "return false if not all occurrences of the package are excluded" {
                 val excludes = Excludes(
                         projects = listOf(ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "comment")),
-                        scopes = listOf(ScopeExclude("testScope", ScopeExcludeReason.PROVIDED_BY, "comment"))
+                        scopes = listOf(ScopeExclude(Regex("testScope"), ScopeExcludeReason.PROVIDED_BY, "comment"))
                 )
 
                 val analyzerResult = AnalyzerResult(
@@ -155,7 +155,7 @@ class ExcludesTest : WordSpec() {
                 val excludes = Excludes(
                         projects = listOf(
                                 ProjectExclude(path = "path1", scopes = listOf(
-                                        ScopeExclude("scope", ScopeExcludeReason.PROVIDED_BY, "comment")
+                                        ScopeExclude(Regex("scope"), ScopeExcludeReason.PROVIDED_BY, "comment")
                                 ))
                         )
                 )
@@ -182,7 +182,7 @@ class ExcludesTest : WordSpec() {
                 val excludes = Excludes(
                         projects = listOf(
                                 ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "comment",
-                                        listOf(ScopeExclude("scope", ScopeExcludeReason.PROVIDED_BY, "comment")))
+                                        listOf(ScopeExclude(Regex("scope"), ScopeExcludeReason.PROVIDED_BY, "comment")))
                         )
                 )
 
@@ -191,7 +191,15 @@ class ExcludesTest : WordSpec() {
 
             "return true if the scope is excluded globally" {
                 val excludes = Excludes(
-                        scopes = listOf(ScopeExclude("scope", ScopeExcludeReason.PROVIDED_BY, "comment"))
+                        scopes = listOf(ScopeExclude(Regex("scope"), ScopeExcludeReason.PROVIDED_BY, "comment"))
+                )
+
+                excludes.isScopeExcluded(scope, project) shouldBe true
+            }
+
+            "return true if the scope is excluded using a regex" {
+                val excludes = Excludes(
+                        scopes = listOf(ScopeExclude(Regex("sc.*"), ScopeExcludeReason.PROVIDED_BY, "comment"))
                 )
 
                 excludes.isScopeExcluded(scope, project) shouldBe true
