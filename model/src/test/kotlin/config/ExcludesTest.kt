@@ -197,6 +197,14 @@ class ExcludesTest : WordSpec() {
                 excludes.isScopeExcluded(scope, project) shouldBe true
             }
 
+            "return true if the scope is excluded using a regex" {
+                val excludes = Excludes(
+                        scopes = listOf(ScopeExclude("sc.*", ScopeExcludeReason.PROVIDED_BY, "comment"))
+                )
+
+                excludes.isScopeExcluded(scope, project) shouldBe true
+            }
+
             "return false if the scope is not excluded" {
                 val excludes = Excludes()
 

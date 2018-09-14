@@ -19,12 +19,14 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 /**
  * Defines a scope that should be excluded.
  */
 data class ScopeExclude(
         /**
-         * The name of the scope.
+         * A regular expression to match the names of scopes to exclude.
          */
         val name: String,
 
@@ -37,4 +39,12 @@ data class ScopeExclude(
          * A comment to further explain why the [reason] is applicable here.
          */
         val comment: String
-)
+) {
+    @JsonIgnore
+    private val nameRegex = Regex(name)
+
+    /**
+     * True if [ScopeExclude.name] matches [name].
+     */
+    fun matches(name: String) = nameRegex.matches(name)
+}
