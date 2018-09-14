@@ -67,6 +67,6 @@ data class Excludes(
      * True if the [scope] is excluded in [project] by this [Excludes] configuration.
      */
     fun isScopeExcluded(scope: Scope, project: Project) =
-            scopes.any { it.name == scope.name }
-                    || findProjectExclude(project)?.scopes?.any { it.name == scope.name } ?: false
+            scopes.any { it.matches(scope.name) }
+                    || findProjectExclude(project)?.scopes?.any { it.matches(scope.name) } ?: false
 }

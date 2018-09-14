@@ -19,14 +19,18 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
+
 /**
  * Defines a scope that should be excluded.
  */
 data class ScopeExclude(
         /**
-         * The name of the scope.
+         * A regular expression to match the names of scopes to exclude.
          */
-        val name: String,
+        @JsonSerialize(using = ToStringSerializer::class)
+        val name: Regex,
 
         /**
          * The reason why the scope is excluded, out of a predefined choice.
@@ -37,4 +41,11 @@ data class ScopeExclude(
          * A comment to further explain why the [reason] is applicable here.
          */
         val comment: String
-)
+) {
+    constructor(name: String, reason: ScopeExcludeReason, comment: String) : this(Regex(name), reason, comment)
+
+    /**
+     * True if [ScopeExclude.name] matches [scopeName].
+     */
+    fun matches(scopeName: String) = name.matches(scopeName)
+}
