@@ -29,6 +29,4 @@ dependencies {
     implementation "org.apache.maven.resolver:maven-resolver-transport-wagon:$mavenResolverVersion"
 
     implementation "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
-
-    implementation "org.scala-sbt:sbt-launch:$sbtLaunchVersion"
 }
