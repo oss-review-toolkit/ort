@@ -27,6 +27,9 @@ import com.here.ort.utils.OS
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
+import java.io.IOException
+
+val YARN_LOCK_FILES = listOf("yarn.lock")
 
 /**
  * The Yarn package manager for JavaScript, see https://www.yarnpkg.com/.
@@ -34,23 +37,57 @@ import java.io.File
 class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         NPM(analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>() {
-        override val globsForDefinitionFiles = listOf("yarn.lock")
+        override val globsForDefinitionFiles = listOf("package.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Yarn(analyzerConfig, repoConfig)
     }
 
-    override val recognizedLockFiles = listOf("yarn.lock")
+    override val recognizedLockFiles = YARN_LOCK_FILES
 
     override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a fixed
-        // minor version to be sure to get consistent results.
-        checkVersion(Requirement.buildNPM("1.3.* - 1.9.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        val conflictingLockFiles = mutableMapOf<File, Pair<List<File>, List<File>>>()
 
-        // Map "yarn.lock" files to existing "package.json" files for use by the NPM class (which in this case calls
-        // "yarn" to install the dependencies).
-        return definitionFiles.mapNotNull { File(it.parentFile, "package.json").takeIf { it.isFile } }
+        // Only keep those definition files that are accompanied by a Yarn lock file.
+        val yarnDefinitionFiles = definitionFiles.filter { definitionFile ->
+            val existingYarnLockFiles = recognizedLockFiles.mapNotNull { lockFileName ->
+                definitionFile.resolveSibling(lockFileName).takeIf { it.isFile }
+            }
+
+            val existingNpmLockFiles = super.recognizedLockFiles.mapNotNull { lockFileName ->
+                definitionFile.resolveSibling(lockFileName).takeIf { it.isFile }
+            }
+
+            if (existingYarnLockFiles.isNotEmpty()) {
+                if (existingNpmLockFiles.isNotEmpty()) {
+                    conflictingLockFiles.put(definitionFile, Pair(existingYarnLockFiles, existingNpmLockFiles))
+                }
+
+                true
+            } else {
+                false
+            }
+        }
+
+        if (conflictingLockFiles.isNotEmpty()) {
+            val message = StringBuilder("Found the following conflicting lock files:").appendln()
+            conflictingLockFiles.forEach { definitionfile, (yarnLockFiles, npmLockFiles) ->
+                val yarnLockFileNames = yarnLockFiles.map { it.name }
+                val npmLockFileNames = npmLockFiles.map { it.name }
+                message.appendln("For '$definitionfile', $yarnLockFileNames vs. $npmLockFileNames.")
+            }
+
+            throw IOException(message.toString())
+        }
+
+        if (yarnDefinitionFiles.isNotEmpty()) {
+            // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
+            // fixed minor version to be sure to get consistent results.
+            checkVersion(Requirement.buildNPM("1.3.* - 1.9.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        }
+
+        return yarnDefinitionFiles
     }
 }

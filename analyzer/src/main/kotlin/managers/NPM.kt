@@ -63,6 +63,8 @@ import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.Hex
 
+val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
+
 /**
  * The Node package manager for JavaScript, see https://www.npmjs.com/.
  */
@@ -113,16 +115,23 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         }
     }
 
-    protected open val recognizedLockFiles = listOf("npm-shrinkwrap.json", "package-lock.json")
+    protected open val recognizedLockFiles = NPM_LOCK_FILES
 
     override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        // We do not actually depend on any features specific to an NPM version, but we still want to stick to a fixed
-        // minor version to be sure to get consistent results.
-        checkVersion(Requirement.buildNPM("5.5.* - 6.4.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        // Only keep those definition files that are not accompanied by a Yarn lock file.
+        val npmDefinitionFiles = definitionFiles.filterNot { definitionFile ->
+            YARN_LOCK_FILES.any { definitionFile.resolveSibling(it).isFile }
+        }
 
-        return definitionFiles
+        if (npmDefinitionFiles.isNotEmpty()) {
+            // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
+            // fixed minor version to be sure to get consistent results.
+            checkVersion(Requirement.buildNPM("5.5.* - 6.4.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        }
+
+        return npmDefinitionFiles
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
