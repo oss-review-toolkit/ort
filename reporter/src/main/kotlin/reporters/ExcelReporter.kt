@@ -168,13 +168,13 @@ class ExcelReporter : TableReporter() {
 
             sheet.createRow(currentRow).apply {
                 CellUtil.createCell(this, 0, row.id.toString(), cellStyle)
-                CellUtil.createCell(this, 1, row.scopes.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 1, row.scopes.keys.joinWithLimit(), cellStyle)
                 CellUtil.createCell(this, 2, row.declaredLicenses.joinWithLimit(), cellStyle)
                 CellUtil.createCell(this, 3, row.detectedLicenses.joinWithLimit(), cellStyle)
                 CellUtil.createCell(this, 4, row.analyzerErrors.map { it.toString() }.joinWithLimit(), cellStyle)
                 CellUtil.createCell(this, 5, row.scanErrors.map { it.toString() }.joinWithLimit(), cellStyle)
 
-                val maxLines = listOf(row.scopes, row.declaredLicenses, row.detectedLicenses,
+                val maxLines = listOf(row.scopes.values, row.declaredLicenses, row.detectedLicenses,
                         row.analyzerErrors, row.scanErrors).map { it.size }.max() ?: 1
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }

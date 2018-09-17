@@ -48,6 +48,14 @@ data class Excludes(
     fun findProjectExclude(project: Project) = projects.find { it.path == project.definitionFilePath }
 
     /**
+     * Return the [ScopeExclude]s for the provided [scope]. This includes global excludes as well as excludes in the
+     * context of [project].
+     */
+    fun findScopeExcludes(scope: Scope, project: Project) =
+            scopes.filter { it.matches(scope.name) } +
+                    (findProjectExclude(project)?.scopes?.filter { it.matches(scope.name) } ?: emptyList())
+
+    /**
      * True if all occurrences of the package identified by [id] in the [analyzerResult] are excluded by this [Excludes]
      * configuration.
      */
