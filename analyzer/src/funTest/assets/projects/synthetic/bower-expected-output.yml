@@ -23,7 +23,7 @@ project:
       - id: "Bower::shadycss:1.5.2"
         dependencies: []
         errors: []
-      - id: "Bower::webcomponentsjs:1.2.6"
+      - id: "Bower::webcomponentsjs:1.2.7"
         dependencies: []
         errors: []
       errors: []
@@ -108,7 +108,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bower::webcomponentsjs:1.2.6"
+    id: "Bower::webcomponentsjs:1.2.7"
     declared_licenses:
     - "BSD-3-Clause"
     description: "Web components polyfill"
@@ -124,12 +124,12 @@ packages:
     vcs:
       type: "git"
       url: "https://github.com/webcomponents/webcomponentsjs.git"
-      revision: "9de0f8438485eea4da07086d3237a0400ee30e91"
+      revision: "57ed75b1730f291772bafb134f00d4821cb1a768"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/webcomponents/webcomponentsjs.git"
-      revision: "9de0f8438485eea4da07086d3237a0400ee30e91"
+      revision: "57ed75b1730f291772bafb134f00d4821cb1a768"
       path: ""
   curations: []
 errors: []
