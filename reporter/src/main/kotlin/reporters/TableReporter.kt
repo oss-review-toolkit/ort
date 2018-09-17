@@ -25,6 +25,8 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.ProjectExclude
+import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.Reporter
 import com.here.ort.utils.zipWithDefault
 
@@ -69,7 +71,15 @@ abstract class TableReporter : Reporter() {
     )
 
     data class ProjectTable(
-            val rows: List<DependencyRow>
+            /**
+             * The dependencies of this project.
+             */
+            val rows: List<DependencyRow>,
+
+            /**
+             * Information about if and why the project is excluded.
+             */
+            val exclude: ProjectExclude? = null
     )
 
     data class DependencyRow(
@@ -81,7 +91,7 @@ abstract class TableReporter : Reporter() {
             /**
              * The scopes the package is used in.
              */
-            val scopes: SortedSet<String>,
+            val scopes: SortedMap<String, List<ScopeExclude>>,
 
             /**
              * The licenses declared by the package.
@@ -106,7 +116,7 @@ abstract class TableReporter : Reporter() {
         fun merge(other: DependencyRow) =
                 DependencyRow(
                         id = id,
-                        scopes = (scopes + other.scopes).toSortedSet(),
+                        scopes = scopes.zipWithDefault(other.scopes, emptyList()) { a, b -> a + b }.toSortedMap(),
                         declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
                         detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
                         analyzerErrors = (analyzerErrors + other.analyzerErrors).distinct(),
@@ -163,10 +173,20 @@ abstract class TableReporter : Reporter() {
         val scanRecord = ortResult.scanner!!.results
 
         val projectTables = analyzerResult.projects.associate { project ->
+            val projectExclude = ortResult.repository.config.excludes?.findProjectExclude(project)?.let { exclude ->
+                // Only add the project exclude to the model if the whole project is excluded. If only parts of the
+                // project are excluded this information will be stored in the rows of the affected dependencies.
+                exclude.takeIf { it.exclude }
+            }
+
             val tableRows = (listOf(project.id) + project.collectDependencyIds()).map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
-                val scopes = project.scopes.filter { id in it }.map { it.name }.toSortedSet()
+                val scopes = project.scopes.filter { id in it }.associate {
+                    val scopeExcludes = ortResult.repository.config.excludes?.findScopeExcludes(it, project)
+                            ?: emptyList()
+                    Pair(it.name, scopeExcludes)
+                }.toSortedMap()
 
                 val declaredLicenses = analyzerResult.projects.find { it.id == id }?.declaredLicenses
                         ?: analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
@@ -194,7 +214,8 @@ abstract class TableReporter : Reporter() {
                         scanErrors = scanErrors
                 ).also { row ->
                     summaryRows[row.id] = summaryRows[row.id]?.merge(row) ?: row
-                    if (row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty()) {
+                    if ((row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty())
+                            && (scopes.isEmpty() || scopes.any { it.value.isEmpty() }) && projectExclude == null) {
                         val errorRow = ErrorRow(
                                 id = row.id,
                                 analyzerErrors = if (row.analyzerErrors.isNotEmpty())
@@ -208,7 +229,7 @@ abstract class TableReporter : Reporter() {
                 }
             }
 
-            Pair(project, ProjectTable(tableRows))
+            Pair(project, ProjectTable(tableRows, projectExclude))
         }.toSortedMap()
 
         val errorSummaryTable = ErrorTable(errorSummaryRows.values.toList().sortedBy { it.id })
