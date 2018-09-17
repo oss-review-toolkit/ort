@@ -22,10 +22,12 @@ package com.here.ort.reporter.reporters
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.ScopeExclude
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.log
 
 import java.io.File
+import java.util.*
 
 class StaticHtmlReporter : TableReporter() {
     override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File) {
@@ -254,6 +256,18 @@ class StaticHtmlReporter : TableReporter() {
                       margin: 0;
                       padding: 0;
                   }
+
+                  .excluded {
+                      filter: opacity(50%);
+                  }
+
+                  .reason {
+                      border-radius: 3px;
+                      background: #EEE;
+                      padding: 2px;
+                      font-size: 12px;
+                      display: inline;
+                  }
                 </style>
             </head>
             <body>
@@ -293,8 +307,12 @@ class StaticHtmlReporter : TableReporter() {
                 if (tabularScanRecord.errorSummary.rows.isNotEmpty()) {
                     append("<li><a href=\"#error-summary\">Error Summary</a></li>")
                 }
-                tabularScanRecord.projectDependencies.keys.forEach { project ->
-                    append("<li><a href=\"#${project.id}\">${project.id}</a></li>")
+                tabularScanRecord.projectDependencies.forEach { (project, projectTable) ->
+                    append("<li><a href=\"#${project.id}\">${project.id}")
+                    projectTable.exclude?.let { exclude ->
+                        append(" <div class=\"reason\">Excluded: ${exclude.reason} - ${exclude.comment}</div>")
+                    }
+                    append("</a></li>")
                 }
                 append("</ul>")
 
@@ -337,8 +355,8 @@ class StaticHtmlReporter : TableReporter() {
                                 <a href="#$id">$id</a>
                                 <ul>
                                     ${errors.joinToString("\n") {
-                                        "<li>${it.toString().replace("\n", "<br/>")}</li>"
-                                    }}
+                            "<li>${it.toString().replace("\n", "<br/>")}</li>"
+                        }}
                                 </ul>""".trimIndent())
                     }
 
@@ -366,12 +384,23 @@ class StaticHtmlReporter : TableReporter() {
 
     private fun createTable(title: String, vcsInfo: VcsInfo?, summary: TableReporter.ProjectTable, anchor: String) =
             buildString {
+                val excludedClass = if (summary.exclude != null) " excluded" else ""
+
                 append("<h2><a id=\"$anchor\"></a>$title</h2>")
+
+                summary.exclude?.let { exclude ->
+                    append("""
+                        <h3>Project is Excluded</h3>
+                        <p>
+                            The project is excluded for the following reason:<br/>
+                            <div class="reason">${exclude.reason} - ${exclude.comment}</div>
+                        </p>""".trimIndent())
+                }
 
                 if (vcsInfo != null) {
                     append("""
-                        <h3>VCS Information</h3>
-                        <table class="report-metadata">
+                        <h3 class="$excludedClass">VCS Information</h3>
+                        <table class="report-metadata$excludedClass">
                         <tbody>
                             <tr>
                                 <td>Type</td>
@@ -394,8 +423,8 @@ class StaticHtmlReporter : TableReporter() {
                 }
 
                 append("""
-                    <h3>Packages</h3>
-                    <table class="report-packages">
+                    <h3 class="$excludedClass">Packages</h3>
+                    <table class="report-packages$excludedClass">
                     <thead>
                     <tr>
                         <th>Package</th>
@@ -410,6 +439,10 @@ class StaticHtmlReporter : TableReporter() {
                     """.trimIndent())
 
                 summary.rows.forEach { row ->
+                    // Only mark the row as excluded if all scopes the dependency appears in are excluded.
+                    val rowExcludedClass = if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
+                        " excluded" else ""
+
                     val cssClass = when {
                         row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty() -> "error"
                         row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "warning"
@@ -417,9 +450,9 @@ class StaticHtmlReporter : TableReporter() {
                     }
 
                     append("""
-                        <tr class="$cssClass">
+                        <tr class="$cssClass$rowExcludedClass">
                             <td>${row.id}</td>
-                            <td>${row.scopes.keys.joinToString("<br/>")}</td>
+                            <td>${formatScopes(row.scopes)}</td>
                             <td>${row.declaredLicenses.joinToString("<br/>")}</td>
                             <td>${row.detectedLicenses.joinToString("<br/>")}</td>
                             <td><ul>
@@ -436,5 +469,21 @@ class StaticHtmlReporter : TableReporter() {
                 }
 
                 append("</tbody></table>")
+            }
+
+    private fun formatScopes(scopes: SortedMap<String, List<ScopeExclude>>) =
+            scopes.entries.asSequence().sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
+                    .joinToString(separator = "", prefix = "<ul>", postfix = "</ul>") {
+                        val excludedClass = if (it.value.isNotEmpty()) "excluded" else ""
+                        "<li class=\"$excludedClass\">${it.key}${formatScopeExcludes(it.value)}</li>"
+                    }
+
+    private fun formatScopeExcludes(scopeExcludes: List<ScopeExclude>) =
+            buildString {
+                if (scopeExcludes.isNotEmpty()) {
+                    append(" <div class=\"reason\">Excluded: ")
+                    append(scopeExcludes.joinToString { "${it.reason} - ${it.comment}" })
+                    append("</div>")
+                }
             }
 }
