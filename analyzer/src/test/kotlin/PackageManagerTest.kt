@@ -55,7 +55,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["PIP"] shouldBe listOf(File(projectDir, "setup.py"))
             managedFilesByName["SBT"] shouldBe listOf(File(projectDir, "build.sbt"))
             managedFilesByName["Stack"] shouldBe listOf(File(projectDir, "stack.yaml"))
-            managedFilesByName["Yarn"] shouldBe listOf(File(projectDir, "yarn.lock"))
+            managedFilesByName["Yarn"] shouldBe listOf(File(projectDir, "package.json"))
         }
 
         "find only files for active package managers" {
