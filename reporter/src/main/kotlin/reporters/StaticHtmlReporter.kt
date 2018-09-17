@@ -419,7 +419,7 @@ class StaticHtmlReporter : TableReporter() {
                     append("""
                         <tr class="$cssClass">
                             <td>${row.id}</td>
-                            <td>${row.scopes.joinToString("<br/>")}</td>
+                            <td>${row.scopes.keys.joinToString("<br/>")}</td>
                             <td>${row.declaredLicenses.joinToString("<br/>")}</td>
                             <td>${row.detectedLicenses.joinToString("<br/>")}</td>
                             <td><ul>
