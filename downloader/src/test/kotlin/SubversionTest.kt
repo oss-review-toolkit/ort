@@ -68,7 +68,7 @@ class SubversionTest : StringSpec() {
         "Detected Subversion working tree information is correct".config(enabled = svn.isInPath()) {
             val workingTree = svn.getWorkingTree(zipContentDir)
 
-            workingTree.getType() shouldBe "Subversion"
+            workingTree.vcsType shouldBe "Subversion"
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code/trunk/docutils"
             workingTree.getRevision() shouldBe "8207"

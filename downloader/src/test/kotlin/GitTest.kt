@@ -69,7 +69,7 @@ class GitTest : StringSpec() {
         "Detected Git working tree information is correct" {
             val workingTree = git.getWorkingTree(zipContentDir)
 
-            workingTree.getType() shouldBe "Git"
+            workingTree.vcsType shouldBe "Git"
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://github.com/naiquevin/pipdeptree.git"
             workingTree.getRevision() shouldBe "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c"

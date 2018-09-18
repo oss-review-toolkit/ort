@@ -20,6 +20,7 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingTree
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 
@@ -44,7 +45,7 @@ abstract class GitBase : VersionControlSystem(), CommandLineTool {
                 }
             }
 
-    open inner class GitWorkingTree(workingDir: File) : WorkingTree(workingDir) {
+    open inner class GitWorkingTree(workingDir: File) : WorkingTree(workingDir, type) {
         override fun isValid(): Boolean {
             if (!workingDir.isDirectory) {
                 return false

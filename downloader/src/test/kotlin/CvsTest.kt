@@ -68,7 +68,7 @@ class CvsTest : StringSpec() {
         "Detected CVS working tree information is correct".config(enabled = cvs.isInPath() && false) {
             val workingTree = cvs.getWorkingTree(zipContentDir)
 
-            workingTree.getType() shouldBe "Cvs"
+            workingTree.vcsType shouldBe "Cvs"
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe ":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex"
             workingTree.getRevision() shouldBe "8707a14c78c6e77ffc59e685360fa20071c1afb6"
