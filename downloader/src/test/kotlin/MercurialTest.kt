@@ -70,7 +70,7 @@ class MercurialTest : StringSpec() {
         "Detected Mercurial working tree information is correct".config(enabled = hg.isInPath()) {
             val workingTree = hg.getWorkingTree(zipContentDir)
 
-            workingTree.getType() shouldBe "Mercurial"
+            workingTree.vcsType shouldBe "Mercurial"
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://bitbucket.org/facebook/lz4revlog"
             workingTree.getRevision() shouldBe "422ca71c35132f1f55d20a13355708aec7669b50"
