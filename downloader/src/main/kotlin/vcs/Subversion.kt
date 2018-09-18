@@ -163,7 +163,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
-        log.info { "Using $this version ${getVersion()}." }
+        log.info { "Using $type version ${getVersion()}." }
 
         try {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
@@ -191,7 +191,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
 
                 if (pkg.vcsProcessed.path.startsWith("tags/")) {
                     log.info {
-                        "Ignoring the $this revision '${pkg.vcsProcessed.revision}' as the path points to a tag."
+                        "Ignoring the $type revision '${pkg.vcsProcessed.revision}' as the path points to a tag."
                     }
 
                     val pathComponents = pkg.vcsProcessed.path.split('/', limit = 3)
@@ -199,7 +199,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                     tagPath = pathComponents[0] + "/" + pathComponents.getOrElse(1) { "" }
                     path = pkg.vcsProcessed.path
                 } else {
-                    log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
+                    log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
 
                     revision = try {
                         getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
@@ -208,7 +208,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                     }
 
                     log.warn {
-                        "Using guessed $this revision '$revision' for version '${pkg.id.version}'. This might cause " +
+                        "Using guessed $type revision '$revision' for version '${pkg.id.version}'. This might cause " +
                                 "the downloaded source code to not match the package version."
                     }
 
@@ -224,7 +224,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                 getWorkingTree(File(targetDir, tagPath))
             }
         } catch (e: IOException) {
-            throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
+            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
 }

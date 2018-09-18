@@ -98,7 +98,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
-        log.info { "Using $this version ${getVersion()}." }
+        log.info { "Using $type version ${getVersion()}." }
 
         try {
             // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
@@ -129,11 +129,11 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             val revision = if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
                 pkg.vcsProcessed.revision
             } else {
-                log.info { "Trying to guess a $this revision for version '${pkg.id.version}'." }
+                log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
                 try {
                     workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
                         log.warn {
-                            "Using guessed $this revision '$revision' for version '${pkg.id.version}'. This might " +
+                            "Using guessed $type revision '$revision' for version '${pkg.id.version}'. This might " +
                                     "cause the downloaded source code to not match the package version."
                         }
                     }
@@ -152,7 +152,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
             return workingTree
         } catch (e: IOException) {
-            throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
+            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
 }

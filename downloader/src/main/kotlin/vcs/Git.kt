@@ -44,7 +44,7 @@ class Git : GitBase() {
 
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
-        log.info { "Using $this version ${getVersion()}." }
+        log.info { "Using $type version ${getVersion()}." }
 
         try {
             return createWorkingTree(pkg, targetDir, allowMovingRevisions).also {
@@ -53,7 +53,7 @@ class Git : GitBase() {
                 }
             }
         } catch (e: IOException) {
-            throw DownloadException("$this failed to download from URL '${pkg.vcsProcessed.url}'.", e)
+            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
     }
 
@@ -87,16 +87,16 @@ class Git : GitBase() {
             }
         }
 
-        log.info { "Trying to guess a $this revision for version '${pkg.id.version}' to fall back to." }
+        log.info { "Trying to guess a $type revision for version '${pkg.id.version}' to fall back to." }
         try {
             workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
                 revisionCandidates += revision
-                log.info { "Found $this revision '$revision' for version '${pkg.id.version}'." }
+                log.info { "Found $type revision '$revision' for version '${pkg.id.version}'." }
             }
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.info { "No $this revision for version '${pkg.id.version}' found: ${e.message}" }
+            log.info { "No $type revision for version '${pkg.id.version}' found: ${e.message}" }
         }
 
         val revision = revisionCandidates.firstOrNull()

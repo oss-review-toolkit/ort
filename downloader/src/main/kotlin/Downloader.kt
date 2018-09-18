@@ -93,7 +93,7 @@ class Downloader {
         // work.
         val projectPackages = projects.map { it.toPackage() }
         val projectPackagesByVcs = projectPackages.groupBy {
-            if (it.vcsProcessed.type == GitRepo().toString()) {
+            if (it.vcsProcessed.type == GitRepo().type) {
                 it.vcsProcessed
             } else {
                 it.vcsProcessed.copy(path = "")
@@ -200,7 +200,7 @@ class Downloader {
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
 
         val vcsInfo = VcsInfo(
-                type = applicableVcs.toString(),
+                type = applicableVcs.type,
                 url = target.vcsProcessed.url,
                 revision = target.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
                 resolvedRevision = revision,
