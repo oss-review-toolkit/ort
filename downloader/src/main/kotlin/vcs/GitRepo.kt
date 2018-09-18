@@ -42,14 +42,14 @@ class GitRepo : GitBase() {
         val repoRoot = vcsDirectory.searchUpwardsForSubdirectory(".repo")
 
         return if (repoRoot == null) {
-            object : GitWorkingTree(vcsDirectory) {
+            object : GitWorkingTree(vcsDirectory, this) {
                 override fun isValid() = false
             }
         } else {
             // GitRepo is special in that the workingDir points to the Git working tree of the manifest files, yet
             // the root path is the directory containing the ".repo" directory. This way Git operations work on a valid
             // Git repository, but path operations work relative to the path GitRepo was initialized in.
-            object : GitWorkingTree(File(repoRoot, ".repo/manifests")) {
+            object : GitWorkingTree(File(repoRoot, ".repo/manifests"), this) {
                 // Return the path to the manifest as part of the VCS information, as that is required to recreate the
                 // working tree.
                 override fun getInfo(): VcsInfo {
