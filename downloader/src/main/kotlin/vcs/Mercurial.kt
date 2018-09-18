@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
@@ -56,7 +57,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory) {
+            object : WorkingTree(vcsDirectory, type) {
                 override fun isValid(): Boolean {
                     if (!workingDir.isDirectory) {
                         return false

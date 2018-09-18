@@ -28,6 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.model.xmlMapper
 import com.here.ort.utils.CommandLineTool
@@ -108,7 +109,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
             }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory) {
+            object : WorkingTree(vcsDirectory, type) {
                 private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
                 private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
                         .with(DeserializationFeature.UNWRAP_ROOT_VALUE)

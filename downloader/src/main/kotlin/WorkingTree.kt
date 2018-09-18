@@ -1,0 +1,105 @@
+/*
+ * Copyright (C) 2017-2018 HERE Europe B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package com.here.ort.downloader
+
+import com.here.ort.model.VcsInfo
+import com.here.ort.utils.filterVersionNames
+import java.io.File
+import java.io.IOException
+
+/**
+ * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
+ * root directory of the tree. The root directory can be determined by calling [getRootPath].
+ */
+abstract class WorkingTree(val workingDir: File, val vcsType: String) {
+
+    /**
+     * Return a simple string representation for the VCS this working tree belongs to.
+     */
+    fun getType(): String = vcsType
+
+    /**
+     * Conveniently return all VCS information about how this working tree was created, so it could be easily
+     * recreated from that information.
+     */
+    open fun getInfo() = VcsInfo(getType(), getRemoteUrl(), getRevision(), path = getPathToRoot(workingDir))
+
+    /**
+     * Return true if the [workingDir] is managed by this VCS, false otherwise.
+     */
+    abstract fun isValid(): Boolean
+
+    /**
+     * Return whether this is a shallow working tree with truncated history.
+     */
+    abstract fun isShallow(): Boolean
+
+    /**
+     * Return the clone URL of the associated remote repository.
+     */
+    abstract fun getRemoteUrl(): String
+
+    /**
+     * Return the VCS-specific working tree revision.
+     */
+    abstract fun getRevision(): String
+
+    /**
+     * Return the root directory of this working tree.
+     */
+    abstract fun getRootPath(): File
+
+    /**
+     * Return the list of branches available in the remote repository.
+     */
+    abstract fun listRemoteBranches(): List<String>
+
+    /**
+     * Return the list of tags available in the remote repository.
+     */
+    abstract fun listRemoteTags(): List<String>
+
+    /**
+     * Search (symbolic) names of VCS revisions for a match with the given [project] and [version].
+     *
+     * @return The matching VCS revision, never blank.
+     * @throws IOException If no or multiple matching revisions are found.
+     */
+    fun guessRevisionName(project: String, version: String): String {
+        val versionNames = filterVersionNames(version, listRemoteTags(), project)
+        return when {
+            versionNames.isEmpty() ->
+                throw IOException("No matching tag found for version '$version'.")
+            versionNames.size > 1 ->
+                throw IOException("Multiple matching tags found for version '$version': $versionNames")
+            else -> versionNames.first()
+        }
+    }
+
+    /**
+     * Return the relative path to [path] with respect to the VCS root.
+     */
+    fun getPathToRoot(path: File): String {
+        val relativePath = path.absoluteFile.relativeTo(getRootPath())
+
+        // Use Unix paths even on Windows for consistent output.
+        return relativePath.invariantSeparatorsPath
+    }
+}

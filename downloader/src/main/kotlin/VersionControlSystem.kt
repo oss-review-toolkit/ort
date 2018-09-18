@@ -24,7 +24,6 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.filterVersionNames
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
@@ -221,85 +220,6 @@ abstract class VersionControlSystem {
      * A string uniquely identifying the type of this [VersionControlSystem], e.g. 'git'.
      */
     val type = javaClass.simpleName
-
-    /**
-     * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
-     * root directory of the tree. The root directory can be determined by calling [getRootPath].
-     */
-    abstract inner class WorkingTree(val workingDir: File) {
-        /**
-         * Return a simple string representation for the VCS this working tree belongs to.
-         */
-        fun getType() = this@VersionControlSystem.type
-
-        /**
-         * Conveniently return all VCS information about how this working tree was created, so it could be easily
-         * recreated from that information.
-         */
-        open fun getInfo() = VcsInfo(getType(), getRemoteUrl(), getRevision(), path = getPathToRoot(workingDir))
-
-        /**
-         * Return true if the [workingDir] is managed by this VCS, false otherwise.
-         */
-        abstract fun isValid(): Boolean
-
-        /**
-         * Return whether this is a shallow working tree with truncated history.
-         */
-        abstract fun isShallow(): Boolean
-
-        /**
-         * Return the clone URL of the associated remote repository.
-         */
-        abstract fun getRemoteUrl(): String
-
-        /**
-         * Return the VCS-specific working tree revision.
-         */
-        abstract fun getRevision(): String
-
-        /**
-         * Return the root directory of this working tree.
-         */
-        abstract fun getRootPath(): File
-
-        /**
-         * Return the list of branches available in the remote repository.
-         */
-        abstract fun listRemoteBranches(): List<String>
-
-        /**
-         * Return the list of tags available in the remote repository.
-         */
-        abstract fun listRemoteTags(): List<String>
-
-        /**
-         * Search (symbolic) names of VCS revisions for a match with the given [project] and [version].
-         *
-         * @return The matching VCS revision, never blank.
-         * @throws IOException If no or multiple matching revisions are found.
-         */
-        fun guessRevisionName(project: String, version: String): String {
-            val versionNames = filterVersionNames(version, listRemoteTags(), project)
-            return when {
-                versionNames.isEmpty() ->
-                    throw IOException("No matching tag found for version '$version'.")
-                versionNames.size > 1 ->
-                    throw IOException("Multiple matching tags found for version '$version': $versionNames")
-                else -> versionNames.first()
-            }
-        }
-
-        /**
-         * Return the relative path to [path] with respect to the VCS root.
-         */
-        fun getPathToRoot(path: File): String {
-            val relativePath = path.absoluteFile.relativeTo(getRootPath())
-
-            // Use Unix paths even on Windows for consistent output.
-            return relativePath.invariantSeparatorsPath
-        }
-    }
 
     /**
      * A list of lowercase names that clearly identify the VCS. For example ["svn", "subversion"] for Subversion.
