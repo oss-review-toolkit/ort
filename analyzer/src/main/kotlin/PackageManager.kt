@@ -67,6 +67,9 @@ abstract class PackageManager(
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
 
         private val IGNORED_DIRECTORY_MATCHERS = listOf(
+                // Ignore intermediate build system directories.
+                ".gradle",
+                "node_modules",
                 // Ignore resources in a standard Maven / Gradle project layout.
                 "src/main/resources",
                 "src/test/resources",
