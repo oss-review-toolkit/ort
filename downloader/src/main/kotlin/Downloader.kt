@@ -200,7 +200,7 @@ class Downloader {
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
 
         val vcsInfo = VcsInfo(
-                type = applicableVcs.toString(),
+                type = applicableVcs.getType(),
                 url = target.vcsProcessed.url,
                 revision = target.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
                 resolvedRevision = revision,

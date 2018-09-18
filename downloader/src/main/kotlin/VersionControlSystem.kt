@@ -170,7 +170,7 @@ abstract class VersionControlSystem {
                         }
                     }
 
-                    val type = forUrl(url)?.toString() ?: ""
+                    val type = forUrl(url)?.getType() ?: ""
                     if (type == "Git") {
                         url += ".git"
                     }
@@ -220,7 +220,7 @@ abstract class VersionControlSystem {
     /**
      * Return the Java class name as a simple way to refer to the [VersionControlSystem].
      */
-    override fun toString(): String = javaClass.simpleName
+    fun getType(): String = javaClass.simpleName
 
     /**
      * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
@@ -230,7 +230,7 @@ abstract class VersionControlSystem {
         /**
          * Return a simple string representation for the VCS this working tree belongs to.
          */
-        fun getType() = this@VersionControlSystem.toString()
+        fun getType() = this@VersionControlSystem.getType()
 
         /**
          * Conveniently return all VCS information about how this working tree was created, so it could be easily
