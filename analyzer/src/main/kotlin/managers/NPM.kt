@@ -452,17 +452,17 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
      * Install dependencies using the given package manager command.
      */
     private fun installDependencies(workingDir: File) {
-        if (!analyzerConfig.allowDynamicVersions) {
-            val lockFiles = recognizedLockFiles.filter {
-                File(workingDir, it).isFile
-            }
+        val existingLockFiles = recognizedLockFiles.filter {
+            File(workingDir, it).isFile
+        }
 
-            when (lockFiles.size) {
+        if (!analyzerConfig.allowDynamicVersions) {
+            when (existingLockFiles.size) {
                 0 -> throw IllegalArgumentException(
                         "No lockfile found in '${workingDir.invariantSeparatorsPath}'. This potentially results in " +
                         "unstable versions of dependencies. To allow this, enable support for dynamic versions."
                 )
-                else -> log.debug { "Found the following lockfile(s): $lockFiles." }
+                else -> log.debug { "Found the following lockfile(s): $existingLockFiles." }
             }
         }
 
@@ -471,6 +471,12 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
         // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         // platforms except for Mac.
+
+        // Remove any lock files created by NPM, if they did not exist before.
+        (recognizedLockFiles - existingLockFiles).forEach {
+            log.debug { "Removing automatically generated lock file '$it'." }
+            File(workingDir, it).delete()
+        }
     }
 
     private fun splitNamespaceAndName(rawName: String): Pair<String, String> {
