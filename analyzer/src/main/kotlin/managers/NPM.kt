@@ -123,7 +123,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
     override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.5.* - 6.4.*")
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 6.4.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
             PackageJsonUtils.mapDefinitionFilesForNpm(definitionFiles).toList()
@@ -503,7 +503,11 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        run(workingDir, "install", "--ignore-scripts")
+        if (hasLockFile(workingDir) && this !is Yarn) {
+            run(workingDir, "ci")
+        } else {
+            run(workingDir, "install", "--ignore-scripts")
+        }
 
         // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
         // platforms except for Mac.
