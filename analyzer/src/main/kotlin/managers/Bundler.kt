@@ -46,8 +46,8 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
-import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.stashDirectories
 import com.here.ort.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
@@ -55,8 +55,6 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
 import okhttp3.Request
@@ -90,17 +88,8 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
-        val vendorDir = File(workingDir, "vendor")
-        var tempVendorDir: File? = null
 
-        try {
-            if (vendorDir.isDirectory) {
-                val tempDir = createTempDir(prefix = "analyzer", directory = workingDir)
-                tempVendorDir = File(tempDir, "vendor")
-                log.warn { "'$vendorDir' already exists, temporarily moving it to '$tempVendorDir'." }
-                Files.move(vendorDir.toPath(), tempVendorDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-            }
-
+        stashDirectories(File(workingDir, "vendor")).use {
             val scopes = mutableSetOf<Scope>()
             val packages = mutableSetOf<Package>()
             val errors = mutableListOf<Error>()
@@ -126,19 +115,6 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
             )
 
             return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet(), errors)
-        } finally {
-            // Delete vendor folder to not pollute the scan.
-            log.info { "Deleting temporary directory '$vendorDir'..." }
-            vendorDir.safeDeleteRecursively()
-
-            // Restore any previously existing "vendor" directory.
-            if (tempVendorDir != null) {
-                log.info { "Restoring original '$vendorDir' directory from '$tempVendorDir'." }
-                Files.move(tempVendorDir.toPath(), vendorDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-                if (!tempVendorDir.parentFile.delete()) {
-                    throw IOException("Unable to delete the '${tempVendorDir.parent}' directory.")
-                }
-            }
         }
     }
 

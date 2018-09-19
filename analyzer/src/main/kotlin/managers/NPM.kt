@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.TOOL_NAME
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
@@ -47,7 +46,7 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.log
-import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.stashDirectories
 
 import com.vdurmont.semver4j.Requirement
 
@@ -57,8 +56,6 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URLEncoder
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
 import okhttp3.Request
@@ -130,19 +127,8 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
-        val modulesDir = File(workingDir, "node_modules")
 
-        var tempModulesDir: File? = null
-        try {
-            // Temporarily move away any existing "node_modules" directory within the same filesystem to ensure
-            // the move can be performed atomically.
-            if (modulesDir.isDirectory) {
-                val tempDir = createTempDir(TOOL_NAME, ".tmp", workingDir)
-                tempModulesDir = File(tempDir, "node_modules")
-                log.warn { "'$modulesDir' already exists, temporarily moving it to '$tempModulesDir'." }
-                Files.move(modulesDir.toPath(), tempModulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-            }
-
+        stashDirectories(File(workingDir, "node_modules")).use {
             // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
             // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
             // dependency is only ever downloaded once.
@@ -158,19 +144,6 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
             return parseProject(definitionFile, sortedSetOf(dependencies, devDependencies),
                     packages.values.toSortedSet())
-        } finally {
-            // Delete node_modules folder to not pollute the scan.
-            log.info { "Deleting temporary '$modulesDir'..." }
-            modulesDir.safeDeleteRecursively()
-
-            // Restore any previously existing "node_modules" directory.
-            if (tempModulesDir != null) {
-                log.info { "Restoring original '$modulesDir' directory from '$tempModulesDir'..." }
-                Files.move(tempModulesDir.toPath(), modulesDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-                if (!tempModulesDir.parentFile.delete()) {
-                    throw IOException("Unable to delete the '${tempModulesDir.parent}' directory.")
-                }
-            }
         }
     }
 
