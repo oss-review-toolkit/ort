@@ -19,6 +19,8 @@
 
 package com.here.ort.utils
 
+import ch.frankel.slf4k.*
+
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.util.ClassUtil
 
@@ -36,6 +38,7 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
+import java.io.Closeable
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintStream
@@ -45,6 +48,7 @@ import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
+import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.security.Permission
 
@@ -566,4 +570,48 @@ fun Throwable.showStackTrace() {
     // We cannot use a function expression for a single "if"-statement, see
     // https://discuss.kotlinlang.org/t/if-operator-in-function-expression/7227.
     if (printStackTrace) printStackTrace()
+}
+
+/**
+ * Return a Closable which temporarily moves the given directories to a temporary directory on initialization. On close
+ * it moves them back to their original location overwriting any conflicting existing directory.
+ */
+fun stashDirectories(vararg directories: File): Closeable = StashDirectory(setOf(*directories))
+
+private class StashDirectory(directories: Set<File>) : Closeable {
+    private val stashedDirectories = mutableMapOf<File, File>()
+
+    init {
+        directories.forEach {
+            stashDir(it)
+        }
+    }
+
+    override fun close() {
+        HashMap(stashedDirectories).forEach {
+            unstashDir(it.key)
+        }
+    }
+
+    private fun stashDir(originalDir: File) {
+        if (!originalDir.isDirectory) return
+
+        val tempDir = createTempDir(originalDir.name, ".tmp", originalDir.parentFile)
+        log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
+
+        Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+        stashedDirectories[originalDir] = tempDir
+    }
+
+    private fun unstashDir(originalDir: File) {
+        originalDir.safeDeleteRecursively()
+
+        val tempDir = stashedDirectories[originalDir]
+        tempDir ?: return
+
+        log.info { "Moving back directory from: '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
+
+        Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+        stashedDirectories.remove(originalDir)
+    }
 }
