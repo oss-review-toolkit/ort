@@ -42,14 +42,12 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.fieldNamesOrEmpty
 import com.here.ort.utils.fieldsOrEmpty
 import com.here.ort.utils.log
-import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.stashDirectories
 import com.here.ort.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 import java.util.Stack
 
@@ -161,8 +159,6 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         }
     }
 
-    private val stashedDirectories = HashMap<File, File>()
-
     override fun toString() = PROVIDER_NAME
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bower.cmd" else "bower"
@@ -179,12 +175,8 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         log.info { "Resolving dependencies for: '${definitionFile.absolutePath}'" }
 
         val workingDir = definitionFile.parentFile
-        val bowerComponentsDir = File(workingDir, "bower_components")
-        val result: ProjectAnalyzerResult?
 
-        try {
-            stashDir(bowerComponentsDir)
-
+        stashDirectories(File(workingDir, "bower_components")).use {
             installDependencies(workingDir)
             val dependenciesJson = listDependencies(workingDir)
             val rootNode = jsonMapper.readTree(dependenciesJson)
@@ -209,36 +201,11 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                     scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
             )
 
-            result = ProjectAnalyzerResult(
+            return ProjectAnalyzerResult(
                     project = project,
                     packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
             )
-        } finally {
-            bowerComponentsDir.safeDeleteRecursively()
-            unstashDir(bowerComponentsDir)
         }
-
-        return result
-    }
-
-    private fun stashDir(originalDir: File) {
-        if (!originalDir.isDirectory) return
-
-        val tempDir = createTempDir("analyzer", ".tmp", originalDir.parentFile)
-        log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
-
-        Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-        stashedDirectories[originalDir] = tempDir
-    }
-
-    private fun unstashDir(originalDir: File) {
-        val tempDir = stashedDirectories[originalDir]
-        tempDir ?: return
-
-        log.info { "Moving back directory from: '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
-
-        Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-        stashedDirectories.remove(originalDir)
     }
 
     private fun installDependencies(workingDir: File) {
