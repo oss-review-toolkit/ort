@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.TOOL_NAME
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Error
 import com.here.ort.model.HashAlgorithm
@@ -46,16 +45,14 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
-import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.stashDirectories
 import com.here.ort.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import java.util.SortedSet
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
@@ -110,17 +107,8 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
-        val vendorDir = File(workingDir, "vendor")
-        var tempVendorDir: File? = null
 
-        try {
-            if (vendorDir.isDirectory) {
-                val tempDir = createTempDir(TOOL_NAME, ".tmp", workingDir)
-                tempVendorDir = File(tempDir, "composer_vendor")
-                log.warn { "'$vendorDir' already exists, temporarily moving it to '$tempVendorDir'." }
-                Files.move(vendorDir.toPath(), tempVendorDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-            }
-
+        stashDirectories(File(workingDir, "vendor")).use {
             val manifest = jsonMapper.readTree(definitionFile)
             val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
                 key.startsWith("require") && value.count() > 0
@@ -156,19 +144,6 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
             val project = parseProject(definitionFile, scopes)
 
             return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
-        } finally {
-            // Delete vendor folder to not pollute the scan.
-            log.info { "Deleting temporary '$vendorDir'..." }
-            vendorDir.safeDeleteRecursively()
-
-            // Restore any previously existing "vendor" directory.
-            if (tempVendorDir != null) {
-                log.info { "Restoring original '$vendorDir' directory from '$tempVendorDir'." }
-                Files.move(tempVendorDir.toPath(), vendorDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-                if (!tempVendorDir.parentFile.delete()) {
-                    throw IOException("Unable to delete the '${tempVendorDir.parent}' directory.")
-                }
-            }
         }
     }
 
