@@ -609,7 +609,7 @@ private class StashDirectory(directories: Set<File>) : Closeable {
         val tempDir = stashedDirectories[originalDir]
         tempDir ?: return
 
-        log.info { "Moving back directory from: '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
+        log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
 
         Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
         stashedDirectories.remove(originalDir)
