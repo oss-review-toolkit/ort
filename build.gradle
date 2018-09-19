@@ -1,14 +1,9 @@
 plugins {
-    // We need to hard-code the version here because of
-    // https://github.com/gradle/gradle/issues/1697
-    id 'org.jetbrains.kotlin.jvm' version '1.2.70' apply false
-    id 'org.jetbrains.dokka' version '0.9.16' apply false
+    id 'org.jetbrains.kotlin.jvm' apply false
+    id 'org.jetbrains.dokka' apply false
 
-    // Note that the detekt Gradle plugin version does not necessarily
-    // match the detekt tool version.
-    id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC8' apply false
-
-    id 'com.github.ben-manes.versions' version '0.20.0' apply false
+    id 'com.github.ben-manes.versions' apply false
+    id 'io.gitlab.arturbosch.detekt' apply false
 }
 
 subprojects {
@@ -96,7 +91,7 @@ subprojects {
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
     configurations.all {
         resolutionStrategy {
-            force 'org.jetbrains.kotlin:kotlin-reflect:1.2.70'
+            force "org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion"
         }
     }
 
@@ -117,7 +112,8 @@ subprojects {
     }
 
     detekt {
-        version = '1.0.0.RC8'
+        // Align the detekt core and plugin versions.
+        version = detektPluginVersion
 
         profile('main') {
             config = '../detekt.yml'
