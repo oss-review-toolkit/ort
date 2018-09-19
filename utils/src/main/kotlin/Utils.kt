@@ -606,12 +606,11 @@ private class StashDirectory(directories: Set<File>) : Closeable {
     private fun unstashDir(originalDir: File) {
         originalDir.safeDeleteRecursively()
 
-        val tempDir = stashedDirectories[originalDir]
-        tempDir ?: return
+        stashedDirectories[originalDir]?.let { tempDir ->
+            log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
 
-        log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
-
-        Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-        stashedDirectories.remove(originalDir)
+            Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+            stashedDirectories.remove(originalDir)
+        }
     }
 }
