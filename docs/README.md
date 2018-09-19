@@ -159,7 +159,7 @@ The most important root project Gradle tasks are listed in the table below.
 | Task        | Purpose                                                           |
 | ----------- | ----------------------------------------------------------------- |
 | assemble    | Build the JAR artifacts for all projects                          |
-| detektCheck | Run static code analysis on all projects                          |
+| detekt      | Run static code analysis on all projects                          |
 | test        | Run unit tests for all projects                                   |
 | funTest     | Run functional tests for all projects                             |
 | installDist | Build all projects and install the start scripts for distribution |
