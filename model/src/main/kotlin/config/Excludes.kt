@@ -77,4 +77,10 @@ data class Excludes(
     fun isScopeExcluded(scope: Scope, project: Project) =
             scopes.any { it.matches(scope.name) }
                     || findProjectExclude(project)?.scopes?.any { it.matches(scope.name) } ?: false
+
+    /**
+     * Map the project excludes by the identifiers of the provided [projects].
+     */
+    fun projectExcludesById(projects: Set<Project>) =
+            projects.associate { Pair(it.id, findProjectExclude(it)) }
 }

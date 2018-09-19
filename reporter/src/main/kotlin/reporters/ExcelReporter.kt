@@ -107,10 +107,10 @@ class ExcelReporter : TableReporter() {
             createMetadataSheet(workbook, tabularScanRecord.metadata)
         }
 
-        createSheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
+        createSummarySheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
                 tabularScanRecord.extraColumns)
         tabularScanRecord.projectDependencies.forEach { project, table ->
-            createSheet(workbook, project.id.toString(), project.definitionFilePath, table, project.vcsProcessed,
+            createProjectSheet(workbook, project.id.toString(), project.definitionFilePath, table, project.vcsProcessed,
                     tabularScanRecord.extraColumns)
         }
 
@@ -150,8 +150,42 @@ class ExcelReporter : TableReporter() {
         (0..1).forEach { sheet.autoSizeColumn(it) }
     }
 
-    private fun createSheet(workbook: XSSFWorkbook, name: String, file: String, table: ProjectTable, vcsInfo: VcsInfo,
-                            extraColumns: List<String>) {
+    private fun createSummarySheet(workbook: XSSFWorkbook, name: String, file: String, table: SummaryTable,
+                                   vcsInfo: VcsInfo, extraColumns: List<String>) {
+        val sheetName = createUniqueSheetName(workbook, name)
+
+        val sheet = workbook.createSheet(sheetName)
+
+        val headerRows = createHeader(sheet, name, file, vcsInfo, extraColumns)
+        var currentRow = headerRows
+
+        table.rows.forEach { row ->
+            val cellStyle = when {
+                row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty() -> errorStyle
+                row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> warningStyle
+                else -> successStyle
+            }
+
+            sheet.createRow(currentRow).apply {
+                CellUtil.createCell(this, 0, row.id.toString(), cellStyle)
+                CellUtil.createCell(this, 1, row.scopes.keys.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 2, row.declaredLicenses.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 3, row.detectedLicenses.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 4, row.analyzerErrors.map { it.toString() }.joinWithLimit(), cellStyle)
+                CellUtil.createCell(this, 5, row.scanErrors.map { it.toString() }.joinWithLimit(), cellStyle)
+
+                val maxLines = listOf(row.scopes.values, row.declaredLicenses, row.detectedLicenses,
+                        row.analyzerErrors.values, row.scanErrors.values).map { it.size }.max() ?: 1
+                heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
+            }
+            ++currentRow
+        }
+
+        sheet.finalize(headerRows, currentRow, defaultColumns + extraColumns.size)
+    }
+
+    private fun createProjectSheet(workbook: XSSFWorkbook, name: String, file: String, table: ProjectTable,
+                                   vcsInfo: VcsInfo, extraColumns: List<String>) {
         val sheetName = createUniqueSheetName(workbook, name)
 
         val sheet = workbook.createSheet(sheetName)
@@ -289,7 +323,7 @@ private fun XSSFSheet.finalize(headerRows: Int, totalRows: Int, totalColumns: In
 
 private const val ELLIPSIS = "[...]"
 
-private fun Collection<String>.joinWithLimit(
+private fun Collection<*>.joinWithLimit(
         separator: String = " \n",
         maxLength: Int = 32767 /* This is the maximum Excel cell content length. */
 ) = joinToString(separator).let { cellContent ->
