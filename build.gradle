@@ -113,11 +113,9 @@ subprojects {
 
     detekt {
         // Align the detekt core and plugin versions.
-        version = detektPluginVersion
+        toolVersion = detektPluginVersion
 
-        profile('main') {
-            config = '../detekt.yml'
-        }
+        config = files('../detekt.yml')
     }
 
     task funTest(type: Test) {
@@ -177,7 +175,6 @@ subprojects {
         dependsOn tasks.withType(JacocoReport)
     }
 
-    check.dependsOn detektCheck
     check.dependsOn funTest
 
     task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
