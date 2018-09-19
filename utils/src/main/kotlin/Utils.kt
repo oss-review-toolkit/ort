@@ -582,36 +582,29 @@ private class StashDirectory(directories: Set<File>) : Closeable {
     private val stashedDirectories = mutableMapOf<File, File>()
 
     init {
-        directories.forEach {
-            stashDir(it)
+        directories.filter {
+            it.isDirectory
+        }.associateTo(stashedDirectories) { originalDir ->
+            val tempDir = createTempDir(originalDir.name, ".tmp", originalDir.parentFile)
+
+            log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
+
+            Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+            Pair(originalDir, tempDir)
         }
     }
 
     override fun close() {
-        HashMap(stashedDirectories).forEach {
-            unstashDir(it.key)
+        val i = stashedDirectories.iterator()
+        while (i.hasNext()) {
+            val (originalDir, tempDir) = i.next()
+
+            originalDir.safeDeleteRecursively()
+
+            log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
+
+            Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+            i.remove()
         }
-    }
-
-    private fun stashDir(originalDir: File) {
-        if (!originalDir.isDirectory) return
-
-        val tempDir = createTempDir(originalDir.name, ".tmp", originalDir.parentFile)
-        log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
-
-        Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-        stashedDirectories[originalDir] = tempDir
-    }
-
-    private fun unstashDir(originalDir: File) {
-        originalDir.safeDeleteRecursively()
-
-        val tempDir = stashedDirectories[originalDir]
-        tempDir ?: return
-
-        log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
-
-        Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-        stashedDirectories.remove(originalDir)
     }
 }
