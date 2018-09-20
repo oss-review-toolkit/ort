@@ -229,7 +229,7 @@ abstract class TableReporter : Reporter() {
             val projectExclude = ortResult.repository.config.excludes?.findProjectExclude(project)?.let { exclude ->
                 // Only add the project exclude to the model if the whole project is excluded. If only parts of the
                 // project are excluded this information will be stored in the rows of the affected dependencies.
-                exclude.takeIf { it.exclude }
+                exclude.takeIf { it.isWholeProjectExcluded }
             }
 
             val tableRows = (listOf(project.id) + project.collectDependencyIds()).map { id ->
