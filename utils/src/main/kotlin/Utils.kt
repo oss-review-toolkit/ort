@@ -585,7 +585,11 @@ private class StashDirectory(directories: Set<File>) : Closeable {
         directories.filter {
             it.isDirectory
         }.associateTo(stashedDirectories) { originalDir ->
-            val tempDir = createTempDir(originalDir.name, ".tmp", originalDir.parentFile)
+            // Create a temporary directory to move directories as-is into.
+            val stashDir = createTempDir("stash", ".tmp", originalDir.parentFile)
+
+            // Use a non-existing directory as the target to ensure the directory can be moved atomically.
+            val tempDir = File(stashDir, originalDir.name)
 
             log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
 
@@ -605,6 +609,11 @@ private class StashDirectory(directories: Set<File>) : Closeable {
 
             Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
             i.remove()
+
+            // Delete the top-level temporary directory which should be empty now.
+            if (!tempDir.parentFile.delete()) {
+                throw IOException("Unable to delete the '${tempDir.parent}' directory.")
+            }
         }
     }
 }
