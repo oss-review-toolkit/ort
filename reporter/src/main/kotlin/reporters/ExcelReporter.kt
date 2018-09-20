@@ -27,6 +27,9 @@ import com.here.ort.model.config.ProjectExclude
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.log
 
+import java.awt.Color
+import java.io.File
+
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.Cell
@@ -44,9 +47,6 @@ import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFRichTextString
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-
-import java.awt.Color
-import java.io.File
 
 /**
  * A [Reporter] that creates an Excel sheet report from a [ScanRecord] in the Open XML XLSX format. It creates one sheet
