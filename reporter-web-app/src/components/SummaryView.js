@@ -94,7 +94,8 @@ class SummaryView extends React.Component {
         };
     }
 
-    onExpandMetadata = () => {
+    onExpandMetadata = (e) => {
+        e.stopPropagation();
         this.setState(prevState => ({ expandedMetadata: !prevState.expandedMetadata }));
     };
 
