@@ -18,85 +18,10 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Cell, Label, PieChart, Pie, Sector
 } from 'recharts';
-
-class LicenseChart extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { activeIndex: 0 };
-        this.onPieEnter = this.onPieEnter.bind(this);
-
-        this.state = {};
-
-        if (props.licenses) {
-            this.state = {
-                ...this.state,
-                licenses: props.licenses
-            };
-        }
-
-        this.state = {
-            ...this.state,
-            activeIndex: 0,
-            cx: (props.cx || 310),
-            cy: (props.cy || 210),
-            height: (props.height || 400),
-            width: (props.width || 800)
-        };
-    }
-
-    onPieEnter(data, index) {
-        if (!isNaN(parseFloat(index)) && isFinite(index)) {
-            this.setState({
-                activeIndex: index
-            });
-        }
-    }
-
-    render() {
-        const {
-            activeIndex,
-            cx,
-            cy,
-            height,
-            label,
-            licenses,
-            width
-        } = this.state;
-
-        return (
-            <PieChart
-                width={width}
-                height={height}
-                onMouseEnter={this.onPieEnter}
-            >
-                <Pie
-                    activeIndex={activeIndex}
-                    activeShape={renderActiveShape}
-                    data={licenses}
-                    dataKey="value"
-                    cx={cx}
-                    cy={cy}
-                    innerRadius={135}
-                    outerRadius={165}
-                    onMouseEnter={this.onPieEnter}
-                >
-                    {
-                        licenses.map((entry, index) => <Cell key={entry.name} fill={entry.color} />)
-                    }
-                    <Label value={label} offset={0} position="bottom" />
-                </Pie>
-                <text x={width / 2 - 80} y={height - 30} dy={8} textAnchor="middle" fill="#333">
-                    Move over chart to see license distribution
-                </text>
-            </PieChart>
-        );
-    }
-}
-
-export default LicenseChart;
 
 const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180;
@@ -148,3 +73,112 @@ const renderActiveShape = (props) => {
         </g>
     );
 };
+
+renderActiveShape.propTypes = {
+    cx: PropTypes.number.isRequired,
+    cy: PropTypes.number.isRequired,
+    midAngle: PropTypes.number,
+    innerRadius: PropTypes.number.isRequired,
+    outerRadius: PropTypes.number.isRequired,
+    startAngle: PropTypes.number,
+    endAngle: PropTypes.number,
+    payload: PropTypes.object.isRequired,
+    percent: PropTypes.number,
+    value: PropTypes.string.isRequired
+};
+
+renderActiveShape.defaultProps = {
+    midAngle: 0,
+    startAngle: 0,
+    endAngle: 0,
+    percent: 0
+};
+
+class LicenseChart extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { activeIndex: 0 };
+        this.onPieEnter = this.onPieEnter.bind(this);
+
+        this.state = {};
+
+        if (props.licenses) {
+            this.state = {
+                ...this.state,
+                licenses: props.licenses
+            };
+        }
+
+        this.state = {
+            ...this.state,
+            activeIndex: 0,
+            cx: (props.cx || 310),
+            cy: (props.cy || 210),
+            height: (props.height || 400),
+            width: (props.width || 800)
+        };
+    }
+
+    onPieEnter(data, index) {
+        if (!Number.isNaN(parseFloat(index)) && Number.isFinite(index)) {
+            this.setState({
+                activeIndex: index
+            });
+        }
+    }
+
+    render() {
+        const {
+            activeIndex,
+            cx,
+            cy,
+            height,
+            label,
+            licenses,
+            width
+        } = this.state;
+
+        return (
+            <PieChart
+                width={width}
+                height={height}
+                onMouseEnter={this.onPieEnter}
+            >
+                <Pie
+                    activeIndex={activeIndex}
+                    activeShape={renderActiveShape}
+                    data={licenses}
+                    dataKey="value"
+                    cx={cx}
+                    cy={cy}
+                    innerRadius={135}
+                    outerRadius={165}
+                    onMouseEnter={this.onPieEnter}
+                >
+                    {
+                        licenses.map(entry => <Cell key={entry.name} fill={entry.color} />)
+                    }
+                    <Label value={label} offset={0} position="bottom" />
+                </Pie>
+                <text x={width / 2 - 80} y={height - 30} dy={8} textAnchor="middle" fill="#333">
+                    Move over chart to see license distribution
+                </text>
+            </PieChart>
+        );
+    }
+}
+
+LicenseChart.propTypes = {
+    cx: PropTypes.number,
+    cy: PropTypes.number,
+    height: PropTypes.number.isRequired,
+    licenses: PropTypes.object.isRequired,
+    width: PropTypes.number.isRequired
+};
+
+LicenseChart.defaultProps = {
+    cx: 310,
+    cy: 210
+};
+
+export default LicenseChart;
