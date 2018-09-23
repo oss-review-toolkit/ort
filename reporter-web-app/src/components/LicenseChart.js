@@ -22,7 +22,7 @@ import {
     Cell, Label, PieChart, Pie, Sector
 } from 'recharts';
 
-export class LicenseChart extends React.Component {
+class LicenseChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = { activeIndex: 0 };
@@ -95,6 +95,8 @@ export class LicenseChart extends React.Component {
         );
     }
 }
+
+export default LicenseChart;
 
 const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180;

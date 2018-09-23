@@ -19,25 +19,20 @@
 
 import React from 'react';
 import { Icon } from 'antd';
+import PropTypes from 'prop-types';
 
 // Generates the HTML for packages errors in an expanded row of projectTable
-export class PackagesTableErrors extends React.Component {
+class PackagesTableErrors extends React.Component {
     constructor(props) {
         super();
 
         this.state = {
-            expanded: props.expanded || false
+            data: props.data,
+            expanded: props.expanded
         };
-
-        if (props.data) {
-            this.state = {
-                ...this.state,
-                data: props.data
-            };
-        }
     }
 
-    onClick = () => {
+    onExpandedTitle = () => {
         this.setState(prevState => ({ expanded: !prevState.expanded }));
     };
 
@@ -50,22 +45,36 @@ export class PackagesTableErrors extends React.Component {
 
         if (!expanded) {
             return (
-                <h4 onClick={this.onClick} className="ort-clickable">
-                    <span>
-                        Package Errors
-                        {' '}
-                    </span>
-                    <Icon type="right" />
+                <h4>
+                    <button
+                        className="ort-btn-expand"
+                        onClick={this.onExpandedTitle}
+                        onKeyDown={this.onExpandedTitle}
+                        type="button"
+                    >
+                        <span>
+                            Package Errors
+                            {' '}
+                        </span>
+                        <Icon type="right" />
+                    </button>
                 </h4>
             );
         }
 
         return (
-            <div className="ort-package-erors">
-                <h4 onClick={this.onClick} className="ort-clickable">
-                    Package Errors
-                    {' '}
-                    <Icon type="down" />
+            <div className="ort-package-errors">
+                <h4>
+                    <button
+                        className="ort-btn-expand"
+                        onClick={this.onExpandedTitle}
+                        onKeyUp={this.onExpandedTitle}
+                        type="button"
+                    >
+                        Package Errors
+                        {' '}
+                        <Icon type="down" />
+                    </button>
                 </h4>
                 {pkgObj.errors.map(error => (
                     <p key={`package-error-${error.code}`}>
@@ -76,3 +85,10 @@ export class PackagesTableErrors extends React.Component {
         );
     }
 }
+
+PackagesTableErrors.propTypes = {
+    data: PropTypes.object.isRequired,
+    expanded: PropTypes.bool.isRequired
+};
+
+export default PackagesTableErrors;

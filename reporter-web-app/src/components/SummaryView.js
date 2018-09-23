@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import {
     Alert, Col, Icon, Row, Table, Tabs, Timeline
 } from 'antd';
-import { LicenseChart } from './LicenseChart';
+import PropTypes from 'prop-types';
+import LicenseChart from './LicenseChart';
 import { UNIQUE_COLORS } from '../data/colors/index';
 
 const COLORS = UNIQUE_COLORS.data;
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 class SummaryView extends React.Component {
     constructor(props) {
@@ -93,6 +94,10 @@ class SummaryView extends React.Component {
         };
     }
 
+    onExpandMetadata = () => {
+        this.setState(prevState => ({ expandedMetadata: !prevState.expandedMetadata }));
+    };
+
     convertLicensesToChartFormat(licenses) {
         const chartData = Object.entries(licenses).reduce((accumulator, [key, value]) => {
             accumulator[key] = {
@@ -110,10 +115,6 @@ class SummaryView extends React.Component {
             return accumulator;
         }, []).reverse();
     }
-
-    onClickReviewMetadata = () => {
-        this.setState(prevState => ({ expandedMetadata: !prevState.expandedMetadata }));
-    };
 
     render() {
         const { data, expandedMetadata, viewData } = this.state;
@@ -186,10 +187,12 @@ class SummaryView extends React.Component {
                             )}
                             key="2"
                         >
-                            {renderErrorTable(
-                                viewData.errors.addressed,
-                                viewData.errors.totalAddressed
-                            )}
+                            {
+                                renderErrorTable(
+                                    viewData.errors.addressed,
+                                    viewData.errors.totalAddressed
+                                )
+                            }
                         </TabPane>
                     </Tabs>
                 );
@@ -198,46 +201,44 @@ class SummaryView extends React.Component {
             // If return null to prevent React render error
             return null;
         };
-        const SummaryLicenseCharts = () => {
-            return (
-                <Tabs tabPosition="top">
-                    <TabPane
-                        tab={(
-                            <span>
-                                Detected licenses (
-                                {nrDetectedLicenses}
-                                )
-                            </span>
-                        )}
-                        key="1"
-                    >
-                        <LicenseChart
-                            label="Detected licenses"
-                            licenses={viewData.charts.detectedLicenses}
-                            width={800}
-                            height={500}
-                        />
-                    </TabPane>
-                    <TabPane
-                        tab={(
-                            <span>
-                                Declared licenses (
-                                {nrDeclaredLicenses}
-                                )
-                            </span>
-                        )}
-                        key="2"
-                    >
-                        <LicenseChart
-                            label="Declared licenses"
-                            licenses={viewData.charts.declaredLicenses}
-                            width={800}
-                            height={500}
-                        />
-                    </TabPane>
-                </Tabs>
-            );
-        };
+        const SummaryLicenseCharts = () => (
+            <Tabs tabPosition="top">
+                <TabPane
+                    tab={(
+                        <span>
+                            Detected licenses (
+                            {nrDetectedLicenses}
+                            )
+                        </span>
+                    )}
+                    key="1"
+                >
+                    <LicenseChart
+                        label="Detected licenses"
+                        licenses={viewData.charts.detectedLicenses}
+                        width={800}
+                        height={500}
+                    />
+                </TabPane>
+                <TabPane
+                    tab={(
+                        <span>
+                            Declared licenses (
+                            {nrDeclaredLicenses}
+                            )
+                        </span>
+                    )}
+                    key="2"
+                >
+                    <LicenseChart
+                        label="Declared licenses"
+                        licenses={viewData.charts.declaredLicenses}
+                        width={800}
+                        height={500}
+                    />
+                </TabPane>
+            </Tabs>
+        );
         const SummaryTimeline = () => {
             const nrLevels = data.levels.total || 'n/a';
             const nrPackages = data.packages.total || 'n/a';
@@ -314,22 +315,32 @@ class SummaryView extends React.Component {
                 if (!expandedMetadata) {
                     return (
                         <div className="ort-metadata-props">
-                            <div onClick={this.onClickReviewMetadata} className="ort-clickable">
+                            <button
+                                className="ort-btn-expand"
+                                onClick={this.onExpandMetadata}
+                                onKeyUp={this.onExpandMetadata}
+                                type="button"
+                            >
                                 Show metadata
                                 {' '}
                                 <Icon type="right" />
-                            </div>
+                            </button>
                         </div>
                     );
                 }
 
                 return (
                     <div className="ort-metadata-props">
-                        <div onClick={this.onClickReviewMetadata} className="ort-clickable">
+                        <button
+                            className="ort-btn-expand"
+                            onClick={this.onExpandMetadata}
+                            onKeyUp={this.onExpandMetadata}
+                            type="button"
+                        >
                             Hide metadata
                             {''}
                             <Icon type="down" />
-                        </div>
+                        </button>
                         <table>
                             <tbody>
                                 {Object.entries(data.metadata).map(([key, value]) => {
@@ -474,6 +485,10 @@ class SummaryView extends React.Component {
         );
     }
 }
+
+SummaryView.propTypes = {
+    reportData: PropTypes.object.isRequired
+};
 
 export default connect(
     state => ({ reportData: state }),

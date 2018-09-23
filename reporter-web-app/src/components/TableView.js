@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Col, Collapse, Row } from 'antd';
-import { PackagesTable } from './PackagesTable';
+import PropTypes from 'prop-types';
+import PackagesTable from './PackagesTable';
 
-const Panel = Collapse.Panel;
+const { Panel } = Collapse;
 
 class TableView extends React.Component {
     constructor(props) {
@@ -87,6 +88,10 @@ class TableView extends React.Component {
         );
     }
 }
+
+TableView.propTypes = {
+    reportData: PropTypes.object.isRequired
+};
 
 export default connect(
     state => ({ reportData: state }),
