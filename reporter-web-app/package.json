@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "antd": "^3.6.1",
+        "classnames": "^2.2.6",
         "immutable": "^3.8.2",
         "promise": "8.0.1",
         "prop-types": "^15.6.2",

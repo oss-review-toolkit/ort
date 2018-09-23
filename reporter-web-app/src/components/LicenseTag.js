@@ -92,6 +92,11 @@ export default class LicenseTag extends React.Component {
     }
 }
 
+LicenseTag.propTypes = {
+    ellipsisAtChar: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired
+};
+
 // Generates the HTML for the additional license information
 const LicenseInfo = (props) => {
     const { license } = props;
@@ -112,7 +117,7 @@ const LicenseInfo = (props) => {
         const providers = {};
 
         for (let i = 0; i < summary.length; i += 1) {
-            const provider = summary[i].provider;
+            const { provider } = summary[i];
 
             if (provider) {
                 if (!providers[provider]) {
@@ -157,7 +162,6 @@ const LicenseInfo = (props) => {
     );
 };
 
-LicenseTag.propTypes = {
-    ellipsisAtChar: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired
+LicenseInfo.propTypes = {
+    license: PropTypes.object.isRequired
 };
