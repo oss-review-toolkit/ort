@@ -53,11 +53,16 @@ https://ant.design/docs/react/customize-theme
     width: auto;
 }
 
-.ort-app .ort-clickable {
+.ort-app button.ort-btn-expand {
+    background: none;
+    border: none;
+    color:inherit;
     cursor: pointer;
+    font: inherit;
+    padding: 0;
 }
 
-.ort-app .ort-clickable .anticon {
+.ort-app button.ort-btn-expand .anticon {
     font-size: 9px;
 }
 

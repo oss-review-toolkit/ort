@@ -20,7 +20,7 @@
 import React from 'react';
 import { Col, Row } from 'antd';
 
-export const PackagesTableDetails = (props) => {
+export default (props) => {
     const { data } = props;
     const pkgObj = data;
     const renderBinaryArtifact = () => {

@@ -23,8 +23,8 @@ import {
 } from 'antd';
 import { LICENSES_PROVIDERS } from '../data/licenses';
 
-export const LicenseSummaryCard = (props) => {
-    const summary = props.summary;
+export default (props) => {
+    const { summary } = props;
     let licenseDataAttributed = false;
     const licenseAttributionText = (item) => {
         let provider;

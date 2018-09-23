@@ -19,103 +19,117 @@
 
 import React from 'react';
 import { Icon, Tabs, Table } from 'antd';
+import PropTypes from 'prop-types';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 // Generates the HTML to display scan results for a package
-export class PackagesTableScanSummary extends React.Component {
+class PackagesTableScanSummary extends React.Component {
     constructor(props) {
         super();
 
         this.state = {
-            expanded: props.expanded || false
+            data: props.data,
+            expanded: props.expanded
         };
-
-        if (props.data) {
-            this.state = {
-                ...this.state,
-                data: props.data
-            };
-        }
     }
 
-   onClick = () => {
-       this.setState(prevState => ({ expanded: !prevState.expanded }));
-   };
+    onExpandTitle = () => {
+        this.setState(prevState => ({ expanded: !prevState.expanded }));
+    };
 
-   render() {
-       const { data: pkgObj, expanded } = this.state;
+    render() {
+        const { data: pkgObj, expanded } = this.state;
 
-       if (Array.isArray(pkgObj.results) && pkgObj.results.length === 0) {
-           return null;
-       }
+        if (Array.isArray(pkgObj.results) && pkgObj.results.length === 0) {
+            return null;
+        }
 
-       if (!expanded) {
-           return (
-               <h4 onClick={this.onClick} className="ort-clickable">
-                   <span>
-                       Package Scan Summary
-                       {' '}
-                   </span>
-                   <Icon type="right" />
-               </h4>
-           );
-       }
+        if (!expanded) {
+            return (
+                <h4>
+                    <button
+                        className="ort-btn-expand"
+                        onClick={this.onExpandTitle}
+                        onKeyDown={this.onExpandTitle}
+                        type="button"
+                    >
+                        <span>
+                            Package Scan Summary
+                            {' '}
+                        </span>
+                        <Icon type="right" />
+                    </button>
+                </h4>
+            );
+        }
 
-       return (
-           <div className="ort-package-scan-summary">
-               <h4 onClick={this.onClick} className="ort-clickable">
-                   <span>
-                       Package Scan Summary
-                       {' '}
-                   </span>
-                   <Icon type="down" />
-               </h4>
-               <Tabs tabPosition="top">
-                   {pkgObj.results.map(scan => (
-                       <TabPane
-                           key={`tab-${scan.scanner.name}-${scan.scanner.version}`}
-                           tab={`${scan.scanner.name} ${scan.scanner.version}`}
-                       >
-                           <Table
-                               columns={[{
-                                   title: 'license',
-                                   dataIndex: 'license',
-                                   render: (text, row) => (
-                                       <div>
-                                           <dl>
-                                               <dt>
-                                                   {row.license}
-                                               </dt>
-                                           </dl>
-                                           <dl>
-                                               {row.copyrights.map(holder => (
-                                                   <dd key={`${row.license}-holder-${holder}`}>
-                                                       {holder}
-                                                   </dd>
-                                               ))}
-                                           </dl>
-                                       </div>
-                                   )
-                               }]}
-                               dataSource={scan.summary.license_findings}
-                               locale={{
-                                   emptyText: 'No findings'
-                               }}
-                               pagination={{
-                                   hideOnSinglePage: true,
-                                   pageSize: scan.summary.license_findings.length
-                               }}
-                               rowKey="license"
-                               scroll={{
-                                   y: 300
-                               }}
-                               showHeader={false}
-                           />
-                       </TabPane>
-                   ))}
-               </Tabs>
-           </div>
-       );
-   }
+        return (
+            <div className="ort-package-scan-summary">
+                <h4>
+                    <button
+                        className="ort-btn-expand"
+                        onClick={this.onExpandTitle}
+                        onKeyUp={this.onExpandTitle}
+                        type="button"
+                    >
+                        Package Scan Summary
+                        {' '}
+                        <Icon type="down" />
+                    </button>
+                </h4>
+                <Tabs tabPosition="top">
+                    {pkgObj.results.map(scan => (
+                        <TabPane
+                            key={`tab-${scan.scanner.name}-${scan.scanner.version}`}
+                            tab={`${scan.scanner.name} ${scan.scanner.version}`}
+                        >
+                            <Table
+                                columns={[{
+                                    title: 'license',
+                                    dataIndex: 'license',
+                                    render: (text, row) => (
+                                        <div>
+                                            <dl>
+                                                <dt>
+                                                    {row.license}
+                                                </dt>
+                                            </dl>
+                                            <dl>
+                                                {row.copyrights.map(holder => (
+                                                    <dd key={`${row.license}-holder-${holder}`}>
+                                                        {holder}
+                                                    </dd>
+                                                ))}
+                                            </dl>
+                                        </div>
+                                    )
+                                }]}
+                                dataSource={scan.summary.license_findings}
+                                locale={{
+                                    emptyText: 'No findings'
+                                }}
+                                pagination={{
+                                    hideOnSinglePage: true,
+                                    pageSize: scan.summary.license_findings.length
+                                }}
+                                rowKey="license"
+                                scroll={{
+                                    y: 300
+                                }}
+                                showHeader={false}
+                            />
+                        </TabPane>
+                    ))}
+                </Tabs>
+            </div>
+        );
+    }
 }
+
+PackagesTableScanSummary.propTypes = {
+    data: PropTypes.object.isRequired,
+    expanded: PropTypes.bool.isRequired
+};
+
+export default PackagesTableScanSummary;
