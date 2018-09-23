@@ -222,7 +222,7 @@ export const data = (() => {
             'GPL-3.0': createLicenseWithProxies(GPL_3_0),
             'GPL-3.0-only': createLicenseWithProxies(GPL_3_0),
             'GPL-3.0-or-later': createLicenseWithProxies(GPL_3_0),
-            'ISC': createLicenseWithProxies(ISC),
+            ISC: createLicenseWithProxies(ISC),
             'LGPL-2.1': createLicenseWithProxies(LGPL_2_1),
             'LGPL-2.1-only': createLicenseWithProxies(LGPL_2_1),
             'LGPL-2.1-or-later': createLicenseWithProxies(LGPL_2_1),
@@ -230,18 +230,18 @@ export const data = (() => {
             'LGPL-3.0-only': createLicenseWithProxies(LGPL_3_0),
             'LGPL-3.0-or-later': createLicenseWithProxies(LGPL_3_0),
             'LPPL-1.3c': createLicenseWithProxies(LPPL_1_3c),
-            'MIT': createLicenseWithProxies(MIT),
+            MIT: createLicenseWithProxies(MIT),
             'MPL-2.0': createLicenseWithProxies(MPL_2_0),
             'MS-PL': createLicenseWithProxies(MS_PL),
             'MS-RL': createLicenseWithProxies(MS_RL),
-            'NCSA': createLicenseWithProxies(NCSA),
+            NCSA: createLicenseWithProxies(NCSA),
             'OFL-1.1': createLicenseWithProxies(OFL_1_1),
             'OSL-3.0': createLicenseWithProxies(OSL_3_0),
-            'PostgreSQL': createLicenseWithProxies(PostgreSQL),
-            'Unlicense': createLicenseWithProxies(Unlicense),
+            PostgreSQL: createLicenseWithProxies(PostgreSQL),
+            Unlicense: createLicenseWithProxies(Unlicense),
             'UPL-1.0': createLicenseWithProxies(UPL_1_0),
-            'WTFPL': createLicenseWithProxies(WTFPL),
-            'Zlib': createLicenseWithProxies(Zlib)
+            WTFPL: createLicenseWithProxies(WTFPL),
+            Zlib: createLicenseWithProxies(Zlib)
         },
         type: 'license-summary'
     };
