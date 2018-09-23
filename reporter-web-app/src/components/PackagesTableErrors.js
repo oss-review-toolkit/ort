@@ -32,7 +32,8 @@ class PackagesTableErrors extends React.Component {
         };
     }
 
-    onExpandedTitle = () => {
+    onExpandedTitle = (e) => {
+        e.stopPropagation();
         this.setState(prevState => ({ expanded: !prevState.expanded }));
     };
 

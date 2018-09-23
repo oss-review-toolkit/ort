@@ -21,6 +21,7 @@ import React from 'react';
 import {
     List, Modal, Tabs, Tag, Tooltip
 } from 'antd';
+import PropTypes from 'prop-types';
 import LicenseSummaryCard from './LicenseSummaryCard';
 import { LICENSES } from '../data/licenses';
 import 'antd/dist/antd.css';
@@ -37,7 +38,9 @@ export default class LicenseTag extends React.Component {
         if (this.tagText) {
             this.license = LICENSES[this.tagText];
 
-            this.showLicenseInfoModal = () => {
+            this.showLicenseInfoModal = (e) => {
+                e.stopPropagation();
+
                 if (!this.license) {
                     return;
                 }
@@ -152,4 +155,9 @@ const LicenseInfo = (props) => {
             </Tabs>
         </div>
     );
+};
+
+LicenseTag.propTypes = {
+    ellipsisAtChar: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired
 };

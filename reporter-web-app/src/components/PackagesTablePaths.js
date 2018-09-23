@@ -34,7 +34,8 @@ class PackagesTablePaths extends React.Component {
         };
     }
 
-    onExpandTitle = () => {
+    onExpandTitle = (e) => {
+        e.stopPropagation();
         this.setState(prevState => ({ expanded: !prevState.expanded }));
     };
 
