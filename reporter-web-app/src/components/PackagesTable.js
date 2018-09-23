@@ -218,7 +218,15 @@ export class PackagesTable extends React.Component {
                     locale={{
                         emptyText: 'No packages'
                     }}
-                    pagination={false}
+                    pagination={
+                        {
+                            hideOnSinglePage: true,
+                            pageSize: 100,
+                            pageSizeOptions: ['50', '100', '250', '500'],
+                            position: 'both',
+                            showSizeChanger: true
+                        }
+                    }
                     size="small"
                     rowKey="id"
                 />
