@@ -1,100 +1,102 @@
-export const config = {
-    'licenses': {
+const config = {
+    licenses: {
         'Apache-2.0': {
-            'color': 'green'
+            color: 'green'
         },
         'BSD-2-Clause': {
-            'color': 'green'
+            color: 'green'
         },
         'BSD-2-Clause-FreeBSD': {
-            'color': 'green'
+            color: 'green'
         },
         'BSD-3-Clause': {
-            'color': 'green'
+            color: 'green'
         },
         'CPL-1.0': {
-            'color': 'red'
+            color: 'red'
         },
         'EPL-1.0': {
-            'color': 'red'
+            color: 'red'
         },
         'EPL-2.0': {
-            'color': 'red'
+            color: 'red'
         },
         'EUPL-1.0': {
-            'color': 'red'
+            color: 'red'
         },
         'EUPL-1.1': {
-            'color': 'red'
+            color: 'red'
         },
         'EUPL-1.2': {
-            'color': 'red'
+            color: 'red'
         },
         'GPL-1.0-only': {
-            'color': 'red'
+            color: 'red'
         },
         'GPL-1.0-or-later': {
-            'color': 'red'
+            color: 'red'
         },
         'GPL-2.0-only': {
-            'color': 'red'
+            color: 'red'
         },
         'GPL-2.0-or-later': {
-            'color': 'red'
+            color: 'red'
         },
         'GPL-3.0-only': {
-            'color': 'red'
+            color: 'red'
         },
         'GPL-3.0-or-later': {
-            'color': 'red'
+            color: 'red'
         },
-        'ISC': {
-            'color': 'green'
+        ISC: {
+            color: 'green'
         },
         'LGPL-2.0-only': {
-            'color': 'red'
+            color: 'red'
         },
         'LGPL-2.1-only': {
-            'color': 'red'
+            color: 'red'
         },
         'LGPL-2.0-or-later': {
-            'color': 'orange'
+            color: 'orange'
         },
         'LGPL-2.1-or-later': {
-            'color': 'orange'
+            color: 'orange'
         },
         'LGPL-3.0-or-later': {
-            'color': 'orange'
+            color: 'orange'
         },
-        'MIT': {
-            'color': 'green'
+        MIT: {
+            color: 'green'
         },
         'MPL-1.0': {
-            'color': 'red'
+            color: 'red'
         },
         'MPL-1.1': {
-            'color': 'red'
+            color: 'red'
         },
         'MPL-2.0-no-copyleft-exception': {
-            'color': 'red'
+            color: 'red'
         },
         'MPL-2.0': {
-            'color': 'red'
+            color: 'red'
         },
         'MS-RL': {
-            'color': 'red'
+            color: 'red'
         },
         'ODbL-1.0': {
-            'color': 'red'
+            color: 'red'
         },
         'RPL-1.1': {
-            'color': 'red'
+            color: 'red'
         },
         'RPL-1.5': {
-            'color': 'red'
+            color: 'red'
         },
-        'Zlib': {
-            'color': 'green'
+        Zlib: {
+            color: 'green'
         }
     }
 };
+
+export default config;

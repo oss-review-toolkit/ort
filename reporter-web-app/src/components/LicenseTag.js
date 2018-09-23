@@ -21,13 +21,13 @@ import React from 'react';
 import {
     List, Modal, Tabs, Tag, Tooltip
 } from 'antd';
-import { LicenseSummaryCard } from './LicenseSummaryCard';
+import LicenseSummaryCard from './LicenseSummaryCard';
 import { LICENSES } from '../data/licenses';
 import 'antd/dist/antd.css';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
-export class LicenseTag extends React.Component {
+export default class LicenseTag extends React.Component {
     constructor(props) {
         super(props);
 

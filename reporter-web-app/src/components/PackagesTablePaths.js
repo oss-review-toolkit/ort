@@ -19,27 +19,22 @@
 
 import React from 'react';
 import { Icon, List, Steps } from 'antd';
+import PropTypes from 'prop-types';
 
-const Step = Steps.Step;
+const { Step } = Steps;
 
 // Generates the HTML to display the path(s) from root package to current package
-export class PackagesTablePaths extends React.Component {
+class PackagesTablePaths extends React.Component {
     constructor(props) {
         super();
 
         this.state = {
-            expanded: props.expanded || false
+            data: props.data,
+            expanded: props.expanded
         };
-
-        if (props.data) {
-            this.state = {
-                ...this.state,
-                data: props.data
-            };
-        }
     }
 
-    onClick = () => {
+    onExpandTitle = () => {
         this.setState(prevState => ({ expanded: !prevState.expanded }));
     };
 
@@ -52,22 +47,36 @@ export class PackagesTablePaths extends React.Component {
 
         if (!expanded) {
             return (
-                <h4 onClick={this.onClick} className="ort-clickable">
-                    <span>
-                        Package Dependency Paths
-                        {' '}
-                    </span>
-                    <Icon type="right" />
+                <h4>
+                    <button
+                        className="ort-btn-expand"
+                        onClick={this.onExpandTitle}
+                        onKeyDown={this.onExpandTitle}
+                        type="button"
+                    >
+                        <span>
+                            Package Dependency Paths
+                            {' '}
+                        </span>
+                        <Icon type="right" />
+                    </button>
                 </h4>
             );
         }
 
         return (
             <div className="ort-package-deps-paths">
-                <h4 onClick={this.onClick} className="ort-clickable">
-                    Package Dependency Paths
-                    {' '}
-                    <Icon type="down" />
+                <h4>
+                    <button
+                        className="ort-btn-expand"
+                        onClick={this.onExpandTitle}
+                        onKeyUp={this.onExpandTitle}
+                        type="button"
+                    >
+                        Package Dependency Paths
+                        {' '}
+                        <Icon type="down" />
+                    </button>
                 </h4>
                 <List
                     grid={{
@@ -97,3 +106,10 @@ export class PackagesTablePaths extends React.Component {
         );
     }
 }
+
+PackagesTablePaths.propTypes = {
+    data: PropTypes.object.isRequired,
+    expanded: PropTypes.bool.isRequired
+};
+
+export default PackagesTablePaths;

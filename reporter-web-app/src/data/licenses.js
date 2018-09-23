@@ -1,6 +1,6 @@
-import { data as choosealicenseLicenses } from '../data/choosealicense/index';
-import { metadata as choosealicenseMetaData } from '../data/choosealicense/index';
-import { config } from '../config';
+import { data as choosealicenseLicenses } from './choosealicense/index';
+import { metadata as choosealicenseMetaData } from './choosealicense/index';
+import config from '../config';
 
 const licensesDataFromSPDX = require('spdx-license-list');
 
@@ -43,7 +43,6 @@ export const LICENSES = window.licenses = (() => {
     const licenseValueHandler = {
         get: (obj, prop) => {
             let data;
-            let licenseDataFromChoosealicense;
             let licenseDataFromSPDX;
             let values = [];
 
@@ -80,7 +79,7 @@ export const LICENSES = window.licenses = (() => {
 
             // If property name is not found in user specified config
             // try to see if it's in SPDX licenses metadata
-            licenseDataFromChoosealicense = licensesDataFromChoosealicense[spdxId];
+            const licenseDataFromChoosealicense = licensesDataFromChoosealicense[spdxId];
 
             if (licenseDataFromChoosealicense && licenseDataFromChoosealicense[prop]) {
                 data = licenseDataFromChoosealicense[prop];

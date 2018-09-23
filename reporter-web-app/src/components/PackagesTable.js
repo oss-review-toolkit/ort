@@ -19,14 +19,15 @@
 
 import React from 'react';
 import { Table, Tag } from 'antd';
+import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
-import { LicenseTag } from './LicenseTag';
-import { PackagesTableDetails } from './PackagesTableDetails';
-import { PackagesTableErrors } from './PackagesTableErrors';
-import { PackagesTablePaths } from './PackagesTablePaths';
-import { PackagesTableScanSummary } from './PackagesTableScanSummary';
+import LicenseTag from './LicenseTag';
+import PackagesTableDetails from './PackagesTableDetails';
+import PackagesTableErrors from './PackagesTableErrors';
+import PackagesTablePaths from './PackagesTablePaths';
+import PackagesTableScanSummary from './PackagesTableScanSummary';
 
-export class PackagesTable extends React.Component {
+class PackagesTable extends React.Component {
     constructor(props) {
         super(props);
 
@@ -55,12 +56,16 @@ export class PackagesTable extends React.Component {
                 {
                     align: 'left',
                     dataIndex: 'scopes',
-                    filters: (() => Array.from(this.state.data.packages.scopes).sort().map(
-                        scope => ({
-                            text: scope,
-                            value: scope
-                        })
-                    ))(),
+                    filters: (() => {
+                        const { data } = this.state;
+
+                        return Array.from(data.packages.scopes).sort().map(
+                            scope => ({
+                                text: scope,
+                                value: scope
+                            })
+                        );
+                    })(),
                     key: 'scopes',
                     onFilter: (scope, component) => component.scopes.includes(scope),
                     title: 'Scopes',
@@ -77,12 +82,16 @@ export class PackagesTable extends React.Component {
                 {
                     align: 'left',
                     dataIndex: 'levels',
-                    filters: (() => Array.from(this.state.data.packages.levels).sort().map(
-                        level => ({
-                            text: level,
-                            value: level
-                        })
-                    ))(),
+                    filters: (() => {
+                        const { data } = this.state;
+
+                        return Array.from(data.packages.levels).sort().map(
+                            level => ({
+                                text: level,
+                                value: level
+                            })
+                        );
+                    })(),
                     filterMultiple: true,
                     key: 'levels',
                     onFilter: (level, component) => component.levels.includes(parseInt(level, 10)),
@@ -101,12 +110,16 @@ export class PackagesTable extends React.Component {
                 {
                     align: 'left',
                     dataIndex: 'declared_licenses',
-                    filters: (() => this.state.data.packages.licenses.declared.sort().map(
-                        license => ({
-                            text: license,
-                            value: license
-                        })
-                    ))(),
+                    filters: (() => {
+                        const { data } = this.state;
+
+                        return Array.from(data.packages.licenses.declared).sort().map(
+                            license => ({
+                                text: license,
+                                value: license
+                            })
+                        );
+                    })(),
                     filterMultiple: true,
                     key: 'declared_licenses',
                     onFilter: (value, record) => record.declared_licenses.includes(value),
@@ -125,12 +138,16 @@ export class PackagesTable extends React.Component {
                 {
                     align: 'left',
                     dataIndex: 'detected_licenses',
-                    filters: (() => this.state.data.packages.licenses.detected.sort().map(
-                        license => ({
-                            text: license,
-                            value: license
-                        })
-                    ))(),
+                    filters: (() => {
+                        const { data } = this.state;
+
+                        return Array.from(data.packages.licenses.detected).sort().map(
+                            license => ({
+                                text: license,
+                                value: license
+                            })
+                        );
+                    })(),
                     filterMultiple: true,
                     key: 'detected_licenses',
                     onFilter: (license, component) => component.detected_licenses.includes(license),
@@ -206,10 +223,10 @@ export class PackagesTable extends React.Component {
 
                         return (
                             <div>
-                                <PackagesTableDetails data={record} />
-                                <PackagesTablePaths data={record} />
+                                <PackagesTableDetails data={record} expanded={false} />
+                                <PackagesTablePaths data={record} expanded={false} />
                                 <PackagesTableErrors data={record} expanded />
-                                <PackagesTableScanSummary data={record} />
+                                <PackagesTableScanSummary data={record} expanded={false} />
                             </div>
                         );
                     }}
@@ -237,3 +254,9 @@ export class PackagesTable extends React.Component {
         return null;
     }
 }
+
+PackagesTable.propTypes = {
+    project: PropTypes.object.isRequired
+};
+
+export default PackagesTable;
