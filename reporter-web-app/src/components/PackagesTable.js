@@ -228,6 +228,7 @@ export class PackagesTable extends React.Component {
                         }
                     }
                     size="small"
+                    rowClassName="ort-package"
                     rowKey="id"
                 />
             );
