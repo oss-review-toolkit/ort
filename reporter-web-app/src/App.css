@@ -49,6 +49,10 @@ https://ant.design/docs/react/customize-theme
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.ort-app .ant-steps-dot .ant-steps-item-content {
+    width: auto;
+}
+
 .ort-app .ort-clickable {
     cursor: pointer;
 }
