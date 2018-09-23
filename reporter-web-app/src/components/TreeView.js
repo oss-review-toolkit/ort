@@ -67,20 +67,6 @@ class TreeView extends React.Component {
         }
     }
 
-    createSingleTreeFromProjects = (reportData) => {
-        if (reportData && reportData.projects && reportData.projects.data) {
-            return Object.values(reportData.projects.data).reduce((accumulator, project) => {
-                if (project.packages && project.packages.tree) {
-                    accumulator.push(project.packages.tree);
-                }
-
-                return accumulator;
-            }, []);
-        }
-
-        return [];
-    }
-
     onExpand = (expandedKeys) => {
         this.setState({
             expandedKeys,
@@ -121,7 +107,9 @@ class TreeView extends React.Component {
         }
     }
 
-    onSearchPreviousClick = () => {
+    onSearchPreviousClick = (e) => {
+        e.stopPropagation();
+
         const { selectedIndex, sorted } = this.state;
         const index = selectedIndex - 1 < 0 ? sorted.length - 1 : selectedIndex - 1;
 
@@ -131,7 +119,9 @@ class TreeView extends React.Component {
         });
     }
 
-    onSearchNextClick = () => {
+    onSearchNextClick = (e) => {
+        e.stopPropagation();
+
         const { selectedIndex, sorted } = this.state;
         const index = selectedIndex + 1 > sorted.length - 1 ? 0 : selectedIndex + 1;
 
@@ -169,6 +159,20 @@ class TreeView extends React.Component {
                 sorted
             });
         }
+    }
+
+    createSingleTreeFromProjects = (reportData) => {
+        if (reportData && reportData.projects && reportData.projects.data) {
+            return Object.values(reportData.projects.data).reduce((accumulator, project) => {
+                if (project.packages && project.packages.tree) {
+                    accumulator.push(project.packages.tree);
+                }
+
+                return accumulator;
+            }, []);
+        }
+
+        return [];
     }
 
     scrollTo = (index) => {

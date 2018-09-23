@@ -20,6 +20,7 @@
 import React, { Component } from 'react';
 import { Alert, Row, Tabs } from 'antd';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import SummaryView from './components/SummaryView';
 import TableView from './components/TableView';
 import TreeView from './components/TreeView';
@@ -27,7 +28,7 @@ import 'antd/dist/antd.css';
 import './App.css';
 import store from './store/setup';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 // TODO for state management look into https://github.com/solkimicreb/react-easy-state
 
@@ -43,14 +44,19 @@ class ReporterApp extends Component {
     }
 
     render() {
-        if (Object.keys(this.props.reportData).length === 0) {
+        const { reportData } = this.props;
+
+        if (Object.keys(reportData).length === 0) {
             return (
                 <Row className="ort-app">
                     <Tabs>
                         <TabPane tab="Summary" key="1">
                             <Alert
                                 message="No review results found"
-                                description="Either something went wrong or you are looking at an ORT report template file."
+                                description={
+                                    'Either something went wrong or'
+                                    + 'you are looking at an ORT report template file.'
+                                }
                                 type="error"
                             />
                         </TabPane>
@@ -77,7 +83,11 @@ class ReporterApp extends Component {
     }
 }
 
+ReporterApp.propTypes = {
+    reportData: PropTypes.object.isRequired
+};
+
 export default connect(
-    (state) => ({ reportData: state }),
+    state => ({ reportData: state }),
     () => ({})
 )(ReporterApp);
