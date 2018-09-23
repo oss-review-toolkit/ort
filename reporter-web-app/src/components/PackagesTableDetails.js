@@ -106,27 +106,29 @@ export const PackagesTableDetails = (props) => {
         return null;
     };
     const renderVcs = () => {
-        const vcs = pkgObj.vcs_processed.type || pkgObj.vcs.type;
-        const vcsUrl = pkgObj.vcs_processed.url || pkgObj.vcs.url;
-        const vcsRevision = pkgObj.vcs_processed.revision || pkgObj.vcs.revision;
-        const vcsPath = pkgObj.vcs_processed.path || pkgObj.vcs.path;
-        let vcsText = `${vcs}+${vcsUrl}`;
+        if (pkgObj.vcs_processed) {
+            const vcs = pkgObj.vcs_processed.type || pkgObj.vcs.type;
+            const vcsUrl = pkgObj.vcs_processed.url || pkgObj.vcs.url;
+            const vcsRevision = pkgObj.vcs_processed.revision || pkgObj.vcs.revision;
+            const vcsPath = pkgObj.vcs_processed.path || pkgObj.vcs.path;
+            let vcsText = `${vcs}+${vcsUrl}`;
 
-        if (vcsRevision && vcsPath) {
-            vcsText = `${vcsText}@${vcsRevision}#${vcsPath}`;
-        }
+            if (vcsRevision && vcsPath) {
+                vcsText = `${vcsText}@${vcsRevision}#${vcsPath}`;
+            }
 
-        if (vcs && vcsUrl) {
-            return (
-                <tr>
-                    <th>
-                        Repository
-                    </th>
-                    <td>
-                        {vcsText}
-                    </td>
-                </tr>
-            );
+            if (vcs && vcsUrl) {
+                return (
+                    <tr>
+                        <th>
+                            Repository
+                        </th>
+                        <td>
+                            {vcsText}
+                        </td>
+                    </tr>
+                );
+            }
         }
 
         return null;
