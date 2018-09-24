@@ -184,7 +184,7 @@ abstract class PackageManager(
 
     /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
-     * for each provided path.
+     * for all [definitionFiles] which were found by searching the [analyzerRoot] directory.
      */
     open fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, ProjectAnalyzerResult>()
