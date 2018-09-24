@@ -19,8 +19,6 @@
 
 package com.here.ort.utils
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.util.ClassUtil
 
@@ -38,7 +36,6 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
-import java.io.Closeable
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintStream
@@ -48,7 +45,6 @@ import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
-import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.security.Permission
 
@@ -570,50 +566,4 @@ fun Throwable.showStackTrace() {
     // We cannot use a function expression for a single "if"-statement, see
     // https://discuss.kotlinlang.org/t/if-operator-in-function-expression/7227.
     if (printStackTrace) printStackTrace()
-}
-
-/**
- * Return a Closable which moves the given directories to temporary directories on initialization. On close, it deletes
- * any conflicting existing directories in the original location and then moves the original directories back.
- */
-fun stashDirectories(vararg directories: File): Closeable = StashDirectory(setOf(*directories))
-
-private class StashDirectory(directories: Set<File>) : Closeable {
-    private val stashedDirectories = mutableMapOf<File, File>()
-
-    init {
-        directories.filter {
-            it.isDirectory
-        }.associateTo(stashedDirectories) { originalDir ->
-            // Create a temporary directory to move directories as-is into.
-            val stashDir = createTempDir("stash", ".tmp", originalDir.parentFile)
-
-            // Use a non-existing directory as the target to ensure the directory can be moved atomically.
-            val tempDir = File(stashDir, originalDir.name)
-
-            log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
-
-            Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-            Pair(originalDir, tempDir)
-        }
-    }
-
-    override fun close() {
-        val i = stashedDirectories.iterator()
-        while (i.hasNext()) {
-            val (originalDir, tempDir) = i.next()
-
-            originalDir.safeDeleteRecursively()
-
-            log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
-
-            Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-            i.remove()
-
-            // Delete the top-level temporary directory which should be empty now.
-            if (!tempDir.parentFile.delete()) {
-                throw IOException("Unable to delete the '${tempDir.parent}' directory.")
-            }
-        }
-    }
 }
