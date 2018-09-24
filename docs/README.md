@@ -148,6 +148,10 @@ are supported.
 
 Please see [GettingStarted.md](./GettingStarted.md) for an introduction to the individual tools.
 
+## Configuration
+
+Please see [Configuration.md](./Configuration.md) for details about the ORT configuration.
+
 ## Development
 
 The toolkit is written in [Kotlin](https://kotlinlang.org/) and uses [Gradle](https://gradle.org/) as the build system.
