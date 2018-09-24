@@ -86,6 +86,17 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "String.stripUserNameFromUrl" should {
+        "strip the user name from a string representing a URL" {
+            "ssh://bot@gerrit.host.com:29418/parent/project".stripUserNameFromUrl() shouldBe
+                    "ssh://gerrit.host.com:29418/parent/project"
+        }
+
+        "not modify a string not representing a URL" {
+            "This is not a URL".stripUserNameFromUrl() shouldBe "This is not a URL"
+        }
+    }
+
     "String.urlencode" should {
         val str = "project: fünky\$name*>nul."
 
