@@ -21,6 +21,7 @@ package com.here.ort.analyzer.integration
 
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.NPM
+import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -52,6 +53,13 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
                 NPM.Factory() as PackageManagerFactory to listOf(
+                        File(downloadDir, "package.json"),
+                        File(downloadDir, "packages/vue-server-renderer/package.json"),
+                        File(downloadDir, "packages/vue-template-compiler/package.json"),
+                        File(downloadDir, "packages/weex-template-compiler/package.json"),
+                        File(downloadDir, "packages/weex-vue-framework/package.json")
+                ),
+                Yarn.Factory() as PackageManagerFactory to listOf(
                         File(downloadDir, "package.json"),
                         File(downloadDir, "packages/vue-server-renderer/package.json"),
                         File(downloadDir, "packages/vue-template-compiler/package.json"),
