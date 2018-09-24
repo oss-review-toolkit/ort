@@ -167,7 +167,7 @@ object Main : CommandWithHelp() {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var packageCurationsFile: File? = null
 
-        @Parameter(description = "A file containing the repository configuration. If set the .ort.yml file from the" +
+        @Parameter(description = "A file containing the repository configuration. If set the .ort.yml file from the " +
                 "repository will be ignored.",
                 names = ["--repository-configuration-file"],
                 order = PARAMETER_ORDER_OPTIONAL)
