@@ -69,14 +69,14 @@ class RepositoryConfigurationTest : WordSpec() {
                 projects should haveSize(2)
 
                 val project1 = projects[0]
-                project1.path shouldBe "project1/path"
+                project1.path.pattern shouldBe "project1/path"
                 project1.reason shouldBe ProjectExcludeReason.BUILD_TOOL_OF
                 project1.comment shouldBe "project comment"
                 project1.isWholeProjectExcluded shouldBe true
                 project1.scopes should beEmpty()
 
                 val project2 = projects[1]
-                project2.path shouldBe "project2/path"
+                project2.path.pattern shouldBe "project2/path"
                 project2.reason shouldBe null
                 project2.comment shouldBe null
                 project2.isWholeProjectExcluded shouldBe false
