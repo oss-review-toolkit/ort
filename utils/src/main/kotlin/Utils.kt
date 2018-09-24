@@ -547,7 +547,7 @@ fun String.fileSystemEncode() =
  */
 fun String.isValidUrl() =
         try {
-            URL(this).toURI()
+            URL(this)
             true
         } catch (e: MalformedURLException) {
             false
