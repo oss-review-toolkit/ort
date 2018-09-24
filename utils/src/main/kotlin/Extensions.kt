@@ -26,6 +26,7 @@ import java.io.File
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URI
+import java.net.URISyntaxException
 import java.net.URL
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -198,6 +199,18 @@ val NON_LINUX_LINE_BREAKS = Regex("\\r\\n?")
  * Replace "\r\n" and "\r" line breaks with "\n".
  */
 fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
+
+/**
+ * Strip any user name off the URL represented by this [String]. Return the unmodified [String] if it does not represent
+ * a URL or if it does not include a user name.
+ */
+fun String.stripUserNameFromUrl() = try {
+    URI(this).let {
+        URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString()
+    }
+} catch (e: URISyntaxException) {
+    this
+}
 
 /**
  * Recursively collect the messages of this [Throwable] and all its causes.
