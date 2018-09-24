@@ -171,4 +171,8 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             Maven(analyzerConfig, repoConfig)
                     .enableSbtMode()
                     .resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
+
+    override fun resolveDependencies(definitionFile: File) =
+            // This is not implemented in favor over overriding [resolveDependencies].
+            throw NotImplementedError()
 }
