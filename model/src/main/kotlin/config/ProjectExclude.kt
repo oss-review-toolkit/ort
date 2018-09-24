@@ -21,6 +21,8 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
 /**
  * Defines which parts of a project should be excluded. The project is defined by the definition file located at [path]
@@ -29,9 +31,11 @@ import com.fasterxml.jackson.annotation.JsonInclude
  */
 data class ProjectExclude(
         /**
-         * The path of the project definition file, relative to the root of the repository.
+         * A regular expression to match the path of the project definition file, relative to the root of the
+         * repository.
          */
-        val path: String,
+        @JsonSerialize(using = ToStringSerializer::class)
+        val path: Regex,
 
         /**
          * The reason why the project is excluded, out of a predefined choice.
@@ -51,6 +55,13 @@ data class ProjectExclude(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val scopes: List<ScopeExclude> = emptyList()
 ) {
+    constructor(
+            path: String,
+            reason: ProjectExcludeReason? = null,
+            comment: String? = null,
+            scopes: List<ScopeExclude> = emptyList()
+    ) : this(Regex(path), reason, comment, scopes)
+
     /**
      * True if the whole project will be excluded. This is the case if no specific scopes to exclude are defined.
      */
@@ -62,4 +73,9 @@ data class ProjectExclude(
         // See: https://github.com/FasterXML/jackson-module-kotlin/issues/80#issuecomment-423308227
         @JsonIgnore
         get() = scopes.isEmpty()
+
+    /**
+     * True if [path] matches [projectPath].
+     */
+    fun matches(projectPath: String) = path.matches(projectPath)
 }

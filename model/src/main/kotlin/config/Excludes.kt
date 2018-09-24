@@ -45,7 +45,7 @@ data class Excludes(
     /**
      * Return the [ProjectExclude] for the provided [project], or null if there is none.
      */
-    fun findProjectExclude(project: Project) = projects.find { it.path == project.definitionFilePath }
+    fun findProjectExclude(project: Project) = projects.find { it.matches(project.definitionFilePath) }
 
     /**
      * Return the [ScopeExclude]s for the provided [scope]. This includes global excludes from [scopes] as well as
@@ -70,7 +70,7 @@ data class Excludes(
      * True if the [project] is excluded by this [Excludes] configuration.
      */
     fun isProjectExcluded(project: Project) = projects.any {
-        it.path == project.definitionFilePath && it.isWholeProjectExcluded
+        it.matches(project.definitionFilePath) && it.isWholeProjectExcluded
     }
 
     /**

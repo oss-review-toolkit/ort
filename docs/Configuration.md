@@ -43,6 +43,17 @@ excludes:
 This configuration will mark the whole project and all its dependencies as excluded in the generated reports. For
 example, if an error occurs during the scan of a dependency of this project, it will not appear in the error summary.
 
+The path is interpreted as a regular expression, so it is possible to exclude all Gradle projects in a repository using
+a single exclude:
+
+```yaml
+excludes:
+  projects:
+  - path: ".*build.gradle"
+    reason: "EXAMPLE_OF"
+    comment: "The project contains example code which is not distributed."
+```
+
 For the available exclude reasons for projects, see
 [ProjectExcludeReason.kt](../model/src/main/kotlin/config/ProjectExcludeReason.kt).
 
