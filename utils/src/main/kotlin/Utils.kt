@@ -22,16 +22,6 @@ package com.here.ort.utils
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
-import java.net.URLConnection
-
-import okhttp3.Cache
-import okhttp3.ConnectionSpec
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
-
 import java.security.Permission
 
 @Suppress("UnsafeCast")
@@ -61,43 +51,6 @@ const val PARAMETER_ORDER_LOGGING = 2
  * Ordinal for the help program parameter.
  */
 const val PARAMETER_ORDER_HELP = 100
-
-/**
- * A helper class to manage OkHttp instances backed by distinct cache directories.
- */
-object OkHttpClientHelper {
-    private val clients = mutableMapOf<String, OkHttpClient>()
-
-    /**
-     * Guess the media type based on the file component of a string.
-     */
-    fun guessMediaType(name: String): MediaType? {
-        val contentType = URLConnection.guessContentTypeFromName(name) ?: "application/octet-stream"
-        return MediaType.parse(contentType)
-    }
-
-    /**
-     * Create a request body for the specified file.
-     */
-    fun createRequestBody(source: File): RequestBody = RequestBody.create(guessMediaType(source.name), source)
-
-    /**
-     * Execute a request using the client for the specified cache directory.
-     */
-    fun execute(cachePath: String, request: Request): Response {
-        val client = clients.getOrPut(cachePath) {
-            val cacheDirectory = File(getUserConfigDirectory(), cachePath)
-            val cache = Cache(cacheDirectory, 10 * 1024 * 1024)
-            val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
-            OkHttpClient.Builder()
-                    .cache(cache)
-                    .connectionSpecs(specs)
-                    .build()
-        }
-
-        return client.newCall(request).execute()
-    }
-}
 
 /**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
