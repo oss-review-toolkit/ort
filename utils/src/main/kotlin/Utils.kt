@@ -32,9 +32,6 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.PrintStream
 import java.security.Permission
 
 @Suppress("UnsafeCast")
@@ -266,48 +263,6 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     }
 
     return url
-}
-
-private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val tempFile = createTempFile().apply { deleteOnExit() }
-    val fileStream = FileOutputStream(tempFile)
-
-    try {
-        PrintStream(fileStream).use {
-            setOutput(it)
-            block()
-        }
-    } finally {
-        setOutput(originalOutput)
-    }
-
-    return tempFile.readText()
-}
-
-/**
- * Redirect the standard error stream to a [String] during the execution of [block].
- */
-fun redirectStderr(block: () -> Unit) = redirectOutput(System.err, System::setErr, block)
-
-/**
- * Redirect the standard output stream to a [String] during the execution of [block].
- */
-fun redirectStdout(block: () -> Unit) = redirectOutput(System.out, System::setOut, block)
-
-/**
- * Suppress any prompts for input by redirecting standard input to the null device.
- */
-fun suppressInput(block: () -> Unit) {
-    val originalInput = System.`in`
-
-    val nullDevice = FileInputStream(if (OS.isWindows) "NUL" else "/dev/null")
-    System.setIn(nullDevice)
-
-    try {
-        block()
-    } finally {
-        System.setIn(originalInput)
-    }
 }
 
 /**
