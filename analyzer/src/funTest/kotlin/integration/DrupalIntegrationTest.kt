@@ -87,7 +87,8 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
                         File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
                 ),
                 Yarn.Factory() as PackageManagerFactory to listOf(
-                        File(downloadDir, "core/yarn.lock")
+                        File(downloadDir, "core/package.json"),
+                        File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
                 )
         )
     }

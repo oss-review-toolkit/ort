@@ -22,10 +22,13 @@ package com.here.ort.analyzer.integration
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.Bower
 import com.here.ort.analyzer.managers.NPM
+import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+
+import java.io.File
 
 class PolymerIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
@@ -51,10 +54,22 @@ class PolymerIntegrationTest : AbstractIntegrationSpec() {
             downloadResult.downloadDirectory.walkTopDown().filter { it.name in filenames }.toList()
 
     override val expectedManagedFiles by lazy {
-        val bowerFiles = findDownloadedFiles("bower.json")
-        val npmFiles = findDownloadedFiles( "package.json")
+        val bowerJsonFiles = findDownloadedFiles("bower.json")
+        val packageJsonFiles = findDownloadedFiles( "package.json")
 
-        mapOf(Bower.Factory() as PackageManagerFactory to bowerFiles,
-                NPM.Factory() as PackageManagerFactory to npmFiles)
+        mapOf(
+                Bower.Factory() as PackageManagerFactory to bowerJsonFiles,
+                NPM.Factory() as PackageManagerFactory to packageJsonFiles,
+                Yarn.Factory() as PackageManagerFactory to packageJsonFiles
+        )
+    }
+
+    override val managedFilesForTest by lazy {
+        mapOf(
+                Bower.Factory() as PackageManagerFactory to
+                        listOf(File(downloadResult.downloadDirectory, "bower.json")),
+                NPM.Factory() as PackageManagerFactory to
+                        listOf(File(downloadResult.downloadDirectory, "package.json"))
+        )
     }
 }
