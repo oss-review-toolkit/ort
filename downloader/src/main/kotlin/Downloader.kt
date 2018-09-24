@@ -32,6 +32,7 @@ import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.stripUserNameFromUrl
 import com.here.ort.utils.unpack
 
 import okhttp3.Request
@@ -194,7 +195,22 @@ class Downloader {
         }
 
         val startTime = Instant.now()
-        val workingTree = applicableVcs.download(target, outputDirectory, allowMovingRevisions)
+        val workingTree = try {
+            applicableVcs.download(target, outputDirectory, allowMovingRevisions)
+        } catch (e: DownloadException) {
+            // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
+            // non-strict mode.
+            val vcsUrlWithoutUserName = target.vcsProcessed.url.stripUserNameFromUrl()
+            if (vcsUrlWithoutUserName != target.vcsProcessed.url) {
+                // Try once more with any user name / password stripped from the URL.
+                log.info { "Falling back to trying to download from '$vcsUrlWithoutUserName'." }
+
+                val fallbackTarget = target.copy(vcsProcessed = target.vcsProcessed.copy(url = vcsUrlWithoutUserName))
+                applicableVcs.download(fallbackTarget, outputDirectory, allowMovingRevisions)
+            } else {
+                throw e
+            }
+        }
         val revision = workingTree.getRevision()
 
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
