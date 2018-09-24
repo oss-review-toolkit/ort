@@ -230,9 +230,7 @@ abstract class PackageManager(
     }
 
     /**
-     * Resolve dependencies for a single [definitionFile], returning the [ProjectAnalyzerResult].
+     * Resolve dependencies for a single [definitionFile] and return a [ProjectAnalyzerResult].
      */
-    protected open fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    abstract fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult?
 }
