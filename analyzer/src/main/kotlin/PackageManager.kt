@@ -177,6 +177,12 @@ abstract class PackageManager(
     override fun toString(): String = javaClass.simpleName
 
     /**
+     * Optional preparation step for dependency resolution, like checking for prerequisites or mapping
+     * [definitionFiles].
+     */
+    protected open fun prepareResolution(definitionFiles: List<File>): List<File> = definitionFiles
+
+    /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for each provided path.
      */
@@ -222,12 +228,6 @@ abstract class PackageManager(
 
         return result
     }
-
-    /**
-     * Optional preparation step for dependency resolution, like checking for prerequisites or mapping
-     * [definitionFiles].
-     */
-    protected open fun prepareResolution(definitionFiles: List<File>): List<File> = definitionFiles
 
     /**
      * Resolve dependencies for a single [definitionFile], returning the [ProjectAnalyzerResult].
