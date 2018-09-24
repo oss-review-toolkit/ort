@@ -101,11 +101,6 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 }
 
 /**
- * Return the directory to store user-specific configuration in.
- */
-fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
-
-/**
  * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
  */
 fun getPathFromEnvironment(executable: String): File? {
@@ -139,6 +134,11 @@ fun getPathFromEnvironment(executable: String): File? {
 
     return null
 }
+
+/**
+ * Return the directory to store user-specific configuration in.
+ */
+fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
 
 /**
  * Normalize a VCS URL by converting it to a common pattern.
