@@ -176,7 +176,14 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 maven.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
             }
 
-            val dependencies = node.children.map { parseDependency(it, packages) }.toSortedSet()
+            val dependencies = node.children.mapNotNull { child ->
+                if (child.artifact.identifier().startsWith("jdk.tools:jdk.tools:")) {
+                    log.info { "Omitting the Java < 1.9 system dependency on 'tools.jar'." }
+                    null
+                } else {
+                    parseDependency(child, packages)
+                }
+            }.toSortedSet()
 
             return pkg.toReference(dependencies)
         } catch (e: ProjectBuildingException) {
