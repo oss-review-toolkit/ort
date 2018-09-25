@@ -29,6 +29,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.collectMessages
+import com.here.ort.utils.hash
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
@@ -38,8 +39,6 @@ import com.here.ort.utils.unpack
 import okhttp3.Request
 
 import okio.Okio
-
-import org.apache.commons.codec.digest.DigestUtils
 
 import java.io.File
 import java.io.IOException
@@ -302,18 +301,13 @@ class Downloader {
     }
 
     private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {
-        val digest = file.inputStream().use {
-            when (hashAlgorithm) {
-                HashAlgorithm.MD2 -> DigestUtils.md2Hex(it)
-                HashAlgorithm.MD5 -> DigestUtils.md5Hex(it)
-                HashAlgorithm.SHA1 -> DigestUtils.sha1Hex(it)
-                HashAlgorithm.SHA256 -> DigestUtils.sha256Hex(it)
-                HashAlgorithm.SHA384 -> DigestUtils.sha384Hex(it)
-                HashAlgorithm.SHA512 -> DigestUtils.sha512Hex(it)
-                HashAlgorithm.UNKNOWN -> {
-                    log.warn { "Unknown hash algorithm." }
-                    ""
-                }
+        val digest = when (hashAlgorithm) {
+            HashAlgorithm.UNKNOWN -> {
+                log.warn { "Unknown hash algorithm." }
+                ""
+            }
+            else -> {
+                file.hash(hashAlgorithm.toString())
             }
         }
 
