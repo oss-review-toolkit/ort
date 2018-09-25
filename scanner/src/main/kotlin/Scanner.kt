@@ -89,7 +89,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
         val analyzerResult = ortResult.analyzer!!.result
 
         // Add the projects as packages to scan.
-        val consolidatedProjectPackageMap = Downloader().consolidateProjectPackagesByVcs(analyzerResult.projects)
+        val consolidatedProjectPackageMap = Downloader.consolidateProjectPackagesByVcs(analyzerResult.projects)
         val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
 
         val projectScanScopes = if (scopesToScan.isNotEmpty()) {
