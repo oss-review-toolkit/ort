@@ -34,6 +34,13 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
+import org.apache.commons.codec.digest.DigestUtils
+
+/**
+ * Return the hexadecimal digest of the given hash [algorithm] for this [File].
+ */
+fun File.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).digestAsHex(this)
+
 /**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
  * resolve symbolic links on Windows.
