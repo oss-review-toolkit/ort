@@ -170,22 +170,18 @@ class Downloader {
         if (target.vcsProcessed.type.isNotBlank()) {
             applicableVcs = VersionControlSystem.forType(target.vcsProcessed.type)
             log.info {
-                if (applicableVcs != null) {
-                    "Detected VCS type '$applicableVcs' from type name '${target.vcsProcessed.type}'."
-                } else {
-                    "Could not detect VCS type from type name '${target.vcsProcessed.type}'."
-                }
+                applicableVcs?.let {
+                    "Detected VCS type '${it.type}' from type name '${target.vcsProcessed.type}'."
+                } ?: "Could not detect VCS type from type name '${target.vcsProcessed.type}'."
             }
         }
 
         if (applicableVcs == null) {
             applicableVcs = VersionControlSystem.forUrl(target.vcsProcessed.url)
             log.info {
-                if (applicableVcs != null) {
-                    "Detected VCS type '$applicableVcs' from URL '${target.vcsProcessed.url}'."
-                } else {
-                    "Could not detect VCS type from URL '${target.vcsProcessed.url}'."
-                }
+                applicableVcs?.let {
+                    "Detected VCS type '${it.type}' from URL '${target.vcsProcessed.url}'."
+                } ?: "Could not detect VCS type from URL '${target.vcsProcessed.url}'."
             }
         }
 
