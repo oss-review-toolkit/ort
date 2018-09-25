@@ -24,8 +24,10 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.utils.hash
 import com.here.ort.utils.log
 
+import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -80,12 +82,15 @@ class AnalyzerResultBuilder {
         val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
         if (existingProject != null) {
+            val existingFile = File(existingProject.definitionFilePath)
+            val incomingFile = File(projectAnalyzerResult.project.definitionFilePath)
+
             val error = Error(
                     source = "analyzer",
                     message = "Multiple projects with the same id '${existingProject.id}' found. Not adding the " +
-                            "project defined in '${projectAnalyzerResult.project.definitionFilePath}' to the " +
+                            "project defined in '$incomingFile' (SHA-1: ${incomingFile.hash()}) to the " +
                             "analyzer results as it duplicates the project defined in " +
-                            "'${existingProject.definitionFilePath}'."
+                            "'$existingFile' (SHA-1: ${existingFile.hash()})."
             )
 
             log.error { error.message }
