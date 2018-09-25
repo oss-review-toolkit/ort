@@ -46,6 +46,7 @@ import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
 import java.io.File
 import java.io.IOException
 import java.nio.file.FileSystems
+import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 import java.time.Instant
 import java.util.regex.Pattern
@@ -304,7 +305,11 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
 
         val rootLicenseFile = result["files"].singleOrNull { file ->
             val path = file["path"].asText()
-            matchersForLicenseFiles.any { it.matches(Paths.get(path)) }
+            try {
+                matchersForLicenseFiles.any { it.matches(Paths.get(path)) }
+            } catch (e: InvalidPathException) {
+                false
+            }
         } ?: return ""
 
         return rootLicenseFile["licenses"].singleOrNull()?.let { getLicenseId(it) } ?: ""
