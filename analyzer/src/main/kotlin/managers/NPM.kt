@@ -392,7 +392,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             }
 
             return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
-                    listOf(Error(source = toString(), message = "Package was not installed.")))
+                    listOf(Error(source = toString(), message = "Package '$name' was not installed.")))
         } else {
             // Skip the package name directory when going up.
             var parentModulesDir = startModulesDir.parentFile.parentFile
