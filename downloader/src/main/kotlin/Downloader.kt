@@ -52,6 +52,43 @@ const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
  * The class to download source code. The signatures of public functions in this class define the library API.
  */
 class Downloader {
+    companion object {
+        /**
+         * Consolidate projects based on their VcsInfo without taking the path into account. As we store VcsInfo per
+         * project but many project definition files actually reside in different sub-directories of the same VCS
+         * working tree, it does not make sense to download (and scan) all of them individually, not even if doing
+         * sparse checkouts.
+         *
+         * @param projects A set of projects to consolidate into packages.
+         * @return A map that associates packages for projects with distinct VCS working trees to all other projects
+         *         from the same VCS working tree.
+         */
+        fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, List<Package>> {
+            // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
+            // Git repositories that contain project definition files, which in many cases is doing duplicate
+            // work.
+            val projectPackages = projects.map { it.toPackage() }
+            val projectPackagesByVcs = projectPackages.groupBy {
+                if (it.vcsProcessed.type == GitRepo().type) {
+                    it.vcsProcessed
+                } else {
+                    it.vcsProcessed.copy(path = "")
+                }
+            }
+
+            return projectPackagesByVcs.entries.associate { (sameVcs, projectsWithSameVcs) ->
+                // Find the original project which has the empty path, if any, or simply take the first project
+                // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
+                val referencePackage = projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() }
+                        ?: projectsWithSameVcs.first()
+
+                val otherPackages = (projectsWithSameVcs - referencePackage).map { it.copy(vcsProcessed = sameVcs) }
+
+                Pair(referencePackage.copy(vcsProcessed = sameVcs), otherPackages)
+            }
+        }
+    }
+
     /**
      * The choice of data entities to download.
      */
@@ -75,40 +112,6 @@ class Downloader {
             require((sourceArtifact == null) != (vcsInfo == null)) {
                 "Either sourceArtifact or vcsInfo must be set, but not both."
             }
-        }
-    }
-
-    /**
-     * Consolidate projects based on their VcsInfo without taking the path into account. As we store VcsInfo per project
-     * but many project definition files actually reside in different sub-directories of the same VCS working tree, it
-     * does not make sense to download (and scan) all of them individually, not even if doing sparse checkouts.
-     *
-     * @param projects A set of projects to consolidate into packages.
-     * @return A map that associates packages for projects with distinct VCS working trees to all other projects from
-     *         the same VCS working tree.
-     */
-    fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, List<Package>> {
-        // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
-        // Git repositories that contain project definition files, which in many cases is doing duplicate
-        // work.
-        val projectPackages = projects.map { it.toPackage() }
-        val projectPackagesByVcs = projectPackages.groupBy {
-            if (it.vcsProcessed.type == GitRepo().type) {
-                it.vcsProcessed
-            } else {
-                it.vcsProcessed.copy(path = "")
-            }
-        }
-
-        return projectPackagesByVcs.entries.associate { (sameVcs, projectsWithSameVcs) ->
-            // Find the original project which has the empty path, if any, or simply take the first project
-            // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
-            val referencePackage = projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() }
-                    ?: projectsWithSameVcs.first()
-
-            val otherPackages = (projectsWithSameVcs - referencePackage).map { it.copy(vcsProcessed = sameVcs) }
-
-            Pair(referencePackage.copy(vcsProcessed = sameVcs), otherPackages)
         }
     }
 

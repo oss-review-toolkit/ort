@@ -290,7 +290,7 @@ object Main : CommandWithHelp() {
                     entities = entities.distinct()
 
                     if (Downloader.DataEntity.PROJECT in entities) {
-                        addAll(Downloader().consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
+                        addAll(Downloader.consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
                     }
 
                     if (Downloader.DataEntity.PACKAGES in entities) {
