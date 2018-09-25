@@ -207,6 +207,10 @@ class Downloader {
                     "Falling back to trying to download from '$vcsUrlNoCredentials' which has credentials removed."
                 }
 
+                // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
+                outputDirectory.safeDeleteRecursively()
+                outputDirectory.safeMkdirs()
+
                 val fallbackTarget = target.copy(vcsProcessed = target.vcsProcessed.copy(url = vcsUrlNoCredentials))
                 applicableVcs.download(fallbackTarget, outputDirectory, allowMovingRevisions)
             } else {
