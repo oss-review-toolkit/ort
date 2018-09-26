@@ -148,11 +148,11 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 val childNode = node["dependencies"][it]
                 val childScope = SCOPE_NAME_DEPENDENCIES
                 val childDependencies = extractDependencyTree(childNode, childScope)
-                val packageRefence = PackageReference(
+                val packageReference = PackageReference(
                         id = extractPackageId(childNode),
                         dependencies = childDependencies
                 )
-                result.add(packageRefence)
+                result.add(packageReference)
             }
 
             return result.toSortedSet()
