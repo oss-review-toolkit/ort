@@ -19,14 +19,16 @@
 
 package com.here.ort.model
 
+import com.here.ort.utils.OS
+
 /**
  * A description of the environment that ORT was executed in.
  */
 data class Environment(
         /**
-         * Name of the operating system, defaults to `System.getProperty("os.name")`.
+         * Name of the operating system, defaults to [OS.name].
           */
-        val os: String = System.getProperty("os.name"),
+        val os: String = OS.name,
 
         /**
          * Map of used tools and their installed versions, defaults to an empty map.
