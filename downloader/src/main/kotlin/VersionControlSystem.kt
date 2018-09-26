@@ -208,7 +208,7 @@ abstract class VersionControlSystem {
                         }
                     }
 
-                    VcsInfo("git", url, revision, path = path)
+                    VcsInfo("Git", url, revision, path = path)
                 }
 
                 else -> {
