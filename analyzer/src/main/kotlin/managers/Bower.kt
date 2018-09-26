@@ -141,18 +141,65 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             return result
         }
 
-        private fun extractDependencyTree(node: JsonNode, scopeName: String): SortedSet<PackageReference> {
+        private fun hasCompleteDependencies(node: JsonNode, scopeName: String): Boolean {
+            val dependencyKeys = node["dependencies"].fieldNamesOrEmpty().asSequence().toSet()
+            val dependencyRefKeys = node["pkgMeta"][scopeName].fieldNamesOrEmpty().asSequence().toSet()
+
+            return dependencyKeys.containsAll(dependencyRefKeys)
+        }
+
+        private fun dependencyKeyOf(node: JsonNode): String? {
+            // As non-null dependency keys are supposed to define an equivalence relation for parsing 'missing' nodes,
+            // only the name and version attributes can be used. Typically those attributes should be not null
+            // however in particular for root projects the null case also happens.
+            val name = node["pkgMeta"]["name"].textValueOrEmpty()
+            val version = node["pkgMeta"]["version"].textValueOrEmpty()
+            return "$name:$version".takeUnless { name.isEmpty() || version.isEmpty() }
+        }
+
+        private fun getNodesWithCompleteDependencies(node: JsonNode): Map<String, JsonNode> {
+            val result = mutableMapOf<String, JsonNode>()
+
+            val stack = Stack<JsonNode>().apply { push(node) }
+            while (!stack.empty()) {
+                val currentNode = stack.pop()
+
+                val key = dependencyKeyOf(currentNode)
+                if (key != null && hasCompleteDependencies(node, SCOPE_NAME_DEPENDENCIES)
+                        && hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)) {
+                    result[key] = currentNode
+                }
+
+                stack.addAll(getDependencyNodes(currentNode))
+            }
+
+            return result
+        }
+
+        private fun extractDependencyTree(node: JsonNode, scopeName: String,
+                alternativeNodes: Map<String, JsonNode> = getNodesWithCompleteDependencies(node)):
+                SortedSet<PackageReference> {
             val result = mutableSetOf<PackageReference>()
+
+            if (!hasCompleteDependencies(node, scopeName)) {
+                // Bower leaves out a dependency entry for a child if there exists a similar node to its parent node
+                // with the exact same name and resolved target. This makes it necessary to retrieve the information
+                // about the subtree rooted at the parent from that other node containing the full dependency
+                // information.
+                // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
+                val alternativeNode = checkNotNull(alternativeNodes[dependencyKeyOf(node)])
+                return extractDependencyTree(alternativeNode, scopeName, alternativeNodes)
+            }
 
             node["pkgMeta"][scopeName].fieldNamesOrEmpty().forEach {
                 val childNode = node["dependencies"][it]
                 val childScope = SCOPE_NAME_DEPENDENCIES
-                val childDependencies = extractDependencyTree(childNode, childScope)
-                val packageRefence = PackageReference(
+                val childDependencies = extractDependencyTree(childNode, childScope, alternativeNodes)
+                val packageReference = PackageReference(
                         id = extractPackageId(childNode),
                         dependencies = childDependencies
                 )
-                result.add(packageRefence)
+                result.add(packageReference)
             }
 
             return result.toSortedSet()
