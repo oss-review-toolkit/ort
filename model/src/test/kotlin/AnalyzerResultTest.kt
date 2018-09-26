@@ -22,6 +22,8 @@ package com.here.ort.model
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
+import java.io.File
+
 class AnalyzerResultTest : WordSpec() {
     private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
@@ -54,7 +56,7 @@ class AnalyzerResultTest : WordSpec() {
     init {
         "AnalyzerResult" should {
             "be serialized and deserialized correctly" {
-                val mergedResults = AnalyzerResultBuilder()
+                val mergedResults = AnalyzerResultBuilder(File(""))
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)
                         .build()
@@ -69,7 +71,7 @@ class AnalyzerResultTest : WordSpec() {
 
         "AnalyzerResultBuilder" should {
             "merge results from all files" {
-                val mergedResults = AnalyzerResultBuilder()
+                val mergedResults = AnalyzerResultBuilder(File(""))
                         .addResult(analyzerResult1)
                         .addResult(analyzerResult2)
                         .build()
