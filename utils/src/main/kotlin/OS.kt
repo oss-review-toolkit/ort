@@ -23,9 +23,10 @@ package com.here.ort.utils
  * Operating-System-specific utility functions.
  */
 object OS {
-    private val OS_NAME = System.getProperty("os.name").toLowerCase()
+    val name = System.getProperty("os.name") ?: ""
+    private val nameLowerCase = name.toLowerCase()
 
-    val isLinux = "linux" in OS_NAME
-    val isMac = "mac" in OS_NAME
-    val isWindows = "windows" in OS_NAME
+    val isLinux = "linux" in nameLowerCase
+    val isMac = "mac" in nameLowerCase
+    val isWindows = "windows" in nameLowerCase
 }
