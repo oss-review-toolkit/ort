@@ -211,7 +211,14 @@ abstract class VersionControlSystem {
                     VcsInfo("git", url, revision, path = path)
                 }
 
-                else -> VcsInfo("", vcsUrl, "")
+                else -> {
+                    val gitUrlParts = vcsUrl.split(".git/")
+                    if (gitUrlParts.count() == 2) {
+                        VcsInfo("git", "${gitUrlParts[0]}.git", "", null, gitUrlParts[1])
+                    } else {
+                        VcsInfo("", vcsUrl, "")
+                    }
+                }
             }
         }
     }
