@@ -44,7 +44,9 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.OS
 import com.here.ort.utils.collectMessagesAsString
+import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -169,22 +171,24 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      * Scan all files in [inputPath] using this [Scanner] and store the scan results in [outputDirectory].
      */
     fun scanInputPath(inputPath: File, outputDirectory: File): OrtResult {
+        val absoluteInputPath = inputPath.absoluteFile
+
         require(inputPath.exists()) {
-            "Provided path does not exist: ${inputPath.absolutePath}"
+            "Specified path '$absoluteInputPath' does not exist."
         }
 
-        log.info { "Scanning path '${inputPath.absolutePath}'..." }
+        log.info { "Scanning path '$absoluteInputPath'..." }
 
         val result = try {
             scanPath(inputPath, outputDirectory).also {
                 log.info {
-                    "Detected licenses for path '${inputPath.absolutePath}': ${it.summary.licenses.joinToString()}"
+                    "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
                 }
             }
         } catch (e: ScanException) {
             e.showStackTrace()
 
-            log.error { "Could not scan path '${inputPath.absolutePath}': ${e.message}" }
+            log.error { "Could not scan path '$absoluteInputPath': ${e.message}" }
 
             val now = Instant.now()
             val summary = ScanSummary(now, now, 0, sortedSetOf(),
@@ -192,10 +196,12 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
             ScanResult(Provenance(now), getDetails(), summary)
         }
 
-        val scanResultContainer = ScanResultContainer(Identifier("", "", inputPath.absolutePath, ""), listOf(result))
+        // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
+        val id = Identifier(OS.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
+                inputPath.name.fileSystemEncode(), "")
 
+        val scanResultContainer = ScanResultContainer(id, listOf(result))
         val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
-
         val scannerRun = ScannerRun(Environment(), config, scanRecord)
 
         val vcs = VersionControlSystem.getCloneInfo(inputPath)
