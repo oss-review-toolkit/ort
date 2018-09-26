@@ -67,7 +67,12 @@ data class AnalyzerResult(
     }
 }
 
-class AnalyzerResultBuilder {
+class AnalyzerResultBuilder(
+        /**
+         * The root directory of the analyzer run this builder is used for.
+         */
+        private val rootDir: File
+) {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<Error>>()
@@ -82,15 +87,15 @@ class AnalyzerResultBuilder {
         val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
         if (existingProject != null) {
-            val existingFile = File(existingProject.definitionFilePath)
-            val incomingFile = File(projectAnalyzerResult.project.definitionFilePath)
+            val existingFile = File(rootDir, existingProject.definitionFilePath)
+            val incomingFile = File(rootDir, projectAnalyzerResult.project.definitionFilePath)
 
             val error = Error(
                     source = "analyzer",
                     message = "Multiple projects with the same id '${existingProject.id}' found. Not adding the " +
-                            "project defined in '$incomingFile' (SHA-1: ${incomingFile.hash()}) to the " +
-                            "analyzer results as it duplicates the project defined in " +
-                            "'$existingFile' (SHA-1: ${existingFile.hash()})."
+                            "project defined in '${incomingFile.relativeTo(rootDir)}' (SHA-1: " +
+                            "${incomingFile.hash()}) to the analyzer results as it duplicates the project defined in " +
+                            "'${existingFile.relativeTo(rootDir)}' (SHA-1: ${existingFile.hash()})."
             )
 
             log.error { error.message }

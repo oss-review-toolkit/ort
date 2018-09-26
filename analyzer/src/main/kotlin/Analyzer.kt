@@ -86,7 +86,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
-        val analyzerResultBuilder = AnalyzerResultBuilder()
+        val analyzerResultBuilder = AnalyzerResultBuilder(absoluteProjectPath)
 
         // Resolve dependencies per package manager.
         managedFiles.forEach { manager, files ->
