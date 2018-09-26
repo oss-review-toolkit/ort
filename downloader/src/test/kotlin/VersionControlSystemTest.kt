@@ -64,6 +64,21 @@ class VersionControlSystemTest : WordSpec({
         }
     }
 
+    "splitUrl" should {
+        "split paths from a URL to a Git repository" {
+            val actual = VersionControlSystem.splitUrl(
+                    "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
+            )
+            val expected = VcsInfo(
+                    type = "Git",
+                    url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
+                    revision = "",
+                    path = "zeppelin-interpreter"
+            )
+            actual shouldBe expected
+        }
+    }
+
     "splitUrl for Bitbucket" should {
         "not modify URLs without a path".config(enabled = Mercurial().isInPath()) {
             val actual = VersionControlSystem.splitUrl(
