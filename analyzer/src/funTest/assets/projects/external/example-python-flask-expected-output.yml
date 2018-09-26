@@ -28,7 +28,7 @@ project:
       - id: "PyPI::Werkzeug:0.14.1"
         dependencies: []
         errors: []
-      - id: "PyPI::click:6.7"
+      - id: "PyPI::click:7.0"
         dependencies: []
         errors: []
       - id: "PyPI::itsdangerous:0.24"
@@ -141,18 +141,18 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::click:6.7"
+    id: "PyPI::click:7.0"
     declared_licenses:
     - "BSD"
-    description: "A simple wrapper around optparse for powerful command line utilities."
-    homepage_url: "http://github.com/mitsuhiko/click"
+    description: "Composable command line interface toolkit"
+    homepage_url: "https://palletsprojects.com/p/click/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
-      hash: "5e7a4e296b3212da2ff11017675d7a4d"
+      url: "https://files.pythonhosted.org/packages/fa/37/45185cb5abbc30d7257104c434fe0b07e5a195a6847506c074527aa599ec/Click-7.0-py2.py3-none-any.whl"
+      hash: "4de489e31c57834a21b8be7111dab613"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
-      hash: "fc4cc00c4863833230d3af92af48abd4"
+      url: "https://files.pythonhosted.org/packages/f8/5c/f60e9d8a1e77005f664b76ff8aeaee5bc05d0a91798afd7f53fc998dbc47/Click-7.0.tar.gz"
+      hash: "7f53d50f7b7373ebc7963f9ff697450a"
       hash_algorithm: "MD5"
     vcs:
       type: ""
@@ -160,8 +160,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
-      url: "https://github.com/mitsuhiko/click.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
   curations: []
