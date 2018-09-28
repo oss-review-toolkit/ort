@@ -451,7 +451,7 @@ private const val ELLIPSIS = "[...]"
 private const val MAX_EXCEL_CELL_CONTENT_LENGTH = 32767
 
 private fun RichTextString.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) =
-        takeIf { it.length() <= maxLength }
+        takeIf { it.string == null || it.length() <= maxLength }
                 // There is no easy way to get a substring of a RichTextString, so convert to plain text here.
                 ?: XSSFRichTextString("${string.take(maxLength - ELLIPSIS.length)}$ELLIPSIS")
 
