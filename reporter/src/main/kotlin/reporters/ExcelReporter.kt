@@ -258,8 +258,8 @@ class ExcelReporter : TableReporter() {
             sheet.createRow(currentRow).apply {
                 createCell(this, 0, row.id.toString(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
-                createCell(this, 2, row.declaredLicenses.joinWithLimit(), font, cellStyle)
-                createCell(this, 3, row.detectedLicenses.joinWithLimit(), font, cellStyle)
+                createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
+                createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 4, analyzerErrorsText, font, cellStyle)
                 createCell(this, 5, scanErrorsText, font, cellStyle)
 
@@ -311,10 +311,10 @@ class ExcelReporter : TableReporter() {
             sheet.createRow(currentRow).apply {
                 createCell(this, 0, row.id.toString(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
-                createCell(this, 2, row.declaredLicenses.joinWithLimit(), font, cellStyle)
-                createCell(this, 3, row.detectedLicenses.joinWithLimit(), font, cellStyle)
-                createCell(this, 4, row.analyzerErrors.map { it.toString() }.joinWithLimit(), font, cellStyle)
-                createCell(this, 5, row.scanErrors.map { it.toString() }.joinWithLimit(), font, cellStyle)
+                createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
+                createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
+                createCell(this, 4, row.analyzerErrors.map { it.toString() }.joinToString(" \n"), font, cellStyle)
+                createCell(this, 5, row.scanErrors.map { it.toString() }.joinToString(" \n"), font, cellStyle)
 
                 val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
                         row.analyzerErrors.size, row.scanErrors.size).max() ?: 1
@@ -396,7 +396,7 @@ class ExcelReporter : TableReporter() {
     private fun createCell(row: Row, column: Int, value: XSSFRichTextString, style: CellStyle?): Cell? {
         val cell = CellUtil.getCell(row, column)
 
-        cell.setCellValueWithLimit(value)
+        cell.setCellValue(value.limit())
 
         if (style != null) {
             cell.cellStyle = style
@@ -406,7 +406,7 @@ class ExcelReporter : TableReporter() {
     }
 
     private fun createCell(row: Row, column: Int, value: String, font: XSSFFont, cellStyle: CellStyle) =
-            createCell(row, column, XSSFRichTextString().apply { append(value, font) }, cellStyle)
+            createCell(row, column, XSSFRichTextString().apply { append(value.limit(), font) }, cellStyle)
 }
 
 // Use the same name as in XSSFWorkbook.MAX_SENSITIVE_SHEET_NAME_LEN, which is private.
@@ -450,16 +450,10 @@ private fun XSSFSheet.finalize(headerRows: Int, totalRows: Int, totalColumns: In
 private const val ELLIPSIS = "[...]"
 private const val MAX_EXCEL_CELL_CONTENT_LENGTH = 32767
 
-private fun Cell.setCellValueWithLimit(value: RichTextString, maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) {
-    val cellContent = value.takeIf { it.length() <= maxLength } ?:
-            // There is no easy way to get a substring of a RichTextString, so convert to plain text here.
-            XSSFRichTextString("${value.string.take(maxLength - ELLIPSIS.length)}$ELLIPSIS")
-    setCellValue(cellContent)
-}
+private fun RichTextString.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) =
+        takeIf { it.length() <= maxLength }
+                // There is no easy way to get a substring of a RichTextString, so convert to plain text here.
+                ?: XSSFRichTextString("${string.take(maxLength - ELLIPSIS.length)}$ELLIPSIS")
 
-private fun <T> Iterable<T>.joinWithLimit(
-        separator: String = " \n",
-        maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH
-) = joinToString(separator).let { cellContent ->
-    cellContent.takeIf { it.length <= maxLength } ?: "${cellContent.take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
-}
+private fun String.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) =
+        takeIf { it.length <= maxLength } ?: "${take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
