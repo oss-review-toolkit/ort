@@ -3414,7 +3414,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/json5/-/json5-0.5.1.tgz"
+      url: "http://registry.npmjs.org/json5/-/json5-0.5.1.tgz"
       hash: "1eade7acc012034ad84e2396767ead9fa5495821"
       hash_algorithm: "SHA-1"
     vcs:
