@@ -406,7 +406,7 @@ class ExcelReporter : TableReporter() {
     }
 
     private fun createCell(row: Row, column: Int, value: String, font: XSSFFont, cellStyle: CellStyle) =
-            createCell(row, column, XSSFRichTextString().apply { append(value.limit(), font) }, cellStyle)
+            createCell(row, column, XSSFRichTextString(value.limit()).apply { applyFont(font) }, cellStyle)
 }
 
 // Use the same name as in XSSFWorkbook.MAX_SENSITIVE_SHEET_NAME_LEN, which is private.
