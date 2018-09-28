@@ -36,6 +36,7 @@ import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.CreationHelper
 import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.RichTextString
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.util.CellRangeAddress
@@ -395,7 +396,7 @@ class ExcelReporter : TableReporter() {
     private fun createCell(row: Row, column: Int, value: XSSFRichTextString, style: CellStyle?): Cell? {
         val cell = CellUtil.getCell(row, column)
 
-        cell.setCellValue(value)
+        cell.setCellValueWithLimit(value)
 
         if (style != null) {
             cell.cellStyle = style
@@ -447,10 +448,18 @@ private fun XSSFSheet.finalize(headerRows: Int, totalRows: Int, totalColumns: In
 }
 
 private const val ELLIPSIS = "[...]"
+private const val MAX_EXCEL_CELL_CONTENT_LENGTH = 32767
+
+private fun Cell.setCellValueWithLimit(value: RichTextString, maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) {
+    val cellContent = value.takeIf { it.length() <= maxLength } ?:
+            // There is no easy way to get a substring of a RichTextString, so convert to plain text here.
+            XSSFRichTextString("${value.string.take(maxLength - ELLIPSIS.length)}$ELLIPSIS")
+    setCellValue(cellContent)
+}
 
 private fun <T> Iterable<T>.joinWithLimit(
         separator: String = " \n",
-        maxLength: Int = 32767 /* This is the maximum Excel cell content length. */
+        maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH
 ) = joinToString(separator).let { cellContent ->
     cellContent.takeIf { it.length <= maxLength } ?: "${cellContent.take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
 }
