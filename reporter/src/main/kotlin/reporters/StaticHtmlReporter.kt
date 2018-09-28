@@ -302,10 +302,12 @@ class StaticHtmlReporter : TableReporter() {
                     append("</tbody></table>")
                 }
 
+                val numberOfErrors = tabularScanRecord.errorSummary.rows.count()
+
                 append("<h2>Index</h2>")
                 append("<ul>")
-                if (tabularScanRecord.errorSummary.rows.isNotEmpty()) {
-                    append("<li><a href=\"#error-summary\">Error Summary</a></li>")
+                if (numberOfErrors > 0) {
+                    append("<li><a href=\"#error-summary\">Error Summary ($numberOfErrors)</a></li>")
                 }
                 tabularScanRecord.projectDependencies.forEach { (project, projectTable) ->
                     append("<li><a href=\"#${project.id}\">${project.id}")
@@ -316,8 +318,9 @@ class StaticHtmlReporter : TableReporter() {
                 }
                 append("</ul>")
 
-                if (tabularScanRecord.errorSummary.rows.isNotEmpty()) {
-                    append(createErrorTable("Error Summary", tabularScanRecord.errorSummary, "error-summary"))
+                if (numberOfErrors > 0) {
+                    append(createErrorTable("Error Summary ($numberOfErrors)", tabularScanRecord.errorSummary,
+                            "error-summary"))
                 }
 
                 tabularScanRecord.projectDependencies.forEach { project, table ->
