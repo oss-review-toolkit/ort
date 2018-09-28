@@ -131,7 +131,24 @@ class Downloader {
 
         try {
             if (target.vcsProcessed.url.isBlank()) {
-                throw DownloadException("No VCS URL provided for '${target.id}'.")
+                val details = when (target.id.provider) {
+                    "Bundler" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, see: " +
+                            "https://guides.rubygems.org/specification-reference/#metadata"
+                    "Gradle" -> " Please make sure the release POM file includes the SCM connection, see: " +
+                            "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
+                            "example_customizing_the_pom_file"
+                    "Maven" -> " Please define the <scm><connection> in the POM file, see: " +
+                            "http://maven.apache.org/pom.html#SCM"
+                    "NPM" -> " Please define the \"repository\" in the package.json file, see: " +
+                            "https://docs.npmjs.com/files/package.json#repository"
+                    "PIP", "PyPI" -> " Please make sure the setup.py defines the 'Source' attribute in " +
+                            "'project_urls', see: " +
+                            "https://packaging.python.org/guides/distributing-packages-using-setuptools/#project-urls"
+                    "SBT" -> " Please make sure the released POM file includes the SCM connection, see: " +
+                            "http://maven.apache.org/pom.html#SCM"
+                    else -> ""
+                }
+                throw DownloadException("No VCS URL provided for '${target.id}'.$details")
             } else {
                 return downloadFromVcs(target, targetDir, allowMovingRevisions)
             }
