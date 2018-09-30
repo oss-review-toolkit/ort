@@ -20,7 +20,7 @@
 // SPDX-License-Identifier: CC-BY-3.0
 // Author KimKha
 // https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
-function hashCode(str) {
+export function hashCode(str) {
     let hash = 0;
 
     for (let i = 0; i < str.length; i++) {
@@ -142,18 +142,35 @@ export function convertToRenderFormat(reportData) {
         if (errors.length !== 0) {
             pkg.errors = errors;
 
-            addErrorsToReportDataReportData(projectIndex, pkg.id, pkgObj.errors);
+            addErrorsToReportDataReportData(pkg);
         }
 
         return pkg;
     };
-    const addErrorsToReportDataReportData = (projectIndex, pkgId, errors) => {
+    const addErrorsToReportDataReportData = (pkgObj) => {
+        const pkg = pkgObj;
+        const { errors } = pkg;
+        let errorSummaryPkgObj;
+
         if (Array.isArray(errors) && errors.length !== 0) {
-            if (!reportDataOpenErrors[projectIndex]) {
-                reportDataOpenErrors[projectIndex] = {};
+            if (!reportDataOpenErrors[pkg.id]) {
+                errorSummaryPkgObj = {
+                    id: pkg.id,
+                    files: new Set([]),
+                    messages: new Set([])
+                };
+            } else {
+                errorSummaryPkgObj = reportDataOpenErrors[pkg.id];
             }
 
-            reportDataOpenErrors[projectIndex][pkgId] = errors;
+            for (let i = errors.length - 1; i >= 0; i -= 1) {
+                const error = errors[i];
+                
+                errorSummaryPkgObj.files.add(error.file);
+                errorSummaryPkgObj.messages.add(error.message);
+            }
+
+            reportDataOpenErrors[pkg.id] = errorSummaryPkgObj;
         }
     };
     // Helper function to add license results
@@ -642,13 +659,11 @@ export function convertToRenderFormat(reportData) {
         ).reverse();
     }
 
-    // Flatten errors per project into a flat array of errors
-    reportDataOpenErrors = Object.values(reportDataOpenErrors)
-        .reduce((accumulator, errors) => accumulator.concat(...Object.values(errors)), []);
+    // Flatten errors into an array of errors
+    reportDataOpenErrors = Object.values(reportDataOpenErrors);
 
-    // Flatten addressed errors per project into a flat array of errors
-    reportDataAddressedErrors = Object.values(reportDataAddressedErrors)
-        .reduce((accumulator, errors) => accumulator.concat(...Object.values(errors)), []);
+    // Flatten addressed errors into an array of errors
+    reportDataAddressedErrors = Object.values(reportDataAddressedErrors);
 
     return {
         hasErrors: reportData.has_errors || false,

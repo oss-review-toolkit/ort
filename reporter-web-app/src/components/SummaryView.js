@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import LicenseChart from './LicenseChart';
 import { UNIQUE_COLORS } from '../data/colors/index';
+import { hashCode } from '../utils';
 
 const COLORS = UNIQUE_COLORS.data;
 const { TabPane } = Tabs;
@@ -132,17 +133,21 @@ class SummaryView extends React.Component {
                             <div>
                                 <dl>
                                     <dt>
-                                        {row.package ? row.package.id : row.id}
+                                        {row.id}
                                     </dt>
                                     <dd>
                                         Dependency defined in
                                         {' '}
-                                        {row.file}
+                                        {Array.from(row.files).join(', ')}
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dd>
-                                        {row.message}
+                                        {Array.from(row.messages).map(message => (
+                                            <p key={`error-message-${hashCode(message)}`}>
+                                                {message}
+                                            </p>
+                                        ))}
                                     </dd>
                                 </dl>
                             </div>
@@ -156,7 +161,7 @@ class SummaryView extends React.Component {
                         hideOnSinglePage: true,
                         pageSize
                     }}
-                    rowKey="code"
+                    rowKey="id"
                     scroll={{
                         y: 300
                     }}
@@ -215,7 +220,7 @@ class SummaryView extends React.Component {
                     key="1"
                 >
                     <LicenseChart
-                        label="Detected licenses"
+                        label="Detected Licenses"
                         licenses={viewData.charts.detectedLicenses}
                         width={800}
                         height={500}
@@ -224,7 +229,7 @@ class SummaryView extends React.Component {
                 <TabPane
                     tab={(
                         <span>
-                            Declared licenses (
+                            Declared Licenses (
                             {nrDeclaredLicenses}
                             )
                         </span>
