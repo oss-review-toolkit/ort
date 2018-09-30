@@ -17,19 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package config
 
-/**
- * The configuration model of the scanner.
- */
-data class ScannerConfiguration(
-        /**
-         * (optional) Artifactory configuration to cache the scan results
-         */
-        val artifactoryCache: ArtifactoryCacheConfiguration? = null,
+interface CacheConfiguration {
 
-        /**
-         * (optional) Google Cloud Storage configuration to cache the scan results
-         */
-        val cloudStorageCache: CloudStorageCacheConfiguration? = null
-)
+    fun validate()
+
+}

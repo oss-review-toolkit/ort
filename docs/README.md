@@ -126,16 +126,27 @@ the [appropriate VCS tool](../downloader/src/main/kotlin/vcs) to checkout source
 
 This tool wraps underlying license / copyright scanners with a common API. This way all supported scanners can be used
 in the same way to easily run them and compare their results. If passed a dependencies analysis file (`-d`), the Scanner
-will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In order to not
-download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote cache, hosted
-e.g. on [Artifactory](../scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented, see
-[#752](https://github.com/heremaps/oss-review-toolkit/issues/752)). Using the example of configuring an Artifactory
-cache, the YAML-based configuration file would look like:
+will automatically download the sources of the dependencies via the Downloader and scan them afterwards. 
+
+In order to not download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote cache, hosted
+e.g. on [Artifactory](../scanner/src/main/kotlin/ArtifactoryCache.kt), Google Cloud Storage or S3 (not yet implemented, see
+[#752](https://github.com/heremaps/oss-review-toolkit/issues/752)). 
+
+Example of Artifactory configuration file:
 
 ```yaml
 artifactory_cache:
   url: "https://artifactory.domain.com/artifactory/generic-repository-name"
   apiToken: $ARTIFACTORY_API_KEY
+```
+
+To configure Google Cloud Storage as a cache you should specify [Google Application Credentials](https://cloud.google.com/docs/authentication/getting-started) json file 
+either in environment or as `--google-application-credentials` command parameter
+ 
+Example of Google Cloud Storage configuration file:
+```yaml
+cloud_storage_cache:
+  bucket_name: scan-cache
 ```
 
 ### [reporter](../reporter/src/main/kotlin)

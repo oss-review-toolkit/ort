@@ -28,7 +28,9 @@ import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryCacheConfiguration
+import com.here.ort.model.config.CloudStorageCacheConfiguration
 import com.here.ort.utils.log
+import config.CacheConfiguration
 
 interface ScanResultsCache {
 
@@ -75,17 +77,44 @@ interface ScanResultsCache {
 
         var stats = CacheStatistics()
 
-        fun configure(config: ArtifactoryCacheConfiguration) {
-            require(config.url.isNotBlank()) {
-                "URL for Artifactory cache is missing."
+        fun configure(config: CacheConfiguration) {
+            config.validate()
+
+            if (config is ArtifactoryCacheConfiguration) {
+                cache = ArtifactoryCache(config)
+                log.info { "Using Artifactory cache '${config.url}'." }
+            } else if (config is CloudStorageCacheConfiguration) {
+                cache = CloudStorageCache(config)
+                log.info { "Using Cloud Storage cache." }
+            }
+        }
+
+        override fun add(id: Identifier, scanResult: ScanResult): Boolean = run {
+            // Do not cache empty scan results. It is likely that something went wrong when they were created, and if not,
+            // it is cheap to re-create them.
+            if (scanResult.summary.fileCount == 0) {
+                log.info { "Not caching scan result for '$id' because no files were scanned." }
+
+                return false
             }
 
-            require(config.apiToken.isNotBlank()) {
-                "API token for Artifactory cache is missing."
+            // Do not cache scan results without raw result. The raw result can be set to null for other usages, but in the
+            // cache it must never be null.
+            if (scanResult.rawResult == null) {
+                log.info { "Not caching scan result for '$id' because the raw result is null." }
+
+                return false
             }
 
-            cache = ArtifactoryCache(config.url, config.apiToken)
-            log.info { "Using Artifactory cache '${config.url}'." }
+            // Do not cache scan results without provenance information, because they cannot be assigned to the revision of
+            // the package source code later.
+            if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
+                log.info { "Not caching scan result for '$id' because no provenance information is available." }
+
+                return false
+            }
+
+            cache.add(id, scanResult)
         }
 
         override fun read(id: Identifier) = cache.read(id).also {
@@ -95,14 +124,34 @@ interface ScanResultsCache {
             }
         }
 
-        override fun read(pkg: Package, scannerDetails: ScannerDetails) =
-                cache.read(pkg, scannerDetails).also {
-                    ++stats.numReads
-                    if (it.results.isNotEmpty()) {
-                        ++stats.numHits
-                    }
-                }
+        override fun read(pkg: Package, scannerDetails: ScannerDetails) : ScanResultContainer {
+            val scanResults = read(pkg.id).results.toMutableList()
 
-        override fun add(id: Identifier, scanResult: ScanResult) = cache.add(id, scanResult)
+            if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
+
+            scanResults.retainAll { it.provenance.matches(pkg) }
+            if (scanResults.isEmpty()) {
+                log.info {
+                    "No cached scan results found for $pkg. The following entries with non-matching provenance have " +
+                            "been ignored: ${scanResults.map { it.provenance }}"
+                }
+                return ScanResultContainer(pkg.id, scanResults)
+            }
+
+            scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
+            if (scanResults.isEmpty()) {
+                log.info {
+                    "No cached scan results found for $scannerDetails. The following entries with incompatible scanners " +
+                            "have been ignored: ${scanResults.map { it.scanner }}"
+                }
+                return ScanResultContainer(pkg.id, scanResults)
+            }
+
+            log.info {
+                "Found ${scanResults.size} cached scan result(s) for $pkg that are compatible with $scannerDetails."
+            }
+
+            return ScanResultContainer(pkg.id, scanResults)
+        }
     }
 }

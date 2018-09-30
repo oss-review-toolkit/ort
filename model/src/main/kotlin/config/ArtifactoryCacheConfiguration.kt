@@ -20,10 +20,22 @@
 package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import config.CacheConfiguration
 
 data class ArtifactoryCacheConfiguration(
         val url: String,
 
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         val apiToken: String = ""
-)
+
+) : CacheConfiguration {
+    override fun validate() {
+        require(url.isNotBlank()) {
+            "URL for Artifactory cache is missing."
+        }
+
+        require(apiToken.isNotBlank()) {
+            "API token for Artifactory cache is missing."
+        }
+    }
+}

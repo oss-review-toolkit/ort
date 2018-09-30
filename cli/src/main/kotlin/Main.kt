@@ -41,6 +41,8 @@ import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.ArtifactoryCacheConfiguration
+import com.here.ort.model.config.CloudStorageCacheConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.reporter.Reporter
@@ -466,6 +468,11 @@ object Main : CommandWithHelp() {
                 order = PARAMETER_ORDER_OPTIONAL)
         private var scannerFactory: ScannerFactory? = null
 
+        @Parameter(description = "The path to Google Application Credentials json file.",
+                names = ["--google-application-credentials"],
+                order = PARAMETER_ORDER_OPTIONAL)
+        private var googleApplicationCredentials: File? = null
+
         @Parameter(description = "The path to the configuration file.",
                 names = ["--config", "-c"],
                 order = PARAMETER_ORDER_OPTIONAL)
@@ -499,8 +506,12 @@ object Main : CommandWithHelp() {
                 it.readValue(ScannerConfiguration::class.java)
             } ?: ScannerConfiguration()
 
-            config.artifactoryCache?.let {
-                ScanResultsCache.configure(it)
+            if (config.artifactoryCache != null) {
+                ScanResultsCache.configure(config.artifactoryCache as ArtifactoryCacheConfiguration)
+            } else if (config.cloudStorageCache != null) {
+                (config.cloudStorageCache as CloudStorageCacheConfiguration).googleApplicationCredentials =
+                        googleApplicationCredentials
+                ScanResultsCache.configure(config.cloudStorageCache as CloudStorageCacheConfiguration)
             }
 
             val scanner = scannerFactory?.create(config) ?: ScanCode(config)
