@@ -172,7 +172,7 @@ LicenseChart.propTypes = {
     cx: PropTypes.number,
     cy: PropTypes.number,
     height: PropTypes.number.isRequired,
-    licenses: PropTypes.object.isRequired,
+    licenses: PropTypes.array.isRequired,
     width: PropTypes.number.isRequired
 };
 
