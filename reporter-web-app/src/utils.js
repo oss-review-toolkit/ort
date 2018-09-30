@@ -20,7 +20,7 @@
 // SPDX-License-Identifier: CC-BY-3.0
 // Author KimKha
 // https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
-export function hashCode(str) {
+function hashCode(str) {
     let hash = 0;
 
     for (let i = 0; i < str.length; i++) {
@@ -35,6 +35,12 @@ export function hashCode(str) {
 // Utility boolean function to determine if input is a number
 export function isNumeric(n) {
     return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
+}
+
+// Utility function to remove duplicates from Array
+// https://codehandbook.org/how-to-remove-duplicates-from-javascript-array/
+export function removeDuplicatesInArray(arr) {
+    return Array.from(new Set(arr));
 }
 
 export function convertToRenderFormat(reportData) {
@@ -54,7 +60,34 @@ export function convertToRenderFormat(reportData) {
     let reportDataLevels = new Set([]);
     let reportDataScopes = new Set([]);
 
+    // Transform Analyer results to be indexed by package Id for faster lookups
+    const packagesFromAnalyzer = ((dataArr) => {
+        const tmp = {};
+
+        for (let i = dataArr.length - 1; i >= 0; i -= 1) {
+            tmp[dataArr[i].package.id] = {
+                ...dataArr[i].package,
+                curations: dataArr[i].curations
+            };
+        }
+
+        return tmp;
+    })(reportData.analyzer.result.packages || []);
+        // Transform Scanner results to be indexed by package Id for faster lookups
+    const packagesFromScanner = ((dataArr) => {
+        const tmp = {};
+
+        for (let i = dataArr.length - 1; i >= 0; i -= 1) {
+            tmp[dataArr[i].id] = dataArr[i].results;
+        }
+
+        return tmp;
+    })(reportData.scanner.results.scan_results || []);
+    const packageErrorsFromAnalyzer = reportData.analyzer.result.errors;
+    const projectsFromAnalyzer = reportData.analyzer.result.projects;
+
     const addErrorsToPackage = (projectIndex, pkgObj, analyzerErrors) => {
+        const pkg = pkgObj;
         const project = projects[projectIndex];
         let errors;
         let errorsAnalyzer = [];
@@ -62,30 +95,30 @@ export function convertToRenderFormat(reportData) {
 
         const createErrorObj = (type, error) => ({
             id: project.id,
-            code: `${hashCode(project.id)}x${hashCode(pkgObj.id)}${error.message.length}`,
+            code: `${hashCode(project.id)}x${hashCode(pkg.id)}${error.message.length}`,
             source: error.source,
             timestamp: error.timestamp,
             type,
             package: {
-                id: pkgObj.id,
-                path: pkgObj.path,
-                level: pkgObj.level,
-                scope: pkgObj.scope
+                id: pkg.id,
+                path: pkg.path,
+                level: pkg.level,
+                scope: pkg.scope
             },
             file: project.definition_file_path,
             message: error.message
         });
-        const packageFromScanner = packagesFromScanner[pkgObj.id] || false;
+        const packageFromScanner = packagesFromScanner[pkg.id] || false;
 
         if (analyzerErrors && project) {
             errorsAnalyzer = analyzerErrors.map(error => createErrorObj('ANALYZER_PACKAGE_ERROR', error));
         }
 
         if (packageErrorsFromAnalyzer && project) {
-            if (packageErrorsFromAnalyzer[pkgObj.id]) {
+            if (packageErrorsFromAnalyzer[pkg.id]) {
                 errorsAnalyzer = [
                     ...errorsAnalyzer,
-                    ...packageErrorsFromAnalyzer[pkgObj.id].map(
+                    ...packageErrorsFromAnalyzer[pkg.id].map(
                         error => createErrorObj('ANALYZER_PACKAGE_ERROR', error)
                     )
                 ];
@@ -107,12 +140,12 @@ export function convertToRenderFormat(reportData) {
         errors = [...errorsAnalyzer, ...errorsScanner];
 
         if (errors.length !== 0) {
-            pkgObj.errors = errors;
+            pkg.errors = errors;
 
-            addErrorsToReportDataReportData(projectIndex, pkgObj.id, pkgObj.errors);
+            addErrorsToReportDataReportData(projectIndex, pkg.id, pkgObj.errors);
         }
 
-        return pkgObj;
+        return pkg;
     };
     const addErrorsToReportDataReportData = (projectIndex, pkgId, errors) => {
         if (Array.isArray(errors) && errors.length !== 0) {
@@ -126,18 +159,19 @@ export function convertToRenderFormat(reportData) {
     // Helper function to add license results
     // from Analyzer and Scanner to a package
     const addLicensesToPackage = (projectIndex, pkgObj) => {
-        const packageFromAnalyzer = packagesFromAnalyzer[pkgObj.id] || false;
-        const packageFromScanner = packagesFromScanner[pkgObj.id] || false;
+        const pkg = pkgObj;
+        const packageFromAnalyzer = packagesFromAnalyzer[pkg.id] || false;
+        const packageFromScanner = packagesFromScanner[pkg.id] || false;
 
-        if (pkgObj.id === projects[projectIndex].id) {
+        if (pkg.id === projects[projectIndex].id) {
             // If package is a project then declared licenses
             // are in projects found by Analyzer
-            pkgObj.declared_licenses = projectsFromAnalyzer[projectIndex].declared_licenses;
+            pkg.declared_licenses = projectsFromAnalyzer[projectIndex].declared_licenses;
         } else if (packageFromAnalyzer) {
-            pkgObj.declared_licenses = packageFromAnalyzer.declared_licenses;
+            pkg.declared_licenses = packageFromAnalyzer.declared_licenses;
         } else {
-            pkgObj.declared_licenses = [];
-            console.error(`Package ${pkgObj.id} can not be found in Analyzer results`);
+            pkg.declared_licenses = [];
+            console.error(`Package ${pkg.id} can not be found in Analyzer results`);
         }
 
         addPackageLicensesToProject(
@@ -154,19 +188,19 @@ export function convertToRenderFormat(reportData) {
         );
 
         if (packageFromScanner) {
-            pkgObj.results = packageFromScanner;
+            pkg.results = packageFromScanner;
 
-            pkgObj.license_findings = packageFromScanner
+            pkg.license_findings = packageFromScanner
                 .reduce((accumulator, scanResult) => accumulator.concat(scanResult.summary.license_findings), []);
 
             // Merge scan results from different scanners into array of license names
-            pkgObj.detected_licenses = pkgObj.license_findings.reduce((accumulator, finding) => {
+            pkg.detected_licenses = pkgObj.license_findings.reduce((accumulator, finding) => {
                 accumulator.push(finding.license);
                 return accumulator;
             }, []);
 
             // Remove duplicate license names after merging
-            pkgObj.detected_licenses = removeDuplicatesInArray(pkgObj.detected_licenses);
+            pkg.detected_licenses = removeDuplicatesInArray(pkgObj.detected_licenses);
 
             addPackageLicensesToProject(
                 projectIndex,
@@ -181,13 +215,13 @@ export function convertToRenderFormat(reportData) {
                 pkgObj.detected_licenses
             );
         } else {
-            pkgObj.results = [];
-            pkgObj.license_findings = [];
-            pkgObj.detected_licenses = [];
-            console.error(`Package ${pkgObj.id} was detected by Analyzer but not scanned`);
+            pkg.results = [];
+            pkg.license_findings = [];
+            pkg.detected_licenses = [];
+            console.error(`Package ${pkg.id} was detected by Analyzer but not scanned`);
         }
 
-        return pkgObj;
+        return pkg;
     };
     /* Helper function to add the level and the scope for package
      * to the project that introduced the dependency.
@@ -291,47 +325,48 @@ export function convertToRenderFormat(reportData) {
      */
     const addPackageToProjectList = (projectIndex, pkgObj) => {
         let projectsListPkg;
+        const pkg = pkgObj;
 
-        projectsListPkg = projects[projectIndex].packages.list[pkgObj.id];
+        projectsListPkg = projects[projectIndex].packages.list[pkg.id];
 
         if (!projectsListPkg) {
-            pkgObj.levels = [pkgObj.level];
-            pkgObj.paths = [];
-            pkgObj.scopes = [];
-            if (pkgObj.scope !== '') {
-                pkgObj.scopes.push(pkgObj.scope);
+            pkg.levels = [pkgObj.level];
+            pkg.paths = [];
+            pkg.scopes = [];
+            if (pkg.scope !== '') {
+                pkg.scopes.push(pkg.scope);
             }
 
-            projectsListPkg = pkgObj;
-            projects[projectIndex].packages.list[pkgObj.id] = pkgObj;
+            projectsListPkg = pkg;
+            projects[projectIndex].packages.list[pkg.id] = pkgObj;
             projects[projectIndex].packages.total += 1;
         } else {
             // Ensure each level only occurs once
-            if (!projectsListPkg.levels.includes(pkgObj.level)) {
+            if (!projectsListPkg.levels.includes(pkg.level)) {
                 projectsListPkg.levels.push(pkgObj.level);
             }
 
-            if (pkgObj.scope !== '') {
+            if (pkg.scope !== '') {
                 // Ensure each scope only occurs once
-                if (!projectsListPkg.scopes.includes(pkgObj.scope)) {
-                    projectsListPkg.scopes.push(pkgObj.scope);
+                if (!projectsListPkg.scopes.includes(pkg.scope)) {
+                    projectsListPkg.scopes.push(pkg.scope);
                 }
             }
         }
 
-        if (pkgObj.scope !== '' && pkgObj.path.length !== 0) {
+        if (pkg.scope !== '' && pkg.path.length !== 0) {
             projectsListPkg.paths.push({
-                scope: pkgObj.scope,
-                path: pkgObj.path
+                scope: pkg.scope,
+                path: pkg.path
             });
         }
 
-        addPackageLevelAndScopeToProject(projectIndex, pkgObj.level, pkgObj.scope);
+        addPackageLevelAndScopeToProject(projectIndex, pkgObj.level, pkg.scope);
 
-        delete pkgObj.children;
-        delete pkgObj.path;
-        delete pkgObj.level;
-        delete pkgObj.scope;
+        delete pkg.children;
+        delete pkg.path;
+        delete pkg.level;
+        delete pkg.scope;
 
         return pkgObj;
     };
@@ -496,31 +531,6 @@ export function convertToRenderFormat(reportData) {
             return undefined;
         }
     };
-    // Transform Analyer results to be indexed by package Id for faster lookups
-    const packagesFromAnalyzer = ((dataArr) => {
-        const tmp = {};
-
-        for (let i = dataArr.length - 1; i >= 0; i -= 1) {
-            tmp[dataArr[i].package.id] = {
-                ...dataArr[i].package,
-                curations: dataArr[i].curations
-            };
-        }
-
-        return tmp;
-    })(reportData.analyzer.result.packages || []);
-    // Transform Scanner results to be indexed by package Id for faster lookups
-    const packagesFromScanner = ((dataArr) => {
-        const tmp = {};
-
-        for (let i = dataArr.length - 1; i >= 0; i -= 1) {
-            tmp[dataArr[i].id] = dataArr[i].results;
-        }
-
-        return tmp;
-    })(reportData.scanner.results.scan_results || []);
-    const packageErrorsFromAnalyzer = reportData.analyzer.result.errors;
-    const projectsFromAnalyzer = reportData.analyzer.result.projects;
     /* Helper function to recursive traverse over the packages
      * found by the Analyzer so they can be transformed
      * into a format that suitable for use in the WebApp
@@ -685,10 +695,4 @@ export function convertToRenderFormat(reportData) {
         vcs: reportData.repository.vcs || {},
         vcs_processed: reportData.repository.vcs_processed || {}
     };
-}
-
-// Utility function to remove duplicates from Array
-// https://codehandbook.org/how-to-remove-duplicates-from-javascript-array/
-export function removeDuplicatesInArray(arr) {
-    return Array.from(new Set(arr));
 }
