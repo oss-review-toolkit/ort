@@ -26,6 +26,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import java.util.Stack
 
 /**
  * A convenience function that stashes directories using a [DirectoryStash] instance.
@@ -37,22 +38,23 @@ fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf
  * any conflicting existing directories in the original location and then moves the original directories back.
  */
 private class DirectoryStash(directories: Set<File>) : Closeable {
-    private val stashedDirectories = mutableMapOf<File, File>()
+    private val stashedDirectories = Stack<Pair<File, File>>()
 
     init {
-        directories.filter {
-            it.isDirectory
-        }.associateTo(stashedDirectories) { originalDir ->
-            // Create a temporary directory to move directories as-is into.
-            val stashDir = createTempDir("stash", ".tmp", originalDir.parentFile)
+        directories.forEach { originalDir ->
+            if (originalDir.isDirectory) {
+                // Create a temporary directory to move directories as-is into.
+                val stashDir = createTempDir("stash", ".tmp", originalDir.parentFile)
 
-            // Use a non-existing directory as the target to ensure the directory can be moved atomically.
-            val tempDir = File(stashDir, originalDir.name)
+                // Use a non-existing directory as the target to ensure the directory can be moved atomically.
+                val tempDir = File(stashDir, originalDir.name)
 
-            log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
+                log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'." }
 
-            Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-            Pair(originalDir, tempDir)
+                Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+
+                stashedDirectories.push(Pair(originalDir, tempDir))
+            }
         }
     }
 

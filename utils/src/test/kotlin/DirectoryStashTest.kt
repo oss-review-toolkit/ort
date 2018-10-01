@@ -110,14 +110,14 @@ private lateinit var directoryStash : Closeable
             sandboxDirShouldBeInOriginalState()
         }
 
-        "given parent and child, stashing works".config( enabled = false ) {
+        "given parent and child, stashing works" {
             directoryStash = stashDirectories(a, a1)
 
             a shouldNot exist()
             a1 shouldNot exist()
         }
 
-        "given parent and child, un-stashing works".config( enabled = false ) {
+        "given parent and child, un-stashing works" {
             directoryStash = stashDirectories(a, a1)
 
             directoryStash.close()
