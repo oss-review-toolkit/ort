@@ -54,6 +54,7 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
+import java.lang.IllegalArgumentException
 import java.net.HttpURLConnection
 import java.util.SortedSet
 
@@ -153,7 +154,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
         var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
 
-        val (projectName, projectVersion, projectHomepage) = if (File(workingDir, "setup.py").isFile) {
+        // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
+        val (setupName, setupVersion, setupHomepage) = if (File(workingDir, "setup.py").isFile) {
             val pydep = if (OS.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
                 runInVirtualEnv(virtualEnvDir, workingDir, "python",
@@ -173,12 +175,11 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                         it["repo_url"].textValueOrEmpty())
             }
         } else {
-            // In case of "requirements*.txt" there is no meta-data at all available, so use the parent directory name
-            // plus what "*" expands to as the project name and the VCS revision, if any, as the project version.
-            val name = definitionFile.parentFile.name +
-                    definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
-            val version = VersionControlSystem.getCloneInfo(workingDir).revision
+            listOf("", "", "")
+        }
 
+        // Try to get additional information from any "requirements.txt" file.
+        val (requirementsName, requirementsVersion, requirementsSuffix) = if (definitionFile.name != "setup.py") {
             val pythonVersionLines = definitionFile.readLines().filter { it.contains("python_version") }
             if (pythonVersionLines.isNotEmpty()) {
                 log.debug {
@@ -186,8 +187,27 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                 }
             }
 
-            listOf(name, version, "")
+            // In case of "requirements*.txt" there is no meta-data at all available, so use the parent directory name
+            // plus what "*" expands to as the project name and the VCS revision, if any, as the project version.
+            val suffix = definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
+            val name = definitionFile.parentFile.name + suffix
+
+            val version = VersionControlSystem.getCloneInfo(workingDir).revision
+
+            listOf(name, version, suffix)
+        } else {
+            listOf("", "", "")
         }
+
+        // Amend information from "setup.py" with that from "requirements.txt".
+        val projectName = when (Pair(setupName.isNotEmpty(), requirementsName.isNotEmpty())) {
+            Pair(true, false) -> setupName
+            Pair(false, true) -> requirementsName
+            Pair(true, true) -> "$setupName-requirements$requirementsSuffix"
+            else -> throw IllegalArgumentException("Unbale to determine a project name for '$definitionFile'.")
+        }
+        val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
+        val projectHomepage = setupHomepage
 
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
