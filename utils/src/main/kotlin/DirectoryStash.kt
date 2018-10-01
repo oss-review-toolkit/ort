@@ -60,16 +60,14 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
     }
 
     override fun close() {
-        val i = stashedDirectories.iterator()
-        while (i.hasNext()) {
-            val (originalDir, tempDir) = i.next()
+        while (!stashedDirectories.empty()) {
+            val (originalDir, tempDir) = stashedDirectories.pop()
 
             originalDir.safeDeleteRecursively()
 
             log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
 
             Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
-            i.remove()
 
             // Delete the top-level temporary directory which should be empty now.
             if (!tempDir.parentFile.delete()) {
