@@ -102,14 +102,14 @@ class DirectoryStashTest : StringSpec() {
             sandboxDirShouldBeInOriginalState()
         }
 
-        "given parent and child, stashing works".config(enabled = false) {
+        "given parent and child, stashing works" {
             stashDirectories(a, a1).use {
                 a shouldNot exist()
                 a1 shouldNot exist()
             }
         }
 
-        "given parent and child, un-stashing works".config(enabled = false) {
+        "given parent and child, un-stashing works" {
             stashDirectories(a, a1).use {}
 
             sandboxDirShouldBeInOriginalState()
