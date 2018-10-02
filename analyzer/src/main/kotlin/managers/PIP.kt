@@ -67,6 +67,13 @@ val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
 const val PYDEP_REVISION = "license-and-classifiers"
 
+// virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
+// installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
+object VirtualEnv : CommandLineTool {
+    override fun command(workingDir: File?) = "virtualenv"
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("15.1.+")
+}
+
 /**
  * The PIP package manager for Python, see https://pip.pypa.io/. Also see
  * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
@@ -114,14 +121,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
     }
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        // virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
-        // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
-        val virtualEnv = object : CommandLineTool {
-            override fun command(workingDir: File?) = "virtualenv"
-            override fun getVersionRequirement(): Requirement = Requirement.buildIvy("15.1.+")
-        }
-
-        virtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         return definitionFiles
     }
