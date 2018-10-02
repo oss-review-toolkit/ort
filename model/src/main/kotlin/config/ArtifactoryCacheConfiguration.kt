@@ -26,4 +26,15 @@ data class ArtifactoryCacheConfiguration(
 
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         val apiToken: String = ""
-)
+
+) : CacheConfiguration {
+    override fun validate() {
+        require(url.isNotBlank()) {
+            "URL for Artifactory cache is missing."
+        }
+
+        require(apiToken.isNotBlank()) {
+            "API token for Artifactory cache is missing."
+        }
+    }
+}

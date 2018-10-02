@@ -22,10 +22,9 @@ package com.here.ort.scanner
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.Identifier
-import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScannerDetails
+import com.here.ort.model.config.ArtifactoryCacheConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.OkHttpClientHelper
@@ -42,19 +41,18 @@ import okhttp3.Request
 import okio.Okio
 
 class ArtifactoryCache(
-        private val url: String,
-        private val apiToken: String
-) : ScanResultsCache {
+        private val config: ArtifactoryCacheConfiguration
+) : ScanStorage {
     override fun read(id: Identifier): ScanResultContainer {
         val cachePath = cachePath(id)
 
         log.info { "Trying to read scan results for '$id' from Artifactory cache: $cachePath" }
 
         val request = Request.Builder()
-                .header("X-JFrog-Art-Api", apiToken)
+                .header("X-JFrog-Art-Api", config.apiToken)
                 .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
                 .get()
-                .url("$url/$cachePath")
+                .url("${config.url}/$cachePath")
                 .build()
 
         val tempFile = createTempFile("scan-results-", ".yml")
@@ -89,61 +87,7 @@ class ArtifactoryCache(
         return ScanResultContainer(id, emptyList())
     }
 
-    override fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
-        val scanResults = read(pkg.id).results.toMutableList()
-
-        if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
-
-        scanResults.retainAll { it.provenance.matches(pkg) }
-        if (scanResults.isEmpty()) {
-            log.info {
-                "No cached scan results found for $pkg. The following entries with non-matching provenance have " +
-                        "been ignored: ${scanResults.map { it.provenance }}"
-            }
-            return ScanResultContainer(pkg.id, scanResults)
-        }
-
-        scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
-        if (scanResults.isEmpty()) {
-            log.info {
-                "No cached scan results found for $scannerDetails. The following entries with incompatible scanners " +
-                        "have been ignored: ${scanResults.map { it.scanner }}"
-            }
-            return ScanResultContainer(pkg.id, scanResults)
-        }
-
-        log.info {
-            "Found ${scanResults.size} cached scan result(s) for $pkg that are compatible with $scannerDetails."
-        }
-
-        return ScanResultContainer(pkg.id, scanResults)
-    }
-
     override fun add(id: Identifier, scanResult: ScanResult): Boolean {
-        // Do not cache empty scan results. It is likely that something went wrong when they were created, and if not,
-        // it is cheap to re-create them.
-        if (scanResult.summary.fileCount == 0) {
-            log.info { "Not caching scan result for '$id' because no files were scanned." }
-
-            return false
-        }
-
-        // Do not cache scan results without raw result. The raw result can be set to null for other usages, but in the
-        // cache it must never be null.
-        if (scanResult.rawResult == null) {
-            log.info { "Not caching scan result for '$id' because the raw result is null." }
-
-            return false
-        }
-
-        // Do not cache scan results without provenance information, because they cannot be assigned to the revision of
-        // the package source code later.
-        if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
-            log.info { "Not caching scan result for '$id' because no provenance information is available." }
-
-            return false
-        }
-
         val scanResults = ScanResultContainer(id, read(id).results + scanResult)
 
         val tempFile = createTempFile("scan-results-")
@@ -154,9 +98,9 @@ class ArtifactoryCache(
         log.info { "Writing scan results for '$id' to Artifactory cache: $cachePath" }
 
         val request = Request.Builder()
-                .header("X-JFrog-Art-Api", apiToken)
+                .header("X-JFrog-Art-Api", config.apiToken)
                 .put(OkHttpClientHelper.createRequestBody(tempFile))
-                .url("$url/$cachePath")
+                .url("${config.url}/$cachePath")
                 .build()
 
         try {

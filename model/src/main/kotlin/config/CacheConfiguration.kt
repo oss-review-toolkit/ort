@@ -19,17 +19,6 @@
 
 package com.here.ort.model.config
 
-/**
- * The configuration model of the scanner.
- */
-data class ScannerConfiguration(
-        /**
-         * An optional Artifactory configuration to cache the scan results.
-         */
-        val artifactoryCache: ArtifactoryCacheConfiguration? = null,
-
-        /**
-         * An optional Google Cloud Storage configuration to cache the scan results.
-         */
-        val cloudStorageCache: CloudStorageCacheConfiguration? = null
-)
+interface CacheConfiguration {
+    fun validate()
+}

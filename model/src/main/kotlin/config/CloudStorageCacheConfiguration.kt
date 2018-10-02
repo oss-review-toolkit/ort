@@ -19,17 +19,15 @@
 
 package com.here.ort.model.config
 
-/**
- * The configuration model of the scanner.
- */
-data class ScannerConfiguration(
-        /**
-         * An optional Artifactory configuration to cache the scan results.
-         */
-        val artifactoryCache: ArtifactoryCacheConfiguration? = null,
+import java.io.File
 
-        /**
-         * An optional Google Cloud Storage configuration to cache the scan results.
-         */
-        val cloudStorageCache: CloudStorageCacheConfiguration? = null
-)
+data class CloudStorageCacheConfiguration(
+        val bucketName: String,
+        var googleApplicationCredentials: File? = null
+) : CacheConfiguration {
+    override fun validate() {
+        require(bucketName.isNotBlank()) {
+            "Bucket named $bucketName for Cloud Storage Cache is missing."
+        }
+    }
+}
