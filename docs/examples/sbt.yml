@@ -1,0 +1,8 @@
+excludes:
+  scopes:
+  - name: "provided"
+    reason: "PROVIDED_BY"
+    comment: "These are dependencies provided by the JDK or container at runtime. They are not distributed in the context of this project."
+  - name: "test"
+    reason: "TEST_TOOL_OF"
+    comment: "These are dependencies used for testing. They are not distributed in the context of this project."

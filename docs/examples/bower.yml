@@ -1,0 +1,5 @@
+excludes:
+  scopes:
+  - name: "devDependencies"
+    reason: "BUILD_TOOL_OF"
+    comment: "These are dependencies only used for development. They are not distributed in the context of this product."
