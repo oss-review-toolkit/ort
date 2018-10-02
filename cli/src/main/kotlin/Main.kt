@@ -60,6 +60,7 @@ object Main : CommandWithHelp() {
             addCommand(AnalyzerCommand)
             addCommand(DownloaderCommand)
             addCommand(ReporterCommand)
+            addCommand(RequirementsCommand)
             addCommand(ScannerCommand)
             parse(*args)
         }

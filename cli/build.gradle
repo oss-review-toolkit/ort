@@ -5,6 +5,8 @@ applicationName = 'ort'
 mainClassName = 'com.here.ort.Main'
 
 repositories {
+    jcenter()
+
     // Need to repeat the analyzer's custom repository definition here, see
     // https://github.com/gradle/gradle/issues/4106.
     maven {
@@ -21,4 +23,6 @@ dependencies {
     compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile "org.reflections:reflections:$reflectionsVersion"
 }
