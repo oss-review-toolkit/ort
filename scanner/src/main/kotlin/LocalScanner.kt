@@ -52,6 +52,8 @@ import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
+import com.vdurmont.semver4j.Requirement
+
 import java.io.File
 import java.io.IOException
 import java.time.Instant
@@ -102,6 +104,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      * The full path to the scanner executable.
      */
     protected val scannerPath by lazy { File(scannerDir, command()) }
+
+    override fun getVersionRequirement() = Requirement.buildLoose(scannerVersion)
 
     /**
      * Return the actual version of the scanner, or an empty string in case of failure.

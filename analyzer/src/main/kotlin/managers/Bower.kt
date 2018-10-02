@@ -210,11 +210,10 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bower.cmd" else "bower"
 
+    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_BOWER_VERSION)
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        checkVersion(
-                Requirement.buildNPM(REQUIRED_BOWER_VERSION),
-                ignoreActualVersion = analyzerConfig.ignoreToolVersions
-        )
+        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
         return definitionFiles
     }
 

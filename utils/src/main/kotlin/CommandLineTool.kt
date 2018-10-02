@@ -38,6 +38,11 @@ interface CommandLineTool {
     fun command(workingDir: File? = null): String
 
     /**
+     * Return the requirement for the version of the command. Defaults to any version.
+     */
+    fun getVersionRequirement() = Requirement.buildNPM("*")
+
+    /**
      * Return whether the executable for this command is available in the system PATH.
      */
     fun isInPath() = getPathFromEnvironment(command()) != null
@@ -73,10 +78,9 @@ interface CommandLineTool {
     }
 
     /**
-     * Run a [command] to check its version against a [requirement].
+     * Run a [command] to check its version against the [required version][getVersionRequirement].
      */
     fun checkVersion(
-            requirement: Requirement,
             versionArguments: String = "--version",
             ignoreActualVersion: Boolean = false,
             workingDir: File? = null,
@@ -84,9 +88,10 @@ interface CommandLineTool {
     ) {
         val toolVersionOutput = getVersion(versionArguments, workingDir, transform)
         val actualVersion = Semver(toolVersionOutput, Semver.SemverType.LOOSE)
+        val requiredVersion = getVersionRequirement()
 
-        if (!requirement.isSatisfiedBy(actualVersion)) {
-            val message = "Unsupported ${command()} version $actualVersion does not fulfill $requirement."
+        if (!requiredVersion.isSatisfiedBy(actualVersion)) {
+            val message = "Unsupported ${command()} version $actualVersion does not fulfill $requiredVersion."
             if (ignoreActualVersion) {
                 log.warn { "$message Still continuing because you chose to ignore the actual version." }
             } else {

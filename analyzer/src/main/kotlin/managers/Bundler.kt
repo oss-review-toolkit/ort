@@ -74,11 +74,12 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bundle.bat" else "bundle"
 
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("1.16.+")
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
         // fixed versions to be sure to get consistent results.
         checkVersion(
-                Requirement.buildIvy("1.16.+"),
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                 transform = { it.substringAfter("Bundler version ") }
         )

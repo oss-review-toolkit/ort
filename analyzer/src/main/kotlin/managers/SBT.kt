@@ -69,6 +69,12 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
     override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
 
+    override fun getVersionRequirement(): Requirement =
+            // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
+            // form "make-pom" and to support declaring Maven-style repositories, see
+            // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+            Requirement.buildIvy("[0.13.0,)")
+
     private fun extractLowestSbtVersion(stdout: String): String {
         val versions = stdout.lines().mapNotNull { line ->
             VERSION_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { Semver(it) }
@@ -106,11 +112,6 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             definitionFiles.first().parentFile
         }
 
-        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
-        // form "make-pom" and to support declaring Maven-style repositories, see
-        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-        val sbtVersionRequirement = Requirement.buildIvy("[0.13.0,)")
-
         // Determine the SBT version(s) being used.
         val rootPropertiesFile = workingDir.resolve("project").resolve("build.properties")
         val propertiesFiles = workingDir.walkBottomUp().filter { it.isFile && it.name == "build.properties" }.toList()
@@ -119,7 +120,6 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
             // https://stackoverflow.com/a/20337575/1127485.
             checkVersion(
-                    sbtVersionRequirement,
                     versionArguments = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion",
                     workingDir = workingDir,
                     ignoreActualVersion = analyzerConfig.ignoreToolVersions,
@@ -134,7 +134,9 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                 props.getProperty("sbt.version")?.let { versions += Semver(it) }
             }
 
+            val sbtVersionRequirement = getVersionRequirement()
             val lowestSbtVersion = checkForSameSbtVersion(versions)
+
             if (!sbtVersionRequirement.isSatisfiedBy(lowestSbtVersion)) {
                 throw IOException("Unsupported ${toString()} version $lowestSbtVersion does not fulfill " +
                         "$sbtVersionRequirement.")
