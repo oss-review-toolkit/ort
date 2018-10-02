@@ -1,6 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-Below you will find some information on how to perform common tasks.<br>
+Below you will find some information on how to perform common tasks.
+
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
 ## Table of Contents
@@ -152,13 +153,16 @@ For the project to build, **these files must exist with exact filenames**:
 
 You can delete or rename the other files.
 
-You may create subdirectories inside `src`. For faster rebuilds, only files inside `src` are processed by Webpack.<br>
+You may create subdirectories inside `src`. For faster rebuilds, only files inside `src` are processed by Webpack.
+
 You need to **put any JS and CSS files inside `src`**, otherwise Webpack won’t see them.
 
-Only files inside `public` can be used from `public/index.html`.<br>
+Only files inside `public` can be used from `public/index.html`.
+
 Read instructions below for using assets from JavaScript and HTML.
 
-You can, however, create more top-level directories.<br>
+You can, however, create more top-level directories.
+
 They will not be included in the production build so you can use them for things like documentation.
 
 ## Available Scripts
@@ -167,23 +171,28 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.<br>
+Runs the app in the development mode.
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
+The page will reload if you make edits.
+
 You will also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.<br>
+Launches the test runner in the interactive watch mode.
+
 See the section about [running tests](#running-tests) for more information.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br>
+Builds the app for production to the `build` folder.
+
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br>
+The build is minified and the filenames include the hashes.
+
 Your app is ready to be deployed!
 
 See the section about [deployment](#deployment) for more information.
@@ -206,7 +215,8 @@ You can refer [to the React documentation](https://reactjs.org/docs/react-dom.ht
 
 ## Supported Language Features and Polyfills
 
-This project supports a superset of the latest JavaScript standard.<br>
+This project supports a superset of the latest JavaScript standard.
+
 In addition to [ES6](https://github.com/lukehoban/es6features) syntax features, it also supports:
 
 * [Exponentiation Operator](https://github.com/rwaldron/exponentiation-operator) (ES2016).
@@ -236,7 +246,8 @@ To configure the syntax highlighting in your favorite text editor, head to the [
 
 ## Displaying Lint Output in the Editor
 
->Note: this feature is available with `react-scripts@0.2.0` and higher.<br>
+>Note: this feature is available with `react-scripts@0.2.0` and higher.
+
 >It also only works with npm 3 or higher.
 
 Some editors, including Sublime Text, Atom, and Visual Studio Code, provide plugins for ESLint.
@@ -380,7 +391,8 @@ This works for any library, not just `react-router`.
 
 ## Importing a Component
 
-This project setup supports ES6 modules thanks to Babel.<br>
+This project setup supports ES6 modules thanks to Babel.
+
 While you can still use `require()` and `module.exports`, we encourage you to use [`import` and `export`](http://exploringjs.com/es6/ch_modules.html) instead.
 
 For example:
@@ -677,7 +689,8 @@ Webpack finds all relative module references in CSS (they start with `./`) and r
 
 Please be advised that this is also a custom feature of Webpack.
 
-**It is not required for React** but many people enjoy it (and React Native uses a similar mechanism for images).<br>
+**It is not required for React** but many people enjoy it (and React Native uses a similar mechanism for images).
+
 An alternative way of handling static assets is described in the next section.
 
 ## Using the `public` Folder
@@ -793,7 +806,8 @@ Now you are ready to use the imported React Bootstrap components within your com
 
 ### Using a Custom Theme
 
-Sometimes you might need to tweak the visual styles of Bootstrap (or equivalent package).<br>
+Sometimes you might need to tweak the visual styles of Bootstrap (or equivalent package).
+
 We suggest the following approach:
 
 * Create a new package that depends on the package you wish to customize, e.g. Bootstrap.
@@ -972,7 +986,8 @@ Files on the left have more priority than files on the right:
 * `npm run build`: `.env.production.local`, `.env.production`, `.env.local`, `.env`
 * `npm test`: `.env.test.local`, `.env.test`, `.env` (note `.env.local` is missing)
 
-These variables will act as the defaults if the machine does not explicitly set them.<br>
+These variables will act as the defaults if the machine does not explicitly set them.
+
 Please refer to the [dotenv documentation](https://github.com/motdotla/dotenv) for more details.
 
 >Note: If you are defining environment variables for development, your CI and/or hosting platform will most likely need
@@ -1002,14 +1017,16 @@ REACT_APP_BAR=$DOMAIN/bar
 
 ## Can I Use Decorators?
 
-Many popular libraries use [decorators](https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841) in their documentation.<br>
+Many popular libraries use [decorators](https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841) in their documentation.
+
 Create React App doesn’t support decorator syntax at the moment because:
 
 * It is an experimental proposal and is subject to change.
 * The current specification version is not officially supported by Babel.
 * If the specification changes, we won’t be able to write a codemod because we don’t use them internally at Facebook.
 
-However in many cases you can rewrite decorator-based code without decorators just as fine.<br>
+However in many cases you can rewrite decorator-based code without decorators just as fine.
+
 Please refer to these two threads for reference:
 
 * [#214](https://github.com/facebookincubator/create-react-app/issues/214)
@@ -1045,7 +1062,8 @@ You can find the companion GitHub repository [here](https://github.com/fullstack
 
 >Note: this feature is available with `react-scripts@0.2.3` and higher.
 
-People often serve the front-end React app from the same host and port as their backend implementation.<br>
+People often serve the front-end React app from the same host and port as their backend implementation.
+
 For example, a production setup might look like this after the app is deployed:
 
 ```
@@ -1072,7 +1090,8 @@ Fetch API cannot load http://localhost:4000/api/todos. No 'Access-Control-Allow-
 
 Keep in mind that `proxy` only has effect in development (with `npm start`), and it is up to you to ensure that URLs like `/api/todos` point to the right thing in production. You don’t have to use the `/api` prefix. Any unrecognized request without a `text/html` accept header will be redirected to the specified `proxy`.
 
-The `proxy` option supports HTTP, HTTPS and WebSocket connections.<br>
+The `proxy` option supports HTTP, HTTPS and WebSocket connections.
+
 If the `proxy` option is **not** flexible enough for you, alternatively you can:
 
 * [Configure the proxy yourself](#configuring-the-proxy-manually)
@@ -1109,7 +1128,8 @@ We don’t recommend this approach.
 
 >Note: this feature is available with `react-scripts@1.0.0` and higher.
 
-If the `proxy` option is **not** flexible enough for you, you can specify an object in the following form (in `package.json`).<br>
+If the `proxy` option is **not** flexible enough for you, you can specify an object in the following form (in `package.json`).
+
 You may also specify any configuration value [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware#options) or [`http-proxy`](https://github.com/nodejitsu/node-http-proxy#options) supports.
 ```js
 {
@@ -1266,7 +1286,8 @@ Then, on the server, you can replace `__SERVER_DATA__` with a JSON of real data 
 
 ## Running Tests
 
->Note: this feature is available with `react-scripts@0.3.0` and higher.<br>
+>Note: this feature is available with `react-scripts@0.3.0` and higher.
+
 >[Read the migration guide to learn how to enable it in older projects!](https://github.com/facebookincubator/create-react-app/blob/master/CHANGELOG.md#migrating-from-023-to-030)
 
 Create React App uses [Jest](https://facebook.github.io/jest/) as its test runner. To prepare for this integration, we did a [major revamp](https://facebook.github.io/jest/blog/2016/09/01/jest-15.html) of Jest so if you heard bad things about it years ago, give it another try.
@@ -1320,7 +1341,8 @@ it('sums numbers', () => {
 });
 ```
 
-All `expect()` matchers supported by Jest are [extensively documented here](https://facebook.github.io/jest/docs/en/expect.html#content).<br>
+All `expect()` matchers supported by Jest are [extensively documented here](https://facebook.github.io/jest/docs/en/expect.html#content).
+
 You can also use [`jest.fn()` and `expect(fn).toBeCalled()`](https://facebook.github.io/jest/docs/en/expect.html#tohavebeencalled) to create “spies” or mock functions.
 
 ### Testing Components
@@ -1401,7 +1423,8 @@ it('renders welcome message', () => {
 });
 ```
 
-All Jest matchers are [extensively documented here](http://facebook.github.io/jest/docs/en/expect.html).<br>
+All Jest matchers are [extensively documented here](http://facebook.github.io/jest/docs/en/expect.html).
+
 Nevertheless you can use a third-party assertion library like [Chai](http://chaijs.com/) if you want to, as described below.
 
 Additionally, you might find [jest-enzyme](https://github.com/blainekasten/enzyme-matchers) helpful to simplify your tests with readable matchers. The above `contains` code can be written more simply with jest-enzyme.
@@ -1470,12 +1493,14 @@ global.localStorage = localStorageMock
 
 ### Focusing and Excluding Tests
 
-You can replace `it()` with `xit()` to temporarily exclude a test from being executed.<br>
+You can replace `it()` with `xit()` to temporarily exclude a test from being executed.
+
 Similarly, `fit()` lets you focus on a specific test without running any other tests.
 
 ### Coverage Reporting
 
-Jest has an integrated coverage reporter that works well with ES6 and requires no configuration.<br>
+Jest has an integrated coverage reporter that works well with ES6 and requires no configuration.
+
 Run `npm test -- --coverage` (note extra `--` in the middle) to include a coverage report like this:
 
 ![coverage report](http://i.imgur.com/5bFhnTS.png)
@@ -2012,7 +2037,8 @@ When users install your app to the homescreen of their device the default config
 
 ### Building for Relative Paths
 
-By default, Create React App produces a build assuming your app is hosted at the server root.<br>
+By default, Create React App produces a build assuming your app is hosted at the server root.
+
 To override this, specify the `homepage` in your `package.json`, for example:
 
 ```js
@@ -2021,9 +2047,10 @@ To override this, specify the `homepage` in your `package.json`, for example:
 
 This will let Create React App correctly infer the root path to use in the generated HTML file.
 
-**Note**: If you are using `react-router@^4`, you can root `<Link>`s using the `basename` prop on any `<Router>`.<br>
-More information [here](https://reacttraining.com/react-router/web/api/BrowserRouter/basename-string).<br>
-<br>
+**Note**: If you are using `react-router@^4`, you can root `<Link>`s using the `basename` prop on any `<Router>`.
+
+More information [here](https://reacttraining.com/react-router/web/api/BrowserRouter/basename-string).
+
 For example:
 ```js
 <BrowserRouter basename="/calendar"/>
@@ -2127,7 +2154,8 @@ For more information see [Add Firebase to your JavaScript Project](https://fireb
 
 #### Step 1: Add `homepage` to `package.json`
 
-**The step below is important!**<br>
+**The step below is important!**
+
 **If you skip it, your app will not deploy correctly.**
 
 Open your `package.json` and add a `homepage` field for your project:
@@ -2221,7 +2249,8 @@ If, when deploying, you get `/dev/tty: No such a device or address` or a similar
 
 ### [Heroku](https://www.heroku.com/)
 
-Use the [Heroku Buildpack for Create React App](https://github.com/mars/create-react-app-buildpack).<br>
+Use the [Heroku Buildpack for Create React App](https://github.com/mars/create-react-app-buildpack).
+
 You can find instructions in [Deploying React with Zero Configuration](https://blog.heroku.com/deploying-react-with-zero-configuration).
 
 #### Resolving Heroku Deployment Errors
@@ -2344,7 +2373,8 @@ NODE_PATH | :white_check_mark: |  :white_check_mark: | Same as [`NODE_PATH` in N
 
 ### `npm start` doesn’t detect changes
 
-When you save a file while `npm start` is running, the browser should refresh with the updated code.<br>
+When you save a file while `npm start` is running, the browser should refresh with the updated code.
+
 If this doesn’t happen, try one of the following workarounds:
 
 * If your project is in a Dropbox folder, try moving it out.
@@ -2397,7 +2427,8 @@ Please refer to [this section](#resolving-heroku-deployment-errors).
 
 If you use a [Moment.js](https://momentjs.com/), you might notice that only the English locale is available by default. This is because the locale files are large, and you probably only need a subset of [all the locales provided by Moment.js](https://momentjs.com/#multiple-locale-support).
 
-To add a specific Moment.js locale to your bundle, you need to import it explicitly.<br>
+To add a specific Moment.js locale to your bundle, you need to import it explicitly.
+
 For example:
 
 ```js
@@ -2423,7 +2454,6 @@ This will only work for locales that have been explicitly imported before.
 
 Some third-party packages don't compile their code to ES5 before publishing to npm. This often causes problems in the ecosystem because neither browsers (except for most modern versions) nor some tools currently support all ES6 features. We recommend to publish code on npm as ES5 at least for a few more years.
 
-<br>
 To resolve this:
 
 1. Open an issue on the dependency's issue tracker and ask that the package be published pre-compiled.
