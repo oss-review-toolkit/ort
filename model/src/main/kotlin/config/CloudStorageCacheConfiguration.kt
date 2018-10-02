@@ -19,24 +19,17 @@
 
 package com.here.ort.model.config
 
-import com.fasterxml.jackson.annotation.JsonProperty
-
 import com.here.ort.model.config.CacheConfiguration
 
-data class ArtifactoryCacheConfiguration(
-        val url: String,
+import java.io.File
 
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-        val apiToken: String = ""
-
+data class CloudStorageCacheConfiguration(
+        val bucketName: String,
+        var googleApplicationCredentials: File? = null
 ) : CacheConfiguration {
     override fun validate() {
-        require(url.isNotBlank()) {
-            "URL for Artifactory cache is missing."
-        }
-
-        require(apiToken.isNotBlank()) {
-            "API token for Artifactory cache is missing."
+        require(bucketName.isNotBlank()) {
+            "Bucket named $bucketName for Cloud Storage Cache is missing."
         }
     }
 }

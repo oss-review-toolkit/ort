@@ -86,7 +86,12 @@ object ScannerCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var scannerFactory: ScannerFactory = ScanCode.Factory()
 
-    @Parameter(description = "The path to a configuration file.",
+    @Parameter(description = "The path to Google Application Credentials file.",
+            names = ["--google-application-credentials"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var googleApplicationCredentials: File? = null
+
+    @Parameter(description = "The path to the configuration file.",
             names = ["--config", "-c"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var configFile: File? = null
@@ -123,7 +128,12 @@ object ScannerCommand : CommandWithHelp() {
             ScanResultsCache.configure(it)
         }
 
-        val scanner = scannerFactory.create(config)
+        config.cloudStorageCache?.let {
+            it.googleApplicationCredentials = googleApplicationCredentials
+            ScanResultsCache.configure(it)
+        }
+
+        val scanner = scannerFactory?.create(config) ?: ScanCode(config)
 
         println("Using scanner '$scanner'.")
 

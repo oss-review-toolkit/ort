@@ -24,7 +24,12 @@ package com.here.ort.model.config
  */
 data class ScannerConfiguration(
         /**
-         * Configuration of the scan results Artifactory cache.
+         * An optional Artifactory configuration to cache the scan results.
          */
-        val artifactoryCache: ArtifactoryCacheConfiguration? = null
+        val artifactoryCache: ArtifactoryCacheConfiguration? = null,
+
+        /**
+         * An optional Google Cloud Storage configuration to cache the scan results.
+         */
+        val cloudStorageCache: CloudStorageCacheConfiguration? = null
 )

@@ -28,17 +28,6 @@ import io.kotlintest.specs.WordSpec
 
 @Suppress("UnsafeCallOnNullableType", "UnsafeCast")
 class ScanResultsCacheTest : WordSpec() {
-    private fun ArtifactoryCache.getStringField(name: String): String {
-        javaClass.getDeclaredField(name).let {
-            it.isAccessible = true
-            return it.get(this) as String
-        }
-    }
-
-    private fun ArtifactoryCache.getApiToken() = getStringField("apiToken")
-
-    private fun ArtifactoryCache.getUrl() = getStringField("url")
-
     init {
         "ScanResultsCache.configure" should {
             "fail if the Artifactory URL is empty" {
@@ -66,8 +55,6 @@ class ScanResultsCacheTest : WordSpec() {
 
                 ScanResultsCache.cache shouldNotBe null
                 ScanResultsCache.cache::class shouldBe ArtifactoryCache::class
-                (ScanResultsCache.cache as ArtifactoryCache).getApiToken() shouldBe "someApiToken"
-                (ScanResultsCache.cache as ArtifactoryCache).getUrl() shouldBe "someUrl"
             }
         }
     }
