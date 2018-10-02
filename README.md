@@ -146,11 +146,11 @@ are supported.
 
 ## Getting Started
 
-Please see [GettingStarted.md](./GettingStarted.md) for an introduction to the individual tools.
+Please see [GettingStarted.md](./docs/GettingStarted.md) for an introduction to the individual tools.
 
 ## Configuration
 
-Please see [Configuration.md](./Configuration.md) for details about the ORT configuration.
+Please see [Configuration.md](./docs/Configuration.md) for details about the ORT configuration.
 
 ## Development
 
