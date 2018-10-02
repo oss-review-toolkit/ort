@@ -1,0 +1,144 @@
+/*
+ * Copyright (C) 2017-2018 HERE Europe B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package com.here.ort.commands
+
+import ch.frankel.slf4k.*
+
+import com.beust.jcommander.IStringConverter
+import com.beust.jcommander.JCommander
+import com.beust.jcommander.Parameter
+import com.beust.jcommander.ParameterException
+import com.beust.jcommander.Parameters
+
+import com.here.ort.CommandWithHelp
+import com.here.ort.analyzer.Analyzer
+import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.model.OutputFormat
+import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.log
+import com.here.ort.utils.safeMkdirs
+
+import java.io.File
+
+import kotlin.system.exitProcess
+
+@Parameters(commandNames = ["analyze"], commandDescription = "Determine dependencies of a software project.")
+object AnalyzerCommand : CommandWithHelp() {
+    private class PackageManagerConverter : IStringConverter<PackageManagerFactory> {
+        companion object {
+            // Map upper-cased package manager names to their instances.
+            val PACKAGE_MANAGERS = PackageManager.ALL.associateBy { it.toString().toUpperCase() }
+        }
+
+        override fun convert(name: String): PackageManagerFactory {
+            return PACKAGE_MANAGERS[name.toUpperCase()]
+                    ?: throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGERS.keys}.")
+        }
+    }
+
+    @Parameter(description = "The list of package managers to activate.",
+            names = ["--package-managers", "-m"],
+            converter = PackageManagerConverter::class,
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var packageManagers = PackageManager.ALL
+
+    @Parameter(description = "The project directory to analyze.",
+            names = ["--input-dir", "-i"],
+            required = true,
+            order = PARAMETER_ORDER_MANDATORY)
+    @Suppress("LateinitUsage")
+    private lateinit var inputDir: File
+
+    @Parameter(description = "The directory to write the analyzer result file to.",
+            names = ["--output-dir", "-o"],
+            required = true,
+            order = PARAMETER_ORDER_MANDATORY)
+    @Suppress("LateinitUsage")
+    private lateinit var outputDir: File
+
+    @Parameter(description = "The list of output formats used for the result file(s).",
+            names = ["--output-formats", "-f"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var outputFormats = listOf(OutputFormat.YAML)
+
+    @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
+            names = ["--ignore-tool-versions"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var ignoreToolVersions = false
+
+    @Parameter(description = "Allow dynamic versions of dependencies. This can result in unstable results when " +
+            "dependencies use version ranges. This option only affects package managers that support lock files, " +
+            "like NPM.",
+            names = ["--allow-dynamic-versions"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var allowDynamicVersions = false
+
+    @Parameter(description = "A YAML file that contains package curation data.",
+            names = ["--package-curations-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var packageCurationsFile: File? = null
+
+    @Parameter(description = "A file containing the repository configuration. If set the .ort.yml file from the " +
+            "repository will be ignored.",
+            names = ["--repository-configuration-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var repositoryConfigurationFile: File? = null
+
+    override fun runCommand(jc: JCommander) {
+        val absoluteOutputPath = outputDir.absoluteFile
+        if (absoluteOutputPath.exists()) {
+            log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
+            exitProcess(1)
+        }
+
+        require(packageCurationsFile?.isFile ?: true) {
+            "The package curations file '${packageCurationsFile!!.invariantSeparatorsPath}' could not be found."
+        }
+
+        require(repositoryConfigurationFile?.isFile ?: true) {
+            "The repository configuration file '${repositoryConfigurationFile!!.invariantSeparatorsPath}' could " +
+                    "not be found."
+        }
+
+        packageManagers = packageManagers.distinct()
+
+        println("The following package managers are activated:")
+        println("\t" + packageManagers.joinToString(", "))
+
+        val absoluteProjectPath = inputDir.absoluteFile
+        println("Scanning project path:\n\t$absoluteProjectPath")
+
+        val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
+        val analyzer = Analyzer(config)
+        val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile,
+                repositoryConfigurationFile)
+
+        absoluteOutputPath.safeMkdirs()
+
+        outputFormats.distinct().forEach { format ->
+            val outputFile = File(absoluteOutputPath, "analyzer-result.${format.fileExtension}")
+            println("Writing analyzer result to '$outputFile'.")
+            format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, ortResult)
+        }
+    }
+}
