@@ -101,3 +101,18 @@ It is possible to mix global and local scope excludes in a single `.ort.yml`.
 
 For the available exclude reasons for scopes, see
 [ScopeExcludeReason.kt](../model/src/main/kotlin/config/ScopeExcludeReason.kt).
+
+See below examples for typical scope excludes for the supported package managers. Note that you have to verify that
+these examples match the configuration of your project.
+
+* [bower.yml](examples/bower.yml)
+* [bundler.yml](examples/bundler.yml)
+* [go-dep.yml](examples/go-dep.yml)
+* [gradle.yml](examples/gradle.yml)
+* [maven.yml](examples/maven.yml)
+* [npm.yml](examples/npm.yml)
+* [php-composer.yml](examples/php-composer.yml)
+* [pip.yml](examples/pip.yml)
+* [sbt.yml](examples/sbt.yml)
+* [stack.yml](examples/stack.yml)
+* [yarn.yml](examples/yarn.yml)
