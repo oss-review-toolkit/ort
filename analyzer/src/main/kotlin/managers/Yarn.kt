@@ -47,6 +47,8 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
 
     override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"
 
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.9.*")
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         val conflictingLockFiles = mutableMapOf<File, Pair<List<File>, List<File>>>()
 
@@ -84,7 +86,7 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
         if (yarnDefinitionFiles.isNotEmpty()) {
             // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
             // fixed minor version to be sure to get consistent results.
-            checkVersion(Requirement.buildNPM("1.3.* - 1.9.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+            checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
         }
 
         return yarnDefinitionFiles

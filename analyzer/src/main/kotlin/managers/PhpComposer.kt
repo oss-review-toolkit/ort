@@ -84,6 +84,8 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
     override fun run(workingDir: File?, vararg args: String) =
             ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args).requireSuccess()
 
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.5,)")
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
@@ -96,7 +98,6 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
         // Composer version 1.5.1 2017-08-09 16:07:22
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
         checkVersion(
-                Requirement.buildIvy("[1.5,)"),
                 "--no-ansi --version",
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                 transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }

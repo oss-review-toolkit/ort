@@ -118,9 +118,10 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
         val virtualEnv = object : CommandLineTool {
             override fun command(workingDir: File?) = "virtualenv"
+            override fun getVersionRequirement(): Requirement = Requirement.buildIvy("15.1.+")
         }
 
-        virtualEnv.checkVersion(Requirement.buildIvy("15.1.+"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        virtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
         return definitionFiles
     }

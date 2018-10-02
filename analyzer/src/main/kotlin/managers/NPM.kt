@@ -119,6 +119,8 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
     override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
 
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.5.* - 6.4.*")
+
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
         // Only keep those definition files that are not accompanied by a Yarn lock file.
         val npmDefinitionFiles = definitionFiles.filterNot { definitionFile ->
@@ -128,7 +130,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         if (npmDefinitionFiles.isNotEmpty()) {
             // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
             // fixed minor version to be sure to get consistent results.
-            checkVersion(Requirement.buildNPM("5.5.* - 6.4.*"), ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+            checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
         }
 
         return npmDefinitionFiles
