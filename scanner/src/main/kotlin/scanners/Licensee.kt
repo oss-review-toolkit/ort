@@ -57,6 +57,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
     override fun command(workingDir: File?) = if (OS.isWindows) "licensee.bat" else "licensee"
 
     override fun getVersion(dir: File): String {
+        // Create a temporary tool to get its version from the installation in a specific directory.
         val cmd = command()
         val tool = object : CommandLineTool {
             override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
