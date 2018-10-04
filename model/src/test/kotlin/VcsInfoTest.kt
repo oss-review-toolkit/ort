@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -36,7 +38,7 @@ class VcsInfoTest : StringSpec({
 
             println(yaml)
 
-            val vcsInfo = yamlMapper.readValue(yaml, VcsInfo::class.java)
+            val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
             vcsInfo.type shouldBe "type"
             vcsInfo.url shouldBe "url"
@@ -50,7 +52,7 @@ class VcsInfoTest : StringSpec({
                 type: "type"
                 """.trimIndent()
 
-            val vcsInfo = yamlMapper.readValue(yaml, VcsInfo::class.java)
+            val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
             vcsInfo.type shouldBe "type"
             vcsInfo.url shouldBe ""
@@ -64,7 +66,7 @@ class VcsInfoTest : StringSpec({
                 path: "path"
                 """.trimIndent()
 
-            val vcsInfo = yamlMapper.readValue(yaml, VcsInfo::class.java)
+            val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
             vcsInfo.type shouldBe ""
             vcsInfo.url shouldBe ""

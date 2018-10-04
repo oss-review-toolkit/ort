@@ -21,6 +21,8 @@ package com.here.ort.analyzer
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -196,7 +198,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
     private fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
         remoteArtifactCache.read(artifact.toString())?.let {
             log.debug { "Reading remote artifact for '$artifact' from disk cache." }
-            return yamlMapper.readValue(it, RemoteArtifact::class.java)
+            return yamlMapper.readValue(it)
         }
 
         val repoSystem = container.lookup(RepositorySystem::class.java, "default")

@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -62,8 +64,7 @@ class AnalyzerResultTest : WordSpec() {
                         .build()
 
                 val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
-                val deserializedMergedResults =
-                        yamlMapper.readValue(serializedMergedResults, AnalyzerResult::class.java)
+                val deserializedMergedResults = yamlMapper.readValue<AnalyzerResult>(serializedMergedResults)
 
                 deserializedMergedResults shouldBe mergedResults
             }

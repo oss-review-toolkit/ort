@@ -19,6 +19,8 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.here.ort.model.yamlMapper
 
 import io.kotlintest.matchers.beEmpty
@@ -36,7 +38,7 @@ class RepositoryConfigurationTest : WordSpec() {
                     excludes:
                     """.trimIndent()
 
-                val repositoryConfiguration = yamlMapper.readValue(configuration, RepositoryConfiguration::class.java)
+                val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
 
                 repositoryConfiguration shouldNotBe null
                 repositoryConfiguration.excludes shouldBe null
@@ -60,7 +62,7 @@ class RepositoryConfigurationTest : WordSpec() {
                         comment: "scope comment"
                     """.trimIndent()
 
-                val repositoryConfiguration = yamlMapper.readValue(configuration, RepositoryConfiguration::class.java)
+                val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
 
                 repositoryConfiguration shouldNotBe null
                 repositoryConfiguration.excludes shouldNotBe null
