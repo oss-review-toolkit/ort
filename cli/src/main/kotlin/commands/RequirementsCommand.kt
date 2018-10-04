@@ -100,12 +100,21 @@ object RequirementsCommand : CommandWithHelp() {
         allTools.forEach { category, tools ->
             println("${category}s:")
             tools.forEach { tool ->
-                if (tool.getVersionRequirement().toString() == anyVersion) {
-                    println("\t${tool.javaClass.simpleName} requires '${tool.command()}' in no specific version.")
+                val message = if (tool.getVersionRequirement().toString() == anyVersion) {
+                    "${tool.javaClass.simpleName} requires '${tool.command()}' in no specific version."
                 } else {
-                    println("\t${tool.javaClass.simpleName} has ${tool.getVersionRequirement()} on the version of " +
-                            "'${tool.command()}'.")
+                    "${tool.javaClass.simpleName} has ${tool.getVersionRequirement()} on the version of " +
+                            "'${tool.command()}'."
                 }
+
+                // TODO: State which version was found, but this requires refactoring of CommandLineTool.
+                val (prefix, suffix) = if (tool.isInPath()) {
+                    Pair("\t* ", " (Some version was found in the PATH environment.)")
+                } else {
+                    Pair("\t- ", "")
+                }
+
+                println(prefix + message + suffix)
             }
         }
     }
