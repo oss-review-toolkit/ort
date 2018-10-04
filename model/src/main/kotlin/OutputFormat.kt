@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 
@@ -52,6 +53,6 @@ fun File.mapper() =
         )
 
 /**
- * Use the mapper returned from [File.mapper] to read the [valueType] object from this file using Jackson.
+ * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file.
  */
-fun <T> File.readValue(valueType: Class<T>): T = mapper().readValue(this, valueType)
+inline fun <reified T : Any> File.readValue(): T = mapper().readValue(this)

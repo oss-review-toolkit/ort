@@ -32,7 +32,7 @@ import java.io.File
 
 class ReporterTest : WordSpec({
     val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-            .readValue(OrtResult::class.java)
+            .readValue<OrtResult>()
 
     "A result file" should {
         "successfully export to an Excel sheet" {

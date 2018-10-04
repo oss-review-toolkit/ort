@@ -115,7 +115,7 @@ object ScannerCommand : CommandWithHelp() {
                 "Provided configuration file is not a file: ${it.invariantSeparatorsPath}"
             }
 
-            it.readValue(ScannerConfiguration::class.java)
+            it.readValue<ScannerConfiguration>()
         } ?: ScannerConfiguration()
 
         config.artifactoryCache?.let {

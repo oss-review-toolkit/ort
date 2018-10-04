@@ -120,7 +120,7 @@ object DownloaderCommand : CommandWithHelp() {
                 "Provided path is not a file: ${it.absolutePath}"
             }
 
-            val analyzerResult = it.readValue(AnalyzerResult::class.java)
+            val analyzerResult = it.readValue<AnalyzerResult>()
 
             mutableListOf<Package>().apply {
                 entities = entities.distinct()
