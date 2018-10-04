@@ -19,11 +19,9 @@
 
 package com.here.ort.analyzer
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import com.here.ort.model.Identifier
 import com.here.ort.model.PackageCuration
-import com.here.ort.model.yamlMapper
+import com.here.ort.model.readValue
 
 import java.io.File
 
@@ -34,7 +32,7 @@ class YamlFilePackageCurationProvider(
         curationFile: File
 ) : PackageCurationProvider {
     internal val packageCurations: List<PackageCuration> by lazy {
-        yamlMapper.readValue<List<PackageCuration>>(curationFile)
+        curationFile.readValue<List<PackageCuration>>()
     }
 
     override fun getCurationsFor(identifier: Identifier) = packageCurations.filter { it.id.matches(identifier) }
