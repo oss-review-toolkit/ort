@@ -71,6 +71,14 @@ Follow these steps to run the OSS Review Toolkit from source code:
 4. Make sure that the locale of your system is set to `en_US.UTF-8`, using other locales might lead to issues with parsing
    the output of external tools.
 
+5. Install any missing external command line tools as listed by
+
+   * `./cli/build/install/ort/bin/ort requirements`
+
+   or
+
+   * `./gradlew cli:run --args="requirements"`
+
 ## Supported package managers
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
