@@ -48,7 +48,7 @@ The toolkit is envisioned to consist of the following libraries:
 
 ## Installation
 
-Follow these steps to get started with the OSS Review Toolkit:
+Follow these steps to run the OSS Review Toolkit from source code:
 
 1. Ensure OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler) is installed and the
    `JAVA_HOME` environment variable set.
