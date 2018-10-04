@@ -112,7 +112,7 @@ For reusing already known scan results, ORT can currently use one of the followi
 
 * [Artifactory](https://jfrog.com/artifactory/)
 
-## Usage
+## Tools
 
 ### [analyzer](../analyzer/src/main/kotlin)
 
