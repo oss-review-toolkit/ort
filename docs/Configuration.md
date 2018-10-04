@@ -109,6 +109,7 @@ these examples match the configuration of your project.
 * [bundler.yml](examples/bundler.yml)
 * [go-dep.yml](examples/go-dep.yml)
 * [gradle.yml](examples/gradle.yml)
+* [gradle-android.yml](examples/gradle-android.yml)
 * [maven.yml](examples/maven.yml)
 * [npm.yml](examples/npm.yml)
 * [php-composer.yml](examples/php-composer.yml)
