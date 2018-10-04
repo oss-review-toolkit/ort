@@ -19,7 +19,10 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.here.ort.utils.test.patchActualResult
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -90,8 +93,7 @@ class ScanResultContainerTest : WordSpec() {
         "ScanResults" should {
             "be serialized and deserialized correctly" {
                 val serializedScanResults = jsonMapper.writeValueAsString(scanResults)
-                val deserializedScanResults =
-                        jsonMapper.readValue(serializedScanResults, ScanResultContainer::class.java)
+                val deserializedScanResults = jsonMapper.readValue<ScanResultContainer>(serializedScanResults)
 
                 deserializedScanResults shouldBe scanResults
             }

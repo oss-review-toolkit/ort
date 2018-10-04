@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
@@ -141,9 +142,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                     }
 
                     val svnPathInfo = run(workingDir, "info", "--xml", "--depth=immediates", "$projectRoot/$namespace")
-                    val valueType = xmlMapper.typeFactory
-                            .constructCollectionType(List::class.java, SubversionPathEntry::class.java)
-                    val pathEntries: List<SubversionPathEntry> = xmlMapper.readValue(svnPathInfo.stdout, valueType)
+                    val pathEntries = xmlMapper.readValue<List<SubversionPathEntry>>(svnPathInfo.stdout)
 
                     // As the "immediates" depth includes the parent namespace itself, too, drop it.
                     return pathEntries.drop(1).map { it.path }.sorted()
