@@ -83,7 +83,7 @@ object ScannerCommand : CommandWithHelp() {
             names = ["--scanner", "-s"],
             converter = ScannerConverter::class,
             order = PARAMETER_ORDER_OPTIONAL)
-    private var scannerFactory: ScannerFactory? = null
+    private var scannerFactory = ScanCode.Factory()
 
     @Parameter(description = "The path to the configuration file.",
             names = ["--config", "-c"],
@@ -122,13 +122,15 @@ object ScannerCommand : CommandWithHelp() {
             ScanResultsCache.configure(it)
         }
 
-        val scanner = scannerFactory?.create(config) ?: ScanCode(config)
+        val scanner = scannerFactory.create(config)
 
         println("Using scanner '$scanner'.")
 
         val ortResult = dependenciesFile?.let {
             scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet())
         } ?: run {
+            // The check is not useless as we do not know what scanners plugins might add.
+            @Suppress("USELESS_IS_CHECK")
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."
             }
