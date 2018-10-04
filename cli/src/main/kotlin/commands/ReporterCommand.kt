@@ -80,7 +80,7 @@ object ReporterCommand : CommandWithHelp() {
 
         outputDir.safeMkdirs()
 
-        val ortResult = ortResultFile.readValue(OrtResult::class.java)
+        val ortResult = ortResultFile.readValue<OrtResult>()
 
         reportFormats.distinct().forEach {
             try {

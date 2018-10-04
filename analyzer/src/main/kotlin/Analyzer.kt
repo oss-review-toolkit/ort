@@ -52,7 +52,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val actualRepositoryConfigurationFile = repositoryConfigurationFile ?: File(absoluteProjectPath, ".ort.yml")
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
-            actualRepositoryConfigurationFile.readValue(RepositoryConfiguration::class.java)
+            actualRepositoryConfigurationFile.readValue()
         } else {
             RepositoryConfiguration(null)
         }

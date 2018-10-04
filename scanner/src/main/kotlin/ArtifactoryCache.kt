@@ -72,7 +72,7 @@ class ArtifactoryCache(
                         log.info { "Downloaded $cachePath from Artifactory cache." }
                     }
 
-                    return tempFile.readValue(ScanResultContainer::class.java)
+                    return tempFile.readValue()
                 } else {
                     log.info {
                         "Could not get $cachePath from Artifactory cache: ${response.code()} - " +

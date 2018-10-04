@@ -33,7 +33,7 @@ class NoticeReporterTest : WordSpec({
             val expectedResultFile = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE")
             val expectedText = expectedResultFile.readText()
             val scanRecordFile = File("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
-            val ortResult = scanRecordFile.readValue(OrtResult::class.java)
+            val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
             NoticeReporter().generateReport(ortResult, outputDir)
@@ -47,7 +47,7 @@ class NoticeReporterTest : WordSpec({
         "contain all licenses without excludes" {
             val expectedResultFile = File("src/test/assets/npm-test-without-exclude-NOTICE")
             val scanRecordFile = File("src/test/assets/npm-test-without-exclude-scan-results.yml")
-            val ortResult = scanRecordFile.readValue(OrtResult::class.java)
+            val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
             NoticeReporter().generateReport(ortResult, outputDir)
@@ -60,7 +60,7 @@ class NoticeReporterTest : WordSpec({
         "not contain licenses of excluded packages" {
             val expectedResultFile = File("src/test/assets/npm-test-with-exclude-NOTICE")
             val scanRecordFile = File("src/test/assets/npm-test-with-exclude-scan-results.yml")
-            val ortResult = scanRecordFile.readValue(OrtResult::class.java)
+            val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
             NoticeReporter().generateReport(ortResult, outputDir)
