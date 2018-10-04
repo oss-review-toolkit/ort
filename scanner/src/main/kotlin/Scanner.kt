@@ -79,7 +79,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
             "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
         }
 
-        val ortResult = dependenciesFile.readValue(OrtResult::class.java)
+        val ortResult = dependenciesFile.readValue<OrtResult>()
 
         require(ortResult.analyzer != null) {
             "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
