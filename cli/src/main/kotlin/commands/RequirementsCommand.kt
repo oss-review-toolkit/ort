@@ -50,7 +50,7 @@ object RequirementsCommand : CommandWithHelp() {
         val anyVersion = Requirement.buildNPM("*").toString()
 
         classes.filterNot {
-            Modifier.isAbstract(it.modifiers) || it.isAnonymousClass
+            Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
         }.sortedBy { it.simpleName }.forEach {
             try {
                 val kotlinObject = it.kotlin.objectInstance
