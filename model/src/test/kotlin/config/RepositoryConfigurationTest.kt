@@ -56,7 +56,7 @@ class RepositoryConfigurationTest : WordSpec() {
                           comment: "scope comment"
                       scopes:
                       - name: "scope"
-                        reason: "TEST_CASE_OF"
+                        reason: "TEST_TOOL_OF"
                         comment: "scope comment"
                     """.trimIndent()
 
@@ -89,7 +89,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 val scopes = repositoryConfiguration.excludes!!.scopes
                 scopes should haveSize(1)
                 scopes.first().name.pattern shouldBe "scope"
-                scopes.first().reason shouldBe ScopeExcludeReason.TEST_CASE_OF
+                scopes.first().reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
                 scopes.first().comment shouldBe "scope comment"
             }
         }

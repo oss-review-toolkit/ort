@@ -36,7 +36,7 @@ providing the path to the definition file relative to the root of the repository
 excludes:
   projects:
   - path: "integrationTests/build.gradle"
-    reason: "TEST_CASE_OF"
+    reason: "TEST_TOOL_OF"
     comment: "The project contains integration tests which are not distributed."
 ```
 
@@ -74,7 +74,7 @@ excludes are useful for repositories that contain many similar projects:
 excludes:
   scopes:
   - name: "test.*"
-    reason: "TEST_CASE_OF"
+    reason: "TEST_TOOL_OF"
     comment: "Test dependencies which are not distributed."
 ```
 
@@ -90,7 +90,7 @@ excludes:
   - path: "app/build.gradle"
     scopes:
     - name: "test.*"
-      reason: "TEST_CASE_OF"
+      reason: "TEST_TOOL_OF"
       comment: "Test dependencies which are not distributed."
 ```
 
