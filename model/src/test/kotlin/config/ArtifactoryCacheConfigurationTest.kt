@@ -19,7 +19,10 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.here.ort.model.yamlMapper
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -32,8 +35,7 @@ class ArtifactoryCacheConfigurationTest : WordSpec() {
                     url: "url"
                     api_token: "apiToken"""".trimIndent()
 
-                val artifactoryCacheConfiguration = yamlMapper.readValue(yaml,
-                        ArtifactoryCacheConfiguration::class.java)
+                val artifactoryCacheConfiguration = yamlMapper.readValue<ArtifactoryCacheConfiguration>(yaml)
 
                 artifactoryCacheConfiguration.url shouldBe "url"
                 artifactoryCacheConfiguration.apiToken shouldBe "apiToken"
@@ -56,8 +58,7 @@ class ArtifactoryCacheConfigurationTest : WordSpec() {
                     url: "url"
                     """.trimIndent()
 
-                val artifactoryCacheConfiguration = yamlMapper.readValue(yaml,
-                        ArtifactoryCacheConfiguration::class.java)
+                val artifactoryCacheConfiguration = yamlMapper.readValue<ArtifactoryCacheConfiguration>(yaml)
 
                 artifactoryCacheConfiguration.url shouldBe "url"
                 artifactoryCacheConfiguration.apiToken shouldBe ""
