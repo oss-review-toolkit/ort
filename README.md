@@ -79,39 +79,6 @@ Follow these steps to run the OSS Review Toolkit from source code:
 
    * `./gradlew cli:run --args="requirements"`
 
-## Supported package managers
-
-Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
-
-* [Bower](http://bower.io/) (JavaScript)
-* [Bundler](http://bundler.io/) (Ruby)
-* [dep](https://golang.github.io/dep/) (Go)
-* [Glide](https://glide.sh/) (Go)
-* [Godep](https://github.com/tools/godep) (Go)
-* [Gradle](https://gradle.org/) (Java)
-* [Maven](http://maven.apache.org/) (Java)
-* [NPM](https://www.npmjs.com/) (Node.js)
-* [Composer](https://getcomposer.org/) (PHP)
-* [PIP](https://pip.pypa.io/) (Python)
-* [SBT](http://www.scala-sbt.org/) (Scala)
-* [Stack](http://haskellstack.org/) (Haskell)
-* [Yarn](https://yarnpkg.com/) (Node.js)
-
-## Supported license scanners
-
-ORT comes with some example implementations for wrappers around license / copyright scanners:
-
-* [Askalono](https://github.com/amzn/askalono)
-* [lc](https://github.com/boyter/lc)
-* [Licensee](https://github.com/benbalter/licensee)
-* [ScanCode](https://github.com/nexB/scancode-toolkit)
-
-## Supported remote caches
-
-For reusing already known scan results, ORT can currently use one of the following backends as a remote cache:
-
-* [Artifactory](https://jfrog.com/artifactory/)
-
 ## Tools
 
 ### [analyzer](../analyzer/src/main/kotlin)
@@ -159,6 +126,39 @@ Please see [GettingStarted.md](./docs/GettingStarted.md) for an introduction to 
 ## Configuration
 
 Please see [Configuration.md](./docs/Configuration.md) for details about the ORT configuration.
+
+## Supported package managers
+
+Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
+
+* [Bower](http://bower.io/) (JavaScript)
+* [Bundler](http://bundler.io/) (Ruby)
+* [dep](https://golang.github.io/dep/) (Go)
+* [Glide](https://glide.sh/) (Go)
+* [Godep](https://github.com/tools/godep) (Go)
+* [Gradle](https://gradle.org/) (Java)
+* [Maven](http://maven.apache.org/) (Java)
+* [NPM](https://www.npmjs.com/) (Node.js)
+* [Composer](https://getcomposer.org/) (PHP)
+* [PIP](https://pip.pypa.io/) (Python)
+* [SBT](http://www.scala-sbt.org/) (Scala)
+* [Stack](http://haskellstack.org/) (Haskell)
+* [Yarn](https://yarnpkg.com/) (Node.js)
+
+## Supported license scanners
+
+ORT comes with some example implementations for wrappers around license / copyright scanners:
+
+* [Askalono](https://github.com/amzn/askalono)
+* [lc](https://github.com/boyter/lc)
+* [Licensee](https://github.com/benbalter/licensee)
+* [ScanCode](https://github.com/nexB/scancode-toolkit)
+
+## Supported remote caches
+
+For reusing already known scan results, ORT can currently use one of the following backends as a remote cache:
+
+* [Artifactory](https://jfrog.com/artifactory/)
 
 ## Development
 
