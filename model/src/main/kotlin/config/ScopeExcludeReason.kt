@@ -38,5 +38,5 @@ enum class ScopeExcludeReason {
      * The scope only contains packages used for testing source code which are not included in distributed build
      * artifacts.
      */
-    TEST_CASE_OF
+    TEST_TOOL_OF
 }

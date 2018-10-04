@@ -14,7 +14,7 @@ repository:
     excludes:
       scopes:
       - name: "devDependencies"
-        reason: "TEST_CASE_OF"
+        reason: "TEST_TOOL_OF"
         comment: "Test dependencies."
 analyzer:
   environment:
