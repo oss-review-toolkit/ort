@@ -57,6 +57,18 @@ data class AnalyzerResult(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) {
+    companion object {
+        /**
+         * A constant for an [AnalyzerResult] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = AnalyzerResult(
+                projects = sortedSetOf(),
+                packages = sortedSetOf(),
+                errors = sortedMapOf()
+        )
+    }
+
     /**
      * True if there were any errors during the analysis, false otherwise.
      */
