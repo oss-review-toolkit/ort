@@ -140,7 +140,7 @@ class Downloader {
                     "Gradle" -> " Please make sure the release POM file includes the SCM connection, see: " +
                             "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
                             "example_customizing_the_pom_file"
-                    "Maven" -> " Please define the <scm><connection> in the POM file, see: " +
+                    "Maven" -> " Please define the \"connection\" tag within the \"scm\" tag in the POM file, see: " +
                             "http://maven.apache.org/pom.html#SCM"
                     "NPM" -> " Please define the \"repository\" in the package.json file, see: " +
                             "https://docs.npmjs.com/files/package.json#repository"
