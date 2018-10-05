@@ -65,6 +65,18 @@ data class AnalyzerResult(
         errors.any { it.value.isNotEmpty() }
                 || projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
     }
+
+    companion object {
+        /**
+         * A constant for a [AnalyzerResult] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = AnalyzerResult(
+                projects = sortedSetOf(),
+                packages = sortedSetOf(),
+                errors = sortedMapOf()
+        )
+    }
 }
 
 class AnalyzerResultBuilder(
