@@ -81,9 +81,11 @@ abstract class WorkingTree(val workingDir: File, val vcsType: String) {
         val versionNames = filterVersionNames(version, listRemoteTags(), project)
         return when {
             versionNames.isEmpty() ->
-                throw IOException("No matching tag found for version '$version'.")
+                throw IOException("No matching tag found. Please tag the release revision using a tag name containing "
+                        + "the version '$version'.")
             versionNames.size > 1 ->
-                throw IOException("Multiple matching tags found for version '$version': $versionNames")
+                throw IOException("Multiple matching tags found for version '$version': $versionNames. Please add a" +
+                        "curation.")
             else -> versionNames.first()
         }
     }
