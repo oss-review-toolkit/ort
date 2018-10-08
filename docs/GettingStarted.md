@@ -229,7 +229,7 @@ scanner on the `dependencies` scope in this tutorial. If you also want to scan t
 advised to configure a cache for the scan results as documented in the [README](../README.md) to speed up repeated scans.
 
 ```bash
-$ cli/build/install/ort/bin/ort scan --analyzer-result-file [analyzer-output-path]/analyzer-result.yml -o [scanner-output-path] --scopes dependencies
+$ cli/build/install/ort/bin/ort scan --ort-file [analyzer-output-path]/analyzer-result.yml -o [scanner-output-path] --scopes dependencies
 Using scanner 'ScanCode'.
 Limiting scan to scopes: [dependencies]
 Bootstrapping scanner 'ScanCode' as required version 2.9.2 was not found in PATH.
