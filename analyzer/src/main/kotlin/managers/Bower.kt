@@ -56,13 +56,6 @@ import java.util.Stack
  */
 class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<Bower>() {
-        override val globsForDefinitionFiles = listOf("bower.json")
-
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Bower(analyzerConfig, repoConfig)
-    }
-
     companion object {
         // We do not actually depend on any features specific to this Bower version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
@@ -204,6 +197,13 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
             return result.toSortedSet()
         }
+    }
+
+    class Factory : AbstractPackageManagerFactory<Bower>() {
+        override val globsForDefinitionFiles = listOf("bower.json")
+
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                Bower(analyzerConfig, repoConfig)
     }
 
     override fun toString() = PROVIDER_NAME

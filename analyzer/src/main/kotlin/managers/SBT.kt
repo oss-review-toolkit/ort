@@ -41,13 +41,6 @@ import java.util.Properties
  */
 class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<SBT>() {
-        override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
-
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                SBT(analyzerConfig, repoConfig)
-    }
-
     companion object {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
@@ -65,6 +58,13 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                 it
             }
         }
+    }
+
+    class Factory : AbstractPackageManagerFactory<SBT>() {
+        override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
+
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                SBT(analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"

@@ -73,13 +73,6 @@ val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
  */
 open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<NPM>() {
-        override val globsForDefinitionFiles = listOf("package.json")
-
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                NPM(analyzerConfig, repoConfig)
-    }
-
     companion object {
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
@@ -116,6 +109,13 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 url
             }
         }
+    }
+
+    class Factory : AbstractPackageManagerFactory<NPM>() {
+        override val globsForDefinitionFiles = listOf("package.json")
+
+        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
+                NPM(analyzerConfig, repoConfig)
     }
 
     protected open val recognizedLockFiles = NPM_LOCK_FILES

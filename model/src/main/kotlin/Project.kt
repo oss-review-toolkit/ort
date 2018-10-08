@@ -74,6 +74,21 @@ data class Project(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) : Comparable<Project> {
+    companion object {
+        /**
+         * A constant for a [Project] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = Project(
+                id = Identifier.EMPTY,
+                definitionFilePath = "",
+                declaredLicenses = sortedSetOf(),
+                vcs = VcsInfo.EMPTY,
+                homepageUrl = "",
+                scopes = sortedSetOf()
+        )
+    }
+
     fun collectDependencyIds(includeErroneous: Boolean = true) =
             scopes.fold(sortedSetOf<Identifier>()) { ids, scope ->
                 ids.also { it += scope.collectDependencyIds(includeErroneous) }
@@ -120,19 +135,4 @@ data class Project(
             vcs = vcs,
             vcsProcessed = vcsProcessed
     )
-
-    companion object {
-        /**
-         * A constant for a [Project] where all properties are empty.
-         */
-        @JvmField
-        val EMPTY = Project(
-                id = Identifier.EMPTY,
-                definitionFilePath = "",
-                declaredLicenses = sortedSetOf(),
-                vcs = VcsInfo.EMPTY,
-                homepageUrl = "",
-                scopes = sortedSetOf()
-        )
-    }
 }

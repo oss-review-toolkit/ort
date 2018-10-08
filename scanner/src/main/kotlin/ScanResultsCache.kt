@@ -31,40 +31,6 @@ import com.here.ort.model.config.ArtifactoryCacheConfiguration
 import com.here.ort.utils.log
 
 interface ScanResultsCache {
-
-    /**
-     * Read all [ScanResult]s for this [id] from the cache.
-     *
-     * @param id The [Identifier] of the scanned [Package].
-     *
-     * @return The [ScanResultContainer] for this [id].
-     */
-    fun read(id: Identifier): ScanResultContainer
-
-    /**
-     * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the cache.
-     * [ScannerDetails.isCompatible] is used to check if the results are compatible with the provided [scannerDetails].
-     * Also [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result
-     * matches the expected source code location. This is important to find the correct results when different revisions
-     * of a package using the same version name are used (e.g. multiple scans of 1.0-SNAPSHOT during development).
-     *
-     * @param pkg The [Package] to look up results for.
-     * @param scannerDetails Details about the scanner that was used to scan the [Package].
-     *
-     * @return The [ScanResultContainer] matching the [id][Package.id] of [pkg] and the [scannerDetails].
-     */
-    fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
-
-    /**
-     * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
-     *
-     * @param id The [Identifier] of the scanned [Package].
-     * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
-     *
-     * @return If the [ScanResult] could be written to the cache.
-     */
-    fun add(id: Identifier, scanResult: ScanResult): Boolean
-
     companion object : ScanResultsCache {
         var cache = object : ScanResultsCache {
             override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
@@ -106,4 +72,37 @@ interface ScanResultsCache {
 
         override fun add(id: Identifier, scanResult: ScanResult) = cache.add(id, scanResult)
     }
+
+    /**
+     * Read all [ScanResult]s for this [id] from the cache.
+     *
+     * @param id The [Identifier] of the scanned [Package].
+     *
+     * @return The [ScanResultContainer] for this [id].
+     */
+    fun read(id: Identifier): ScanResultContainer
+
+    /**
+     * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the cache.
+     * [ScannerDetails.isCompatible] is used to check if the results are compatible with the provided [scannerDetails].
+     * Also [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result
+     * matches the expected source code location. This is important to find the correct results when different revisions
+     * of a package using the same version name are used (e.g. multiple scans of 1.0-SNAPSHOT during development).
+     *
+     * @param pkg The [Package] to look up results for.
+     * @param scannerDetails Details about the scanner that was used to scan the [Package].
+     *
+     * @return The [ScanResultContainer] matching the [id][Package.id] of [pkg] and the [scannerDetails].
+     */
+    fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
+
+    /**
+     * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
+     *
+     * @param id The [Identifier] of the scanned [Package].
+     * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
+     *
+     * @return If the [ScanResult] could be written to the cache.
+     */
+    fun add(id: Identifier, scanResult: ScanResult): Boolean
 }
