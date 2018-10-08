@@ -22,6 +22,9 @@ package com.here.ort.utils
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.util.ClassUtil
 
+import com.vdurmont.semver4j.Semver
+import com.vdurmont.semver4j.SemverException
+
 import java.io.File
 import java.io.IOException
 import java.net.MalformedURLException
@@ -185,6 +188,17 @@ fun String.fileSystemEncode() =
                 .replace("*", "%2A")
                 .replace(Regex("(^\\.|\\.$)"), "%2E")
                 .take(255)
+
+/**
+ * True if the string is a valid semantic version of the given [type], false otherwise.
+ */
+fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
+        try {
+            Semver(this, type)
+            true
+        } catch (e: SemverException) {
+            false
+        }
 
 /**
  * True if the string is a valid URL, false otherwise.
