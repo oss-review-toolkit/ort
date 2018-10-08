@@ -56,7 +56,7 @@ class FileCounterTest : StringSpec() {
             .replace(timeRegex) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 
     init {
-        "Gradle project scan results from analyzer result file are correct" {
+        "Gradle project scan results for a given analyzer result are correct" {
             val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
             val expectedResult = patchExpectedResult(
                     File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml"))
