@@ -85,4 +85,12 @@ data class Excludes(
      * Map the project excludes by the identifiers of the provided [projects].
      */
     fun projectExcludesById(projects: Set<Project>) = projects.associate { Pair(it.id, findProjectExclude(it)) }
+
+    /**
+     * Map the scope excludes for [project] by the names of the provided [scopes].
+     */
+    fun scopeExcludesByName(project: Project, scopes: Collection<Scope>) =
+            scopes.associate {
+                Pair(it.name, findScopeExcludes(it, project))
+            }
 }
