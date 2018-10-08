@@ -27,6 +27,8 @@ import com.here.ort.model.Scope
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.contain
+import io.kotlintest.matchers.collections.containOnlyNulls
+import io.kotlintest.matchers.containAll
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -38,9 +40,11 @@ class ExcludesTest : WordSpec() {
 
         val projectId1 = id.copy(name = "project1")
         val projectId2 = id.copy(name = "project2")
+        val projectId3 = id.copy(name = "project3")
 
         val project1 = Project.EMPTY.copy(id = projectId1, definitionFilePath = "path1")
         val project2 = Project.EMPTY.copy(id = projectId2, definitionFilePath = "path2")
+        val project3 = Project.EMPTY.copy(id = projectId3, definitionFilePath = "path3")
 
         val projectExclude1 = ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "")
         val projectExclude2 = ProjectExclude("path2", ProjectExcludeReason.BUILD_TOOL_OF, "")
@@ -196,6 +200,43 @@ class ExcludesTest : WordSpec() {
                 val excludes = Excludes()
 
                 excludes.isScopeExcluded(scope1, project1) shouldBe false
+            }
+        }
+
+        "projectExcludesById" should {
+            "return null values for projects without a project exclude" {
+                val excludes = Excludes()
+
+                val excludesById = excludes.projectExcludesById(setOf(project1, project2, project3))
+
+                excludesById.keys should haveSize(3)
+                excludesById.keys should containAll(projectId1, projectId2, projectId3)
+                excludesById.values should containOnlyNulls()
+            }
+
+            "return the correct mapping of ids to project excludes" {
+                val excludes = Excludes(
+                        projects = listOf(projectExclude1, projectExclude2, projectExclude3)
+                )
+
+                val excludesById = excludes.projectExcludesById(setOf(project1, project2, project3))
+
+                excludesById.keys should haveSize(3)
+                excludesById[projectId1] shouldBe projectExclude1
+                excludesById[projectId2] shouldBe projectExclude2
+                excludesById[projectId3] shouldBe projectExclude3
+            }
+
+            "only return mappings for requested projects" {
+                val excludes = Excludes(
+                        projects = listOf(projectExclude1, projectExclude2, projectExclude3)
+                )
+
+                val excludesById = excludes.projectExcludesById(setOf(project1, project2))
+
+                excludesById.keys should haveSize(2)
+                excludesById[projectId1] shouldBe projectExclude1
+                excludesById[projectId2] shouldBe projectExclude2
             }
         }
     }
