@@ -43,10 +43,7 @@ install:
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
 
 script:
-  - if git grep -L "Copyright" -- "*.kt"; then
-      echo "Please add Copyright statements to the above files.";
-      exit 1;
-    fi
+  - ./check-copyright.sh
   - ./ktlint.sh
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
