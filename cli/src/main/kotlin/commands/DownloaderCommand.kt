@@ -50,37 +50,38 @@ import kotlin.system.exitProcess
 
 @Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
 object DownloaderCommand : CommandWithHelp() {
-    @Parameter(description = "An analyzer result file to use. Must not be used together with '--project-url'.",
-            names = ["--analyzer-result-file", "-a"],
+    @Parameter(description = "An ORT result file with an analyzer result to use. Must not be used together with " +
+            "'--project-url'.",
+            names = ["--ort-file", "-a"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var dependenciesFile: File? = null
 
     @Parameter(description = "A VCS or archive URL of a project to download. Must not be used together with " +
-            "'--analyzer-result-file'.",
+            "'--ort-file'.",
             names = ["--project-url"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var projectUrl: String? = null
 
-    @Parameter(description = "The speaking name of the project to download. For use together with " +
-            "'--project-url'. Will be ignored if '--analyzer-result-file' is also specified.",
+    @Parameter(description = "The speaking name of the project to download. For use together with '--project-url'. " +
+            "Will be ignored if '--ort-file' is also specified.",
             names = ["--project-name"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var projectName: String? = null
 
-    @Parameter(description = "The VCS type if '--project-url' points to a VCS. Will be ignored if " +
-            "'--analyzer-result-file' is also specified.",
+    @Parameter(description = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
+            "also specified.",
             names = ["--vcs-type"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var vcsType = ""
 
-    @Parameter(description = "The VCS revision if '--project-url' points to a VCS. Will be ignored if " +
-            "'--analyzer-result-file' is also specified.",
+    @Parameter(description = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' " +
+            "is also specified.",
             names = ["--vcs-revision"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var vcsRevision = ""
 
-    @Parameter(description = "The VCS path if '--project-url' points to a VCS. Will be ignored if " +
-            "'--analyzer-result-file' is also specified.",
+    @Parameter(description = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
+            "also specified.",
             names = ["--vcs-path"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var vcsPath = ""
@@ -92,19 +93,18 @@ object DownloaderCommand : CommandWithHelp() {
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "Archive the downloaded source code as ZIP files.",
+    @Parameter(description = "Archive the downloaded source code as ZIP files to the output directory.",
             names = ["--archive"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var archive = false
 
-    @Parameter(description = "The data entities from the analyzer result file to download.",
+    @Parameter(description = "The type of data entities from the ORT file's analyzer result to download.",
             names = ["--entities", "-e"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var entities = enumValues<Downloader.DataEntity>().asList()
 
-    @Parameter(description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By " +
-            "default these revision are forbidden because they are not pointing to a stable revision of the " +
-            "source code.",
+    @Parameter(description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
+            "these revision are forbidden because they are not pointing to a stable revision of the source code.",
             names = ["--allow-moving-revisions"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var allowMovingRevisions = false
@@ -112,7 +112,7 @@ object DownloaderCommand : CommandWithHelp() {
     override fun runCommand(jc: JCommander) {
         if ((dependenciesFile != null) == (projectUrl != null)) {
             throw IllegalArgumentException(
-                    "Either '--analyzer-result-file' or '--project-url' must be specified.")
+                    "Either '--ort-file' or '--project-url' must be specified.")
         }
 
         val packages = dependenciesFile?.let {
