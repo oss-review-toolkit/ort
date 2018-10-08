@@ -69,14 +69,14 @@ object AnalyzerCommand : CommandWithHelp() {
     @Suppress("LateinitUsage")
     private lateinit var inputDir: File
 
-    @Parameter(description = "The directory to write the analyzer result file to.",
+    @Parameter(description = "The directory to write the analyzer result as ORT result file(s) to.",
             names = ["--output-dir", "-o"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The list of output formats used for the result file(s).",
+    @Parameter(description = "The list of output formats to be used for the ORT result file(s).",
             names = ["--output-formats", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputFormats = listOf(OutputFormat.YAML)
