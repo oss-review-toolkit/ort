@@ -81,33 +81,34 @@ class AnalyzerResultBuilder(
         return AnalyzerResult(projects, packages, errors)
     }
 
-    fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = also {
-        // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with the same
-        // ID exist. We need to decide how to handle that case.
-        val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
+    fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) =
+            also {
+                // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
+                // the same ID exist. We need to decide how to handle that case.
+                val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
-        if (existingProject != null) {
-            val existingFile = File(rootDir, existingProject.definitionFilePath)
-            val incomingFile = File(rootDir, projectAnalyzerResult.project.definitionFilePath)
+                if (existingProject != null) {
+                    val existingFile = File(rootDir, existingProject.definitionFilePath)
+                    val incomingFile = File(rootDir, projectAnalyzerResult.project.definitionFilePath)
 
-            val error = Error(
-                    source = "analyzer",
-                    message = "Multiple projects with the same id '${existingProject.id}' found. Not adding the " +
-                            "project defined in '${incomingFile.relativeTo(rootDir)}' (SHA-1: " +
-                            "${incomingFile.hash()}) to the analyzer results as it duplicates the project defined in " +
-                            "'${existingFile.relativeTo(rootDir)}' (SHA-1: ${existingFile.hash()})."
-            )
+                    val error = Error(
+                            source = "analyzer",
+                            message = "Multiple projects with the same id '${existingProject.id}' found. Not adding " +
+                                    "the project defined in '${incomingFile.relativeTo(rootDir)}' (SHA-1: " +
+                                    "${incomingFile.hash()}) to the analyzer results as it duplicates the project " +
+                                    "defined in '${existingFile.relativeTo(rootDir)}' (SHA-1: ${existingFile.hash()})."
+                    )
 
-            log.error { error.message }
+                    log.error { error.message }
 
-            val projectErrors = errors.getOrDefault(existingProject.id, listOf())
-            errors[existingProject.id] = projectErrors + error
-        } else {
-            projects += projectAnalyzerResult.project
-            packages += projectAnalyzerResult.packages
-            if (projectAnalyzerResult.errors.isNotEmpty()) {
-                errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+                    val projectErrors = errors.getOrDefault(existingProject.id, listOf())
+                    errors[existingProject.id] = projectErrors + error
+                } else {
+                    projects += projectAnalyzerResult.project
+                    packages += projectAnalyzerResult.packages
+                    if (projectAnalyzerResult.errors.isNotEmpty()) {
+                        errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+                    }
+                }
             }
-        }
-    }
 }

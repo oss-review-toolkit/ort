@@ -88,12 +88,13 @@ interface ScanResultsCache {
             log.info { "Using Artifactory cache '${config.url}'." }
         }
 
-        override fun read(id: Identifier) = cache.read(id).also {
-            ++stats.numReads
-            if (it.results.isNotEmpty()) {
-                ++stats.numHits
-            }
-        }
+        override fun read(id: Identifier) =
+                cache.read(id).also {
+                    ++stats.numReads
+                    if (it.results.isNotEmpty()) {
+                        ++stats.numHits
+                    }
+                }
 
         override fun read(pkg: Package, scannerDetails: ScannerDetails) =
                 cache.read(pkg, scannerDetails).also {
