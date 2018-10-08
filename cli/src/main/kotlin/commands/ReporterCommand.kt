@@ -54,7 +54,7 @@ object ReporterCommand : CommandWithHelp() {
     }
 
     @Parameter(description = "The ORT result file to use. Must contain a scan result.",
-            names = ["--ort-result-file", "-i"],
+            names = ["--ort-file", "-i"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
     private lateinit var ortResultFile: File
