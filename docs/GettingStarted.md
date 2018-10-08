@@ -246,9 +246,9 @@ As you can see from when you check the results file the licenses detected by `Sc
 the packages. This is because we scanned a small and well-maintained package in this example, but if you run the scan on
 a bigger project you will see that `ScanCode` often finds more licenses than are declared by the packages.
 
-The `scanner` appends its result to the analyzer result file and writes it to the file
-`[scanner-output-path]/scan-result.yml`. It contains a summary of all licenses for all packages and some more details
-like cache statistics and information about the scanned scopes.
+The `scanner` writes a new ORT result file to `[scanner-output-path]/scan-result.yml` containing the scan results in
+addition to the analyzer result from the input. This way belonging results are stored in the same place for tracability.
+If the input file already contained scan results they are replaced by the new scan results in the output.
 
 ## 6. Generate a report
 
