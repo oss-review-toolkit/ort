@@ -25,6 +25,10 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
 
+import io.kotlintest.matchers.beEmpty
+import io.kotlintest.matchers.collections.contain
+import io.kotlintest.matchers.haveSize
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -49,6 +53,7 @@ class ExcludesTest : WordSpec() {
         val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_BY, "")
 
         val projectExcludeWithScopes1 = ProjectExclude("path1", scopes = listOf(scopeExclude1))
+        val projectExcludeWithScopes2 = ProjectExclude("path2", scopes = listOf(scopeExclude2))
 
         "findProjectExclude" should {
             "return null if there is no matching project exclude" {
@@ -61,6 +66,39 @@ class ExcludesTest : WordSpec() {
                 val excludes = Excludes(projects = listOf(projectExclude1, projectExclude2, projectExclude3))
 
                 excludes.findProjectExclude(project2) shouldBe projectExclude2
+            }
+        }
+
+        "findScopeExcludes" should {
+            "return an empty list if there are no matching scope excludes" {
+                val excludes = Excludes(
+                        projects = listOf(projectExcludeWithScopes2),
+                        scopes = listOf(scopeExclude2)
+                )
+
+                excludes.findScopeExcludes(scope1, project1) should beEmpty()
+            }
+
+            "find the correct global scope excludes" {
+                val excludes = Excludes(
+                        scopes = listOf(scopeExclude1, scopeExclude2)
+                )
+
+                val scopeExcludes = excludes.findScopeExcludes(scope1, project1)
+
+                scopeExcludes should haveSize(1)
+                scopeExcludes should contain(scopeExclude1)
+            }
+
+            "find the correct project specific scope excludes" {
+                val excludes = Excludes(
+                        projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
+                )
+
+                val scopeExcludes = excludes.findScopeExcludes(scope1, project1)
+
+                scopeExcludes should haveSize(1)
+                scopeExcludes should contain(scopeExclude1)
             }
         }
 
