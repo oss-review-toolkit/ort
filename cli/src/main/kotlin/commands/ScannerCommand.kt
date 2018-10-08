@@ -49,25 +49,26 @@ object ScannerCommand : CommandWithHelp() {
         }
     }
 
-    @Parameter(description = "The analyzer result file to use. Source code will be downloaded automatically if " +
-            "needed. This parameter and --input-path are mutually exclusive.",
-            names = ["--analyzer-result-file", "-a"],
+    @Parameter(description = "An ORT result file with an analyzer result to use. Source code will be downloaded " +
+            "automatically if needed. This parameter and '--input-path' are mutually exclusive.",
+            names = ["--ort-file", "-a"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var dependenciesFile: File? = null
 
-    @Parameter(description = "The input directory or file to scan. This parameter and --analyzer-result-file are " +
-            "mutually exclusive.",
+    @Parameter(description = "An input directory or file to scan. This parameter and '--ort-file' are mutually " +
+            "exclusive.",
             names = ["--input-path", "-i"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var inputPath: File? = null
 
-    @Parameter(description = "The list of scopes that shall be scanned. Works only with the " +
-            "--analyzer-result-file parameter. If empty, all scopes are scanned.",
+    @Parameter(description = "The list of scopes whose packages shall be scanned. Works only with the '--ort-file' " +
+            "parameter. If empty, all scopes are scanned.",
             names = ["--scopes"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var scopesToScan = listOf<String>()
 
-    @Parameter(description = "The output directory to store the scan results in.",
+    @Parameter(description = "The directory to write the scan results as ORT result file(s) to, in the specified " +
+            "output format(s).",
             names = ["--output-dir", "-o"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
@@ -85,19 +86,19 @@ object ScannerCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var scannerFactory = ScanCode.Factory()
 
-    @Parameter(description = "The path to the configuration file.",
+    @Parameter(description = "The path to a configuration file.",
             names = ["--config", "-c"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var configFile: File? = null
 
-    @Parameter(description = "The list of output formats used for the result file(s).",
+    @Parameter(description = "The list of output formats to be used for the ORT result file(s).",
             names = ["--output-formats", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputFormats = listOf(OutputFormat.YAML)
 
     override fun runCommand(jc: JCommander) {
         require((dependenciesFile == null) != (inputPath == null)) {
-            "Either --analyzer-result-file or --input-path must be specified."
+            "Either '--ort-file' or '--input-path' must be specified."
         }
 
         require(!outputDir.exists()) {
