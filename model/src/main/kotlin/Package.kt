@@ -80,6 +80,22 @@ data class Package(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) : Comparable<Package> {
+    companion object {
+        /**
+         * A constant for a [Package] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = Package(
+                id = Identifier.EMPTY,
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY
+        )
+    }
+
     /**
      * A comparison function to sort packages by their identifier.
      */
@@ -113,20 +129,4 @@ data class Package(
      */
     fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf(), errors: List<Error> = emptyList()) =
             PackageReference(id, dependencies, errors)
-
-    companion object {
-        /**
-         * A constant for a [Package] where all properties are empty.
-         */
-        @JvmField
-        val EMPTY = Package(
-                id = Identifier.EMPTY,
-                declaredLicenses = sortedSetOf(),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY
-        )
-    }
 }
