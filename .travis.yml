@@ -43,8 +43,8 @@ install:
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
 
 script:
-  - ./check-copyright.sh
-  - ./ktlint.sh
+  - ./tools/check-copyright.sh
+  - ./tools/ktlint.sh
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
       ./gradlew --no-daemon -Dkotlintest.tags.exclude=ScanCodeTag --stacktrace check jacocoReport | tee log.txt;
