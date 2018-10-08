@@ -41,6 +41,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.model.readValue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
@@ -169,8 +170,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         }.forEach {
             log.debug { "Found a module in '${it.absolutePath}'." }
 
-            @Suppress("UnsafeCast")
-            val json = jsonMapper.readTree(it) as ObjectNode
+            val json = it.readValue<ObjectNode>()
             val rawName = json["name"].textValue()
             val (namespace, name) = splitNamespaceAndName(rawName)
             val version = json["version"].textValue()
