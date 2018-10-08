@@ -140,13 +140,14 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         return scancodeDir
     }
 
-    override fun getConfiguration() = DEFAULT_CONFIGURATION_OPTIONS.toMutableList().run {
-        add(OUTPUT_FORMAT_OPTION)
-        if (log.isEnabledFor(Level.DEBUG)) {
-            addAll(DEBUG_CONFIGURATION_OPTIONS)
-        }
-        joinToString(" ")
-    }
+    override fun getConfiguration() =
+            DEFAULT_CONFIGURATION_OPTIONS.toMutableList().run {
+                add(OUTPUT_FORMAT_OPTION)
+                if (log.isEnabledFor(Level.DEBUG)) {
+                    addAll(DEBUG_CONFIGURATION_OPTIONS)
+                }
+                joinToString(" ")
+            }
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {

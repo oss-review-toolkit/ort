@@ -60,17 +60,18 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
-        fun forUrl(vcsUrl: String) = if (vcsUrl in urlToVcsMap) {
-            urlToVcsMap[vcsUrl]
-        } else {
-            ALL.find {
-                if (it is CommandLineTool) {
-                    it.isInPath() && it.isApplicableUrl(vcsUrl)
+        fun forUrl(vcsUrl: String) =
+                if (vcsUrl in urlToVcsMap) {
+                    urlToVcsMap[vcsUrl]
                 } else {
-                    it.isApplicableUrl(vcsUrl)
+                    ALL.find {
+                        if (it is CommandLineTool) {
+                            it.isInPath() && it.isApplicableUrl(vcsUrl)
+                        } else {
+                            it.isApplicableUrl(vcsUrl)
+                        }
+                    }.also { urlToVcsMap[vcsUrl] = it }
                 }
-            }.also { urlToVcsMap[vcsUrl] = it }
-        }
 
         /**
          * A map to cache the [WorkingTree], if any, for previously queried directories. This helps to speed up

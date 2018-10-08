@@ -74,9 +74,10 @@ data class Project(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) : Comparable<Project> {
-    fun collectDependencyIds(includeErroneous: Boolean = true) = scopes.fold(sortedSetOf<Identifier>()) { ids, scope ->
-        ids.also { it += scope.collectDependencyIds(includeErroneous) }
-    }
+    fun collectDependencyIds(includeErroneous: Boolean = true) =
+            scopes.fold(sortedSetOf<Identifier>()) { ids, scope ->
+                ids.also { it += scope.collectDependencyIds(includeErroneous) }
+            }
 
     /**
      * Return a de-duplicated list of all errors for the provided [id].

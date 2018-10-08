@@ -26,16 +26,17 @@ import com.here.ort.utils.log
 import org.codehaus.plexus.logging.AbstractLogger
 import org.codehaus.plexus.logging.Logger
 
-fun toPlexusLoggerLevel(level: Level) = when (level) {
-    Level.OFF -> Logger.LEVEL_DISABLED
-    Level.ERROR -> Logger.LEVEL_ERROR
-    Level.WARN -> Logger.LEVEL_WARN
-    Level.INFO -> Logger.LEVEL_INFO
-    Level.DEBUG -> Logger.LEVEL_DEBUG
-    Level.TRACE -> Logger.LEVEL_DEBUG
-    Level.ALL -> Logger.LEVEL_DEBUG
-    else -> Logger.LEVEL_DEBUG
-}
+fun toPlexusLoggerLevel(level: Level) =
+        when (level) {
+            Level.OFF -> Logger.LEVEL_DISABLED
+            Level.ERROR -> Logger.LEVEL_ERROR
+            Level.WARN -> Logger.LEVEL_WARN
+            Level.INFO -> Logger.LEVEL_INFO
+            Level.DEBUG -> Logger.LEVEL_DEBUG
+            Level.TRACE -> Logger.LEVEL_DEBUG
+            Level.ALL -> Logger.LEVEL_DEBUG
+            else -> Logger.LEVEL_DEBUG
+        }
 
 /**
  * Implementation of the Plexus [Logger] that forwards all logs to the [org.slf4j.Logger] [log] using the appropriate

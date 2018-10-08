@@ -69,9 +69,10 @@ data class Excludes(
     /**
      * True if the [project] is excluded by this [Excludes] configuration.
      */
-    fun isProjectExcluded(project: Project) = projects.any {
-        it.matches(project.definitionFilePath) && it.isWholeProjectExcluded
-    }
+    fun isProjectExcluded(project: Project) =
+            projects.any {
+                it.matches(project.definitionFilePath) && it.isWholeProjectExcluded
+            }
 
     /**
      * True if the [scope] is excluded in [project] by this [Excludes] configuration.
