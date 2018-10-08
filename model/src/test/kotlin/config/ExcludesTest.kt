@@ -239,5 +239,53 @@ class ExcludesTest : WordSpec() {
                 excludesById[projectId2] shouldBe projectExclude2
             }
         }
+
+        "scopeExcludesByName" should {
+            "return empty lists for scopes without a scope exclude" {
+                val excludes = Excludes()
+
+                val excludesByName = excludes.scopeExcludesByName(project1, listOf(scope1, scope2))
+
+                excludesByName.keys should haveSize(2)
+                excludesByName.keys should containAll(scope1.name, scope2.name)
+                excludesByName[scope1.name]!! should beEmpty()
+                excludesByName[scope2.name]!! should beEmpty()
+            }
+
+            "return the correct mapping of scope names to scope excludes" {
+                val excludes = Excludes(
+                        projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2, projectExclude3),
+                        scopes = listOf(scopeExclude2)
+                )
+
+                val excludesByName = excludes.scopeExcludesByName(project1, setOf(scope1, scope2))
+
+                excludesByName.keys should haveSize(2)
+                excludesByName.keys should containAll(scope1.name, scope2.name)
+                excludesByName[scope1.name]!!.let {
+                    it should haveSize(1)
+                    it should contain(scopeExclude1)
+                }
+                excludesByName[scope2.name]!!.let {
+                    it should haveSize(1)
+                    it should contain(scopeExclude2)
+                }
+            }
+
+            "only return mappings for requested scopes" {
+                val excludes = Excludes(
+                        projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
+                )
+
+                val excludesByName = excludes.scopeExcludesByName(project1, listOf(scope1))
+
+                excludesByName.keys should haveSize(1)
+                excludesByName.keys should contain(scope1.name)
+                excludesByName[scope1.name]!!.let {
+                    it should haveSize(1)
+                    it should contain(scopeExclude1)
+                }
+            }
+        }
     }
 }

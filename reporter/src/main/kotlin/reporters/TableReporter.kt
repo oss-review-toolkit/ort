@@ -235,11 +235,11 @@ abstract class TableReporter : Reporter() {
             val tableRows = (listOf(project.id) + project.collectDependencyIds()).map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
-                val scopes = project.scopes.filter { id in it }.associate {
-                    val scopeExcludes = ortResult.repository.config.excludes?.findScopeExcludes(it, project)
-                            ?: emptyList()
-                    Pair(it.name, scopeExcludes)
-                }.toSortedMap()
+                val scopes = project.scopes.filter { id in it }.let { scopes ->
+                    ortResult.repository.config.excludes
+                            ?.scopeExcludesByName(project, scopes)?.toSortedMap()
+                            ?: scopes.associateTo(sortedMapOf()) { Pair(it.name, emptyList<ScopeExclude>()) }
+                }
 
                 val declaredLicenses = analyzerResult.projects.find { it.id == id }?.declaredLicenses
                         ?: analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
