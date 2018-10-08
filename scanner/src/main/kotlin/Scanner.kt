@@ -135,6 +135,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
 
         val scannerRun = ScannerRun(Environment(), config, scanRecord)
 
-        return OrtResult(ortResult.repository, ortResult.analyzer, scannerRun)
+        // Note: This overwrites any existing ScannerRun from the input file.
+        return ortResult.copy(scanner = scannerRun)
     }
 }
