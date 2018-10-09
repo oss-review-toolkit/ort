@@ -40,74 +40,36 @@ analyzer:
         - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
           dependencies:
           - id: "Maven:ch.qos.logback:logback-core:1.2.3"
-            dependencies: []
-            errors: []
           - id: "Maven:org.slf4j:slf4j-api:1.7.25"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
             dependencies:
             - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
-            dependencies: []
-            errors: []
           - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
           dependencies:
           - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.typesafe:config:1.3.1"
-          dependencies: []
-          errors: []
         - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
           dependencies:
           - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
             dependencies:
             - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
-              dependencies: []
-              errors: []
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
-          dependencies: []
-          errors: []
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-          dependencies: []
-          errors: []
       - name: "test"
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
           dependencies:
           - id: "Maven:org.scala-sbt:test-interface:1.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
           dependencies:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
-            dependencies: []
-            errors: []
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
-            dependencies: []
-            errors: []
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-            dependencies: []
-            errors: []
-          errors: []
     - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
       definition_file_path: "multi1/target/scala-2.12/multi1_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
@@ -128,89 +90,43 @@ analyzer:
         - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
           dependencies:
           - id: "Maven:ch.qos.logback:logback-core:1.2.3"
-            dependencies: []
-            errors: []
           - id: "Maven:org.slf4j:slf4j-api:1.7.25"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.github.julien-truffaut:monocle-core_2.12:1.4.0"
           dependencies:
           - id: "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
           dependencies:
           - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.pbassiner:common_2.12:0.1-SNAPSHOT"
-          dependencies: []
-          errors: []
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
             dependencies:
             - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
-            dependencies: []
-            errors: []
           - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
           dependencies:
           - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.typesafe:config:1.3.1"
-          dependencies: []
-          errors: []
         - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
           dependencies:
           - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
             dependencies:
             - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
-              dependencies: []
-              errors: []
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
-          dependencies: []
-          errors: []
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-          dependencies: []
-          errors: []
       - name: "test"
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
           dependencies:
           - id: "Maven:org.scala-sbt:test-interface:1.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
           dependencies:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
-            dependencies: []
-            errors: []
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
-            dependencies: []
-            errors: []
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-            dependencies: []
-            errors: []
-          errors: []
     - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
       definition_file_path: "multi2/target/scala-2.12/multi2_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
@@ -231,92 +147,44 @@ analyzer:
         - id: "Maven:ch.qos.logback:logback-classic:1.2.3"
           dependencies:
           - id: "Maven:ch.qos.logback:logback-core:1.2.3"
-            dependencies: []
-            errors: []
           - id: "Maven:org.slf4j:slf4j-api:1.7.25"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
           dependencies:
           - id: "Maven:com.chuusai:shapeless_2.12:2.3.2"
-            dependencies: []
-            errors: []
           - id: "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
             dependencies:
             - id: "Maven:org.scala-lang:scala-compiler:2.12.3"
-              dependencies: []
-              errors: []
             - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "Maven:com.pbassiner:common_2.12:0.1-SNAPSHOT"
-          dependencies: []
-          errors: []
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
             dependencies:
             - id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
-            dependencies: []
-            errors: []
           - id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
           dependencies:
           - id: "Maven:org.scala-lang:scala-reflect:2.12.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:com.typesafe:config:1.3.1"
-          dependencies: []
-          errors: []
         - id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
           dependencies:
           - id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
             dependencies:
             - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
-              dependencies: []
-              errors: []
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
-          dependencies: []
-          errors: []
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-          dependencies: []
-          errors: []
       - name: "test"
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
           dependencies:
           - id: "Maven:org.scala-sbt:test-interface:1.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
           dependencies:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
-            dependencies: []
-            errors: []
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
-            dependencies: []
-            errors: []
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-            dependencies: []
-            errors: []
-          errors: []
     - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
       definition_file_path: "target/scala-2.12/sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
@@ -335,8 +203,6 @@ analyzer:
       - name: "compile"
         dependencies:
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
-          dependencies: []
-          errors: []
     packages:
     - package:
         id: "Maven:ch.qos.logback:logback-classic:1.2.3"
@@ -1144,6 +1010,5 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    errors: {}
     has_errors: false
 scanner: null

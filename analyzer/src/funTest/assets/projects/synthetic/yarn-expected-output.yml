@@ -23,171 +23,80 @@ project:
       - id: "NPM::css-select:1.2.0"
         dependencies:
         - id: "NPM::boolbase:1.0.0"
-          dependencies: []
-          errors: []
         - id: "NPM::css-what:2.1.0"
-          dependencies: []
-          errors: []
         - id: "NPM::domutils:1.5.1"
           dependencies:
           - id: "NPM::dom-serializer:0.1.0"
             dependencies:
             - id: "NPM::domelementtype:1.1.3"
-              dependencies: []
-              errors: []
             - id: "NPM::entities:1.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::domelementtype:1.3.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::nth-check:1.0.1"
           dependencies:
           - id: "NPM::boolbase:1.0.0"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::dom-serializer:0.1.0"
         dependencies:
         - id: "NPM::domelementtype:1.1.3"
-          dependencies: []
-          errors: []
         - id: "NPM::entities:1.1.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::entities:1.1.1"
-        dependencies: []
-        errors: []
       - id: "NPM::htmlparser2:3.9.2"
         dependencies:
         - id: "NPM::domelementtype:1.3.0"
-          dependencies: []
-          errors: []
         - id: "NPM::domhandler:2.4.1"
           dependencies:
           - id: "NPM::domelementtype:1.3.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::domutils:1.5.1"
           dependencies:
           - id: "NPM::dom-serializer:0.1.0"
             dependencies:
             - id: "NPM::domelementtype:1.1.3"
-              dependencies: []
-              errors: []
             - id: "NPM::entities:1.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::domelementtype:1.3.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::entities:1.1.1"
-          dependencies: []
-          errors: []
         - id: "NPM::inherits:2.0.3"
-          dependencies: []
-          errors: []
         - id: "NPM::readable-stream:2.3.3"
           dependencies:
           - id: "NPM::core-util-is:1.0.2"
-            dependencies: []
-            errors: []
           - id: "NPM::inherits:2.0.3"
-            dependencies: []
-            errors: []
           - id: "NPM::isarray:1.0.0"
-            dependencies: []
-            errors: []
           - id: "NPM::process-nextick-args:1.0.7"
-            dependencies: []
-            errors: []
           - id: "NPM::safe-buffer:5.1.1"
-            dependencies: []
-            errors: []
           - id: "NPM::string_decoder:1.0.3"
             dependencies:
             - id: "NPM::safe-buffer:5.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::util-deprecate:1.0.2"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::lodash:4.17.4"
-        dependencies: []
-        errors: []
       - id: "NPM::parse5:3.0.2"
         dependencies:
         - id: "NPM:@types:node:6.0.79"
-          dependencies: []
-          errors: []
-        errors: []
-      errors: []
     - id: "NPM::long:3.2.0"
-      dependencies: []
-      errors: []
   - name: "devDependencies"
     dependencies:
     - id: "NPM::cson:4.1.0"
       dependencies:
       - id: "NPM::coffee-script:1.12.6"
-        dependencies: []
-        errors: []
       - id: "NPM::cson-parser:1.3.5"
         dependencies:
         - id: "NPM::coffee-script:1.12.6"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::extract-opts:3.3.1"
         dependencies:
         - id: "NPM::eachr:3.2.0"
           dependencies:
           - id: "NPM::editions:1.3.3"
-            dependencies: []
-            errors: []
           - id: "NPM::typechecker:4.4.1"
             dependencies:
             - id: "NPM::editions:1.3.3"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::editions:1.3.3"
-          dependencies: []
-          errors: []
         - id: "NPM::typechecker:4.4.1"
           dependencies:
           - id: "NPM::editions:1.3.3"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::requirefresh:2.1.0"
         dependencies:
         - id: "NPM::editions:1.3.3"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::safefs:4.1.0"
         dependencies:
         - id: "NPM::editions:1.3.3"
-          dependencies: []
-          errors: []
         - id: "NPM::graceful-fs:4.1.11"
-          dependencies: []
-          errors: []
-        errors: []
-      errors: []
 packages:
 - package:
     id: "NPM::asap:2.0.5"
@@ -1096,4 +1005,3 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors: []

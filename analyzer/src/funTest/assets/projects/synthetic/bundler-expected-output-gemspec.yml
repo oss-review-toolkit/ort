@@ -18,29 +18,16 @@ project:
   - name: "default"
     dependencies:
     - id: "Bundler::rack:1.6.10"
-      dependencies: []
-      errors: []
     - id: "Bundler::signet:0.8.1"
       dependencies:
       - id: "Bundler::addressable:2.5.2"
         dependencies:
         - id: "Bundler::public_suffix:3.0.2"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Bundler::faraday:0.15.1"
         dependencies:
         - id: "Bundler::multipart-post:2.0.0"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Bundler::jwt:2.1.0"
-        dependencies: []
-        errors: []
       - id: "Bundler::multi_json:1.13.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "development"
     dependencies:
     - id: "Bundler::rspec:3.7.0"
@@ -48,28 +35,14 @@ project:
       - id: "Bundler::rspec-core:3.7.1"
         dependencies:
         - id: "Bundler::rspec-support:3.7.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Bundler::rspec-expectations:3.7.0"
         dependencies:
         - id: "Bundler::diff-lcs:1.3"
-          dependencies: []
-          errors: []
         - id: "Bundler::rspec-support:3.7.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Bundler::rspec-mocks:3.7.0"
         dependencies:
         - id: "Bundler::diff-lcs:1.3"
-          dependencies: []
-          errors: []
         - id: "Bundler::rspec-support:3.7.1"
-          dependencies: []
-          errors: []
-        errors: []
-      errors: []
 packages:
 - package:
     id: "Bundler::addressable:2.5.2"
@@ -452,4 +425,3 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors: []
