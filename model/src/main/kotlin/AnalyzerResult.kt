@@ -32,7 +32,7 @@ import java.util.SortedMap
 import java.util.SortedSet
 
 /**
- * A class that merges all information from individual AnalyzerResults created for each found build file
+ * A class that merges all information from individual [ProjectAnalyzerResult]s created for each found definition file.
  */
 @JsonIgnoreProperties(value = ["has_errors"], allowGetters = true)
 data class AnalyzerResult(
