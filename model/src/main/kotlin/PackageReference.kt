@@ -37,11 +37,13 @@ data class PackageReference(
          * The list of references to packages this package depends on. Note that this list depends on the scope in
          * which this package reference is used.
          */
-        val dependencies: SortedSet<PackageReference>,
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
         /**
          * A list of errors that occurred handling this [PackageReference].
          */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val errors: List<Error> = emptyList(),
 
         /**

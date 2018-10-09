@@ -49,7 +49,8 @@ data class AnalyzerResult(
         /**
          * The list of all errors.
          */
-        val errors: SortedMap<Identifier, List<Error>>,
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val errors: SortedMap<Identifier, List<Error>> = sortedMapOf(),
 
         /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.

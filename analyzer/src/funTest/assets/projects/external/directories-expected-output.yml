@@ -41,15 +41,9 @@ analyzer:
         - id: "Maven:com.novocode:junit-interface:0.11"
           dependencies:
           - id: "Maven:org.scala-sbt:test-interface:1.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:junit:junit:4.12"
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
     packages:
     - package:
         id: "Maven:com.novocode:junit-interface:0.11"
@@ -155,6 +149,5 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    errors: {}
     has_errors: false
 scanner: null

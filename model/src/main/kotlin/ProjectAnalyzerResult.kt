@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import java.util.SortedSet
 
 /**
@@ -39,6 +41,7 @@ data class ProjectAnalyzerResult(
         /**
          * The list of errors that occurred during dependency resolution. Defaults to an empty list.
          */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val errors: List<Error> = emptyList()
 ) {
     init {

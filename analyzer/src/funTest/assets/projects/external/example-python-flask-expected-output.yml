@@ -22,22 +22,10 @@ project:
       - id: "PyPI::Jinja2:2.8.1"
         dependencies:
         - id: "PyPI::MarkupSafe:1.0"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "PyPI::Werkzeug:0.14.1"
-        dependencies: []
-        errors: []
       - id: "PyPI::click:7.0"
-        dependencies: []
-        errors: []
       - id: "PyPI::itsdangerous:0.24"
-        dependencies: []
-        errors: []
-      errors: []
     - id: "PyPI::gunicorn:19.6.0"
-      dependencies: []
-      errors: []
 packages:
 - package:
     id: "PyPI::Flask:0.12"
@@ -216,4 +204,3 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors: []

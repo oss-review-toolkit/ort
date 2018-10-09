@@ -27,34 +27,16 @@ project:
           - id: "NPM::chalk:1.1.3"
             dependencies:
             - id: "NPM::ansi-styles:2.2.1"
-              dependencies: []
-              errors: []
             - id: "NPM::escape-string-regexp:1.0.5"
-              dependencies: []
-              errors: []
             - id: "NPM::has-ansi:2.0.0"
               dependencies:
               - id: "NPM::ansi-regex:2.1.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::strip-ansi:3.0.1"
               dependencies:
               - id: "NPM::ansi-regex:2.1.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::supports-color:2.0.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::esutils:2.0.2"
-            dependencies: []
-            errors: []
           - id: "NPM::js-tokens:3.0.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::babel-generator:6.26.1"
           dependencies:
           - id: "NPM::babel-messages:6.23.0"
@@ -62,43 +44,20 @@ project:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::esutils:2.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
             - id: "NPM::to-fast-properties:1.0.3"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::detect-indent:4.0.0"
             dependencies:
             - id: "NPM::repeating:2.0.1"
@@ -106,46 +65,22 @@ project:
               - id: "NPM::is-finite:1.0.2"
                 dependencies:
                 - id: "NPM::number-is-nan:1.0.1"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::jsesc:1.3.0"
-            dependencies: []
-            errors: []
           - id: "NPM::lodash:4.17.10"
-            dependencies: []
-            errors: []
           - id: "NPM::source-map:0.5.7"
-            dependencies: []
-            errors: []
           - id: "NPM::trim-right:1.0.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::babel-helpers:6.24.1"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-template:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-traverse:6.26.0"
               dependencies:
               - id: "NPM::babel-code-frame:6.26.0"
@@ -153,201 +88,91 @@ project:
                 - id: "NPM::chalk:1.1.3"
                   dependencies:
                   - id: "NPM::ansi-styles:2.2.1"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::escape-string-regexp:1.0.5"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::has-ansi:2.0.0"
                     dependencies:
                     - id: "NPM::ansi-regex:2.1.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::strip-ansi:3.0.1"
                     dependencies:
                     - id: "NPM::ansi-regex:2.1.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::supports-color:2.0.0"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::esutils:2.0.2"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::js-tokens:3.0.2"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-messages:6.23.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
                   - id: "NPM::core-js:2.5.7"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-types:6.26.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
                   - id: "NPM::core-js:2.5.7"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::esutils:2.0.2"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::lodash:4.17.10"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::to-fast-properties:1.0.3"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babylon:6.18.0"
-                dependencies: []
-                errors: []
               - id: "NPM::debug:2.6.9"
                 dependencies:
                 - id: "NPM::ms:2.0.0"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::globals:9.18.0"
-                dependencies: []
-                errors: []
               - id: "NPM::invariant:2.2.4"
                 dependencies:
                 - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::esutils:2.0.2"
-                dependencies: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
               - id: "NPM::to-fast-properties:1.0.3"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babylon:6.18.0"
-              dependencies: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::babel-messages:6.23.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::babel-register:6.26.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::core-js:2.5.7"
-            dependencies: []
-            errors: []
           - id: "NPM::home-or-tmp:2.0.0"
             dependencies:
             - id: "NPM::os-homedir:1.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::os-tmpdir:1.0.2"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::lodash:4.17.10"
-            dependencies: []
-            errors: []
           - id: "NPM::mkdirp:0.5.1"
             dependencies:
             - id: "NPM::minimist:0.0.8"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::source-map-support:0.4.18"
             dependencies:
             - id: "NPM::source-map:0.5.7"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
           - id: "NPM::core-js:2.5.7"
-            dependencies: []
-            errors: []
           - id: "NPM::regenerator-runtime:0.11.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::babel-template:6.26.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-traverse:6.26.0"
             dependencies:
             - id: "NPM::babel-code-frame:6.26.0"
@@ -355,129 +180,57 @@ project:
               - id: "NPM::chalk:1.1.3"
                 dependencies:
                 - id: "NPM::ansi-styles:2.2.1"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::escape-string-regexp:1.0.5"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::has-ansi:2.0.0"
                   dependencies:
                   - id: "NPM::ansi-regex:2.1.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::strip-ansi:3.0.1"
                   dependencies:
                   - id: "NPM::ansi-regex:2.1.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::supports-color:2.0.0"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::esutils:2.0.2"
-                dependencies: []
-                errors: []
               - id: "NPM::js-tokens:3.0.2"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-messages:6.23.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::esutils:2.0.2"
-                dependencies: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
               - id: "NPM::to-fast-properties:1.0.3"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babylon:6.18.0"
-              dependencies: []
-              errors: []
             - id: "NPM::debug:2.6.9"
               dependencies:
               - id: "NPM::ms:2.0.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::globals:9.18.0"
-              dependencies: []
-              errors: []
             - id: "NPM::invariant:2.2.4"
               dependencies:
               - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::esutils:2.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
             - id: "NPM::to-fast-properties:1.0.3"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babylon:6.18.0"
-            dependencies: []
-            errors: []
           - id: "NPM::lodash:4.17.10"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::babel-traverse:6.26.0"
           dependencies:
           - id: "NPM::babel-code-frame:6.26.0"
@@ -485,183 +238,80 @@ project:
             - id: "NPM::chalk:1.1.3"
               dependencies:
               - id: "NPM::ansi-styles:2.2.1"
-                dependencies: []
-                errors: []
               - id: "NPM::escape-string-regexp:1.0.5"
-                dependencies: []
-                errors: []
               - id: "NPM::has-ansi:2.0.0"
                 dependencies:
                 - id: "NPM::ansi-regex:2.1.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::strip-ansi:3.0.1"
                 dependencies:
                 - id: "NPM::ansi-regex:2.1.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::supports-color:2.0.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::esutils:2.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::js-tokens:3.0.2"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-messages:6.23.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::esutils:2.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
             - id: "NPM::to-fast-properties:1.0.3"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babylon:6.18.0"
-            dependencies: []
-            errors: []
           - id: "NPM::debug:2.6.9"
             dependencies:
             - id: "NPM::ms:2.0.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::globals:9.18.0"
-            dependencies: []
-            errors: []
           - id: "NPM::invariant:2.2.4"
             dependencies:
             - id: "NPM::loose-envify:1.4.0"
               dependencies:
               - id: "NPM::js-tokens:3.0.2"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::lodash:4.17.10"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::babel-types:6.26.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::esutils:2.0.2"
-            dependencies: []
-            errors: []
           - id: "NPM::lodash:4.17.10"
-            dependencies: []
-            errors: []
           - id: "NPM::to-fast-properties:1.0.3"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::babylon:6.18.0"
-          dependencies: []
-          errors: []
         - id: "NPM::convert-source-map:1.5.1"
-          dependencies: []
-          errors: []
         - id: "NPM::debug:2.6.9"
           dependencies:
           - id: "NPM::ms:2.0.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::json5:0.5.1"
-          dependencies: []
-          errors: []
         - id: "NPM::lodash:4.17.10"
-          dependencies: []
-          errors: []
         - id: "NPM::minimatch:3.0.4"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
             dependencies:
             - id: "NPM::balanced-match:1.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::concat-map:0.0.1"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::path-is-absolute:1.0.1"
-          dependencies: []
-          errors: []
         - id: "NPM::private:0.1.8"
-          dependencies: []
-          errors: []
         - id: "NPM::slash:1.0.0"
-          dependencies: []
-          errors: []
         - id: "NPM::source-map:0.5.7"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::babel-polyfill:6.26.0"
         dependencies:
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
           - id: "NPM::core-js:2.5.7"
-            dependencies: []
-            errors: []
           - id: "NPM::regenerator-runtime:0.11.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::core-js:2.5.7"
-          dependencies: []
-          errors: []
         - id: "NPM::regenerator-runtime:0.10.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::babel-register:6.26.0"
         dependencies:
         - id: "NPM::babel-core:6.26.3"
@@ -671,34 +321,16 @@ project:
             - id: "NPM::chalk:1.1.3"
               dependencies:
               - id: "NPM::ansi-styles:2.2.1"
-                dependencies: []
-                errors: []
               - id: "NPM::escape-string-regexp:1.0.5"
-                dependencies: []
-                errors: []
               - id: "NPM::has-ansi:2.0.0"
                 dependencies:
                 - id: "NPM::ansi-regex:2.1.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::strip-ansi:3.0.1"
                 dependencies:
                 - id: "NPM::ansi-regex:2.1.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::supports-color:2.0.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::esutils:2.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::js-tokens:3.0.2"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-generator:6.26.1"
             dependencies:
             - id: "NPM::babel-messages:6.23.0"
@@ -706,43 +338,20 @@ project:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::esutils:2.0.2"
-                dependencies: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
               - id: "NPM::to-fast-properties:1.0.3"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::detect-indent:4.0.0"
               dependencies:
               - id: "NPM::repeating:2.0.1"
@@ -750,46 +359,22 @@ project:
                 - id: "NPM::is-finite:1.0.2"
                   dependencies:
                   - id: "NPM::number-is-nan:1.0.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::jsesc:1.3.0"
-              dependencies: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
             - id: "NPM::source-map:0.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::trim-right:1.0.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-helpers:6.24.1"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-template:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-traverse:6.26.0"
                 dependencies:
                 - id: "NPM::babel-code-frame:6.26.0"
@@ -797,162 +382,73 @@ project:
                   - id: "NPM::chalk:1.1.3"
                     dependencies:
                     - id: "NPM::ansi-styles:2.2.1"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::escape-string-regexp:1.0.5"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::has-ansi:2.0.0"
                       dependencies:
                       - id: "NPM::ansi-regex:2.1.1"
-                        dependencies: []
-                        errors: []
-                      errors: []
                     - id: "NPM::strip-ansi:3.0.1"
                       dependencies:
                       - id: "NPM::ansi-regex:2.1.1"
-                        dependencies: []
-                        errors: []
-                      errors: []
                     - id: "NPM::supports-color:2.0.0"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::esutils:2.0.2"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::js-tokens:3.0.2"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::babel-messages:6.23.0"
                   dependencies:
                   - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
                     - id: "NPM::core-js:2.5.7"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::regenerator-runtime:0.11.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
                   - id: "NPM::core-js:2.5.7"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::babel-types:6.26.0"
                   dependencies:
                   - id: "NPM::babel-runtime:6.26.0"
                     dependencies:
                     - id: "NPM::core-js:2.5.7"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::regenerator-runtime:0.11.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::esutils:2.0.2"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::lodash:4.17.10"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::to-fast-properties:1.0.3"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::babylon:6.18.0"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::debug:2.6.9"
                   dependencies:
                   - id: "NPM::ms:2.0.0"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::globals:9.18.0"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::invariant:2.2.4"
                   dependencies:
                   - id: "NPM::loose-envify:1.4.0"
                     dependencies:
                     - id: "NPM::js-tokens:3.0.2"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::lodash:4.17.10"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-types:6.26.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
                   - id: "NPM::core-js:2.5.7"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::esutils:2.0.2"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::lodash:4.17.10"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::to-fast-properties:1.0.3"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babylon:6.18.0"
-                dependencies: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::babel-messages:6.23.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::babel-runtime:6.26.0"
             dependencies:
             - id: "NPM::core-js:2.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::regenerator-runtime:0.11.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-template:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-traverse:6.26.0"
               dependencies:
               - id: "NPM::babel-code-frame:6.26.0"
@@ -960,129 +456,57 @@ project:
                 - id: "NPM::chalk:1.1.3"
                   dependencies:
                   - id: "NPM::ansi-styles:2.2.1"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::escape-string-regexp:1.0.5"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::has-ansi:2.0.0"
                     dependencies:
                     - id: "NPM::ansi-regex:2.1.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::strip-ansi:3.0.1"
                     dependencies:
                     - id: "NPM::ansi-regex:2.1.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::supports-color:2.0.0"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::esutils:2.0.2"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::js-tokens:3.0.2"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-messages:6.23.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
                   - id: "NPM::core-js:2.5.7"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babel-types:6.26.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
                   dependencies:
                   - id: "NPM::core-js:2.5.7"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::regenerator-runtime:0.11.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::esutils:2.0.2"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::lodash:4.17.10"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::to-fast-properties:1.0.3"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::babylon:6.18.0"
-                dependencies: []
-                errors: []
               - id: "NPM::debug:2.6.9"
                 dependencies:
                 - id: "NPM::ms:2.0.0"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::globals:9.18.0"
-                dependencies: []
-                errors: []
               - id: "NPM::invariant:2.2.4"
                 dependencies:
                 - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::esutils:2.0.2"
-                dependencies: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
               - id: "NPM::to-fast-properties:1.0.3"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babylon:6.18.0"
-              dependencies: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-traverse:6.26.0"
             dependencies:
             - id: "NPM::babel-code-frame:6.26.0"
@@ -1090,211 +514,92 @@ project:
               - id: "NPM::chalk:1.1.3"
                 dependencies:
                 - id: "NPM::ansi-styles:2.2.1"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::escape-string-regexp:1.0.5"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::has-ansi:2.0.0"
                   dependencies:
                   - id: "NPM::ansi-regex:2.1.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::strip-ansi:3.0.1"
                   dependencies:
                   - id: "NPM::ansi-regex:2.1.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::supports-color:2.0.0"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::esutils:2.0.2"
-                dependencies: []
-                errors: []
               - id: "NPM::js-tokens:3.0.2"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-messages:6.23.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
                 dependencies:
                 - id: "NPM::core-js:2.5.7"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::regenerator-runtime:0.11.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::esutils:2.0.2"
-                dependencies: []
-                errors: []
               - id: "NPM::lodash:4.17.10"
-                dependencies: []
-                errors: []
               - id: "NPM::to-fast-properties:1.0.3"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::babylon:6.18.0"
-              dependencies: []
-              errors: []
             - id: "NPM::debug:2.6.9"
               dependencies:
               - id: "NPM::ms:2.0.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::globals:9.18.0"
-              dependencies: []
-              errors: []
             - id: "NPM::invariant:2.2.4"
               dependencies:
               - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
               dependencies:
               - id: "NPM::core-js:2.5.7"
-                dependencies: []
-                errors: []
               - id: "NPM::regenerator-runtime:0.11.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::esutils:2.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::lodash:4.17.10"
-              dependencies: []
-              errors: []
             - id: "NPM::to-fast-properties:1.0.3"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::babylon:6.18.0"
-            dependencies: []
-            errors: []
           - id: "NPM::convert-source-map:1.5.1"
-            dependencies: []
-            errors: []
           - id: "NPM::debug:2.6.9"
             dependencies:
             - id: "NPM::ms:2.0.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::json5:0.5.1"
-            dependencies: []
-            errors: []
           - id: "NPM::lodash:4.17.10"
-            dependencies: []
-            errors: []
           - id: "NPM::minimatch:3.0.4"
             dependencies:
             - id: "NPM::brace-expansion:1.1.11"
               dependencies:
               - id: "NPM::balanced-match:1.0.0"
-                dependencies: []
-                errors: []
               - id: "NPM::concat-map:0.0.1"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::path-is-absolute:1.0.1"
-            dependencies: []
-            errors: []
           - id: "NPM::private:0.1.8"
-            dependencies: []
-            errors: []
           - id: "NPM::slash:1.0.0"
-            dependencies: []
-            errors: []
           - id: "NPM::source-map:0.5.7"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::babel-runtime:6.26.0"
           dependencies:
           - id: "NPM::core-js:2.5.7"
-            dependencies: []
-            errors: []
           - id: "NPM::regenerator-runtime:0.11.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::core-js:2.5.7"
-          dependencies: []
-          errors: []
         - id: "NPM::home-or-tmp:2.0.0"
           dependencies:
           - id: "NPM::os-homedir:1.0.2"
-            dependencies: []
-            errors: []
           - id: "NPM::os-tmpdir:1.0.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::lodash:4.17.10"
-          dependencies: []
-          errors: []
         - id: "NPM::mkdirp:0.5.1"
           dependencies:
           - id: "NPM::minimist:0.0.8"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::source-map-support:0.4.18"
           dependencies:
           - id: "NPM::source-map:0.5.7"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::babel-runtime:6.26.0"
         dependencies:
         - id: "NPM::core-js:2.5.7"
-          dependencies: []
-          errors: []
         - id: "NPM::regenerator-runtime:0.11.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::chokidar:1.7.0"
         dependencies:
         - id: "NPM::anymatch:1.3.2"
@@ -1304,12 +609,7 @@ project:
             - id: "NPM::arr-diff:2.0.0"
               dependencies:
               - id: "NPM::arr-flatten:1.1.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::array-unique:0.2.1"
-              dependencies: []
-              errors: []
             - id: "NPM::braces:1.8.5"
               dependencies:
               - id: "NPM::expand-range:1.8.2"
@@ -1321,91 +621,41 @@ project:
                     - id: "NPM::kind-of:3.2.2"
                       dependencies:
                       - id: "NPM::is-buffer:1.1.6"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
                   - id: "NPM::isobject:2.1.0"
                     dependencies:
                     - id: "NPM::isarray:1.0.0"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::randomatic:3.1.0"
                     dependencies:
                     - id: "NPM::is-number:4.0.0"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::kind-of:6.0.2"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::math-random:1.0.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::repeat-element:1.1.2"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::repeat-string:1.6.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::preserve:0.2.0"
-                dependencies: []
-                errors: []
               - id: "NPM::repeat-element:1.1.2"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::expand-brackets:0.1.5"
               dependencies:
               - id: "NPM::is-posix-bracket:0.1.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::extglob:0.3.2"
               dependencies:
               - id: "NPM::is-extglob:1.0.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::filename-regex:2.0.1"
-              dependencies: []
-              errors: []
             - id: "NPM::is-extglob:1.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::is-glob:2.0.1"
               dependencies:
               - id: "NPM::is-extglob:1.0.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::kind-of:3.2.2"
               dependencies:
               - id: "NPM::is-buffer:1.1.6"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::normalize-path:2.1.1"
               dependencies:
               - id: "NPM::remove-trailing-separator:1.1.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::object.omit:2.0.1"
               dependencies:
               - id: "NPM::for-own:0.1.5"
                 dependencies:
                 - id: "NPM::for-in:1.0.2"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::is-extendable:0.1.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::parse-glob:3.0.4"
               dependencies:
               - id: "NPM::glob-base:0.3.0"
@@ -1415,52 +665,24 @@ project:
                   - id: "NPM::is-glob:2.0.1"
                     dependencies:
                     - id: "NPM::is-extglob:1.0.0"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::is-glob:2.0.1"
                   dependencies:
                   - id: "NPM::is-extglob:1.0.0"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::is-dotfile:1.0.3"
-                dependencies: []
-                errors: []
               - id: "NPM::is-extglob:1.0.0"
-                dependencies: []
-                errors: []
               - id: "NPM::is-glob:2.0.1"
                 dependencies:
                 - id: "NPM::is-extglob:1.0.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::regex-cache:0.4.4"
               dependencies:
               - id: "NPM::is-equal-shallow:0.1.3"
                 dependencies:
                 - id: "NPM::is-primitive:2.0.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::normalize-path:2.1.1"
             dependencies:
             - id: "NPM::remove-trailing-separator:1.1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::async-each:1.0.1"
-          dependencies: []
-          errors: []
         - id: "NPM::fsevents:"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "NPM"
@@ -1470,164 +692,73 @@ project:
           - id: "NPM::is-glob:2.0.1"
             dependencies:
             - id: "NPM::is-extglob:1.0.0"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::inherits:2.0.3"
-          dependencies: []
-          errors: []
         - id: "NPM::is-binary-path:1.0.1"
           dependencies:
           - id: "NPM::binary-extensions:1.11.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::is-glob:2.0.1"
           dependencies:
           - id: "NPM::is-extglob:1.0.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::path-is-absolute:1.0.1"
-          dependencies: []
-          errors: []
         - id: "NPM::readdirp:2.1.0"
           dependencies:
           - id: "NPM::graceful-fs:4.1.11"
-            dependencies: []
-            errors: []
           - id: "NPM::minimatch:3.0.4"
             dependencies:
             - id: "NPM::brace-expansion:1.1.11"
               dependencies:
               - id: "NPM::balanced-match:1.0.0"
-                dependencies: []
-                errors: []
               - id: "NPM::concat-map:0.0.1"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::readable-stream:2.3.6"
             dependencies:
             - id: "NPM::core-util-is:1.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::inherits:2.0.3"
-              dependencies: []
-              errors: []
             - id: "NPM::isarray:1.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::process-nextick-args:2.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::safe-buffer:5.1.2"
-              dependencies: []
-              errors: []
             - id: "NPM::string_decoder:1.1.1"
               dependencies:
               - id: "NPM::safe-buffer:5.1.2"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::util-deprecate:1.0.2"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::set-immediate-shim:1.0.1"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::commander:2.17.1"
-        dependencies: []
-        errors: []
       - id: "NPM::convert-source-map:1.5.1"
-        dependencies: []
-        errors: []
       - id: "NPM::fs-readdir-recursive:1.1.0"
-        dependencies: []
-        errors: []
       - id: "NPM::glob:7.1.2"
         dependencies:
         - id: "NPM::fs.realpath:1.0.0"
-          dependencies: []
-          errors: []
         - id: "NPM::inflight:1.0.6"
           dependencies:
           - id: "NPM::once:1.4.0"
             dependencies:
             - id: "NPM::wrappy:1.0.2"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::wrappy:1.0.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::inherits:2.0.3"
-          dependencies: []
-          errors: []
         - id: "NPM::minimatch:3.0.4"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
             dependencies:
             - id: "NPM::balanced-match:1.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::concat-map:0.0.1"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::once:1.4.0"
           dependencies:
           - id: "NPM::wrappy:1.0.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::path-is-absolute:1.0.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::lodash:4.17.10"
-        dependencies: []
-        errors: []
       - id: "NPM::output-file-sync:1.1.2"
         dependencies:
         - id: "NPM::graceful-fs:4.1.11"
-          dependencies: []
-          errors: []
         - id: "NPM::mkdirp:0.5.1"
           dependencies:
           - id: "NPM::minimist:0.0.8"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::object-assign:4.1.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::path-is-absolute:1.0.1"
-        dependencies: []
-        errors: []
       - id: "NPM::slash:1.0.0"
-        dependencies: []
-        errors: []
       - id: "NPM::source-map:0.5.7"
-        dependencies: []
-        errors: []
       - id: "NPM::v8flags:2.1.1"
         dependencies:
         - id: "NPM::user-home:1.1.1"
-          dependencies: []
-          errors: []
-        errors: []
-      errors: []
   - name: "devDependencies"
-    dependencies: []
 packages:
 - package:
     id: "NPM::ansi-regex:2.1.1"
@@ -4616,4 +3747,3 @@ packages:
       revision: "71d91b6dc5bdeac37e218c2cf03f9ab55b60d214"
       path: ""
   curations: []
-errors: []

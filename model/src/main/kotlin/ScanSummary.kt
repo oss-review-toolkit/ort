@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.time.Instant
 import java.util.SortedSet
@@ -56,7 +57,8 @@ data class ScanSummary(
         /**
          * The list of errors that occurred during the scan.
          */
-        val errors: List<Error>
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val errors: List<Error> = emptyList()
 ) {
     val licenses: SortedSet<String>
         @JsonIgnore
