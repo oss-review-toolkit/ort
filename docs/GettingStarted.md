@@ -65,14 +65,14 @@ The next step is to run the `analyzer`. It will create a JSON or YAML output fil
 # Command line help specific to the analyzer.
 cli/build/install/ort/bin/ort analyze --help
 
-# The easiest way to run the analyzer. Be aware that the [output-path] directory must not exist.
-cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [output-path]
+# The easiest way to run the analyzer. Be aware that the [analyzer-output-path] directory must not exist.
+cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-path]
 
 # The command above will create the default YAML output. If you prefer JSON run:
-cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [output-path] -f JSON
+cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-path] -f JSON
 
 # To get the maximum log output run:
-cli/build/install/ort/bin/ort --debug --stacktrace analyze -i [mime-types-path] -o [output-path]
+cli/build/install/ort/bin/ort --debug --stacktrace analyze -i [mime-types-path] -o [analyzer-output-path]
 ```
 
 The `analyzer` will search for build files of all supported package managers. In case of `mime-types` it will find the
@@ -85,7 +85,7 @@ The following package managers are activated:
 Scanning project path:
         [mime-types-path]
 ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-path]'. This potentially results in unstable versions of dependencies. To allow this, enable support for dynamic versions.
-Writing analyzer result to '[output-path]/analyzer-result.yml'.
+Writing analyzer result to '[analyzer-output-path]/analyzer-result.yml'.
 ```
 
 This happens because `mime-types` does not have `package-lock.json` file. Without this file the versions of (transitive)
@@ -93,12 +93,12 @@ dependencies that are defined with version ranges could change at any time, lead
 analyzer. To override this check use the `--allow-dynamic-versions` option:
 
 ```bash
-$ cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [output-path] --allow-dynamic-versions
+$ cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-path] --allow-dynamic-versions
 The following package managers are activated:
         Gradle, Maven, SBT, NPM, Yarn, GoDep, PIP, Bundler, PhpComposer, Stack
 Scanning project path:
         [mime-types-path]
-Writing analyzer result to '[output-path]/analyzer-result.yml'.
+Writing analyzer result to '[analyzer-output-path]/analyzer-result.yml'.
 ```
 
 The result file will contain information about the `mime-types` package itself, the dependency tree for each scope, and
@@ -318,7 +318,7 @@ provide the location of source artifacts. The structure of the curations file is
 To use the curations file pass it to the `--package-curations-file` option of the `analyzer`:
 
 ```
-cli/build/install/ort/bin/ort analyze -i [input-path] -o [output-path] --package-curations-file [curations-file-path]
+cli/build/install/ort/bin/ort analyze -i [input-path] -o [analyzer-output-path] --package-curations-file [curations-file-path]
 ```
 
 In future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until then,
