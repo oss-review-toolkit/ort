@@ -43,7 +43,7 @@ data class Scope(
          * dependencies would not be test dependencies of the test dependencies, but compile dependencies of test
          * dependencies.
          */
-        val dependencies: SortedSet<PackageReference>,
+        val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
         /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.

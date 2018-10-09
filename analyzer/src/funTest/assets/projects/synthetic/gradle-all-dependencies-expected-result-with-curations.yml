@@ -85,13 +85,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -99,13 +93,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "compileOnly"
         dependencies: []
       - name: "default"
@@ -115,13 +103,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "runtime"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -129,13 +111,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -143,13 +119,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "testAnnotationProcessor"
         dependencies: []
       - name: "testCompile"
@@ -159,13 +129,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -173,13 +137,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "testCompileOnly"
         dependencies: []
       - name: "testRuntime"
@@ -189,13 +147,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -203,13 +155,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-            dependencies: []
-            errors: []
-          errors: []
     - id: "Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
       declared_licenses: []
@@ -232,7 +178,6 @@ analyzer:
       - name: "compile"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -242,7 +187,6 @@ analyzer:
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -254,7 +198,6 @@ analyzer:
       - name: "default"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -264,7 +207,6 @@ analyzer:
       - name: "runtime"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -274,7 +216,6 @@ analyzer:
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -286,14 +227,12 @@ analyzer:
       - name: "testCompile"
         dependencies:
         - id: "Maven:junit:junit:4.12"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -303,14 +242,12 @@ analyzer:
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -322,14 +259,12 @@ analyzer:
       - name: "testRuntime"
         dependencies:
         - id: "Maven:junit:junit:4.12"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -339,14 +274,12 @@ analyzer:
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
         - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies: []
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "Gradle"
@@ -377,23 +310,13 @@ analyzer:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "compileOnly"
         dependencies: []
       - name: "default"
@@ -401,34 +324,19 @@ analyzer:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "runtime"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "testAnnotationProcessor"
         dependencies: []
       - name: "testCompile"
@@ -436,35 +344,19 @@ analyzer:
         - id: "Maven:junit:junit:4.12"
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "testCompileOnly"
         dependencies: []
       - name: "testRuntime"
@@ -472,35 +364,19 @@ analyzer:
         - id: "Maven:junit:junit:4.12"
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-          dependencies: []
-          errors: []
     packages:
     - package:
         id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -676,6 +552,5 @@ analyzer:
           - "curated license a"
           - "curated license b"
           comment: "Declared license in pom.xml is wrong."
-    errors: {}
     has_errors: true
 scanner: null

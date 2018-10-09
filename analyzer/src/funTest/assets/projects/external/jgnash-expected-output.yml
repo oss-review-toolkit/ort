@@ -18,11 +18,7 @@ project:
   - name: "test"
     dependencies:
     - id: "Maven:junit:junit:4.12"
-      dependencies: []
-      errors: []
     - id: "Maven:org.hamcrest:hamcrest-all:1.3"
-      dependencies: []
-      errors: []
 packages:
 - package:
     id: "Maven:junit:junit:4.12"
@@ -76,4 +72,3 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors: []

@@ -48,7 +48,10 @@ data class AnalyzerResult(
          * The lists of errors that occurred within the analyzed projects themselves. Errors related to project
          * dependencies are contained in the dependencies of the project's scopes.
          */
-        val errors: SortedMap<Identifier, List<Error>>,
+        // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
+        // [AnalyzerResult.hasErrors] already contains that information.
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val errors: SortedMap<Identifier, List<Error>> = sortedMapOf(),
 
         /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.

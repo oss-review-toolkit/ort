@@ -21,17 +21,10 @@ project:
     - id: "Bower::polymer:2.4.0"
       dependencies:
       - id: "Bower::shadycss:1.5.2"
-        dependencies: []
-        errors: []
       - id: "Bower::webcomponentsjs:1.2.7"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "devDependencies"
     dependencies:
     - id: "Bower::jquery:3.3.1"
-      dependencies: []
-      errors: []
 packages:
 - package:
     id: "Bower::jquery:3.3.1"
@@ -132,4 +125,3 @@ packages:
       revision: "57ed75b1730f291772bafb134f00d4821cb1a768"
       path: ""
   curations: []
-errors: []

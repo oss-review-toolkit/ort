@@ -19,11 +19,7 @@ project:
   - name: "dependencies"
     dependencies:
     - id: "NPM::is-win:1.0.8"
-      dependencies: []
-      errors: []
     - id: "NPM::is-windows:1.0.2"
-      dependencies: []
-      errors: []
   - name: "devDependencies"
     dependencies:
     - id: "NPM::gulp-format-md:1.0.0"
@@ -31,24 +27,13 @@ project:
       - id: "NPM::extend-shallow:2.0.1"
         dependencies:
         - id: "NPM::is-extendable:0.1.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::log-ok:0.1.1"
         dependencies:
         - id: "NPM::ansi-green:0.1.1"
           dependencies:
           - id: "NPM::ansi-wrap:0.1.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::success-symbol:0.1.0"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::minimist:1.2.0"
-        dependencies: []
-        errors: []
       - id: "NPM::pretty-remarkable:0.4.1"
         dependencies:
         - id: "NPM::expand-reflinks:0.2.1"
@@ -62,54 +47,28 @@ project:
                 - id: "NPM::kind-of:3.2.2"
                   dependencies:
                   - id: "NPM::is-buffer:1.1.6"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::is-data-descriptor:0.1.4"
                 dependencies:
                 - id: "NPM::kind-of:3.2.2"
                   dependencies:
                   - id: "NPM::is-buffer:1.1.6"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::kind-of:5.1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::extend-shallow:2.0.1"
             dependencies:
             - id: "NPM::is-extendable:0.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::regex-not:1.0.2"
             dependencies:
             - id: "NPM::extend-shallow:3.0.2"
               dependencies:
               - id: "NPM::assign-symbols:1.0.0"
-                dependencies: []
-                errors: []
               - id: "NPM::is-extendable:1.0.1"
                 dependencies:
                 - id: "NPM::is-plain-object:2.0.4"
                   dependencies:
                   - id: "NPM::isobject:3.0.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::safe-regex:1.1.0"
               dependencies:
               - id: "NPM::ret:0.1.15"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::snapdragon:0.8.2"
             dependencies:
             - id: "NPM::base:0.11.2"
@@ -123,28 +82,14 @@ project:
                     - id: "NPM::object-visit:1.0.1"
                       dependencies:
                       - id: "NPM::isobject:3.0.1"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
                   - id: "NPM::object-visit:1.0.1"
                     dependencies:
                     - id: "NPM::isobject:3.0.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::component-emitter:1.2.1"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::get-value:2.0.6"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::has-value:1.0.0"
                   dependencies:
                   - id: "NPM::get-value:2.0.6"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::has-values:1.0.0"
                     dependencies:
                     - id: "NPM::is-number:3.0.0"
@@ -152,135 +97,67 @@ project:
                       - id: "NPM::kind-of:3.2.2"
                         dependencies:
                         - id: "NPM::is-buffer:1.1.6"
-                          dependencies: []
-                          errors: []
-                        errors: []
-                      errors: []
                     - id: "NPM::kind-of:4.0.0"
                       dependencies:
                       - id: "NPM::is-buffer:1.1.6"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
                   - id: "NPM::isobject:3.0.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::isobject:3.0.1"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::set-value:2.0.0"
                   dependencies:
                   - id: "NPM::extend-shallow:2.0.1"
                     dependencies:
                     - id: "NPM::is-extendable:0.1.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::is-extendable:0.1.1"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::is-plain-object:2.0.4"
                     dependencies:
                     - id: "NPM::isobject:3.0.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::split-string:3.1.0"
                     dependencies:
                     - id: "NPM::extend-shallow:3.0.2"
                       dependencies:
                       - id: "NPM::assign-symbols:1.0.0"
-                        dependencies: []
-                        errors: []
                       - id: "NPM::is-extendable:1.0.1"
                         dependencies:
                         - id: "NPM::is-plain-object:2.0.4"
                           dependencies:
                           - id: "NPM::isobject:3.0.1"
-                            dependencies: []
-                            errors: []
-                          errors: []
-                        errors: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::to-object-path:0.3.0"
                   dependencies:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::union-value:1.0.0"
                   dependencies:
                   - id: "NPM::arr-union:3.1.0"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::get-value:2.0.6"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::is-extendable:0.1.1"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::set-value:0.4.3"
                     dependencies:
                     - id: "NPM::extend-shallow:2.0.1"
                       dependencies:
                       - id: "NPM::is-extendable:0.1.1"
-                        dependencies: []
-                        errors: []
-                      errors: []
                     - id: "NPM::is-extendable:0.1.1"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::is-plain-object:2.0.4"
                       dependencies:
                       - id: "NPM::isobject:3.0.1"
-                        dependencies: []
-                        errors: []
-                      errors: []
                     - id: "NPM::to-object-path:0.3.0"
                       dependencies:
                       - id: "NPM::kind-of:3.2.2"
                         dependencies:
                         - id: "NPM::is-buffer:1.1.6"
-                          dependencies: []
-                          errors: []
-                        errors: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::unset-value:1.0.0"
                   dependencies:
                   - id: "NPM::has-value:0.3.1"
                     dependencies:
                     - id: "NPM::get-value:2.0.6"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::has-values:0.1.4"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::isobject:2.1.0"
                       dependencies:
                       - id: "NPM::isarray:1.0.0"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
                   - id: "NPM::isobject:3.0.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::class-utils:0.3.6"
                 dependencies:
                 - id: "NPM::arr-union:3.1.0"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::define-property:0.2.5"
                   dependencies:
                   - id: "NPM::is-descriptor:0.1.6"
@@ -290,27 +167,13 @@ project:
                       - id: "NPM::kind-of:3.2.2"
                         dependencies:
                         - id: "NPM::is-buffer:1.1.6"
-                          dependencies: []
-                          errors: []
-                        errors: []
-                      errors: []
                     - id: "NPM::is-data-descriptor:0.1.4"
                       dependencies:
                       - id: "NPM::kind-of:3.2.2"
                         dependencies:
                         - id: "NPM::is-buffer:1.1.6"
-                          dependencies: []
-                          errors: []
-                        errors: []
-                      errors: []
                     - id: "NPM::kind-of:5.1.0"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::isobject:3.0.1"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::static-extend:0.1.2"
                   dependencies:
                   - id: "NPM::define-property:0.2.5"
@@ -322,29 +185,15 @@ project:
                         - id: "NPM::kind-of:3.2.2"
                           dependencies:
                           - id: "NPM::is-buffer:1.1.6"
-                            dependencies: []
-                            errors: []
-                          errors: []
-                        errors: []
                       - id: "NPM::is-data-descriptor:0.1.4"
                         dependencies:
                         - id: "NPM::kind-of:3.2.2"
                           dependencies:
                           - id: "NPM::is-buffer:1.1.6"
-                            dependencies: []
-                            errors: []
-                          errors: []
-                        errors: []
                       - id: "NPM::kind-of:5.1.0"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
                   - id: "NPM::object-copy:0.1.0"
                     dependencies:
                     - id: "NPM::copy-descriptor:0.1.1"
-                      dependencies: []
-                      errors: []
                     - id: "NPM::define-property:0.2.5"
                       dependencies:
                       - id: "NPM::is-descriptor:0.1.6"
@@ -354,36 +203,16 @@ project:
                           - id: "NPM::kind-of:3.2.2"
                             dependencies:
                             - id: "NPM::is-buffer:1.1.6"
-                              dependencies: []
-                              errors: []
-                            errors: []
-                          errors: []
                         - id: "NPM::is-data-descriptor:0.1.4"
                           dependencies:
                           - id: "NPM::kind-of:3.2.2"
                             dependencies:
                             - id: "NPM::is-buffer:1.1.6"
-                              dependencies: []
-                              errors: []
-                            errors: []
-                          errors: []
                         - id: "NPM::kind-of:5.1.0"
-                          dependencies: []
-                          errors: []
-                        errors: []
-                      errors: []
                     - id: "NPM::kind-of:3.2.2"
                       dependencies:
                       - id: "NPM::is-buffer:1.1.6"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::component-emitter:1.2.1"
-                dependencies: []
-                errors: []
               - id: "NPM::define-property:1.0.0"
                 dependencies:
                 - id: "NPM::is-descriptor:1.0.2"
@@ -391,48 +220,23 @@ project:
                   - id: "NPM::is-accessor-descriptor:1.0.0"
                     dependencies:
                     - id: "NPM::kind-of:6.0.2"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::is-data-descriptor:1.0.0"
                     dependencies:
                     - id: "NPM::kind-of:6.0.2"
-                      dependencies: []
-                      errors: []
-                    errors: []
                   - id: "NPM::kind-of:6.0.2"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::isobject:3.0.1"
-                dependencies: []
-                errors: []
               - id: "NPM::mixin-deep:1.3.1"
                 dependencies:
                 - id: "NPM::for-in:1.0.2"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::is-extendable:1.0.1"
                   dependencies:
                   - id: "NPM::is-plain-object:2.0.4"
                     dependencies:
                     - id: "NPM::isobject:3.0.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::pascalcase:0.1.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::debug:2.6.9"
               dependencies:
               - id: "NPM::ms:2.0.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::define-property:0.2.5"
               dependencies:
               - id: "NPM::is-descriptor:0.1.6"
@@ -442,58 +246,25 @@ project:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::is-data-descriptor:0.1.4"
                   dependencies:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::kind-of:5.1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::extend-shallow:2.0.1"
               dependencies:
               - id: "NPM::is-extendable:0.1.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::map-cache:0.2.2"
-              dependencies: []
-              errors: []
             - id: "NPM::source-map-resolve:0.5.2"
               dependencies:
               - id: "NPM::atob:2.1.2"
-                dependencies: []
-                errors: []
               - id: "NPM::decode-uri-component:0.2.0"
-                dependencies: []
-                errors: []
               - id: "NPM::resolve-url:0.2.1"
-                dependencies: []
-                errors: []
               - id: "NPM::source-map-url:0.4.0"
-                dependencies: []
-                errors: []
               - id: "NPM::urix:0.1.0"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::source-map:0.5.7"
-              dependencies: []
-              errors: []
             - id: "NPM::use:3.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::to-regex:3.0.2"
             dependencies:
             - id: "NPM::define-property:2.0.2"
@@ -503,70 +274,35 @@ project:
                 - id: "NPM::is-accessor-descriptor:1.0.0"
                   dependencies:
                   - id: "NPM::kind-of:6.0.2"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::is-data-descriptor:1.0.0"
                   dependencies:
                   - id: "NPM::kind-of:6.0.2"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::kind-of:6.0.2"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::isobject:3.0.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::extend-shallow:3.0.2"
               dependencies:
               - id: "NPM::assign-symbols:1.0.0"
-                dependencies: []
-                errors: []
               - id: "NPM::is-extendable:1.0.1"
                 dependencies:
                 - id: "NPM::is-plain-object:2.0.4"
                   dependencies:
                   - id: "NPM::isobject:3.0.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::regex-not:1.0.2"
               dependencies:
               - id: "NPM::extend-shallow:3.0.2"
                 dependencies:
                 - id: "NPM::assign-symbols:1.0.0"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::is-extendable:1.0.1"
                   dependencies:
                   - id: "NPM::is-plain-object:2.0.4"
                     dependencies:
                     - id: "NPM::isobject:3.0.1"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::safe-regex:1.1.0"
                 dependencies:
                 - id: "NPM::ret:0.1.15"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::safe-regex:1.1.0"
               dependencies:
               - id: "NPM::ret:0.1.15"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::lazy-cache:2.0.2"
           dependencies:
           - id: "NPM::set-getter:0.1.0"
@@ -576,12 +312,6 @@ project:
               - id: "NPM::kind-of:3.2.2"
                 dependencies:
                 - id: "NPM::is-buffer:1.1.6"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::list-item:1.1.1"
           dependencies:
           - id: "NPM::expand-range:1.8.2"
@@ -593,69 +323,33 @@ project:
                 - id: "NPM::kind-of:3.2.2"
                   dependencies:
                   - id: "NPM::is-buffer:1.1.6"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::isobject:2.1.0"
                 dependencies:
                 - id: "NPM::isarray:1.0.0"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::randomatic:3.1.0"
                 dependencies:
                 - id: "NPM::is-number:4.0.0"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::kind-of:6.0.2"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::math-random:1.0.1"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::repeat-element:1.1.3"
-                dependencies: []
-                errors: []
               - id: "NPM::repeat-string:1.6.1"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::extend-shallow:2.0.1"
             dependencies:
             - id: "NPM::is-extendable:0.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::is-number:2.1.0"
             dependencies:
             - id: "NPM::kind-of:3.2.2"
               dependencies:
               - id: "NPM::is-buffer:1.1.6"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::repeat-string:1.6.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::markdown-utils:0.7.3"
           dependencies:
           - id: "NPM::array-slice:0.2.3"
-            dependencies: []
-            errors: []
           - id: "NPM::is-number:2.1.0"
             dependencies:
             - id: "NPM::kind-of:3.2.2"
               dependencies:
               - id: "NPM::is-buffer:1.1.6"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::list-item:1.1.1"
             dependencies:
             - id: "NPM::expand-range:1.8.2"
@@ -667,137 +361,62 @@ project:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::isobject:2.1.0"
                   dependencies:
                   - id: "NPM::isarray:1.0.0"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::randomatic:3.1.0"
                   dependencies:
                   - id: "NPM::is-number:4.0.0"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::kind-of:6.0.2"
-                    dependencies: []
-                    errors: []
                   - id: "NPM::math-random:1.0.1"
-                    dependencies: []
-                    errors: []
-                  errors: []
                 - id: "NPM::repeat-element:1.1.3"
-                  dependencies: []
-                  errors: []
                 - id: "NPM::repeat-string:1.6.1"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::extend-shallow:2.0.1"
               dependencies:
               - id: "NPM::is-extendable:0.1.1"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::is-number:2.1.0"
               dependencies:
               - id: "NPM::kind-of:3.2.2"
                 dependencies:
                 - id: "NPM::is-buffer:1.1.6"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::repeat-string:1.6.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::to-gfm-code-block:0.1.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::repeat-string:1.6.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::remarkable:1.7.1"
         dependencies:
         - id: "NPM::argparse:0.1.16"
           dependencies:
           - id: "NPM::underscore.string:2.4.0"
-            dependencies: []
-            errors: []
           - id: "NPM::underscore:1.7.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::autolinker:0.15.3"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::sections:1.0.0"
         dependencies:
         - id: "NPM::gfm-code-blocks:1.0.0"
           dependencies:
           - id: "NPM::gfm-code-block-regex:1.0.0"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::sort-by-value:0.1.0"
           dependencies:
           - id: "NPM::extend-shallow:2.0.1"
             dependencies:
             - id: "NPM::is-extendable:0.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::isobject:3.0.1"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::through2:2.0.3"
         dependencies:
         - id: "NPM::readable-stream:2.3.6"
           dependencies:
           - id: "NPM::core-util-is:1.0.2"
-            dependencies: []
-            errors: []
           - id: "NPM::inherits:2.0.3"
-            dependencies: []
-            errors: []
           - id: "NPM::isarray:1.0.0"
-            dependencies: []
-            errors: []
           - id: "NPM::process-nextick-args:2.0.0"
-            dependencies: []
-            errors: []
           - id: "NPM::safe-buffer:5.1.2"
-            dependencies: []
-            errors: []
           - id: "NPM::string_decoder:1.1.1"
             dependencies:
             - id: "NPM::safe-buffer:5.1.2"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::util-deprecate:1.0.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::xtend:4.0.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::tokenize-comment:1.0.3"
         dependencies:
         - id: "NPM::array-each:1.0.1"
-          dependencies: []
-          errors: []
         - id: "NPM::define-property:0.2.5"
           dependencies:
           - id: "NPM::is-descriptor:0.1.6"
@@ -807,41 +426,21 @@ project:
               - id: "NPM::kind-of:3.2.2"
                 dependencies:
                 - id: "NPM::is-buffer:1.1.6"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::is-data-descriptor:0.1.4"
               dependencies:
               - id: "NPM::kind-of:3.2.2"
                 dependencies:
                 - id: "NPM::is-buffer:1.1.6"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::kind-of:5.1.0"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::extend-shallow:2.0.1"
           dependencies:
           - id: "NPM::is-extendable:0.1.1"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::snapdragon:0.11.5"
           dependencies:
           - id: "NPM::component-emitter:1.2.1"
-            dependencies: []
-            errors: []
           - id: "NPM::debug:2.6.9"
             dependencies:
             - id: "NPM::ms:2.0.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::define-property:0.2.5"
             dependencies:
             - id: "NPM::is-descriptor:0.1.6"
@@ -851,39 +450,18 @@ project:
                 - id: "NPM::kind-of:3.2.2"
                   dependencies:
                   - id: "NPM::is-buffer:1.1.6"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::is-data-descriptor:0.1.4"
                 dependencies:
                 - id: "NPM::kind-of:3.2.2"
                   dependencies:
                   - id: "NPM::is-buffer:1.1.6"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::kind-of:5.1.0"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::extend-shallow:2.0.1"
             dependencies:
             - id: "NPM::is-extendable:0.1.1"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::get-value:2.0.6"
-            dependencies: []
-            errors: []
           - id: "NPM::isobject:3.0.1"
-            dependencies: []
-            errors: []
           - id: "NPM::map-cache:0.2.2"
-            dependencies: []
-            errors: []
           - id: "NPM::snapdragon-node:1.0.6"
             dependencies:
             - id: "NPM::define-property:0.2.5"
@@ -895,27 +473,13 @@ project:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::is-data-descriptor:0.1.4"
                   dependencies:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
                 - id: "NPM::kind-of:5.1.0"
-                  dependencies: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::isobject:3.0.1"
-              dependencies: []
-              errors: []
             - id: "NPM::lazy-cache:2.0.2"
               dependencies:
               - id: "NPM::set-getter:0.1.0"
@@ -925,12 +489,6 @@ project:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                      dependencies: []
-                      errors: []
-                    errors: []
-                  errors: []
-                errors: []
-              errors: []
             - id: "NPM::snapdragon-util:1.0.6"
               dependencies:
               - id: "NPM::define-property:0.2.5"
@@ -942,30 +500,15 @@ project:
                     - id: "NPM::kind-of:3.2.2"
                       dependencies:
                       - id: "NPM::is-buffer:1.1.6"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
                   - id: "NPM::is-data-descriptor:0.1.4"
                     dependencies:
                     - id: "NPM::kind-of:3.2.2"
                       dependencies:
                       - id: "NPM::is-buffer:1.1.6"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
                   - id: "NPM::kind-of:5.1.0"
-                    dependencies: []
-                    errors: []
-                  errors: []
-                errors: []
               - id: "NPM::kind-of:3.2.2"
                 dependencies:
                 - id: "NPM::is-buffer:1.1.6"
-                  dependencies: []
-                  errors: []
-                errors: []
               - id: "NPM::lazy-cache:2.0.2"
                 dependencies:
                 - id: "NPM::set-getter:0.1.0"
@@ -975,209 +518,91 @@ project:
                     - id: "NPM::kind-of:3.2.2"
                       dependencies:
                       - id: "NPM::is-buffer:1.1.6"
-                        dependencies: []
-                        errors: []
-                      errors: []
-                    errors: []
-                  errors: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::snapdragon-util:2.1.1"
             dependencies:
             - id: "NPM::kind-of:3.2.2"
               dependencies:
               - id: "NPM::is-buffer:1.1.6"
-                dependencies: []
-                errors: []
-              errors: []
-            errors: []
           - id: "NPM::source-map-resolve:0.5.2"
             dependencies:
             - id: "NPM::atob:2.1.2"
-              dependencies: []
-              errors: []
             - id: "NPM::decode-uri-component:0.2.0"
-              dependencies: []
-              errors: []
             - id: "NPM::resolve-url:0.2.1"
-              dependencies: []
-              errors: []
             - id: "NPM::source-map-url:0.4.0"
-              dependencies: []
-              errors: []
             - id: "NPM::urix:0.1.0"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::source-map:0.5.7"
-            dependencies: []
-            errors: []
           - id: "NPM::use:3.1.1"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::vinyl:2.2.0"
         dependencies:
         - id: "NPM::clone-buffer:1.0.0"
-          dependencies: []
-          errors: []
         - id: "NPM::clone-stats:1.0.0"
-          dependencies: []
-          errors: []
         - id: "NPM::clone:2.1.2"
-          dependencies: []
-          errors: []
         - id: "NPM::cloneable-readable:1.1.2"
           dependencies:
           - id: "NPM::inherits:2.0.3"
-            dependencies: []
-            errors: []
           - id: "NPM::process-nextick-args:2.0.0"
-            dependencies: []
-            errors: []
           - id: "NPM::readable-stream:2.3.6"
             dependencies:
             - id: "NPM::core-util-is:1.0.2"
-              dependencies: []
-              errors: []
             - id: "NPM::inherits:2.0.3"
-              dependencies: []
-              errors: []
             - id: "NPM::isarray:1.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::process-nextick-args:2.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::safe-buffer:5.1.2"
-              dependencies: []
-              errors: []
             - id: "NPM::string_decoder:1.1.1"
               dependencies:
               - id: "NPM::safe-buffer:5.1.2"
-                dependencies: []
-                errors: []
-              errors: []
             - id: "NPM::util-deprecate:1.0.2"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::remove-trailing-separator:1.1.0"
-          dependencies: []
-          errors: []
         - id: "NPM::replace-ext:1.0.0"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::write:0.3.3"
         dependencies:
         - id: "NPM::fs-exists-sync:0.1.0"
-          dependencies: []
-          errors: []
         - id: "NPM::mkdirp:0.5.1"
           dependencies:
           - id: "NPM::minimist:0.0.8"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
-      errors: []
     - id: "NPM::mocha:5.2.0"
       dependencies:
       - id: "NPM::browser-stdout:1.3.1"
-        dependencies: []
-        errors: []
       - id: "NPM::commander:2.15.1"
-        dependencies: []
-        errors: []
       - id: "NPM::debug:3.1.0"
         dependencies:
         - id: "NPM::ms:2.0.0"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::diff:3.5.0"
-        dependencies: []
-        errors: []
       - id: "NPM::escape-string-regexp:1.0.5"
-        dependencies: []
-        errors: []
       - id: "NPM::glob:7.1.2"
         dependencies:
         - id: "NPM::fs.realpath:1.0.0"
-          dependencies: []
-          errors: []
         - id: "NPM::inflight:1.0.6"
           dependencies:
           - id: "NPM::once:1.4.0"
             dependencies:
             - id: "NPM::wrappy:1.0.2"
-              dependencies: []
-              errors: []
-            errors: []
           - id: "NPM::wrappy:1.0.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::inherits:2.0.3"
-          dependencies: []
-          errors: []
         - id: "NPM::minimatch:3.0.4"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
             dependencies:
             - id: "NPM::balanced-match:1.0.0"
-              dependencies: []
-              errors: []
             - id: "NPM::concat-map:0.0.1"
-              dependencies: []
-              errors: []
-            errors: []
-          errors: []
         - id: "NPM::once:1.4.0"
           dependencies:
           - id: "NPM::wrappy:1.0.2"
-            dependencies: []
-            errors: []
-          errors: []
         - id: "NPM::path-is-absolute:1.0.1"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::growl:1.10.5"
-        dependencies: []
-        errors: []
       - id: "NPM::he:1.1.1"
-        dependencies: []
-        errors: []
       - id: "NPM::minimatch:3.0.4"
         dependencies:
         - id: "NPM::brace-expansion:1.1.11"
           dependencies:
           - id: "NPM::balanced-match:1.0.0"
-            dependencies: []
-            errors: []
           - id: "NPM::concat-map:0.0.1"
-            dependencies: []
-            errors: []
-          errors: []
-        errors: []
       - id: "NPM::mkdirp:0.5.1"
         dependencies:
         - id: "NPM::minimist:0.0.8"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "NPM::supports-color:5.4.0"
         dependencies:
         - id: "NPM::has-flag:3.0.0"
-          dependencies: []
-          errors: []
-        errors: []
-      errors: []
 packages:
 - package:
     id: "NPM::ansi-green:0.1.1"
@@ -4840,4 +4265,3 @@ packages:
       revision: "23dc302a89756da89c1897bc732a752317e35390"
       path: ""
   curations: []
-errors: []
