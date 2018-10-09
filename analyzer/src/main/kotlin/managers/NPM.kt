@@ -47,11 +47,9 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.log
-import com.here.ort.utils.isSemanticVersion
 import com.here.ort.utils.stashDirectories
 
 import com.vdurmont.semver4j.Requirement
-import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
@@ -175,17 +173,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             val json = it.readValue<ObjectNode>()
             val rawName = json["name"].textValue()
             val (namespace, name) = splitNamespaceAndName(rawName)
-            val version = json["version"].textValue().let { versionFromPackage ->
-                if (versionFromPackage.isSemanticVersion(Semver.SemverType.NPM)) {
-                    versionFromPackage
-                } else {
-                    // This could also be a URL to a tarball or to a Git repository, like e.g.
-                    // https://registry.npmjs.org/form-data/-/form-data-0.2.0.tgz
-                    val fileName = versionFromPackage.substringAfterLast('/')
-                    val versionFromName = fileName.removeSuffix(".tgz").substringAfterLast('-')
-                    versionFromName.takeIf { it.isSemanticVersion(Semver.SemverType.NPM) } ?: versionFromPackage
-                }
-            }
+            val version = json["version"].textValue()
 
             val declaredLicenses = sortedSetOf<String>()
 
