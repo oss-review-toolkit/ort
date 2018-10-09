@@ -239,7 +239,7 @@ Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM
 Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-types.git, revision=7c4ce23d7354fbf64c69d7b7be8413c4ba2add78, resolvedRevision=null, path=).
 Original was VcsInfo(type=, url=https://github.com/jshttp/mime-types.git, revision=, resolvedRevision=null, path=).
 Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM/unknown/mime-types/2.1.19'.
-Writing scan record to '[scanner-output-path]/scan-result.yml'.
+Writing scan result to '[scanner-output-path]/scan-result.yml'.
 ```
 
 As you can see from when you check the results file the licenses detected by `ScanCode` match the licenses declared by
@@ -256,7 +256,7 @@ The `scan-result.yml` file can now be used as input for the reporter to generate
 generate both, the static HTML report and the Excel record, use:
 
 ```bash
-cli/build/install/ort/bin/ort report -f StaticHtml,Excel -s [scanner-output-path]/mime-types/scan-record.yml -o [reporter-output-path]/mime-types
+cli/build/install/ort/bin/ort report -f StaticHtml,Excel -s [scanner-output-path]/mime-types/scan-result.yml -o [reporter-output-path]/mime-types
 Writing static HTML report to '[reporter-output-path]/mime-types/scan-report.html'.
 Writing Excel report to '[reporter-output-path]/mime-types/scan-report.xlsx'.
 ```
