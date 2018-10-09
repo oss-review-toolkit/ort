@@ -252,8 +252,8 @@ If the input file already contained scan results they are replaced by the new sc
 
 ## 6. Generate a report
 
-The `scan-result.yml` file can now be used as input for the reporter to generate human-readable reports. For example to
-generate both, the static HTML report and the Excel record, use:
+The `scan-result.yml` file can now be used as input for the reporter to generate human-readable reports. For example, to
+generate both a static HTML report and an Excel report use:
 
 ```bash
 cli/build/install/ort/bin/ort report -f StaticHtml,Excel -i [scanner-output-path]/mime-types/scan-result.yml -o [reporter-output-path]/mime-types
