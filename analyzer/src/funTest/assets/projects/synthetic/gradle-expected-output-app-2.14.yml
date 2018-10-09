@@ -24,13 +24,7 @@ project:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "compileOnly"
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -38,13 +32,7 @@ project:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "default"
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -52,13 +40,7 @@ project:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "runtime"
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -66,13 +48,7 @@ project:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testCompile"
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -80,13 +56,7 @@ project:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testCompileOnly"
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -94,13 +64,7 @@ project:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
   - name: "testRuntime"
     dependencies:
     - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -108,13 +72,7 @@ project:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        dependencies: []
-        errors: []
-      errors: []
 packages:
 - package:
     id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
@@ -218,4 +176,3 @@ packages:
       revision: "STRUTS_2_5_14_1"
       path: ""
   curations: []
-errors: []

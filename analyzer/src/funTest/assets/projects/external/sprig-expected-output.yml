@@ -18,32 +18,14 @@ project:
   - name: "default"
     dependencies:
     - id: "GoDep::github.com/Masterminds/semver:v1.2.2"
-      dependencies: []
-      errors: []
     - id: "GoDep::github.com/aokoli/goutils:9c37978a95bd5c709a15883b6242714ea6709e64"
-      dependencies: []
-      errors: []
     - id: "GoDep::github.com/davecgh/go-spew:5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
-      dependencies: []
-      errors: []
     - id: "GoDep::github.com/huandu/xstrings:3959339b333561bf62a38b424fd41517c2c90f40"
-      dependencies: []
-      errors: []
     - id: "GoDep::github.com/imdario/mergo:0.2.2"
-      dependencies: []
-      errors: []
     - id: "GoDep::github.com/pmezard/go-difflib:d8ed2627bdf02c080bf22230dbb337003b7aba2d"
-      dependencies: []
-      errors: []
     - id: "GoDep::github.com/satori/go.uuid:v1.1.0"
-      dependencies: []
-      errors: []
     - id: "GoDep::github.com/stretchr/testify:e3a8ff8ce36581f87a15341206f205b1da467059"
-      dependencies: []
-      errors: []
     - id: "GoDep::golang.org/x/crypto:d172538b2cfce0c13cee31e647d0367aa8cd2486"
-      dependencies: []
-      errors: []
 packages:
 - package:
     id: "GoDep::github.com/Masterminds/semver:v1.2.2"
@@ -261,4 +243,3 @@ packages:
       revision: "d172538b2cfce0c13cee31e647d0367aa8cd2486"
       path: ""
   curations: []
-errors: []

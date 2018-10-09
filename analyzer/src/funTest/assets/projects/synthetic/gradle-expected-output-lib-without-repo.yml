@@ -22,7 +22,6 @@ project:
   - name: "compile"
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -32,7 +31,6 @@ project:
   - name: "compileClasspath"
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -44,7 +42,6 @@ project:
   - name: "default"
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -54,7 +51,6 @@ project:
   - name: "runtime"
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -64,7 +60,6 @@ project:
   - name: "runtimeClasspath"
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -76,14 +71,12 @@ project:
   - name: "testCompile"
     dependencies:
     - id: "Maven:junit:junit:4.12"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -93,14 +86,12 @@ project:
   - name: "testCompileClasspath"
     dependencies:
     - id: "Maven:junit:junit:4.12"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -112,14 +103,12 @@ project:
   - name: "testRuntime"
     dependencies:
     - id: "Maven:junit:junit:4.12"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -129,14 +118,12 @@ project:
   - name: "testRuntimeClasspath"
     dependencies:
     - id: "Maven:junit:junit:4.12"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
     - id: "Maven:org.apache.commons:commons-text:1.1"
-      dependencies: []
       errors:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
@@ -144,4 +131,3 @@ project:
           \ dependency org.apache.commons:commons-text:1.1 because no repositories\
           \ are defined."
 packages: []
-errors: []

@@ -20,23 +20,13 @@ project:
   - name: "install"
     dependencies:
     - id: "PyPI::ply:3.11"
-      dependencies: []
-      errors: []
     - id: "PyPI::rdflib:4.2.2"
       dependencies:
       - id: "PyPI::isodate:0.6.0"
         dependencies:
         - id: "PyPI::six:1.11.0"
-          dependencies: []
-          errors: []
-        errors: []
       - id: "PyPI::pyparsing:2.2.2"
-        dependencies: []
-        errors: []
-      errors: []
     - id: "PyPI::six:1.11.0"
-      dependencies: []
-      errors: []
 packages:
 - package:
     id: "PyPI::isodate:0.6.0"
@@ -165,4 +155,3 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors: []

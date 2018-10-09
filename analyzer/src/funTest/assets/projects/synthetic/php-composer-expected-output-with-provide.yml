@@ -20,11 +20,7 @@ project:
   - name: "require"
     dependencies:
     - id: "PhpComposer:ort:child:1.0.0"
-      dependencies: []
-      errors: []
     - id: "PhpComposer:ort:virtual2:1.0.0"
-      dependencies: []
-      errors: []
   - name: "require-dev"
     dependencies: []
 packages:
@@ -76,4 +72,3 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors: []
