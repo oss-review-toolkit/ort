@@ -256,9 +256,9 @@ The `scan-result.yml` file can now be used as input for the reporter to generate
 generate both a static HTML report and an Excel report use:
 
 ```bash
-cli/build/install/ort/bin/ort report -f StaticHtml,Excel -i [scanner-output-path]/scan-result.yml -o [reporter-output-path]/mime-types
-Writing static HTML report to '[reporter-output-path]/mime-types/scan-report.html'.
-Writing Excel report to '[reporter-output-path]/mime-types/scan-report.xlsx'.
+cli/build/install/ort/bin/ort report -f StaticHtml,Excel -i [scanner-output-path]/scan-result.yml -o [reporter-output-path]
+Writing static HTML report to '[reporter-output-path]/scan-report.html'.
+Writing Excel report to '[reporter-output-path]/scan-report.xlsx'.
 ```
 
 ## 7. Curating the metadata
