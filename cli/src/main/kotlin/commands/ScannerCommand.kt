@@ -141,9 +141,9 @@ object ScannerCommand : CommandWithHelp() {
         }
 
         outputFormats.distinct().forEach { format ->
-            val scanRecordFile = File(outputDir, "scan-result.${format.fileExtension}")
-            println("Writing scan record to '${scanRecordFile.absolutePath}'.")
-            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanRecordFile, ortResult)
+            val scanResultFile = File(outputDir, "scan-result.${format.fileExtension}")
+            println("Writing scan result to '${scanResultFile.absolutePath}'.")
+            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanResultFile, ortResult)
         }
     }
 }
