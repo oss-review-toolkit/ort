@@ -58,11 +58,3 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*'
-
-addons:
-  artifacts:
-    paths:
-      - ./analyzer/build/reports/tests
-      - ./downloader/build/reports/tests
-      - ./scanner/build/reports/tests
-      - ./utils/build/reports/tests
