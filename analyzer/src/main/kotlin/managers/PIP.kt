@@ -378,10 +378,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
             val classifier = it.textValue().split(" :: ")
-            if (classifier.first() == "License") {
-                classifier.last().removeSuffix(" License")
-            } else {
-                null
+            classifier.takeIf { it.first() == "License" }?.let {
+                it.last().removeSuffix(" License")
             }
         }
 

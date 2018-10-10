@@ -66,13 +66,10 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     private inner class LocalProjectWorkspaceReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository()
 
-        override fun findArtifact(artifact: Artifact): File? {
-            return if (artifact.extension == "pom") {
-                localProjectBuildingResults[artifact.identifier()]?.pomFile?.absoluteFile
-            } else {
-                null
-            }
-        }
+        override fun findArtifact(artifact: Artifact) =
+                artifact.takeIf { it.extension == "pom" }?.let {
+                    localProjectBuildingResults[it.identifier()]?.pomFile?.absoluteFile
+                }
 
         override fun findVersions(artifact: Artifact) =
                 // Avoid resolution of (SNAPSHOT) versions for local projects.
