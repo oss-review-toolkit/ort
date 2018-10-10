@@ -73,10 +73,10 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
             val message = buildString {
                 appendln("Found the following conflicting lock files:")
 
-                conflictingLockFiles.forEach { definitionfile, (yarnLockFiles, npmLockFiles) ->
+                conflictingLockFiles.forEach { definitionFile, (yarnLockFiles, npmLockFiles) ->
                     val yarnLockFileNames = yarnLockFiles.map { it.name }
                     val npmLockFileNames = npmLockFiles.map { it.name }
-                    appendln("For '$definitionfile', $yarnLockFileNames vs. $npmLockFileNames.")
+                    appendln("For '$definitionFile', $yarnLockFileNames vs. $npmLockFileNames.")
                 }
             }
 
