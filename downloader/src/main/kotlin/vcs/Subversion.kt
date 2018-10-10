@@ -141,11 +141,19 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                         remoteUrl
                     }
 
-                    val svnPathInfo = run(workingDir, "info", "--xml", "--depth=immediates", "$projectRoot/$namespace")
-                    val pathEntries = xmlMapper.readValue<List<SubversionPathEntry>>(svnPathInfo.stdout)
+                    return try {
+                        val svnPathInfo = run(workingDir, "info", "--xml", "--depth=immediates",
+                                "$projectRoot/$namespace")
+                        val pathEntries = xmlMapper.readValue<List<SubversionPathEntry>>(svnPathInfo.stdout)
 
-                    // As the "immediates" depth includes the parent namespace itself, too, drop it.
-                    return pathEntries.drop(1).map { it.path }.sorted()
+                        // As the "immediates" depth includes the parent namespace itself, too, drop it.
+                        pathEntries.drop(1).map { it.path }.sorted()
+                    } catch (e: IOException) {
+                        // We assume a single project directory layout above. If we fail, e.g. for a multi-project
+                        // layout whose directory names cannot be easily guessed from the project names, return an
+                        // empty list to give a later curation the chance to succeed.
+                        emptyList()
+                    }
                 }
 
                 override fun listRemoteBranches() = listRemoteRefs("branches")
