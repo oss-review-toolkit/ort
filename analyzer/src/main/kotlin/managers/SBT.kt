@@ -27,6 +27,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
+import com.here.ort.utils.getCommonFilePrefix
 import com.here.ort.utils.log
 
 import com.vdurmont.semver4j.Requirement
@@ -99,13 +100,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
             // project's root directory. In order to determine the root directory, use the common prefix of all
             // definition file paths.
-            val projectRoot = definitionFiles.map {
-                it.absolutePath
-            }.reduce { prefix, path ->
-                prefix.commonPrefixWith(path)
-            }
-
-            File(projectRoot).also {
+            getCommonFilePrefix(definitionFiles).also {
                 log.info { "Determined '$it' as the ${toString()} project root directory." }
             }
         } else {
