@@ -101,6 +101,16 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 }
 
 /**
+ * Return the longest prefix that is common to all [files].
+ */
+fun getCommonFilePrefix(files: List<File>) =
+        files.map {
+            it.absolutePath
+        }.reduce { prefix, path ->
+            prefix.commonPrefixWith(path)
+        }.let { File(it) }
+
+/**
  * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
  */
 fun getPathFromEnvironment(executable: String): File? {
