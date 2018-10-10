@@ -17,22 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package com.here.ort.reporter
 
-import com.fasterxml.jackson.annotation.JsonInclude
+import com.here.ort.model.Error
+import com.here.ort.model.config.ErrorResolution
 
 /**
- * Resolutions for issues with a repository.
+ * A provider for [ErrorResolution]s.
  */
-class Resolutions(
+interface ResolutionProvider {
     /**
-     * Resolutions for issues with the analysis or scan of the projects in this repository and their dependencies.
+     * Get all resolutions that match [error].
      */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: List<ErrorResolution> = emptyList()
-) {
-    /**
-     * Merge this [Resolutions] with [other] [Resolutions]. Duplicates are removed.
-     */
-    fun merge(other: Resolutions) = Resolutions((errors + other.errors).distinct())
+    fun getResolutionsFor(error: Error): List<ErrorResolution>
 }

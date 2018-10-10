@@ -21,6 +21,8 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
+import com.here.ort.model.Error
+
 /**
  * Defines the resolution of an error. This can be used to silence false positives, or errors that have been identified
  * as not being relevant.
@@ -44,4 +46,9 @@ data class ErrorResolution(
 ) {
     @JsonIgnore
     private val regex = Regex(message, RegexOption.DOT_MATCHES_ALL)
+
+    /**
+     * True if [message] matches the message of [error].
+     */
+    fun matches(error: Error) = regex.matches(error.message)
 }
