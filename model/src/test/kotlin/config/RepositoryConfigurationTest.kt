@@ -33,9 +33,10 @@ import io.kotlintest.specs.WordSpec
 class RepositoryConfigurationTest : WordSpec() {
     init {
         "RepositoryConfiguration" should {
-            "be deserializable with empty excludes" {
+            "be deserializable with empty excludes and resolutions" {
                 val configuration = """
                     excludes:
+                    resolutions:
                     """.trimIndent()
 
                 val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
@@ -60,6 +61,11 @@ class RepositoryConfigurationTest : WordSpec() {
                       - name: "scope"
                         reason: "TEST_TOOL_OF"
                         comment: "scope comment"
+                    resolutions:
+                      errors:
+                      - message: "message"
+                        reason: "CANT_FIX_ISSUE"
+                        comment: "error comment"
                     """.trimIndent()
 
                 val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
