@@ -64,7 +64,7 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
 
             existingYarnLockFiles.isNotEmpty().also {
                 if (it && existingNpmLockFiles.isNotEmpty()) {
-                    conflictingLockFiles.put(definitionFile, Pair(existingYarnLockFiles, existingNpmLockFiles))
+                    conflictingLockFiles[definitionFile] = Pair(existingYarnLockFiles, existingNpmLockFiles)
                 }
             }
         }
