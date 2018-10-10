@@ -29,10 +29,12 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
@@ -74,6 +76,11 @@ object ReporterCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_MANDATORY)
     private lateinit var reportFormats: List<Reporter>
 
+    @Parameter(description = "A file containing error resolutions.",
+            names = ["--resolutions-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var resolutionsFile: File? = null
+
     override fun runCommand(jc: JCommander) {
         require(!outputDir.exists()) {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
@@ -85,6 +92,7 @@ object ReporterCommand : CommandWithHelp() {
 
         val resolutionProvider = DefaultResolutionProvider()
         ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
+        resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
         reportFormats.distinct().forEach {
             try {
