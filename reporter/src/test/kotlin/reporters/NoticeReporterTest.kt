@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.readValue
+import com.here.ort.reporter.DefaultResolutionProvider
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -36,7 +37,7 @@ class NoticeReporterTest : WordSpec({
             val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
-            NoticeReporter().generateReport(ortResult, outputDir)
+            NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir)
 
             val resultFile = File(outputDir, "NOTICE")
             val actualText = resultFile.readText()
@@ -50,7 +51,7 @@ class NoticeReporterTest : WordSpec({
             val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
-            NoticeReporter().generateReport(ortResult, outputDir)
+            NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir)
 
             val resultFile = File(outputDir, "NOTICE")
 
@@ -63,7 +64,7 @@ class NoticeReporterTest : WordSpec({
             val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
-            NoticeReporter().generateReport(ortResult, outputDir)
+            NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir)
 
             val resultFile = File(outputDir, "NOTICE")
 
