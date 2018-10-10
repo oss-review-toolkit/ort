@@ -27,7 +27,6 @@ import com.here.ort.utils.OS
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.IOException
 
 val YARN_LOCK_FILES = listOf("yarn.lock")
 
@@ -50,37 +49,13 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.9.*")
 
     override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        val conflictingLockFiles = mutableMapOf<File, Pair<List<File>, List<File>>>()
-
         // Only keep those definition files that are accompanied by a Yarn lock file.
         val yarnDefinitionFiles = definitionFiles.filter { definitionFile ->
             val existingYarnLockFiles = recognizedLockFiles.mapNotNull { lockFileName ->
                 definitionFile.resolveSibling(lockFileName).takeIf { it.isFile }
             }
 
-            val existingNpmLockFiles = super.recognizedLockFiles.mapNotNull { lockFileName ->
-                definitionFile.resolveSibling(lockFileName).takeIf { it.isFile }
-            }
-
-            existingYarnLockFiles.isNotEmpty().also {
-                if (it && existingNpmLockFiles.isNotEmpty()) {
-                    conflictingLockFiles[definitionFile] = Pair(existingYarnLockFiles, existingNpmLockFiles)
-                }
-            }
-        }
-
-        if (conflictingLockFiles.isNotEmpty()) {
-            val message = buildString {
-                appendln("Found the following conflicting lock files:")
-
-                conflictingLockFiles.forEach { definitionFile, (yarnLockFiles, npmLockFiles) ->
-                    val yarnLockFileNames = yarnLockFiles.map { it.name }
-                    val npmLockFileNames = npmLockFiles.map { it.name }
-                    appendln("For '$definitionFile', $yarnLockFileNames vs. $npmLockFileNames.")
-                }
-            }
-
-            throw IOException(message)
+            existingYarnLockFiles.isNotEmpty()
         }
 
         if (yarnDefinitionFiles.isNotEmpty()) {
