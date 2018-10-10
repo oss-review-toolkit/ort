@@ -25,6 +25,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.Reporter
@@ -107,12 +108,12 @@ abstract class TableReporter : Reporter() {
             /**
              * All analyzer errors related to this package.
              */
-            val analyzerErrors: List<Error>,
+            val analyzerErrors: List<ResolvableError>,
 
             /**
              * All scan errors related to this package.
              */
-            val scanErrors: List<Error>
+            val scanErrors: List<ResolvableError>
     ) {
         fun merge(other: DependencyRow) =
                 DependencyRow(
@@ -154,12 +155,12 @@ abstract class TableReporter : Reporter() {
             /**
              * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val analyzerErrors: SortedMap<Identifier, List<Error>>,
+            val analyzerErrors: SortedMap<Identifier, List<ResolvableError>>,
 
             /**
              * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val scanErrors: SortedMap<Identifier, List<Error>>
+            val scanErrors: SortedMap<Identifier, List<ResolvableError>>
     ) {
         fun merge(other: SummaryRow): SummaryRow {
             fun <T> plus(left: List<T>, right: List<T>) = left + right
@@ -191,15 +192,15 @@ abstract class TableReporter : Reporter() {
             /**
              * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val analyzerErrors: SortedMap<Identifier, List<Error>>,
+            val analyzerErrors: SortedMap<Identifier, List<ResolvableError>>,
 
             /**
              * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val scanErrors: SortedMap<Identifier, List<Error>>
+            val scanErrors: SortedMap<Identifier, List<ResolvableError>>
     ) {
         fun merge(other: ErrorRow): ErrorRow {
-            val plus = { left: List<Error>, right: List<Error> -> left + right }
+            val plus = { left: List<ResolvableError>, right: List<ResolvableError> -> left + right }
 
             return ErrorRow(
                     id = id,
@@ -210,7 +211,19 @@ abstract class TableReporter : Reporter() {
         }
     }
 
+    data class ResolvableError(
+        val error: Error,
+        val resolutions: List<ErrorResolution>
+    ) {
+        override fun toString() =
+            "$error${resolutions.joinToString(prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }}"
+    }
+
     override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File) {
+        fun Error.toResolvableError(): TableReporter.ResolvableError {
+            return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
+        }
+
         val errorSummaryRows = mutableMapOf<Identifier, ErrorRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
@@ -264,8 +277,8 @@ abstract class TableReporter : Reporter() {
                         scopes = scopes,
                         declaredLicenses = declaredLicenses,
                         detectedLicenses = detectedLicenses,
-                        analyzerErrors = analyzerErrors,
-                        scanErrors = scanErrors
+                        analyzerErrors = analyzerErrors.map { it.toResolvableError() },
+                        scanErrors = scanErrors.map { it.toResolvableError() }
                 ).also { row ->
                     val isRowExcluded = projectExclude != null
                             || (scopes.isNotEmpty() && scopes.all { it.value.isNotEmpty() })
@@ -286,13 +299,17 @@ abstract class TableReporter : Reporter() {
 
                     summaryRows[row.id] = summaryRows[row.id]?.merge(summaryRow) ?: summaryRow
 
-                    if ((row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty()) && !isRowExcluded) {
+                    val unresolvedAnalyzerErrors = row.analyzerErrors.filterUnresolved()
+                    val unresolvedScanErrors = row.scanErrors.filterUnresolved()
+
+                    if ((unresolvedAnalyzerErrors.isNotEmpty() || unresolvedScanErrors.isNotEmpty())
+                        && !isRowExcluded) {
                         val errorRow = ErrorRow(
-                                id = row.id,
-                                analyzerErrors = if (row.analyzerErrors.isNotEmpty())
-                                    sortedMapOf(project.id to row.analyzerErrors) else sortedMapOf(),
-                                scanErrors = if (row.scanErrors.isNotEmpty())
-                                    sortedMapOf(project.id to row.scanErrors) else sortedMapOf()
+                            id = row.id,
+                            analyzerErrors = if (unresolvedAnalyzerErrors.isNotEmpty())
+                                sortedMapOf(project.id to unresolvedAnalyzerErrors) else sortedMapOf(),
+                            scanErrors = if (unresolvedScanErrors.isNotEmpty())
+                                sortedMapOf(project.id to unresolvedScanErrors) else sortedMapOf()
                         )
 
                         errorSummaryRows[row.id] = errorSummaryRows[errorRow.id]?.merge(errorRow) ?: errorRow
@@ -337,3 +354,9 @@ abstract class TableReporter : Reporter() {
 
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File)
 }
+
+fun Collection<TableReporter.ResolvableError>.filterUnresolved() = filter { it.resolutions.isEmpty() }
+
+fun Collection<TableReporter.ResolvableError>.containsUnresolved() = any { it.resolutions.isEmpty() }
+
+fun <K> Map<K, Collection<TableReporter.ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
