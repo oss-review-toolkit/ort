@@ -197,7 +197,7 @@ class ExcelReporter : TableReporter() {
 
             val cellStyle = when {
                 isExcluded -> excludedStyle
-                row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty() -> errorStyle
+                row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> errorStyle
                 row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> warningStyle
                 else -> successStyle
             }
@@ -290,7 +290,7 @@ class ExcelReporter : TableReporter() {
 
             val cellStyle = when {
                 isExcluded -> excludedStyle
-                row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty() -> errorStyle
+                row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> errorStyle
                 row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> warningStyle
                 else -> successStyle
             }
