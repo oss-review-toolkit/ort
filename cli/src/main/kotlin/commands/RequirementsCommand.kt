@@ -67,7 +67,7 @@ object RequirementsCommand : CommandWithHelp() {
                         log.debug { "$it is a $key." }
                         it.getDeclaredConstructor(AnalyzerConfiguration::class.java,
                                 RepositoryConfiguration::class.java).newInstance(AnalyzerConfiguration(false, false),
-                                RepositoryConfiguration(null))
+                                RepositoryConfiguration())
                     }
 
                     Scanner::class.java.isAssignableFrom(it) -> {

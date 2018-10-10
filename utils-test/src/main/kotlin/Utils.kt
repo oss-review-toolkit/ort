@@ -26,7 +26,7 @@ import java.io.File
 import java.time.Instant
 
 val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(false, false)
-val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration(null)
+val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 
 val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 val USER_DIR = File(System.getProperty("user.dir"))
