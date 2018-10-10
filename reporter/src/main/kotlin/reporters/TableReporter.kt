@@ -322,20 +322,12 @@ abstract class TableReporter : Reporter() {
             }
         }, { it.id })), projectExcludes)
 
-        val metadata = ortResult.data["reporter.metadata"]?.let {
-            if (it is Map<*, *>) {
-                it.entries.associate { (key, value) -> key.toString() to value.toString() }
-            } else {
-                null
-            }
+        val metadata = (ortResult.data["reporter.metadata"] as? Map<*, *>)?.let {
+            it.entries.associate { (key, value) -> key.toString() to value.toString() }
         } ?: emptyMap()
 
-        val extraColumns = scanRecord.data["reporter.extraColumns"]?.let { extraColumns ->
-            if (extraColumns is List<*>) {
-                extraColumns.map { it.toString() }
-            } else {
-                null
-            }
+        val extraColumns = (scanRecord.data["reporter.extraColumns"] as? List<*>)?.let { extraColumns ->
+            extraColumns.map { it.toString() }
         } ?: emptyList()
 
         generateReport(TabularScanRecord(ortResult.repository.vcsProcessed, errorSummaryTable, summaryTable,
