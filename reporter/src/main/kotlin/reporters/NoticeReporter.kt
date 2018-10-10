@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtResult
 import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.utils.log
 import com.here.ort.utils.spdx.getLicenseText
 
@@ -32,7 +33,7 @@ import java.util.SortedSet
 const val NOTICE_FILE_NAME = "NOTICE"
 
 class NoticeReporter : Reporter() {
-    override fun generateReport(ortResult: OrtResult, outputDir: File) {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File) {
         require(ortResult.scanner != null) {
             "The provided ORT result file does not contain a scan result."
         }

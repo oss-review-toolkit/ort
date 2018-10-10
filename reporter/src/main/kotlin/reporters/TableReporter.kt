@@ -28,6 +28,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.utils.zipWithDefault
 
 import java.io.File
@@ -209,7 +210,7 @@ abstract class TableReporter : Reporter() {
         }
     }
 
-    override fun generateReport(ortResult: OrtResult, outputDir: File) {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File) {
         val errorSummaryRows = mutableMapOf<Identifier, ErrorRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
