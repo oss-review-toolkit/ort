@@ -37,19 +37,19 @@ class ReporterTest : WordSpec({
     "A result file" should {
         "successfully export to an Excel sheet" {
             val outputDir = createTempDir().apply { deleteOnExit() }
-            ExcelReporter().generateReport(ortResult, outputDir)
+            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir)
             outputDir.resolve("scan-report.xlsx").isFile shouldBe true
         }
 
         "successfully export to a static HTML page" {
             val outputDir = createTempDir().apply { deleteOnExit() }
-            StaticHtmlReporter().generateReport(ortResult, outputDir)
+            StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir)
             outputDir.resolve("scan-report.html").isFile shouldBe true
         }
 
         "successfully export to a web application" {
             val outputDir = createTempDir().apply { deleteOnExit() }
-            WebAppReporter().generateReport(ortResult, outputDir)
+            WebAppReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir)
             outputDir.resolve("scan-report-web-app.html").isFile shouldBe true
         }
     }
