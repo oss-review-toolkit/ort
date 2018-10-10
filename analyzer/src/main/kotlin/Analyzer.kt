@@ -54,7 +54,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             actualRepositoryConfigurationFile.readValue()
         } else {
-            RepositoryConfiguration(null)
+            RepositoryConfiguration()
         }
 
         // Map files by the package manager factory that manages them.
