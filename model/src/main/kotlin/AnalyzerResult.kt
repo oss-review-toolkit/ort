@@ -24,10 +24,8 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.utils.hash
 import com.here.ort.utils.log
 
-import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -80,12 +78,7 @@ data class AnalyzerResult(
     }
 }
 
-class AnalyzerResultBuilder(
-        /**
-         * The root directory of the analyzer run this builder is used for.
-         */
-        private val rootDir: File
-) {
+class AnalyzerResultBuilder {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<Error>>()
@@ -101,15 +94,18 @@ class AnalyzerResultBuilder(
                 val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
                 if (existingProject != null) {
-                    val existingFile = File(rootDir, existingProject.definitionFilePath)
-                    val incomingFile = File(rootDir, projectAnalyzerResult.project.definitionFilePath)
+                    val existingDefinitionFileUrl = existingProject.let {
+                        "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                    }
+                    val incomingDefinitionFileUrl = projectAnalyzerResult.project.let {
+                        "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                    }
 
                     val error = Error(
                             source = "analyzer",
                             message = "Multiple projects with the same id '${existingProject.id}' found. Not adding " +
-                                    "the project defined in '${incomingFile.relativeTo(rootDir)}' (SHA-1: " +
-                                    "${incomingFile.hash()}) to the analyzer results as it duplicates the project " +
-                                    "defined in '${existingFile.relativeTo(rootDir)}' (SHA-1: ${existingFile.hash()})."
+                                    "the project defined in '$incomingDefinitionFileUrl' to the analyzer results " +
+                                    "as it duplicates the project defined in '$existingDefinitionFileUrl'."
                     )
 
                     log.error { error.message }
