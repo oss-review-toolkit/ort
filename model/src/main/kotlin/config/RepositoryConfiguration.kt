@@ -32,5 +32,11 @@ data class RepositoryConfiguration(
          * scanned, but related errors will be marked as resolved in the reporter output.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val excludes: Excludes?
+        val excludes: Excludes? = null,
+
+        /**
+         * Defines resolutions for issues with this repository.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val resolutions: Resolutions? = null
 )
