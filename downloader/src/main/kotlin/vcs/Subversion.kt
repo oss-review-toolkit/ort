@@ -197,14 +197,17 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                 val tagPath: String
                 val path: String
 
-                if (pkg.vcsProcessed.path.startsWith("tags/")) {
+                val tagsIndex = pkg.vcsProcessed.path.indexOf("tags/")
+                if (tagsIndex == 0 || (tagsIndex > 0 && pkg.vcsProcessed.path[tagsIndex - 1] == '/')) {
                     log.info {
                         "Ignoring the $type revision '${pkg.vcsProcessed.revision}' as the path points to a tag."
                     }
 
-                    val pathComponents = pkg.vcsProcessed.path.split('/', limit = 3)
+                    val tagsPathIndex = pkg.vcsProcessed.path.indexOf('/', tagsIndex + "tags/".length)
 
-                    tagPath = pathComponents[0] + "/" + pathComponents.getOrElse(1) { "" }
+                    tagPath = pkg.vcsProcessed.path.let {
+                        if (tagsPathIndex < 0) it else it.substring(0, tagsPathIndex)
+                    }
                     path = pkg.vcsProcessed.path
                 } else {
                     log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
