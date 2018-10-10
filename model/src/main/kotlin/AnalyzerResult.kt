@@ -47,7 +47,8 @@ data class AnalyzerResult(
         val packages: SortedSet<CuratedPackage>,
 
         /**
-         * The list of all errors.
+         * The lists of errors that occurred within the analyzed projects themselves. Errors related to project
+         * dependencies are contained in the dependencies of the project's scopes.
          */
         val errors: SortedMap<Identifier, List<Error>>,
 
