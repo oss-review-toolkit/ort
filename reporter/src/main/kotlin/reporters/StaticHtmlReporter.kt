@@ -448,7 +448,7 @@ class StaticHtmlReporter : TableReporter() {
                         " excluded" else ""
 
                     val cssClass = when {
-                        row.analyzerErrors.isNotEmpty() || row.scanErrors.isNotEmpty() -> "error"
+                        row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> "error"
                         row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "warning"
                         else -> "success"
                     }
