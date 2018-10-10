@@ -25,9 +25,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
-import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 import com.here.ort.utils.test.USER_DIR
 
