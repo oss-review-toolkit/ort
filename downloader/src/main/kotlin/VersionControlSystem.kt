@@ -178,7 +178,7 @@ abstract class VersionControlSystem {
                     VcsInfo(type, url, revision, path = path)
                 }
 
-                uri.host.endsWith("gitlab.com") || uri.host.endsWith("github.com") -> {
+                uri.host.endsWith("github.com") || uri.host.endsWith("gitlab.com") -> {
                     var url = uri.scheme + "://" + uri.authority
 
                     // Append the first two path components that denote the user and project to the base URL.
