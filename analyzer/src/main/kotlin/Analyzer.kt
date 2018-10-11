@@ -57,8 +57,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             RepositoryConfiguration(null)
         }
 
-        // Map of files managed by the respective package manager.
-        var managedFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        // Map files by the package manager factory that manages them.
+        val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
@@ -66,13 +66,20 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
         }
 
-        val hasDefinitionFileInRootDirectory = managedFiles.values.flatten().any {
+        val hasDefinitionFileInRootDirectory = factoryFiles.values.flatten().any {
             it.parentFile.absoluteFile == absoluteProjectPath
         }
 
-        if (managedFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-            managedFiles[Unmanaged.Factory()] = listOf(absoluteProjectPath)
+        if (factoryFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
+            factoryFiles[Unmanaged.Factory()] = listOf(absoluteProjectPath)
         }
+
+        // Instantiate the managers via their factories.
+        val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
+            val manager = factory.create(config, repositoryConfiguration)
+            val filteredFiles = manager.prepareResolution(files)
+            Pair(manager, filteredFiles).takeIf { filteredFiles.isNotEmpty() }
+        }.toMap()
 
         if (log.isInfoEnabled) {
             // Log the summary of projects found per package manager.
@@ -85,13 +92,11 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
-        val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
         // Resolve dependencies per package manager.
         managedFiles.forEach { manager, files ->
-            val results = manager.create(config, repositoryConfiguration)
-                    .resolveDependencies(absoluteProjectPath, files)
+            val results = manager.resolveDependencies(absoluteProjectPath, files)
 
             val curatedResults = packageCurationsFile?.let {
                 val provider = YamlFilePackageCurationProvider(it)
@@ -117,6 +122,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
+        val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
         val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
         val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())

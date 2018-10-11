@@ -180,7 +180,7 @@ abstract class PackageManager(
      * Optional preparation step for dependency resolution, like checking for prerequisites or mapping
      * [definitionFiles].
      */
-    protected open fun prepareResolution(definitionFiles: List<File>): List<File> = definitionFiles
+    open fun prepareResolution(definitionFiles: List<File>): List<File> = definitionFiles
 
     /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
@@ -189,7 +189,7 @@ abstract class PackageManager(
     open fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, ProjectAnalyzerResult>()
 
-        prepareResolution(definitionFiles).forEach { definitionFile ->
+        definitionFiles.forEach { definitionFile ->
             log.info { "Resolving ${javaClass.simpleName} dependencies for '$definitionFile'..." }
 
             val elapsed = measureTimeMillis {
