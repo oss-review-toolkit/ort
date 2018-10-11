@@ -92,7 +92,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             val path = uri.schemeSpecificPart
 
             // Do not mess with crazy URLs.
-            if (path.startsWith("git@") || path.startsWith("github.com")) return url
+            if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
 
             return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query, uri.fragment).all { it == null }) {
                 // See https://docs.npmjs.com/files/package.json#repository.
