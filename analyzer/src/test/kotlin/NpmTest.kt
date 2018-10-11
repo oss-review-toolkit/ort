@@ -34,6 +34,8 @@ class NpmTest : WordSpec({
             val packages = mapOf(
                     "npm/npm"
                             to "https://github.com/npm/npm.git",
+                    "mochajs/mocha#4727d357ea"
+                            to "https://github.com/mochajs/mocha.git#4727d357ea",
                     "gist:11081aaa281"
                             to "https://gist.github.com/11081aaa281",
                     "bitbucket:example/repo"

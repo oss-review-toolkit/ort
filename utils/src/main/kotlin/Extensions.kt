@@ -260,3 +260,8 @@ fun Throwable.showStackTrace() {
     // https://discuss.kotlinlang.org/t/if-operator-in-function-expression/7227.
     if (printStackTrace) printStackTrace()
 }
+
+/**
+ * Check whether the URI has a fragment that looks like a VCS revision.
+ */
+fun URI.hasFragmentRevision() = fragment?.let { Regex("[a-fA-F0-9]{7,}$").matches(it) } == true
