@@ -179,7 +179,7 @@ abstract class PackageManager(
     /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
-    protected open fun mapDefinitionFiles(definitionFiles: List<File>): List<File> = definitionFiles
+    open fun mapDefinitionFiles(definitionFiles: List<File>): List<File> = definitionFiles
 
     /**
      * Optional preparation step for dependency resolution, like checking for prerequisites.
@@ -195,7 +195,7 @@ abstract class PackageManager(
 
         prepareResolution(definitionFiles)
 
-        mapDefinitionFiles(definitionFiles).forEach { definitionFile ->
+        definitionFiles.forEach { definitionFile ->
             log.info { "Resolving ${javaClass.simpleName} dependencies for '$definitionFile'..." }
 
             val elapsed = measureTimeMillis {
