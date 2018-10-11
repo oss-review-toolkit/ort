@@ -57,7 +57,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             RepositoryConfiguration(null)
         }
 
-        // Map of files managed by the respective package manager.
+        // Map files by the package manager factory that manages them.
         var managedFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
@@ -74,6 +74,10 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             managedFiles[Unmanaged.Factory()] = listOf(absoluteProjectPath)
         }
 
+        managedFiles = managedFiles.mapValues { (factory, files) ->
+            factory.create(config, repositoryConfiguration).mapDefinitionFiles(files)
+        }.toMutableMap()
+
         if (log.isInfoEnabled) {
             // Log the summary of projects found per package manager.
             managedFiles.forEach { manager, files ->
@@ -85,7 +89,6 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
-        val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
         // Resolve dependencies per package manager.
@@ -117,6 +120,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
+        val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
         val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
         val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())
