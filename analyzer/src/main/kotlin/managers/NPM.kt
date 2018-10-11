@@ -205,8 +205,10 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 // https://w3c.github.io/webappsec-subresource-integrity/
                 hash = Hex.encodeHexString(Base64.decodeBase64(splitHash.last()))
                 HashAlgorithm.fromString(splitHash.first())
-            } else {
+            } else if (hash.isNotEmpty()) {
                 HashAlgorithm.SHA1
+            } else {
+                HashAlgorithm.UNKNOWN
             }
 
             // Download package info from registry.npmjs.org.
