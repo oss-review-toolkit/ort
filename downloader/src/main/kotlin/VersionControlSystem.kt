@@ -24,7 +24,9 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
 
 import com.vdurmont.semver4j.Semver
@@ -207,17 +209,28 @@ abstract class VersionControlSystem {
                             // Just treat all the extra components as a path.
                             path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
                         }
+                    } else {
+                        if (uri.hasFragmentRevision()) revision = uri.fragment
                     }
 
                     VcsInfo("git", url, revision, path = path)
                 }
 
                 else -> {
-                    val gitUrlParts = vcsUrl.split(".git/")
-                    if (gitUrlParts.count() == 2) {
-                        VcsInfo("git", "${gitUrlParts[0]}.git", "", null, gitUrlParts[1])
-                    } else {
-                        VcsInfo("", vcsUrl, "")
+                    when {
+                        vcsUrl.contains(".git/") -> {
+                            val url = normalizeVcsUrl(vcsUrl.substringBefore(".git/"))
+                            val path = vcsUrl.substringAfter(".git/")
+                            VcsInfo("git", "$url.git", "", null, path)
+                        }
+
+                        vcsUrl.contains(".git#") || Regex("^git.+#[a-fA-F0-9]{7,}$").matches(vcsUrl) -> {
+                            val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
+                            val revision = vcsUrl.substringAfterLast('#')
+                            VcsInfo("git", url, revision, null, "")
+                        }
+
+                        else -> VcsInfo("", vcsUrl, "")
                     }
                 }
             }
