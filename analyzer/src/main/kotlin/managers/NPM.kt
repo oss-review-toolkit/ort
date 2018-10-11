@@ -45,6 +45,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.log
 import com.here.ort.utils.stashDirectories
@@ -94,13 +95,16 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             // Do not mess with crazy URLs.
             if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
 
-            return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query, uri.fragment).all { it == null }) {
+            return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
+                // See https://docs.npmjs.com/files/package.json#github-urls.
+                val revision = if (uri.hasFragmentRevision()) "#${uri.fragment}" else ""
+
                 // See https://docs.npmjs.com/files/package.json#repository.
                 when (uri.scheme) {
-                    null -> "https://github.com/$path.git"
-                    "gist" -> "https://gist.github.com/$path"
-                    "bitbucket" -> "https://bitbucket.org/$path.git"
-                    "gitlab" -> "https://gitlab.com/$path.git"
+                    null -> "https://github.com/$path.git$revision"
+                    "gist" -> "https://gist.github.com/$path$revision"
+                    "bitbucket" -> "https://bitbucket.org/$path.git$revision"
+                    "gitlab" -> "https://gitlab.com/$path.git$revision"
                     else -> url
                 }
             } else {
