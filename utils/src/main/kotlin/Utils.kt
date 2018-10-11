@@ -184,8 +184,8 @@ fun normalizeVcsUrl(vcsUrl: String): String {
         }
     }
 
-    // If we have no protocol by now, and the host is GitHub, assume https.
-    if (url.startsWith("github.com")) {
+    // If we have no protocol by now and the host is Git-specific, assume https.
+    if (url.startsWith("github.com") || url.startsWith("gitlab.com")) {
         url = "https://$url"
     }
 
@@ -208,7 +208,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     // Handle host-specific normalizations.
     if (uri.host != null) {
         when {
-            uri.host.endsWith("github.com") -> {
+            uri.host.endsWith("github.com") || uri.host.endsWith("gitlab.com") -> {
                 // Ensure the path ends in ".git".
                 val path = uri.path.takeIf { Regex("\\.git(/|$)") in it } ?: "${uri.path}.git"
 
