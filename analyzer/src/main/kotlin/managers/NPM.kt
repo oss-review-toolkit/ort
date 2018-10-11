@@ -259,6 +259,11 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 }
             }
 
+            val vcsDownloadUrl = VersionControlSystem.splitUrl(expandShortcutURL(downloadUrl))
+            if (vcsDownloadUrl.url != downloadUrl) {
+                vcsFromPackage = vcsFromPackage.merge(vcsDownloadUrl)
+            }
+
             val module = Package(
                     id = Identifier(
                             provider = "NPM",
