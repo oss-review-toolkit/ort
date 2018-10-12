@@ -48,22 +48,18 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.9.*")
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        // Only keep those definition files that are accompanied by a Yarn lock file.
-        val yarnDefinitionFiles = definitionFiles.filter { definitionFile ->
-            val existingYarnLockFiles = recognizedLockFiles.mapNotNull { lockFileName ->
-                definitionFile.resolveSibling(lockFileName).takeIf { it.isFile }
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+            // Only keep those definition files that are accompanied by a Yarn lock file.
+            definitionFiles.filter { definitionFile ->
+                val existingYarnLockFiles = recognizedLockFiles.mapNotNull { lockFileName ->
+                    definitionFile.resolveSibling(lockFileName).takeIf { it.isFile }
+                }
+
+                existingYarnLockFiles.isNotEmpty()
             }
 
-            existingYarnLockFiles.isNotEmpty()
-        }
-
-        if (yarnDefinitionFiles.isNotEmpty()) {
+    override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
             // fixed minor version to be sure to get consistent results.
             checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
-        }
-
-        return yarnDefinitionFiles
-    }
 }

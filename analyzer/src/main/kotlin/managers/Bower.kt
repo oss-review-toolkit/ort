@@ -212,10 +212,8 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
     override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_BOWER_VERSION)
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
-        return definitionFiles
-    }
+    override fun prepareResolution(definitionFiles: List<File>) =
+            checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         log.info { "Resolving dependencies for: '${definitionFile.absolutePath}'" }

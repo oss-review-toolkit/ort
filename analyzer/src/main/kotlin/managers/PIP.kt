@@ -120,11 +120,8 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         return process
     }
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
-
-        return definitionFiles
-    }
+    override fun prepareResolution(definitionFiles: List<File>) =
+            VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:

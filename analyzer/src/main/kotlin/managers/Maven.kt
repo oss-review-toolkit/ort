@@ -89,7 +89,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
      */
     fun enableSbtMode() = also { sbtMode = true }
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
+    override fun prepareResolution(definitionFiles: List<File>) {
         val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = maven.createProjectBuildingRequest(false)
         val projectBuildingResults = try {
@@ -118,8 +118,6 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 localProjectBuildingResults[identifier] = projectBuildingResult
             }
         }
-
-        return definitionFiles
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
