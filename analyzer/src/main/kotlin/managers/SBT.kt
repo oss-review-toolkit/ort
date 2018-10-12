@@ -93,9 +93,44 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         return uniqueVersions.first().toString()
     }
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        if (definitionFiles.isEmpty()) return emptyList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
+        val workingDir = if (definitionFiles.count() > 1) {
+            // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
+            // project's root directory. In order to determine the root directory, use the common prefix of all
+            // definition file paths.
+            getCommonFilePrefix(definitionFiles).also {
+                log.info { "Determined '$it' as the ${toString()} project root directory." }
+            }
+        } else {
+            definitionFiles.first().parentFile
+        }
 
+        fun runSBT(vararg command: String) = run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
+
+        // Get the list of project names.
+        val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {
+            PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
+        }
+
+        if (internalProjectNames.isEmpty()) {
+            log.warn { "No SBT projects found inside the '${workingDir.absolutePath}' directory." }
+        }
+
+        // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
+        // aggregate projects.
+        val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
+        val pomFiles = runSBT(makePomCommand).stdout.lines().mapNotNull { line ->
+            POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
+        }
+
+        if (pomFiles.isEmpty()) {
+            log.warn { "No generated POM files found inside the '${workingDir.absolutePath}' directory." }
+        }
+
+        return pomFiles.distinct()
+    }
+
+    override fun prepareResolution(definitionFiles: List<File>) {
         val workingDir = if (definitionFiles.count() > 1) {
             // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
             // project's root directory. In order to determine the root directory, use the common prefix of all
@@ -137,37 +172,13 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                         "$sbtVersionRequirement.")
             }
         }
-
-        fun runSBT(vararg command: String) = run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
-
-        // Get the list of project names.
-        val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {
-            PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
-        }
-
-        if (internalProjectNames.isEmpty()) {
-            log.warn { "No SBT projects found inside the '${workingDir.absolutePath}' directory." }
-        }
-
-        // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
-        // aggregate projects.
-        val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        val pomFiles = runSBT(makePomCommand).stdout.lines().mapNotNull { line ->
-            POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
-        }
-
-        if (pomFiles.isEmpty()) {
-            log.warn { "No generated POM files found inside the '${workingDir.absolutePath}' directory." }
-        }
-
-        return pomFiles.distinct()
     }
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
             Maven(analyzerConfig, repoConfig)
                     .enableSbtMode()
-                    .resolveDependencies(analyzerRoot, prepareResolution(definitionFiles))
+                    .resolveDependencies(analyzerRoot, mapDefinitionFiles(definitionFiles))
 
     override fun resolveDependencies(definitionFile: File) =
             // This is not implemented in favor over overriding [resolveDependencies].

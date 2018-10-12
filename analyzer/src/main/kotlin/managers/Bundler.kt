@@ -76,16 +76,13 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("1.16.+")
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
-        // fixed versions to be sure to get consistent results.
-        checkVersion(
-                ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-                transform = { it.substringAfter("Bundler version ") }
-        )
-
-        return definitionFiles
-    }
+    override fun prepareResolution(definitionFiles: List<File>) =
+            // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
+            // fixed versions to be sure to get consistent results.
+            checkVersion(
+                    ignoreActualVersion = analyzerConfig.ignoreToolVersions,
+                    transform = { it.substringAfter("Bundler version ") }
+            )
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile

@@ -126,20 +126,16 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.5.* - 6.4.*")
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
-        // Only keep those definition files that are not accompanied by a Yarn lock file.
-        val npmDefinitionFiles = definitionFiles.filterNot { definitionFile ->
-            YARN_LOCK_FILES.any { definitionFile.resolveSibling(it).isFile }
-        }
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+            // Only keep those definition files that are not accompanied by a Yarn lock file.
+            definitionFiles.filterNot { definitionFile ->
+                YARN_LOCK_FILES.any { definitionFile.resolveSibling(it).isFile }
+            }
 
-        if (npmDefinitionFiles.isNotEmpty()) {
+    override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
             // fixed minor version to be sure to get consistent results.
             checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
-        }
-
-        return npmDefinitionFiles
-    }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile

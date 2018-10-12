@@ -86,11 +86,11 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.5,)")
 
-    override fun prepareResolution(definitionFiles: List<File>): List<File> {
+    override fun prepareResolution(definitionFiles: List<File>) {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
         if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) {
-            return definitionFiles
+            return
         }
 
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
@@ -102,8 +102,6 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                 ignoreActualVersion = analyzerConfig.ignoreToolVersions,
                 transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
         )
-
-        return definitionFiles
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
