@@ -475,6 +475,9 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                     Pair(type, url)
                 }
             } else {
+                if (connection.isNotEmpty()) {
+                    log.info { "Ignore Maven scm-connection URL '$connection' of unexpected format." }
+                }
                 Pair("", "")
             }
         }
