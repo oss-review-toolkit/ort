@@ -58,7 +58,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         // Map files by the package manager factory that manages them.
-        var managedFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        var factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
@@ -66,17 +66,19 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
         }
 
-        val hasDefinitionFileInRootDirectory = managedFiles.values.flatten().any {
+        val hasDefinitionFileInRootDirectory = factoryFiles.values.flatten().any {
             it.parentFile.absoluteFile == absoluteProjectPath
         }
 
-        if (managedFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-            managedFiles[Unmanaged.Factory()] = listOf(absoluteProjectPath)
+        if (factoryFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
+            factoryFiles[Unmanaged.Factory()] = listOf(absoluteProjectPath)
         }
 
-        managedFiles = managedFiles.mapValues { (factory, files) ->
-            factory.create(config, repositoryConfiguration).mapDefinitionFiles(files)
-        }.toMutableMap()
+        val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
+            val manager = factory.create(config, repositoryConfiguration)
+            val mappedFiles = manager.mapDefinitionFiles(files)
+            Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
+        }.toMap()
 
         if (log.isInfoEnabled) {
             // Log the summary of projects found per package manager.
@@ -93,8 +95,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         // Resolve dependencies per package manager.
         managedFiles.forEach { manager, files ->
-            val results = manager.create(config, repositoryConfiguration)
-                    .resolveDependencies(absoluteProjectPath, files)
+            val results = manager.resolveDependencies(absoluteProjectPath, files)
 
             val curatedResults = packageCurationsFile?.let {
                 val provider = YamlFilePackageCurationProvider(it)
