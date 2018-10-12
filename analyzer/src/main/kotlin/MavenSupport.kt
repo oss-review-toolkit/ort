@@ -90,6 +90,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         private const val MAX_DISK_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
         private const val MAX_DISK_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
 
+        // See http://maven.apache.org/pom.html#SCM.
         val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
