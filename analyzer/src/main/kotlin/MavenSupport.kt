@@ -143,28 +143,34 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             val connection = scm.connection ?: ""
             val tag = scm.tag?.takeIf { it != "HEAD" } ?: ""
 
-            val (type, url) = SCM_REGEX.matcher(connection).let {
+            val (type, url, path) = SCM_REGEX.matcher(connection).let {
                 if (it.matches()) {
                     val type = it.group("type")
                     val url = it.group("url")
 
-                    // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the
-                    // Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up here.
-                    if (type == "cvs" && !url.startsWith(":")) {
-                        Pair(type, ":$url")
-                    } else {
-                        Pair(type, url)
+                    when {
+                        // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
+                        // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
+                        //  here.
+                        type == "cvs" && !url.startsWith(":") -> listOf(type, ":$url", "")
+
+                        // Maven does not officially support git-repo as an SCM, see
+                        // http://maven.apache.org/scm/scms-overview.html, so come up with a convention to use the URL
+                        // fragment for the path to the manifest inside the repository.
+                        type == "git-repo" -> listOf(type, url.substringBefore('?'), url.substringAfter('?'))
+
+                        else -> listOf(type, url, "")
                     }
                 } else {
                     if (connection.isNotEmpty()) {
                         log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
                     }
 
-                    Pair("", "")
+                    listOf("", "", "")
                 }
             }
 
-            return VcsInfo(type, url, tag)
+            return VcsInfo(type = type, url = url, revision = tag, path = path)
         }
     }
 
