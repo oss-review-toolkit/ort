@@ -136,7 +136,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             scope.dependencies += parseDependency(node, packages)
         }
 
-        val vcsFromPackage = maven.parseVcsInfo(mavenProject)
+        val vcsFromPackage = MavenSupport.parseVcsInfo(mavenProject)
 
         // If running in SBT mode expect that POM files were generated in a "target" subdirectory and that the correct
         // project directory is the parent directory of this.
@@ -154,7 +154,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                         version = mavenProject.version
                 ),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = maven.parseLicenses(mavenProject),
+                declaredLicenses = MavenSupport.parseLicenses(mavenProject),
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: ""),
                 homepageUrl = mavenProject.url ?: "",
