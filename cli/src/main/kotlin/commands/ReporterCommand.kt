@@ -83,9 +83,12 @@ object ReporterCommand : CommandWithHelp() {
 
         val ortResult = ortResultFile.readValue<OrtResult>()
 
+        val resolutionProvider = DefaultResolutionProvider()
+        ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
+
         reportFormats.distinct().forEach {
             try {
-                it.generateReport(ortResult, DefaultResolutionProvider(), outputDir)
+                it.generateReport(ortResult, resolutionProvider, outputDir)
             } catch (e: Exception) {
                 e.showStackTrace()
 
