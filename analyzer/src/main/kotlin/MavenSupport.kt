@@ -96,24 +96,80 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         private val remoteArtifactCache =
                 DiskCache(File(getUserConfigDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
                         MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS)
+
+        private fun createContainer(): PlexusContainer {
+            val configuration = DefaultContainerConfiguration().apply {
+                autoWiring = true
+                classPathScanning = PlexusConstants.SCANNING_INDEX
+                classWorld = ClassWorld("plexus.core", javaClass.classLoader)
+            }
+
+            return DefaultPlexusContainer(configuration).apply {
+                loggerManager = object : BaseLoggerManager() {
+                    override fun createLogger(name: String) = MavenLogger(log.effectiveLevel)
+                }
+            }
+        }
+
+        fun parseLicenses(mavenProject: MavenProject) =
+                mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
+
+        fun parseVcsInfo(mavenProject: MavenProject): VcsInfo {
+            // When asking Maven for the SCM URL of a POM that does not itself define an SCM URL, Maven returns the SCM
+            // URL of the parent POM (if any) and appends the child POM's artifactId to it. This behavior is
+            // fundamentally broken because it invalidates the URL for many SCMs that cannot clone / checkout a specific
+            // path from a repository. Also, the assumption that the source code for a child artifact is stored in a
+            // top-level directory named like the artifactId inside the parent artifact's repository is often not
+            // correct.
+            // To fix this, determine the SCM URL of the root parent (if there are parents) and use that as the child's
+            // SCM URL.
+            var scm = mavenProject.scm
+            var parent = mavenProject.parent
+
+            while (parent != null) {
+                parent.scm?.let {
+                    it.connection?.let { connection ->
+                        if (connection.isNotBlank() && scm.connection.startsWith(connection)) {
+                            scm = parent.scm
+                        }
+                    }
+                }
+
+                parent = parent.parent
+            }
+
+            if (scm == null) return VcsInfo.EMPTY
+
+            val connection = scm.connection ?: ""
+            val tag = scm.tag?.takeIf { it != "HEAD" } ?: ""
+
+            val (type, url) = SCM_REGEX.matcher(connection).let {
+                if (it.matches()) {
+                    val type = it.group("type")
+                    val url = it.group("url")
+
+                    // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the
+                    // Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up here.
+                    if (type == "cvs" && !url.startsWith(":")) {
+                        Pair(type, ":$url")
+                    } else {
+                        Pair(type, url)
+                    }
+                } else {
+                    if (connection.isNotEmpty()) {
+                        log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
+                    }
+
+                    Pair("", "")
+                }
+            }
+
+            return VcsInfo(type, url, tag)
+        }
     }
 
     val container = createContainer()
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
-
-    private fun createContainer(): PlexusContainer {
-        val configuration = DefaultContainerConfiguration().apply {
-            autoWiring = true
-            classPathScanning = PlexusConstants.SCANNING_INDEX
-            classWorld = ClassWorld("plexus.core", javaClass.classLoader)
-        }
-
-        return DefaultPlexusContainer(configuration).apply {
-            loggerManager = object : BaseLoggerManager() {
-                override fun createLogger(name: String) = MavenLogger(log.effectiveLevel)
-            }
-        }
-    }
 
     // The MavenSettingsBuilder class is deprecated but internally it uses its successor SettingsBuilder. Calling
     // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
@@ -428,62 +484,6 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 vcs = vcsFromPackage,
                 vcsProcessed = vcsProcessed
         )
-    }
-
-    fun parseLicenses(mavenProject: MavenProject) =
-            mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
-
-    fun parseVcsInfo(mavenProject: MavenProject): VcsInfo {
-        // When asking Maven for the SCM URL of a POM that does not itself define an SCM URL, Maven returns the SCM
-        // URL of the parent POM (if any) and appends the child POM's artifactId to it. This behavior is
-        // fundamentally broken because it invalidates the URL for many SCMs that cannot clone / checkout a specific
-        // path from a repository. Also, the assumption that the source code for a child artifact is stored in a
-        // top-level directory named like the artifactId inside the parent artifact's repository is often not
-        // correct.
-        // To fix this, determine the SCM URL of the root parent (if there are parents) and use that as the child's
-        // SCM URL.
-        var scm = mavenProject.scm
-        var parent = mavenProject.parent
-
-        while (parent != null) {
-            parent.scm?.let {
-                it.connection?.let { connection ->
-                    if (connection.isNotBlank() && scm.connection.startsWith(connection)) {
-                        scm = parent.scm
-                    }
-                }
-            }
-
-            parent = parent.parent
-        }
-
-        if (scm == null) return VcsInfo.EMPTY
-
-        val connection = scm.connection ?: ""
-        val tag = scm.tag?.takeIf { it != "HEAD" } ?: ""
-
-        val (type, url) = SCM_REGEX.matcher(connection).let {
-            if (it.matches()) {
-                val type = it.group("type")
-                val url = it.group("url")
-
-                // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the
-                // Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up here.
-                if (type == "cvs" && !url.startsWith(":")) {
-                    Pair(type, ":$url")
-                } else {
-                    Pair(type, url)
-                }
-            } else {
-                if (connection.isNotEmpty()) {
-                    log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
-                }
-
-                Pair("", "")
-            }
-        }
-
-        return VcsInfo(type, url, tag)
     }
 
     /**
