@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils
+package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.NPM
 

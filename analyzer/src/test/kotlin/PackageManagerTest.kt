@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.util
+package com.here.ort.analyzer
 
-import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.managers.*
 
 import io.kotlintest.shouldBe
