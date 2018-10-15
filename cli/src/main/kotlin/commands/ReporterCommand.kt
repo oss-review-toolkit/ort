@@ -39,8 +39,10 @@ import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
-@Parameters(commandNames = ["report"],
-        commandDescription = "Present Analyzer and Scanner results in various formats.")
+@Parameters(
+    commandNames = ["report"],
+    commandDescription = "Present Analyzer and Scanner results in various formats."
+)
 object ReporterCommand : CommandWithHelp() {
     private class ReporterConverter : IStringConverter<Reporter> {
         companion object {
@@ -54,24 +56,30 @@ object ReporterCommand : CommandWithHelp() {
         }
     }
 
-    @Parameter(description = "The ORT result file to use. Must contain a scan result.",
-            names = ["--ort-file", "-i"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The ORT result file to use. Must contain a scan result.",
+        names = ["--ort-file", "-i"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     private lateinit var ortResultFile: File
 
-    @Parameter(description = "The output directory to store the generated reports in.",
-            names = ["--output-dir", "-o"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The output directory to store the generated reports in.",
+        names = ["--output-dir", "-o"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The list of report formats that will be generated.",
-            names = ["--report-formats", "-f"],
-            converter = ReporterConverter::class,
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The list of report formats that will be generated.",
+        names = ["--report-formats", "-f"],
+        converter = ReporterConverter::class,
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     private lateinit var reportFormats: List<Reporter>
 
     override fun runCommand(jc: JCommander) {
@@ -83,9 +91,12 @@ object ReporterCommand : CommandWithHelp() {
 
         val ortResult = ortResultFile.readValue<OrtResult>()
 
+        val resolutionProvider = DefaultResolutionProvider()
+        ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
+
         reportFormats.distinct().forEach {
             try {
-                it.generateReport(ortResult, DefaultResolutionProvider(), outputDir)
+                it.generateReport(ortResult, resolutionProvider, outputDir)
             } catch (e: Exception) {
                 e.showStackTrace()
 
