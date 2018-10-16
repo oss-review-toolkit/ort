@@ -105,10 +105,12 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
  */
 fun getCommonFilePrefix(files: List<File>) =
         files.map {
-            it.absolutePath
+            it.normalize().absolutePath
         }.reduce { prefix, path ->
             prefix.commonPrefixWith(path)
-        }.let { File(it) }
+        }.let {
+            File(it)
+        }
 
 /**
  * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
