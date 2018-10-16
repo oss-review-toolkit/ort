@@ -171,7 +171,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
         log.info { "Using $type version ${getVersion()}." }
 
         try {
-            val path = pkg.vcsProcessed.path.takeUnless { it.isBlank() } ?: "."
+            val path = pkg.vcsProcessed.path.takeUnless { it.isEmpty() } ?: "."
 
             // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
             run(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
@@ -208,6 +208,13 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
             // Checkout the working tree of the desired revision.
             run(targetDir, "checkout", "-r", revision, path)
+
+            pkg.vcsProcessed.path.let {
+                if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).isDirectory) {
+                    throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
+                            "contain the requested path '$it'.")
+                }
+            }
 
             return workingTree
         } catch (e: IOException) {
