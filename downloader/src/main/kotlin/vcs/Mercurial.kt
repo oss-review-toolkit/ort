@@ -151,6 +151,13 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             // Explicitly update the working tree to the desired revision.
             run(targetDir, "update", revision)
 
+            pkg.vcsProcessed.path.let {
+                if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).isDirectory) {
+                    throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
+                            "contain the requested path '$it'.")
+                }
+            }
+
             return workingTree
         } catch (e: IOException) {
             throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", e)
