@@ -47,9 +47,10 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.getCommonFilePrefix
 import com.here.ort.utils.hasFragmentRevision
-import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.log
+import com.here.ort.utils.realFile
 import com.here.ort.utils.stashDirectories
+import com.here.ort.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
@@ -189,12 +190,23 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = File(rootDirectory, "node_modules")
 
-        log.info { "Searching for package.json files in '${nodeModulesDir.absolutePath}'..." }
+        log.info { "Searching for 'package.json' files in '${nodeModulesDir.absolutePath}'..." }
 
         nodeModulesDir.walkTopDown().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }.forEach {
-            log.debug { "Found a module in '${it.absolutePath}'." }
+            val packageDir = it.absoluteFile.parentFile
+            val realPackageDir = packageDir.realFile()
+            val isSymbolicPackageDir = packageDir != realPackageDir
+
+            log.debug {
+                val prefix = "Found a 'package.json' file in '$packageDir'"
+                if (isSymbolicPackageDir) {
+                    "$prefix which links to '$realPackageDir'."
+                } else {
+                    "$prefix."
+                }
+            }
 
             val json = it.readValue<ObjectNode>()
             val rawName = json["name"].textValue()
@@ -242,41 +254,46 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 rawName
             }
 
-            val pkgRequest = Request.Builder()
-                    .get()
-                    .url("https://registry.npmjs.org/$encodedName")
-                    .build()
+            if (isSymbolicPackageDir) {
+                val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo() ?: VcsInfo.EMPTY
+                vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
+            } else {
+                val pkgRequest = Request.Builder()
+                        .get()
+                        .url("https://registry.npmjs.org/$encodedName")
+                        .build()
 
-            OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
-                if (response.code() == HttpURLConnection.HTTP_OK) {
-                    log.debug {
-                        if (response.cacheResponse() != null) {
-                            "Retrieved info about '$encodedName' from local cache."
-                        } else {
-                            "Downloaded info about '$encodedName' from NPM registry."
-                        }
-                    }
-
-                    response.body()?.let { body ->
-                        val packageInfo = jsonMapper.readTree(body.string())
-
-                        packageInfo["versions"][version]?.let { versionInfo ->
-                            description = versionInfo["description"].textValueOrEmpty()
-                            homepageUrl = versionInfo["homepage"].textValueOrEmpty()
-
-                            versionInfo["dist"]?.let { dist ->
-                                downloadUrl = dist["tarball"].textValueOrEmpty()
-                                hash = dist["shasum"].textValueOrEmpty()
-                                hashAlgorithm = HashAlgorithm.SHA1
+                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+                    if (response.code() == HttpURLConnection.HTTP_OK) {
+                        log.debug {
+                            if (response.cacheResponse() != null) {
+                                "Retrieved info about '$encodedName' from local cache."
+                            } else {
+                                "Downloaded info about '$encodedName' from NPM registry."
                             }
-
-                            vcsFromPackage = parseVcsInfo(versionInfo)
                         }
-                    }
-                } else {
-                    log.info {
-                        "Could not retrieve package information for '$encodedName' " +
-                                "from public NPM registry: ${response.message()} (code ${response.code()})."
+
+                        response.body()?.let { body ->
+                            val packageInfo = jsonMapper.readTree(body.string())
+
+                            packageInfo["versions"][version]?.let { versionInfo ->
+                                description = versionInfo["description"].textValueOrEmpty()
+                                homepageUrl = versionInfo["homepage"].textValueOrEmpty()
+
+                                versionInfo["dist"]?.let { dist ->
+                                    downloadUrl = dist["tarball"].textValueOrEmpty()
+                                    hash = dist["shasum"].textValueOrEmpty()
+                                    hashAlgorithm = HashAlgorithm.SHA1
+                                }
+
+                                vcsFromPackage = parseVcsInfo(versionInfo)
+                            }
+                        }
+                    } else {
+                        log.info {
+                            "Could not retrieve package information for '$encodedName' " +
+                                    "from public NPM registry: ${response.message()} (code ${response.code()})."
+                        }
                     }
                 }
             }
