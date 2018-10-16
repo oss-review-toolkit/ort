@@ -52,6 +52,13 @@ class Git : GitBase() {
                 if (recursive && File(targetDir, ".gitmodules").isFile) {
                     run(targetDir, "submodule", "update", "--init", "--recursive")
                 }
+
+                pkg.vcsProcessed.path.let {
+                    if (it.isNotEmpty() && !targetDir.resolve(it).isDirectory) {
+                        throw DownloadException("The $type working directory at '$targetDir' does not contain the " +
+                                "requested path '$it'.")
+                    }
+                }
             }
         } catch (e: IOException) {
             throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", e)
