@@ -276,8 +276,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
         val allRepositories = (artifactDescriptorResult.repositories + repositories).distinct()
 
-        // Filter local repositories, as remote artifacts should never point to files on the local disk.
-        val remoteRepositories = allRepositories.filterNot { it.url.startsWith("file:/") }
+        // Filter out local repositories, as remote artifacts should never point to files on the local disk.
+        val remoteRepositories = allRepositories.filterNot { it.url.startsWith("file://") }
 
         if (log.isDebugEnabled) {
             val localRepositories = allRepositories - remoteRepositories
