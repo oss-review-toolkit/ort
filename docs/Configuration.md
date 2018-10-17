@@ -117,3 +117,33 @@ these examples match the configuration of your project.
 * [sbt.yml](examples/sbt.yml)
 * [stack.yml](examples/stack.yml)
 * [yarn.yml](examples/yarn.yml)
+
+### Resolving errors
+
+If the ORT result contains errors usually the best approach is to fix them and run the scan again. However, sometimes it
+is not possible or necessary to fix an error, for example:
+
+* The error occurs in the license scan of a third-party dependency which cannot be fixed or updated.
+* The error is a false positive.
+* The error occurs in a part of the repository which is not distributed (in this case it might be better to use the
+  excludes mechanism described above).
+
+For such situations it is possible to *resolve* and error, by providing a reason and a comment explaining why it can be
+ignored in the `.ort.yml` file:
+
+```yaml
+resolutions:
+  errors:
+  - message: "A regular expression matching the error message."
+    reason: "One of: BUILD_TOOL_ISSUE|CANT_FIX_ISSUE|SCANNER_ISSUE"
+    comment: "A comment further explaining why the reason above is applicable here."
+```
+
+Since the message property of the resolution is a regular expression, it is possible to resolve multiple similar errors
+using one resolution.
+
+Resolved errors still appear in the ORT result file and in the repoter, but they are not shown in the error summary, and
+they get annotated with the reason and comment from the resolution.
+
+For details about the available reasons, see
+[ErrorResolutionReason.kt](../model/src/main/kotlin/config/ErrorResolutionReason.kt).
