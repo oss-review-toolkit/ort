@@ -30,7 +30,7 @@ import com.here.ort.utils.log
 import java.io.File
 
 class WebAppReporter : Reporter() {
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File) {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val json = jsonMapper.writeValueAsString(ortResult)
         val result = template.replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$json<")
@@ -40,5 +40,7 @@ class WebAppReporter : Reporter() {
         log.info { "Writing web app report to '${outputFile.absolutePath}'." }
 
         outputFile.writeText(result)
+
+        return outputFile
     }
 }

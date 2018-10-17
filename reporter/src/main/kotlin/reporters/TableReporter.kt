@@ -224,7 +224,7 @@ abstract class TableReporter : Reporter() {
                 }
     }
 
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File) {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
         fun Error.toResolvableError(): TableReporter.ResolvableError {
             return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
         }
@@ -353,11 +353,11 @@ abstract class TableReporter : Reporter() {
             extraColumns.map { it.toString() }
         }.orEmpty()
 
-        generateReport(TabularScanRecord(ortResult.repository.vcsProcessed, errorSummaryTable, summaryTable,
+        return generateReport(TabularScanRecord(ortResult.repository.vcsProcessed, errorSummaryTable, summaryTable,
                 projectTables, metadata, extraColumns), outputDir)
     }
 
-    abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File)
+    abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File
 }
 
 fun Collection<TableReporter.ResolvableError>.filterUnresolved() = filter { it.resolutions.isEmpty() }

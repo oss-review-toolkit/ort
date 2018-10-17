@@ -33,7 +33,7 @@ import java.util.SortedSet
 const val NOTICE_FILE_NAME = "NOTICE"
 
 class NoticeReporter : Reporter() {
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File) {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
         require(ortResult.scanner != null) {
             "The provided ORT result file does not contain a scan result."
         }
@@ -65,7 +65,7 @@ class NoticeReporter : Reporter() {
 
         if (!findingsIterator.hasNext()) {
             log.info { "Not writing a $NOTICE_FILE_NAME file as it would be empty." }
-            return
+            return null
         } else {
             log.info { "Writing $NOTICE_FILE_NAME file to '${outputFile.absolutePath}'." }
         }
@@ -101,5 +101,7 @@ class NoticeReporter : Reporter() {
 
             outputFile.appendText(noticeBuilder.toString())
         }
+
+        return outputFile
     }
 }
