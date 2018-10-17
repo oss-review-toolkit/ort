@@ -148,3 +148,71 @@ place they occur.
 
 For details about the available reasons, see
 [ErrorResolutionReason.kt](../model/src/main/kotlin/config/ErrorResolutionReason.kt).
+
+## Global configuration
+
+This section describes repository-independent configuration options for ORT.
+
+### Curating metadata of packages
+
+In order to discover the source code of dependencies, ORT relies on the metadata provided by those packages. Often the
+metadata contains information how to locate the source code, but this is not always the case. In many cases the metadata
+of packages has no VCS information, it points to outdated repositories, or the repositories are not correctly tagged.
+Because this information can not always be fixed in upstream packages, ORT provides a mechanism to curate metadata of
+packages.
+
+These curations can be configured in a YAML file that has to be passed to the `analyzer`. The data from the curations
+file will amend the metadata provided by the packages themselves. This way it is possible to fix borken VCS URLs or
+provide the location of source artifacts. The structure of the curations file is:
+
+```yaml
+# Example for a complete curation object:
+#- id: "Maven:org.hamcrest:hamcrest-core:1.3"
+#  curations:
+#    declared_licenses:
+#    - "license a"
+#    - "license b"
+#    description: "curated description"
+#    homepage_url: "http://example.com"
+#    binary_artifact:
+#      url: "http://example.com/binary.zip"
+#      hash: "ddce269a1e3d054cae349621c198dd52"
+#      hash_algorithm: "MD5"
+#    source_artifact:
+#      url: "http://example.com/sources.zip"
+#      hash: "ddce269a1e3d054cae349621c198dd52"
+#      hash_algorithm: "MD5"
+#    vcs:
+#      type: "git"
+#      url: "http://example.com/repo.git"
+#      revision: "1234abc"
+#      path: "subdirectory"
+
+# A few examples:
+
+# Repository moved to https://gitlab.ow2.org.
+- id: "Maven:asm:asm" # No version means the curation will be applied to all versions of the package.
+  curations:
+    vcs:
+      type: "git"
+      url: "https://gitlab.ow2.org/asm/asm.git"
+
+# Revisions found by comparing NPM packages with the sources from https://github.com/olov/ast-traverse.
+- id: "NPM::ast-traverse:0.1.0"
+  curations:
+    vcs:
+      revision: "f864d24ba07cde4b79f16999b1c99bfb240a441e"
+- id: "NPM::ast-traverse:0.1.1"
+  curations:
+    vcs:
+      revision: "73f2b3c319af82fd8e490d40dd89a15951069b0d"
+```
+
+To use the curations file pass it to the `--package-curations-file` option of the `analyzer`:
+
+```
+cli/build/install/ort/bin/ort analyze -i [input-path] -o [analyzer-output-path] --package-curations-file [curations-file-path]
+```
+
+In the future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until
+then, and also for curations for internal packages that cannot be published, the curations file can be used.
