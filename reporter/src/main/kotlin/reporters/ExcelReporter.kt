@@ -76,7 +76,7 @@ class ExcelReporter : TableReporter() {
 
     private lateinit var creationHelper: CreationHelper
 
-    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File) {
+    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File {
         val workbook = XSSFWorkbook()
 
         defaultStyle = workbook.createCellStyle().apply {
@@ -150,6 +150,8 @@ class ExcelReporter : TableReporter() {
         outputFile.outputStream().use {
             workbook.write(it)
         }
+
+        return outputFile
     }
 
     private fun createMetadataSheet(workbook: XSSFWorkbook, metadata: Map<String, String>) {

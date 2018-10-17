@@ -45,5 +45,5 @@ abstract class Reporter {
      */
     override fun toString(): String = javaClass.simpleName
 
-    abstract fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File)
+    abstract fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File?
 }

@@ -30,7 +30,7 @@ import java.io.File
 import java.util.SortedMap
 
 class StaticHtmlReporter : TableReporter() {
-    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File) {
+    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File {
         val html = """
             <!DOCTYPE html>
             <html lang="en">
@@ -284,6 +284,8 @@ class StaticHtmlReporter : TableReporter() {
         log.info { "Writing static HTML report to '${outputFile.absolutePath}'." }
 
         outputFile.writeText(html)
+
+        return outputFile
     }
 
     private fun createContent(tabularScanRecord: TabularScanRecord) =
