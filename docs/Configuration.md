@@ -148,6 +148,10 @@ they get annotated with the reason and comment from the resolution.
 For details about the available reasons, see
 [ErrorResolutionReason.kt](../model/src/main/kotlin/config/ErrorResolutionReason.kt).
 
+If the error resolutions are not specific to the project, they should not be configured in the `.ort.yml`, but in a
+global resolutions file. This makes the resolutions reusable for different projects. For details, see
+[below](#resolving-errors-1).
+
 ## Global configuration
 
 This section describes repository independent configuration options for ORT.
@@ -214,3 +218,27 @@ cli/build/install/ort/bin/ort analyze -i [input-path] -o [analyzer-output-path] 
 
 In future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until then,
 and also for curations for internal packages that cannot be published, the curations file can be used.
+
+### Resolving errors
+
+Global error resolutions work the same way as the project specific error resolutions described
+[above](#resolving-errors), but instead of adding them to the `.ort.yml` file of the project, they are added to a
+separate configuration file, which makes them reusable for different projects. Global error resolutions should only be
+used for generic errors that can always be ignored. One example where this applies would be scan errors in the
+repositories of third-party packages which affect files which are not built into the package, like documentation or test
+files.
+
+The structure of the resolutions file is:
+
+```yaml
+errors:
+- message: "A regular expression matching the error message."
+  reason: "One of: BUILD_TOOL_ISSUE|CANT_FIX_ISSUE|SCANNER_ISSUE"
+  comment: "A comment further explaining why the reason above is applicable here."
+```
+
+To resolutions file must be passed to the `--resolutions-file` option of the `reporter`:
+
+```
+cli/build/install/ort/bin/ort report -i [ort-result-path] -o [reporter-output-path] --resolutions-file [resolutions-file-path]
+```
