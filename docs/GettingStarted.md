@@ -25,10 +25,10 @@ For the full list of supported package managers and Version Control Systems see 
 ## 2. Download & Install ORT
 
 In future we will provide binaries of the ORT tools, but currently you have to build the tools on your own. First
-download the source code from GitHub:
+download the source code (including Git submodules) from GitHub:
 
 ```bash
-git clone https://github.com/heremaps/oss-review-toolkit.git
+git clone --recurse-submodules https://github.com/heremaps/oss-review-toolkit.git
 ```
 
 To build the command line interface run:
