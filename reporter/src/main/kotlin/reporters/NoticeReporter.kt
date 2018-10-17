@@ -19,32 +19,20 @@
 
 package com.here.ort.reporter.reporters
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.OrtResult
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.utils.log
-import com.here.ort.utils.spdx.getLicenseText
 
-import java.io.File
+import java.util.SortedMap
 import java.util.SortedSet
 
-const val NOTICE_FILE_NAME = "NOTICE"
+class NoticeReporter : AbstractNoticeReporter() {
+    override val noticeFileName = "NOTICE"
 
-class NoticeReporter : Reporter() {
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
-        require(ortResult.scanner != null) {
-            "The provided ORT result file does not contain a scan result."
-        }
-
+    override fun getLicenseFindings(ortResult: OrtResult): SortedMap<String, SortedSet<String>> {
         val excludes = ortResult.repository.config.excludes
         val analyzerResult = ortResult.analyzer!!.result
         val scanRecord = ortResult.scanner!!.results
 
-        val outputFile = File(outputDir, NOTICE_FILE_NAME)
-
-        val allFindings = sortedMapOf<String, SortedSet<String>>()
+        val licenseFindings = sortedMapOf<String, SortedSet<String>>()
 
         // TODO: Decide whether we want to merge the list of detected licenses with declared licenses (which do not come
         // with a copyright).
@@ -52,56 +40,12 @@ class NoticeReporter : Reporter() {
             if (excludes == null || !excludes.isPackageExcluded(container.id, analyzerResult)) {
                 container.results.forEach { result ->
                     result.summary.licenseFindings.forEach { licenseFinding ->
-                        allFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
+                        licenseFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
                     }
                 }
             }
         }
 
-        val findingsIterator = allFindings.filterNot { (license, _) ->
-            // For now, just skip license references for which SPDX has no license text.
-            license.startsWith("LicenseRef-")
-        }.iterator()
-
-        if (!findingsIterator.hasNext()) {
-            log.info { "Not writing a $NOTICE_FILE_NAME file as it would be empty." }
-            return null
-        } else {
-            log.info { "Writing $NOTICE_FILE_NAME file to '${outputFile.absolutePath}'." }
-        }
-
-        // Note: Do not use appendln() here as that would write out platform-native line endings, but we want to
-        // normalize on Unix-style line endings for consistency.
-        while (findingsIterator.hasNext()) {
-            val (license, copyrights) = findingsIterator.next()
-
-            var noticeBuilder = StringBuilder()
-
-            copyrights.forEach { copyright ->
-                noticeBuilder.append("$copyright\n")
-            }
-
-            if (copyrights.isNotEmpty()) noticeBuilder.append("\n")
-
-            noticeBuilder.append("${getLicenseText(license, true)}\n")
-
-            // Trim lines and remove consecutive blank lines as the license text formatting in SPDX JSON files is
-            // broken, see https://github.com/spdx/LicenseListPublisher/issues/30.
-            var previousLine = ""
-            val trimmedNoticeLines = noticeBuilder.lines().mapNotNull { line ->
-                val trimmedLine = line.trim()
-                trimmedLine.takeIf { it.isNotBlank() || previousLine.isNotBlank() }
-                        .also { previousLine = trimmedLine }
-            }
-
-            noticeBuilder = StringBuilder(trimmedNoticeLines.joinToString("\n"))
-
-            // Separate notice rows.
-            if (findingsIterator.hasNext()) noticeBuilder.append("\n----\n\n")
-
-            outputFile.appendText(noticeBuilder.toString())
-        }
-
-        return outputFile
+        return licenseFindings
     }
 }
