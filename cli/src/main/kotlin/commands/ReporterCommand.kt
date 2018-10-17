@@ -95,12 +95,18 @@ object ReporterCommand : CommandWithHelp() {
         resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
         reportFormats.distinct().forEach {
+            val name = it.toString().substringBefore("Reporter")
             try {
-                it.generateReport(ortResult, resolutionProvider, outputDir)
+                val reportFile = it.generateReport(ortResult, resolutionProvider, outputDir)
+                if (reportFile != null) {
+                    println("Created '$name' report:\n\t$reportFile")
+                } else {
+                    println("Could not create '$name' report.")
+                }
             } catch (e: Exception) {
                 e.showStackTrace()
 
-                log.error { "Could not create '$it' report: ${e.message}" }
+                log.error { "Could not create '$name' report: ${e.message}" }
             }
         }
     }
