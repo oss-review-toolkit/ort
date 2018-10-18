@@ -142,6 +142,12 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                                     path = url.substringAfter('?'))
                         }
 
+                        type == "svn" -> {
+                            // With Subversion, a tag actually is a path and not a symbolic revision.
+                            val path = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
+                            VcsInfo(type = type, url = url, revision = "", path = path)
+                        }
+
                         else -> VcsInfo(type = type, url = url, revision = tag)
                     }
                 } else {

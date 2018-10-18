@@ -834,13 +834,13 @@ packages:
     vcs:
       type: "svn"
       url: "http://svn.code.sf.net/p/hsqldb/svn/base/"
-      revision: "2.4.0"
-      path: ""
+      revision: ""
+      path: "tags/2.4.0"
     vcs_processed:
       type: "svn"
       url: "http://svn.code.sf.net/p/hsqldb/svn/base"
-      revision: "2.4.0"
-      path: ""
+      revision: ""
+      path: "tags/2.4.0"
   curations: []
 - package:
     id: "Maven:org.javassist:javassist:3.20.0-GA"
