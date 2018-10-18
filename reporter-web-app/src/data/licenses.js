@@ -1,56 +1,26 @@
-import { data as choosealicenseLicenses } from './choosealicense/index';
-import { metadata as choosealicenseMetaData } from './choosealicense/index';
+import {
+    data as choosealicenseLicenses,
+    metadata as choosealicenseMetaData
+} from './choosealicense/index';
 import config from '../config';
 
 const licensesDataFromSPDX = require('spdx-license-list');
+const correctToSPDX = require('spdx-correct');
 
-export const LICENSES = window.licenses = (() => {
-    const correctToSPDX = require('spdx-correct');
+export const LICENSES = (() => {
     const licensesDataFromConfig = (config && config.licenses) ? config.licenses : {};
     const licensesDataFromChoosealicense = choosealicenseLicenses.data;
-    const licenseHandler = {
-        get: (obj, prop) => {
-            let licenseDataFromConfig;
-            let spdxId;
-
-            if (!obj[prop]) {
-                spdxId = correctToSPDX(prop);
-
-                // Check if property name has been defined in Reporter's config
-                licenseDataFromConfig = licensesDataFromConfig[spdxId]
-                    ? licensesDataFromConfig[spdxId] : licensesDataFromConfig[prop];
-
-                if (licenseDataFromConfig && licenseDataFromConfig[prop]) {
-                    obj[prop] = new Proxy(licenseDataFromConfig[prop], licenseValueHandler);
-                    obj[prop]['spdx-id'] = spdxId;
-                    return obj[prop];
-                }
-
-                // If property name is not found in user specified config
-                // try to see if it's in SPDX licenses metadata
-                if (licensesDataFromSPDX[spdxId]) {
-                    obj[prop] = new Proxy(licensesDataFromSPDX[spdxId], licenseValueHandler);
-                    obj[prop].spdxId = spdxId;
-                    return obj[prop];
-                }
-
-                return undefined;
-            }
-
-            return obj[prop];
-        }
-    };
     const licenseValueHandler = {
         get: (obj, prop) => {
             let data;
-            let licenseDataFromSPDX;
             let values = [];
+            const object = obj;
 
-            if (obj[prop]) {
-                return obj[prop];
+            if (object[prop]) {
+                return object[prop];
             }
 
-            const spdxId = obj.spdxId;
+            const { spdxId } = obj;
             // Check if property name has been defined in Reporter's config
             const licenseDataFromConfig = licensesDataFromConfig[spdxId]
                 ? licensesDataFromConfig[spdxId] : licensesDataFromConfig[prop];
@@ -59,19 +29,21 @@ export const LICENSES = window.licenses = (() => {
                 data = licenseDataFromConfig[prop];
 
                 if (!Array.isArray(data)) {
-                    return obj[prop] = data;
+                    object[prop] = data;
+                    return obj[prop];
                 }
 
                 values = [...values, ...data];
             }
 
-            licenseDataFromSPDX = licensesDataFromSPDX[spdxId];
+            const licenseDataFromSPDX = licensesDataFromSPDX[spdxId];
 
             if (licenseDataFromSPDX && licenseDataFromSPDX[prop]) {
                 data = licenseDataFromSPDX[prop];
 
                 if (!Array.isArray(data)) {
-                    return obj[prop] = data;
+                    object[prop] = data;
+                    return obj[prop];
                 }
 
                 values = [...values, ...data];
@@ -85,13 +57,47 @@ export const LICENSES = window.licenses = (() => {
                 data = licenseDataFromChoosealicense[prop];
 
                 if (!Array.isArray(data)) {
-                    return obj[prop] = data;
+                    object[prop] = data;
+                    return object[prop];
                 }
 
                 values = [...values, ...data];
             }
 
             return (values.length !== 0) ? values : '';
+        }
+    };
+    const licenseHandler = {
+        get: (obj, prop) => {
+            let licenseDataFromConfig;
+            let spdxId;
+            const object = obj;
+
+            if (!object[prop]) {
+                spdxId = correctToSPDX(prop);
+
+                // Check if property name has been defined in Reporter's config
+                licenseDataFromConfig = licensesDataFromConfig[spdxId]
+                    ? licensesDataFromConfig[spdxId] : licensesDataFromConfig[prop];
+
+                if (licenseDataFromConfig && licenseDataFromConfig[prop]) {
+                    object[prop] = new Proxy(licenseDataFromConfig[prop], licenseValueHandler);
+                    object[prop]['spdx-id'] = spdxId;
+                    return object[prop];
+                }
+
+                // If property name is not found in user specified config
+                // try to see if it's in SPDX licenses metadata
+                if (licensesDataFromSPDX[spdxId]) {
+                    object[prop] = new Proxy(licensesDataFromSPDX[spdxId], licenseValueHandler);
+                    object[prop].spdxId = spdxId;
+                    return object[prop];
+                }
+
+                return undefined;
+            }
+
+            return object[prop];
         }
     };
 
@@ -112,13 +118,12 @@ export const LICENSES = window.licenses = (() => {
      *.  url: "http://www.apache.org/licenses/LICENSE-2.0"
      *.}
      *
-     * For more details on ES6 proxy please see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+     * For more details on ES6 proxy please see
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
      */
     return new Proxy({}, licenseHandler);
 })();
 
-export const LICENSES_PROVIDERS = window.LICENSES_PROVIDERS = (() => {
-    return {
-        choosealicense: choosealicenseMetaData
-    };
-})();
+export const LICENSES_PROVIDERS = {
+    choosealicense: choosealicenseMetaData
+};
