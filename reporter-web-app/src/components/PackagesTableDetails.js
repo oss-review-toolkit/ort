@@ -19,8 +19,11 @@
 
 import React from 'react';
 import { Col, Row } from 'antd';
+import PropTypes from 'prop-types';
 
-export default (props) => {
+// Generates the HTML for packages details like
+// description, source code location(s), etc.
+const PackagesTableDetails = (props) => {
     const { data } = props;
     const pkgObj = data;
     const renderBinaryArtifact = () => {
@@ -161,3 +164,9 @@ export default (props) => {
         </Row>
     );
 };
+
+PackagesTableDetails.propTypes = {
+    data: PropTypes.object.isRequired
+};
+
+export default PackagesTableDetails;

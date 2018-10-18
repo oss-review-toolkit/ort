@@ -18,78 +18,37 @@
  */
 
 import React from 'react';
-import { Icon } from 'antd';
 import PropTypes from 'prop-types';
+import ExpandablePanel from './ExpandablePanel';
+import ExpandablePanelContent from './ExpandablePanelContent';
+import ExpandablePanelTitle from './ExpandablePanelTitle';
 
 // Generates the HTML for packages errors in an expanded row of projectTable
-class PackagesTableErrors extends React.Component {
-    constructor(props) {
-        super();
+const PackagesTableErrors = (props) => {
+    const { data } = props;
+    const pkgObj = data;
 
-        this.state = {
-            data: props.data,
-            expanded: props.expanded
-        };
+    // Do not render anything if no errors
+    if (Array.isArray(pkgObj.errors) && pkgObj.errors.length === 0) {
+        return null;
     }
 
-    onExpandedTitle = (e) => {
-        e.stopPropagation();
-        this.setState(prevState => ({ expanded: !prevState.expanded }));
-    };
-
-    render() {
-        const { data: pkgObj, expanded } = this.state;
-
-        if (Array.isArray(pkgObj.errors) && pkgObj.errors.length === 0) {
-            return null;
-        }
-
-        if (!expanded) {
-            return (
-                <h4>
-                    <button
-                        className="ort-btn-expand"
-                        onClick={this.onExpandedTitle}
-                        onKeyDown={this.onExpandedTitle}
-                        type="button"
-                    >
-                        <span>
-                            Package Errors
-                            {' '}
-                        </span>
-                        <Icon type="right" />
-                    </button>
-                </h4>
-            );
-        }
-
-        return (
-            <div className="ort-package-errors">
-                <h4>
-                    <button
-                        className="ort-btn-expand"
-                        onClick={this.onExpandedTitle}
-                        onKeyUp={this.onExpandedTitle}
-                        type="button"
-                    >
-                        Package Errors
-                        {' '}
-                        <Icon type="down" />
-                    </button>
-                </h4>
+    return (
+        <ExpandablePanel key="ort-metadata-props">
+            <ExpandablePanelTitle titleElem="h4">Package Errors</ExpandablePanelTitle>
+            <ExpandablePanelContent>
                 {pkgObj.errors.map(error => (
-                    <p key={`package-error-${error.code}`}>
+                    <p key={`ort-package-error-${error.code}`}>
                         {error.message}
                     </p>
                 ))}
-            </div>
-        );
-    }
-}
+            </ExpandablePanelContent>
+        </ExpandablePanel>
+    );
+};
 
 PackagesTableErrors.propTypes = {
-    data: PropTypes.object.isRequired,
-    expanded: PropTypes.bool.isRequired
+    data: PropTypes.object.isRequired
 };
 
 export default PackagesTableErrors;
