@@ -1,18 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    Alert, Col, Icon, Row, Table, Tabs, Timeline
-} from 'antd';
 import PropTypes from 'prop-types';
-import ExpandablePanel from './ExpandablePanel';
-import ExpandablePanelContent from './ExpandablePanelContent';
-import ExpandablePanelTitle from './ExpandablePanelTitle';
-import LicenseChart from './LicenseChart';
+import {
+    Col, Row
+} from 'antd';
+import SummaryViewLicenseCharts from './SummaryViewLicenseCharts';
+import SummaryViewTableErrors from './SummaryViewTableErrors';
+import SummaryViewTimeline from './SummaryViewTimeline';
 import { UNIQUE_COLORS } from '../data/colors/index';
-import { hashCode } from '../utils';
 
 const COLORS = UNIQUE_COLORS.data;
-const { TabPane } = Tabs;
 
 class SummaryView extends React.Component {
     constructor(props) {
@@ -117,349 +114,28 @@ class SummaryView extends React.Component {
 
     render() {
         const { data, viewData } = this.state;
-        const nrDetectedLicenses = viewData.charts.totalDetectedLicenses;
-        const nrDeclaredLicenses = viewData.charts.totalDeclaredLicenses;
-        const nrErrors = viewData.errors.totalOpen;
-        const SummaryErrors = () => {
-            const renderErrorTable = (errors, pageSize) => (
-                <Table
-                    columns={[{
-                        title: 'id',
-                        dataIndex: 'id',
-                        render: (text, row) => (
-                            <div>
-                                <dl>
-                                    <dt>
-                                        {row.id}
-                                    </dt>
-                                    <dd>
-                                        Dependency defined in
-                                        {' '}
-                                        {Array.from(row.files).join(', ')}
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dd>
-                                        {Array.from(row.messages).map(message => (
-                                            <p key={`error-message-${hashCode(message)}`}>
-                                                {message}
-                                            </p>
-                                        ))}
-                                    </dd>
-                                </dl>
-                            </div>
-                        )
-                    }]}
-                    dataSource={errors}
-                    locale={{
-                        emptyText: 'No errors'
-                    }}
-                    pagination={{
-                        hideOnSinglePage: true,
-                        pageSize
-                    }}
-                    rowKey="id"
-                    scroll={{
-                        y: 300
-                    }}
-                    showHeader={false}
-                />);
-
-            if (viewData.errors.totalOpen !== 0) {
-                return (
-                    <Tabs tabPosition="top">
-                        <TabPane
-                            tab={(
-                                <span>
-                                    Errors (
-                                    {viewData.errors.totalOpen}
-                                    )
-                                </span>
-                            )}
-                            key="1"
-                        >
-                            {renderErrorTable(viewData.errors.open, viewData.errors.totalOpen)}
-                        </TabPane>
-                        <TabPane
-                            tab={(
-                                <span>
-                                    Addressed Errors (
-                                    {viewData.errors.totalAddressed}
-                                    )
-                                </span>
-                            )}
-                            key="2"
-                        >
-                            {
-                                renderErrorTable(
-                                    viewData.errors.addressed,
-                                    viewData.errors.totalAddressed
-                                )
-                            }
-                        </TabPane>
-                    </Tabs>
-                );
-            }
-
-            // If return null to prevent React render error
-            return null;
-        };
-        const SummaryLicenseCharts = () => (
-            <Tabs tabPosition="top">
-                <TabPane
-                    tab={(
-                        <span>
-                            Detected licenses (
-                            {nrDetectedLicenses}
-                            )
-                        </span>
-                    )}
-                    key="1"
-                >
-                    <LicenseChart
-                        label="Detected Licenses"
-                        licenses={viewData.charts.detectedLicenses}
-                        width={800}
-                        height={500}
-                    />
-                </TabPane>
-                <TabPane
-                    tab={(
-                        <span>
-                            Declared Licenses (
-                            {nrDeclaredLicenses}
-                            )
-                        </span>
-                    )}
-                    key="2"
-                >
-                    <LicenseChart
-                        label="Declared licenses"
-                        licenses={viewData.charts.declaredLicenses}
-                        width={800}
-                        height={500}
-                    />
-                </TabPane>
-            </Tabs>
-        );
-        const SummaryTimeline = () => {
-            const nrLevels = data.levels.total || 'n/a';
-            const nrPackages = data.packages.total || 'n/a';
-            const nrProjects = data.projects.total || 'n/a';
-            const nrScopes = data.scopes.total || 'n/a';
-            const renderLicensesText = () => {
-                if (nrDetectedLicenses === 0) {
-                    return (
-                        <span>
-                            {' '}
-                            Detected
-                            {' '}
-                            <b>
-                                {nrDeclaredLicenses}
-                            </b>
-                            {' '}
-                            declared licenses
-                        </span>
-                    );
-                }
-                return (
-                    <span>
-                        Detected
-                        {' '}
-                        <b>
-                            {nrDetectedLicenses}
-                        </b>
-                        {' '}
-                        licenses and
-                        {' '}
-                        <b>
-                            {nrDeclaredLicenses}
-                        </b>
-                        {' '}
-                        declared licenses
-                    </span>
-                );
-            };
-            const renderCompletedText = () => {
-                if (nrErrors !== 0) {
-                    return (
-                        <span style={
-                            { color: '#f5222d', fontSize: 18, lineHeight: '1.2' }
-                        }
-                        >
-                            <b>
-                                Completed scan with
-                                {' '}
-                                {nrErrors}
-                                {' '}
-                                errors
-                            </b>
-                        </span>
-                    );
-                }
-
-                return (
-                    <span style={
-                        { color: '#52c41a', fontSize: 18, lineHeight: '1.2' }
-                    }
-                    >
-                        <b>
-                            Completed scan successfully
-                        </b>
-                    </span>
-                );
-            };
-            const renderMetadataTable = () => {
-                if (!data.metadata
-                    || Object.keys(data.metadata).length === 0) {
-                    return null;
-                }
-
-                return (
-                    <div className="ort-metadata-props">
-                        <ExpandablePanel key="ort-metadata-props">
-                            <ExpandablePanelTitle>Metadata</ExpandablePanelTitle>
-                            <ExpandablePanelContent>
-                                <table>
-                                    <tbody>
-                                        {Object.entries(data.metadata).map(([key, value]) => {
-                                            if (value.length > 0) {
-                                                if (value.startsWith('http')) {
-                                                    return (
-                                                        <tr key={`metadata-${key}`}>
-                                                            <th>
-                                                                {`${key}:`}
-                                                            </th>
-                                                            <td>
-                                                                <a
-                                                                    href={value}
-                                                                    rel="noopener noreferrer"
-                                                                    target="_blank"
-                                                                >
-                                                                    {value}
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                }
-
-                                                return (
-                                                    <tr key={`metadata-${key}`}>
-                                                        <th>
-                                                            {`${key}:`}
-                                                        </th>
-                                                        <td>
-                                                            {value}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-
-                                            return null;
-                                        })}
-                                    </tbody>
-                                </table>
-                            </ExpandablePanelContent>
-                        </ExpandablePanel>
-                    </div>
-                );
-            };
-            let vcs;
-
-            if (data && data.vcs && data.vcs_processed) {
-                vcs = {
-                    type: (data.vcs_processed.type || data.vcs.type || 'n/a'),
-                    revision: (data.vcs_processed.revision || data.vcs.revision || 'n/a'),
-                    url: (data.vcs_processed.url || data.vcs.url || 'n/a')
-                };
-
-                return (
-                    <Timeline>
-                        <Timeline.Item>
-                            Cloned revision
-                            {' '}
-                            <b>
-                                {vcs.revision}
-                            </b>
-                            {' '}
-                            of
-                            {' '}
-                            {vcs.type}
-                            {' '}
-                            repository
-                            {' '}
-                            <b>
-                                {vcs.url}
-                            </b>
-                            {renderMetadataTable()}
-                        </Timeline.Item>
-                        <Timeline.Item>
-                            Found
-                            {' '}
-                            <b>
-                                {nrProjects}
-                            </b>
-                            {' '}
-                            files defining
-                            {' '}
-                            <b>
-                                {nrPackages}
-                            </b>
-                            {' '}
-                            unique dependencies within
-                            {' '}
-                            <b>
-                                {nrScopes}
-                            </b>
-                            {' '}
-                            scopes and
-                            {' '}
-                            <b>
-                                {nrLevels}
-                            </b>
-                            {' '}
-                            dependency levels
-                        </Timeline.Item>
-                        <Timeline.Item>
-                            {renderLicensesText()}
-                        </Timeline.Item>
-                        <Timeline.Item
-                            dot={(
-                                <Icon
-                                    type={
-                                        (nrErrors !== 0) ? 'exclamation-circle-o' : 'check-circle-o'
-                                    }
-                                    style={
-                                        { fontSize: 16 }
-                                    }
-                                />
-                            )}
-                            color={(nrErrors !== 0) ? 'red' : 'green'}
-                        >
-                            {renderCompletedText()}
-                        </Timeline.Item>
-                    </Timeline>
-                );
-            }
-
-            return (<Alert message="No repository information available" type="error" />);
-        };
 
         return (
             <div className="ort-summary">
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryTimeline />
+                        <SummaryViewTimeline data={{
+                            ...data,
+                            nrDetectedLicenses: viewData.charts.totalDetectedLicenses,
+                            nrDeclaredLicenses: viewData.charts.totalDeclaredLicenses,
+                            nrErrors: viewData.errors.totalOpen
+                        }}
+                        />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryErrors />
+                        <SummaryViewTableErrors data={viewData.errors} />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryLicenseCharts />
+                        <SummaryViewLicenseCharts data={viewData.charts} />
                     </Col>
                 </Row>
             </div>
