@@ -4,6 +4,9 @@ import {
     Alert, Col, Icon, Row, Table, Tabs, Timeline
 } from 'antd';
 import PropTypes from 'prop-types';
+import ExpandablePanel from './ExpandablePanel';
+import ExpandablePanelContent from './ExpandablePanelContent';
+import ExpandablePanelTitle from './ExpandablePanelTitle';
 import LicenseChart from './LicenseChart';
 import { UNIQUE_COLORS } from '../data/colors/index';
 import { hashCode } from '../utils';
@@ -45,8 +48,7 @@ class SummaryView extends React.Component {
         if (props.reportData) {
             this.state = {
                 ...this.state,
-                data: props.reportData,
-                expandedMetadata: false
+                data: props.reportData
             };
             const { data } = this.state;
 
@@ -95,11 +97,6 @@ class SummaryView extends React.Component {
         };
     }
 
-    onExpandMetadata = (e) => {
-        e.stopPropagation();
-        this.setState(prevState => ({ expandedMetadata: !prevState.expandedMetadata }));
-    };
-
     convertLicensesToChartFormat(licenses) {
         const chartData = Object.entries(licenses).reduce((accumulator, [key, value]) => {
             accumulator[key] = {
@@ -119,7 +116,7 @@ class SummaryView extends React.Component {
     }
 
     render() {
-        const { data, expandedMetadata, viewData } = this.state;
+        const { data, viewData } = this.state;
         const nrDetectedLicenses = viewData.charts.totalDetectedLicenses;
         const nrDeclaredLicenses = viewData.charts.totalDeclaredLicenses;
         const nrErrors = viewData.errors.totalOpen;
@@ -318,74 +315,52 @@ class SummaryView extends React.Component {
                     return null;
                 }
 
-                if (!expandedMetadata) {
-                    return (
-                        <div className="ort-metadata-props">
-                            <button
-                                className="ort-btn-expand"
-                                onClick={this.onExpandMetadata}
-                                onKeyUp={this.onExpandMetadata}
-                                type="button"
-                            >
-                                Show metadata
-                                {' '}
-                                <Icon type="right" />
-                            </button>
-                        </div>
-                    );
-                }
-
                 return (
                     <div className="ort-metadata-props">
-                        <button
-                            className="ort-btn-expand"
-                            onClick={this.onExpandMetadata}
-                            onKeyUp={this.onExpandMetadata}
-                            type="button"
-                        >
-                            Hide metadata
-                            {''}
-                            <Icon type="down" />
-                        </button>
-                        <table>
-                            <tbody>
-                                {Object.entries(data.metadata).map(([key, value]) => {
-                                    if (value.length > 0) {
-                                        if (value.startsWith('http')) {
-                                            return (
-                                                <tr key={`metadata-${key}`}>
-                                                    <th>
-                                                        {`${key}:`}
-                                                    </th>
-                                                    <td>
-                                                        <a
-                                                            href={value}
-                                                            rel="noopener noreferrer"
-                                                            target="_blank"
-                                                        >
+                        <ExpandablePanel key="ort-metadata-props">
+                            <ExpandablePanelTitle>Metadata</ExpandablePanelTitle>
+                            <ExpandablePanelContent>
+                                <table>
+                                    <tbody>
+                                        {Object.entries(data.metadata).map(([key, value]) => {
+                                            if (value.length > 0) {
+                                                if (value.startsWith('http')) {
+                                                    return (
+                                                        <tr key={`metadata-${key}`}>
+                                                            <th>
+                                                                {`${key}:`}
+                                                            </th>
+                                                            <td>
+                                                                <a
+                                                                    href={value}
+                                                                    rel="noopener noreferrer"
+                                                                    target="_blank"
+                                                                >
+                                                                    {value}
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+
+                                                return (
+                                                    <tr key={`metadata-${key}`}>
+                                                        <th>
+                                                            {`${key}:`}
+                                                        </th>
+                                                        <td>
                                                             {value}
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        }
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
 
-                                        return (
-                                            <tr key={`metadata-${key}`}>
-                                                <th>
-                                                    {`${key}:`}
-                                                </th>
-                                                <td>
-                                                    {value}
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
-
-                                    return null;
-                                })}
-                            </tbody>
-                        </table>
+                                            return null;
+                                        })}
+                                    </tbody>
+                                </table>
+                            </ExpandablePanelContent>
+                        </ExpandablePanel>
                     </div>
                 );
             };

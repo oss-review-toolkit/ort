@@ -18,67 +18,28 @@
  */
 
 import React from 'react';
-import { Icon, Tabs, Table } from 'antd';
+import { Tabs, Table } from 'antd';
 import PropTypes from 'prop-types';
+import ExpandablePanel from './ExpandablePanel';
+import ExpandablePanelContent from './ExpandablePanelContent';
+import ExpandablePanelTitle from './ExpandablePanelTitle';
 
 const { TabPane } = Tabs;
 
 // Generates the HTML to display scan results for a package
-class PackagesTableScanSummary extends React.Component {
-    constructor(props) {
-        super();
+const PackagesTableScanSummary = (props) => {
+    const { data } = props;
+    const pkgObj = data;
 
-        this.state = {
-            data: props.data,
-            expanded: props.expanded
-        };
+    // Do not render anything if no scan results
+    if (Array.isArray(pkgObj.results) && pkgObj.results.length === 0) {
+        return null;
     }
 
-    onExpandTitle = (e) => {
-        e.stopPropagation();
-        this.setState(prevState => ({ expanded: !prevState.expanded }));
-    };
-
-    render() {
-        const { data: pkgObj, expanded } = this.state;
-
-        if (Array.isArray(pkgObj.results) && pkgObj.results.length === 0) {
-            return null;
-        }
-
-        if (!expanded) {
-            return (
-                <h4>
-                    <button
-                        className="ort-btn-expand"
-                        onClick={this.onExpandTitle}
-                        onKeyDown={this.onExpandTitle}
-                        type="button"
-                    >
-                        <span>
-                            Package Scan Summary
-                            {' '}
-                        </span>
-                        <Icon type="right" />
-                    </button>
-                </h4>
-            );
-        }
-
-        return (
-            <div className="ort-package-scan-summary">
-                <h4>
-                    <button
-                        className="ort-btn-expand"
-                        onClick={this.onExpandTitle}
-                        onKeyUp={this.onExpandTitle}
-                        type="button"
-                    >
-                        Package Scan Summary
-                        {' '}
-                        <Icon type="down" />
-                    </button>
-                </h4>
+    return (
+        <ExpandablePanel key="ort-metadata-props">
+            <ExpandablePanelTitle titleElem="h4">Package Scan Summary</ExpandablePanelTitle>
+            <ExpandablePanelContent>
                 <Tabs tabPosition="top">
                     {pkgObj.results.map(scan => (
                         <TabPane
@@ -123,14 +84,13 @@ class PackagesTableScanSummary extends React.Component {
                         </TabPane>
                     ))}
                 </Tabs>
-            </div>
-        );
-    }
-}
+            </ExpandablePanelContent>
+        </ExpandablePanel>
+    );
+};
 
 PackagesTableScanSummary.propTypes = {
-    data: PropTypes.object.isRequired,
-    expanded: PropTypes.bool.isRequired
+    data: PropTypes.object.isRequired
 };
 
 export default PackagesTableScanSummary;
