@@ -25,7 +25,7 @@ import LicenseChart from './LicenseChart';
 const { TabPane } = Tabs;
 
 // Generates the HTML to display summary of licenses
-const SummaryViewLicenseCharts = (props) => {
+const SummaryViewLicenses = (props) => {
     const { data } = props;
     const columns = [
         {
@@ -164,8 +164,8 @@ const SummaryViewLicenseCharts = (props) => {
     );
 };
 
-SummaryViewLicenseCharts.propTypes = {
+SummaryViewLicenses.propTypes = {
     data: PropTypes.object.isRequired
 };
 
-export default SummaryViewLicenseCharts;
+export default SummaryViewLicenses;

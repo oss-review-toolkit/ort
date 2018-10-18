@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
     Col, Row
 } from 'antd';
-import SummaryViewLicenseCharts from './SummaryViewLicenseCharts';
+import SummaryViewLicenses from './SummaryViewLicenses';
 import SummaryViewTableErrors from './SummaryViewTableErrors';
 import SummaryViewTimeline from './SummaryViewTimeline';
 import { UNIQUE_COLORS } from '../data/colors/index';
@@ -28,17 +28,17 @@ class SummaryView extends React.Component {
             }
         };
         const viewData = {
-            charts: {
-                declaredLicenses: [],
-                detectedLicenses: [],
-                totalDeclaredLicenses: 0,
-                totalDetectedLicenses: 0
-            },
             errors: {
                 open: [],
                 addressed: [],
                 totalOpen: 0,
                 totalResolved: 0
+            },
+            licenses: {
+                declaredLicenses: [],
+                detectedLicenses: [],
+                totalDeclaredLicenses: 0,
+                totalDetectedLicenses: 0
             }
         };
 
@@ -55,19 +55,19 @@ class SummaryView extends React.Component {
                 if (data.licenses.data.detected
                     && Number.isInteger(data.licenses.total.detected)) {
                     assignColorsToLicenses(Object.keys(data.licenses.data.detected));
-                    viewData.charts.detectedLicenses = this.convertLicensesToChartFormat(
+                    viewData.licenses.detectedLicenses = this.convertLicensesToChartFormat(
                         data.licenses.data.detected
                     );
-                    viewData.charts.totalDetectedLicenses = data.licenses.total.detected;
+                    viewData.licenses.totalDetectedLicenses = data.licenses.total.detected;
                 }
 
                 if (data.licenses.data.declared
                     && Number.isInteger(data.licenses.total.declared)) {
                     assignColorsToLicenses(Object.keys(data.licenses.data.declared));
-                    viewData.charts.declaredLicenses = this.convertLicensesToChartFormat(
+                    viewData.licenses.declaredLicenses = this.convertLicensesToChartFormat(
                         data.licenses.data.declared
                     );
-                    viewData.charts.totalDeclaredLicenses = data.licenses.total.declared;
+                    viewData.licenses.totalDeclaredLicenses = data.licenses.total.declared;
                 }
             }
 
@@ -115,8 +115,8 @@ class SummaryView extends React.Component {
                     <Col span={22} offset={1}>
                         <SummaryViewTimeline data={{
                             ...data,
-                            nrDetectedLicenses: viewData.charts.totalDetectedLicenses,
-                            nrDeclaredLicenses: viewData.charts.totalDeclaredLicenses,
+                            nrDetectedLicenses: viewData.licenses.totalDetectedLicenses,
+                            nrDeclaredLicenses: viewData.licenses.totalDeclaredLicenses,
                             nrErrors: viewData.errors.totalOpen
                         }}
                         />
@@ -129,7 +129,7 @@ class SummaryView extends React.Component {
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryViewLicenseCharts data={viewData.charts} />
+                        <SummaryViewLicenses data={viewData.licenses} />
                     </Col>
                 </Row>
             </div>
