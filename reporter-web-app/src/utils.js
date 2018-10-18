@@ -17,6 +17,14 @@
  * License-Filename: LICENSE
  */
 
+/* eslint-disable */
+/* Disabling ESlint as major parts od functionality
+ * included in this file will soon be moved to 
+ * ORT's Kotlin code.
+ * Pointless to fix linter isses that may cause
+ * WebApp to break for code that will be refactored soon.
+ */
+
 // SPDX-License-Identifier: CC-BY-3.0
 // Author KimKha
 // https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
