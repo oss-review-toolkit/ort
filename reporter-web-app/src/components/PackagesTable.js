@@ -45,7 +45,18 @@ class PackagesTable extends React.Component {
                     dataIndex: 'id',
                     key: 'id',
                     onFilter: (value, record) => record.id.indexOf(value) === 0,
-                    sorter: (a, b) => a.id.length - b.id.length,
+                    sorter: (a, b) => {
+                        const idA = a.id.toUpperCase();
+                        const idB = b.id.toUpperCase();
+                        if (idA < idB) {
+                            return -1;
+                        }
+                        if (idA > idB) {
+                            return 1;
+                        }
+
+                        return 0;
+                    },
                     title: 'Id',
                     render: text => (
                         <span className="ort-package-id">
