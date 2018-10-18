@@ -17,6 +17,14 @@
  * License-Filename: LICENSE
  */
 
+/* eslint-disable */
+/* We should only include in the WebApp report the
+ * license summaries for the licenses found in the code.
+ * Code analysis and scanning is handled by ORT's Kotlin code
+ * so disabling ESlint as functionality included in this file
+ * will be moved to the Kotlin code in the near future.
+ */
+
 import RULES from './json/rules.json';
 import AFL_3_0 from './json/AFL-3.0';
 import AGPL_3_0 from './json/AGPL-3.0';
