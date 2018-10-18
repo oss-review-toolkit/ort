@@ -95,7 +95,7 @@ class SummaryView extends React.Component {
     }
 
     convertLicensesToChartFormat(licenses) {
-        const chartData = Object.entries(licenses).reduce((accumulator, [key, value]) => {
+        return Object.entries(licenses).reduce((accumulator, [key, value]) => {
             accumulator[key] = {
                 name: key,
                 value,
@@ -104,12 +104,6 @@ class SummaryView extends React.Component {
 
             return accumulator;
         }, {});
-
-        return Object.keys(chartData).sort().reduce((accumulator, key) => {
-            accumulator.push(chartData[key]);
-
-            return accumulator;
-        }, []).reverse();
     }
 
     render() {
