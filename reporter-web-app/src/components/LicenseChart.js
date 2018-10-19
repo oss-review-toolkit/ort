@@ -119,6 +119,10 @@ class LicenseChart extends React.Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState(prevState => ({ ...prevState, ...nextProps }));
+    }
+
     onPieEnter(data, index) {
         if (!Number.isNaN(parseFloat(index)) && Number.isFinite(index)) {
             this.setState({
@@ -161,7 +165,7 @@ class LicenseChart extends React.Component {
                     <Label value={label} offset={0} position="bottom" />
                 </Pie>
                 <text x={width / 2 - 80} y={height - 30} dy={8} textAnchor="middle" fill="#333">
-                    Move over chart to see license distribution
+                    Move over above chart to see license distribution
                 </text>
             </PieChart>
         );
