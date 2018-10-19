@@ -45,6 +45,13 @@
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/jsx-indent": [2, 4],
         "react/jsx-indent-props": [2, 4],
+        "react/jsx-no-bind": [1, {
+            "ignoreDOMComponents": true,
+            "ignoreRefs": false,
+            "allowArrowFunctions": true,
+            "allowFunctions": false,
+            "allowBind": true
+        }],
         "react/sort-comp": [2, {
             "order": [
               "static-methods",

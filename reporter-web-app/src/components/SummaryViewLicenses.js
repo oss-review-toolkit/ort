@@ -28,38 +28,72 @@ const { TabPane } = Tabs;
 
 // Generates the HTML to display summary of licenses
 const SummaryViewLicenses = (props) => {
-    const { data } = props;
-    const columns = [
-        {
-            title: 'License',
-            dataIndex: 'name',
-            sorter: (a, b) => {
-                const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-                const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-                if (nameA < nameB) {
-                    return -1;
-                }
-                if (nameA > nameB) {
-                    return 1;
-                }
+    const {
+        data,
+        onDeclaredLicensesTableChange,
+        onDetectedLicensesTableChange
+    } = props;
 
-                // names must be equal
-                return 0;
-            },
-            key: 'name',
-            render: (text, row) => (
-                <Tag color={row.color}>
-                    {text}
-                </Tag>
-            )
-        }, {
-            title: 'Packages',
-            dataIndex: 'value',
-            sorter: (a, b) => a.value - b.value,
-            key: 'value',
-            width: 150
-        }
-    ];
+    const columns = (licenses, filter) => {
+        const { sortedInfo = {}, filteredInfo = {} } = filter;
+        return [
+            {
+                title: 'License',
+                dataIndex: 'name',
+                filters: (() => licenses
+                    .sort((a, b) => {
+                        const nameA = a.name.toUpperCase();
+                        const nameB = b.name.toUpperCase();
+                        if (nameA < nameB) {
+                            return -1;
+                        }
+                        if (nameA > nameB) {
+                            return 1;
+                        }
+
+                        return 0;
+                    })
+                    .reduce((accumulator, obj) => {
+                        accumulator.push({
+                            text: obj.name,
+                            value: obj.name
+                        });
+
+                        return accumulator;
+                    }, [])
+                )(),
+                filteredValue: filteredInfo.name || null,
+                onFilter: (license, record) => record.name === license,
+                sorter: (a, b) => {
+                    const nameA = a.name.toUpperCase();
+                    const nameB = b.name.toUpperCase();
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+
+                    return 0;
+                },
+                sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
+                key: 'name',
+                render: (text, row) => (
+                    <Tag color={row.color}>
+                        {text}
+                    </Tag>
+                )
+            }, {
+                title: 'Packages',
+                dataIndex: 'value',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.value - b.value,
+                sortOrder: sortedInfo.columnKey === 'value' && sortedInfo.order,
+                key: 'value',
+                width: 150
+            }
+        ];
+    };
     const pagination = {
         hideOnSinglePage: true,
         pageSize: 50,
@@ -68,20 +102,6 @@ const SummaryViewLicenses = (props) => {
         showSizeChanger: true,
         showQuickJumper: true
     };
-    const sortReverseLicensesByName = (licenses) => {
-        const arr = Object.keys(licenses).sort().reduce((accumulator, key) => {
-            accumulator.push(licenses[key]);
-
-            return accumulator;
-        }, []).reverse();
-
-        return arr;
-    };
-    const sortReverseLicensesByValue = (licenses) => {
-        const arr = Object.values(licenses);
-
-        return arr.sort((a, b) => a.value - b.value).reverse();
-    };
 
     return (
         <Tabs tabPosition="top" className="ort-summary-licenses">
@@ -89,7 +109,7 @@ const SummaryViewLicenses = (props) => {
                 tab={(
                     <span>
                         Detected licenses (
-                        {data.totalDetectedLicenses}
+                        {data.totalDetected}
                         )
                     </span>
                 )}
@@ -98,8 +118,7 @@ const SummaryViewLicenses = (props) => {
                 <Row>
                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>
                         <LicenseChart
-                            label="Detected Licenses"
-                            licenses={sortReverseLicensesByName(data.detectedLicenses)}
+                            licenses={data.detectedChart}
                             width={750}
                             height={500}
                         />
@@ -107,11 +126,12 @@ const SummaryViewLicenses = (props) => {
                     <Col xs={24} sm={24} md={24} lg={24} xl={9}>
                         <Table
                             bordered={false}
-                            columns={columns}
-                            dataSource={sortReverseLicensesByValue(data.detectedLicenses)}
+                            columns={columns(data.detected, data.detectedFilter)}
+                            dataSource={data.detected}
                             locale={{
                                 emptyText: 'No detected licenses'
                             }}
+                            onChange={onDetectedLicensesTableChange}
                             pagination={pagination}
                             size="small"
                             rowClassName="ort-dectected-licenses-table-row"
@@ -124,7 +144,7 @@ const SummaryViewLicenses = (props) => {
                 tab={(
                     <span>
                         Declared Licenses (
-                        {data.totalDeclaredLicenses}
+                        {data.totalDeclared}
                         )
                     </span>
                 )}
@@ -133,8 +153,7 @@ const SummaryViewLicenses = (props) => {
                 <Row>
                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>
                         <LicenseChart
-                            label="Declared licenses"
-                            licenses={sortReverseLicensesByName(data.declaredLicenses)}
+                            licenses={data.declaredChart}
                             width={800}
                             height={500}
                         />
@@ -142,11 +161,12 @@ const SummaryViewLicenses = (props) => {
                     <Col xs={24} sm={24} md={24} lg={24} xl={9}>
                         <Table
                             bordered={false}
-                            columns={columns}
-                            dataSource={sortReverseLicensesByValue(data.declaredLicenses)}
+                            columns={columns(data.declared, data.declaredFilter)}
+                            dataSource={data.declared}
                             locale={{
                                 emptyText: 'No declared licenses'
                             }}
+                            onChange={onDeclaredLicensesTableChange}
                             pagination={pagination}
                             size="small"
                             rowClassName="ort-dectected-licenses-table-row"
@@ -160,7 +180,9 @@ const SummaryViewLicenses = (props) => {
 };
 
 SummaryViewLicenses.propTypes = {
-    data: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired,
+    onDeclaredLicensesTableChange: PropTypes.func.isRequired,
+    onDetectedLicensesTableChange: PropTypes.func.isRequired
 };
 
 export default SummaryViewLicenses;

@@ -27,7 +27,7 @@ class SummaryView extends React.Component {
                 }
             }
         };
-        const viewData = {
+        const view = {
             errors: {
                 open: [],
                 addressed: [],
@@ -35,10 +35,14 @@ class SummaryView extends React.Component {
                 totalResolved: 0
             },
             licenses: {
-                declaredLicenses: [],
-                detectedLicenses: [],
-                totalDeclaredLicenses: 0,
-                totalDetectedLicenses: 0
+                declared: [],
+                declaredChart: [],
+                detected: [],
+                detectedChart: [],
+                declaredFilter: {},
+                detectedFilter: {},
+                totalDeclared: 0,
+                totalDetected: 0
             }
         };
 
@@ -55,19 +59,21 @@ class SummaryView extends React.Component {
                 if (data.licenses.data.detected
                     && Number.isInteger(data.licenses.total.detected)) {
                     assignColorsToLicenses(Object.keys(data.licenses.data.detected));
-                    viewData.licenses.detectedLicenses = this.convertLicensesToChartFormat(
+                    view.licenses.detected = this.convertLicensesToRenderFormat(
                         data.licenses.data.detected
                     );
-                    viewData.licenses.totalDetectedLicenses = data.licenses.total.detected;
+                    view.licenses.detectedChart = view.licenses.detected;
+                    view.licenses.totalDetected = data.licenses.total.detected;
                 }
 
                 if (data.licenses.data.declared
                     && Number.isInteger(data.licenses.total.declared)) {
                     assignColorsToLicenses(Object.keys(data.licenses.data.declared));
-                    viewData.licenses.declaredLicenses = this.convertLicensesToChartFormat(
+                    view.licenses.declared = this.convertLicensesToRenderFormat(
                         data.licenses.data.declared
                     );
-                    viewData.licenses.totalDeclaredLicenses = data.licenses.total.declared;
+                    view.licenses.declaredChart = view.licenses.declared;
+                    view.licenses.totalDeclared = data.licenses.total.declared;
                 }
             }
 
@@ -76,38 +82,66 @@ class SummaryView extends React.Component {
                 && data.errors.total) {
                 if (data.errors.data.open
                     && Number.isInteger(data.errors.total.open)) {
-                    viewData.errors.open = data.errors.data.open;
-                    viewData.errors.totalOpen = data.errors.total.open;
+                    view.errors.open = data.errors.data.open;
+                    view.errors.totalOpen = data.errors.total.open;
                 }
 
                 if (data.errors.data.addressed
                     && Number.isInteger(data.errors.total.addressed)) {
-                    viewData.errors.addressed = data.errors.data.addressed;
-                    viewData.errors.totalAddressed = data.errors.total.addressed;
+                    view.errors.addressed = data.errors.data.addressed;
+                    view.errors.totalAddressed = data.errors.total.addressed;
                 }
             }
         }
 
         this.state = {
             ...this.state,
-            viewData
+            view
         };
     }
 
-    convertLicensesToChartFormat(licenses) {
+    onDeclaredLicensesTableChange(pagination, filters, sorter, extra) {
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.licenses.declaredChart = extra.currentDataSource;
+            state.view.licenses.declaredFilter = {
+                filteredInfo: filters,
+                sortedInfo: sorter
+            };
+
+            return state;
+        });
+    }
+
+    onDetectedLicensesTableChange(pagination, filters, sorter, extra) {
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.licenses.detectedChart = extra.currentDataSource;
+            state.view.licenses.detectedFilter = {
+                filteredInfo: filters,
+                sortedInfo: sorter
+            };
+
+            return state;
+        });
+    }
+
+    convertLicensesToRenderFormat(licenses) {
         return Object.entries(licenses).reduce((accumulator, [key, value]) => {
-            accumulator[key] = {
+            accumulator.push({
                 name: key,
                 value,
                 color: this.licenseColors.get(key)
-            };
+            });
 
             return accumulator;
-        }, {});
+        }, []);
     }
 
     render() {
-        const { data, viewData } = this.state;
+        const { data, view } = this.state;
 
         return (
             <div className="ort-summary">
@@ -115,21 +149,25 @@ class SummaryView extends React.Component {
                     <Col span={22} offset={1}>
                         <SummaryViewTimeline data={{
                             ...data,
-                            nrDetectedLicenses: viewData.licenses.totalDetectedLicenses,
-                            nrDeclaredLicenses: viewData.licenses.totalDeclaredLicenses,
-                            nrErrors: viewData.errors.totalOpen
+                            nrDetectedLicenses: view.licenses.totalDetected,
+                            nrDeclaredLicenses: view.licenses.totalDeclared,
+                            nrErrors: view.errors.totalOpen
                         }}
                         />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryViewTableErrors data={viewData.errors} />
+                        <SummaryViewTableErrors data={view.errors} />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryViewLicenses data={viewData.licenses} />
+                        <SummaryViewLicenses
+                            data={view.licenses}
+                            onDeclaredLicensesTableChange={this.onDeclaredLicensesTableChange.bind(this)}
+                            onDetectedLicensesTableChange={this.onDetectedLicensesTableChange.bind(this)}
+                        />
                     </Col>
                 </Row>
             </div>
