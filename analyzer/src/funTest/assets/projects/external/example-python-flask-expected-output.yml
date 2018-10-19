@@ -24,7 +24,7 @@ project:
         - id: "PyPI::MarkupSafe:1.0"
       - id: "PyPI::Werkzeug:0.14.1"
       - id: "PyPI::click:7.0"
-      - id: "PyPI::itsdangerous:0.24"
+      - id: "PyPI::itsdangerous:1.0.0"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
 - package:
@@ -179,19 +179,18 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::itsdangerous:0.24"
+    id: "PyPI::itsdangerous:1.0.0"
     declared_licenses:
     - "BSD"
-    description: "Various helpers to pass trusted data to untrusted environments and\
-      \ back."
-    homepage_url: "http://github.com/mitsuhiko/itsdangerous"
+    description: "Various helpers to pass data to untrusted environments and back."
+    homepage_url: "https://palletsprojects.com/p/itsdangerous/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
-      hash: "a3d55aa79369aef5345c036a8a26307f"
+      url: "https://files.pythonhosted.org/packages/c9/c3/8dadb353944803796515ce68ad3944e6e7acc934f5036c40829cb96e64a1/ItsDangerous-1.0.0-py2.py3-none-any.whl"
+      hash: "760f4af583c3daf31926755db32b53ea"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
-      hash: "a3d55aa79369aef5345c036a8a26307f"
+      url: "https://files.pythonhosted.org/packages/12/32/927b8a5c1dadd7a96876566a88e61560ccdbc30a9015b3b8da341a4ab20e/ItsDangerous-1.0.0.tar.gz"
+      hash: "5ecaed77d6c0b9104ecb4c06d5135435"
       hash_algorithm: "MD5"
     vcs:
       type: ""
@@ -199,8 +198,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
-      url: "https://github.com/mitsuhiko/itsdangerous.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
   curations: []
