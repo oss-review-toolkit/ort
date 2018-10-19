@@ -11,8 +11,13 @@ class TableView extends React.Component {
         super(props);
         this.state = {
             view: {
-                showProjects: [],
-                forceRender: false
+                expandedProjects: [],
+                projectsToBeExpanded: Object.values(props.reportData.projects.data)
+                    .reduce((accumulator, project) => {
+                        accumulator.push(`ort-table-panel-${project.id}`);
+                        return accumulator;
+                    }, [])
+                    .reverse()
             }
         };
 
@@ -21,38 +26,55 @@ class TableView extends React.Component {
                 ...this.state,
                 data: props.reportData
             };
-
-            // Limit when to automatically expand project panels
-            // to avoid hitting browser JavaScript timeouts
-            if (Object.values(props.reportData.projects.data).length < 40) {
-                // Expand all project panels with 0.5 second delay
-                // to ensure smooth UI when tabs switching
-                window.setTimeout(() => {
-                    const { data } = this.state;
-                    const projects = Object.values(
-                        data.projects.data
-                    ).reduce((accumulator, project) => {
-                        accumulator.push(`panel-${project.id}`);
-                        return accumulator;
-                    }, []);
-
-                    this.setState({
-                        view: { showProjects: projects }
-                    });
-                }, 500);
-            }
         }
 
         // Bind so `this` works in the Collapse's onChange callback
-        this.onChangeProjectCollapse = this.onChangeProjectCollapse.bind(this);
+        this.onToggleProject = this.onToggleProject.bind(this);
     }
 
-    onChangeProjectCollapse(activeKeys) {
+    componentDidMount() {
+        const { view } = this.state;
+        const { projectsToBeExpanded } = view;
+
+        if (projectsToBeExpanded.length !== 0) {
+            this.timerProjectsToBeExpanded = setInterval(
+                () => this.expandProjects(),
+                1000
+            );
+        }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerProjectsToBeExpanded);
+    }
+
+    onToggleProject(activeKeys) {
         this.setState({
             view: {
-                showProjects: activeKeys
+                expandedProjects: activeKeys
             }
         });
+    }
+
+    expandProjects() {
+        const { view } = this.state;
+        const { projectsToBeExpanded } = view;
+        const panel = projectsToBeExpanded.pop();
+
+        if (panel) {
+            this.setState((prevState) => {
+                const state = { ...prevState };
+
+                state.view.expandedProjects.push(panel);
+                state.view.projectsToBeExpanded = projectsToBeExpanded;
+
+                return state;
+            });
+        }
+
+        if (projectsToBeExpanded.length === 0) {
+            clearInterval(this.timerProjectsToBeExpanded);
+        }
     }
 
     render() {
@@ -79,9 +101,9 @@ class TableView extends React.Component {
 
         return (
             <Collapse
-                activeKey={view.showProjects}
+                activeKey={view.expandedProjects}
                 className="ort-table"
-                onChange={this.onChangeProjectCollapse}
+                onChange={this.onToggleProject}
             >
                 {Object.values(data.projects.data).map(project => (
                     <Panel key={`ort-table-panel-${project.id}`} header={panelHeader(project)}>
