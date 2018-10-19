@@ -113,7 +113,7 @@ const SummaryViewTimeline = (props) => {
         };
 
         return (
-            <Timeline>
+            <Timeline className="ort-summary-timeline">
                 <Timeline.Item>
                     Cloned revision
                     {' '}

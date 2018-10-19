@@ -76,7 +76,7 @@ const SummaryViewTableErrors = (props) => {
 
     if (data.totalOpen !== 0) {
         return (
-            <Tabs tabPosition="top">
+            <Tabs tabPosition="top" className="ort-summary-errors">
                 <TabPane
                     tab={(
                         <span>
