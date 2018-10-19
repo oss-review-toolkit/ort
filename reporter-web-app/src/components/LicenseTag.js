@@ -75,7 +75,7 @@ export default class LicenseTag extends React.Component {
                     <Tag
                         className="ort-license"
                         color={this.license ? this.license.color : ''}
-                        checked="true"
+                        checked
                         onClick={this.license && this.showLicenseInfoModal}
                     >
                         {(this.ellipsisAtChar
