@@ -78,9 +78,13 @@ class TableView extends React.Component {
         };
 
         return (
-            <Collapse activeKey={view.showProjects} onChange={this.onChangeProjectCollapse}>
+            <Collapse
+                activeKey={view.showProjects}
+                className="ort-table"
+                onChange={this.onChangeProjectCollapse}
+            >
                 {Object.values(data.projects.data).map(project => (
-                    <Panel key={`panel-${project.id}`} header={panelHeader(project)}>
+                    <Panel key={`ort-table-panel-${project.id}`} header={panelHeader(project)}>
                         <PackagesTable project={project} />
                     </Panel>
                 ))}
