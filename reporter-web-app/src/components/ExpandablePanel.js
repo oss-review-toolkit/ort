@@ -26,7 +26,7 @@ class ExpandablePanel extends Component {
         show: false
     };
 
-    toggleExpandContent = (e) => {
+    onToggleContent = (e) => {
         e.stopPropagation();
         this.setState(prevState => ({
             show: !prevState.show
@@ -46,7 +46,7 @@ class ExpandablePanel extends Component {
                 // Map the toggle event on the title
                 if (child.type.name === 'expandablePanelTitle') {
                     return cloneElement(child, {
-                        onToggle: this.toggleExpandContent,
+                        onToggle: this.onToggleContent,
                         show
                     });
                 }
