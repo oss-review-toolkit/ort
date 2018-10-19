@@ -227,7 +227,7 @@ class TreeView extends React.Component {
 
         const tooltip = (
             treeLeaf.path.length >= 1 && (
-                <div className="ort-tooltip-list">
+                <div className="ort-tree-tooltip-list">
                     <div>
                         {treeLeaf.path.slice(0).join(' / ')}
                     </div>
@@ -270,7 +270,7 @@ class TreeView extends React.Component {
         } = this.state;
 
         return tree && (
-            <div className="ort-tree-view">
+            <div className="ort-tree">
                 <div className="ort-tree-search">
                     <Search placeholder="Input search text and press Enter" onPressEnter={this.onSearchChange} />
                     {

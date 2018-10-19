@@ -84,7 +84,7 @@ const SummaryViewLicenses = (props) => {
     };
 
     return (
-        <Tabs tabPosition="top">
+        <Tabs tabPosition="top" className="ort-summary-licenses">
             <TabPane
                 tab={(
                     <span>
