@@ -18,7 +18,9 @@
  */
 
 import React from 'react';
-import { Icon, Table, Tabs } from 'antd';
+import {
+    Col, Table, Tabs, Tag, Row
+} from 'antd';
 import PropTypes from 'prop-types';
 import LicenseChart from './LicenseChart';
 
@@ -44,7 +46,12 @@ const SummaryViewLicenses = (props) => {
                 // names must be equal
                 return 0;
             },
-            key: 'name'
+            key: 'name',
+            render: (text, row) => (
+                <Tag color={row.color}>
+                    {text}
+                </Tag>
+            )
         }, {
             title: 'Packages',
             dataIndex: 'value',
@@ -88,22 +95,16 @@ const SummaryViewLicenses = (props) => {
                 )}
                 key="1"
             >
-                <Tabs tabPosition="left">
-                    <TabPane
-                        tab={<Icon type="pie-chart" theme="outlined" />}
-                        key="ort-dectected-licenses-pie-chart"
-                    >
+                <Row>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={15}>
                         <LicenseChart
                             label="Detected Licenses"
                             licenses={sortReverseLicensesByName(data.detectedLicenses)}
-                            width={800}
+                            width={750}
                             height={500}
                         />
-                    </TabPane>
-                    <TabPane
-                        tab={<Icon type="table" theme="outlined" />}
-                        key="ort-dectected-licenses-table"
-                    >
+                    </Col>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={9}>
                         <Table
                             bordered={false}
                             columns={columns}
@@ -116,8 +117,8 @@ const SummaryViewLicenses = (props) => {
                             rowClassName="ort-dectected-licenses-table-row"
                             rowKey="name"
                         />
-                    </TabPane>
-                </Tabs>
+                    </Col>
+                </Row>
             </TabPane>
             <TabPane
                 tab={(
@@ -129,22 +130,16 @@ const SummaryViewLicenses = (props) => {
                 )}
                 key="2"
             >
-                <Tabs tabPosition="left">
-                    <TabPane
-                        tab={<Icon type="pie-chart" theme="outlined" />}
-                        key="ort-declared-licenses-pie-chart"
-                    >
+                <Row>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={15}>
                         <LicenseChart
                             label="Declared licenses"
                             licenses={sortReverseLicensesByName(data.declaredLicenses)}
                             width={800}
                             height={500}
                         />
-                    </TabPane>
-                    <TabPane
-                        tab={<Icon type="table" theme="outlined" />}
-                        key="ort-declared-licenses-table"
-                    >
+                    </Col>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={9}>
                         <Table
                             bordered={false}
                             columns={columns}
@@ -157,8 +152,8 @@ const SummaryViewLicenses = (props) => {
                             rowClassName="ort-dectected-licenses-table-row"
                             rowKey="name"
                         />
-                    </TabPane>
-                </Tabs>
+                    </Col>
+                </Row>
             </TabPane>
         </Tabs>
     );
