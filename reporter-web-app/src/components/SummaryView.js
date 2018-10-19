@@ -98,6 +98,9 @@ class SummaryView extends React.Component {
             ...this.state,
             view
         };
+
+        this.onDeclaredLicensesTableChange = this.onDeclaredLicensesTableChange.bind(this);
+        this.onDetectedLicensesTableChange = this.onDetectedLicensesTableChange.bind(this);
     }
 
     onDeclaredLicensesTableChange(pagination, filters, sorter, extra) {
@@ -165,8 +168,8 @@ class SummaryView extends React.Component {
                     <Col span={22} offset={1}>
                         <SummaryViewLicenses
                             data={view.licenses}
-                            onDeclaredLicensesTableChange={this.onDeclaredLicensesTableChange.bind(this)}
-                            onDetectedLicensesTableChange={this.onDetectedLicensesTableChange.bind(this)}
+                            onDeclaredLicensesTableChange={this.onDeclaredLicensesTableChange}
+                            onDetectedLicensesTableChange={this.onDetectedLicensesTableChange}
                         />
                     </Col>
                 </Row>
