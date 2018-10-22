@@ -395,6 +395,14 @@ export function convertToRenderFormat(reportData) {
 
         return pkgObj;
     };
+    const addPackageToProjectPackagesTreeNodeList = (projectIndex, pkgObj) => {
+        const project = projects[projectIndex];
+
+        project.packages.treeNodesList.push({
+            id: pkgObj.id,
+            key: pkgObj.key
+        });
+    };
     const addProjectLevelsToReportDataReportData = (projectIndex) => {
         const project = projects[projectIndex];
 
@@ -560,13 +568,19 @@ export function convertToRenderFormat(reportData) {
      * found by the Analyzer so they can be transformed
      * into a format that suitable for use in the WebApp
      */
-    const recursivePackageAnalyzer = (projectIndex, pkg, dependencyPathFromRoot = [], scp = '', delivered) => {
+    const recursivePackageAnalyzer = (projectIndex, pkg, childIndex, parentTreeId = '', dependencyPathFromRoot = [], scp = '', delivered) => {
+        const treeId = parentTreeId === '' ? `${childIndex}` : `${parentTreeId}-${childIndex}`;
         const children = Object.entries(pkg).reduce((accumulator, [key, value]) => {
+            let indexOffset = 0;
+
             // Only recursively traverse objects which can hold packages
             if (key === 'dependencies') {
-                const depsChildren = value.map(dep => recursivePackageAnalyzer(
+                indexOffset = value.length;
+                const depsChildren = value.map((dep, index) => recursivePackageAnalyzer(
                     projectIndex,
                     dep,
+                    index,
+                    treeId,
                     [...dependencyPathFromRoot, pkg.id || pkg.name],
                     scp, delivered
                 ));
@@ -574,9 +588,11 @@ export function convertToRenderFormat(reportData) {
             }
 
             if (key === 'scopes') {
-                const scopeChildren = value.map(scope => scope.dependencies.map(dep => recursivePackageAnalyzer(
+                const scopeChildren = value.map((scope, scopeIndex) => scope.dependencies.map((dep, index) => recursivePackageAnalyzer(
                     projectIndex,
                     dep,
+                    indexOffset + scopeIndex + index,
+                    treeId,
                     [...dependencyPathFromRoot, pkg.name || pkg.id],
                     scope.name,
                     scope.delivered
@@ -590,6 +606,7 @@ export function convertToRenderFormat(reportData) {
         }, []);
         let pkgObj = {
             id: pkg.id || pkg.name,
+            key: treeId,
             children,
             errors: pkg.errors || [],
             level: dependencyPathFromRoot.length,
@@ -619,6 +636,8 @@ export function convertToRenderFormat(reportData) {
         // into same listing modifying pkgObj therefore we make a copy
         addPackageToProjectList(projectIndex, new Proxy({ ...pkgObj }, packageProxyHandler));
 
+        addPackageToProjectPackagesTreeNodeList(projectIndex, pkgObj);
+
         return new Proxy(pkgObj, packageProxyHandler);
     };
 
@@ -647,14 +666,15 @@ export function convertToRenderFormat(reportData) {
                     list: {},
                     scopes: new Set([]),
                     total: 0,
-                    tree: []
+                    tree: [],
+                    treeNodesList: []
                 },
                 vcs: project.vcs,
                 vcs_processed: project.vcs_processed
             });
         }
 
-        projects[projectIndex].packages.tree = recursivePackageAnalyzer(projectIndex, project);
+        projects[projectIndex].packages.tree = recursivePackageAnalyzer(projectIndex, project, i);
 
         addProjectLicensesToReportData(projectIndex);
         addProjectLevelsToReportDataReportData(projectIndex);

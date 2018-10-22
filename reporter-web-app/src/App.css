@@ -192,23 +192,6 @@ https://ant.design/docs/react/customize-theme
     max-width: 500px;
 }
 
-.ort-tree-searched-item {
-    background: #99ccff;
-    color: #fff;
-}
-
-.ort-tree-selected-item {
-    background: #1890ff;
-    color: #fff;
-    transition: background 100ms ease-in;
-}
-
-.ort-tree-wrapper {
-    overflow: auto;
-    flex: auto;
-    height: calc(100vh - 150px);
-}
-
 .ort-tree {
     display: flex;
     flex-direction: column;
@@ -218,6 +201,17 @@ https://ant.design/docs/react/customize-theme
 .ort-tree-search {
     display: flex;
     margin-bottom: 8px;
+}
+
+.ort-tree-search-match {
+    color: #1890ff;
+    font-weight: bold;
+}
+
+.ort-tree-search-match.selected {
+    background: #1890ff;
+    color: #fff;
+    transition: background 100ms ease-in;
 }
 
 .ort-tree-navigation {
@@ -230,4 +224,10 @@ https://ant.design/docs/react/customize-theme
 .ort-tree-navigation-counter {
     margin-left: 8px;
     width: 80px;
+}
+
+.ort-tree-wrapper {
+    overflow: auto;
+    flex: auto;
+    height: calc(100vh - 150px);
 }
