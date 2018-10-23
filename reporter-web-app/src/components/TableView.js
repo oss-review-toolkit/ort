@@ -33,8 +33,7 @@ class TableView extends React.Component {
     }
 
     componentDidMount() {
-        const { view } = this.state;
-        const { projectsToBeExpanded } = view;
+        const { view: { projectsToBeExpanded } } = this.state;
 
         if (projectsToBeExpanded.length !== 0) {
             this.timerProjectsToBeExpanded = setInterval(
@@ -57,8 +56,7 @@ class TableView extends React.Component {
     }
 
     expandProjects() {
-        const { view } = this.state;
-        const { projectsToBeExpanded } = view;
+        const { view: { projectsToBeExpanded } } = this.state;
         const panel = projectsToBeExpanded.pop();
 
         if (panel) {
