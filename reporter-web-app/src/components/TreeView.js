@@ -20,10 +20,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Tree, Input, Button, Row
+    Drawer, Tree, Input, Button, Row
 } from 'antd';
 import { connect } from 'react-redux';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import PackageDetails from './PackageDetails';
+import PackageErrors from './PackageErrors';
+import PackageLicenses from './PackageLicenses';
+import PackagePaths from './PackagePaths';
+import PackageScansSummary from './PackageScansSummary';
 
 const { TreeNode } = Tree;
 const { Search } = Input;
@@ -57,7 +62,9 @@ class TreeView extends React.Component {
                 expandedKeys: [],
                 matchedKeys: [],
                 searchValue: '',
-                selectedIndex: 0
+                selectedIndex: 0,
+                selectedPackage: null,
+                showDrawer: false
             }
         };
     }
@@ -70,19 +77,7 @@ class TreeView extends React.Component {
         this.scrollIntoView();
     }
 
-    onExpand = (expandedKeys) => {
-        this.setState((prevState) => {
-            const state = { ...prevState };
-
-            state.view.autoExpandParent = false;
-            state.view.expandedKeys = expandedKeys;
-
-
-            return state;
-        });
-    };
-
-    onSearchChange = (e) => {
+    onChangeSearch = (e) => {
         e.stopPropagation();
 
         const { value } = e.target;
@@ -118,14 +113,40 @@ class TreeView extends React.Component {
                 expandedKeys,
                 matchedKeys,
                 searchValue: value,
-                selectedIndex: 0
+                selectedIndex: 0,
+                selectedPackage: null,
+                showDrawer: false
             };
 
             return state;
         });
     };
 
-    onSearchPreviousClick = (e) => {
+    onClickTreeNode = (selectedKeys, e) => {
+        const { node: { props: { dataRef } } } = e;
+
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.selectedPackage = dataRef;
+            state.view.showDrawer = true;
+
+            return state;
+        });
+    }
+
+    onClickExpandTreeNode = (expandedKeys) => {
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.autoExpandParent = false;
+            state.view.expandedKeys = expandedKeys;
+
+            return state;
+        });
+    };
+
+    onPreviousClickSearch = (e) => {
         e.stopPropagation();
 
         const { view: { selectedIndex, expandedKeys } } = this.state;
@@ -141,7 +162,7 @@ class TreeView extends React.Component {
         });
     }
 
-    onSearchNextClick = (e) => {
+    onNextClickSearch = (e) => {
         e.stopPropagation();
 
         const { view: { selectedIndex, expandedKeys } } = this.state;
@@ -153,6 +174,18 @@ class TreeView extends React.Component {
             const state = { ...prevState };
 
             state.view.selectedIndex = index;
+
+            return state;
+        });
+    }
+
+    onDrawerClose = (e) => {
+        e.stopPropagation();
+
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.showDrawer = false;
 
             return state;
         });
@@ -204,6 +237,38 @@ class TreeView extends React.Component {
         }
     }
 
+    renderDrawer = () => {
+        const {
+            view: {
+                selectedPackage,
+                showDrawer
+            }
+        } = this.state;
+
+        if (!showDrawer) {
+            return null;
+        }
+
+        return (
+            <Drawer
+                title={selectedPackage.id}
+                placement="right"
+                closable
+                onClose={this.onDrawerClose}
+                visible={showDrawer}
+                width="70%"
+            >
+                <div>
+                    <PackageDetails data={selectedPackage} show={false} />
+                    <PackageErrors data={selectedPackage} show />
+                    <PackageLicenses data={selectedPackage} show />
+                    <PackagePaths data={selectedPackage} show />
+                    <PackageScansSummary data={selectedPackage} show={false} />
+                </div>
+            </Drawer>
+        );
+    }
+
     renderTreeNode = data => data.map((item) => {
         const { view } = this.state;
         const {
@@ -237,13 +302,18 @@ class TreeView extends React.Component {
         }
         if (item.children) {
             return (
-                <TreeNode key={item.key} title={title}>
+                <TreeNode
+                    dataRef={item}
+                    key={item.key}
+                    title={title}
+                >
                     {this.renderTreeNode(item.children)}
                 </TreeNode>
             );
         }
         return (
             <TreeNode
+                dataRef={item}
                 key={item.key}
                 title={title}
             />
@@ -252,12 +322,19 @@ class TreeView extends React.Component {
 
 
     render() {
-        const { data: { tree }, view: { autoExpandParent, expandedKeys, selectedIndex } } = this.state;
+        const {
+            data: { tree },
+            view: {
+                autoExpandParent,
+                expandedKeys,
+                selectedIndex
+            }
+        } = this.state;
 
         return (
             <div className="ort-tree">
                 <div className="ort-tree-search">
-                    <Search placeholder="Input search text and press Enter" onPressEnter={this.onSearchChange} />
+                    <Search placeholder="Input search text and press Enter" onPressEnter={this.onChangeSearch} />
                     {
                         expandedKeys.length ? (
                             <Row
@@ -265,8 +342,8 @@ class TreeView extends React.Component {
                                 align="middle"
                                 className="ort-tree-navigation"
                             >
-                                <Button onClick={this.onSearchNextClick} icon="arrow-down" />
-                                <Button onClick={this.onSearchPreviousClick} icon="arrow-up" />
+                                <Button onClick={this.onNextClickSearch} icon="arrow-down" />
+                                <Button onClick={this.onPreviousClickSearch} icon="arrow-up" />
                                 <span className="ort-tree-navigation-counter">
                                     {selectedIndex + 1}
                                     {' '}
@@ -281,11 +358,15 @@ class TreeView extends React.Component {
                     <Tree
                         autoExpandParent={autoExpandParent}
                         expandedKeys={expandedKeys}
-                        onExpand={this.onExpand}
+                        onExpand={this.onClickExpandTreeNode}
+                        onSelect={this.onClickTreeNode}
                         showLine
                     >
                         {this.renderTreeNode(tree)}
                     </Tree>
+                </div>
+                <div className="ort-tree-drawer">
+                    {this.renderDrawer()}
                 </div>
             </div>
         );

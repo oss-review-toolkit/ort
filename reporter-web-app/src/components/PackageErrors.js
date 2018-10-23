@@ -23,9 +23,9 @@ import ExpandablePanel from './ExpandablePanel';
 import ExpandablePanelContent from './ExpandablePanelContent';
 import ExpandablePanelTitle from './ExpandablePanelTitle';
 
-// Generates the HTML for packages errors in an expanded row of projectTable
-const PackagesTableErrors = (props) => {
-    const { data } = props;
+// Generates the HTML for errors related to a package
+const PackageErrors = (props) => {
+    const { data, show } = props;
     const pkgObj = data;
 
     // Do not render anything if no errors
@@ -34,7 +34,7 @@ const PackagesTableErrors = (props) => {
     }
 
     return (
-        <ExpandablePanel key="ort-metadata-props">
+        <ExpandablePanel key="ort-package-errors" show={show}>
             <ExpandablePanelTitle titleElem="h4">Package Errors</ExpandablePanelTitle>
             <ExpandablePanelContent>
                 {pkgObj.errors.map(error => (
@@ -47,8 +47,13 @@ const PackagesTableErrors = (props) => {
     );
 };
 
-PackagesTableErrors.propTypes = {
-    data: PropTypes.object.isRequired
+PackageErrors.propTypes = {
+    data: PropTypes.object.isRequired,
+    show: PropTypes.bool
 };
 
-export default PackagesTableErrors;
+PackageErrors.defaultProps = {
+    show: false
+};
+
+export default PackageErrors;

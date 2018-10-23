@@ -26,18 +26,23 @@ import ExpandablePanelTitle from './ExpandablePanelTitle';
 
 const { Step } = Steps;
 
-// Generates the HTML for packages errors in an expanded row of projectTable
-const PackagesTablePaths = (props) => {
-    const { data } = props;
+// Generates the HTML for packages errors
+const PackagePaths = (props) => {
+    const { data, show } = props;
     const pkgObj = data;
+    let paths = pkgObj.paths || pkgObj.path;
 
     // Do not render anything if no dependency paths
-    if (Array.isArray(pkgObj.paths) && pkgObj.paths.length === 0) {
+    if (Array.isArray(paths) && paths.length === 0) {
         return null;
     }
 
+    if (pkgObj.path) {
+        paths = [{ path: pkgObj.path, scope: pkgObj.scope }];
+    }
+
     return (
-        <ExpandablePanel key="ort-metadata-props">
+        <ExpandablePanel key="ort-package-paths" show={show}>
             <ExpandablePanelTitle titleElem="h4">Package Dependency Paths</ExpandablePanelTitle>
             <ExpandablePanelContent>
                 <List
@@ -51,7 +56,7 @@ const PackagesTablePaths = (props) => {
                         pageSize: 2,
                         size: 'small'
                     }}
-                    dataSource={pkgObj.paths}
+                    dataSource={paths}
                     renderItem={pathsItem => (
                         <List.Item>
                             <h5>
@@ -69,8 +74,13 @@ const PackagesTablePaths = (props) => {
     );
 };
 
-PackagesTablePaths.propTypes = {
-    data: PropTypes.object.isRequired
+PackagePaths.propTypes = {
+    data: PropTypes.object.isRequired,
+    show: PropTypes.bool
 };
 
-export default PackagesTablePaths;
+PackagePaths.defaultProps = {
+    show: false
+};
+
+export default PackagePaths;

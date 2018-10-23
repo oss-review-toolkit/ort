@@ -27,8 +27,8 @@ import ExpandablePanelTitle from './ExpandablePanelTitle';
 const { TabPane } = Tabs;
 
 // Generates the HTML to display scan results for a package
-const PackagesTableScanSummary = (props) => {
-    const { data } = props;
+const PackageScansSummary = (props) => {
+    const { data, show } = props;
     const pkgObj = data;
 
     // Do not render anything if no scan results
@@ -37,7 +37,7 @@ const PackagesTableScanSummary = (props) => {
     }
 
     return (
-        <ExpandablePanel key="ort-metadata-props">
+        <ExpandablePanel key="ort-package-scans-summary" show={show}>
             <ExpandablePanelTitle titleElem="h4">Package Scan Summary</ExpandablePanelTitle>
             <ExpandablePanelContent>
                 <Tabs tabPosition="top">
@@ -89,8 +89,13 @@ const PackagesTableScanSummary = (props) => {
     );
 };
 
-PackagesTableScanSummary.propTypes = {
-    data: PropTypes.object.isRequired
+PackageScansSummary.propTypes = {
+    data: PropTypes.object.isRequired,
+    show: PropTypes.bool
 };
 
-export default PackagesTableScanSummary;
+PackageScansSummary.defaultProps = {
+    show: false
+};
+
+export default PackageScansSummary;
