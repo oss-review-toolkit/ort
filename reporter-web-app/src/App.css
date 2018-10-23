@@ -31,7 +31,7 @@ body {
     min-height: 600px;
 }
 
-.ort-app h1, h2, h3, h4 {
+h1, h2, h3, h4 {
     color: #262727;
     margin: 1em 0em 1em 0em;
 }
@@ -40,20 +40,20 @@ body {
 FIXME Switch to use Ant Design customization
 https://ant.design/docs/react/customize-theme
 */
-.ort-app .ant-collapse,
-.ort-app .ant-steps,
-.ort-app .ant-tabs,
-.ort-app .ant-tag,
-.ort-app .ant-table,
-.ort-app .ant-tree {
+.ant-collapse,
+.ant-steps,
+.ant-tabs,
+.ant-tag,
+.ant-table,
+.ant-tree {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.ort-app .ant-steps-dot .ant-steps-item-content {
+.ant-steps-dot .ant-steps-item-content {
     width: auto;
 }
 
-.ort-app button.ort-btn-expand {
+button.ort-btn-expand {
     background: none;
     border: none;
     color:inherit;
@@ -62,107 +62,111 @@ https://ant.design/docs/react/customize-theme
     padding: 0;
 }
 
-.ort-app button.ort-btn-expand .anticon {
+button.ort-btn-expand .anticon {
     font-size: 9px;
 }
 
-.ort-app .ort-metadata-props {
+.ort-metadata-props {
     font-size: 10px;
 }
 
-.ort-app .ort-metadata-props .anticon {
+.ort-metadata-props .anticon {
     font-size: 7px;
 }
 
-.ort-app .ort-metadata-props .ort-clickable {
+.ort-metadata-props .ort-clickable {
     font-weight: 400;
     margin: 3px 0px 5px 0px;
 }
 
-.ort-app .ort-metadata-props th, .ort-app .ort-metadata-props td {
+.ort-metadata-props th, .ort-app .ort-metadata-props td {
     vertical-align: top;
 }
 
-.ort-app .ort-metadata-props th {
+.ort-metadata-props th {
     font-weight: 400;
     width: 90px;
 }
 
-.ort-app .ort-summary .ant-tag {
+.ort-summary .ant-tag {
     cursor: unset;
 }
 
-.ort-app ul.ort-table-list {
+ul.ort-table-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.ort-app .ort-table-list > li {
+.ort-table-list > li {
     margin: 3px 0 3px 0;
     padding: 0;
 }
 
-.ort-app .ort-package-id .ant-tag {
+.ort-package-id .ant-tag {
     font-size: 10px;
     height: 13px;
     line-height: 10px;
     padding: 0 3px 0 3px;
 }
 
-.ort-app .ort-license.ant-tag:hover {
+.ort-license.ant-tag:hover {
     color: #fff;
     background: rgba(0, 0, 0, 0.65);;
     border-color: rgba(0, 0, 0, 0.65);;
 }
 
-.ort-app .ort-license.ant-tag-green {
+.ort-license.ant-tag-green {
     color: #007020;
     background: #f6ffed;
     border-color: #4e8b60;
 }
 
-.ort-app .ort-license.ant-tag-green:hover {
+.ort-license.ant-tag-green:hover {
     color: #fff;
     background: #007020;
     border-color: #007020;
 }
 
-.ort-app .ort-license.ant-tag-red:hover {
+.ort-license.ant-tag-red:hover {
     color: #fff;
     background-color: #cf1322;
     border-color: #cf1322;
 }
 
-.ort-app .ort-license.ant-tag-orange:hover {
+.ort-license.ant-tag-orange:hover {
     color: #fff;
     background: #fa8c16;
     border-color: #fa8c16;
 }
 
-.ort-app .ort-license.ant-tag-blue:hover, 
-.ort-app .ort-status-ok.ant-tag-blue:hover{
+.ort-license.ant-tag-blue:hover, 
+.ort-status-ok.ant-tag-blue:hover{
     color: #fff;
     background: #1890ff;
     border-color: #1890ff;
 }
 
-.ort-app .ort-package-props th, .ort-app .ort-package-props td {
+.ort-package-props th, .ort-app .ort-package-props td {
     vertical-align: top;
 }
 
-.ort-app .ort-package-props th {
+.ort-package-props th {
     font-weight: 400;
     width: 110px;
 }
 
-.ort-app .ort-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
+.ort-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
     border-bottom: 0px;
 }
 
-.ort-app .ort-package-deps-paths .ant-list-pagination {
+.ort-package-deps-paths .ant-list-pagination {
     margin: 0px 0px 5px 0px;
     text-align: left;
+}
+
+.ort-package-licenses .ort-license.ant-tag {
+    margin-bottom: 5px;
 }
 
 .ort-license-info .ort-license-obligations {

@@ -23,7 +23,7 @@ import PropTypes from 'prop-types';
 
 // Generates the HTML for packages details like
 // description, source code location(s), etc.
-const PackagesTableDetails = (props) => {
+const PackageDetails = (props) => {
     const { data } = props;
     const pkgObj = data;
     const renderBinaryArtifact = () => {
@@ -165,8 +165,8 @@ const PackagesTableDetails = (props) => {
     );
 };
 
-PackagesTableDetails.propTypes = {
+PackageDetails.propTypes = {
     data: PropTypes.object.isRequired
 };
 
-export default PackagesTableDetails;
+export default PackageDetails;
