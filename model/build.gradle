@@ -14,3 +14,37 @@ dependencies {
 
     implementation "com.vdurmont:semver4j:$semverVersion"
 }
+
+task generateSpdxLicenseList {
+    doLast {
+        println "Fetching SPDX license list..."
+        def jsonSlurper = new groovy.json.JsonSlurper()
+        def spdxUrl = "https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json".toURL()
+        def json = jsonSlurper.parse(spdxUrl)
+        def spdxLicenseIds = json.licenses.collect {
+            it["licenseId"]
+        }
+
+        println "Found ${spdxLicenseIds.size()} SPDX license identifiers."
+
+        def licenseEnumFile = file('src/main/kotlin/config/SpdxLicense.kt')
+        licenseEnumFile.write("""
+            package com.here.ort.model.config
+
+            enum class SpdxLicense(val license: String) {
+            """.stripIndent())
+        licenseEnumFile.append(spdxLicenseIds.collect { "    ${licenseToEnumEntry(it.toString())}" }.sort().join(',\n'))
+        licenseEnumFile.append("""
+            }
+            """.stripIndent())
+        println("Generated SPDX license enum '$licenseEnumFile'.")
+    }
+}
+
+def licenseToEnumEntry(String license) {
+    def enumName = license.toUpperCase().replaceAll('[-\\.]', '_').replace('+', 'PLUS')
+    if (enumName.startsWith('0')) {
+        enumName = "_$enumName"
+    }
+    return "$enumName(\"$license\")"
+}
