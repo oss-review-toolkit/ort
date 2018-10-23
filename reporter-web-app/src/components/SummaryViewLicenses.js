@@ -30,8 +30,8 @@ const { TabPane } = Tabs;
 const SummaryViewLicenses = (props) => {
     const {
         data,
-        onDeclaredLicensesTableChange,
-        onDetectedLicensesTableChange
+        onChangeDeclaredLicensesTable,
+        onChangeDetectedLicensesTable
     } = props;
 
     const columns = (licenses, filter) => {
@@ -131,7 +131,7 @@ const SummaryViewLicenses = (props) => {
                             locale={{
                                 emptyText: 'No detected licenses'
                             }}
-                            onChange={onDetectedLicensesTableChange}
+                            onChange={onChangeDetectedLicensesTable}
                             pagination={pagination}
                             size="small"
                             rowClassName="ort-dectected-licenses-table-row"
@@ -166,7 +166,7 @@ const SummaryViewLicenses = (props) => {
                             locale={{
                                 emptyText: 'No declared licenses'
                             }}
-                            onChange={onDeclaredLicensesTableChange}
+                            onChange={onChangeDeclaredLicensesTable}
                             pagination={pagination}
                             size="small"
                             rowClassName="ort-dectected-licenses-table-row"
@@ -181,8 +181,8 @@ const SummaryViewLicenses = (props) => {
 
 SummaryViewLicenses.propTypes = {
     data: PropTypes.object.isRequired,
-    onDeclaredLicensesTableChange: PropTypes.func.isRequired,
-    onDetectedLicensesTableChange: PropTypes.func.isRequired
+    onChangeDeclaredLicensesTable: PropTypes.func.isRequired,
+    onChangeDetectedLicensesTable: PropTypes.func.isRequired
 };
 
 export default SummaryViewLicenses;
