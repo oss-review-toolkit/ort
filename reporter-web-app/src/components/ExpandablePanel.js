@@ -22,9 +22,13 @@ import PropTypes from 'prop-types';
 
 // Inspired by https://www.dzurico.com/react-create-reusable-composable-components/
 class ExpandablePanel extends Component {
-    state = {
-        show: false
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            show: props.show
+        };
+    }
 
     onToggleContent = (e) => {
         e.stopPropagation();
@@ -59,7 +63,12 @@ class ExpandablePanel extends Component {
 }
 
 ExpandablePanel.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    show: PropTypes.bool
+};
+
+ExpandablePanel.defaultProps = {
+    show: false
 };
 
 export default ExpandablePanel;

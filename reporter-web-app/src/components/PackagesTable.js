@@ -22,10 +22,10 @@ import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import LicenseTag from './LicenseTag';
-import PackagesTableDetails from './PackagesTableDetails';
-import PackagesTableErrors from './PackagesTableErrors';
-import PackagesTablePaths from './PackagesTablePaths';
-import PackagesTableScanSummary from './PackagesTableScanSummary';
+import PackageDetails from './PackageDetails';
+import PackageErrors from './PackageErrors';
+import PackagePaths from './PackagePaths';
+import PackageScansSummary from './PackageScansSummary';
 
 class PackagesTable extends React.Component {
     constructor(props) {
@@ -234,10 +234,10 @@ class PackagesTable extends React.Component {
 
                         return (
                             <div>
-                                <PackagesTableDetails data={record} expanded={false} />
-                                <PackagesTablePaths data={record} expanded={false} />
-                                <PackagesTableErrors data={record} expanded />
-                                <PackagesTableScanSummary data={record} expanded={false} />
+                                <PackageDetails data={record} show={false} />
+                                <PackagePaths data={record} show={false} />
+                                <PackageErrors data={record} show />
+                                <PackageScansSummary data={record} show={false} />
                             </div>
                         );
                     }}
