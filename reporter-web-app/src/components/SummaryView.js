@@ -99,11 +99,11 @@ class SummaryView extends React.Component {
             view
         };
 
-        this.onDeclaredLicensesTableChange = this.onDeclaredLicensesTableChange.bind(this);
-        this.onDetectedLicensesTableChange = this.onDetectedLicensesTableChange.bind(this);
+        this.onChangeDeclaredLicensesTable = this.onChangeDeclaredLicensesTable.bind(this);
+        this.onChangeDetectedLicensesTable = this.onChangeDetectedLicensesTable.bind(this);
     }
 
-    onDeclaredLicensesTableChange(pagination, filters, sorter, extra) {
+    onChangeDeclaredLicensesTable(pagination, filters, sorter, extra) {
         this.setState((prevState) => {
             const state = { ...prevState };
 
@@ -117,7 +117,7 @@ class SummaryView extends React.Component {
         });
     }
 
-    onDetectedLicensesTableChange(pagination, filters, sorter, extra) {
+    onChangeDetectedLicensesTable(pagination, filters, sorter, extra) {
         this.setState((prevState) => {
             const state = { ...prevState };
 
@@ -168,8 +168,8 @@ class SummaryView extends React.Component {
                     <Col span={22} offset={1}>
                         <SummaryViewLicenses
                             data={view.licenses}
-                            onDeclaredLicensesTableChange={this.onDeclaredLicensesTableChange}
-                            onDetectedLicensesTableChange={this.onDetectedLicensesTableChange}
+                            onChangeDeclaredLicensesTable={this.onChangeDeclaredLicensesTable}
+                            onChangeDetectedLicensesTable={this.onChangeDetectedLicensesTable}
                         />
                     </Col>
                 </Row>

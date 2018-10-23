@@ -98,7 +98,7 @@ class LicenseChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = { activeIndex: 0 };
-        this.onPieEnter = this.onPieEnter.bind(this);
+        this.onEnterPieChart = this.onEnterPieChart.bind(this);
 
         this.state = {};
 
@@ -123,7 +123,7 @@ class LicenseChart extends React.Component {
         this.setState(prevState => ({ ...prevState, ...nextProps }));
     }
 
-    onPieEnter(data, index) {
+    onEnterPieChart(data, index) {
         if (!Number.isNaN(parseFloat(index)) && Number.isFinite(index)) {
             this.setState({
                 activeIndex: index
@@ -146,7 +146,7 @@ class LicenseChart extends React.Component {
             <PieChart
                 width={width}
                 height={height}
-                onMouseEnter={this.onPieEnter}
+                onMouseEnter={this.onEnterPieChart}
             >
                 <Pie
                     activeIndex={activeIndex}
