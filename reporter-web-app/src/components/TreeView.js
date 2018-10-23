@@ -48,13 +48,17 @@ class TreeView extends React.Component {
         super(props);
 
         this.state = {
-            autoExpandParent: true,
-            expandedKeys: [],
-            matchedKeys: [],
-            searchValue: '',
-            selectedIndex: 0,
-            tree: this.createSingleTreeFromProjects(props.reportData),
-            treeNodesList: this.createSingleTreeNodesListFromProjects(props.reportData)
+            data: {
+                tree: this.createSingleTreeFromProjects(props.reportData),
+                treeNodesList: this.createSingleTreeNodesListFromProjects(props.reportData)
+            },
+            view: {
+                autoExpandParent: true,
+                expandedKeys: [],
+                matchedKeys: [],
+                searchValue: '',
+                selectedIndex: 0
+            }
         };
     }
 
@@ -67,9 +71,14 @@ class TreeView extends React.Component {
     }
 
     onExpand = (expandedKeys) => {
-        this.setState({
-            expandedKeys,
-            autoExpandParent: false
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.autoExpandParent = false;
+            state.view.expandedKeys = expandedKeys;
+
+
+            return state;
         });
     };
 
@@ -77,7 +86,7 @@ class TreeView extends React.Component {
         e.stopPropagation();
 
         const { value } = e.target;
-        const { tree, treeNodesList } = this.state;
+        const { data: { tree, treeNodesList } } = this.state;
         const expandedKeys = (value === '') ? [] : treeNodesList
             .map((item) => {
                 if (item.id.indexOf(value) > -1) {
@@ -101,37 +110,51 @@ class TreeView extends React.Component {
                 return 0;
             });
 
-        this.setState({
-            autoExpandParent: true,
-            expandedKeys,
-            matchedKeys,
-            searchValue: value,
-            selectedIndex: 0
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view = {
+                autoExpandParent: true,
+                expandedKeys,
+                matchedKeys,
+                searchValue: value,
+                selectedIndex: 0
+            };
+
+            return state;
         });
     };
 
     onSearchPreviousClick = (e) => {
         e.stopPropagation();
 
-        const { selectedIndex, expandedKeys } = this.state;
+        const { view: { selectedIndex, expandedKeys } } = this.state;
         const index = selectedIndex - 1 < 0 ? expandedKeys.length - 1 : selectedIndex - 1;
 
         this.scrollIntoView();
-        this.setState({
-            selectedIndex: index
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.selectedIndex = index;
+
+            return state;
         });
     }
 
     onSearchNextClick = (e) => {
         e.stopPropagation();
 
-        const { selectedIndex, expandedKeys } = this.state;
+        const { view: { selectedIndex, expandedKeys } } = this.state;
         const index = selectedIndex + 1 > expandedKeys.length - 1 ? 0 : selectedIndex + 1;
 
         this.scrollIntoView();
 
-        this.setState({
-            selectedIndex: index
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.selectedIndex = index;
+
+            return state;
         });
     }
 
@@ -164,7 +187,7 @@ class TreeView extends React.Component {
     }
 
     scrollIntoView = () => {
-        const { expandedKeys, selectedIndex } = this.state;
+        const { view: { expandedKeys, selectedIndex } } = this.state;
 
         if (expandedKeys.length === 0) {
             return;
@@ -182,9 +205,10 @@ class TreeView extends React.Component {
     }
 
     renderTreeNode = data => data.map((item) => {
+        const { view } = this.state;
         const {
             matchedKeys, searchValue, selectedIndex
-        } = this.state;
+        } = view;
 
         const index = item.id.indexOf(searchValue);
         const beforeSearchValueStr = item.id.substr(0, index);
@@ -228,9 +252,7 @@ class TreeView extends React.Component {
 
 
     render() {
-        const {
-            autoExpandParent, expandedKeys, selectedIndex, tree
-        } = this.state;
+        const { data: { tree }, view: { autoExpandParent, expandedKeys, selectedIndex } } = this.state;
 
         return (
             <div className="ort-tree">
