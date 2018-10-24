@@ -23,6 +23,7 @@ import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
+import java.util.EnumSet
 
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
@@ -51,6 +52,9 @@ const val PARAMETER_ORDER_LOGGING = 2
  * Ordinal for the help program parameter.
  */
 const val PARAMETER_ORDER_HELP = 100
+
+inline fun <reified T : kotlin.Enum<T>> enumSetOf(vararg elems: T) =
+        EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
