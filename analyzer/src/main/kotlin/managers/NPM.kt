@@ -149,7 +149,13 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             definitionFiles.first().parentFile
         }
 
-        val rootPackageJson = projectRoot.resolve("package.json").readValue<ObjectNode>()
+        val rootDefinitionFile = projectRoot.resolve("package.json")
+        if (!rootDefinitionFile.exists()) {
+            workspaceMatchers = emptyList()
+            return definitionFiles
+        }
+
+        val rootPackageJson = rootDefinitionFile.readValue<ObjectNode>()
         workspaceMatchers = rootPackageJson["workspaces"]?.map {
             FileSystems.getDefault().getPathMatcher("glob:$projectRoot/${it.textValue()}")
         }.orEmpty()
