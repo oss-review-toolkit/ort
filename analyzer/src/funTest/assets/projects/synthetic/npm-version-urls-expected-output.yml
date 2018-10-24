@@ -326,7 +326,7 @@ project:
               - id: "NPM::isobject:2.1.0"
                 dependencies:
                 - id: "NPM::isarray:1.0.0"
-              - id: "NPM::randomatic:3.1.0"
+              - id: "NPM::randomatic:3.1.1"
                 dependencies:
                 - id: "NPM::is-number:4.0.0"
                 - id: "NPM::kind-of:6.0.2"
@@ -364,7 +364,7 @@ project:
                 - id: "NPM::isobject:2.1.0"
                   dependencies:
                   - id: "NPM::isarray:1.0.0"
-                - id: "NPM::randomatic:3.1.0"
+                - id: "NPM::randomatic:3.1.1"
                   dependencies:
                   - id: "NPM::is-number:4.0.0"
                   - id: "NPM::kind-of:6.0.2"
@@ -3098,7 +3098,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::randomatic:3.1.0"
+    id: "NPM::randomatic:3.1.1"
     declared_licenses:
     - "MIT"
     description: "Generate randomized strings of a specified length using simple character\
@@ -3109,18 +3109,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/randomatic/-/randomatic-3.1.0.tgz"
-      hash: "36f2ca708e9e567f5ed2ec01949026d50aa10116"
+      url: "https://registry.npmjs.org/randomatic/-/randomatic-3.1.1.tgz"
+      hash: "b776efc59375984e36c537b2f51a1f0aff0da1ed"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/randomatic.git"
-      revision: "4d76cd1ec91d0ac0ff33fa112efb806ab96295b9"
+      revision: "b7451f4dac44a9920790f76a4d8a1dd081c37a5a"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/randomatic.git"
-      revision: "4d76cd1ec91d0ac0ff33fa112efb806ab96295b9"
+      revision: "b7451f4dac44a9920790f76a4d8a1dd081c37a5a"
       path: ""
   curations: []
 - package:
