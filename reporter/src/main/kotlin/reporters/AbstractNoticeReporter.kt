@@ -22,10 +22,12 @@ package com.here.ort.reporter.reporters
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.LicenseMapping
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.utils.log
 import com.here.ort.utils.spdx.getLicenseText
+import com.here.ort.utils.zipWithDefault
 
 import java.io.File
 import java.util.SortedMap
@@ -40,8 +42,9 @@ abstract class AbstractNoticeReporter : Reporter() {
         val outputFile = File(outputDir, noticeFileName)
 
         val licenseFindings = getLicenseFindings(ortResult)
+        val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
 
-        val findingsIterator = licenseFindings.filterNot { (license, _) ->
+        val findingsIterator = spdxLicenseFindings.filterNot { (license, _) ->
             // For now, just skip license references for which SPDX has no license text.
             license.startsWith("LicenseRef-")
         }.iterator()
@@ -86,6 +89,23 @@ abstract class AbstractNoticeReporter : Reporter() {
         }
 
         return outputFile
+    }
+
+    private fun mapSpdxLicenses(licenseFindings: SortedMap<String, SortedSet<String>>)
+            : SortedMap<String, SortedSet<String>> {
+        var result = mapOf<String, SortedSet<String>>()
+
+        licenseFindings.forEach { finding ->
+            LicenseMapping.map(finding.key).map { spdxLicense ->
+                sortedMapOf(spdxLicense.license to finding.value)
+            }.forEach {
+                result = result.zipWithDefault(it, sortedSetOf()) { left, right ->
+                    (left + right).toSortedSet()
+                }
+            }
+        }
+
+        return result.toSortedMap()
     }
 
     abstract val noticeFileName: String
