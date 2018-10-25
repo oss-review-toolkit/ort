@@ -574,12 +574,11 @@ export function convertToRenderFormat(reportData) {
             let indexOffset = 0;
 
             // Only recursively traverse objects which can hold packages
-            if (key === 'dependencies') {
-                indexOffset = value.length;
+            if (key === 'dependencies' && value.length !== 0) {
                 const depsChildren = value.map((dep, index) => recursivePackageAnalyzer(
                     projectIndex,
                     dep,
-                    index,
+                    `d${index}`,
                     treeId,
                     [...dependencyPathFromRoot, pkg.id || pkg.name],
                     scp, delivered
@@ -587,19 +586,26 @@ export function convertToRenderFormat(reportData) {
                 accumulator.push(...depsChildren);
             }
 
-            if (key === 'scopes') {
-                const scopeChildren = value.map((scope, scopeIndex) => scope.dependencies.map((dep, index) => recursivePackageAnalyzer(
-                    projectIndex,
-                    dep,
-                    indexOffset + scopeIndex + index,
-                    treeId,
-                    [...dependencyPathFromRoot, pkg.name || pkg.id],
-                    scope.name,
-                    scope.delivered
-                ))).reduce((acc, scopeDeps) => [...acc, ...scopeDeps], []);
-                // Abve reduces removes empty arrays resulting from scopes without dependencies
+            if (key === 'scopes' && value.length !== 0) {
+                const scopeChildren = value
+                    // Filter out scopes with no dependencies
+                    .filter(scope => scope.dependencies.length !== 0)
+                    // Loop over recursively over dependencies
+                    // defined for each scope
+                    .map((scope, scopeIndex) => scope.dependencies.map((dep, index) => recursivePackageAnalyzer(
+                        projectIndex,
+                        dep,
+                        `s${scopeIndex}-${index}`,
+                        treeId,
+                        [...dependencyPathFromRoot, pkg.name || pkg.id],
+                        scope.name,
+                        scope.delivered
+                    )))
+                    // Flatten array of arrays into a single array
+                    // as each scope is on the same level
+                    .reduce((acc, scopeDeps) => [...acc, ...scopeDeps], []);
 
-                accumulator.push(...scopeChildren);
+               accumulator.push(...scopeChildren);
             }
 
             return accumulator;
