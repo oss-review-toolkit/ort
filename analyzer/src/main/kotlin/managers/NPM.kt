@@ -150,7 +150,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         }
 
         val rootDefinitionFile = projectRoot.resolve("package.json")
-        if (!rootDefinitionFile.exists()) {
+        if (!rootDefinitionFile.isFile) {
             workspaceMatchers = emptyList()
             return definitionFiles
         }
