@@ -58,7 +58,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         // Map files by the package manager factory that manages them.
-        var factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
