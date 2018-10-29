@@ -24,7 +24,7 @@ project:
         - id: "PyPI::MarkupSafe:1.0"
       - id: "PyPI::Werkzeug:0.14.1"
       - id: "PyPI::click:7.0"
-      - id: "PyPI::itsdangerous:1.0.0"
+      - id: "PyPI::itsdangerous:1.1.0"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
 - package:
@@ -179,18 +179,18 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::itsdangerous:1.0.0"
+    id: "PyPI::itsdangerous:1.1.0"
     declared_licenses:
     - "BSD"
     description: "Various helpers to pass data to untrusted environments and back."
     homepage_url: "https://palletsprojects.com/p/itsdangerous/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/c9/c3/8dadb353944803796515ce68ad3944e6e7acc934f5036c40829cb96e64a1/ItsDangerous-1.0.0-py2.py3-none-any.whl"
-      hash: "760f4af583c3daf31926755db32b53ea"
+      url: "https://files.pythonhosted.org/packages/76/ae/44b03b253d6fade317f32c24d100b3b35c2239807046a4c953c7b89fa49e/itsdangerous-1.1.0-py2.py3-none-any.whl"
+      hash: "55179072b7f84ae38f16b3fdca33aa4f"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/12/32/927b8a5c1dadd7a96876566a88e61560ccdbc30a9015b3b8da341a4ab20e/ItsDangerous-1.0.0.tar.gz"
-      hash: "5ecaed77d6c0b9104ecb4c06d5135435"
+      url: "https://files.pythonhosted.org/packages/68/1a/f27de07a8a304ad5fa817bbe383d1238ac4396da447fa11ed937039fa04b/itsdangerous-1.1.0.tar.gz"
+      hash: "9b7f5afa7f1e3acfb7786eeca3d99307"
       hash_algorithm: "MD5"
     vcs:
       type: ""
