@@ -315,8 +315,8 @@ class ExcelReporter : TableReporter() {
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
-                createCell(this, 4, row.analyzerErrors.map { it.toString() }.joinToString(" \n"), font, cellStyle)
-                createCell(this, 5, row.scanErrors.map { it.toString() }.joinToString(" \n"), font, cellStyle)
+                createCell(this, 4, row.analyzerErrors.joinToString(" \n") { it.toString() }, font, cellStyle)
+                createCell(this, 5, row.scanErrors.joinToString(" \n") { it.toString() }, font, cellStyle)
 
                 val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
                         row.analyzerErrors.size, row.scanErrors.size).max() ?: 1
