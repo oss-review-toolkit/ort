@@ -81,7 +81,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
 
         val ortResult = dependenciesFile.readValue<OrtResult>()
 
-        require(ortResult.analyzer != null) {
+        requireNotNull(ortResult.analyzer) {
             "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
                     "analyzer result."
         }
