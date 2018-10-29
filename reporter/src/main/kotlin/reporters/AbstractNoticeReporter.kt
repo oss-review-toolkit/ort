@@ -35,7 +35,7 @@ import java.util.SortedSet
 
 abstract class AbstractNoticeReporter : Reporter() {
     override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
-        require(ortResult.scanner != null) {
+        requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
 
