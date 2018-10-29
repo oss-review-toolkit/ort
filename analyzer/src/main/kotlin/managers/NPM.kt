@@ -233,6 +233,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
             var downloadUrl = json["_resolved"].textValueOrEmpty()
+
             var vcsFromPackage = parseVcsInfo(json)
 
             val identifier = "$rawName@$version"
@@ -287,7 +288,16 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                                 homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
                                 versionInfo["dist"]?.let { dist ->
-                                    downloadUrl = dist["tarball"].textValueOrEmpty()
+                                    downloadUrl = dist["tarball"].textValueOrEmpty().let { tarballUrl ->
+                                        if (tarballUrl.startsWith("http://registry.npmjs.org/")) {
+                                            // Work around the issue described at
+                                            // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                                            "https://" + tarballUrl.removePrefix("http://")
+                                        } else {
+                                            tarballUrl
+                                        }
+                                    }
+
                                     hash = dist["shasum"].textValueOrEmpty()
                                     hashAlgorithm = HashAlgorithm.SHA1
                                 }
