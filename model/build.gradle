@@ -18,6 +18,7 @@ dependencies {
 task generateSpdxLicenseList {
     doLast {
         println "Fetching SPDX license list..."
+
         def jsonSlurper = new groovy.json.JsonSlurper()
         def spdxUrl = "https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json".toURL()
         def json = jsonSlurper.parse(spdxUrl)
@@ -28,7 +29,7 @@ task generateSpdxLicenseList {
         println "Found ${spdxLicenseIds.size()} SPDX license identifiers."
 
         def licenseEnumFile = file('src/main/kotlin/config/SpdxLicense.kt')
-        licenseEnumFile.write("""
+        licenseEnumFile.write("""\
             /*
              * Copyright (C) 2017-2018 HERE Europe B.V.
              *
@@ -56,10 +57,12 @@ task generateSpdxLicenseList {
              */
             enum class SpdxLicense(val license: String) {
             """.stripIndent())
+
         licenseEnumFile.append(spdxLicenseIds.collect { "    ${licenseToEnumEntry(it.toString())}" }.sort().join(',\n'))
         licenseEnumFile.append("""
             }
             """.stripIndent())
+
         println("Generated SPDX license enum '$licenseEnumFile'.")
     }
 }
