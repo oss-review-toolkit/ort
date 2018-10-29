@@ -53,7 +53,10 @@ const val PARAMETER_ORDER_LOGGING = 2
  */
 const val PARAMETER_ORDER_HELP = 100
 
-inline fun <reified T : kotlin.Enum<T>> enumSetOf(vararg elems: T) =
+/**
+ * A Kotlin-style conveniece function to replace EnumSet.of() and EnumSet.noneOf().
+ */
+inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
         EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
