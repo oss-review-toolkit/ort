@@ -237,7 +237,8 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
                     }
                     return null
                 }
-                return GemSpec.createFromJson(body!!)
+
+                return GemSpec.createFromJson(body)
             }
         } catch (e: IOException) {
             e.showStackTrace()
