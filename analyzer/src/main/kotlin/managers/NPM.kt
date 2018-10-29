@@ -241,15 +241,15 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             var hash = json["_integrity"].textValueOrEmpty()
             val splitHash = hash.split('-')
 
-            var hashAlgorithm = if (splitHash.count() == 2) {
-                // Support Subresource Integrity (SRI) hashes, see
-                // https://w3c.github.io/webappsec-subresource-integrity/
-                hash = Hex.encodeHexString(Base64.decodeBase64(splitHash.last()))
-                HashAlgorithm.fromString(splitHash.first())
-            } else if (hash.isNotEmpty()) {
-                HashAlgorithm.SHA1
-            } else {
-                HashAlgorithm.UNKNOWN
+            var hashAlgorithm = when {
+                splitHash.count() == 2 -> {
+                    // Support Subresource Integrity (SRI) hashes, see
+                    // https://w3c.github.io/webappsec-subresource-integrity/
+                    hash = Hex.encodeHexString(Base64.decodeBase64(splitHash.last()))
+                    HashAlgorithm.fromString(splitHash.first())
+                }
+                hash.isNotEmpty() -> HashAlgorithm.SHA1
+                else -> HashAlgorithm.UNKNOWN
             }
 
             // Download package info from registry.npmjs.org.
