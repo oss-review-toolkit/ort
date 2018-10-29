@@ -393,7 +393,8 @@ object LicenseMapping {
             "zlib" to enumSetOf(SpdxLicense.ZLIB)
     )
 
-    fun map(license: String) = (mapping[license] ?: enumSetOf()).apply {
-        SpdxLicense.values().find { it.license == license }?.let { add(it) }
-    }
+    fun map(license: String) =
+            (mapping[license] ?: enumSetOf()).apply {
+                SpdxLicense.values().find { it.license == license }?.let { add(it) }
+            }
 }
