@@ -1128,7 +1128,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "http://registry.npmjs.org/commander/-/commander-2.15.1.tgz"
+      url: "https://registry.npmjs.org/commander/-/commander-2.15.1.tgz"
       hash: "df46e867d0fc2aec66a34662b406a9ccafff5b0f"
       hash_algorithm: "SHA-1"
     vcs:
@@ -2780,7 +2780,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "http://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
+      url: "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
       hash: "857fcabfc3397d2625b8228262e86aa7a011b05d"
       hash_algorithm: "SHA-1"
     vcs:
@@ -2805,7 +2805,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "http://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
+      url: "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
       hash: "a35008b20f41383eec1fb914f4cd5df79a264284"
       hash_algorithm: "SHA-1"
     vcs:
@@ -2856,7 +2856,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "http://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
+      url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
       hash: "30057438eac6cf7f8c4767f38648d6697d75c903"
       hash_algorithm: "SHA-1"
     vcs:
@@ -3134,7 +3134,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "http://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
+      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
       hash: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
       hash_algorithm: "SHA-1"
     vcs:
@@ -3387,7 +3387,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "http://registry.npmjs.org/safe-regex/-/safe-regex-1.1.0.tgz"
+      url: "https://registry.npmjs.org/safe-regex/-/safe-regex-1.1.0.tgz"
       hash: "40a3669f3b077d1e943d44629e157dd48023bf2e"
       hash_algorithm: "SHA-1"
     vcs:
@@ -3999,7 +3999,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "http://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz"
+      url: "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz"
       hash: "8cdd8fbac4e2d2ea1e7e2e8097c42f442280f85b"
       hash_algorithm: "SHA-1"
     vcs:
