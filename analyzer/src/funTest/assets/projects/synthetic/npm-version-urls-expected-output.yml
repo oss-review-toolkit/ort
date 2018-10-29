@@ -3387,7 +3387,7 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/safe-regex/-/safe-regex-1.1.0.tgz"
+      url: "http://registry.npmjs.org/safe-regex/-/safe-regex-1.1.0.tgz"
       hash: "40a3669f3b077d1e943d44629e157dd48023bf2e"
       hash_algorithm: "SHA-1"
     vcs:
