@@ -105,7 +105,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      */
     protected val scannerPath by lazy { File(scannerDir, command()) }
 
-    override fun getVersionRequirement() = Requirement.buildLoose(scannerVersion)
+    override fun getVersionRequirement(): Requirement = Requirement.buildLoose(scannerVersion)
 
     /**
      * Return the actual version of the scanner, or an empty string in case of failure.

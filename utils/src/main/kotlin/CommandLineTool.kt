@@ -40,7 +40,7 @@ interface CommandLineTool {
     /**
      * Return the requirement for the version of the command. Defaults to any version.
      */
-    fun getVersionRequirement() = Requirement.buildNPM("*")
+    fun getVersionRequirement(): Requirement = Requirement.buildNPM("*")
 
     /**
      * Return whether the executable for this command is available in the system PATH.
