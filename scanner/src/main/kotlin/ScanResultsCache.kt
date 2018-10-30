@@ -50,7 +50,7 @@ interface ScanResultsCache {
                 "API token for Artifactory cache is missing."
             }
 
-            cache = ArtifactoryCache(config.url, config.apiToken)
+            cache = ArtifactoryCache(config.url, config.apiToken, config.rewriteArtifactoryCache)
             log.info { "Using Artifactory cache '${config.url}'." }
         }
 

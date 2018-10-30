@@ -96,6 +96,11 @@ object ScannerCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputFormats = listOf(OutputFormat.YAML)
 
+    @Parameter(description = "Remove binary and zip files from project",
+                names = ["--remove-binary-zip", "-r"],
+                order = PARAMETER_ORDER_OPTIONAL)
+    private var removeBinaryAndZipFiles = false
+
     override fun runCommand(jc: JCommander) {
         require((dependenciesFile == null) != (inputPath == null)) {
             "Either '--ort-file' or '--input-path' must be specified."
@@ -128,7 +133,7 @@ object ScannerCommand : CommandWithHelp() {
         println("Using scanner '$scanner'.")
 
         val ortResult = dependenciesFile?.let {
-            scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet())
+            scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet(), removeBinaryAndZipFiles)
         } ?: run {
             // The check is not useless as we do not know what scanners plugins might add.
             @Suppress("USELESS_IS_CHECK")

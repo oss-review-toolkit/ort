@@ -65,7 +65,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
      * [ScanResult]s are returned associated by the [Package]. The map may contain multiple results for the same
      * [Package] if the cache contains more than one result for the specification of this scanner.
      */
-    abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null)
+    abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null, removeBinaryAndZipFiles: Boolean)
             : Map<Package, List<ScanResult>>
 
     /**
@@ -74,7 +74,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
      * download the source code to. Return scan results as an [OrtResult].
      */
     fun scanDependenciesFile(dependenciesFile: File, outputDirectory: File, downloadDirectory: File? = null,
-                             scopesToScan: Set<String> = emptySet()): OrtResult {
+                             scopesToScan: Set<String> = emptySet(), removeBinaryAndZipFiles: Boolean): OrtResult {
         require(dependenciesFile.isFile) {
             "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
         }
@@ -117,7 +117,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
             consolidatedReferencePackages + analyzerResult.packages
         }.toSortedSet()
 
-        val results = scan(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory)
+        val results = scan(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory, removeBinaryAndZipFiles)
         val resultContainers = results.map { (pkg, results) ->
             ScanResultContainer(pkg.id, results)
         }.toSortedSet()

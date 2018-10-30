@@ -43,7 +43,8 @@ import okio.Okio
 
 class ArtifactoryCache(
         private val url: String,
-        private val apiToken: String
+        private val apiToken: String,
+        private val rewriteArtifactoryCache: Boolean
 ) : ScanResultsCache {
     override fun read(id: Identifier): ScanResultContainer {
         val cachePath = cachePath(id)
@@ -143,8 +144,7 @@ class ArtifactoryCache(
 
             return false
         }
-
-        val scanResults = ScanResultContainer(id, read(id).results + scanResult)
+        val scanResults = if (rewriteArtifactoryCache) ScanResultContainer(id, ScanResultContainer(id, emptyList()).results + scanResult) else ScanResultContainer(id, read(id).results + scanResult)
 
         val tempFile = createTempFile("scan-results-")
         yamlMapper.writeValue(tempFile, scanResults)

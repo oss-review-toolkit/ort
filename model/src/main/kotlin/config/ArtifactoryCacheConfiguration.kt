@@ -25,5 +25,7 @@ data class ArtifactoryCacheConfiguration(
         val url: String,
 
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-        val apiToken: String = ""
+        val apiToken: String = "",
+
+        val rewriteArtifactoryCache: Boolean = false
 )
