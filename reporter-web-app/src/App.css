@@ -212,12 +212,6 @@ ul.ort-table-list {
     font-weight: bold;
 }
 
-.ort-tree-search-match.selected {
-    background: #1890ff;
-    color: #fff;
-    transition: background 100ms ease-in;
-}
-
 .ort-tree-navigation {
     display: flex;
     align-items: center;
