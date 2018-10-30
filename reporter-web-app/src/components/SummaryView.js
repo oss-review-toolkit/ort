@@ -183,6 +183,6 @@ SummaryView.propTypes = {
 };
 
 export default connect(
-    state => ({ reportData: state }),
+    state => ({ reportData: state.data.report }),
     () => ({})
 )(SummaryView);

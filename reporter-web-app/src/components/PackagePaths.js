@@ -31,6 +31,7 @@ const PackagePaths = (props) => {
     const { data, show } = props;
     const pkgObj = data;
     let paths = pkgObj.paths || pkgObj.path;
+    let title = 'Package Dependency Path';
 
     // Do not render anything if no dependency paths
     if (Array.isArray(paths) && paths.length === 0) {
@@ -41,9 +42,13 @@ const PackagePaths = (props) => {
         paths = [{ path: pkgObj.path, scope: pkgObj.scope }];
     }
 
+    if (paths.length > 1) {
+        title += 's';
+    }
+
     return (
         <ExpandablePanel key="ort-package-paths" show={show}>
-            <ExpandablePanelTitle titleElem="h4">Package Dependency Paths</ExpandablePanelTitle>
+            <ExpandablePanelTitle titleElem="h4">{title}</ExpandablePanelTitle>
             <ExpandablePanelContent>
                 <List
                     grid={{
