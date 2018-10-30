@@ -55,7 +55,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
         override fun create(config: ScannerConfiguration) = Askalono(config)
     }
 
-    override val scannerVersion = "0.2.0"
+    override val scannerVersion = "0.3.0"
     override val resultFileExt = "txt"
 
     override fun command(workingDir: File?): String {
