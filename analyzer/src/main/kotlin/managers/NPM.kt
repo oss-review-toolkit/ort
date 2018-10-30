@@ -45,7 +45,6 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.getCommonFilePrefix
 import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
@@ -60,17 +59,12 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URLEncoder
-import java.nio.file.FileSystems
-import java.nio.file.PathMatcher
 import java.util.SortedSet
 
 import okhttp3.Request
 
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.binary.Hex
-
-val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
-val YARN_LOCK_FILES = listOf("yarn.lock")
 
 /**
  * The Node package manager for JavaScript, see https://www.npmjs.com/.
@@ -125,45 +119,14 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 NPM(analyzerConfig, repoConfig)
     }
 
-    protected lateinit var projectRoot: File
-    protected lateinit var workspaceMatchers: List<PathMatcher>
-
-    protected fun isManagedByWorkspace(projectDir: File) = workspaceMatchers.any { it.matches(projectDir.toPath()) }
-
-    protected open fun hasLockFile(projectDir: File) = NPM_LOCK_FILES.any { projectDir.resolve(it).isFile }
-
-    protected fun hasYarnLockFile(projectDir: File, considerWorkspaces: Boolean = true) =
-            YARN_LOCK_FILES.any { lockFile ->
-                projectDir.resolve(lockFile).isFile ||
-                        (considerWorkspaces && projectRoot.resolve(lockFile).isFile && isManagedByWorkspace(projectDir))
-            }
+    protected open fun hasLockFile(projectDir: File) = PackageJsonUtil.hasNpmLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.5.* - 6.4.*")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
-        projectRoot = if (definitionFiles.count() > 1) {
-            getCommonFilePrefix(definitionFiles)
-        } else {
-            definitionFiles.first().parentFile
-        }
-
-        val rootDefinitionFile = projectRoot.resolve("package.json")
-        if (!rootDefinitionFile.isFile) {
-            workspaceMatchers = emptyList()
-            return definitionFiles
-        }
-
-        val rootPackageJson = rootDefinitionFile.readValue<ObjectNode>()
-        workspaceMatchers = rootPackageJson["workspaces"]?.map {
-            FileSystems.getDefault().getPathMatcher("glob:$projectRoot/${it.textValue()}")
-        }.orEmpty()
-
-        // Only keep those definition files that are not accompanied by a Yarn lock file and that are not managed as
-        // part of a Yarn workspace.
-        return definitionFiles.filterNot { hasYarnLockFile(it.parentFile) }
-    }
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+            PackageJsonUtil.mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
