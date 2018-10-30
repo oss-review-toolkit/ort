@@ -28,12 +28,10 @@ subprojects {
         componentSelection { rules ->
             rules.all { ComponentSelection selection ->
                 boolean isNonFinalVersion = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-                    selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+                    selection.candidate.version ==~ /(?i).*[.-]$qualifier[.\d-]*/
                 }
 
-                if (isNonFinalVersion) {
-                    selection.reject('Release candidate')
-                }
+                if (isNonFinalVersion) selection.reject('Release candidate')
             }
         }
     }
