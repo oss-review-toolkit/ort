@@ -61,9 +61,7 @@ fun File.unpack(targetDirectory: File) {
  * @param targetDirectory The target directory to store the unpacked content of this archive.
  */
 fun File.unpackTar(targetDirectory: File) {
-    val lowerExtension = extension.toLowerCase()
-
-    val inputStream = when (lowerExtension) {
+    val inputStream = when (extension.toLowerCase()) {
         "gz", "tgz" -> GzipCompressorInputStream(inputStream())
         "bz2", "tbz2" -> BZip2CompressorInputStream(inputStream())
         "gem", "tar" -> inputStream()

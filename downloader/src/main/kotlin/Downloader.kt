@@ -322,9 +322,7 @@ class Downloader {
                 log.warn { "Unknown hash algorithm." }
                 ""
             }
-            else -> {
-                file.hash(hashAlgorithm.toString())
-            }
+            else -> file.hash(hashAlgorithm.toString())
         }
 
         if (digest != hash) {
