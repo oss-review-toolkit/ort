@@ -49,7 +49,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
         override fun create(config: ScannerConfiguration) = Licensee(config)
     }
 
-    override val scannerVersion = "9.9.1"
+    override val scannerVersion = "9.10.1"
     override val resultFileExt = "json"
 
     val CONFIGURATION_OPTIONS = listOf("--json")
