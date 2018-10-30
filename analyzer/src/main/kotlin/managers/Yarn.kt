@@ -40,20 +40,14 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
                 Yarn(analyzerConfig, repoConfig)
     }
 
+    override fun hasLockFile(projectDir: File) = PackageJsonUtil.hasYarnLockFile(projectDir)
+
     override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.9.*")
 
-    override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
-
-    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
-        val yarnDefinitionFiles = definitionFiles - super.mapDefinitionFiles(definitionFiles)
-
-        // Only keep those Yarn definition files that are accompanied by a Yarn lock file. Deliberately omit Yarn
-        // definition files managed by Yarn workspaces as then installation of dependencies only needs to happen in the
-        // project root.
-        return yarnDefinitionFiles.filter { hasYarnLockFile(it.parentFile, false) }
-    }
+    override fun mapDefinitionFiles(definitionFiles: List<File>) =
+            PackageJsonUtil.mapDefinitionFilesForYarn(definitionFiles).toList()
 
     override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
