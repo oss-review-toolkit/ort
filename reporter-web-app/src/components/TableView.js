@@ -48,10 +48,12 @@ class TableView extends React.Component {
     }
 
     onToggleProject(activeKeys) {
-        this.setState({
-            view: {
-                expandedProjects: activeKeys
-            }
+        this.setState((prevState) => {
+            const state = { ...prevState };
+
+            state.view.expandedProjects = activeKeys;
+
+            return state;
         });
     }
 
@@ -118,6 +120,6 @@ TableView.propTypes = {
 };
 
 export default connect(
-    state => ({ reportData: state }),
+    state => ({ reportData: state.data.report }),
     () => ({})
 )(TableView);

@@ -17,41 +17,14 @@
  * License-Filename: LICENSE
  */
 
-/* eslint-disable */
-/* Disabling ESlint as major parts od functionality
- * included in this file will soon be moved to 
- * ORT's Kotlin code.
- * Pointless to fix linter isses that may cause
- * WebApp to break for code that will be refactored soon.
- */
+import { delay } from 'redux-saga';
+import { call, put } from 'redux-saga/effects';
+import { hashCode, removeDuplicatesInArray } from '../utils';
 
-// SPDX-License-Identifier: CC-BY-3.0
-// Author KimKha
-// https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
-export function hashCode(str) {
-    let hash = 0;
+function* convertReportData(reportData) {
+    yield call(delay, 200);
+    yield put({ type: 'LOADING_CONVERTING_REPORT_DATA' });
 
-    for (let i = 0; i < str.length; i++) {
-        const character = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + character; // eslint-disable-line
-        // Convert to 32bit integer
-        hash &= hash; // eslint-disable-line
-    }
-    return hash;
-}
-
-// Utility boolean function to determine if input is a number
-export function isNumeric(n) {
-    return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
-}
-
-// Utility function to remove duplicates from Array
-// https://codehandbook.org/how-to-remove-duplicates-from-javascript-array/
-export function removeDuplicatesInArray(arr) {
-    return Array.from(new Set(arr));
-}
-
-export function convertToRenderFormat(reportData) {
     if (Object.keys(reportData).length === 0
         || !reportData.analyzer.result
         || !reportData.analyzer.result.projects
@@ -93,7 +66,32 @@ export function convertToRenderFormat(reportData) {
     })(reportData.scanner.results.scan_results || []);
     const packageErrorsFromAnalyzer = reportData.analyzer.result.errors;
     const projectsFromAnalyzer = reportData.analyzer.result.projects;
+    const addErrorsToReportDataReportData = (pkgObj) => {
+        const pkg = pkgObj;
+        const { errors } = pkg;
+        let errorSummaryPkgObj;
 
+        if (Array.isArray(errors) && errors.length !== 0) {
+            if (!reportDataOpenErrors[pkg.id]) {
+                errorSummaryPkgObj = {
+                    id: pkg.id,
+                    files: new Set([]),
+                    messages: new Set([])
+                };
+            } else {
+                errorSummaryPkgObj = reportDataOpenErrors[pkg.id];
+            }
+
+            for (let i = errors.length - 1; i >= 0; i -= 1) {
+                const error = errors[i];
+
+                errorSummaryPkgObj.files.add(error.file);
+                errorSummaryPkgObj.messages.add(error.message);
+            }
+
+            reportDataOpenErrors[pkg.id] = errorSummaryPkgObj;
+        }
+    };
     const addErrorsToPackage = (projectIndex, pkgObj, analyzerErrors) => {
         const pkg = pkgObj;
         const project = projects[projectIndex];
@@ -155,30 +153,77 @@ export function convertToRenderFormat(reportData) {
 
         return pkg;
     };
-    const addErrorsToReportDataReportData = (pkgObj) => {
-        const pkg = pkgObj;
-        const { errors } = pkg;
-        let errorSummaryPkgObj;
+    const addPackageLicensesToProject = (projectIndex, licenseType, licenses) => {
+        const project = projects[projectIndex];
+        let projectLicenses;
 
-        if (Array.isArray(errors) && errors.length !== 0) {
-            if (!reportDataOpenErrors[pkg.id]) {
-                errorSummaryPkgObj = {
-                    id: pkg.id,
-                    files: new Set([]),
-                    messages: new Set([])
-                };
-            } else {
-                errorSummaryPkgObj = reportDataOpenErrors[pkg.id];
+        if (project && licenseType && licenses) {
+            projectLicenses = project.packages.licenses;
+
+            if (projectLicenses[licenseType]) {
+                projectLicenses[licenseType] = Array.from(
+                    new Set([...projectLicenses[licenseType], ...licenses])
+                );
             }
+        }
+    };
+    /* Helper function to add declared and detected licenses objects
+     * to the report data object
+     *
+     * Example of object this function creates:
+     *
+     * licenses.declared[1]: {
+     *    'Eclipse Public License 1.0': {
+     *        id: 'Maven:com.google.protobuf:protobuf-lite:3.0.0',
+     *        definition_file_path: './java/lite/pom.xml',
+     *        package: {
+     *            id: 'Maven:junit:junit:4.12'
+     *        }
+     *    }
+     * }
+     */
+    const addPackageLicensesToReportData = (reportDataLicenses, projectIndex, pkgObj, pkgLicenses) => {
+        if (Array.isArray(pkgLicenses)) {
+            for (let i = pkgLicenses.length - 1; i >= 0; i -= 1) {
+                const license = pkgLicenses[i];
+                const project = projects[projectIndex];
+                let licenseOccurance = [];
+                let licenseOccurances;
 
-            for (let i = errors.length - 1; i >= 0; i -= 1) {
-                const error = errors[i];
-                
-                errorSummaryPkgObj.files.add(error.file);
-                errorSummaryPkgObj.messages.add(error.message);
+                if (!Object.prototype.hasOwnProperty.call(reportDataLicenses, projectIndex)) {
+                    reportDataLicenses[projectIndex] = {}; // eslint-disable-line
+                }
+
+                if (!reportDataLicenses[projectIndex][license]) {
+                    reportDataLicenses[projectIndex][license] = new Map(); // eslint-disable-line
+                }
+
+                if (project && project.id && pkgObj && pkgObj.id) {
+                    licenseOccurances = reportDataLicenses[projectIndex][license];
+
+                    if (licenseOccurances.has(pkgObj.id)) {
+                        licenseOccurance = licenseOccurances.get(pkgObj.id);
+                    }
+
+                    reportDataLicenses[projectIndex][license].set(
+                        pkgObj.id,
+                        [
+                            ...licenseOccurance,
+                            {
+                                id: project.id,
+                                definition_file_path: project.definition_file_path,
+                                package: {
+                                    id: pkgObj.id,
+                                    level: pkgObj.level,
+                                    path: pkgObj.path,
+                                    scope: pkgObj.scope
+                                },
+                                type: 'PACKAGE'
+                            }
+                        ]
+                    );
+                }
             }
-
-            reportDataOpenErrors[pkg.id] = errorSummaryPkgObj;
         }
     };
     // Helper function to add license results
@@ -196,7 +241,7 @@ export function convertToRenderFormat(reportData) {
             pkg.declared_licenses = packageFromAnalyzer.declared_licenses;
         } else {
             pkg.declared_licenses = [];
-            console.error(`Package ${pkg.id} can not be found in Analyzer results`);
+            console.error(`Package ${pkg.id} can not be found in Analyzer results`); // eslint-disable-line
         }
 
         addPackageLicensesToProject(
@@ -243,7 +288,7 @@ export function convertToRenderFormat(reportData) {
             pkg.results = [];
             pkg.license_findings = [];
             pkg.detected_licenses = [];
-            console.error(`Package ${pkg.id} was detected by Analyzer but not scanned`);
+            console.error(`Package ${pkg.id} was detected by Analyzer but not scanned`); // eslint-disable-line
         }
 
         return pkg;
@@ -268,79 +313,6 @@ export function convertToRenderFormat(reportData) {
 
             if (scope && scope !== '' && !projectScopes.has(scope)) {
                 projectScopes.add(scope);
-            }
-        }
-    };
-    const addPackageLicensesToProject = (projectIndex, licenseType, licenses) => {
-        const project = projects[projectIndex];
-        let projectLicenses;
-
-        if (project && licenseType && licenses) {
-            projectLicenses = project.packages.licenses;
-
-            if (projectLicenses[licenseType]) {
-                projectLicenses[licenseType] = Array.from(
-                    new Set([...projectLicenses[licenseType], ...licenses])
-                );
-            }
-        }
-    };
-    /* Helper function to add declared and detected licenses objects
-     * to the report data object
-     *
-     * Example of object this function creates:
-     *
-     * licenses.declared[1]: {
-     *    'Eclipse Public License 1.0': {
-     *        id: 'Maven:com.google.protobuf:protobuf-lite:3.0.0',
-     *        definition_file_path: './java/lite/pom.xml',
-     *        package: {
-     *            id: 'Maven:junit:junit:4.12'
-     *        }
-     *    }
-     * }
-     */
-    const addPackageLicensesToReportData = (reportDataLicenses, projectIndex, pkgObj, licenses) => {
-        if (Array.isArray(licenses)) {
-            for (let i = licenses.length - 1; i >= 0; i -= 1) {
-                const license = licenses[i];
-                const project = projects[projectIndex];
-                let licenseOccurance = [];
-                let licenseOccurances;
-
-                if (!Object.prototype.hasOwnProperty.call(reportDataLicenses, projectIndex)) {
-                    reportDataLicenses[projectIndex] = {};
-                }
-
-                if (!reportDataLicenses[projectIndex][license]) {
-                    reportDataLicenses[projectIndex][license] = new Map();
-                }
-
-                if (project && project.id && pkgObj && pkgObj.id) {
-                    licenseOccurances = reportDataLicenses[projectIndex][license];
-
-                    if (licenseOccurances.has(pkgObj.id)) {
-                        licenseOccurance = licenseOccurances.get(pkgObj.id);
-                    }
-
-                    reportDataLicenses[projectIndex][license].set(
-                        pkgObj.id,
-                        [
-                            ...licenseOccurance,
-                            {
-                                id: project.id,
-                                definition_file_path: project.definition_file_path,
-                                package: {
-                                    id: pkgObj.id,
-                                    level: pkgObj.level,
-                                    path: pkgObj.path,
-                                    scope: pkgObj.scope
-                                },
-                                type: 'PACKAGE'
-                            }
-                        ]
-                    );
-                }
             }
         }
     };
@@ -414,11 +386,13 @@ export function convertToRenderFormat(reportData) {
         }
     };
     const addProjectLicensesToReportData = (projectIndex) => {
-        const addLicensesToReportData = (licenses, projectIndex, project, projectLicenses) => {
+        const project = projects[projectIndex];
+        const addLicensesToReportData = (reportDatalicenses, projectLicenses) => {
+            const licenses = reportDatalicenses;
+
             if (Array.isArray(projectLicenses)) {
                 for (let i = projectLicenses.length - 1; i >= 0; i -= 1) {
                     const license = projectLicenses[i];
-                    const project = projects[projectIndex];
                     let licenseOccurance = [];
                     let licenseOccurances;
 
@@ -452,19 +426,14 @@ export function convertToRenderFormat(reportData) {
                 }
             }
         };
-        const project = projects[projectIndex];
 
         if (project) {
             addLicensesToReportData(
                 declaredLicensesFromAnalyzer,
-                projectIndex,
-                project,
                 project.declared_licenses
             );
             addLicensesToReportData(
                 detectedLicensesFromScanner,
-                projectIndex,
-                project,
                 project.detected_licenses
             );
         }
@@ -481,29 +450,32 @@ export function convertToRenderFormat(reportData) {
     };
     // Helper function to add results from Scanner to a project
     const addScanResultsToProject = (project) => {
-        const projectId = project.id;
+        const proj = project;
+        const projectId = proj.id;
         const projectFromScanner = packagesFromScanner[projectId] || false;
 
         if (projectId && projectFromScanner) {
-            project.results = projectFromScanner;
+            proj.results = projectFromScanner;
 
-            project.packages.licenses.findings = projectFromScanner.reduce(
+            proj.packages.licenses.findings = projectFromScanner.reduce(
                 (accumulator, scanResult) => accumulator.concat(
                     scanResult.summary.license_findings
                 ),
                 []
             );
 
-            project.packages.licenses.detected = removeDuplicatesInArray(
-                project.packages.licenses.findings.map(finding => finding.license)
+            proj.packages.licenses.detected = removeDuplicatesInArray(
+                proj.packages.licenses.findings.map(finding => finding.license)
             );
         }
 
-        return project;
+        return proj;
     };
     const calculateNrPackagesLicenses = projectsLicenses => Object.values(projectsLicenses)
         .reduce((accumulator, projectLicenses) => {
-            for (const license in projectLicenses) {
+            const keys = Object.keys(projectLicenses);
+            for (let i = keys.length - 1; i >= 0; i -= 1) {
+                const license = keys[i];
                 const licenseMap = projectLicenses[license];
 
                 if (!accumulator[license]) {
@@ -512,15 +484,19 @@ export function convertToRenderFormat(reportData) {
 
                 accumulator[license] += licenseMap.size;
             }
+
             return accumulator;
         }, {});
     const calculateReportDataTotalLicenses = (projectsLicenses) => {
         const licensesSet = new Set([]);
 
         return Object.values(projectsLicenses).reduce((accumulator, projectLicenses) => {
-            for (const license in projectLicenses) {
+            const keys = Object.keys(projectLicenses);
+            for (let i = keys.length - 1; i >= 0; i -= 1) {
+                const license = keys[i];
                 accumulator.add(license);
             }
+
             return accumulator;
         }, licensesSet).size || undefined;
     };
@@ -568,17 +544,17 @@ export function convertToRenderFormat(reportData) {
      * found by the Analyzer so they can be transformed
      * into a format that suitable for use in the WebApp
      */
-    const recursivePackageAnalyzer = (projectIndex, pkg, childIndex, parentTreeId = '', dependencyPathFromRoot = [], scp = '', delivered) => {
+    const recursivePackageAnalyzer = (
+        projectIndex, pkg, childIndex, parentTreeId = '', dependencyPathFromRoot = [], scp = '', delivered
+    ) => {
         const treeId = parentTreeId === '' ? `${childIndex}` : `${parentTreeId}-${childIndex}`;
         const children = Object.entries(pkg).reduce((accumulator, [key, value]) => {
-            let indexOffset = 0;
-
             // Only recursively traverse objects which can hold packages
             if (key === 'dependencies' && value.length !== 0) {
                 const depsChildren = value.map((dep, index) => recursivePackageAnalyzer(
                     projectIndex,
                     dep,
-                    `d${index}`,
+                    `${index}`,
                     treeId,
                     [...dependencyPathFromRoot, pkg.id || pkg.name],
                     scp, delivered
@@ -595,7 +571,7 @@ export function convertToRenderFormat(reportData) {
                     .map((scope, scopeIndex) => scope.dependencies.map((dep, index) => recursivePackageAnalyzer(
                         projectIndex,
                         dep,
-                        `s${scopeIndex}-${index}`,
+                        `${scopeIndex}-${index}`,
                         treeId,
                         [...dependencyPathFromRoot, pkg.name || pkg.id],
                         scope.name,
@@ -605,7 +581,7 @@ export function convertToRenderFormat(reportData) {
                     // as each scope is on the same level
                     .reduce((acc, scopeDeps) => [...acc, ...scopeDeps], []);
 
-               accumulator.push(...scopeChildren);
+                accumulator.push(...scopeChildren);
             }
 
             return accumulator;
@@ -681,6 +657,29 @@ export function convertToRenderFormat(reportData) {
         }
 
         projects[projectIndex].packages.tree = recursivePackageAnalyzer(projectIndex, project, i);
+        // Sort the tree nodes so parent comes before children in array
+        // so tree search will return results in the right order
+        projects[projectIndex].packages.treeNodesList.sort((a, b) => {
+            const keysA = a.key.split('-');
+            const keysB = b.key.split('-');
+            const keysLength = keysA.length < keysB.length ? keysA.length : keysB.length;
+
+            for (let j = 0; j < keysLength; j++) {
+                if (keysA[j] !== keysB[j]) {
+                    return keysA[j] - keysB[j];
+                }
+            }
+
+            if (keysA.length < keysB.length) {
+                return -1;
+            }
+
+            if (keysA.length > keysB.length) {
+                return 1;
+            }
+
+            return 0;
+        });
 
         addProjectLicensesToReportData(projectIndex);
         addProjectLevelsToReportDataReportData(projectIndex);
@@ -691,6 +690,13 @@ export function convertToRenderFormat(reportData) {
         projects[projectIndex].packages.list = Object.values(
             projects[projectIndex].packages.list
         ).reverse();
+
+        yield call(delay, 50);
+        yield put({
+            type: 'LOADING_CONVERTING_REPORT_DATA_PROGRESS',
+            index: projectsFromAnalyzer.length - i,
+            total: projectsFromAnalyzer.length
+        });
     }
 
     // Flatten errors into an array of errors
@@ -699,7 +705,7 @@ export function convertToRenderFormat(reportData) {
     // Flatten addressed errors into an array of errors
     reportDataAddressedErrors = Object.values(reportDataAddressedErrors);
 
-    return {
+    const convertedData = {
         hasErrors: reportData.has_errors || false,
         errors: {
             data: {
@@ -744,4 +750,14 @@ export function convertToRenderFormat(reportData) {
         vcs: reportData.repository.vcs || {},
         vcs_processed: reportData.repository.vcs_processed || {}
     };
+
+    yield put({ type: 'LOADING_CONVERTING_REPORT_DATA_DONE', payload: convertedData });
+    yield call(delay, 300);
+    yield put({ type: 'LOADING_DONE' });
+    yield call(delay, 300);
+    yield put({ type: 'VIEW_SHOW_REPORT' });
+
+    return convertedData;
 }
+
+export default convertReportData;
