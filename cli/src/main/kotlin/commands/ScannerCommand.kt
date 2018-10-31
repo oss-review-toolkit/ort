@@ -134,8 +134,7 @@ object ScannerCommand : CommandWithHelp() {
                 "To scan local files the chosen scanner must be a local scanner."
             }
 
-            val localScanner = scanner as LocalScanner
-            localScanner.scanInputPath(inputPath!!, outputDir)
+            scanner.scanInputPath(inputPath!!, outputDir)
         }
 
         outputFormats.distinct().forEach { format ->
