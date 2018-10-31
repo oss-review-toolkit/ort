@@ -224,7 +224,7 @@ abstract class TableReporter : Reporter() {
                 }
     }
 
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File {
         fun Error.toResolvableError(): TableReporter.ResolvableError {
             return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
         }
