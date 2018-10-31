@@ -36,15 +36,22 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
+import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
+import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
-import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
+import com.here.ort.utils.unpack
+
+import okhttp3.Request
+
+import okio.Okio
 
 import java.io.File
 import java.io.IOException
+import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
@@ -128,16 +135,37 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun bootstrap(): File {
-        val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
-        val scancodeDir = File(gitRoot, "scanner/src/funTest/assets/scanners/scancode-toolkit")
-        if (!scancodeDir.isDirectory) throw IOException("Directory '$scancodeDir' not found.")
+        // Use the .zip file despite it being slightly larger than the .tar.bz2 file as the latter for some reason does
+        // not complete to unpack on Windows.
+        val url = "https://github.com/nexB/scancode-toolkit/releases/download/v$scannerVersion/" +
+                "scancode-toolkit-$scannerVersion.zip"
 
-        val configureExe = if (OS.isWindows) "configure.bat" else "configure"
-        val configurePath = File(scancodeDir, configureExe)
-        ProcessCapture(configurePath.absolutePath, "--clean").requireSuccess()
-        ProcessCapture(configurePath.absolutePath).requireSuccess()
+        log.info { "Downloading $this from '$url'... " }
 
-        return scancodeDir
+        val request = Request.Builder().get().url(url).build()
+
+        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+            val body = response.body()
+
+            if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
+                throw IOException("Failed to download $this from $url.")
+            }
+
+            if (response.cacheResponse() != null) {
+                log.info { "Retrieved $this from local cache." }
+            }
+
+            val scannerArchive = createTempFile(suffix = url.substringAfterLast("/"))
+            Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
+
+            val unpackDir = createTempDir()
+            unpackDir.deleteOnExit()
+
+            log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
+            scannerArchive.unpack(unpackDir)
+
+            unpackDir.resolve("scancode-toolkit-$scannerVersion")
+        }
     }
 
     override fun getConfiguration() =

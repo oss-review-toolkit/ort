@@ -14,10 +14,6 @@
 	path = analyzer/src/funTest/assets/projects/external/spdx-tools-python
 	url = https://github.com/spdx/tools-python.git
 	ignore = untracked
-[submodule "scancode-toolkit"]
-	path = scanner/src/funTest/assets/scanners/scancode-toolkit
-	url = https://github.com/nexb/scancode-toolkit.git
-	ignore = untracked
 [submodule "qmstr"]
 	path = analyzer/src/funTest/assets/projects/external/qmstr
 	url = https://github.com/QMSTR/qmstr.git
