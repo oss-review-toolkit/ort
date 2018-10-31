@@ -98,11 +98,7 @@ object ReporterCommand : CommandWithHelp() {
             val name = it.toString().removeSuffix("Reporter")
             try {
                 val reportFile = it.generateReport(ortResult, resolutionProvider, outputDir)
-                if (reportFile != null) {
-                    println("Created '$name' report:\n\t$reportFile")
-                } else {
-                    println("Not creating any output for '$name' report.")
-                }
+                println("Created '$name' report:\n\t$reportFile")
             } catch (e: Exception) {
                 e.showStackTrace()
 

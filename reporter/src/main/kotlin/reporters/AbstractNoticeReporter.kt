@@ -34,7 +34,7 @@ import java.util.SortedMap
 import java.util.SortedSet
 
 abstract class AbstractNoticeReporter : Reporter() {
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
@@ -49,43 +49,46 @@ abstract class AbstractNoticeReporter : Reporter() {
             license.startsWith("LicenseRef-")
         }.iterator()
 
+        log.info { "Writing $noticeFileName file to '${outputFile.absolutePath}'." }
+
         if (!findingsIterator.hasNext()) {
-            log.info { "Not writing a $noticeFileName file as it would be empty." }
-            return null
-        } else {
-            log.info { "Writing $noticeFileName file to '${outputFile.absolutePath}'." }
+            outputFile.appendText("This project neither contains or depends on any third-party software " +
+                    "components.\n")
+            return outputFile
         }
+
+        outputFile.appendText("This project contains or depends on third-party software components pursuant to the " +
+                "following licenses:\n")
 
         // Note: Do not use appendln() here as that would write out platform-native line endings, but we want to
         // normalize on Unix-style line endings for consistency.
         while (findingsIterator.hasNext()) {
+            outputFile.appendText("\n----\n\n")
+
             val (license, copyrights) = findingsIterator.next()
 
-            var noticeBuilder = StringBuilder()
+            val notice = buildString {
+                copyrights.forEach { copyright ->
+                    append("$copyright\n")
+                }
 
-            copyrights.forEach { copyright ->
-                noticeBuilder.append("$copyright\n")
+                if (copyrights.isNotEmpty()) append("\n")
+
+                val licenseText = getLicenseText(license, true)
+                append("$licenseText\n")
             }
-
-            if (copyrights.isNotEmpty()) noticeBuilder.append("\n")
-
-            noticeBuilder.append("${getLicenseText(license, true)}\n")
 
             // Trim lines and remove consecutive blank lines as the license text formatting in SPDX JSON files is
             // broken, see https://github.com/spdx/LicenseListPublisher/issues/30.
             var previousLine = ""
-            val trimmedNoticeLines = noticeBuilder.lines().mapNotNull { line ->
+            val trimmedNoticeLines = notice.lines().mapNotNull { line ->
                 val trimmedLine = line.trim()
                 trimmedLine.takeIf { it.isNotBlank() || previousLine.isNotBlank() }
                         .also { previousLine = trimmedLine }
             }
 
-            noticeBuilder = StringBuilder(trimmedNoticeLines.joinToString("\n"))
-
-            // Separate notice rows.
-            if (findingsIterator.hasNext()) noticeBuilder.append("\n----\n\n")
-
-            outputFile.appendText(noticeBuilder.toString())
+            val trimmedNotice = trimmedNoticeLines.joinToString("\n")
+            outputFile.appendText(trimmedNotice)
         }
 
         return outputFile

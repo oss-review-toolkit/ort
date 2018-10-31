@@ -45,5 +45,9 @@ abstract class Reporter {
      */
     override fun toString(): String = javaClass.simpleName
 
-    abstract fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File?
+    /**
+     * Generate a report for the [ortResult] taking into account any error resolutions provided by [resolutionProvider].
+     * The report, whose file name is determined internally, is written to [outputDir] and returned as the result.
+     */
+    abstract fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File
 }
