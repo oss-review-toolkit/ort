@@ -19,8 +19,6 @@
 
 package com.here.ort.model.config
 
-import com.here.ort.model.config.CacheConfiguration
-
 import java.io.File
 
 data class CloudStorageCacheConfiguration(

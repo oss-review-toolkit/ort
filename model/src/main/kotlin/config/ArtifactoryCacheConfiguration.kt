@@ -21,8 +21,6 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-import com.here.ort.model.config.CacheConfiguration
-
 data class ArtifactoryCacheConfiguration(
         val url: String,
 
