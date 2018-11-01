@@ -83,6 +83,15 @@ fun File.unpackTar(targetDirectory: File) {
             target.outputStream().use { output ->
                 it.copyTo(output)
             }
+
+            if (!OS.isWindows) {
+                // Note: In contrast to Java, Kotlin does not support octal literals, see
+                // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
+                // The bit-triplets from left to right stand for user, groups, other, respectively.
+                if (entry.mode and 0b001_000_001 != 0) {
+                    target.setExecutable(true, (entry.mode and 0b000_000_001) == 0)
+                }
+            }
         }
     }
 }
