@@ -46,7 +46,7 @@ class NoticeReporterTest : WordSpec({
         }
 
         "contain all licenses without excludes" {
-            val expectedResultFile = File("src/test/assets/npm-test-without-exclude-NOTICE")
+            val expectedResultFile = File("src/test/assets/npm-test-without-exclude-expected-NOTICE")
             val scanRecordFile = File("src/test/assets/npm-test-without-exclude-scan-results.yml")
             val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
@@ -59,7 +59,7 @@ class NoticeReporterTest : WordSpec({
         }
 
         "not contain licenses of excluded packages" {
-            val expectedResultFile = File("src/test/assets/npm-test-with-exclude-NOTICE")
+            val expectedResultFile = File("src/test/assets/npm-test-with-exclude-expected-NOTICE")
             val scanRecordFile = File("src/test/assets/npm-test-with-exclude-scan-results.yml")
             val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
