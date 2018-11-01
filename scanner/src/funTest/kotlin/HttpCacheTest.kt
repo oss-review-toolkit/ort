@@ -159,7 +159,7 @@ class HttpCacheTest : StringSpec() {
 
     init {
         "Scan result can be added to the cache" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
 
@@ -173,7 +173,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Does not add scan result without raw result to cache" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles)
 
             val result = cache.add(id, scanResult)
@@ -185,7 +185,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Does not add scan result with fileCount 0 to cache" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles,
                     rawResultWithContent)
 
@@ -198,7 +198,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Does not add scan result without provenance information to cache" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult = ScanResult(provenanceEmpty, scannerDetails1, scanSummaryWithFiles,
                     rawResultEmpty)
 
@@ -211,7 +211,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Can retrieve all scan results from cache" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
             val scanResult2 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles,
@@ -229,7 +229,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Can retrieve all scan results for specific scanner from cache" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
             val scanResult2 = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles,
@@ -251,7 +251,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Can retrieve all scan results for compatible scanners from cache" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
             val scanResultCompatible1 = ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1,
@@ -278,7 +278,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Returns only packages with matching provenance" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResultSourceArtifactMatching = ScanResult(provenanceWithSourceArtifact, scannerDetails1,
                     scanSummaryWithFiles, rawResultWithContent)
             val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles,
@@ -308,7 +308,7 @@ class HttpCacheTest : StringSpec() {
         }
 
         "Cached result is found if revision was detected from version" {
-            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+            val cache = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken", false)
             val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
 

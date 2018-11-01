@@ -33,22 +33,25 @@ class ArtifactoryCacheConfigurationTest : WordSpec() {
                 val yaml = """
                     ---
                     url: "url"
-                    api_token: "apiToken"""".trimIndent()
+                    api_token: "apiToken"
+                    rewrite_artifactory_cache: false""".trimIndent()
 
                 val artifactoryCacheConfiguration = yamlMapper.readValue<ArtifactoryCacheConfiguration>(yaml)
 
                 artifactoryCacheConfiguration.url shouldBe "url"
                 artifactoryCacheConfiguration.apiToken shouldBe "apiToken"
+                artifactoryCacheConfiguration.rewriteArtifactoryCache shouldBe false
             }
 
             "not serialize the ApiToken" {
-                val artifactoryCacheConfiguration = ArtifactoryCacheConfiguration("url", "apiToken")
+                val artifactoryCacheConfiguration = ArtifactoryCacheConfiguration("url", "apiToken", false)
 
                 val yaml = yamlMapper.writeValueAsString(artifactoryCacheConfiguration).trim()
 
                 yaml shouldBe """
                     ---
                     url: "url"
+                    rewrite_artifactory_cache: false
                     """.trimIndent()
             }
 
