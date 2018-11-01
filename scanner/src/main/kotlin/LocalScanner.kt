@@ -134,8 +134,12 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      */
     fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
 
-    override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File?, removeBinaryAndZipFiles: Boolean)
-            : Map<Package, List<ScanResult>> {
+    override fun scan(
+            packages: List<Package>,
+            outputDirectory: File,
+            downloadDirectory: File?,
+            removeBinaryAndZipFiles: Boolean
+    ): Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
         return packages.withIndex().associate { (index, pkg) ->
@@ -245,7 +249,12 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
         }
 
         val downloadResult = try {
-            Downloader().download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"), false, removeBinaryAndZipFiles)
+            Downloader().download(
+                    pkg,
+                    downloadDirectory ?: File(outputDirectory, "downloads"),
+                    false,
+                    removeBinaryAndZipFiles
+            )
         } catch (e: DownloadException) {
             e.showStackTrace()
 

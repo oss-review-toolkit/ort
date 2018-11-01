@@ -144,7 +144,11 @@ class ArtifactoryCache(
 
             return false
         }
-        val scanResults = if (rewriteArtifactoryCache) ScanResultContainer(id, ScanResultContainer(id, emptyList()).results + scanResult) else ScanResultContainer(id, read(id).results + scanResult)
+        val scanResults = if (rewriteArtifactoryCache) {
+            ScanResultContainer(id, ScanResultContainer(id, emptyList()).results + scanResult)
+        } else {
+            ScanResultContainer(id, read(id).results + scanResult)
+        }
 
         val tempFile = createTempFile("scan-results-")
         yamlMapper.writeValue(tempFile, scanResults)

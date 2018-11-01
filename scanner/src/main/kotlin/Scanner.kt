@@ -65,8 +65,12 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
      * [ScanResult]s are returned associated by the [Package]. The map may contain multiple results for the same
      * [Package] if the cache contains more than one result for the specification of this scanner.
      */
-    abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File? = null, removeBinaryAndZipFiles: Boolean)
-            : Map<Package, List<ScanResult>>
+    abstract fun scan(
+            packages: List<Package>,
+            outputDirectory: File,
+            downloadDirectory: File? = null,
+            removeBinaryAndZipFiles: Boolean
+    ): Map<Package, List<ScanResult>>
 
     /**
      * Scan the [Project]s and [Package]s specified in [dependenciesFile] using this [Scanner] and store the scan

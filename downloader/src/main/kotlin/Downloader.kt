@@ -129,7 +129,12 @@ class Downloader {
      *
      * @throws DownloadException In case the download failed.
      */
-    fun download(target: Package, outputDirectory: File, allowMovingRevisions: Boolean = false, removeBinaryAndZipFiles: Boolean = false): DownloadResult {
+    fun download(
+            target: Package,
+            outputDirectory: File,
+            allowMovingRevisions: Boolean = false,
+            removeBinaryAndZipFiles: Boolean = false
+    ): DownloadResult {
         log.info { "Trying to download source code for '${target.id}'." }
 
         val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
@@ -176,7 +181,12 @@ class Downloader {
         }
     }
 
-    private fun downloadFromVcs(target: Package, outputDirectory: File, allowMovingRevisions: Boolean, removeBinaryAndZipFiles: Boolean): DownloadResult {
+    private fun downloadFromVcs(
+            target: Package,
+            outputDirectory: File,
+            allowMovingRevisions: Boolean,
+            removeBinaryAndZipFiles: Boolean
+    ): DownloadResult {
         log.info {
             "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
@@ -255,18 +265,18 @@ class Downloader {
 
     private fun checkType(url: String) {
         val path = Paths.get(url)
-        val type = Files.probeContentType(path);
+        val type = Files.probeContentType(path)
         if (type == "application/octet-stream" || type == "application/zip") {
-            log.info("removing file ${url}")
-            if(File(url).delete()) {
-                log.info("removed file ${url}")
+            log.info("removing file $url")
+            if (File(url).delete()) {
+                log.info("removed file $url")
             }
         }
     }
 
     fun filterFilesInDirectory(path: String) {
 
-        File("${path}").walkTopDown().forEach {
+        File("$path").walkTopDown().forEach {
             checkType(it.toString())
         }
     }

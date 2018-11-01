@@ -97,8 +97,8 @@ object ScannerCommand : CommandWithHelp() {
     private var outputFormats = listOf(OutputFormat.YAML)
 
     @Parameter(description = "Remove binary and zip files from project",
-                names = ["--remove-binary-zip", "-r"],
-                order = PARAMETER_ORDER_OPTIONAL)
+            names = ["--remove-binary-zip", "-r"],
+            order = PARAMETER_ORDER_OPTIONAL)
     private var removeBinaryAndZipFiles = false
 
     override fun runCommand(jc: JCommander) {
