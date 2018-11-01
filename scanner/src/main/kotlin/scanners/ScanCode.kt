@@ -170,6 +170,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
                 // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
                 // Unix mode bits.
                 scannerDir.resolve(command()).setExecutable(true)
+                scannerDir.resolve("configure").setExecutable(true)
             }
 
             scannerDir
