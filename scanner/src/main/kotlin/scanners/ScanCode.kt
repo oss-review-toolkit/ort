@@ -164,7 +164,15 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)
 
-            unpackDir.resolve("scancode-toolkit-$scannerVersion")
+            val scannerDir = unpackDir.resolve("scancode-toolkit-$scannerVersion")
+
+            if (!OS.isWindows) {
+                // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
+                // Unix mode bits.
+                scannerDir.resolve(command()).setExecutable(true)
+            }
+
+            scannerDir
         }
     }
 
