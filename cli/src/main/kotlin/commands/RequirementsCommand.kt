@@ -118,5 +118,9 @@ object RequirementsCommand : CommandWithHelp() {
                 println(prefix + message + suffix)
             }
         }
+
+        println("Legend:")
+        println("\tA '-' prefix means that the tool was not found in the PATH environment.")
+        println("\tA '*' prefix means that some version of the tool was found in the PATH environment.")
     }
 }
