@@ -135,10 +135,14 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun bootstrap(): File {
-        // Use the .zip file despite it being slightly larger than the .tar.bz2 file as the latter for some reason does
-        // not complete to unpack on Windows.
-        val url = "https://github.com/nexB/scancode-toolkit/releases/download/v$scannerVersion/" +
-                "scancode-toolkit-$scannerVersion.zip"
+        val archive = when {
+            // Use the .zip file despite it being slightly larger than the .tar.bz2 file here as the latter for some
+            // reason does not complete to unpack on Windows.
+            OS.isWindows -> "scancode-toolkit-$scannerVersion.zip"
+            else -> "scancode-toolkit-$scannerVersion.tar.bz2"
+        }
+
+        val url = "https://github.com/nexB/scancode-toolkit/releases/download/v$scannerVersion/$archive"
 
         log.info { "Downloading $this from '$url'... " }
 
@@ -165,13 +169,6 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             scannerArchive.unpack(unpackDir)
 
             val scannerDir = unpackDir.resolve("scancode-toolkit-$scannerVersion")
-
-            if (!OS.isWindows) {
-                // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
-                // Unix mode bits.
-                scannerDir.resolve(command()).setExecutable(true)
-                scannerDir.resolve("configure").setExecutable(true)
-            }
 
             scannerDir
         }
