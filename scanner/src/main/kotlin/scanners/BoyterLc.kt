@@ -114,8 +114,7 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
             scannerArchive.unpack(unpackDir)
 
             if (!OS.isWindows) {
-                // The Linux version is distributed as a ZIP, but our ZIP unpacker seems to be unable to properly handle
-                // Unix mode bits.
+                // The Linux version is distributed as a ZIP, but without having the Unix executable mode bits stored.
                 File(unpackDir, command()).setExecutable(true)
             }
 
