@@ -2,8 +2,21 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' apply false
     id 'org.jetbrains.dokka' apply false
 
-    id 'com.github.ben-manes.versions' apply false
     id 'io.gitlab.arturbosch.detekt' apply false
+
+    id 'com.github.ben-manes.versions'
+}
+
+dependencyUpdates.resolutionStrategy = {
+    componentSelection { rules ->
+        rules.all { ComponentSelection selection ->
+            boolean isNonFinalVersion = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+                selection.candidate.version ==~ /(?i).*[.-]$qualifier[.\d-]*/
+            }
+
+            if (isNonFinalVersion) selection.reject('Release candidate')
+        }
+    }
 }
 
 subprojects {
@@ -19,22 +32,9 @@ subprojects {
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.jetbrains.dokka'
     apply plugin: 'io.gitlab.arturbosch.detekt'
-    apply plugin: 'com.github.ben-manes.versions'
 
     // Apply core plugins.
     apply plugin: 'jacoco'
-
-    dependencyUpdates.resolutionStrategy = {
-        componentSelection { rules ->
-            rules.all { ComponentSelection selection ->
-                boolean isNonFinalVersion = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-                    selection.candidate.version ==~ /(?i).*[.-]$qualifier[.\d-]*/
-                }
-
-                if (isNonFinalVersion) selection.reject('Release candidate')
-            }
-        }
-    }
 
     sourceSets {
         funTest {
