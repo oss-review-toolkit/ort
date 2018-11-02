@@ -1,4 +1,5 @@
 plugins {
+    id 'com.bmuschko.docker-java-application'
     id 'com.bmuschko.docker-remote-api'
 }
 
@@ -13,6 +14,15 @@ task dockerBuildBaseImage(type: com.bmuschko.gradle.docker.tasks.image.DockerBui
     description = 'Builds the base Docker image to run ORT.'
     tag = 'ort-base:latest'
 }
+
+docker {
+    javaApplication {
+        baseImage = 'ort-base:latest'
+        tag = 'ort:latest'
+    }
+}
+
+dockerBuildImage.dependsOn dockerBuildBaseImage
 
 repositories {
     jcenter()
