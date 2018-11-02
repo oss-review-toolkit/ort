@@ -55,7 +55,8 @@ object OkHttpClientHelper {
     fun execute(cachePath: String, request: Request): Response {
         val client = clients.getOrPut(cachePath) {
             val cacheDirectory = File(getUserConfigDirectory(), cachePath)
-            val cache = Cache(cacheDirectory, 10 * 1024 * 1024)
+            val maxCacheSizeInBytes = 1024L * 1024L * 1024L
+            val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
             OkHttpClient.Builder()
                     .cache(cache)
