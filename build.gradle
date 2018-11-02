@@ -62,22 +62,6 @@ subprojects {
         }
     }
 
-    plugins.withType(ApplicationPlugin) {
-        dependencies {
-            compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-
-            testCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
-            testCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
-            testCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
-            testCompile project(':utils-test')
-
-            funTestCompile sourceSets.main.output
-            funTestCompile sourceSets.test.output
-            funTestCompile configurations.testCompile
-            funTestRuntime configurations.testRuntime
-        }
-    }
-
     // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
     configurations.all {
         resolutionStrategy {

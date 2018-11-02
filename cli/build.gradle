@@ -23,6 +23,20 @@ dependencies {
     compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
+
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compile 'org.jetbrains.kotlin:kotlin-reflect'
+
     compile "org.reflections:reflections:$reflectionsVersion"
+
+    testCompile project(':utils-test')
+
+    testCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
+    testCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
+    testCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
+
+    funTestCompile sourceSets.main.output
+    funTestCompile sourceSets.test.output
+    funTestCompile configurations.testCompile
+    funTestRuntime configurations.testRuntime
 }
