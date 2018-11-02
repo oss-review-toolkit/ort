@@ -110,7 +110,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 /**
  * Return the longest prefix that is common to all [files].
  */
-fun getCommonFilePrefix(files: List<File>) =
+fun getCommonFilePrefix(files: Collection<File>) =
         files.map {
             it.normalize().absolutePath
         }.reduce { prefix, path ->
