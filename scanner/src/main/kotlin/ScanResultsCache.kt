@@ -72,10 +72,11 @@ class ScanResultsCache {
 
         /**
          * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the cache.
-         * [ScannerDetails.isCompatible] is used to check if the results are compatible with the provided [scannerDetails].
-         * Also [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result
-         * matches the expected source code location. This is important to find the correct results when different revisions
-         * of a package using the same version name are used (e.g. multiple scans of 1.0-SNAPSHOT during development).
+         * [ScannerDetails.isCompatible] is used to check if the results are compatible with the
+         * provided [scannerDetails]. Also [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used
+         * to check if the scan result matches the expected source code location. This is important to find the correct
+         * results when different revisions of a package using the same version name are used (e.g. multiple scans
+         * of 1.0-SNAPSHOT during development).
          *
          * @param pkg The [Package] to look up results for.
          * @param scannerDetails Details about the scanner that was used to scan the [Package].
