@@ -18,140 +18,317 @@
  */
 
 const initState = {
-    data: {
+    app: {
         loading: {
-            state: 'INIT',
-            percentage: 0
+            percentage: 0,
+            text: ''
         },
-        report: {}
+        showKey: 'ort-loading'
     },
-    view: {
-        activeTabKey: 'summary'
+    summary: {
+        licenses: {
+            declaredChart: [],
+            detectedChart: [],
+            declaredFilter: {
+                filteredInfo: {},
+                sortedInfo: {}
+            },
+            detectedFilter: {
+                filteredInfo: {},
+                sortedInfo: {}
+            }
+        },
+        shouldComponentUpdate: false
+    },
+    table: {
+        expandedProjectsKeys: [],
+        shouldComponentUpdate: false,
+        showSingleTable: true
+    },
+    tree: {
+        autoExpandParent: true,
+        expandedKeys: [],
+        matchedKeys: [],
+        searchValue: '',
+        searchIndex: 0,
+        selectedPackage: null,
+        selectedKeys: [],
+        shouldComponentUpdate: false,
+        showDrawer: false
+    },
+    data: {
+        report: {},
+        reportLastUpdate: null
     }
 };
 
 export default (state = initState, action) => {
     switch (action.type) {
-    case 'LOADING_CONVERTING_REPORT_DATA': {
+    case 'APP::LOADING_CONVERTING_REPORT_START': {
         return {
             ...state,
-            data: {
-                ...state.data,
+            app: {
+                ...state.app,
                 loading: {
-                    ...state.data.loading,
-                    state: 'LOADING',
+                    ...state.app.loading,
                     text: 'processing data for optimal rendering...',
                     percentage: 25
                 }
             }
         };
     }
-    case 'LOADING_CONVERTING_REPORT_DATA_DONE': {
+    case 'APP::LOADING_CONVERTING_REPORT_DONE': {
         return {
             ...state,
+            app: {
+                ...state.app,
+                loading: {
+                    ...state.app.loading,
+                    text: 'processing done...',
+                    percentage: 100
+                }
+            },
             data: {
                 ...state.data,
-                loading: {
-                    ...state.data.loading,
-                    state: 'LOADING',
-                    text: 'data processing done...',
-                    percentage: 100
-                },
                 report: action.payload
             }
         };
     }
-    case 'LOADING_CONVERTING_REPORT_DATA_PROGRESS': {
+    case 'APP::LOADING_CONVERTING_REPORT': {
         const { index, total } = action;
-        const { loading } = state.data;
+        const { loading } = state.app;
         const { percentage: currentPercentage } = loading;
         const newPercentage = Math.floor(currentPercentage + (99 - currentPercentage) / (total - index));
 
         return {
             ...state,
-            data: {
-                ...state.data,
+            app: {
+                ...state.app,
                 loading: {
-                    ...state.data.loading,
-                    state: 'LOADING',
+                    ...state.app.loading,
                     text: `processing project (${index}/${total})...`,
                     percentage: newPercentage
                 }
             }
         };
     }
-    case 'LOADING_DONE': {
+    case 'APP::LOADING_DONE': {
         return {
             ...state,
-            data: {
-                ...state.data,
+            app: {
+                ...state.app,
                 loading: {
-                    ...state.data.loading,
-                    state: 'LOADING',
-                    text: 'all done...',
+                    ...state.app.loading,
+                    text: 'loading done...',
                     percentage: 100
                 }
             }
         };
     }
-    case 'LOADING_REPORT_DATA': {
+    case 'APP::LOADING_REPORT_START': {
         return {
             ...state,
             data: {
-                ...state.data,
+                ...state.app,
                 loading: {
-                    ...state.data.loading,
-                    state: 'LOADING',
+                    ...state.app.loading,
                     text: 'loading data...',
                     percentage: 1
                 }
             }
         };
     }
-    case 'LOADING_REPORT_DATA_DONE': {
+    case 'APP::LOADING_REPORT_DONE': {
         return {
             ...state,
-            data: {
-                ...state.data,
+            app: {
+                ...state.app,
                 loading: {
-                    ...state.data.loading,
+                    ...state.app.loading,
                     text: 'loaded data...',
                     percentage: 20
-                },
-                report: action.payload
+                }
+            },
+            data: {
+                ...state.data,
+                report: action.payload,
+                reportLastUpdate: Date.now()
             }
         };
     }
-    case 'LOADING_REPORT_DATA_DONE_NO_DATA': {
+    case 'APP::SHOW_NO_REPORT': {
         return {
             ...state,
-            data: {
-                ...state.data,
-                loading: {
-                    ...state.data.loading,
-                    state: 'NO_REPORT_DATA'
+            app: {
+                ...state.app,
+                showKey: 'ort-no-report-data'
+            }
+        };
+    }
+    case 'APP::CHANGE_TAB': {
+        const { tree: { showDrawer } } = state;
+
+        const newState = {
+            ...state,
+            app: {
+                ...state.app,
+                showKey: action.key
+            },
+            summary: {
+                ...state.summary,
+                shouldComponentUpdate: action.key === 'ort-tabs-summary'
+            },
+            table: {
+                ...state.table,
+                shouldComponentUpdate: action.key === 'ort-tabs-table'
+            },
+            tree: {
+                ...state.tree,
+                shouldComponentUpdate: action.key === 'ort-tabs-tree'
+            }
+        };
+
+        if (action.key !== 'tree' && showDrawer) {
+            newState.tree.showDrawer = false;
+        }
+
+        return newState;
+    }
+    case 'APP::SHOW_LOADING': {
+        return {
+            ...state,
+            app: {
+                ...state.app,
+                showKey: 'ort-loading'
+            }
+        };
+    }
+    case 'APP::SHOW_TABS': {
+        return {
+            ...state,
+            app: {
+                ...state.app,
+                showKey: 'ort-tabs-summary'
+            },
+            summary: {
+                ...state.summary,
+                shouldComponentUpdate: true
+            }
+        };
+    }
+    case 'SUMMARY::CHANGE_DECLARED_LICENSES_TABLE': {
+        const { declaredChart, declaredFilter } = action.payload;
+
+        return {
+            ...state,
+            summary: {
+                ...state.summary,
+                licenses: {
+                    ...state.summary.licenses,
+                    declaredChart,
+                    declaredFilter
                 }
             }
         };
     }
-    case 'VIEW_ONCHANGE_TAB': {
+    case 'SUMMARY::CHANGE_DETECTED_LICENSES_TABLE': {
+        const { detectedChart, detectedFilter } = action.payload;
+
         return {
             ...state,
-            view: {
-                ...state.view,
-                activeTabKey: action.activeTabKey
+            summary: {
+                ...state.summary,
+                licenses: {
+                    ...state.summary.licenses,
+                    detectedChart,
+                    detectedFilter
+                }
             }
         };
     }
-    case 'VIEW_SHOW_REPORT': {
+    case 'TABLE::PROJECT_EXPAND': {
         return {
             ...state,
-            data: {
-                ...state.data,
-                loading: {
-                    ...state.data.loading,
-                    state: 'DONE'
-                }
+            table: {
+                ...state.table,
+                expandedProjectsKeys: action.expandedProjectsKeys
+            }
+        };
+    }
+    case 'TREE::DRAWER_CLOSE':
+    case 'TREE::DRAWER_OPEN': {
+        return {
+            ...state,
+            tree: {
+                ...state.tree,
+                showDrawer: !state.tree.showDrawer
+            }
+        };
+    }
+    case 'TREE::NODE_EXPAND': {
+        return {
+            ...state,
+            tree: {
+                ...state.tree,
+                autoExpandParent: false,
+                expandedKeys: action.expandedKeys
+            }
+        };
+    }
+    case 'TREE::NODE_SELECT': {
+        const { selectedKeys, selectedPackage } = action.payload;
+
+        return {
+            ...state,
+            tree: {
+                ...state.tree,
+                selectedKeys,
+                selectedPackage,
+                showDrawer: true
+            }
+        };
+    }
+    case 'TREE::SEARCH': {
+        const { expandedKeys, matchedKeys, searchValue } = action.payload;
+
+        return {
+            ...state,
+            tree: {
+                ...state.tree,
+                autoExpandParent: true,
+                expandedKeys,
+                matchedKeys,
+                searchIndex: 0,
+                searchValue,
+                selectedPackage: null,
+                selectedKeys: matchedKeys.length > 0 ? [matchedKeys[0].key] : [],
+                showDrawer: false
+            }
+        };
+    }
+    case 'TREE::SEARCH_NEXT_MATCH': {
+        const { tree: { searchIndex, matchedKeys } } = state;
+        const index = searchIndex + 1 > matchedKeys.length - 1 ? 0 : searchIndex + 1;
+
+        return {
+            ...state,
+            tree: {
+                ...state.tree,
+                searchIndex: index,
+                selectedKeys: [matchedKeys[index].key]
+            }
+        };
+    }
+    case 'TREE::SEARCH_PREVIOUS_MATCH': {
+        const { tree: { searchIndex, matchedKeys } } = state;
+        const index = searchIndex - 1 < 0 ? matchedKeys.length - 1 : searchIndex - 1;
+
+        return {
+            ...state,
+            tree: {
+                ...state.tree,
+                searchIndex: index,
+                selectedKeys: [matchedKeys[index].key]
             }
         };
     }
