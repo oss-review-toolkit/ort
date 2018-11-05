@@ -28,9 +28,9 @@ import com.beust.jcommander.Parameters
 import com.here.ort.CommandWithHelp
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Downloader
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -120,7 +120,12 @@ object DownloaderCommand : CommandWithHelp() {
                 "Provided path is not a file: ${it.absolutePath}"
             }
 
-            val analyzerResult = it.readValue<AnalyzerResult>()
+            val analyzerResult = it.readValue<OrtResult>().analyzer?.result
+
+            requireNotNull(analyzerResult) {
+                "The provided dependencies file '${it.invariantSeparatorsPath}' does not contain an " +
+                        "analyzer result."
+            }
 
             mutableListOf<Package>().apply {
                 entities = entities.distinct()
