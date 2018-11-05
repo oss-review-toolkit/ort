@@ -56,24 +56,24 @@ interface ScanResultsCache {
         }
 
         override fun add(id: Identifier, scanResult: ScanResult): Boolean = run {
-            // Do not cache empty scan results. It is likely that something went wrong when they were created, and if not,
-            // it is cheap to re-create them.
+            // Do not cache empty scan results. It is likely that something went wrong when they were created,
+            // and if not, it is cheap to re-create them.
             if (scanResult.summary.fileCount == 0) {
                 log.info { "Not caching scan result for '$id' because no files were scanned." }
 
                 return false
             }
 
-            // Do not cache scan results without raw result. The raw result can be set to null for other usages, but in the
-            // cache it must never be null.
+            // Do not cache scan results without raw result. The raw result can be set to null for other usages,
+            // but in the cache it must never be null.
             if (scanResult.rawResult == null) {
                 log.info { "Not caching scan result for '$id' because the raw result is null." }
 
                 return false
             }
 
-            // Do not cache scan results without provenance information, because they cannot be assigned to the revision of
-            // the package source code later.
+            // Do not cache scan results without provenance information, because they cannot be assigned to the revision
+            // of the package source code later.
             if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
                 log.info { "Not caching scan result for '$id' because no provenance information is available." }
 
