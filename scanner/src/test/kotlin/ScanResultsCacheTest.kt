@@ -53,8 +53,8 @@ class ScanResultsCacheTest : WordSpec() {
 
                 ScanResultsCache.configure(config)
 
-                ScanResultsCache.cache shouldNotBe null
-                ScanResultsCache.cache::class shouldBe ArtifactoryCache::class
+                ScanResultsCache.scanStorage shouldNotBe null
+                ScanResultsCache.scanStorage!!::class shouldBe ArtifactoryCache::class
             }
         }
     }

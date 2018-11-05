@@ -38,7 +38,7 @@ import java.io.FileInputStream
 
 class CloudStorageCache(
         private val config: CloudStorageCacheConfiguration
-) : ScanResultsCache {
+) : ScanStorage {
     private var storage: Storage
 
     init {
@@ -91,6 +91,4 @@ class CloudStorageCache(
         println("$blobName was successfully uploaded to bucket $bucketName.")
         return true
     }
-
-    override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
 }

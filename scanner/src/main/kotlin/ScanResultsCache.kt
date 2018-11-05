@@ -32,66 +32,61 @@ import com.here.ort.model.config.CloudStorageCacheConfiguration
 import com.here.ort.utils.log
 import com.here.ort.model.config.CacheConfiguration
 
-interface ScanResultsCache {
-    companion object : ScanResultsCache {
-        var cache = object : ScanResultsCache {
-            override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
-            override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
-            override fun add(id: Identifier, scanResult: ScanResult) = false
-        }
-            private set
-
+class ScanResultsCache {
+    companion object {
         var stats = CacheStatistics()
+
+        var scanStorage : ScanStorage? = null
 
         fun configure(config: CacheConfiguration) {
             config.validate()
 
             if (config is ArtifactoryCacheConfiguration) {
-                cache = ArtifactoryCache(config)
+                scanStorage = ArtifactoryCache(config)
                 log.info { "Using Artifactory cache '${config.url}'." }
             } else if (config is CloudStorageCacheConfiguration) {
-                cache = CloudStorageCache(config)
+                scanStorage = CloudStorageCache(config)
                 log.info { "Using Cloud Storage cache." }
             }
         }
 
-        override fun add(id: Identifier, scanResult: ScanResult): Boolean = run {
-            // Do not cache empty scan results. It is likely that something went wrong when they were created,
-            // and if not, it is cheap to re-create them.
-            if (scanResult.summary.fileCount == 0) {
-                log.info { "Not caching scan result for '$id' because no files were scanned." }
-
-                return false
+        /**
+         * Read all [ScanResult]s for this [id] from the cache.
+         *
+         * @param id The [Identifier] of the scanned [Package].
+         *
+         * @return The [ScanResultContainer] for this [id].
+         */
+        fun read(id: Identifier): ScanResultContainer {
+            if (scanStorage == null) {
+                return ScanResultContainer(id, emptyList())
             }
 
-            // Do not cache scan results without raw result. The raw result can be set to null for other usages,
-            // but in the cache it must never be null.
-            if (scanResult.rawResult == null) {
-                log.info { "Not caching scan result for '$id' because the raw result is null." }
-
-                return false
+            return scanStorage!!.read(id).also {
+                ++stats.numReads
+                if (it.results.isNotEmpty()) {
+                    ++stats.numHits
+                }
             }
-
-            // Do not cache scan results without provenance information, because they cannot be assigned to the revision
-            // of the package source code later.
-            if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
-                log.info { "Not caching scan result for '$id' because no provenance information is available." }
-
-                return false
-            }
-
-            cache.add(id, scanResult)
         }
 
-        override fun read(id: Identifier) =
-                cache.read(id).also {
-                    ++stats.numReads
-                    if (it.results.isNotEmpty()) {
-                        ++stats.numHits
-                    }
-                }
+        /**
+         * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the cache.
+         * [ScannerDetails.isCompatible] is used to check if the results are compatible with the provided [scannerDetails].
+         * Also [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result
+         * matches the expected source code location. This is important to find the correct results when different revisions
+         * of a package using the same version name are used (e.g. multiple scans of 1.0-SNAPSHOT during development).
+         *
+         * @param pkg The [Package] to look up results for.
+         * @param scannerDetails Details about the scanner that was used to scan the [Package].
+         *
+         * @return The [ScanResultContainer] matching the [id][Package.id] of [pkg] and the [scannerDetails].
+         */
+        fun read(pkg: Package, scannerDetails: ScannerDetails) : ScanResultContainer {
+            if (scanStorage == null) {
+                ScanResultContainer(pkg.id, emptyList())
+            }
 
-        override fun read(pkg: Package, scannerDetails: ScannerDetails) : ScanResultContainer {
             val scanResults = read(pkg.id).results.toMutableList()
 
             if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
@@ -120,38 +115,45 @@ interface ScanResultsCache {
 
             return ScanResultContainer(pkg.id, scanResults)
         }
+
+        /**
+         * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
+         *
+         * @param id The [Identifier] of the scanned [Package].
+         * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
+         *
+         * @return If the [ScanResult] could be written to the cache.
+         */
+        fun add(id: Identifier, scanResult: ScanResult): Boolean {
+            if (scanStorage == null) {
+                return false
+            }
+
+            // Do not cache empty scan results. It is likely that something went wrong when they were created,
+            // and if not, it is cheap to re-create them.
+            if (scanResult.summary.fileCount == 0) {
+                log.info { "Not caching scan result for '$id' because no files were scanned." }
+
+                return false
+            }
+
+            // Do not cache scan results without raw result. The raw result can be set to null for other usages,
+            // but in the cache it must never be null.
+            if (scanResult.rawResult == null) {
+                log.info { "Not caching scan result for '$id' because the raw result is null." }
+
+                return false
+            }
+
+            // Do not cache scan results without provenance information, because they cannot be assigned to the revision
+            // of the package source code later.
+            if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
+                log.info { "Not caching scan result for '$id' because no provenance information is available." }
+
+                return false
+            }
+
+            return scanStorage!!.add(id, scanResult)
+        }
     }
-
-    /**
-     * Read all [ScanResult]s for this [id] from the cache.
-     *
-     * @param id The [Identifier] of the scanned [Package].
-     *
-     * @return The [ScanResultContainer] for this [id].
-     */
-    fun read(id: Identifier): ScanResultContainer
-
-    /**
-     * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the cache.
-     * [ScannerDetails.isCompatible] is used to check if the results are compatible with the provided [scannerDetails].
-     * Also [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result
-     * matches the expected source code location. This is important to find the correct results when different revisions
-     * of a package using the same version name are used (e.g. multiple scans of 1.0-SNAPSHOT during development).
-     *
-     * @param pkg The [Package] to look up results for.
-     * @param scannerDetails Details about the scanner that was used to scan the [Package].
-     *
-     * @return The [ScanResultContainer] matching the [id][Package.id] of [pkg] and the [scannerDetails].
-     */
-    fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
-
-    /**
-     * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
-     *
-     * @param id The [Identifier] of the scanned [Package].
-     * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
-     *
-     * @return If the [ScanResult] could be written to the cache.
-     */
-    fun add(id: Identifier, scanResult: ScanResult): Boolean
 }

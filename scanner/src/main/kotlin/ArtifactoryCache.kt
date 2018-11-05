@@ -44,7 +44,7 @@ import okio.Okio
 
 class ArtifactoryCache(
         private val config: ArtifactoryCacheConfiguration
-) : ScanResultsCache {
+) : ScanStorage {
     override fun read(id: Identifier): ScanResultContainer {
         val cachePath = cachePath(id)
 
@@ -54,7 +54,7 @@ class ArtifactoryCache(
                 .header("X-JFrog-Art-Api", config.apiToken)
                 .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
                 .get()
-                .url("$config.url/$cachePath")
+                .url("${config.url}/$cachePath")
                 .build()
 
         val tempFile = createTempFile("scan-results-", ".yml")
@@ -102,7 +102,7 @@ class ArtifactoryCache(
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", config.apiToken)
                 .put(OkHttpClientHelper.createRequestBody(tempFile))
-                .url("$config.url/$cachePath")
+                .url("${config.url}/$cachePath")
                 .build()
 
         try {
@@ -126,8 +126,6 @@ class ArtifactoryCache(
             return false
         }
     }
-
-    override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
 
     private fun cachePath(id: Identifier) = "scan-results/${id.toPath()}/scan-results.yml"
 }
