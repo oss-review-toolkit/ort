@@ -136,13 +136,15 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun bootstrap(): File {
         val archive = when {
-            // Use the .zip file despite it being slightly larger than the .tar.bz2 file here as the latter for some
+            // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
             // reason does not complete to unpack on Windows.
-            OS.isWindows -> "scancode-toolkit-$scannerVersion.zip"
-            else -> "scancode-toolkit-$scannerVersion.tar.bz2"
+            OS.isWindows -> "v$scannerVersion.zip"
+            else -> "v$scannerVersion.tar.gz"
         }
 
-        val url = "https://github.com/nexB/scancode-toolkit/releases/download/v$scannerVersion/$archive"
+        // Use the source code archive instead of the release artifact from S3 to enable OkHttp to cache the download
+        // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
+        val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
         log.info { "Downloading $this from '$url'... " }
 
