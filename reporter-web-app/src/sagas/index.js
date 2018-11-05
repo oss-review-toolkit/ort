@@ -17,34 +17,38 @@
  * License-Filename: LICENSE
  */
 
-import {
-    all, call, put, takeEvery
-} from 'redux-saga/effects';
+import { all, put, takeEvery } from 'redux-saga/effects';
 import convertReportData from './convertReportData';
 
 export function* loadReportData() {
-    yield put({ type: 'LOADING_REPORT_DATA' });
+    yield put({ type: 'APP::SHOW_LOADING' });
+    yield put({ type: 'APP::LOADING_REPORT_START' });
 
     // Parse JSON report data embedded in HTML page
     const reportDataNode = document.querySelector('script[id="ort-report-data"]');
     const reportDataText = reportDataNode ? reportDataNode.textContent : undefined;
 
     if (!reportDataText || reportDataText.trim().length === 0) {
-        yield put({ type: 'LOADING_REPORT_DATA_DONE_NO_DATA' });
+        yield put({ type: 'APP::SHOW_NO_REPORT' });
     } else {
         const reportData = JSON.parse(reportDataText);
-        yield put({ type: 'LOADING_REPORT_DATA_DONE', payload: reportData });
-        yield call(convertReportData, reportData);
+        yield put({ type: 'APP::LOADING_REPORT_DONE', payload: reportData });
+        yield put({ type: 'APP::LOADING_CONVERTING_REPORT_START' });
     }
 }
 
+export function* watchConvertReportData() {
+    yield takeEvery('APP::LOADING_CONVERTING_REPORT_START', convertReportData);
+}
+
 export function* watchLoadReportData() {
-    yield takeEvery('LOADING_START', loadReportData);
+    yield takeEvery('APP::LOADING_START', loadReportData);
 }
 
 // single entry point to start all Sagas at once
 export default function* rootSaga() {
     yield all([
-        watchLoadReportData()
+        watchLoadReportData(),
+        watchConvertReportData()
     ]);
 }

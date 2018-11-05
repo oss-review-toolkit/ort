@@ -29,6 +29,7 @@ import TreeView from './components/TreeView';
 import 'antd/dist/antd.css';
 import './App.css';
 import store from './store';
+import { getAppView } from './reducers/selectors';
 
 const { TabPane } = Tabs;
 
@@ -41,46 +42,58 @@ class ReporterApp extends Component {
     constructor(props) {
         super(props);
 
-        store.dispatch({ type: 'LOADING_START' });
+        store.dispatch({ type: 'APP::LOADING_START' });
     }
 
     onChangeTab = (activeKey) => {
-        store.dispatch({ type: 'VIEW_ONCHANGE_TAB', activeTabKey: activeKey });
+        store.dispatch({ type: 'APP::CHANGE_TAB', key: activeKey });
     }
 
     render() {
-        const { data: { loading }, view } = this.props;
-        const {
-            percentage: loadingPercentage,
-            state: loadingState,
-            text: loadingText
-        } = loading;
+        const { appView: { loading, showKey } } = this.props;
 
-        switch (loadingState) {
-        case 'DONE': {
+        switch (showKey) {
+        case 'ort-tabs-summary':
+        case 'ort-tabs-table':
+        case 'ort-tabs-tree':
+        case 'ort-tabs': {
             return (
-                <Row className="ort-app">
+                <Row
+                    className="ort-app"
+                    key="ort-tabs"
+                >
                     <Tabs
-                        activeKey={view.activeTabKey}
+                        activeKey={showKey}
                         animated={false}
                         onChange={this.onChangeTab}
                     >
-                        <TabPane tab="Summary" key="summary">
+                        <TabPane tab="Summary" key="ort-tabs-summary">
                             <SummaryView />
                         </TabPane>
-                        <TabPane tab="Table" key="table">
+                        <TabPane tab="Table" key="ort-tabs-table">
                             <TableView />
                         </TabPane>
-                        <TabPane tab="Tree" key="tree">
+                        <TabPane tab="Tree" key="ort-tabs-tree">
                             <TreeView />
                         </TabPane>
                     </Tabs>
                 </Row>
             );
         }
-        case 'LOADING':
+        case 'ort-loading': {
+            const {
+                percentage: loadingPercentage,
+                text: loadingText
+            } = loading;
+
             return (
-                <Row className="ort-app" type="flex" justify="space-around" align="middle">
+                <Row
+                    align="middle"
+                    justify="space-around"
+                    className="ort-app"
+                    key="ort-loading"
+                    type="flex"
+                >
                     <Col span={6}>
                         <p>
                             OSS Review Toolkit:
@@ -95,9 +108,16 @@ class ReporterApp extends Component {
                     </Col>
                 </Row>
             );
-        case 'NO_REPORT_DATA':
+        }
+        case 'ort-no-report-data':
             return (
-                <Row className="ort-app" type="flex" justify="space-around" align="middle">
+                <Row
+                    align="middle"
+                    className="ort-app"
+                    justify="space-around"
+                    key="ort-no-report-data"
+                    type="flex"
+                >
                     <Col span={8}>
                         <Alert
                             message="No review results could be loaded..."
@@ -127,7 +147,13 @@ class ReporterApp extends Component {
             );
         default:
             return (
-                <Row className="ort-app" type="flex" justify="space-around" align="middle">
+                <Row
+                    align="middle"
+                    className="ort-app"
+                    justify="space-around"
+                    key="ort-error-msg"
+                    type="flex"
+                >
                     <Col span={8}>
                         <Alert
                             message="Oops, something went wrong..."
@@ -161,11 +187,14 @@ class ReporterApp extends Component {
 }
 
 ReporterApp.propTypes = {
-    data: PropTypes.object.isRequired,
-    view: PropTypes.object.isRequired
+    appView: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+    appView: getAppView(state)
+});
+
 export default connect(
-    state => ({ data: state.data, view: state.view }),
+    mapStateToProps,
     () => ({})
 )(ReporterApp);

@@ -81,19 +81,19 @@ const SummaryViewTableErrors = (props) => {
                     tab={(
                         <span>
                             Errors (
-                            {data.totalOpen}
+                            {data.openTotal}
                             )
                         </span>
                     )}
                     key="1"
                 >
-                    {renderErrorTable(data.open, data.totalOpen)}
+                    {renderErrorTable(data.open, data.openTotal)}
                 </TabPane>
                 <TabPane
                     tab={(
                         <span>
                             Addressed Errors (
-                            {data.totalAddressed}
+                            {data.addressedTotal}
                             )
                         </span>
                     )}
@@ -102,7 +102,7 @@ const SummaryViewTableErrors = (props) => {
                     {
                         renderErrorTable(
                             data.addressed,
-                            data.totalAddressed
+                            data.addressedTotal
                         )
                     }
                 </TabPane>

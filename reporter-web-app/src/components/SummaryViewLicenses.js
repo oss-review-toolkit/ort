@@ -108,21 +108,45 @@ const SummaryViewLicenses = (props) => {
             <TabPane
                 tab={(
                     <span>
-                        Detected licenses (
-                        {data.totalDetected}
+                        Declared Licenses (
+                        {data.declaredTotal}
                         )
                     </span>
                 )}
-                key="1"
+                key="ort-summary-declared-licenses-table"
             >
                 <Row>
-                    <Col xs={24} sm={24} md={24} lg={24} xl={15}>
-                        <LicenseChart
-                            licenses={data.detectedChart}
-                            width={750}
-                            height={500}
+                    <Col xs={24} sm={24} md={24} lg={24} xl={9}>
+                        <Table
+                            bordered={false}
+                            columns={columns(data.declared, data.declaredFilter)}
+                            dataSource={data.declared}
+                            locale={{
+                                emptyText: 'No declared licenses'
+                            }}
+                            onChange={onChangeDeclaredLicensesTable}
+                            pagination={pagination}
+                            size="small"
+                            rowClassName="ort-dectected-licenses-table-row"
+                            rowKey="name"
                         />
                     </Col>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={15}>
+                        <LicenseChart licenses={data.declaredChart} />
+                    </Col>
+                </Row>
+            </TabPane>
+            <TabPane
+                tab={(
+                    <span>
+                        Detected licenses (
+                        {data.detectedTotal}
+                        )
+                    </span>
+                )}
+                key="ort-summary-detected-licenses-table"
+            >
+                <Row>
                     <Col xs={24} sm={24} md={24} lg={24} xl={9}>
                         <Table
                             bordered={false}
@@ -138,40 +162,8 @@ const SummaryViewLicenses = (props) => {
                             rowKey="name"
                         />
                     </Col>
-                </Row>
-            </TabPane>
-            <TabPane
-                tab={(
-                    <span>
-                        Declared Licenses (
-                        {data.totalDeclared}
-                        )
-                    </span>
-                )}
-                key="2"
-            >
-                <Row>
                     <Col xs={24} sm={24} md={24} lg={24} xl={15}>
-                        <LicenseChart
-                            licenses={data.declaredChart}
-                            width={800}
-                            height={500}
-                        />
-                    </Col>
-                    <Col xs={24} sm={24} md={24} lg={24} xl={9}>
-                        <Table
-                            bordered={false}
-                            columns={columns(data.declared, data.declaredFilter)}
-                            dataSource={data.declared}
-                            locale={{
-                                emptyText: 'No declared licenses'
-                            }}
-                            onChange={onChangeDeclaredLicensesTable}
-                            pagination={pagination}
-                            size="small"
-                            rowClassName="ort-dectected-licenses-table-row"
-                            rowKey="name"
-                        />
+                        <LicenseChart licenses={data.detectedChart} />
                     </Col>
                 </Row>
             </TabPane>

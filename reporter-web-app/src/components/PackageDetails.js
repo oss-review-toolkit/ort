@@ -64,6 +64,27 @@ const PackageDetails = (props) => {
 
         return null;
     };
+    const renderDefinitionFilePath = () => {
+        const paths = pkgObj.paths || pkgObj.path;
+
+        // Only render path for projects as for level 1 or higher
+        // dependencies already package dependency path is
+        // rendered that included also project path
+        if (pkgObj.definition_file_path && paths.length === 0) {
+            return (
+                <tr>
+                    <th>
+                        Defined in:
+                    </th>
+                    <td>
+                        {pkgObj.definition_file_path}
+                    </td>
+                </tr>
+            );
+        }
+
+        return null;
+    };
     const renderHomepage = () => {
         if (pkgObj.homepage_url) {
             return (
@@ -153,6 +174,7 @@ const PackageDetails = (props) => {
                                 {pkgObj.id}
                             </td>
                         </tr>
+                        {renderDefinitionFilePath()}
                         {renderDescription()}
                         {renderHomepage()}
                         {renderVcs()}

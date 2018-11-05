@@ -64,11 +64,40 @@ const PackagePaths = (props) => {
                     dataSource={paths}
                     renderItem={pathsItem => (
                         <List.Item>
-                            <h5>
-                                {pathsItem.scope}
-                            </h5>
                             <Steps progressDot direction="vertical" size="small" current={pathsItem.path.length + 1}>
-                                {pathsItem.path.map(item => <Step key={item} title={item} />)}
+                                {pathsItem.path.map(
+                                    (item, index) => {
+                                        if (index === 0) {
+                                            const description = (
+                                                <div className="ort-metadata-props">
+                                                    <table>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>
+                                                                    Defined in:
+                                                                </th>
+                                                                <td>
+                                                                    {pkgObj.definition_file_path}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>
+                                                                    Scope:
+                                                                </th>
+                                                                <td>
+                                                                    {pathsItem.scope}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            );
+                                            return (<Step key={item} title={item} description={description} />);
+                                        }
+
+                                        return (<Step key={item} title={item} />);
+                                    }
+                                )}
                                 <Step key={pkgObj.id} title={pkgObj.id} />
                             </Steps>
                         </List.Item>

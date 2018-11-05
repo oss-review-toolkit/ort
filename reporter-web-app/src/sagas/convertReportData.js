@@ -18,12 +18,13 @@
  */
 
 import { delay } from 'redux-saga';
-import { call, put } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
+import { getReportData } from '../reducers/selectors';
 import { hashCode, removeDuplicatesInArray } from '../utils';
 
-function* convertReportData(reportData) {
+function* convertReportData() {
+    const reportData = yield select(getReportData);
     yield call(delay, 200);
-    yield put({ type: 'LOADING_CONVERTING_REPORT_DATA' });
 
     if (Object.keys(reportData).length === 0
         || !reportData.analyzer.result
@@ -36,8 +37,8 @@ function* convertReportData(reportData) {
     const projects = {};
     const declaredLicensesFromAnalyzer = {};
     const detectedLicensesFromScanner = {};
-    let reportDataOpenErrors = {};
-    let reportDataAddressedErrors = {};
+    const reportDataOpenErrors = {};
+    const reportDataAddressedErrors = {};
     let reportDataLevels = new Set([]);
     let reportDataScopes = new Set([]);
 
@@ -367,10 +368,10 @@ function* convertReportData(reportData) {
 
         return pkgObj;
     };
-    const addPackageToProjectPackagesTreeNodeList = (projectIndex, pkgObj) => {
+    const addPackageToProjectPackagesTreeNodes = (projectIndex, pkgObj) => {
         const project = projects[projectIndex];
 
-        project.packages.treeNodesList.push({
+        project.packages.treeNodes.push({
             id: pkgObj.id,
             key: pkgObj.key
         });
@@ -471,57 +472,6 @@ function* convertReportData(reportData) {
 
         return proj;
     };
-    const calculateNrPackagesLicenses = projectsLicenses => Object.values(projectsLicenses)
-        .reduce((accumulator, projectLicenses) => {
-            const keys = Object.keys(projectLicenses);
-            for (let i = keys.length - 1; i >= 0; i -= 1) {
-                const license = keys[i];
-                const licenseMap = projectLicenses[license];
-
-                if (!accumulator[license]) {
-                    accumulator[license] = 0;
-                }
-
-                accumulator[license] += licenseMap.size;
-            }
-
-            return accumulator;
-        }, {});
-    const calculateReportDataTotalLicenses = (projectsLicenses) => {
-        const licensesSet = new Set([]);
-
-        return Object.values(projectsLicenses).reduce((accumulator, projectLicenses) => {
-            const keys = Object.keys(projectLicenses);
-            for (let i = keys.length - 1; i >= 0; i -= 1) {
-                const license = keys[i];
-                accumulator.add(license);
-            }
-
-            return accumulator;
-        }, licensesSet).size || undefined;
-    };
-    const calculateReportDataTotalLevels = () => {
-        if (reportDataLevels && reportDataLevels.size) {
-            return reportDataLevels.size;
-        }
-
-        return undefined;
-    };
-    const calculateReportDataTotalPackages = () => {
-        if (packagesFromAnalyzer) {
-            return Object.keys(packagesFromAnalyzer).length;
-        }
-
-        return undefined;
-    };
-    const calculatReportDataTotalProjects = () => Object.keys(projects).length;
-    const calculateReportDataTotalScopes = () => {
-        if (reportDataScopes && reportDataScopes.size) {
-            return reportDataScopes.size;
-        }
-
-        return undefined;
-    };
     // Using ES6 Proxy extend pkgObj with info from Analyzer's packages
     const packageProxyHandler = {
         get: (pkgObj, prop) => {
@@ -610,6 +560,9 @@ function* convertReportData(reportData) {
             pkgObj.homepage_url = pkg.homepage_url;
             pkgObj.vcs = pkg.vcs;
             pkgObj.vcs_processed = pkg.vcs_processed;
+        } else {
+            const project = projects[projectIndex];
+            pkgObj.definition_file_path = project.definition_file_path;
         }
 
         pkgObj = addErrorsToPackage(projectIndex, pkgObj, pkg.errors || []);
@@ -618,7 +571,7 @@ function* convertReportData(reportData) {
         // into same listing modifying pkgObj therefore we make a copy
         addPackageToProjectList(projectIndex, new Proxy({ ...pkgObj }, packageProxyHandler));
 
-        addPackageToProjectPackagesTreeNodeList(projectIndex, pkgObj);
+        addPackageToProjectPackagesTreeNodes(projectIndex, pkgObj);
 
         return new Proxy(pkgObj, packageProxyHandler);
     };
@@ -649,7 +602,7 @@ function* convertReportData(reportData) {
                     scopes: new Set([]),
                     total: 0,
                     tree: [],
-                    treeNodesList: []
+                    treeNodes: []
                 },
                 vcs: project.vcs,
                 vcs_processed: project.vcs_processed
@@ -659,7 +612,7 @@ function* convertReportData(reportData) {
         projects[projectIndex].packages.tree = recursivePackageAnalyzer(projectIndex, project, i);
         // Sort the tree nodes so parent comes before children in array
         // so tree search will return results in the right order
-        projects[projectIndex].packages.treeNodesList.sort((a, b) => {
+        projects[projectIndex].packages.treeNodes.sort((a, b) => {
             const keysA = a.key.split('-');
             const keysB = b.key.split('-');
             const keysLength = keysA.length < keysB.length ? keysA.length : keysB.length;
@@ -693,69 +646,39 @@ function* convertReportData(reportData) {
 
         yield call(delay, 50);
         yield put({
-            type: 'LOADING_CONVERTING_REPORT_DATA_PROGRESS',
+            type: 'APP::LOADING_CONVERTING_REPORT',
             index: projectsFromAnalyzer.length - i,
             total: projectsFromAnalyzer.length
         });
     }
 
-    // Flatten errors into an array of errors
-    reportDataOpenErrors = Object.values(reportDataOpenErrors);
-
-    // Flatten addressed errors into an array of errors
-    reportDataAddressedErrors = Object.values(reportDataAddressedErrors);
-
     const convertedData = {
         hasErrors: reportData.has_errors || false,
         errors: {
-            data: {
-                addressed: reportDataAddressedErrors,
-                open: reportDataOpenErrors
-            },
-            total: {
-                addressed: reportDataAddressedErrors.length,
-                open: reportDataOpenErrors.length
-            }
+            // Flatten errors into an array of errors
+            addressed: Object.values(reportDataAddressedErrors) || [],
+            open: Object.values(reportDataOpenErrors) || []
         },
-        levels: {
-            data: reportDataLevels,
-            total: calculateReportDataTotalLevels()
-        },
+        levels: reportDataLevels || new Set(),
         licenses: {
-            data: {
-                declared: calculateNrPackagesLicenses(declaredLicensesFromAnalyzer),
-                detected: calculateNrPackagesLicenses(detectedLicensesFromScanner)
-            },
-            total: {
-                declared: calculateReportDataTotalLicenses(declaredLicensesFromAnalyzer),
-                detected: calculateReportDataTotalLicenses(detectedLicensesFromScanner)
-            }
+            declared: declaredLicensesFromAnalyzer,
+            detected: detectedLicensesFromScanner
         },
         metadata: (reportData.data) ? { ...reportData.data['job_parameters'], ...reportData.data['process_parameters'] } : {},
         packages: {
-            data: {
-                analyzer: packagesFromAnalyzer || {},
-                scanner: packagesFromScanner || {}
-            },
-            total: calculateReportDataTotalPackages()
+            analyzer: packagesFromAnalyzer || {},
+            scanner: packagesFromScanner || {}
         },
-        projects: {
-            data: projects,
-            total: calculatReportDataTotalProjects()
-        },
-        scopes: {
-            data: reportDataScopes,
-            total: calculateReportDataTotalScopes()
-        },
-        vcs: reportData.repository.vcs || {},
-        vcs_processed: reportData.repository.vcs_processed || {}
+        projects,
+        scopes: reportDataScopes || new Set(),
+        repository: reportData.repository || {}
     };
 
-    yield put({ type: 'LOADING_CONVERTING_REPORT_DATA_DONE', payload: convertedData });
+    yield put({ type: 'APP::LOADING_CONVERTING_REPORT_DONE', payload: convertedData });
     yield call(delay, 300);
-    yield put({ type: 'LOADING_DONE' });
+    yield put({ type: 'APP::LOADING_DONE' });
     yield call(delay, 300);
-    yield put({ type: 'VIEW_SHOW_REPORT' });
+    yield put({ type: 'APP::SHOW_TABS' });
 
     return convertedData;
 }

@@ -16,6 +16,7 @@
         "antd": "^3.10.1",
         "classnames": "^2.2.6",
         "immutable": "^3.8.2",
+        "memoize-one": "^4.0.2",
         "promise": "^8.0.1",
         "prop-types": "^15.6.2",
         "raf": "^3.4.0",
