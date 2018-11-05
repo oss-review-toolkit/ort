@@ -29,6 +29,14 @@ import rootSaga from '../sagas';
 const loggerMiddleware = createLogger({
     collapsed: (getState, action, logEntry) => !logEntry.error,
     diff: true,
+    /* Disabling Redux Logger diff function for TREE::NODE_SELECT action
+     * as logger crashes with https://github.com/LogRocket/redux-logger/issues/243
+     * Steps to reproduce crash:
+     *  1) Navigate to Tree tab
+     *  2) Search for package
+     *  3) Select other tree nodes will crash the logger
+     */
+    diffPredicate: (getState, action) => action.type !== 'TREE::NODE_SELECT',
     predicate: () => process.env.NODE_ENV === 'development'
 });
 const sagaMiddleware = createSagaMiddleware();

@@ -7,169 +7,82 @@ import {
 import SummaryViewLicenses from './SummaryViewLicenses';
 import SummaryViewTableErrors from './SummaryViewTableErrors';
 import SummaryViewTimeline from './SummaryViewTimeline';
-import { UNIQUE_COLORS } from '../data/colors/index';
-
-const COLORS = UNIQUE_COLORS.data;
+import {
+    getSummaryDeclaredLicenses,
+    getSummaryDeclaredLicensesChart,
+    getSummaryDeclaredLicensesFilter,
+    getSummaryDeclaredLicensesTotal,
+    getSummaryDetectedLicenses,
+    getSummaryDetectedLicensesChart,
+    getSummaryDetectedLicensesFilter,
+    getSummaryDetectedLicensesTotal,
+    getSummaryViewShouldComponentUpdate,
+    getSummaryRepository,
+    getReportMetaData,
+    getReportErrorsAdressed,
+    getReportErrorsOpen,
+    getReportErrorsAdressedTotal,
+    getReportErrorsOpenTotal,
+    getReportLevelsTotal,
+    getReportPackagesTotal,
+    getReportProjectsTotal,
+    getReportScopesTotal
+} from '../reducers/selectors';
+import store from '../store';
 
 class SummaryView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-        this.licenseColors = new Map();
-
-        const assignColorsToLicenses = (licenses) => {
-            const nrColors = COLORS.length;
-
-            for (let i = licenses.length - 1; i >= 0; i -= 1) {
-                const license = licenses[i];
-                if (!this.licenseColors.has(license)) {
-                    this.licenseColors.set(license, COLORS[this.licenseColors.size % nrColors]);
-                }
-            }
-        };
-        const view = {
-            errors: {
-                open: [],
-                addressed: [],
-                totalOpen: 0,
-                totalResolved: 0
-            },
-            licenses: {
-                declared: [],
-                declaredChart: [],
-                detected: [],
-                detectedChart: [],
-                declaredFilter: {},
-                detectedFilter: {},
-                totalDeclared: 0,
-                totalDetected: 0
-            }
-        };
-
-        if (props.reportData) {
-            this.state = {
-                ...this.state,
-                data: props.reportData
-            };
-            const { data } = this.state;
-
-            if (data.licenses
-                && data.licenses.data
-                && data.licenses.total) {
-                if (data.licenses.data.detected
-                    && Number.isInteger(data.licenses.total.detected)) {
-                    assignColorsToLicenses(Object.keys(data.licenses.data.detected));
-                    view.licenses.detected = this.convertLicensesToRenderFormat(
-                        data.licenses.data.detected
-                    );
-                    view.licenses.detectedChart = view.licenses.detected;
-                    view.licenses.totalDetected = data.licenses.total.detected;
-                }
-
-                if (data.licenses.data.declared
-                    && Number.isInteger(data.licenses.total.declared)) {
-                    assignColorsToLicenses(Object.keys(data.licenses.data.declared));
-                    view.licenses.declared = this.convertLicensesToRenderFormat(
-                        data.licenses.data.declared
-                    );
-                    view.licenses.declaredChart = view.licenses.declared;
-                    view.licenses.totalDeclared = data.licenses.total.declared;
-                }
-            }
-
-            if (data.errors
-                && data.errors.data
-                && data.errors.total) {
-                if (data.errors.data.open
-                    && Number.isInteger(data.errors.total.open)) {
-                    view.errors.open = data.errors.data.open;
-                    view.errors.totalOpen = data.errors.total.open;
-                }
-
-                if (data.errors.data.addressed
-                    && Number.isInteger(data.errors.total.addressed)) {
-                    view.errors.addressed = data.errors.data.addressed;
-                    view.errors.totalAddressed = data.errors.total.addressed;
-                }
-            }
-        }
-
-        this.state = {
-            ...this.state,
-            view
-        };
-
-        this.onChangeDeclaredLicensesTable = this.onChangeDeclaredLicensesTable.bind(this);
-        this.onChangeDetectedLicensesTable = this.onChangeDetectedLicensesTable.bind(this);
-    }
-
-    onChangeDeclaredLicensesTable(pagination, filters, sorter, extra) {
-        this.setState((prevState) => {
-            const state = { ...prevState };
-
-            state.view.licenses.declaredChart = extra.currentDataSource;
-            state.view.licenses.declaredFilter = {
-                filteredInfo: filters,
-                sortedInfo: sorter
-            };
-
-            return state;
-        });
-    }
-
-    onChangeDetectedLicensesTable(pagination, filters, sorter, extra) {
-        this.setState((prevState) => {
-            const state = { ...prevState };
-
-            state.view.licenses.detectedChart = extra.currentDataSource;
-            state.view.licenses.detectedFilter = {
-                filteredInfo: filters,
-                sortedInfo: sorter
-            };
-
-            return state;
-        });
-    }
-
-    convertLicensesToRenderFormat(licenses) {
-        return Object.entries(licenses).reduce((accumulator, [key, value]) => {
-            accumulator.push({
-                name: key,
-                value,
-                color: this.licenseColors.get(key)
-            });
-
-            return accumulator;
-        }, []);
+    shouldComponentUpdate() {
+        const { shouldComponentUpdate } = this.props;
+        return shouldComponentUpdate;
     }
 
     render() {
-        const { data, view } = this.state;
+        const { errors, licenses } = this.props;
 
         return (
             <div className="ort-summary">
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryViewTimeline data={{
-                            ...data,
-                            nrDetectedLicenses: view.licenses.totalDetected,
-                            nrDeclaredLicenses: view.licenses.totalDeclared,
-                            nrErrors: view.errors.totalOpen
-                        }}
-                        />
+                        <SummaryViewTimeline {...this.props} />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryViewTableErrors data={view.errors} />
+                        <SummaryViewTableErrors data={errors} />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
                         <SummaryViewLicenses
-                            data={view.licenses}
-                            onChangeDeclaredLicensesTable={this.onChangeDeclaredLicensesTable}
-                            onChangeDetectedLicensesTable={this.onChangeDetectedLicensesTable}
+                            data={licenses}
+                            onChangeDeclaredLicensesTable={
+                                (pagination, filters, sorter, extra) => {
+                                    store.dispatch({
+                                        type: 'SUMMARY::CHANGE_DECLARED_LICENSES_TABLE',
+                                        payload: {
+                                            declaredChart: extra.currentDataSource,
+                                            declaredFilter: {
+                                                filteredInfo: filters,
+                                                sortedInfo: sorter
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                            onChangeDetectedLicensesTable={
+                                (pagination, filters, sorter, extra) => {
+                                    store.dispatch({
+                                        type: 'SUMMARY::CHANGE_DETECTED_LICENSES_TABLE',
+                                        payload: {
+                                            detectedChart: extra.currentDataSource,
+                                            detectedFilter: {
+                                                filteredInfo: filters,
+                                                sortedInfo: sorter
+                                            }
+                                        }
+                                    });
+                                }
+                            }
                         />
                     </Col>
                 </Row>
@@ -179,10 +92,37 @@ class SummaryView extends React.Component {
 }
 
 SummaryView.propTypes = {
-    reportData: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
+    licenses: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+    errors: {
+        addressed: getReportErrorsAdressed(state),
+        addressedTotal: getReportErrorsAdressedTotal(state),
+        open: getReportErrorsOpen(state),
+        openTotal: getReportErrorsOpenTotal(state)
+    },
+    levelsTotal: getReportLevelsTotal(state),
+    licenses: {
+        declared: getSummaryDeclaredLicenses(state),
+        declaredChart: getSummaryDeclaredLicensesChart(state),
+        declaredFilter: getSummaryDeclaredLicensesFilter(state),
+        declaredTotal: getSummaryDeclaredLicensesTotal(state),
+        detected: getSummaryDetectedLicenses(state),
+        detectedChart: getSummaryDetectedLicensesChart(state),
+        detectedFilter: getSummaryDetectedLicensesFilter(state),
+        detectedTotal: getSummaryDetectedLicensesTotal(state)
+    },
+    metadata: getReportMetaData(state),
+    packagesTotal: getReportPackagesTotal(state),
+    projectsTotal: getReportProjectsTotal(state),
+    scopesTotal: getReportScopesTotal(state),
+    shouldComponentUpdate: getSummaryViewShouldComponentUpdate(state),
+    repository: getSummaryRepository(state)
+});
+
 export default connect(
-    state => ({ reportData: state.data.report }),
+    mapStateToProps,
     () => ({})
 )(SummaryView);
