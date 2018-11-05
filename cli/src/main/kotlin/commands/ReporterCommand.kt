@@ -81,7 +81,7 @@ object ReporterCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var resolutionsFile: File? = null
 
-    override fun runCommand(jc: JCommander) {
+    override fun runCommand(jc: JCommander): Int {
         require(!outputDir.exists()) {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
         }
@@ -105,5 +105,7 @@ object ReporterCommand : CommandWithHelp() {
                 log.error { "Could not create '$name' report: ${e.message}" }
             }
         }
+
+        return 0
     }
 }

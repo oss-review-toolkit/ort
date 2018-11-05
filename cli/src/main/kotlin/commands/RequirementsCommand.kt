@@ -42,7 +42,7 @@ import java.lang.reflect.Modifier
 
 @Parameters(commandNames = ["requirements"], commandDescription = "List the required command line tools.")
 object RequirementsCommand : CommandWithHelp() {
-    override fun runCommand(jc: JCommander) {
+    override fun runCommand(jc: JCommander): Int {
         val reflections = Reflections("com.here.ort")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
@@ -122,5 +122,7 @@ object RequirementsCommand : CommandWithHelp() {
         println("Legend:")
         println("\tA '-' prefix means that the tool was not found in the PATH environment.")
         println("\tA '*' prefix means that some version of the tool was found in the PATH environment.")
+
+        return 0
     }
 }

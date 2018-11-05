@@ -96,7 +96,7 @@ object ScannerCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputFormats = listOf(OutputFormat.YAML)
 
-    override fun runCommand(jc: JCommander) {
+    override fun runCommand(jc: JCommander): Int {
         require((dependenciesFile == null) != (inputPath == null)) {
             "Either '--ort-file' or '--input-path' must be specified."
         }
@@ -142,5 +142,7 @@ object ScannerCommand : CommandWithHelp() {
             println("Writing scan result to '${scanResultFile.absolutePath}'.")
             format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanResultFile, ortResult)
         }
+
+        return 0
     }
 }

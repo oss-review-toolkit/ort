@@ -27,6 +27,8 @@ import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
 
+import kotlin.system.exitProcess
+
 const val TOOL_NAME = "ort"
 
 /**
@@ -65,10 +67,10 @@ object Main : CommandWithHelp() {
             parse(*args)
         }
 
-        run(jc)
+        exitProcess(run(jc))
     }
 
-    override fun runCommand(jc: JCommander) {
+    override fun runCommand(jc: JCommander): Int {
         when {
             debug -> log.level = ch.qos.logback.classic.Level.DEBUG
             info -> log.level = ch.qos.logback.classic.Level.INFO
@@ -82,6 +84,6 @@ object Main : CommandWithHelp() {
         val commandObject = command.objects.first() as CommandWithHelp
 
         // Delegate running actions to the specified command.
-        commandObject.run(jc)
+        return commandObject.run(jc)
     }
 }
