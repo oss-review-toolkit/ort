@@ -30,7 +30,7 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryCacheConfiguration
 import com.here.ort.model.config.CloudStorageCacheConfiguration
 import com.here.ort.utils.log
-import config.CacheConfiguration
+import com.here.ort.model.config.CacheConfiguration
 
 interface ScanResultsCache {
     companion object : ScanResultsCache {
