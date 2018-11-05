@@ -27,9 +27,7 @@ import com.google.cloud.storage.StorageOptions
 
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanResult
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.Identifier
-import com.here.ort.model.Package
 import com.here.ort.model.yamlMapper
 import com.here.ort.model.config.CloudStorageCacheConfiguration
 import com.here.ort.utils.log

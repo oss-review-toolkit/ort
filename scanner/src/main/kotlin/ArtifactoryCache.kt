@@ -22,10 +22,8 @@ package com.here.ort.scanner
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.Identifier
-import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryCacheConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
