@@ -46,8 +46,6 @@ import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
-import kotlin.system.exitProcess
-
 @Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
 object DownloaderCommand : CommandWithHelp() {
     @Parameter(description = "An ORT result file with an analyzer result to use. Must not be used together with " +
@@ -109,7 +107,7 @@ object DownloaderCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var allowMovingRevisions = false
 
-    override fun runCommand(jc: JCommander) {
+    override fun runCommand(jc: JCommander): Int {
         if ((dependenciesFile != null) == (projectUrl != null)) {
             throw IllegalArgumentException(
                     "Either '--ort-file' or '--project-url' must be specified.")
@@ -201,6 +199,6 @@ object DownloaderCommand : CommandWithHelp() {
             }
         }
 
-        if (error) exitProcess(1)
+        return if (error) 1 else 0
     }
 }

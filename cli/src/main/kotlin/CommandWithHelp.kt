@@ -24,8 +24,6 @@ import com.beust.jcommander.Parameter
 
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 
-import kotlin.system.exitProcess
-
 /**
  * A JCommander command that offers command line help.
  */
@@ -36,19 +34,25 @@ abstract class CommandWithHelp {
             order = PARAMETER_ORDER_HELP)
     private var help = false
 
-    fun run(jc: JCommander) {
+    /**
+     * Run the command after processing command line help.
+     */
+    fun run(jc: JCommander): Int {
         if (jc.parsedCommand == null) {
             jc.usage()
-            exitProcess(0)
+            return 0
         }
 
         if (help) {
             jc.usageFormatter.usage(jc.parsedCommand)
-            exitProcess(0)
+            return 0
         }
 
-        runCommand(jc)
+        return runCommand(jc)
     }
 
-    protected abstract fun runCommand(jc: JCommander)
+    /**
+     * Run the underlying command.
+     */
+    protected abstract fun runCommand(jc: JCommander): Int
 }

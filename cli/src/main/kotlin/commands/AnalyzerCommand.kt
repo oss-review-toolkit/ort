@@ -40,8 +40,6 @@ import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 
-import kotlin.system.exitProcess
-
 @Parameters(commandNames = ["analyze"], commandDescription = "Determine dependencies of a software project.")
 object AnalyzerCommand : CommandWithHelp() {
     private class PackageManagerConverter : IStringConverter<PackageManagerFactory> {
@@ -105,11 +103,11 @@ object AnalyzerCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var repositoryConfigurationFile: File? = null
 
-    override fun runCommand(jc: JCommander) {
+    override fun runCommand(jc: JCommander): Int {
         val absoluteOutputPath = outputDir.absoluteFile
         if (absoluteOutputPath.exists()) {
             log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
-            exitProcess(1)
+            return 1
         }
 
         require(packageCurationsFile?.isFile ?: true) {
@@ -141,5 +139,7 @@ object AnalyzerCommand : CommandWithHelp() {
             println("Writing analyzer result to '$outputFile'.")
             format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, ortResult)
         }
+
+        return 0
     }
 }
