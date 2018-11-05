@@ -3,8 +3,9 @@ pluginManagement {
         eachPlugin {
             // Work around https://github.com/gradle/gradle/issues/1697.
             if (requested.version == null) {
+                def pluginName = requested.id.name.split('-').collect { it.capitalize() }.join().uncapitalize()
                 def versionPropertyName = (requested.id.id == 'org.jetbrains.kotlin.jvm') ?
-                        "kotlinPluginVersion" : "${requested.id.name}PluginVersion"
+                        "kotlinPluginVersion" : "${pluginName}PluginVersion"
                 logger.info("Checking for plugin version property '$versionPropertyName'.")
                 if (gradle.rootProject.hasProperty(versionPropertyName)) {
                     def version = gradle.rootProject.properties[versionPropertyName]
