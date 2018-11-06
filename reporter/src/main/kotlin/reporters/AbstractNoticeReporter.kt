@@ -100,7 +100,7 @@ abstract class AbstractNoticeReporter : Reporter() {
 
         licenseFindings.forEach { finding ->
             LicenseMapping.map(finding.key).map { spdxLicense ->
-                sortedMapOf(spdxLicense.license to finding.value)
+                sortedMapOf(spdxLicense.id to finding.value)
             }.forEach {
                 result = result.zipWithDefault(it, sortedSetOf()) { left, right ->
                     (left + right).toSortedSet()
