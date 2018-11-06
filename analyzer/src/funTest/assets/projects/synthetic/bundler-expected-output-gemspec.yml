@@ -252,7 +252,7 @@ packages:
       \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
       \ and software in between (the so-called\nmiddleware) into a single method call.\n\
       \nAlso see http://rack.github.io/.\n"
-    homepage_url: "http://rack.github.io/"
+    homepage_url: "https://rack.github.io/"
     binary_artifact:
       url: ""
       hash: ""
