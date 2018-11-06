@@ -53,7 +53,7 @@ class NoticeOnlyDeclaredReporter : AbstractNoticeReporter() {
 
         val allDeclaredSpdxLicenses = allDeclaredLicenses
                 .flatMap { LicenseMapping.map(it) }
-                .mapTo(sortedSetOf()) { it.license }
+                .mapTo(sortedSetOf()) { it.id }
 
         return licenseFindings.filterTo(sortedMapOf()) { (license, _) ->
             // Only consider detected licenses that also are declared licenses. We associate detected and declared

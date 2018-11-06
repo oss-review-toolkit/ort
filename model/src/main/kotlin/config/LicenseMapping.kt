@@ -394,7 +394,8 @@ object LicenseMapping {
     )
 
     fun map(license: String) =
-            (mapping[license] ?: enumSetOf()).apply {
-                SpdxLicense.values().find { it.license == license }?.let { add(it) }
+            mapping.getOrDefault(license, enumSetOf()).apply {
+                // Also add any direct match for an SPDX ID.
+                SpdxLicense.forId(license)?.let { add(it) }
             }
 }
