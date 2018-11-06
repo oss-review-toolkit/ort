@@ -24,10 +24,12 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
+import com.here.ort.model.Error
 import com.here.ort.model.OrtResult
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.log
 
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 
@@ -73,14 +75,28 @@ object EvaluatorCommand : CommandWithHelp() {
         engine.put("ortResult", ortResult)
 
         val preface = """
+            import com.here.ort.model.Error
             import com.here.ort.model.OrtResult
+
             val ortResult = bindings["ortResult"] as OrtResult
-        """
-        val script = preface + (rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText())
+            val evalErrors = mutableListOf<Error>()
+        """.trimIndent()
 
-        val scriptResult = engine.eval(script)
+        val postface = """
+            evalErrors
+        """.trimIndent()
 
-        // Return 0 if the script succeeded, or 1 otherwise.
-        return if ((scriptResult as? Boolean) == true) 0 else 1
+        val script = preface + (rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()) + postface
+
+        @Suppress("UNCHECKED_CAST")
+        val evalErrors = engine.eval(script) as List<Error>
+
+        return if (evalErrors.isEmpty()) 0 else 1.also {
+            if (log.isErrorEnabled) {
+                evalErrors.forEach {
+                    log.error(it.toString())
+                }
+            }
+        }
     }
 }
