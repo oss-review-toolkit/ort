@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.Environment
@@ -33,6 +34,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.utils.log
+import com.here.ort.utils.realFile
 
 import java.io.File
 
@@ -49,7 +51,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             packageCurationsFile: File? = null,
             repositoryConfigurationFile: File? = null
     ): OrtResult {
-        val actualRepositoryConfigurationFile = repositoryConfigurationFile ?: File(absoluteProjectPath, ".ort.yml")
+        val actualRepositoryConfigurationFile = repositoryConfigurationFile
+                ?: locateRepositoryConfigurationFile(absoluteProjectPath)
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             actualRepositoryConfigurationFile.readValue()
@@ -128,4 +131,12 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         return OrtResult(repository, run)
     }
+
+    private fun locateRepositoryConfigurationFile(absoluteProjectPath: File) =
+            if (GitRepo().getWorkingTree(absoluteProjectPath).isValid()) {
+                val manifestFile = File(absoluteProjectPath, ".repo/manifest.xml").realFile()
+                File(manifestFile.parent, "${manifestFile.name}.ort.yml")
+            } else {
+                File(absoluteProjectPath, ".ort.yml")
+            }
 }
