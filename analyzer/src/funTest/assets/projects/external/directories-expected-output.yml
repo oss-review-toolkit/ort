@@ -151,3 +151,4 @@ analyzer:
       curations: []
     has_errors: false
 scanner: null
+evaluator: null

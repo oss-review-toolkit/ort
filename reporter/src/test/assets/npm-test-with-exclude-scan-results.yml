@@ -617,3 +617,4 @@ scanner:
       num_reads: 11
       num_hits: 0
     has_errors: true
+evaluator: null

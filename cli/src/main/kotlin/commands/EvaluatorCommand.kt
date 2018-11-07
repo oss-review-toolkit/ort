@@ -25,11 +25,14 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.model.Error
+import com.here.ort.model.EvaluatorRun
 import com.here.ort.model.OrtResult
+import com.here.ort.model.OutputFormat
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
+import com.here.ort.utils.safeMkdirs
 
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 
@@ -39,7 +42,7 @@ import javax.script.ScriptEngineManager
 
 @Parameters(commandNames = ["evaluate"], commandDescription = "Evaluate rules on ORT result files.")
 object EvaluatorCommand : CommandWithHelp() {
-    @Parameter(description = "The ORT result file to use.",
+    @Parameter(description = "The ORT result file to read as input.",
             names = ["--ort-file", "-i"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
@@ -54,6 +57,17 @@ object EvaluatorCommand : CommandWithHelp() {
             names = ["--rules-resource"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var rulesResource: String? = null
+
+    @Parameter(description = "The directory to write the evaluation results as ORT result file(s) to, in the " +
+            "specified output format(s).",
+            names = ["--output-dir", "-o"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var outputDir: File? = null
+
+    @Parameter(description = "The list of output formats to be used for the ORT result file(s).",
+            names = ["--output-formats", "-f"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var outputFormats = listOf(OutputFormat.YAML)
 
     private val engine = ScriptEngineManager().getEngineByExtension("kts")
 
@@ -71,8 +85,8 @@ object EvaluatorCommand : CommandWithHelp() {
         // on Windows for some reason.
         setIdeaIoUseFallback()
 
-        val ortResult = ortFile.readValue<OrtResult>()
-        engine.put("ortResult", ortResult)
+        val ortResultInput = ortFile.readValue<OrtResult>()
+        engine.put("ortResult", ortResultInput)
 
         val preface = """
             import com.here.ort.model.Error
@@ -90,6 +104,23 @@ object EvaluatorCommand : CommandWithHelp() {
 
         @Suppress("UNCHECKED_CAST")
         val evalErrors = engine.eval(script) as List<Error>
+
+        outputDir?.let { dir ->
+            require(!dir.exists()) {
+                "The output directory '${dir.absolutePath}' must not exist yet."
+            }
+
+            dir.safeMkdirs()
+
+            // Note: This overwrites any existing EvaluatorRun from the input file.
+            val ortResultOutput = ortResultInput.copy(evaluator = EvaluatorRun(evalErrors))
+
+            outputFormats.distinct().forEach { format ->
+                val evaluationResultFile = File(dir, "evaluation-result.${format.fileExtension}")
+                println("Writing evaluation result to '${evaluationResultFile.absolutePath}'.")
+                format.mapper.writerWithDefaultPrettyPrinter().writeValue(evaluationResultFile, ortResultOutput)
+            }
+        }
 
         return if (evalErrors.isEmpty()) 0 else 1.also {
             if (log.isErrorEnabled) {
