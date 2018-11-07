@@ -34,9 +34,9 @@ internal class PackageJsonUtil {
 
         private data class DefinitionFileInfo(
                 val definitionFile: File,
-                var hasYarnLockfile: Boolean = false,
-                var hasNpmLockfile: Boolean = false,
-                var isYarnWorkspaceRoot: Boolean = false,
+                val hasYarnLockfile: Boolean = false,
+                val hasNpmLockfile: Boolean = false,
+                val isYarnWorkspaceRoot: Boolean = false,
                 var isYarnWorkspaceSubmodule: Boolean = false
         )
 
@@ -65,13 +65,12 @@ internal class PackageJsonUtil {
 
         private fun getDefinitionFileInfo(definitionFiles: Set<File> ): Collection<DefinitionFileInfo> {
             val result = definitionFiles.associate { definitionFile ->
-                definitionFile to DefinitionFileInfo(definitionFile = definitionFile)
-            }
-
-            result.values.forEach { entry ->
-                entry.isYarnWorkspaceRoot = isYarnWorkspaceRoot(entry.definitionFile)
-                entry.hasYarnLockfile = hasYarnLockFile(entry.definitionFile.parentFile)
-                entry.hasNpmLockfile = hasNpmLockFile(entry.definitionFile.parentFile)
+                definitionFile to DefinitionFileInfo(
+                        definitionFile = definitionFile,
+                        isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
+                        hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
+                        hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile)
+                )
             }
 
             getYarnWorkspaceSubmodules(definitionFiles).forEach { definitionFile ->
