@@ -158,3 +158,4 @@ analyzer:
     errors: {}
     has_errors: false
 scanner: null
+evaluator: null

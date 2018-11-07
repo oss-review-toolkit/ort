@@ -99,3 +99,4 @@ analyzer:
           \ dependency versions are unstable."
     has_errors: true
 scanner: null
+evaluator: null
