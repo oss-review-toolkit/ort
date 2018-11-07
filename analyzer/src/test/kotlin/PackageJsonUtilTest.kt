@@ -19,6 +19,9 @@
 
 package com.here.ort.analyzer
 
+import com.here.ort.analyzer.managers.PackageJsonUtil
+import com.here.ort.analyzer.managers.PackageJsonUtil.Companion.mapDefinitionFilesForNpm
+import com.here.ort.analyzer.managers.PackageJsonUtil.Companion.mapDefinitionFilesForYarn
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
@@ -29,10 +32,6 @@ import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
-
-import com.here.ort.analyzer.managers.PackageJsonUtil
-import com.here.ort.analyzer.managers.PackageJsonUtil.Companion.mapDefinitionFilesForNpm
-import com.here.ort.analyzer.managers.PackageJsonUtil.Companion.mapDefinitionFilesForYarn
 
 import java.io.File
 
