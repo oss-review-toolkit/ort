@@ -158,14 +158,14 @@ class PackageJsonUtilTest : StringSpec() {
         }
     }
 
-    fun absolutePaths(vararg files: String) =
+    private fun absolutePaths(vararg files: String) =
             files.asList().map { file ->
                 tempDir.resolve(file)
             }
 
-    fun hasNpmLockFile(path: String) =
+    private fun hasNpmLockFile(path: String) =
             PackageJsonUtil.hasNpmLockFile(tempDir.resolve(path))
 
-    fun hasYarnLockFile(path: String) =
+    private fun hasYarnLockFile(path: String) =
             PackageJsonUtil.hasYarnLockFile(tempDir.resolve(path))
 }
