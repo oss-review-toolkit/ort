@@ -52,7 +52,7 @@ object DownloaderCommand : CommandWithHelp() {
             "'--project-url'.",
             names = ["--ort-file", "-a"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var dependenciesFile: File? = null
+    private var ortFile: File? = null
 
     @Parameter(description = "A VCS or archive URL of a project to download. Must not be used together with " +
             "'--ort-file'.",
@@ -108,12 +108,12 @@ object DownloaderCommand : CommandWithHelp() {
     private var allowMovingRevisions = false
 
     override fun runCommand(jc: JCommander): Int {
-        if ((dependenciesFile != null) == (projectUrl != null)) {
+        if ((ortFile != null) == (projectUrl != null)) {
             throw IllegalArgumentException(
                     "Either '--ort-file' or '--project-url' must be specified.")
         }
 
-        val packages = dependenciesFile?.let {
+        val packages = ortFile?.let {
             require(it.isFile) {
                 "Provided path is not a file: ${it.absolutePath}"
             }

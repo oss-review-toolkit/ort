@@ -40,10 +40,10 @@ import javax.script.ScriptEngineManager
 @Parameters(commandNames = ["evaluate"], commandDescription = "Evaluate rules on ORT result files.")
 object EvaluatorCommand : CommandWithHelp() {
     @Parameter(description = "The ORT result file to use.",
-            names = ["--ort-result-file", "-i"],
+            names = ["--ort-file", "-i"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
-    private lateinit var ortResultFile: File
+    private lateinit var ortFile: File
 
     @Parameter(description = "The name of a stript file containing rules.",
             names = ["--rules-file", "-r"],
@@ -71,7 +71,7 @@ object EvaluatorCommand : CommandWithHelp() {
         // on Windows for some reason.
         setIdeaIoUseFallback()
 
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = ortFile.readValue<OrtResult>()
         engine.put("ortResult", ortResult)
 
         val preface = """

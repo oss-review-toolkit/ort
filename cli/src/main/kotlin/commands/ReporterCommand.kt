@@ -60,7 +60,7 @@ object ReporterCommand : CommandWithHelp() {
             names = ["--ort-file", "-i"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
-    private lateinit var ortResultFile: File
+    private lateinit var ortFile: File
 
     @Parameter(description = "The output directory to store the generated reports in.",
             names = ["--output-dir", "-o"],
@@ -88,7 +88,7 @@ object ReporterCommand : CommandWithHelp() {
 
         outputDir.safeMkdirs()
 
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = ortFile.readValue<OrtResult>()
 
         val resolutionProvider = DefaultResolutionProvider()
         ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
