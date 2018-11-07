@@ -53,7 +53,7 @@ object ScannerCommand : CommandWithHelp() {
             "automatically if needed. This parameter and '--input-path' are mutually exclusive.",
             names = ["--ort-file", "-a"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var dependenciesFile: File? = null
+    private var ortFile: File? = null
 
     @Parameter(description = "An input directory or file to scan. This parameter and '--ort-file' are mutually " +
             "exclusive.",
@@ -97,7 +97,7 @@ object ScannerCommand : CommandWithHelp() {
     private var outputFormats = listOf(OutputFormat.YAML)
 
     override fun runCommand(jc: JCommander): Int {
-        require((dependenciesFile == null) != (inputPath == null)) {
+        require((ortFile == null) != (inputPath == null)) {
             "Either '--ort-file' or '--input-path' must be specified."
         }
 
@@ -127,7 +127,7 @@ object ScannerCommand : CommandWithHelp() {
 
         println("Using scanner '$scanner'.")
 
-        val ortResult = dependenciesFile?.let {
+        val ortResult = ortFile?.let {
             scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet())
         } ?: run {
             require(scanner is LocalScanner) {
