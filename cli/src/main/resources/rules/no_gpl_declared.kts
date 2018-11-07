@@ -4,7 +4,7 @@
 
 val pkgWithGpl = ortResult.analyzer?.result?.packages?.filter { curatedPkg ->
     curatedPkg.pkg.declaredLicenses.any { license ->
-        license == "GPL" || license.startsWith("GPL ") || license.startsWith("GPL-")
+        license.startsWith("GPL")
     }
 }
 
