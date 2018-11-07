@@ -44,7 +44,7 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
 
     override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.9.*")
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.12.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
             PackageJsonUtil.mapDefinitionFilesForYarn(definitionFiles).toList()

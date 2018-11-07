@@ -4,7 +4,7 @@ plugins {
 
 node {
     version = '8.11.4'
-    yarnVersion = '1.9.4'
+    yarnVersion = '1.12.1'
     // Installing NPM is needed for installing Yarn because the Gradle Node plugin installs Yarn via NPM.
     npmVersion = '6.4.0'
     // Setting download flag is required for bootstrapping NPM.

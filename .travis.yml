@@ -30,7 +30,7 @@ install:
   - sudo apt install -y cvs
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh
-  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.9.4
+  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.12.1
   - phpenv global 7.1
   - curl -Ls https://git.io/sbt > ~/bin/sbt
   - chmod a+x ~/bin/sbt
