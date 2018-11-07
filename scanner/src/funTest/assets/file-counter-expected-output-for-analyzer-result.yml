@@ -260,7 +260,7 @@ scanner:
           file_count: 47
           license_findings: []
     cache_stats:
-      num_reads: 5
+      num_reads: 0
       num_hits: 0
     has_errors: true
 evaluator: null
