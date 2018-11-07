@@ -20,7 +20,9 @@
 package com.here.ort.analyzer.managers
 
 import com.fasterxml.jackson.databind.node.ObjectNode
+
 import com.here.ort.model.readValue
+
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
