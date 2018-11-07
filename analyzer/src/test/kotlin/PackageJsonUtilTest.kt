@@ -35,7 +35,7 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class PackageJsonUtilTest() : StringSpec() {
+class PackageJsonUtilTest : StringSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>) =
                 if (!matchers.isEmpty())
