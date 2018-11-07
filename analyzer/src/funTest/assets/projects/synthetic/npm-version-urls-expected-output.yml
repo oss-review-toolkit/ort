@@ -400,11 +400,15 @@ project:
             dependencies:
             - id: "NPM::is-extendable:0.1.1"
           - id: "NPM::isobject:3.0.1"
-      - id: "NPM::through2:2.0.4"
+      - id: "NPM::through2:2.0.5"
         dependencies:
-        - id: "NPM::readable-stream:3.0.6"
+        - id: "NPM::readable-stream:2.3.6"
           dependencies:
+          - id: "NPM::core-util-is:1.0.2"
           - id: "NPM::inherits:2.0.3"
+          - id: "NPM::isarray:1.0.0"
+          - id: "NPM::process-nextick-args:2.0.0"
+          - id: "NPM::safe-buffer:5.1.2"
           - id: "NPM::string_decoder:1.1.1"
             dependencies:
             - id: "NPM::safe-buffer:5.1.2"
@@ -3145,31 +3149,6 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::readable-stream:3.0.6"
-    declared_licenses:
-    - "MIT"
-    description: "Streams3, a user-land copy of the stream library from Node.js"
-    homepage_url: "https://github.com/nodejs/readable-stream#readme"
-    binary_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    source_artifact:
-      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.0.6.tgz"
-      hash: "351302e4c68b5abd6a2ed55376a7f9a25be3057a"
-      hash_algorithm: "SHA-1"
-    vcs:
-      type: "git"
-      url: "git://github.com/nodejs/readable-stream.git"
-      revision: "09a71b16548054ff439ce3f716b01faf70f78c5d"
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "https://github.com/nodejs/readable-stream.git"
-      revision: "09a71b16548054ff439ce3f716b01faf70f78c5d"
-      path: ""
-  curations: []
-- package:
     id: "NPM::regex-not:1.0.2"
     declared_licenses:
     - "MIT"
@@ -3882,7 +3861,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::through2:2.0.4"
+    id: "NPM::through2:2.0.5"
     declared_licenses:
     - "MIT"
     description: "A tiny wrapper around Node streams2 Transform to avoid explicit\
@@ -3893,18 +3872,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/through2/-/through2-2.0.4.tgz"
-      hash: "e8362dec238b7590f5743b060342f27b452f4450"
+      url: "https://registry.npmjs.org/through2/-/through2-2.0.5.tgz"
+      hash: "01c1e39eb31d07cb7d03a96a70823260b23132cd"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/rvagg/through2.git"
-      revision: "e839de7cc95401797cf7af0533f1d5144dc3d9df"
+      revision: "72a3cefc0ff1ad5cc178be04eb927f40166226f1"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/rvagg/through2.git"
-      revision: "e839de7cc95401797cf7af0533f1d5144dc3d9df"
+      revision: "72a3cefc0ff1ad5cc178be04eb927f40166226f1"
       path: ""
   curations: []
 - package:
