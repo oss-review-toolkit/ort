@@ -93,8 +93,8 @@ object EvaluatorCommand : CommandWithHelp() {
 
         return if (evalErrors.isEmpty()) 0 else 1.also {
             if (log.isErrorEnabled) {
-                evalErrors.forEach {
-                    log.error(it.toString())
+                evalErrors.forEach { error ->
+                    log.error(error.toString())
                 }
             }
         }
