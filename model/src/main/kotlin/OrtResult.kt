@@ -56,6 +56,15 @@ data class OrtResult(
         val data: CustomData = emptyMap()
 ) {
     /**
+     * Conveniently return the declared licenses for the given [id] which may either refer to a project or to a package.
+     */
+    fun getDeclaredLicensesForId(id: Identifier) =
+            analyzer?.result?.run {
+                projects.find { it.id == id }?.declaredLicenses
+                        ?: packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
+            } ?: sortedSetOf<String>()
+
+    /**
      * Conveniently return all detected licenses for the given package [id].
      */
     fun getDetectedLicensesForPackage(id: Identifier) =
