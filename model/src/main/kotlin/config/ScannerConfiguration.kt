@@ -31,5 +31,5 @@ data class ScannerConfiguration(
         /**
          * An optional Google Cloud Storage configuration to cache the scan results.
          */
-        val cloudStorageCache: CloudStorageCacheConfiguration? = null
+        val googleCloudStorageCache: GoogleCloudStorageCacheConfiguration? = null
 )

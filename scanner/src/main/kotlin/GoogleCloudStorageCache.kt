@@ -29,13 +29,13 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanResult
 import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper
-import com.here.ort.model.config.CloudStorageCacheConfiguration
+import com.here.ort.model.config.GoogleCloudStorageCacheConfiguration
 import com.here.ort.utils.log
 
 import java.io.FileInputStream
 
-class CloudStorageCache(
-        private val config: CloudStorageCacheConfiguration
+class GoogleCloudStorageCache(
+        private val config: GoogleCloudStorageCacheConfiguration
 ) : ScanStorage {
     private var storage: Storage
 

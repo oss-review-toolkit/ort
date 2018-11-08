@@ -128,7 +128,7 @@ object ScannerCommand : CommandWithHelp() {
             ScanResultsCache.configure(it)
         }
 
-        config.cloudStorageCache?.let {
+        config.googleCloudStorageCache?.let {
             it.googleApplicationCredentials = googleApplicationCredentials
             ScanResultsCache.configure(it)
         }

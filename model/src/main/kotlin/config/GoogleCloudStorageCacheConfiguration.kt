@@ -21,7 +21,7 @@ package com.here.ort.model.config
 
 import java.io.File
 
-data class CloudStorageCacheConfiguration(
+data class GoogleCloudStorageCacheConfiguration(
         val bucketName: String,
         var googleApplicationCredentials: File? = null
 ) : CacheConfiguration {

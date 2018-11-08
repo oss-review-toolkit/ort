@@ -120,7 +120,7 @@ either in environment by adding `GOOGLE_APPLICATION_CREDENTIALS` variable or via
  
 Example of a Google Cloud Storage configuration file:
 ```yaml
-cloud_storage_cache:
+google_cloud_storage_cache:
   bucket_name: scan-cache
 ```
 
