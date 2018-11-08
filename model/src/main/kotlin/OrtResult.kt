@@ -54,4 +54,10 @@ data class OrtResult(
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
-)
+) {
+    /**
+     * Conveniently return all detected licenses for the given package [id].
+     */
+    fun getDetectedLicensesForPackage(id: Identifier) =
+            scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
+}

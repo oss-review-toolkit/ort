@@ -46,3 +46,15 @@ data class ScanResultContainer(
      */
     override fun compareTo(other: ScanResultContainer) = id.compareTo(other.id)
 }
+
+/**
+ * Conveniently return all detected licenses for the container's package [id], or an empty set if the container is null.
+ */
+fun ScanResultContainer?.getAllDetectedLicenses() =
+        sortedSetOf<String>().also { licenses ->
+            if (this != null) {
+                results.flatMapTo(licenses) {
+                    it.summary.licenses
+                }
+            }
+        }
