@@ -25,6 +25,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.getAllDetectedLicenses
 import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
@@ -264,9 +265,7 @@ abstract class TableReporter : Reporter() {
                         ?: analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
                         ?: sortedSetOf()
 
-                val detectedLicenses = scanResult?.results?.flatMap {
-                    it.summary.licenses
-                }?.toSortedSet() ?: sortedSetOf()
+                val detectedLicenses = scanResult.getAllDetectedLicenses()
 
                 val analyzerErrors = project.collectErrors(id).toMutableList()
                 analyzerResult.errors[id]?.let {
