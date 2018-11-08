@@ -94,9 +94,11 @@ object EvaluatorCommand : CommandWithHelp() {
 
             val ortResult = bindings["ortResult"] as OrtResult
             val evalErrors = mutableListOf<Error>()
+
         """.trimIndent()
 
         val postface = """
+
             evalErrors
         """.trimIndent()
 
