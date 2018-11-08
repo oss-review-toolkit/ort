@@ -261,10 +261,7 @@ abstract class TableReporter : Reporter() {
                             ?: scopes.associateTo(sortedMapOf()) { Pair(it.name, emptyList<ScopeExclude>()) }
                 }
 
-                val declaredLicenses = analyzerResult.projects.find { it.id == id }?.declaredLicenses
-                        ?: analyzerResult.packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
-                        ?: sortedSetOf()
-
+                val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
                 val detectedLicenses = scanResult.getAllDetectedLicenses()
 
                 val analyzerErrors = project.collectErrors(id).toMutableList()
