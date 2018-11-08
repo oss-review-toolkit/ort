@@ -93,6 +93,19 @@ data class Identifier(
     override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
+     * Return whether this [Identifier] is likely to belong to the vendor of the given [name].
+     */
+    fun isFromVendor(name: String): Boolean {
+        val vendorNamespace = when (provider) {
+            "NPM" -> "@$name"
+            "Gradle", "Maven", "SBT" -> "com.$name"
+            else -> ""
+        }
+
+        return vendorNamespace.isNotEmpty() && namespace.startsWith(vendorNamespace)
+    }
+
+    /**
      * Return true if this matches the other identifier. To match, both identifiers need to have the same
      * [provider] and [namespace], and the [name] and [version] must be either equal or empty for at least one of
      * them.
