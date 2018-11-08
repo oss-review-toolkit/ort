@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.SortedSet
+
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
@@ -55,6 +57,30 @@ data class OrtResult(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) {
+    /**
+     * Return all projects and packages that are likely to belong to the vendor of the given [name]. Projects are
+     * converted to packages in the result. If no analyzer result is present an empty set is returned.
+     */
+    fun getVendorPackages(name: String): SortedSet<Package> {
+        val vendorPackages = sortedSetOf<Package>()
+
+        analyzer?.result?.apply {
+            projects.filter {
+                it.id.isFromVendor(name)
+            }.mapTo(vendorPackages) {
+                it.toPackage()
+            }
+
+            packages.filter {
+                it.pkg.id.isFromVendor(name)
+            }.mapTo(vendorPackages) {
+                it.pkg
+            }
+        }
+
+        return vendorPackages
+    }
+
     /**
      * Return the declared licenses for the given [id] which may either refer to a project or to a package. If [id] is
      * not found an empty set is returned.
