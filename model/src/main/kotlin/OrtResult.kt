@@ -61,6 +61,7 @@ data class OrtResult(
      * Return all projects and packages that are likely to belong to the vendor of the given [name]. Projects are
      * converted to packages in the result. If no analyzer result is present an empty set is returned.
      */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getVendorPackages(name: String): SortedSet<Package> {
         val vendorPackages = sortedSetOf<Package>()
 
@@ -95,6 +96,7 @@ data class OrtResult(
      * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
      * scanning, the [id] may either refer to a project or to a package. If [id] is not found an empty set is returned.
      */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getDetectedLicensesForId(id: Identifier) =
             scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
 }
