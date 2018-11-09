@@ -19,6 +19,8 @@
 
 package com.here.ort.commands
 
+import ch.frankel.slf4k.*
+
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
@@ -37,8 +39,11 @@ import com.here.ort.utils.safeMkdirs
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 
 import java.io.File
+import java.lang.IllegalArgumentException
 
+import javax.script.Compilable
 import javax.script.ScriptEngineManager
+import javax.script.ScriptException
 
 @Parameters(commandNames = ["evaluate"], commandDescription = "Evaluate rules on ORT result files.")
 object EvaluatorCommand : CommandWithHelp() {
@@ -68,6 +73,11 @@ object EvaluatorCommand : CommandWithHelp() {
             names = ["--output-formats", "-f"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputFormats = listOf(OutputFormat.YAML)
+
+    @Parameter(description = "Do not evaluate the script but only check its syntax. No output is written in this case.",
+            names = ["--syntax-check"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var syntaxCheck = false
 
     private val engine = ScriptEngineManager().getEngineByExtension("kts")
 
@@ -103,6 +113,25 @@ object EvaluatorCommand : CommandWithHelp() {
         """.trimIndent()
 
         val script = preface + (rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()) + postface
+
+        if (syntaxCheck) {
+            if (engine is Compilable) {
+                val canCompile = try {
+                    engine.compile(script)
+                    true
+                } catch (e: ScriptException) {
+                    log.error {
+                        e.message?.let { it } ?: "No error message available."
+                    }
+
+                    false
+                }
+
+                return if (canCompile) 0 else 1
+            } else {
+                throw IllegalArgumentException("The scripting engine does not support compilation.")
+            }
+        }
 
         @Suppress("UNCHECKED_CAST")
         val evalErrors = engine.eval(script) as List<Error>
