@@ -36,13 +36,13 @@ import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 
-import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-
 import java.io.File
 
 import javax.script.Compilable
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
+
+import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 
 @Parameters(commandNames = ["evaluate"], commandDescription = "Evaluate rules on ORT result files.")
 object EvaluatorCommand : CommandWithHelp() {
