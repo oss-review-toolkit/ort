@@ -5,12 +5,12 @@ environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
 
 cache:
-  - $(HOME)\.gradle\caches\build-cache-1
-  - $(HOME)\.gradle\caches\jars-1
-  - $(HOME)\.gradle\caches\jars-2
-  - $(HOME)\.gradle\caches\jars-3
-  - $(HOME)\.gradle\caches\modules-2
-  - $(HOME)\.gradle\caches\transforms-1
+  - $(HOME)\.gradle\caches\build-cache-1 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\jars-1 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\jars-2 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\jars-3 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\modules-2 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\transforms-1 -> .appveyor.yml
   - $(HOME)\.ivy2
   - $(HOME)\.m2\repository
   - $(HOME)\.ort\analyzer\cache\http
