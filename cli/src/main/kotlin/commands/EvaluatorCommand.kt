@@ -52,7 +52,7 @@ object EvaluatorCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_MANDATORY)
     private lateinit var ortFile: File
 
-    @Parameter(description = "The name of a stript file containing rules.",
+    @Parameter(description = "The name of a script file containing rules.",
             names = ["--rules-file", "-r"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var rulesFile: File? = null
