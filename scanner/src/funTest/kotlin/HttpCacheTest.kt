@@ -50,9 +50,11 @@ import java.net.InetSocketAddress
 import java.time.Duration
 import java.time.Instant
 
+import kotlin.random.Random
+
 class HttpCacheTest : StringSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
-    private val port = 8888
+    private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
 
     private lateinit var server: HttpServer
 
