@@ -76,15 +76,15 @@ class HttpCacheTest : StringSpec() {
     }
 
     override fun beforeTest(description: Description) {
-        // Start the local HTTP server.
+        // Start the local HTTP server with the system default value for queued incoming connections.
         server = HttpServer.create(InetSocketAddress(loopback, port), 0)
         server.createContext("/", MyHttpHandler())
         server.start()
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        // Ensure the server is properly stopped even in case of exceptions.
-        server.stop(0)
+        // Ensure the server is properly stopped even in case of exceptions, but wait at most 5 seconds.
+        server.stop(5)
     }
 
     private val id = Identifier("provider", "namespace", "name", "version")
