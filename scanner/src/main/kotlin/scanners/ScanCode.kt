@@ -115,7 +115,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
                     "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
 
-    override val scannerVersion = "2.9.2"
+    override val scannerVersion = "2.9.7"
     override val resultFileExt = "json"
 
     override fun command(workingDir: File?) = if (OS.isWindows) "scancode.bat" else "scancode"
