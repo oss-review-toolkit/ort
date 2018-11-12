@@ -62,7 +62,6 @@ data class ScanSummary(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val errors: List<Error> = emptyList()
 ) {
-    val licenses: SortedSet<String>
-        @JsonIgnore
-        get() = licenseFindings.map { it.license }.toSortedSet()
+    @get:JsonIgnore
+    val licenses: SortedSet<String> = licenseFindings.map { it.license }.toSortedSet()
 }
