@@ -38,20 +38,21 @@ import java.io.File
 class PackageJsonUtilTest : StringSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>) =
-                if (!matchers.isEmpty())
-                """
-                {
-                   "workspaces" : ${matchers.joinToString (prefix = "[\"", separator = "\",\"", postfix = "\"]")}
+                if (!matchers.isEmpty()) {
+                    """
+                    {
+                       "workspaces" : ${matchers.joinToString(prefix = "[\"", separator = "\",\"", postfix = "\"]")}
+                    }
+                    """.trimIndent()
+                } else {
+                    "{}"
                 }
-                """.trimIndent()
-                else "{}"
 
         private fun mapDefinitionFiles(definitionFiles: Collection<File>) =
                 mapDefinitionFilesForNpm(definitionFiles).plus(mapDefinitionFilesForYarn(definitionFiles))
     }
 
     init {
-
         "given no NPM lockfile present, hasNpmLockFile returns false" {
             setupProject(path = "a")
 
@@ -149,13 +150,8 @@ class PackageJsonUtilTest : StringSpec() {
         definitionFile.writeText(createPackageJson(matchers))
         definitionFiles.add(definitionFile)
 
-        if (hasNpmLockFile) {
-            projectDir.resolve("package-lock.json").createNewFile()
-        }
-
-        if (hasYarnLockFile) {
-            projectDir.resolve("yarn.lock").createNewFile()
-        }
+        if (hasNpmLockFile) projectDir.resolve("package-lock.json").createNewFile()
+        if (hasYarnLockFile) projectDir.resolve("yarn.lock").createNewFile()
     }
 
     private fun absolutePaths(vararg files: String) =
