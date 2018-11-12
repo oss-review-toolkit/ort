@@ -107,7 +107,7 @@ internal class PackageJsonUtil {
 
         private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> =
                 definitionFile.readValue<ObjectNode>()["workspaces"]?.map {
-                    val pattern = "glob:${definitionFile.parentFile}/${it.textValue()}"
+                    val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
                     FileSystems.getDefault().getPathMatcher(pattern)
                 } ?: emptyList()
     }
