@@ -49,7 +49,7 @@ class PackageJsonUtilTest : StringSpec() {
                 }
 
         private fun mapDefinitionFiles(definitionFiles: Collection<File>) =
-                mapDefinitionFilesForNpm(definitionFiles).plus(mapDefinitionFilesForYarn(definitionFiles))
+                mapDefinitionFilesForNpm(definitionFiles) + mapDefinitionFilesForYarn(definitionFiles)
     }
 
     init {
@@ -143,7 +143,7 @@ class PackageJsonUtilTest : StringSpec() {
     ) {
         val projectDir = tempDir.resolve(path)
 
-        require(!projectDir.isFile && !projectDir.isDirectory)
+        require(!projectDir.exists())
         projectDir.safeMkdirs()
 
         val definitionFile = projectDir.resolve("package.json")
