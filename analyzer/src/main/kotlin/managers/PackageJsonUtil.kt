@@ -63,7 +63,7 @@ internal class PackageJsonUtil {
         private fun isHandledByYarn(entry: DefinitionFileInfo) =
                 entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
 
-        private fun getDefinitionFileInfo(definitionFiles: Set<File> ): Collection<DefinitionFileInfo> {
+        private fun getDefinitionFileInfo(definitionFiles: Set<File>): Collection<DefinitionFileInfo> {
             val yarnWorkspaceSubmodules = getYarnWorkspaceSubmodules(definitionFiles)
 
             return definitionFiles.map { definitionFile ->
