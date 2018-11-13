@@ -81,9 +81,7 @@ class PackageJsonUtilTest : StringSpec() {
             setupProject(path = "a", hasNpmLockFile = true, hasYarnLockFile = true)
 
             mapDefinitionFilesForNpm(definitionFiles).shouldBeEmpty()
-            mapDefinitionFilesForYarn(definitionFiles) shouldContainExactly
-                    absolutePaths(
-                    "a/package.json")
+            mapDefinitionFilesForYarn(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
         }
 
         "given project with no lockfile, definition file is mapped for NPM only" {
@@ -159,9 +157,7 @@ class PackageJsonUtilTest : StringSpec() {
                 tempDir.resolve(file)
             }
 
-    private fun hasNpmLockFile(path: String) =
-            PackageJsonUtil.hasNpmLockFile(tempDir.resolve(path))
+    private fun hasNpmLockFile(path: String) = PackageJsonUtil.hasNpmLockFile(tempDir.resolve(path))
 
-    private fun hasYarnLockFile(path: String) =
-            PackageJsonUtil.hasYarnLockFile(tempDir.resolve(path))
+    private fun hasYarnLockFile(path: String) = PackageJsonUtil.hasYarnLockFile(tempDir.resolve(path))
 }
