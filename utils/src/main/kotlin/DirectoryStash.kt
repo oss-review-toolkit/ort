@@ -49,8 +49,9 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
                 // Use a non-existing directory as the target to ensure the directory can be moved atomically.
                 val tempDir = File(stashDir, originalDir.name)
 
-                log.info { "Temporarily moving directory from '${originalDir.absolutePath}' to " +
-                        "'${tempDir.absolutePath}'." }
+                log.info {
+                    "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'."
+                }
 
                 Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
