@@ -38,8 +38,8 @@ import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
 
 import io.kotlintest.Description
+import io.kotlintest.Spec
 import io.kotlintest.specs.StringSpec
-import io.kotlintest.TestResult
 import io.kotlintest.matchers.collections.contain
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -56,9 +56,7 @@ class HttpCacheTest : StringSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
     private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
 
-    private lateinit var server: HttpServer
-
-    private class MyHttpHandler : HttpHandler {
+    private val handler = object : HttpHandler {
         val requests = mutableMapOf<String, String>()
 
         override fun handle(exchange: HttpExchange) {
@@ -75,16 +73,10 @@ class HttpCacheTest : StringSpec() {
         }
     }
 
-    override fun beforeTest(description: Description) {
-        // Start the local HTTP server with the system default value for queued incoming connections.
-        server = HttpServer.create(InetSocketAddress(loopback, port), 0)
-        server.createContext("/", MyHttpHandler())
-        server.start()
-    }
-
-    override fun afterTest(description: Description, result: TestResult) {
-        // Ensure the server is properly stopped even in case of exceptions, but wait at most 5 seconds.
-        server.stop(5)
+    // Start the local HTTP server with the system default value for queued incoming connections.
+    private val server = HttpServer.create(InetSocketAddress(loopback, port), 0).apply {
+        createContext("/", handler)
+        start()
     }
 
     private val id = Identifier("provider", "namespace", "name", "version")
@@ -158,6 +150,19 @@ class HttpCacheTest : StringSpec() {
 
     private val rawResultWithContent = jsonMapper.readTree("\"key 1\": \"value 1\"")
     private val rawResultEmpty = EMPTY_JSON_NODE
+
+    override fun beforeTest(description: Description) {
+        handler.requests.clear()
+
+        super.beforeTest(description)
+    }
+
+    override fun afterSpec(description: Description, spec: Spec) {
+        // Ensure the server is properly stopped even in case of exceptions, but wait at most 5 seconds.
+        server.stop(5)
+
+        super.afterSpec(description, spec)
+    }
 
     init {
         "Scan result can be added to the cache" {
