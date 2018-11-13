@@ -232,5 +232,22 @@ class ScanCodeTest : WordSpec({
 
             actualFindings shouldBe expectedFindings
         }
+
+        "properly associate licenses to copyrights for the new output format" {
+            val resultFile = File("src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json")
+            val result = scanner.getResult(resultFile)
+
+            val expectedFindings = sortedSetOf(
+                    LicenseFinding(
+                            "Apache-2.0",
+                            sortedSetOf(
+                                    "Copyright 2013-2017 Amazon.com, Inc."
+                            )
+                    )
+            )
+            val actualFindings = scanner.associateFindings(result)
+
+            actualFindings shouldBe expectedFindings
+        }
     }
 })
