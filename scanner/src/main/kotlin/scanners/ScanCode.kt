@@ -364,7 +364,10 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             (it["start_line"].asInt() - startLine).absoluteValue <= toleranceLines
         }
 
-        return closestCopyrights.flatMap { it["statements"] }.map { it.asText() }.toSortedSet()
+        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
+        return closestCopyrights.flatMap {
+            it["statements"] ?: listOf(it["value"])
+        }.map { it.asText() }.toSortedSet()
     }
 
     /**
@@ -373,7 +376,11 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     private fun associateFileFindings(licenses: JsonNode, copyrights: JsonNode, rootLicense: String = ""):
             SortedMap<String, SortedSet<String>> {
         val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
-        val allCopyrightStatements = copyrights.flatMap { it["statements"] }.map { it.asText() }.toSortedSet()
+
+        // While ScanCode 2.9.2 was still using "statements", version 2.97 is using "value".
+        val allCopyrightStatements = copyrights.flatMap {
+            it["statements"] ?: listOf(it["value"])
+        }.map { it.asText() }.toSortedSet()
 
         when (licenses.size()) {
             0 -> {
