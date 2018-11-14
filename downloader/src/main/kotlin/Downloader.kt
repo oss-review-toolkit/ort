@@ -42,6 +42,7 @@ import okio.Okio
 
 import java.io.File
 import java.io.IOException
+import java.net.URI
 import java.time.Instant
 import java.util.SortedSet
 
@@ -256,30 +257,36 @@ class Downloader {
             "Trying to download source artifact for '${target.id}' from '${target.sourceArtifact.url}'..."
         }
 
-        val request = Request.Builder()
-                // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to find
-                // a tar.gz file, thus failing to unpack the archive.
-                // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
-                // http/BridgeInterceptor.java#L79
-                .addHeader("Accept-Encoding", "identity")
-                .get()
-                .url(target.sourceArtifact.url)
-                .build()
-
         val startTime = Instant.now()
-        val response = try {
-            OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
-        } catch (e: IOException) {
-            throw DownloadException("Failed to download source artifact: ${e.collectMessages()}", e)
-        }
+        val sourceArchive = if (target.sourceArtifact.url.startsWith("file://")) {
+            File(URI(target.sourceArtifact.url))
+        } else {
+            val request = Request.Builder()
+                    // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to
+                    // find a tar.gz file, thus failing to unpack the archive.
+                    // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
+                    // http/BridgeInterceptor.java#L79
+                    .addHeader("Accept-Encoding", "identity")
+                    .get()
+                    .url(target.sourceArtifact.url)
+                    .build()
 
-        val body = response.body()
-        if (!response.isSuccessful || body == null) {
-            throw DownloadException("Failed to download source artifact: $response")
-        }
+            val response = try {
+                OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
+            } catch (e: IOException) {
+                throw DownloadException("Failed to download source artifact: ${e.collectMessages()}", e)
+            }
 
-        val sourceArchive = createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/"))
-        Okio.buffer(Okio.sink(sourceArchive)).use { it.writeAll(body.source()) }
+            val body = response.body()
+            if (!response.isSuccessful || body == null) {
+                throw DownloadException("Failed to download source artifact: $response")
+            }
+
+            createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
+                Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
+                tempFile.deleteOnExit()
+            }
+        }
 
         verifyChecksum(sourceArchive, target.sourceArtifact.hash, target.sourceArtifact.hashAlgorithm)
 
@@ -303,10 +310,6 @@ class Downloader {
         } catch (e: IOException) {
             log.error { "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.message}" }
             throw DownloadException(e)
-        } finally {
-            if (!sourceArchive.delete()) {
-                log.warn { "Unable to delete temporary file '$sourceArchive'." }
-            }
         }
 
         log.info {
