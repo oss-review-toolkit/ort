@@ -188,6 +188,12 @@ class UtilsTest : WordSpec({
 
             filterVersionNames("4711", names).joinToString("\n") shouldBe "my_project-4711"
         }
+
+        "find names that have a numeric suffix as part of the name" {
+            val names = listOf("my_project_v1-1.0.2", "my_project_v1-1.0.3", "my_project_v1-1.1.0")
+
+            filterVersionNames("1.0.3", names).joinToString("\n") shouldBe "my_project_v1-1.0.3"
+        }
     }
 
     "getPathFromEnvironment" should {
