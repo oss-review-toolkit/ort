@@ -5,6 +5,8 @@ dependencies {
     api('ch.frankel.log4k:slf4k-api:1.0.0') {
         // Our version of the Kotlin runtime is provided by the Gradle plugin.
         exclude module: 'kotlin-runtime'
+        // The Kotlin standard library we use is now called "kotlin-stdlib-jdk8".
+        exclude module: 'kotlin-stdlib'
     }
 
     // Use logback-classic as the logger for slf4k as it allows to change the log level at runtime.
