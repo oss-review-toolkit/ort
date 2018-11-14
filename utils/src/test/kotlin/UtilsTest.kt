@@ -182,6 +182,12 @@ class UtilsTest : WordSpec({
 
             filterVersionNames("1.11.6", names).joinToString("\n") shouldBe "1.11.6"
         }
+
+        "find names with only a single revision number as the version" {
+            val names = listOf("my_project-123", "my_project-4711", "my_project-8888")
+
+            filterVersionNames("4711", names).joinToString("\n") shouldBe "my_project-4711"
+        }
     }
 
     "getPathFromEnvironment" should {
