@@ -258,7 +258,9 @@ class Downloader {
         }
 
         val startTime = Instant.now()
-        val sourceArchive = if (target.sourceArtifact.url.startsWith("file://")) {
+
+        // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
+        val sourceArchive = if (target.sourceArtifact.url.startsWith("file:/")) {
             File(URI(target.sourceArtifact.url))
         } else {
             val request = Request.Builder()
