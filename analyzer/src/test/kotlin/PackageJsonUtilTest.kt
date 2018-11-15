@@ -31,11 +31,11 @@ import io.kotlintest.matchers.collections.shouldBeEmpty
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class PackageJsonUtilTest : StringSpec() {
+class PackageJsonUtilTest : WordSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>) =
                 if (!matchers.isEmpty()) {
@@ -53,71 +53,79 @@ class PackageJsonUtilTest : StringSpec() {
     }
 
     init {
-        "given no NPM lockfile present, hasNpmLockFile returns false" {
-            setupProject(path = "a")
+        "hasNpmLockFile" should {
+            "return false if no NPM lockfile is present" {
+                setupProject(path = "a")
 
-            hasNpmLockFile("a") shouldBe false
+                hasNpmLockFile("a") shouldBe false
+            }
+
+            "returns true if an NPM lockfile present" {
+                setupProject(path = "a", hasNpmLockFile = true)
+
+                hasNpmLockFile("a") shouldBe true
+            }
         }
 
-        "given NPM lockfile present, hasNpmLockFile returns true" {
-            setupProject(path = "a", hasNpmLockFile = true)
+        "hasYarnLockFile" should {
+            "return false if no Yarn lockfile is present" {
+                setupProject(path = "a")
 
-            hasNpmLockFile("a") shouldBe true
+                hasNpmLockFile("a") shouldBe false
+            }
+
+            "returns true if a Yarn lockfile is present" {
+                setupProject(path = "a", hasYarnLockFile = true)
+
+                hasYarnLockFile("a") shouldBe true
+            }
         }
 
-        "given no Yarn lockfile present, hasYarnLockFile returns false" {
-            setupProject(path = "a")
+        "Definition file mapping" should {
+            "happen for Yarn only if both Yarn and NPM lockfiles are present" {
+                setupProject(path = "a", hasNpmLockFile = true, hasYarnLockFile = true)
 
-            hasNpmLockFile("a") shouldBe false
+                mapDefinitionFilesForNpm(definitionFiles).shouldBeEmpty()
+                mapDefinitionFilesForYarn(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
+            }
+
+            "happen for NPM only if no lockfile is present" {
+                setupProject(path = "a")
+
+                mapDefinitionFilesForNpm(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
+                mapDefinitionFilesForYarn(definitionFiles).shouldBeEmpty()
+            }
         }
 
-        "given Yarn lockfile present, hasYarnLockFile returns true" {
-            setupProject(path = "a", hasYarnLockFile = true)
+        "Workspace projects" should {
+            "not be mapped if the project path matches literally" {
+                setupProject(path = "a", matchers = listOf("b"))
+                setupProject(path = "a/b")
+                setupProject(path = "a/c")
 
-            hasYarnLockFile("a") shouldBe true
-        }
+                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
+                        absolutePaths("a/package.json", "a/c/package.json")
+            }
 
-        "given project with Yarn and NPM lockfile, definition file is mapped for Yarn only" {
-            setupProject(path = "a", hasNpmLockFile = true, hasYarnLockFile = true)
+            "not be mapped if * matches the project path" {
+                setupProject(path = "a", matchers = listOf("*", "*/f"))
+                setupProject(path = "a/b")
+                setupProject(path = "a/c")
+                setupProject(path = "a/d/e")
+                setupProject(path = "a/d/f")
 
-            mapDefinitionFilesForNpm(definitionFiles).shouldBeEmpty()
-            mapDefinitionFilesForYarn(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
-        }
+                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
+                        absolutePaths("a/package.json", "a/d/e/package.json")
+            }
 
-        "given project with no lockfile, definition file is mapped for NPM only" {
-            setupProject(path = "a")
+            "not be mapped if ** matches the project name" {
+                setupProject(path = "a", matchers = listOf("**/d"))
+                setupProject(path = "a/b/c/d")
+                setupProject(path = "a/b/c/e")
 
-            mapDefinitionFilesForNpm(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
-            mapDefinitionFilesForYarn(definitionFiles).shouldBeEmpty()
-        }
-
-        "given project matched exactly by workspace, matched project is not mapped" {
-            setupProject(path = "a", matchers = listOf("b"))
-            setupProject(path = "a/b")
-            setupProject(path = "a/c")
-
-            mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                    absolutePaths("a/package.json", "a/c/package.json")
-        }
-
-        "given projects matched via * by workspace, matched projects are not mapped" {
-            setupProject(path = "a", matchers = listOf("*", "*/f"))
-            setupProject(path = "a/b")
-            setupProject(path = "a/c")
-            setupProject(path = "a/d/e")
-            setupProject(path = "a/d/f")
-
-            mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                    absolutePaths("a/package.json", "a/d/e/package.json")
-        }
-
-        "given projects matched via ** by workspace, matched projects are not mapped" {
-            setupProject(path = "a", matchers = listOf("**/d"))
-            setupProject(path = "a/b/c/d")
-            setupProject(path = "a/b/c/e")
-
-            mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                    absolutePaths("a/package.json", "a/b/c/e/package.json")
+                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
+                        absolutePaths("a/package.json", "a/b/c/e/package.json")
+            }
         }
     }
 
