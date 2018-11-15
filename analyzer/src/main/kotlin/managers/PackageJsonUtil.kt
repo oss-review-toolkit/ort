@@ -19,6 +19,7 @@
 
 package com.here.ort.analyzer.managers
 
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.model.readValue
@@ -105,10 +106,16 @@ internal class PackageJsonUtil {
             return result
         }
 
-        private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> =
-                definitionFile.readValue<ObjectNode>()["workspaces"]?.map {
-                    val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
-                    FileSystems.getDefault().getPathMatcher(pattern)
-                } ?: emptyList()
+        private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
+            var workspaces = definitionFile.readValue<ObjectNode>()["workspaces"]
+            if (workspaces != null && workspaces !is ArrayNode) {
+                workspaces = workspaces["packages"]
+            }
+
+            return workspaces?.map {
+                val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
+                FileSystems.getDefault().getPathMatcher(pattern)
+            } ?: emptyList()
+        }
     }
 }
