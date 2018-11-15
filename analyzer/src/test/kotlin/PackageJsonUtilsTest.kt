@@ -19,9 +19,9 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.managers.PackageJsonUtil
-import com.here.ort.analyzer.managers.PackageJsonUtil.Companion.mapDefinitionFilesForNpm
-import com.here.ort.analyzer.managers.PackageJsonUtil.Companion.mapDefinitionFilesForYarn
+import com.here.ort.analyzer.managers.PackageJsonUtils
+import com.here.ort.analyzer.managers.PackageJsonUtils.Companion.mapDefinitionFilesForNpm
+import com.here.ort.analyzer.managers.PackageJsonUtils.Companion.mapDefinitionFilesForYarn
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
@@ -35,7 +35,7 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class PackageJsonUtilTest : WordSpec() {
+class PackageJsonUtilsTest : WordSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>, flattenWorkspaceDefinition: Boolean) =
                 if (!matchers.isEmpty()) {
@@ -186,7 +186,7 @@ class PackageJsonUtilTest : WordSpec() {
                 tempDir.resolve(file)
             }
 
-    private fun hasNpmLockFile(path: String) = PackageJsonUtil.hasNpmLockFile(tempDir.resolve(path))
+    private fun hasNpmLockFile(path: String) = PackageJsonUtils.hasNpmLockFile(tempDir.resolve(path))
 
-    private fun hasYarnLockFile(path: String) = PackageJsonUtil.hasYarnLockFile(tempDir.resolve(path))
+    private fun hasYarnLockFile(path: String) = PackageJsonUtils.hasYarnLockFile(tempDir.resolve(path))
 }

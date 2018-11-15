@@ -28,7 +28,7 @@ import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
-internal class PackageJsonUtil {
+internal class PackageJsonUtils {
     companion object {
         private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
         private val YARN_LOCK_FILES = listOf("yarn.lock")

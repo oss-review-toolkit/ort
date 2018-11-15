@@ -40,14 +40,14 @@ class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigur
                 Yarn(analyzerConfig, repoConfig)
     }
 
-    override fun hasLockFile(projectDir: File) = PackageJsonUtil.hasYarnLockFile(projectDir)
+    override fun hasLockFile(projectDir: File) = PackageJsonUtils.hasYarnLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.12.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
-            PackageJsonUtil.mapDefinitionFilesForYarn(definitionFiles).toList()
+            PackageJsonUtils.mapDefinitionFilesForYarn(definitionFiles).toList()
 
     override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
