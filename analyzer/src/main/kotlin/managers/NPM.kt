@@ -119,14 +119,14 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 NPM(analyzerConfig, repoConfig)
     }
 
-    protected open fun hasLockFile(projectDir: File) = PackageJsonUtil.hasNpmLockFile(projectDir)
+    protected open fun hasLockFile(projectDir: File) = PackageJsonUtils.hasNpmLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.5.* - 6.4.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
-            PackageJsonUtil.mapDefinitionFilesForNpm(definitionFiles).toList()
+            PackageJsonUtils.mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
