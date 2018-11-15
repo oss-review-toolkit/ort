@@ -37,13 +37,14 @@ import java.io.File
 
 class PackageJsonUtilTest : WordSpec() {
     companion object {
-        private fun createPackageJson(matchers: List<String>) =
+        private fun createPackageJson(matchers: List<String>, flattenWorkspaceDefinition: Boolean) =
                 if (!matchers.isEmpty()) {
-                    """
-                    {
-                       "workspaces" : ${matchers.joinToString(prefix = "[\"", separator = "\",\"", postfix = "\"]")}
+                    val workspaces = matchers.joinToString(prefix = "[\"", separator = "\",\"", postfix = "\"]")
+                    if (flattenWorkspaceDefinition) {
+                        "{ \"workspaces\": $workspaces }"
+                    } else {
+                        "{ \"workspaces\": { \"packages\": $workspaces } }"
                     }
-                    """.trimIndent()
                 } else {
                     "{}"
                 }
@@ -118,8 +119,28 @@ class PackageJsonUtilTest : WordSpec() {
                         absolutePaths("a/package.json", "a/d/e/package.json")
             }
 
+            "not be mapped if * matches the project path (non-flattened workspace definition)" {
+                setupProject(path = "a", matchers = listOf("*", "*/f"), flattenWorkspaceDefinition = false)
+                setupProject(path = "a/b")
+                setupProject(path = "a/c")
+                setupProject(path = "a/d/e")
+                setupProject(path = "a/d/f")
+
+                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
+                        absolutePaths("a/package.json", "a/d/e/package.json")
+            }
+
             "not be mapped if ** matches the project name" {
                 setupProject(path = "a", matchers = listOf("**/d"))
+                setupProject(path = "a/b/c/d")
+                setupProject(path = "a/b/c/e")
+
+                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
+                        absolutePaths("a/package.json", "a/b/c/e/package.json")
+            }
+
+            "not be mapped if ** matches the project name (non-flattened workspace definition)" {
+                setupProject(path = "a", matchers = listOf("**/d"), flattenWorkspaceDefinition = false)
                 setupProject(path = "a/b/c/d")
                 setupProject(path = "a/b/c/e")
 
@@ -145,7 +166,7 @@ class PackageJsonUtilTest : WordSpec() {
     }
 
     private fun setupProject(path: String, matchers: List<String> = emptyList(), hasNpmLockFile: Boolean = false,
-                             hasYarnLockFile: Boolean = false
+                             hasYarnLockFile: Boolean = false, flattenWorkspaceDefinition: Boolean = true
     ) {
         val projectDir = tempDir.resolve(path)
 
@@ -153,7 +174,7 @@ class PackageJsonUtilTest : WordSpec() {
         projectDir.safeMkdirs()
 
         val definitionFile = projectDir.resolve("package.json")
-        definitionFile.writeText(createPackageJson(matchers))
+        definitionFile.writeText(createPackageJson(matchers, flattenWorkspaceDefinition))
         definitionFiles.add(definitionFile)
 
         if (hasNpmLockFile) projectDir.resolve("package-lock.json").createNewFile()
