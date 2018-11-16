@@ -93,10 +93,44 @@ data class OrtResult(
             } ?: sortedSetOf<String>()
 
     /**
+     * Return all declared licenses associated to the projects / packages they occur in.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun collectAllDeclaredLicenses() =
+            sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
+                analyzer?.result?.let { result ->
+                    result.projects.forEach {
+                        it.declaredLicenses.forEach { license ->
+                            licenses.getOrPut(license) { sortedSetOf() } += it.id
+                        }
+                    }
+
+                    result.packages.forEach {
+                        it.pkg.declaredLicenses.forEach { license ->
+                            licenses.getOrPut(license) { sortedSetOf() } += it.pkg.id
+                        }
+                    }
+                }
+            }
+
+    /**
      * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
      * scanning, the [id] may either refer to a project or to a package. If [id] is not found an empty set is returned.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getDetectedLicensesForId(id: Identifier) =
             scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
+
+    /**
+     * Return all detected licenses associated to the projects / packages they occur in.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun collectAllDetectedLicenses() =
+            sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
+                scanner?.results?.scanResults?.forEach { result ->
+                    result.getAllDetectedLicenses().forEach { license ->
+                        licenses.getOrPut(license) { sortedSetOf() } += result.id
+                    }
+                }
+            }
 }
