@@ -20,7 +20,7 @@ project:
     - id: "Bundler::nokogiri:1.8.2"
       dependencies:
       - id: "Bundler::mini_portile2:2.3.0"
-    - id: "Bundler::rack:1.6.10"
+    - id: "Bundler::rack:1.6.11"
   - name: "test"
     dependencies:
     - id: "Bundler::rspec:3.7.0"
@@ -126,7 +126,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::rack:1.6.10"
+    id: "Bundler::rack:1.6.11"
     declared_licenses:
     - "MIT"
     description: "Rack provides a minimal, modular and adaptable interface for developing\n\
@@ -140,8 +140,8 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/rack-1.6.10.gem"
-      hash: "58e8ae09c502f219a6ad2e7f932072faf2d2b38ce6fd0251ac7ff3096c55c046"
+      url: "https://rubygems.org/gems/rack-1.6.11.gem"
+      hash: "ee2016b1ddf820f6e5ee437d10a85319506b60c0d493da1d15815361a91129bd"
       hash_algorithm: "SHA-256"
     vcs:
       type: "git"
