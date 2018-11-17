@@ -35,8 +35,12 @@ const loggerMiddleware = createLogger({
      *  1) Navigate to Tree tab
      *  2) Search for package
      *  3) Select other tree nodes will crash the logger
+     *
+     * Disable logger also TABLE::CHANGE_PACKAGES_TABLE action e.g.
+     * filtering table in TableView
      */
-    diffPredicate: (getState, action) => action.type !== 'TREE::NODE_SELECT',
+    diffPredicate: (getState, action) => action.type !== 'TREE::NODE_SELECT'
+        && action.type !== 'TABLE::CHANGE_PACKAGES_TABLE',
     predicate: () => process.env.NODE_ENV === 'development'
 });
 const sagaMiddleware = createSagaMiddleware();

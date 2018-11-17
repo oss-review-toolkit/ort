@@ -41,9 +41,12 @@ const initState = {
         shouldComponentUpdate: false
     },
     table: {
-        expandedProjectsKeys: [],
-        shouldComponentUpdate: false,
-        showSingleTable: true
+        filter: {
+            filteredInfo: {},
+            sortedInfo: {}
+        },
+        filterData: [],
+        shouldComponentUpdate: false
     },
     tree: {
         autoExpandParent: true,
@@ -246,12 +249,28 @@ export default (state = initState, action) => {
             }
         };
     }
-    case 'TABLE::PROJECT_EXPAND': {
+    case 'TABLE::CHANGE_PACKAGES_TABLE': {
+        const { filter, filterData } = action.payload;
+
         return {
             ...state,
             table: {
                 ...state.table,
-                expandedProjectsKeys: action.expandedProjectsKeys
+                filter,
+                filterData
+            }
+        };
+    }
+    case 'TABLE::CLEAR_FILTERS_TABLE': {
+        return {
+            ...state,
+            table: {
+                ...state.table,
+                filter: {
+                    filteredInfo: {},
+                    sortedInfo: {}
+                },
+                filterData: []
             }
         };
     }
