@@ -539,6 +539,7 @@ function* convertReportData() {
         let pkgObj = {
             id: pkg.id || pkg.name,
             key: treeId,
+            projectKey: projectIndex,
             children,
             errors: pkg.errors || [],
             level: dependencyPathFromRoot.length,

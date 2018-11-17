@@ -53,6 +53,14 @@ https://ant.design/docs/react/customize-theme
     width: auto;
 }
 
+.ant-table-wrapper {
+    min-height: 500px;
+}
+
+.ant-table-placeholder {
+    margin-top: 120px;
+}
+
 button.ort-btn-expand {
     background: none;
     border: none;
@@ -186,6 +194,12 @@ ul.ort-table-list {
 .ort-license-info .ort-license-fulltext {
     font-size: 0.7em;
     white-space: pre-wrap;
+}
+
+.ort-table-operations button {
+    float: right;
+    margin: 16px 0px 16px 0px;
+    z-index: 999;
 }
 
 .oss-tree-tooltip .ant-tooltip-inner {

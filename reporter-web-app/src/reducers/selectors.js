@@ -182,48 +182,93 @@ export const getSummaryViewShouldComponentUpdate = state => state.summary.should
 
 export const getSingleTable = memoizeOne(
     (state) => {
+        const table = {
+            columns: {
+                levelsFilter: [],
+                licensesDeclaredFilter: [],
+                licensesDetectedFilter: [],
+                projectsFilter: [],
+                scopesFilter: []
+            },
+            data: []
+        };
         const reportData = getReportData(state);
 
-        if (reportData && reportData.projects && reportData.projects) {
-            return Object.values(reportData.projects).reduce((accumulator, project) => {
-                if (project.packages && project.packages.list) {
-                    accumulator.push(...project.packages.list);
-                }
+        if (reportData) {
+            const {
+                levels,
+                licenses,
+                projects,
+                scopes
+            } = reportData;
 
-                return accumulator;
-            }, []);
+            if (projects) {
+                table.data = Object.values(reportData.projects).reduce((accumulator, project) => {
+                    if (project.packages && project.packages.list) {
+                        accumulator.push(...project.packages.list);
+                    }
+
+                    return accumulator;
+                }, []);
+
+                table.columns.projectsFilter = Object.values(reportData.projects)
+                    .reduce((accumulator, project) => {
+                        if (project.definition_file_path) {
+                            accumulator.push(project.definition_file_path);
+                        }
+
+                        return accumulator;
+                    }, [])
+                    .map(
+                        (project, index) => ({
+                            text: project,
+                            value: index
+                        })
+                    );
+            }
+
+            if (levels) {
+                table.columns.levelsFilter = Array.from(levels)
+                    .sort().map(
+                        level => ({
+                            text: level,
+                            value: level
+                        })
+                    );
+            }
+
+            if (licenses) {
+                const { declared, detected } = licenses;
+                table.columns.licensesDeclaredFilter = Object.keys(getLicensesWithNrPackages(declared))
+                    .sort().map(
+                        license => ({
+                            text: license,
+                            value: license
+                        })
+                    );
+                table.columns.licensesDetectedFilter = Object.keys(getLicensesWithNrPackages(detected))
+                    .sort().map(
+                        license => ({
+                            text: license,
+                            value: license
+                        })
+                    );
+            }
+
+            if (scopes) {
+                table.columns.scopesFilter = Array.from(scopes)
+                    .sort().map(
+                        scope => ({
+                            text: scope,
+                            value: scope
+                        })
+                    );
+            }
+
+            return table;
         }
 
         return [];
-    },
-    hasReportDataChanged
-);
-
-export const getSingleTableColumns = memoizeOne(
-    (state) => {
-        const columns = {
-            levels: [],
-            declaredLicenses: [],
-            detectedLicenses: [],
-            scopes: []
-        };
-        const { levels, licenses, scopes } = getReportData(state);
-
-        if (levels) {
-            columns.levels = Array.from(levels);
-        }
-
-        if (licenses) {
-            const { declared, detected } = licenses;
-            columns.declaredLicenses = Object.keys(getLicensesWithNrPackages(declared));
-            columns.detectedLicenses = Object.keys(getLicensesWithNrPackages(detected));
-        }
-
-        if (scopes) {
-            columns.scopes = Array.from(scopes);
-        }
-
-        return columns;
     },
     hasReportDataChanged
 );

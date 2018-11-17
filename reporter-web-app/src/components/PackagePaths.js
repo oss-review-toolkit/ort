@@ -30,6 +30,15 @@ const { Step } = Steps;
 const PackagePaths = (props) => {
     const { data, show } = props;
     const pkgObj = data;
+    let grid = {
+        gutter: 16,
+        xs: 1,
+        sm: 2,
+        md: 2,
+        lg: 2,
+        xl: 2,
+        xxl: 2
+    };
     let paths = pkgObj.paths || pkgObj.path;
     let title = 'Package Dependency Path';
 
@@ -38,6 +47,8 @@ const PackagePaths = (props) => {
         return null;
     }
 
+    // Transform from pkgObj's path from Tree single to Table's
+    // multi paths object so we can use the same render code
     if (pkgObj.path) {
         paths = [{ path: pkgObj.path, scope: pkgObj.scope }];
     }
@@ -46,14 +57,25 @@ const PackagePaths = (props) => {
         title += 's';
     }
 
+    // Change layout grid to use all available width for single path
+    if (paths.length === 1) {
+        grid = {
+            gutter: 16,
+            xs: 1,
+            sm: 1,
+            md: 1,
+            lg: 1,
+            xl: 1,
+            xxl: 1
+        };
+    }
+
     return (
         <ExpandablePanel key="ort-package-paths" show={show}>
             <ExpandablePanelTitle titleElem="h4">{title}</ExpandablePanelTitle>
             <ExpandablePanelContent>
                 <List
-                    grid={{
-                        gutter: 16, xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2
-                    }}
+                    grid={grid}
                     itemLayout="vertical"
                     size="small"
                     pagination={{
