@@ -34,62 +34,40 @@ import java.util.SortedMap
 import java.util.SortedSet
 
 abstract class AbstractNoticeReporter : Reporter() {
+    companion object {
+        const val NOTICE_SEPARATOR = "\n----\n\n"
+    }
+
+    data class NoticeReport(
+            val headers: List<String>,
+            val findings: Map<String, SortedSet<String>>,
+            val footers: List<String>
+    )
+
     override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val outputFile = File(outputDir, noticeFileName)
-
         val licenseFindings = getLicenseFindings(ortResult)
         val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
 
-        val findingsIterator = spdxLicenseFindings.filterNot { (license, _) ->
+        val findings = spdxLicenseFindings.filterNot { (license, _) ->
             // For now, just skip license references for which SPDX has no license text.
             license.startsWith("LicenseRef-")
-        }.iterator()
-
-        log.info { "Writing $noticeFileName file to '${outputFile.absolutePath}'." }
-
-        if (!findingsIterator.hasNext()) {
-            outputFile.appendText("This project neither contains or depends on any third-party software " +
-                    "components.\n")
-            return outputFile
         }
 
-        outputFile.appendText("This project contains or depends on third-party software components pursuant to the " +
-                "following licenses:\n")
-
-        // Note: Do not use appendln() here as that would write out platform-native line endings, but we want to
-        // normalize on Unix-style line endings for consistency.
-        while (findingsIterator.hasNext()) {
-            outputFile.appendText("\n----\n\n")
-
-            val (license, copyrights) = findingsIterator.next()
-
-            val notice = buildString {
-                copyrights.forEach { copyright ->
-                    append("$copyright\n")
-                }
-
-                if (copyrights.isNotEmpty()) append("\n")
-
-                val licenseText = getLicenseText(license, true)
-                append("$licenseText\n")
-            }
-
-            // Trim lines and remove consecutive blank lines as the license text formatting in SPDX JSON files is
-            // broken, see https://github.com/spdx/LicenseListPublisher/issues/30.
-            var previousLine = ""
-            val trimmedNoticeLines = notice.lines().mapNotNull { line ->
-                val trimmedLine = line.trim()
-                trimmedLine.takeIf { it.isNotBlank() || previousLine.isNotBlank() }
-                        .also { previousLine = trimmedLine }
-            }
-
-            val trimmedNotice = trimmedNoticeLines.joinToString("\n")
-            outputFile.appendText(trimmedNotice)
+        val header = if (findings.isEmpty()) {
+            "This project neither contains or depends on any third-party software components.\n"
+        } else {
+            "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
+
+        val noticeReport = NoticeReport(listOf(header), findings, emptyList())
+
+        val outputFile = File(outputDir, noticeFileName)
+
+        writeNoticeReport(outputFile, noticeReport)
 
         return outputFile
     }
@@ -109,6 +87,43 @@ abstract class AbstractNoticeReporter : Reporter() {
         }
 
         return result.toSortedMap()
+    }
+
+    private fun writeNoticeReport(outputFile: File, noticeReport: AbstractNoticeReporter.NoticeReport) {
+        log.info { "Writing $noticeFileName file to '${outputFile.absolutePath}'." }
+
+        val headers = noticeReport.headers.joinToString(NOTICE_SEPARATOR)
+        outputFile.appendText(headers)
+
+        if (noticeReport.findings.isNotEmpty()) {
+            val findings = noticeReport.findings.map { (license, copyrights) ->
+                val notice = buildString {
+                    copyrights.forEach { copyright ->
+                        append("$copyright\n")
+                    }
+
+                    if (copyrights.isNotEmpty()) append("\n")
+
+                    val licenseText = getLicenseText(license, true)
+                    append("$licenseText\n")
+                }
+
+                var previousLine = ""
+                val trimmedNoticeLines = notice.lines().mapNotNull { line ->
+                    val trimmedLine = line.trim()
+                    trimmedLine.takeIf { it.isNotBlank() || previousLine.isNotBlank() }
+                            .also { previousLine = trimmedLine }
+                }
+
+                trimmedNoticeLines.joinToString("\n")
+            }.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
+            outputFile.appendText(findings)
+        }
+
+        if (noticeReport.footers.isNotEmpty()) {
+            val footers = noticeReport.footers.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
+            outputFile.appendText(footers)
+        }
     }
 
     abstract val noticeFileName: String
