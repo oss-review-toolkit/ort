@@ -63,7 +63,7 @@ abstract class TableReporter : Reporter() {
             val projectDependencies: SortedMap<Project, ProjectTable>,
 
             /**
-             * Additional metadata read from the "reporter.metadata" field in [OrtResult.data].
+             * Additional metadata read from the [OrtResult.data] field.
              */
             val metadata: Map<String, String>,
 
@@ -341,11 +341,15 @@ abstract class TableReporter : Reporter() {
             }
         }, { it.id })), projectExcludes)
 
-        val metadata = (ortResult.data["reporter.metadata"] as? Map<*, *>)?.let {
-            it.entries.associate { (key, value) -> key.toString() to value.toString() }
-        }.orEmpty()
+        val metadata = mutableMapOf<String, String>()
+        (ortResult.data["job_parameters"] as? Map<*, *>)?.let {
+            it.entries.associateTo(metadata) { (key, value) -> key.toString() to value.toString() }
+        }
+        (ortResult.data["process_parameters"] as? Map<*, *>)?.let {
+            it.entries.associateTo(metadata) { (key, value) -> key.toString() to value.toString() }
+        }
 
-        val extraColumns = (scanRecord.data["reporter.extraColumns"] as? List<*>)?.let { extraColumns ->
+        val extraColumns = (scanRecord.data["excel_report_extra_columns"] as? List<*>)?.let { extraColumns ->
             extraColumns.map { it.toString() }
         }.orEmpty()
 

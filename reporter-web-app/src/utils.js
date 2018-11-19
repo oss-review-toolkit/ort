@@ -666,7 +666,7 @@ export function convertToRenderFormat(reportData) {
                 detected: calculateReportDataTotalLicenses(detectedLicensesFromScanner)
             }
         },
-        metadata: (reportData.data) ? reportData.data['reporter.metadata'] : {},
+        metadata: (reportData.data) ? { ...reportData.data['job_parameters'], ...reportData.data['process_parameters'] } : {},
         packages: {
             data: {
                 analyzer: packagesFromAnalyzer || {},
