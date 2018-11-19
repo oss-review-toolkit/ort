@@ -17,6 +17,7 @@ repositories {
 dependencies {
     compile project(':analyzer')
     compile project(':downloader')
+    compile project(':evaluator')
     compile project(':model')
     compile project(':reporter')
     compile project(':scanner')
@@ -24,9 +25,6 @@ dependencies {
 
     compile "com.beust:jcommander:$jcommanderVersion"
 
-    compile 'org.jetbrains.kotlin:kotlin-compiler-embeddable'
-    compile 'org.jetbrains.kotlin:kotlin-script-runtime'
-    compile 'org.jetbrains.kotlin:kotlin-script-util'
     compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     compile 'org.jetbrains.kotlin:kotlin-reflect'
 
