@@ -19,15 +19,12 @@
 
 package com.here.ort.commands
 
-import ch.frankel.slf4k.*
-
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
-import com.here.ort.model.Error
-import com.here.ort.model.EvaluatorRun
+import com.here.ort.evaluator.Evaluator
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.readValue
@@ -37,12 +34,6 @@ import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
-
-import javax.script.Compilable
-import javax.script.ScriptEngineManager
-import javax.script.ScriptException
-
-import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 
 @Parameters(commandNames = ["evaluate"], commandDescription = "Evaluate rules on ORT result files.")
 object EvaluatorCommand : CommandWithHelp() {
@@ -78,59 +69,23 @@ object EvaluatorCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var syntaxCheck = false
 
-    private val engine = ScriptEngineManager().getEngineByExtension("kts")
-
     override fun runCommand(jc: JCommander): Int {
         require((rulesFile == null) != (rulesResource == null)) {
             "Either '--rules-file' or '--rules-resource' must be specified."
         }
 
-        // This is required to avoid
-        //
-        //     WARN: Failed to initialize native filesystem for Windows
-        //     java.lang.RuntimeException: Could not find installation home path. Please make sure bin/idea.properties
-        //     is present in the installation directory.
-        //
-        // on Windows for some reason.
-        setIdeaIoUseFallback()
-
         val ortResultInput = ortFile.readValue<OrtResult>()
-        engine.put("ortResult", ortResultInput)
 
-        val preface = """
-            import com.here.ort.model.Error
-            import com.here.ort.model.OrtResult
+        val script = rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()
 
-            val ortResult = bindings["ortResult"] as OrtResult
-            val evalErrors = mutableListOf<Error>()
-
-        """.trimIndent()
-
-        val postface = """
-
-            evalErrors
-        """.trimIndent()
-
-        val script = preface + (rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()) + postface
+        val evaluator = Evaluator()
 
         if (syntaxCheck) {
-            require(engine is Compilable) {
-                "The scripting engine does not support compilation."
-            }
-
-            val canCompile = try {
-                engine.compile(script)
-                true
-            } catch (e: ScriptException) {
-                log.error { e.message?.let { it } ?: "No error message available." }
-                false
-            }
-
-            return if (canCompile) 0 else 1
+            return if (evaluator.checkSyntax(ortResultInput, script)) 0 else 1
         }
 
         @Suppress("UNCHECKED_CAST")
-        val evalErrors = engine.eval(script) as List<Error>
+        val evaluatorRun = evaluator.evaluate(ortResultInput, script)
 
         outputDir?.let { dir ->
             require(!dir.exists()) {
@@ -140,7 +95,7 @@ object EvaluatorCommand : CommandWithHelp() {
             dir.safeMkdirs()
 
             // Note: This overwrites any existing EvaluatorRun from the input file.
-            val ortResultOutput = ortResultInput.copy(evaluator = EvaluatorRun(evalErrors))
+            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
 
             outputFormats.distinct().forEach { format ->
                 val evaluationResultFile = File(dir, "evaluation-result.${format.fileExtension}")
@@ -149,12 +104,12 @@ object EvaluatorCommand : CommandWithHelp() {
             }
         }
 
-        return if (evalErrors.isEmpty()) 0 else 1.also {
-            if (log.isErrorEnabled) {
-                evalErrors.forEach { error ->
-                    log.error(error.toString())
-                }
+        if (log.isErrorEnabled) {
+            evaluatorRun.errors.forEach { error ->
+                log.error(error.toString())
             }
         }
+
+        return if (evaluatorRun.errors.isEmpty()) 0 else 1
     }
 }
