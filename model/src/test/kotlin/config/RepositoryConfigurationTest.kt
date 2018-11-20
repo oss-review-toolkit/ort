@@ -45,6 +45,19 @@ class RepositoryConfigurationTest : WordSpec() {
                 repositoryConfiguration.excludes shouldBe null
             }
 
+            "deserialize to a path regex working with escaped dots" {
+                val configuration = """
+                    excludes:
+                      projects:
+                      - path: "android/.*build\\.gradle"
+                        reason: "BUILD_TOOL_OF"
+                        comment: "project comment"
+                    """.trimIndent()
+
+                val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
+                config.excludes!!.projects[0].path.matches("android/project1/build.gradle") shouldBe true
+            }
+
             "be deserializable" {
                 val configuration = """
                     excludes:
