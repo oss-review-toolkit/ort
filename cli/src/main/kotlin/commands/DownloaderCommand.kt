@@ -199,6 +199,6 @@ object DownloaderCommand : CommandWithHelp() {
             }
         }
 
-        return if (error) 1 else 0
+        return if (error) 2 else 0
     }
 }

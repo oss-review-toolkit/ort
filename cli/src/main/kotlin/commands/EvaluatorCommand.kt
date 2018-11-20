@@ -81,7 +81,7 @@ object EvaluatorCommand : CommandWithHelp() {
         val evaluator = Evaluator()
 
         if (syntaxCheck) {
-            return if (evaluator.checkSyntax(ortResultInput, script)) 0 else 1
+            return if (evaluator.checkSyntax(ortResultInput, script)) 0 else 2
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -110,6 +110,6 @@ object EvaluatorCommand : CommandWithHelp() {
             }
         }
 
-        return if (evaluatorRun.errors.isEmpty()) 0 else 1
+        return if (evaluatorRun.errors.isEmpty()) 0 else 2
     }
 }

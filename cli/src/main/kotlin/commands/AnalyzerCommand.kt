@@ -107,7 +107,7 @@ object AnalyzerCommand : CommandWithHelp() {
         val absoluteOutputPath = outputDir.absoluteFile
         if (absoluteOutputPath.exists()) {
             log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
-            return 1
+            return 2
         }
 
         require(packageCurationsFile?.isFile ?: true) {
