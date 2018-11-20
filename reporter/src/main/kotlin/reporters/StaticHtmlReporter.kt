@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.Error
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.utils.isValidUrl
@@ -308,6 +309,10 @@ class StaticHtmlReporter : TableReporter() {
 
                 append("<h2>Index</h2>")
                 append("<ul>")
+                tabularScanRecord.evaluatorErrors?.let { evaluatorErrors ->
+                    append("<li><a href=\"#license-check-results\">" +
+                            "License Check Results (${evaluatorErrors.size} errors)</a></li>")
+                }
                 if (numberOfErrors > 0) {
                     append("<li><a href=\"#error-summary\">Error Summary ($numberOfErrors)</a></li>")
                 }
@@ -320,6 +325,10 @@ class StaticHtmlReporter : TableReporter() {
                 }
                 append("</ul>")
 
+                tabularScanRecord.evaluatorErrors?.let { evaluatorErrors ->
+                    append(createEvaluatorTable(evaluatorErrors))
+                }
+
                 if (numberOfErrors > 0) {
                     append(createErrorTable("Error Summary ($numberOfErrors)", tabularScanRecord.errorSummary,
                             "error-summary"))
@@ -328,6 +337,40 @@ class StaticHtmlReporter : TableReporter() {
                 tabularScanRecord.projectDependencies.forEach { project, table ->
                     append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, table,
                             project.id.toString()))
+                }
+            }
+
+    private fun createEvaluatorTable(evaluatorErrors: List<Error>) =
+            buildString {
+                append("<h2><a id=\"license-check-results\"></a>License Check Results</h2>")
+
+                if (evaluatorErrors.isEmpty()) {
+                    append("No issues found.")
+                } else {
+                    append("""
+                        <table class="report-packages">
+                        <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Error</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        """.trimIndent())
+
+                    evaluatorErrors.forEach { error ->
+                        append("""
+                            <tr class="error">
+                                <td>${error.source}</td>
+                                <td>${error.message}</td>
+                            </tr>
+                            """.trimIndent())
+                    }
+
+                    append("""
+                        </tbody>
+                        </table>
+                        """.trimIndent())
                 }
             }
 

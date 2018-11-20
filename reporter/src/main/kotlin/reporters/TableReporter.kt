@@ -48,6 +48,11 @@ abstract class TableReporter : Reporter() {
             val vcsInfo: VcsInfo,
 
             /**
+             * A list containing all evaluator errors. `null` if no evaluator result is available.
+             */
+            val evaluatorErrors: List<Error>?,
+
+            /**
              * A [ErrorTable] containing all dependencies that caused errors.
              */
             val errorSummary: ErrorTable,
@@ -353,8 +358,18 @@ abstract class TableReporter : Reporter() {
             extraColumns.map { it.toString() }
         }.orEmpty()
 
-        return generateReport(TabularScanRecord(ortResult.repository.vcsProcessed, errorSummaryTable, summaryTable,
-                projectTables, metadata, extraColumns), outputDir)
+        return generateReport(
+                TabularScanRecord(
+                        ortResult.repository.vcsProcessed,
+                        ortResult.evaluator?.errors,
+                        errorSummaryTable,
+                        summaryTable,
+                        projectTables,
+                        metadata,
+                        extraColumns
+                ),
+                outputDir
+        )
     }
 
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File
