@@ -44,7 +44,12 @@ abstract class AbstractNoticeReporter : Reporter() {
             val footers: List<String>
     )
 
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File {
+    override fun generateReport(
+            ortResult: OrtResult,
+            resolutionProvider: ResolutionProvider,
+            outputDir: File,
+            postProcessingScript: String?
+    ): File {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
