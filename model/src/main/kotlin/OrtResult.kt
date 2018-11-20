@@ -58,22 +58,26 @@ data class OrtResult(
         val data: CustomData = emptyMap()
 ) {
     /**
-     * Return all projects and packages that are likely to belong to the vendor of the given [name]. Projects are
-     * converted to packages in the result. If no analyzer result is present an empty set is returned.
+     * Return all projects and packages that are likely to belong to the vendor of the given [name]. If [omitExcluded]
+     * is set to true, excluded projects / packages are omitted from the result. Projects are converted to packages in
+     * the result. If no analyzer result is present an empty set is returned.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getVendorPackages(name: String): SortedSet<Package> {
+    fun getVendorPackages(name: String, omitExcluded: Boolean = false): SortedSet<Package> {
         val vendorPackages = sortedSetOf<Package>()
+        val excludes = repository.config.excludes.takeIf { omitExcluded }
 
         analyzer?.result?.apply {
             projects.filter {
-                it.id.isFromVendor(name)
+                val isExcluded = omitExcluded && excludes?.isProjectExcluded(it) == true
+                it.id.isFromVendor(name) && !isExcluded
             }.mapTo(vendorPackages) {
                 it.toPackage()
             }
 
-            packages.filter {
-                it.pkg.id.isFromVendor(name)
+            packages.filter { (pkg, _) ->
+                val isExcluded = omitExcluded && excludes?.isPackageExcluded(pkg.id, analyzer.result) == true
+                pkg.id.isFromVendor(name) && !isExcluded
             }.mapTo(vendorPackages) {
                 it.pkg
             }
@@ -93,21 +97,28 @@ data class OrtResult(
             } ?: sortedSetOf<String>()
 
     /**
-     * Return all declared licenses associated to the projects / packages they occur in.
+     * Return all declared licenses associated to the projects / packages they occur in. If [omitExcluded] is set to
+     * true, excluded projects / packages are omitted from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectAllDeclaredLicenses() =
+    fun collectAllDeclaredLicenses(omitExcluded: Boolean = false) =
             sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
+                val excludes = repository.config.excludes.takeIf { omitExcluded }
+
                 analyzer?.result?.let { result ->
-                    result.projects.forEach {
-                        it.declaredLicenses.forEach { license ->
-                            licenses.getOrPut(license) { sortedSetOf() } += it.id
+                    result.projects.forEach { project ->
+                        if (excludes?.isProjectExcluded(project) == false) {
+                            project.declaredLicenses.forEach { license ->
+                                licenses.getOrPut(license) { sortedSetOf() } += project.id
+                            }
                         }
                     }
 
-                    result.packages.forEach {
-                        it.pkg.declaredLicenses.forEach { license ->
-                            licenses.getOrPut(license) { sortedSetOf() } += it.pkg.id
+                    result.packages.forEach { (pkg, _) ->
+                        if (excludes?.isPackageExcluded(pkg.id, analyzer.result) == false) {
+                            pkg.declaredLicenses.forEach { license ->
+                                licenses.getOrPut(license) { sortedSetOf() } += pkg.id
+                            }
                         }
                     }
                 }
@@ -122,14 +133,22 @@ data class OrtResult(
             scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
 
     /**
-     * Return all detected licenses associated to the projects / packages they occur in.
+     * Return all detected licenses associated to the projects / packages they occur in. If [omitExcluded] is set to
+     * true, excluded projects / packages are omitted from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectAllDetectedLicenses() =
+    fun collectAllDetectedLicenses(omitExcluded: Boolean = false) =
             sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
+                // Note that we require the analyzer result here to determine whether a package has been implicitly
+                // excluded via its project or scope.
+                val excludes = repository.config.excludes.takeIf { omitExcluded && analyzer != null }
+
                 scanner?.results?.scanResults?.forEach { result ->
-                    result.getAllDetectedLicenses().forEach { license ->
-                        licenses.getOrPut(license) { sortedSetOf() } += result.id
+                    // At this point we know that analyzer != null if excludes != null.
+                    if (excludes?.isPackageExcluded(result.id, analyzer!!.result) == false) {
+                        result.getAllDetectedLicenses().forEach { license ->
+                            licenses.getOrPut(license) { sortedSetOf() } += result.id
+                        }
                     }
                 }
             }
