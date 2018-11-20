@@ -38,6 +38,7 @@ class Evaluator {
     private val preface = """
             import com.here.ort.model.Error
             import com.here.ort.model.OrtResult
+            import com.here.ort.model.Package
 
             val ortResult = bindings["ortResult"] as OrtResult
             val evalErrors = mutableListOf<Error>()
