@@ -81,6 +81,11 @@ object ReporterCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var resolutionsFile: File? = null
 
+    @Parameter(description = "The path to a Kotlin script to post-process the notice report before writing it to disk.",
+            names = ["--post-processing-script"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var postProcessingScript: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         require(!outputDir.exists()) {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
@@ -97,7 +102,12 @@ object ReporterCommand : CommandWithHelp() {
         reportFormats.distinct().forEach {
             val name = it.toString().removeSuffix("Reporter")
             try {
-                val reportFile = it.generateReport(ortResult, resolutionProvider, outputDir)
+                val reportFile = it.generateReport(
+                        ortResult,
+                        resolutionProvider,
+                        outputDir,
+                        postProcessingScript?.readText()
+                )
                 println("Created '$name' report:\n\t$reportFile")
             } catch (e: Exception) {
                 e.showStackTrace()
