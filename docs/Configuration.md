@@ -52,7 +52,7 @@ a single exclude:
 ```yaml
 excludes:
   projects:
-  - path: ".*build\.gradle"
+  - path: ".*build\\.gradle"
     reason: "EXAMPLE_OF"
     comment: "The project contains example code which is not distributed."
 ```
