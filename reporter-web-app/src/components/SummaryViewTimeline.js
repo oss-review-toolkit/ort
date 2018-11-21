@@ -194,14 +194,15 @@ const SummaryViewTimeline = (props) => {
                 dot={(
                     <Icon
                         type={
-                            (errorsOpenTotal !== 0) ? 'exclamation-circle-o' : 'check-circle-o'
+                            (errorsOpenTotal !== 0 || violationsOpenTotal !== 0)
+                                ? 'exclamation-circle-o' : 'check-circle-o'
                         }
                         style={
                             { fontSize: 16 }
                         }
                     />
                 )}
-                color={(errorsOpenTotal !== 0) ? 'red' : 'green'}
+                color={(errorsOpenTotal !== 0 || violationsOpenTotal !== 0) ? 'red' : 'green'}
             >
                 {renderCompletedText()}
             </Timeline.Item>
