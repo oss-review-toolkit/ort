@@ -5,7 +5,7 @@ import {
     Col, Row
 } from 'antd';
 import SummaryViewLicenses from './SummaryViewLicenses';
-import SummaryViewTableErrors from './SummaryViewTableErrors';
+import SummaryViewTableIssues from './SummaryViewTableIssues';
 import SummaryViewTimeline from './SummaryViewTimeline';
 import {
     getSummaryDeclaredLicenses,
@@ -23,6 +23,10 @@ import {
     getReportErrorsOpen,
     getReportErrorsAdressedTotal,
     getReportErrorsOpenTotal,
+    getReportViolationsAdressed,
+    getReportViolationsOpen,
+    getReportViolationsAdressedTotal,
+    getReportViolationsOpenTotal,
     getReportLevelsTotal,
     getReportPackagesTotal,
     getReportProjectsTotal,
@@ -37,7 +41,7 @@ class SummaryView extends React.Component {
     }
 
     render() {
-        const { errors, licenses } = this.props;
+        const { issues, licenses } = this.props;
 
         return (
             <div className="ort-summary">
@@ -48,7 +52,7 @@ class SummaryView extends React.Component {
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        <SummaryViewTableErrors data={errors} />
+                        <SummaryViewTableIssues data={issues} />
                     </Col>
                 </Row>
                 <Row>
@@ -92,16 +96,24 @@ class SummaryView extends React.Component {
 }
 
 SummaryView.propTypes = {
-    errors: PropTypes.object.isRequired,
+    issues: PropTypes.object.isRequired,
     licenses: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    errors: {
-        addressed: getReportErrorsAdressed(state),
-        addressedTotal: getReportErrorsAdressedTotal(state),
-        open: getReportErrorsOpen(state),
-        openTotal: getReportErrorsOpenTotal(state)
+    issues: {
+        errors: {
+            addressed: getReportErrorsAdressed(state),
+            addressedTotal: getReportErrorsAdressedTotal(state),
+            open: getReportErrorsOpen(state),
+            openTotal: getReportErrorsOpenTotal(state)
+        },
+        violations: {
+            addressed: getReportViolationsAdressed(state),
+            addressedTotal: getReportViolationsAdressedTotal(state),
+            open: getReportViolationsOpen(state),
+            openTotal: getReportViolationsOpenTotal(state)
+        }
     },
     levelsTotal: getReportLevelsTotal(state),
     licenses: {

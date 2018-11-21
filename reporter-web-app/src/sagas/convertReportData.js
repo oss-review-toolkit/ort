@@ -665,14 +665,19 @@ function* convertReportData() {
             declared: declaredLicensesFromAnalyzer,
             detected: detectedLicensesFromScanner
         },
-        metadata: (reportData.data) ? { ...reportData.data['job_parameters'], ...reportData.data['process_parameters'] } : {},
+        metadata: (reportData.data)
+            ? { ...reportData.data.job_parameters, ...reportData.data.process_parameters } : {},
         packages: {
             analyzer: packagesFromAnalyzer || {},
             scanner: packagesFromScanner || {}
         },
         projects,
         scopes: reportDataScopes || new Set(),
-        repository: reportData.repository || {}
+        repository: reportData.repository || {},
+        violations: {
+            addressed: [],
+            open: (reportData.evaluator && reportData.evaluator.errors) ? reportData.evaluator.errors : []
+        }
     };
 
     yield put({ type: 'APP::LOADING_CONVERTING_REPORT_DONE', payload: convertedData });

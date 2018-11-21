@@ -27,7 +27,7 @@ import SummaryViewTableMetadata from './SummaryViewTableMetadata';
 // Generates the HTML to display timeline of findings related to scanned project
 const SummaryViewTimeline = (props) => {
     const {
-        errors,
+        issues,
         levelsTotal = 'n/a',
         licenses,
         metadata,
@@ -37,11 +37,14 @@ const SummaryViewTimeline = (props) => {
         repository
     } = props;
 
+    const { errors, violations } = issues;
+
     if (repository && repository.vcs && repository.vcs_processed) {
         return (<Alert message="No repository information available" type="error" />);
     }
 
     const { openTotal: errorsOpenTotal } = errors;
+    const { openTotal: violationsOpenTotal } = violations;
     const { declaredTotal: licensesDeclaredTotal, detectedTotal: licensesDetectedTotal } = licenses;
     const renderLicensesText = () => {
         if (licensesDetectedTotal === 0) {
@@ -77,18 +80,49 @@ const SummaryViewTimeline = (props) => {
         );
     };
     const renderCompletedText = () => {
-        if (errorsOpenTotal !== 0) {
+        if (errorsOpenTotal !== 0 && violationsOpenTotal === 0) {
             return (
-                <span style={
-                    { color: '#f5222d', fontSize: 18, lineHeight: '1.2' }
-                }
-                >
+                <span className="ort-issues-msg">
                     <b>
                         Completed scan with
                         {' '}
                         {errorsOpenTotal}
                         {' '}
-                        errors
+                        error(s)
+                    </b>
+                </span>
+            );
+        }
+
+        if (errorsOpenTotal === 0 && violationsOpenTotal !== 0) {
+            return (
+                <span className="ort-issues-msg">
+                    <b>
+                        Completed scan with
+                        {' '}
+                        {violationsOpenTotal}
+                        {' '}
+                        policy violation(s)
+                    </b>
+                </span>
+            );
+        }
+
+        if (errorsOpenTotal !== 0 && violationsOpenTotal !== 0) {
+            return (
+                <span className="ort-issues-msg">
+                    <b>
+                        Completed scan with
+                        {' '}
+                        {errorsOpenTotal}
+                        {' '}
+                        error(s)
+                        {' '}
+                        and
+                        {' '}
+                        {violationsOpenTotal}
+                        {' '}
+                        policy violation(s)
                     </b>
                 </span>
             );
@@ -176,7 +210,7 @@ const SummaryViewTimeline = (props) => {
 };
 
 SummaryViewTimeline.propTypes = {
-    errors: PropTypes.object.isRequired,
+    issues: PropTypes.object.isRequired,
     levelsTotal: PropTypes.number.isRequired,
     licenses: PropTypes.object.isRequired,
     metadata: PropTypes.object.isRequired,
