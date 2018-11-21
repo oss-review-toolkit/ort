@@ -42,30 +42,27 @@ class NoticeReporterTest : WordSpec() {
                 val expectedText = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
                 val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
 
-                NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
+                val report = generateReport(ortResult)
 
-                val actualText = File(tempDir, "NOTICE").readText()
-                actualText shouldBe expectedText
+                report shouldBe expectedText
             }
 
             "contain all licenses without excludes" {
                 val expectedText = File("src/test/assets/npm-test-without-exclude-expected-NOTICE").readText()
                 val ortResult = readOrtResult("src/test/assets/npm-test-without-exclude-scan-results.yml")
 
-                NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
+                val report = generateReport(ortResult)
 
-                val actualText = File(tempDir, "NOTICE").readText()
-                actualText shouldBe expectedText
+                report shouldBe expectedText
             }
 
             "not contain licenses of excluded packages" {
                 val expectedText = File("src/test/assets/npm-test-with-exclude-expected-NOTICE").readText()
                 val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
 
-                NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
+                val report = generateReport(ortResult)
 
-                val actualText = File(tempDir, "NOTICE").readText()
-                actualText shouldBe expectedText
+                report shouldBe expectedText
             }
 
             "evaluate the provided post-processing script" {
@@ -82,10 +79,9 @@ class NoticeReporterTest : WordSpec() {
                 footers += "Footer 2\n"
             """.trimIndent()
 
-                NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir, postProcessingScript)
+                val report = generateReport(ortResult, postProcessingScript)
 
-                val actualText = File(tempDir, "NOTICE").readText()
-                actualText shouldBe expectedText
+                report shouldBe expectedText
             }
         }
     }
@@ -100,6 +96,11 @@ class NoticeReporterTest : WordSpec() {
     override fun afterTest(description: Description, result: TestResult) {
         tempDir.safeDeleteRecursively()
         super.afterTest(description, result)
+    }
+
+    private fun generateReport(ortResult: OrtResult, postProcessingScript: String? = null): String {
+        NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
+        return File(tempDir, "NOTICE").readText()
     }
 }
 
