@@ -19,6 +19,8 @@
 
 import React, { Component, cloneElement, Children } from 'react';
 import PropTypes from 'prop-types';
+import ExpandablePanelContent from './ExpandablePanelContent';
+import ExpandablePanelTitle from './ExpandablePanelTitle';
 
 // Inspired by https://www.dzurico.com/react-create-reusable-composable-components/
 class ExpandablePanel extends Component {
@@ -32,6 +34,7 @@ class ExpandablePanel extends Component {
 
     onToggleContent = (e) => {
         e.stopPropagation();
+
         this.setState(prevState => ({
             show: !prevState.show
         }));
@@ -40,20 +43,22 @@ class ExpandablePanel extends Component {
     render() {
         const { children } = this.props;
         const { show } = this.state;
+
         const childrenClonedWithNewProps = Children.map(
             children,
             (child) => {
                 // Do not display content if `show` is false
-                if (child.type.name === 'expandablePanelContent' && !show) {
+                if (child.type === ExpandablePanelContent && !show) {
                     return null;
                 }
                 // Map the toggle event on the title
-                if (child.type.name === 'expandablePanelTitle') {
+                if (child.type === ExpandablePanelTitle) {
                     return cloneElement(child, {
                         onToggle: this.onToggleContent,
                         show
                     });
                 }
+
                 return cloneElement(child);
             }
         );
