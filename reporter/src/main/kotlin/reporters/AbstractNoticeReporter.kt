@@ -79,7 +79,7 @@ abstract class AbstractNoticeReporter : Reporter() {
         return outputFile
     }
 
-    private fun mapSpdxLicenses(licenseFindings: SortedMap<String, SortedSet<String>>)
+    private fun mapSpdxLicenses(licenseFindings: Map<String, Set<String>>)
             : SortedMap<String, SortedSet<String>> {
         var result = mapOf<String, SortedSet<String>>()
 
