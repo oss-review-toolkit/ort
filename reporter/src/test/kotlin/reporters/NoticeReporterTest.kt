@@ -40,34 +40,34 @@ class NoticeReporterTest : WordSpec() {
         "Notices reporter" should {
             "generate the correct license notes" {
                 val expectedText = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+                val scanResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
 
-                val report = generateReport(ortResult)
+                val report = generateReport(scanResult)
 
                 report shouldBe expectedText
             }
 
             "contain all licenses without excludes" {
                 val expectedText = File("src/test/assets/npm-test-without-exclude-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/npm-test-without-exclude-scan-results.yml")
+                val scanResult = readOrtResult("src/test/assets/npm-test-without-exclude-scan-results.yml")
 
-                val report = generateReport(ortResult)
+                val report = generateReport(scanResult)
 
                 report shouldBe expectedText
             }
 
             "not contain licenses of excluded packages" {
                 val expectedText = File("src/test/assets/npm-test-with-exclude-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+                val scanResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
 
-                val report = generateReport(ortResult)
+                val report = generateReport(scanResult)
 
                 report shouldBe expectedText
             }
 
             "evaluate the provided post-processing script" {
                 val expectedText = File("src/test/assets/post-processed-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+                val scanResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val postProcessingScript = """
                 headers += "Header 1\n"
@@ -79,7 +79,7 @@ class NoticeReporterTest : WordSpec() {
                 footers += "Footer 2\n"
             """.trimIndent()
 
-                val report = generateReport(ortResult, postProcessingScript)
+                val report = generateReport(scanResult, postProcessingScript)
 
                 report shouldBe expectedText
             }
