@@ -71,7 +71,7 @@ const getTotalNrLicenses = (projectsLicenses) => {
         }
 
         return accumulator;
-    }, licensesSet).size || undefined;
+    }, licensesSet).size;
 };
 const hasReportDataChanged = (newArg, lastArg) => newArg.data.reportLastUpdate === lastArg.data.reportLastUpdate;
 
