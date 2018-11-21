@@ -19,71 +19,37 @@
 
 package com.here.ort.evaluator
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.Error
 import com.here.ort.model.EvaluatorRun
 import com.here.ort.model.OrtResult
-import com.here.ort.utils.log
+import com.here.ort.utils.ScriptRunner
 
-import javax.script.Compilable
-import javax.script.ScriptEngineManager
-import javax.script.ScriptException
-
-import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-
-class Evaluator {
-    private val engine = ScriptEngineManager().getEngineByExtension("kts")
-
-    private val preface = """
+class Evaluator(ortResult: OrtResult) : ScriptRunner() {
+    override val preface = """
             import com.here.ort.model.Error
             import com.here.ort.model.OrtResult
             import com.here.ort.model.Package
 
+            // Input:
             val ortResult = bindings["ortResult"] as OrtResult
+
+            // Output:
             val evalErrors = mutableListOf<Error>()
 
         """.trimIndent()
 
-    private val postface = """
+    override val postface = """
 
             evalErrors
         """.trimIndent()
 
     init {
-        // This is required to avoid
-        //
-        //     WARN: Failed to initialize native filesystem for Windows
-        //     java.lang.RuntimeException: Could not find installation home path. Please make sure bin/idea.properties
-        //     is present in the installation directory.
-        //
-        // on Windows for some reason.
-        setIdeaIoUseFallback()
+        engine.put("ortResult", ortResult)
     }
 
-    private fun buildScript(rulesScript: String) = preface + rulesScript + postface
-
-    fun checkSyntax(ortResult: OrtResult, rulesScript: String): Boolean {
-        require(engine is Compilable) {
-            "The scripting engine does not support compilation."
-        }
-
-        engine.put("ortResult", ortResult)
-
-        return try {
-            engine.compile(buildScript(rulesScript))
-            true
-        } catch (e: ScriptException) {
-            log.error { e.message ?: "No error message available." }
-            false
-        }
-    }
-
-    fun evaluate(ortResult: OrtResult, rulesScript: String): EvaluatorRun {
-        engine.put("ortResult", ortResult)
-
+    override fun run(script: String): EvaluatorRun {
         @Suppress("UNCHECKED_CAST")
-        val errors = engine.eval(buildScript(rulesScript)) as List<Error>
+        val errors = super.run(script) as List<Error>
 
         return EvaluatorRun(errors)
     }
