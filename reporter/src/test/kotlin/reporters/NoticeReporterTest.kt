@@ -20,11 +20,15 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightBlacklist
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.safeDeleteRecursively
+
 import io.kotlintest.Description
 import io.kotlintest.TestResult
+import io.kotlintest.matchers.string.shouldContain
+import io.kotlintest.matchers.string.shouldNotContain
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -79,9 +83,41 @@ class NoticeReporterTest : WordSpec() {
                 footers += "Footer 2\n"
             """.trimIndent()
 
-                val report = generateReport(scanResult, postProcessingScript)
+                val report = generateReport(scanResult, CopyrightBlacklist(), postProcessingScript)
 
                 report shouldBe expectedText
+            }
+
+            "contain a copyright statement if not blacklisted" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightBlacklist())
+
+                report.shouldContain("\nCopyright (c) Felix Bohm")
+            }
+
+            "contain a copyright statement if only its prefix is blacklisted" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightBlacklist("Copyright (c) Fel"))
+
+                report.shouldContain("\nCopyright (c) Felix Bohm")
+            }
+
+            "contain a copyright statement if only its super string is blacklisted" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightBlacklist("Copyright (c) Felix BohmX"))
+
+                report.shouldContain("\nCopyright (c) Felix Bohm")
+            }
+
+            "not contain a copyright statement if it is blacklisted" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightBlacklist("Copyright (c) Felix Bohm"))
+
+                report.shouldNotContain("\nCopyright (c) Felix Bohm")
             }
         }
     }
@@ -98,8 +134,18 @@ class NoticeReporterTest : WordSpec() {
         super.afterTest(description, result)
     }
 
-    private fun generateReport(ortResult: OrtResult, postProcessingScript: String? = null): String {
-        NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
+
+    private fun generateReport(ortResult: OrtResult,
+                               copyrightBlacklist: CopyrightBlacklist = CopyrightBlacklist(),
+                               postProcessingScript: String? = null
+    ): String {
+        NoticeReporter().generateReport(
+                ortResult,
+                DefaultResolutionProvider(),
+                copyrightBlacklist,
+                tempDir,
+                postProcessingScript
+        )
         return File(tempDir, "NOTICE").readText()
     }
 }

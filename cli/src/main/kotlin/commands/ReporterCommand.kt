@@ -29,6 +29,7 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightBlacklist
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
@@ -86,6 +87,11 @@ object ReporterCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var postProcessingScript: File? = null
 
+    @Parameter(description = "A file containing a blacklist of copyright statements.",
+            names = ["--copyright-blacklist-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var copyrightBlacklistFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         require(!outputDir.exists()) {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
@@ -98,6 +104,7 @@ object ReporterCommand : CommandWithHelp() {
         val resolutionProvider = DefaultResolutionProvider()
         ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
         resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
+        val copyrightBlacklist = copyrightBlacklistFile?.readValue() ?: CopyrightBlacklist()
 
         reportFormats.distinct().forEach {
             val name = it.toString().removeSuffix("Reporter")
@@ -105,6 +112,7 @@ object ReporterCommand : CommandWithHelp() {
                 val reportFile = it.generateReport(
                         ortResult,
                         resolutionProvider,
+                        copyrightBlacklist,
                         outputDir,
                         postProcessingScript?.readText()
                 )
