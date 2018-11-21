@@ -155,7 +155,7 @@ ul.ort-table-list {
 }
 
 .ort-license.ant-tag-blue:hover, 
-.ort-status-ok.ant-tag-blue:hover{
+.ort-status-ok.ant-tag-blue:hover {
     color: #fff;
     background: #1890ff;
     border-color: #1890ff;
