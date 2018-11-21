@@ -27,6 +27,16 @@ import java.io.File
 import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
+    "disjoint" should {
+        "return true for collections that have no common elememts" {
+            disjoint(setOf(1), setOf(2), setOf(3)) shouldBe true
+        }
+
+        "return false for collections that have common elememts" {
+            disjoint(setOf(1, 2), setOf(2, 3), setOf(3, 4)) shouldBe false
+        }
+    }
+
     "filterVersionNames" should {
         "return an empty list for a blank version" {
             val names = listOf("dummy")

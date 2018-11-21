@@ -23,6 +23,7 @@ import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
+import java.util.Collections
 import java.util.EnumSet
 
 @Suppress("UnsafeCast")
@@ -52,6 +53,21 @@ const val PARAMETER_ORDER_LOGGING = 2
  * Ordinal for the help program parameter.
  */
 const val PARAMETER_ORDER_HELP = 100
+
+/**
+ * Check whether the specified two or more collections have no elemets in common.
+ */
+fun disjoint(c1: Collection<*>, c2: Collection<*>, vararg cN: Collection<*>): Boolean {
+    val c = listOf(c1, c2, *cN)
+
+    for (a in c.indices) {
+        for (b in a + 1 until c.size) {
+            if (!Collections.disjoint(c[a], c[b])) return false
+        }
+    }
+
+    return true
+}
 
 /**
  * A Kotlin-style conveniece function to replace EnumSet.of() and EnumSet.noneOf().
