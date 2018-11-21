@@ -20,12 +20,15 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.Description
 import io.kotlintest.TestResult
+import io.kotlintest.matchers.string.shouldContain
+import io.kotlintest.matchers.string.shouldNotContain
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -49,8 +52,18 @@ class NoticeReporterTest : WordSpec() {
         super.afterTest(description, result)
     }
 
-    private fun generateReport(ortResult: OrtResult, postProcessingScript: String? = null): String {
-        NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir, postProcessingScript)
+    private fun generateReport(ortResult: OrtResult,
+                               copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+                               postProcessingScript: String? = null
+    ): String {
+        NoticeReporter().generateReport(
+                ortResult,
+                DefaultResolutionProvider(),
+                copyrightGarbage,
+                tempDir,
+                postProcessingScript
+        )
+
         return File(tempDir, "NOTICE").readText()
     }
 
@@ -97,9 +110,41 @@ class NoticeReporterTest : WordSpec() {
                 footers += "Footer 2\n"
             """.trimIndent()
 
-                val report = generateReport(ortResult, postProcessingScript)
+                val report = generateReport(ortResult, CopyrightGarbage(), postProcessingScript)
 
                 report shouldBe expectedText
+            }
+
+            "contain a copyright statement if not contained in copyright garnage" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightGarbage())
+
+                report.shouldContain("\nCopyright (c) Felix Bohm")
+            }
+
+            "contain a copyright statement if only its prefix is contained in copyright garbage" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Fel"))
+
+                report.shouldContain("\nCopyright (c) Felix Bohm")
+            }
+
+            "contain a copyright statement if only its super string contained in copyright garbage" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix BohmX"))
+
+                report.shouldContain("\nCopyright (c) Felix Bohm")
+            }
+
+            "not contain a copyright statement if it is contained in garbage" {
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+
+                val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix Bohm"))
+
+                report.shouldNotContain("\nCopyright (c) Felix Bohm")
             }
         }
     }

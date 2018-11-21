@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.LicenseMapping
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
@@ -37,6 +38,15 @@ import javax.script.ScriptEngineManager
 abstract class AbstractNoticeReporter : Reporter() {
     companion object {
         const val NOTICE_SEPARATOR = "\n----\n\n"
+        private fun Map<String, SortedSet<String>>.filterBy(copyrightGarbage: CopyrightGarbage) =
+                this.entries.associateBy(
+                        keySelector = { it.key },
+                        valueTransform = {
+                            it.value.filter { copyrightStatement ->
+                                !copyrightGarbage.items.contains(copyrightStatement)
+                            }.toSortedSet()
+                        }
+                )
     }
 
     data class NoticeReport(
@@ -48,6 +58,7 @@ abstract class AbstractNoticeReporter : Reporter() {
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
+            copyrightGarbage: CopyrightGarbage,
             outputDir: File,
             postProcessingScript: String?
     ): File {
@@ -55,7 +66,7 @@ abstract class AbstractNoticeReporter : Reporter() {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings = getLicenseFindings(ortResult)
+        val licenseFindings = getLicenseFindings(ortResult).filterBy(copyrightGarbage)
         val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
 
         val findings = spdxLicenseFindings.filterNot { (license, _) ->
