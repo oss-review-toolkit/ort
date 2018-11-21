@@ -25,6 +25,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.LicenseMapping
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 import com.here.ort.utils.spdx.getLicenseText
 import com.here.ort.utils.zipWithDefault
@@ -32,7 +33,6 @@ import com.here.ort.utils.zipWithDefault
 import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
-import javax.script.ScriptEngineManager
 
 abstract class AbstractNoticeReporter : Reporter() {
     companion object {
@@ -44,6 +44,37 @@ abstract class AbstractNoticeReporter : Reporter() {
             val findings: Map<String, SortedSet<String>>,
             val footers: List<String>
     )
+
+    class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport) : ScriptRunner() {
+        override val preface = """
+            import com.here.ort.model.OrtResult
+            import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
+
+            import java.util.SortedSet
+
+            // Input:
+            val ortResult = bindings["ortResult"] as OrtResult
+            val noticeReport = bindings["noticeReport"] as NoticeReport
+
+            val headers = mutableListOf<String>()
+            val findings = mutableMapOf<String, SortedSet<String>>()
+            val footers = mutableListOf<String>()
+
+        """.trimIndent()
+
+        override val postface = """
+
+            // Output:
+            NoticeReport(headers, findings, footers)
+        """.trimIndent()
+
+        init {
+            engine.put("ortResult", ortResult)
+            engine.put("noticeReport", noticeReport)
+        }
+
+        override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
+    }
 
     override fun generateReport(
             ortResult: OrtResult,
@@ -70,7 +101,7 @@ abstract class AbstractNoticeReporter : Reporter() {
         }
 
         val noticeReport = NoticeReport(listOf(header), findings, emptyList()).let { noticeReport ->
-            postProcessingScript?.let { postProcess(ortResult, it, noticeReport) } ?: noticeReport
+            postProcessingScript?.let { PostProcessor(ortResult, noticeReport).run(it) } ?: noticeReport
         }
 
         val outputFile = File(outputDir, noticeFileName)
@@ -94,36 +125,6 @@ abstract class AbstractNoticeReporter : Reporter() {
         }
 
         return result.toSortedMap()
-    }
-
-    private fun postProcess(ortResult: OrtResult, postProcessingScript: String, noticeReport: NoticeReport)
-            : NoticeReport {
-        val preface = """
-            import com.here.ort.model.OrtResult
-            import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
-            import java.util.SortedSet
-
-            val ortResult = bindings["ortResult"] as OrtResult
-            val noticeReport = bindings["noticeReport"] as NoticeReport
-
-            val headers = mutableListOf<String>()
-            val findings = mutableMapOf<String, SortedSet<String>>()
-            val footers = mutableListOf<String>()
-
-        """.trimIndent()
-
-        val postface = """
-
-            NoticeReport(headers, findings, footers)
-        """.trimIndent()
-
-        val script = preface + postProcessingScript + postface
-
-        val engine = ScriptEngineManager().getEngineByExtension("kts")
-        engine.put("ortResult", ortResult)
-        engine.put("noticeReport", noticeReport)
-
-        return engine.eval(script) as NoticeReport
     }
 
     private fun writeNoticeReport(noticeReport: NoticeReport, outputFile: File) {

@@ -5,8 +5,4 @@ dependencies {
     api project(':model')
 
     implementation project(':utils')
-
-    implementation 'org.jetbrains.kotlin:kotlin-compiler-embeddable'
-    implementation 'org.jetbrains.kotlin:kotlin-script-runtime'
-    implementation 'org.jetbrains.kotlin:kotlin-script-util'
 }
