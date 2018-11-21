@@ -20,6 +20,7 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightBlacklist
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 
@@ -37,7 +38,12 @@ class NoticeOnlyDeclaredReporterTest : WordSpec({
             val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
-            NoticeOnlyDeclaredReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir)
+            NoticeOnlyDeclaredReporter().generateReport(
+                    ortResult,
+                    DefaultResolutionProvider(),
+                    CopyrightBlacklist(),
+                    outputDir
+            )
 
             val resultFile = File(outputDir, "NOTICE_ONLY_DECLARED")
             val actualText = resultFile.readText()
