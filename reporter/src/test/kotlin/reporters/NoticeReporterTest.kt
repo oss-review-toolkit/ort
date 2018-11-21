@@ -39,43 +39,37 @@ class NoticeReporterTest : WordSpec() {
     init {
         "Notices reporter" should {
             "generate the correct license notes" {
-                val expectedResultFile = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE")
-                val expectedText = expectedResultFile.readText()
+                val expectedText = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
                 val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
 
-                val resultFile = File(tempDir, "NOTICE")
-                val actualText = resultFile.readText()
-
+                val actualText = File(tempDir, "NOTICE").readText()
                 actualText shouldBe expectedText
             }
 
             "contain all licenses without excludes" {
-                val expectedResultFile = File("src/test/assets/npm-test-without-exclude-expected-NOTICE")
+                val expectedText = File("src/test/assets/npm-test-without-exclude-expected-NOTICE").readText()
                 val ortResult = readOrtResult("src/test/assets/npm-test-without-exclude-scan-results.yml")
 
                 NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
 
-                val resultFile = File(tempDir, "NOTICE")
-
-                resultFile.readText() shouldBe expectedResultFile.readText()
+                val actualText = File(tempDir, "NOTICE").readText()
+                actualText shouldBe expectedText
             }
 
             "not contain licenses of excluded packages" {
-                val expectedResultFile = File("src/test/assets/npm-test-with-exclude-expected-NOTICE")
+                val expectedText = File("src/test/assets/npm-test-with-exclude-expected-NOTICE").readText()
                 val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
 
                 NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
 
-                val resultFile = File(tempDir, "NOTICE")
-
-                resultFile.readText() shouldBe expectedResultFile.readText()
+                val actualText = File(tempDir, "NOTICE").readText()
+                actualText shouldBe expectedText
             }
 
             "evaluate the provided post-processing script" {
-                val expectedResultFile = File("src/test/assets/post-processed-NOTICE")
-                val expectedText = expectedResultFile.readText()
+                val expectedText = File("src/test/assets/post-processed-NOTICE").readText()
                 val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val postProcessingScript = """
@@ -90,9 +84,7 @@ class NoticeReporterTest : WordSpec() {
 
                 NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir, postProcessingScript)
 
-                val resultFile = File(tempDir, "NOTICE")
-                val actualText = resultFile.readText()
-
+                val actualText = File(tempDir, "NOTICE").readText()
                 actualText shouldBe expectedText
             }
         }
