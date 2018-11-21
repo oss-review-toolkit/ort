@@ -15,10 +15,6 @@ body {
     height: auto;
 }
 
-.ort-summary .ant-row {
-    margin-top: 20px;
-}
-
 .ort-app {
     background-color: #fff;
     border: 1px solid rgba(34,36,38,.15);
@@ -55,10 +51,6 @@ https://ant.design/docs/react/customize-theme
 
 .ant-table-wrapper {
     min-height: 500px;
-}
-
-.ant-table-placeholder {
-    margin-top: 120px;
 }
 
 button.ort-btn-expand {
@@ -98,6 +90,20 @@ button.ort-btn-expand .anticon {
 
 .ort-summary .ant-tag {
     cursor: unset;
+}
+
+.ort-summary .ant-row {
+    margin-top: 20px;
+}
+
+.ort-summary span.ort-issues-msg {
+    color: #f5222d;
+    font-size: 18;
+    line-height: 1.2;
+}
+
+.ort-summary .ant-table-wrapper {
+    min-height: 350px;
 }
 
 ul.ort-table-list {

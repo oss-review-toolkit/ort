@@ -27,10 +27,11 @@ import { hashCode } from '../utils';
 const { TabPane } = Tabs;
 
 // Generates the HTML to display errors related to scanned project
-const SummaryViewTableErrors = (props) => {
+const SummaryViewTableIssues = (props) => {
     const { data } = props;
+    const { errors, violations } = data;
 
-    const renderErrorTable = (errors, pageSize) => (
+    const renderErrorTable = (errorData, pageSize) => (
         <Table
             columns={[{
                 title: 'id',
@@ -59,7 +60,7 @@ const SummaryViewTableErrors = (props) => {
                     </div>
                 )
             }]}
-            dataSource={errors}
+            dataSource={errorData}
             locale={{
                 emptyText: 'No errors'
             }}
@@ -74,36 +75,93 @@ const SummaryViewTableErrors = (props) => {
             showHeader={false}
         />);
 
-    if (data.totalOpen !== 0) {
+    const renderViolationsTable = (violationData, pageSize) => (
+        <Table
+            columns={[{
+                title: 'id',
+                dataIndex: 'id',
+                render: (text, row) => (
+                    <div>
+                        <dl>
+                            <dt>
+                                {row.source}
+                            </dt>
+                            <dd>
+                                {row.message}
+                            </dd>
+                        </dl>
+                    </div>
+                )
+            }]}
+            dataSource={violationData}
+            locale={{
+                emptyText: 'No violations'
+            }}
+            pagination={{
+                hideOnSinglePage: true,
+                pageSize
+            }}
+            rowKey="source"
+            scroll={{
+                y: 300
+            }}
+            showHeader={false}
+        />);
+
+    if (errors.totalOpen !== 0 || errors.totalAddressed !== 0
+            || violations.totalOpen !== 0 || violations.totalAddressed !== 0) {
         return (
-            <Tabs tabPosition="top" className="ort-summary-errors">
+            <Tabs tabPosition="top" className="ort-summary-issues">
                 <TabPane
                     tab={(
                         <span>
                             Errors (
-                            {data.openTotal}
+                            {errors.openTotal}
                             )
                         </span>
                     )}
                     key="1"
                 >
-                    {renderErrorTable(data.open, data.openTotal)}
+                    {renderErrorTable(errors.open, errors.openTotal)}
                 </TabPane>
                 <TabPane
                     tab={(
                         <span>
                             Addressed Errors (
-                            {data.addressedTotal}
+                            {errors.addressedTotal}
                             )
                         </span>
                     )}
                     key="2"
                 >
                     {
-                        renderErrorTable(
-                            data.addressed,
-                            data.addressedTotal
-                        )
+                        renderErrorTable(errors.addressed, errors.addressedTotal)
+                    }
+                </TabPane>
+                <TabPane
+                    tab={(
+                        <span>
+                            Violations (
+                            {violations.openTotal}
+                            )
+                        </span>
+                    )}
+                    key="3"
+                >
+                    {renderViolationsTable(violations.open, violations.openTotal)}
+                </TabPane>
+                <TabPane
+                    tab={(
+                        <span>
+                            Addressed Violations (
+                            {violations.addressedTotal}
+                            )
+                        </span>
+                    )}
+                    key="4"
+                >
+                    {
+                        renderViolationsTable(violations.addressed, violations.addressedTotal)
                     }
                 </TabPane>
             </Tabs>
@@ -114,8 +172,8 @@ const SummaryViewTableErrors = (props) => {
     return null;
 };
 
-SummaryViewTableErrors.propTypes = {
+SummaryViewTableIssues.propTypes = {
     data: PropTypes.object.isRequired
 };
 
-export default SummaryViewTableErrors;
+export default SummaryViewTableIssues;
