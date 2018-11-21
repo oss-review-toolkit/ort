@@ -33,6 +33,10 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class NoticeReporterTest : WordSpec() {
+    companion object {
+        private fun readOrtResult(file: String) = File(file).readValue<OrtResult>()
+    }
+
     private lateinit var tempDir: File
 
     override fun beforeTest(description: Description) {
@@ -50,8 +54,7 @@ class NoticeReporterTest : WordSpec() {
             "generate the correct license notes" {
                 val expectedResultFile = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE")
                 val expectedText = expectedResultFile.readText()
-                val scanRecordFile = File("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
-                val ortResult = scanRecordFile.readValue<OrtResult>()
+                val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
 
@@ -63,8 +66,7 @@ class NoticeReporterTest : WordSpec() {
 
             "contain all licenses without excludes" {
                 val expectedResultFile = File("src/test/assets/npm-test-without-exclude-expected-NOTICE")
-                val scanRecordFile = File("src/test/assets/npm-test-without-exclude-scan-results.yml")
-                val ortResult = scanRecordFile.readValue<OrtResult>()
+                val ortResult = readOrtResult("src/test/assets/npm-test-without-exclude-scan-results.yml")
 
                 NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
 
@@ -75,9 +77,7 @@ class NoticeReporterTest : WordSpec() {
 
             "not contain licenses of excluded packages" {
                 val expectedResultFile = File("src/test/assets/npm-test-with-exclude-expected-NOTICE")
-                val scanRecordFile = File("src/test/assets/npm-test-with-exclude-scan-results.yml")
-                val ortResult = scanRecordFile.readValue<OrtResult>()
-
+                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
 
                 NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), tempDir)
 
@@ -89,8 +89,7 @@ class NoticeReporterTest : WordSpec() {
             "evaluate the provided post-processing script" {
                 val expectedResultFile = File("src/test/assets/post-processed-NOTICE")
                 val expectedText = expectedResultFile.readText()
-                val scanRecordFile = File("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
-                val ortResult = scanRecordFile.readValue<OrtResult>()
+                val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val postProcessingScript = """
                 headers += "Header 1\n"
