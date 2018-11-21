@@ -70,5 +70,30 @@ class NoticeReporterTest : WordSpec({
 
             resultFile.readText() shouldBe expectedResultFile.readText()
         }
+
+        "evaluate the provided post-processing script" {
+            val expectedResultFile = File("src/test/assets/post-processed-NOTICE")
+            val expectedText = expectedResultFile.readText()
+            val scanRecordFile = File("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+            val ortResult = scanRecordFile.readValue<OrtResult>()
+            val outputDir = createTempDir().also { it.deleteOnExit() }
+
+            val postProcessingScript = """
+                headers += "Header 1\n"
+                headers += "Header 2\n"
+
+                findings.putAll(noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() })
+
+                footers += "Footer 1\n"
+                footers += "Footer 2\n"
+            """.trimIndent()
+
+            NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir, postProcessingScript)
+
+            val resultFile = File(outputDir, "NOTICE")
+            val actualText = resultFile.readText()
+
+            actualText shouldBe expectedText
+        }
     }
 })

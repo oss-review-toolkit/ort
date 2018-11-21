@@ -32,6 +32,7 @@ import com.here.ort.utils.zipWithDefault
 import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
+import javax.script.ScriptEngineManager
 
 abstract class AbstractNoticeReporter : Reporter() {
     companion object {
@@ -68,7 +69,10 @@ abstract class AbstractNoticeReporter : Reporter() {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val noticeReport = NoticeReport(listOf(header), findings, emptyList())
+        val noticeReport = NoticeReport(listOf(header), findings, emptyList()).let { noticeReport ->
+            postProcessingScript?.let { postProcess(ortResult, it, noticeReport) } ?: noticeReport
+        }
+
         val outputFile = File(outputDir, noticeFileName)
         writeNoticeReport(noticeReport, outputFile)
 
@@ -90,6 +94,36 @@ abstract class AbstractNoticeReporter : Reporter() {
         }
 
         return result.toSortedMap()
+    }
+
+    private fun postProcess(ortResult: OrtResult, postProcessingScript: String, noticeReport: NoticeReport)
+            : NoticeReport {
+        val preface = """
+            import com.here.ort.model.OrtResult
+            import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
+            import java.util.SortedSet
+
+            val ortResult = bindings["ortResult"] as OrtResult
+            val noticeReport = bindings["noticeReport"] as NoticeReport
+
+            val headers = mutableListOf<String>()
+            val findings = mutableMapOf<String, SortedSet<String>>()
+            val footers = mutableListOf<String>()
+
+        """.trimIndent()
+
+        val postface = """
+
+            NoticeReport(headers, findings, footers)
+        """.trimIndent()
+
+        val script = preface + postProcessingScript + postface
+
+        val engine = ScriptEngineManager().getEngineByExtension("kts")
+        engine.put("ortResult", ortResult)
+        engine.put("noticeReport", noticeReport)
+
+        return engine.eval(script) as NoticeReport
     }
 
     private fun writeNoticeReport(noticeReport: NoticeReport, outputFile: File) {
