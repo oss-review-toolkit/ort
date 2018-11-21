@@ -1,2 +1,5 @@
-*/src/*/assets/**/*expected*.yml text eol=lf
-reporter/src/test/assets/*-expected-NOTICE* text eol=lf
+*/src/*/assets/**/*expected*.yml		text eol=lf
+reporter/src/test/assets/*-expected-NOTICE*	text eol=lf
+
+# Fix GitHub language statistics, see https://github.com/github/linguist#generated-code.
+reporter-web-app/public/index.html		linguist-generated=true
