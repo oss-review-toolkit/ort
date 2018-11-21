@@ -25,6 +25,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.getAllDetectedLicenses
 import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.ProjectExclude
@@ -233,6 +234,7 @@ abstract class TableReporter : Reporter() {
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
+            copyrightGarbage: CopyrightGarbage,
             outputDir: File,
             postProcessingScript: String?
     ): File {

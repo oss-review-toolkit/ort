@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.jsonMapper
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
@@ -33,6 +34,7 @@ class WebAppReporter : Reporter() {
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
+            copyrightGarbage: CopyrightGarbage,
             outputDir: File,
             postProcessingScript: String?
     ): File {
