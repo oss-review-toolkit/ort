@@ -96,6 +96,16 @@ export const getReportErrorsOpenTotal = memoizeOne(
     state => state.data.report.errors.open.length || 0,
     hasReportDataChanged
 );
+export const getReportViolationsAdressed = state => state.data.report.violations.addressed;
+export const getReportViolationsAdressedTotal = memoizeOne(
+    state => state.data.report.violations.addressed.length || 0,
+    hasReportDataChanged
+);
+export const getReportViolationsOpen = state => state.data.report.violations.open;
+export const getReportViolationsOpenTotal = memoizeOne(
+    state => state.data.report.violations.open.length || 0,
+    hasReportDataChanged
+);
 export const getReportLevels = state => state.data.report.levels;
 export const getReportLevelsTotal = memoizeOne(
     (state) => {
