@@ -78,14 +78,14 @@ object EvaluatorCommand : CommandWithHelp() {
 
         val script = rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()
 
-        val evaluator = Evaluator()
+        val evaluator = Evaluator(ortResultInput)
 
         if (syntaxCheck) {
-            return if (evaluator.checkSyntax(ortResultInput, script)) 0 else 2
+            return if (evaluator.checkSyntax(script)) 0 else 2
         }
 
         @Suppress("UNCHECKED_CAST")
-        val evaluatorRun = evaluator.evaluate(ortResultInput, script)
+        val evaluatorRun = evaluator.evaluate(script)
 
         outputDir?.let { dir ->
             require(!dir.exists()) {

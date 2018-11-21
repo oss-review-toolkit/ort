@@ -37,13 +37,13 @@ class EvaluatorTest : WordSpec() {
             "succeed if the script can be compiled" {
                 val script = javaClass.getResource("/rules/no_gpl_declared.kts").readText()
 
-                val result = Evaluator().checkSyntax(ortResult, script)
+                val result = Evaluator(ortResult).checkSyntax(script)
 
                 result shouldBe true
             }
 
             "fail if the script can not be compiled" {
-                val result = Evaluator().checkSyntax(ortResult, """
+                val result = Evaluator(ortResult).checkSyntax("""
                     broken script
                     """.trimIndent())
 
@@ -53,7 +53,7 @@ class EvaluatorTest : WordSpec() {
 
         "evaluate" should {
             "contain rule errors in the result" {
-                val result = Evaluator().evaluate(ortResult, """
+                val result = Evaluator(ortResult).evaluate("""
                     evalErrors += Error(source = "source 1", message = "message 1")
                     evalErrors += Error(source = "source 2", message = "message 2")
                     """.trimIndent())

@@ -22,8 +22,4 @@ dependencies {
 
     implementation 'org.apache.poi:ooxml-schemas:1.4'
     implementation 'org.apache.poi:poi-ooxml:3.17'
-
-    implementation 'org.jetbrains.kotlin:kotlin-compiler-embeddable'
-    implementation 'org.jetbrains.kotlin:kotlin-script-runtime'
-    implementation 'org.jetbrains.kotlin:kotlin-script-util'
 }
