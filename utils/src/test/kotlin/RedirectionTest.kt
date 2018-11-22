@@ -20,7 +20,10 @@
 package com.here.ort.utils
 
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
+
+import java.util.Scanner
 
 class RedirectionTest : WordSpec({
     "Redirecting output" should {
@@ -88,6 +91,18 @@ class RedirectionTest : WordSpec({
             val stdoutLines = stdout.lines().dropLast(1)
             stdoutLines.count() shouldBe numberOfLines
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
+        }
+    }
+
+    "Suppressing input" should {
+        "avoid blocking for user input" {
+            shouldThrow<NoSuchElementException> {
+                suppressInput {
+                    Scanner(System.`in`).use {
+                        it.nextLine()
+                    }
+                }
+            }
         }
     }
 })
