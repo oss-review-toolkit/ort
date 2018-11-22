@@ -27,7 +27,7 @@ import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -90,7 +90,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
         stashDirectories(File(workingDir, "vendor")).use {
             val scopes = mutableSetOf<Scope>()
             val packages = mutableSetOf<Package>()
-            val errors = mutableListOf<Error>()
+            val errors = mutableListOf<OrtIssue>()
 
             installDependencies(workingDir)
 
@@ -117,7 +117,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
     }
 
     private fun parseScope(workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<Error>) {
+                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<OrtIssue>) {
         log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
@@ -130,7 +130,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
     }
 
     private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
-                                scopeDependencies: MutableSet<PackageReference>, errors: MutableList<Error>) {
+                                scopeDependencies: MutableSet<PackageReference>, errors: MutableList<OrtIssue>) {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
@@ -174,7 +174,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.collectMessagesAsString()}"
             log.error { errorMsg }
 
-            errors += Error(source = toString(), message = errorMsg)
+            errors += OrtIssue(source = toString(), message = errorMsg)
         }
     }
 

@@ -48,7 +48,7 @@ data class PackageReference(
         // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
         // [AnalyzerResult.hasErrors] already contains that information.
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<Error> = emptyList(),
+        val errors: List<OrtIssue> = emptyList(),
 
         /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.

@@ -19,14 +19,14 @@
 
 package com.here.ort.evaluator
 
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.EvaluatorRun
 import com.here.ort.model.OrtResult
 import com.here.ort.utils.ScriptRunner
 
 class Evaluator(ortResult: OrtResult) : ScriptRunner() {
     override val preface = """
-            import com.here.ort.model.Error
+            import com.here.ort.model.OrtIssue
             import com.here.ort.model.OrtResult
             import com.here.ort.model.Package
 
@@ -34,7 +34,7 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
             val ortResult = bindings["ortResult"] as OrtResult
 
             // Output:
-            val evalErrors = mutableListOf<Error>()
+            val evalErrors = mutableListOf<OrtIssue>()
 
         """.trimIndent()
 
@@ -49,7 +49,7 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
 
     override fun run(script: String): EvaluatorRun {
         @Suppress("UNCHECKED_CAST")
-        val errors = super.run(script) as List<Error>
+        val errors = super.run(script) as List<OrtIssue>
 
         return EvaluatorRun(errors)
     }

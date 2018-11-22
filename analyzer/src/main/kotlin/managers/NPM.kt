@@ -28,7 +28,7 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -423,7 +423,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
             }
 
             return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
-                    listOf(Error(source = toString(), message = "Package '$name' was not installed.")))
+                    listOf(OrtIssue(source = toString(), message = "Package '$name' was not installed.")))
         } else {
             // Skip the package name directory when going up.
             var parentModulesDir = startModulesDir.parentFile.parentFile
