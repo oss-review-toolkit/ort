@@ -79,13 +79,9 @@ class NoticeReporterTest : WordSpec({
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
             val postProcessingScript = """
-                headers += "Header 1\n"
-                headers += "Header 2\n"
-
-                findings.putAll(noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() })
-
-                footers += "Footer 1\n"
-                footers += "Footer 2\n"
+                headers = listOf("Header 1\n", "Header 2\n")
+                findings = noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() }
+                footers = listOf("Footer 1\n", "Footer 2\n")
             """.trimIndent()
 
             NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir, postProcessingScript)

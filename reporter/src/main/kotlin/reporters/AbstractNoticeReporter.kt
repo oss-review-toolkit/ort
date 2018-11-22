@@ -56,9 +56,9 @@ abstract class AbstractNoticeReporter : Reporter() {
             val ortResult = bindings["ortResult"] as OrtResult
             val noticeReport = bindings["noticeReport"] as NoticeReport
 
-            val headers = mutableListOf<String>()
-            val findings = mutableMapOf<String, SortedSet<String>>()
-            val footers = mutableListOf<String>()
+            var headers = noticeReport.headers
+            var findings = noticeReport.findings
+            var footers = noticeReport.footers
 
         """.trimIndent()
 
