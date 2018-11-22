@@ -81,11 +81,7 @@ data class PackageReference(
     /**
      * Return whether the package identified by [pkgId] is a (transitive) dependency of this reference.
      */
-    fun dependsOn(pkgId: Identifier): Boolean {
-        return dependencies.find { pkgRef ->
-            pkgRef.id == pkgId || pkgRef.dependsOn(pkgId)
-        } != null
-    }
+    fun dependsOn(pkgId: Identifier): Boolean = dependencies.any { it.id == pkgId || it.dependsOn(pkgId) }
 
     /**
      * Return whether this package reference or any of its dependencies has errors.
