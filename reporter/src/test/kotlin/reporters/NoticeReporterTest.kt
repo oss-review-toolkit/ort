@@ -29,7 +29,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class NoticeReporterTest : WordSpec({
-    "Notices reporter" should {
+    "NoticeReporter" should {
         "generate the correct license notes" {
             val expectedResultFile = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE")
             val expectedText = expectedResultFile.readText()
