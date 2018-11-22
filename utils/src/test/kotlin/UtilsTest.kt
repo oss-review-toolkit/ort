@@ -204,6 +204,13 @@ class UtilsTest : WordSpec({
 
             filterVersionNames("1.0.3", names).joinToString("\n") shouldBe "my_project_v1-1.0.3"
         }
+
+        "find names that use an abbreviated SHA1 as the suffix" {
+            val names = listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
+
+            filterVersionNames("3.9.0.99", names).joinToString("\n") shouldBe
+                    listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99").joinToString("\n")
+        }
     }
 
     "getPathFromEnvironment" should {
