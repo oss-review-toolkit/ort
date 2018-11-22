@@ -83,7 +83,6 @@ data class PackageReference(
      */
     fun dependsOn(pkgId: Identifier): Boolean {
         return dependencies.find { pkgRef ->
-            // Strip the package manager part from the packageIdentifier because it is not part of the PackageReference.
             pkgRef.id == pkgId || pkgRef.dependsOn(pkgId)
         } != null
     }
