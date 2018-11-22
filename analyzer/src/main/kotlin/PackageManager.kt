@@ -22,7 +22,7 @@ package com.here.ort.analyzer
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -221,7 +221,7 @@ abstract class PackageManager(
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    val errors = listOf(Error(source = javaClass.simpleName, message = e.collectMessagesAsString()))
+                    val errors = listOf(OrtIssue(source = javaClass.simpleName, message = e.collectMessagesAsString()))
 
                     result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), errors)
                 }

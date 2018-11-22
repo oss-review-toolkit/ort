@@ -19,7 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
@@ -51,7 +51,7 @@ abstract class TableReporter : Reporter() {
             /**
              * A list containing all evaluator errors. `null` if no evaluator result is available.
              */
-            val evaluatorErrors: List<Error>?,
+            val evaluatorErrors: List<OrtIssue>?,
 
             /**
              * A [ErrorTable] containing all dependencies that caused errors.
@@ -219,8 +219,8 @@ abstract class TableReporter : Reporter() {
     }
 
     data class ResolvableError(
-        val error: Error,
-        val resolutions: List<ErrorResolution>
+            val error: OrtIssue,
+            val resolutions: List<ErrorResolution>
     ) {
         override fun toString() =
                 buildString {
@@ -238,7 +238,7 @@ abstract class TableReporter : Reporter() {
             outputDir: File,
             postProcessingScript: String?
     ): File {
-        fun Error.toResolvableError(): TableReporter.ResolvableError {
+        fun OrtIssue.toResolvableError(): TableReporter.ResolvableError {
             return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
         }
 

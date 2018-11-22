@@ -44,7 +44,7 @@ data class ProjectAnalyzerResult(
         // Do not serialize if empty for consistency with the error properties in other classes, even if this class is
         // not serialized as part of an [OrtResult].
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<Error> = emptyList()
+        val errors: List<OrtIssue> = emptyList()
 ) {
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.
@@ -57,8 +57,8 @@ data class ProjectAnalyzerResult(
         }
     }
 
-    fun collectErrors(): Map<Identifier, List<Error>> {
-        val collectedErrors = mutableMapOf<Identifier, MutableList<Error>>()
+    fun collectErrors(): Map<Identifier, List<OrtIssue>> {
+        val collectedErrors = mutableMapOf<Identifier, MutableList<OrtIssue>>()
 
         fun addErrors(pkgReference: PackageReference) {
             val errorsForPkg = collectedErrors.getOrPut(pkgReference.id) { mutableListOf() }
@@ -73,7 +73,7 @@ data class ProjectAnalyzerResult(
             }
         }
 
-        return mutableMapOf<Identifier, List<Error>>().apply {
+        return mutableMapOf<Identifier, List<OrtIssue>>().apply {
             if (errors.isNotEmpty()) {
                 this[project.id] = errors.toMutableList()
             }

@@ -97,8 +97,8 @@ data class Project(
     /**
      * Return a de-duplicated list of all errors for the provided [id].
      */
-    fun collectErrors(id: Identifier): List<Error> {
-        val collectedErrors = mutableListOf<Error>()
+    fun collectErrors(id: Identifier): List<OrtIssue> {
+        val collectedErrors = mutableListOf<OrtIssue>()
 
         fun addErrors(pkgRef: PackageReference) {
             if (pkgRef.id == id) {

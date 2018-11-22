@@ -53,10 +53,10 @@ class ScanResultContainerTest : WordSpec() {
     private val scannerStartTime2 = downloadTime2 + Duration.ofMinutes(1)
     private val scannerEndTime2 = scannerStartTime2 + Duration.ofMinutes(1)
 
-    private val error11 = Error(source = "source-11", message = "error-11")
-    private val error12 = Error(source = "source-12", message = "error-12")
-    private val error21 = Error(source = "source-21", message = "error-21")
-    private val error22 = Error(source = "source-22", message = "error-22")
+    private val error11 = OrtIssue(source = "source-11", message = "error-11")
+    private val error12 = OrtIssue(source = "source-12", message = "error-12")
+    private val error21 = OrtIssue(source = "source-21", message = "error-21")
+    private val error22 = OrtIssue(source = "source-22", message = "error-22")
 
     private val scanSummary1 = ScanSummary(
             scannerStartTime1,
@@ -120,13 +120,13 @@ class ScanResultContainerTest : WordSpec() {
                 val scanResults = deprecatedScanResultsFile.readValue<ScanResultContainer>()
 
                 scanResults.results[0].summary.errors shouldBe listOf(
-                        Error(timestamp = Instant.EPOCH, source = "", message = "error-11"),
-                        Error(timestamp = Instant.EPOCH, source = "", message = "error-12")
+                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-11"),
+                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-12")
                 )
 
                 scanResults.results[1].summary.errors shouldBe listOf(
-                        Error(timestamp = Instant.EPOCH, source = "", message = "error-21"),
-                        Error(timestamp = Instant.EPOCH, source = "", message = "error-22")
+                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-21"),
+                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-22")
                 )
             }
         }

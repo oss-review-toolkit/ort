@@ -26,7 +26,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -191,7 +191,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             return PackageReference(
                     Identifier(toString(), node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
                     dependencies = sortedSetOf(),
-                    errors = listOf(Error(source = toString(), message = e.collectMessagesAsString()))
+                    errors = listOf(OrtIssue(source = toString(), message = e.collectMessagesAsString()))
             )
         }
     }

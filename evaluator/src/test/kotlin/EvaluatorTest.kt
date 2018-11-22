@@ -61,8 +61,8 @@ class EvaluatorTest : WordSpec() {
 
             "contain rule errors in the result" {
                 val result = Evaluator(ortResult).run("""
-                    evalErrors += Error(source = "source 1", message = "message 1")
-                    evalErrors += Error(source = "source 2", message = "message 2")
+                    evalErrors += OrtIssue(source = "source 1", message = "message 1")
+                    evalErrors += OrtIssue(source = "source 2", message = "message 2")
                     """.trimIndent())
 
                 result.errors should haveSize(2)

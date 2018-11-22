@@ -44,8 +44,8 @@ class AnalyzerResultTest : WordSpec() {
             scopes = sortedSetOf(scope1, scope2)
     )
 
-    private val error1 = Error(source = "source-1", message = "message-1")
-    private val error2 = Error(source = "source-2", message = "message-2")
+    private val error1 = OrtIssue(source = "source-1", message = "message-1")
+    private val error2 = OrtIssue(source = "source-2", message = "message-2")
 
     private val analyzerResult1 = ProjectAnalyzerResult(project1, sortedSetOf(package1.toCuratedPackage()),
             listOf(error1, error2))
