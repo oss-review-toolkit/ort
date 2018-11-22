@@ -51,7 +51,7 @@ data class AnalyzerResult(
         // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
         // [AnalyzerResult.hasErrors] already contains that information.
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: SortedMap<Identifier, List<Error>> = sortedMapOf(),
+        val errors: SortedMap<Identifier, List<OrtError>> = sortedMapOf(),
 
         /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
@@ -84,7 +84,7 @@ data class AnalyzerResult(
 class AnalyzerResultBuilder {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
-    private val errors = sortedMapOf<Identifier, List<Error>>()
+    private val errors = sortedMapOf<Identifier, List<OrtError>>()
 
     fun build(): AnalyzerResult {
         return AnalyzerResult(projects, packages, errors)
@@ -104,7 +104,7 @@ class AnalyzerResultBuilder {
                         "${it.vcsProcessed.url}/${it.definitionFilePath}"
                     }
 
-                    val error = Error(
+                    val error = OrtError(
                             source = "analyzer",
                             message = "Multiple projects with the same id '${existingProject.id}' found. Not adding " +
                                     "the project defined in '$incomingDefinitionFileUrl' to the analyzer results " +

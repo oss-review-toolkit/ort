@@ -10,5 +10,5 @@ val pkgWithGpl = ortResult.analyzer?.result?.packages?.filter { (pkg, _) ->
 
 // Populate the list of errors to return.
 pkgWithGpl?.forEach { (pkg, _) ->
-    evalErrors += Error(source = pkg.id.toString(), message = "This package is declared under a GPL license.")
+    evalErrors += OrtError(source = pkg.id.toString(), message = "This package is declared under a GPL license.")
 }

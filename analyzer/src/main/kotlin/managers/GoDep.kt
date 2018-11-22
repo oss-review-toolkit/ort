@@ -24,7 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtError
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -89,7 +89,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             val revision = project["revision"]!!
             val version = project["version"]!!
 
-            val errors = mutableListOf<Error>()
+            val errors = mutableListOf<OrtError>()
 
             val vcsProcessed = try {
                 resolveVcsInfo(name, revision, gopath)
@@ -98,7 +98,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
                 log.error { "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}" }
 
-                errors += Error(source = toString(), message = e.collectMessagesAsString())
+                errors += OrtError(source = toString(), message = e.collectMessagesAsString())
                 VcsInfo.EMPTY
             }
 

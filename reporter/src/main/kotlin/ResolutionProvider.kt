@@ -19,7 +19,7 @@
 
 package com.here.ort.reporter
 
-import com.here.ort.model.Error
+import com.here.ort.model.OrtError
 import com.here.ort.model.config.ErrorResolution
 
 /**
@@ -29,5 +29,5 @@ interface ResolutionProvider {
     /**
      * Get all resolutions that match [error].
      */
-    fun getResolutionsFor(error: Error): List<ErrorResolution>
+    fun getResolutionsFor(error: OrtError): List<ErrorResolution>
 }

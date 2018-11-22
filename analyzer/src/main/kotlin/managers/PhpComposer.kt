@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtError
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -176,7 +176,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
                     log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
 
-                    packageInfo.toReference(errors = listOf(Error(source = toString(),
+                    packageInfo.toReference(errors = listOf(OrtError(source = toString(),
                             message = e.collectMessagesAsString())))
                 }
             }

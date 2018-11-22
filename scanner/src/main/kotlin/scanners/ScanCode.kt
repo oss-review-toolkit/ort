@@ -25,7 +25,7 @@ import ch.qos.logback.classic.Level
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Error
+import com.here.ort.model.OrtError
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -242,12 +242,12 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["files_count"].intValue()
         val findings = associateFindings(result)
-        val errors = mutableListOf<Error>()
+        val errors = mutableListOf<OrtError>()
 
         result["files"]?.forEach { file ->
             val path = file["path"].textValue()
             errors += file["scan_errors"].map {
-                Error(source = javaClass.simpleName, message = "${it.textValue()} (File: $path)")
+                OrtError(source = javaClass.simpleName, message = "${it.textValue()} (File: $path)")
             }
         }
 
@@ -258,7 +258,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return
      * false otherwise.
      */
-    internal fun mapUnknownErrors(errors: MutableList<Error>): Boolean {
+    internal fun mapUnknownErrors(errors: MutableList<OrtError>): Boolean {
         if (errors.isEmpty()) {
             return false
         }
@@ -294,7 +294,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return
      * false otherwise.
      */
-    internal fun mapTimeoutErrors(errors: MutableList<Error>): Boolean {
+    internal fun mapTimeoutErrors(errors: MutableList<OrtError>): Boolean {
         if (errors.isEmpty()) {
             return false
         }

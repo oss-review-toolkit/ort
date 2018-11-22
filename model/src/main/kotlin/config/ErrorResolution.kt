@@ -21,7 +21,7 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-import com.here.ort.model.Error
+import com.here.ort.model.OrtError
 
 /**
  * Defines the resolution of an error. This can be used to silence false positives, or errors that have been identified
@@ -50,5 +50,5 @@ data class ErrorResolution(
     /**
      * True if [message] matches the message of [error].
      */
-    fun matches(error: Error) = regex.matches(error.message)
+    fun matches(error: OrtError) = regex.matches(error.message)
 }

@@ -34,11 +34,11 @@ import com.here.ort.model.config.AnalyzerConfigurationDeserializer
 
 private val ortModelModule = SimpleModule("OrtModelModule").apply {
     addDeserializer(AnalyzerConfiguration::class.java, AnalyzerConfigurationDeserializer())
-    addDeserializer(Error::class.java, ErrorDeserializer())
+    addDeserializer(OrtError::class.java, ErrorDeserializer())
     addDeserializer(Identifier::class.java, IdentifierFromStringDeserializer())
     addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
 
-    addSerializer(Error::class.java, ErrorSerializer())
+    addSerializer(OrtError::class.java, ErrorSerializer())
     addSerializer(Identifier::class.java, IdentifierToStringSerializer())
 
     addKeyDeserializer(Identifier::class.java, IdentifierFromStringKeyDeserializer())

@@ -23,5 +23,5 @@ package com.here.ort.model
  * The summary of a single run of the evaluator.
  */
 data class EvaluatorRun(
-        val errors: List<Error>
+        val errors: List<OrtError>
 )

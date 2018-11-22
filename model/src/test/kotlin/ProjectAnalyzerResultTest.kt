@@ -24,14 +24,14 @@ import io.kotlintest.specs.StringSpec
 
 class ProjectAnalyzerResultTest : StringSpec({
     "collectErrors should find all errors" {
-        val error1 = Error(source = "source-1", message = "error-1")
-        val error2 = Error(source = "source-2", message = "error-2")
-        val error3 = Error(source = "source-3", message = "error-3")
-        val error4 = Error(source = "source-4", message = "error-4")
-        val error5 = Error(source = "source-5", message = "error-5")
-        val error6 = Error(source = "source-6", message = "error-6")
-        val error7 = Error(source = "source-7", message = "error-7")
-        val error8 = Error(source = "source-8", message = "error-8")
+        val error1 = OrtError(source = "source-1", message = "error-1")
+        val error2 = OrtError(source = "source-2", message = "error-2")
+        val error3 = OrtError(source = "source-3", message = "error-3")
+        val error4 = OrtError(source = "source-4", message = "error-4")
+        val error5 = OrtError(source = "source-5", message = "error-5")
+        val error6 = OrtError(source = "source-6", message = "error-6")
+        val error7 = OrtError(source = "source-7", message = "error-7")
+        val error8 = OrtError(source = "source-8", message = "error-8")
 
         val result = ProjectAnalyzerResult(
                 project = Project(

@@ -34,7 +34,7 @@ import java.time.Instant
 /**
  * An error that occured while executing ORT.
  */
-data class Error(
+data class OrtError(
         /**
          * The timestamp of the error.
          */
@@ -53,21 +53,21 @@ data class Error(
     override fun toString() = "${if (timestamp == Instant.EPOCH) "n/a" else timestamp.toString()}: $source - $message"
 }
 
-class ErrorDeserializer : StdDeserializer<Error>(Error::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Error {
+class ErrorDeserializer : StdDeserializer<OrtError>(OrtError::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): OrtError {
         val node = p.codec.readTree<JsonNode>(p)
         return if (node.isTextual) {
             // For backward-compatibility if only an error string is specified.
-            Error(Instant.EPOCH, "", node.textValue())
+            OrtError(Instant.EPOCH, "", node.textValue())
         } else {
-            Error(Instant.parse(node.get("timestamp").textValue()), node.get("source").textValue(),
+            OrtError(Instant.parse(node.get("timestamp").textValue()), node.get("source").textValue(),
                     node.get("message").textValue())
         }
     }
 }
 
-class ErrorSerializer : StdSerializer<Error>(Error::class.java) {
-    override fun serialize(value: Error, gen: JsonGenerator, provider: SerializerProvider) {
+class ErrorSerializer : StdSerializer<OrtError>(OrtError::class.java) {
+    override fun serialize(value: OrtError, gen: JsonGenerator, provider: SerializerProvider) {
         gen.writeStartObject()
         gen.writeObjectField("timestamp", value.timestamp)
         gen.writeStringField("source", value.source)

@@ -21,7 +21,7 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.Error
+import com.here.ort.model.OrtError
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.utils.isValidUrl
@@ -340,7 +340,7 @@ class StaticHtmlReporter : TableReporter() {
                 }
             }
 
-    private fun createEvaluatorTable(evaluatorErrors: List<Error>) =
+    private fun createEvaluatorTable(evaluatorErrors: List<OrtError>) =
             buildString {
                 append("<h2><a id=\"license-check-results\"></a>License Check Results</h2>")
 
