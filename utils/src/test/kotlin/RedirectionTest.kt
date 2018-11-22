@@ -23,7 +23,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class RedirectionTest : WordSpec({
-    "redirecting output" should {
+    "Redirecting output" should {
         // Use a relatively large number of lines that results in more than 64k to be written to test against the pipe
         // buffer limit on Linux, see https://unix.stackexchange.com/a/11954/53328.
         val numberOfLines = 10000
