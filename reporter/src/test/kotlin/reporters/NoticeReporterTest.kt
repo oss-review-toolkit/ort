@@ -95,5 +95,20 @@ class NoticeReporterTest : WordSpec({
 
             actualText shouldBe expectedText
         }
+
+        "return the input as-is for an empty post-processing script" {
+            val expectedResultFile = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE")
+            val expectedText = expectedResultFile.readText()
+            val scanRecordFile = File("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+            val ortResult = scanRecordFile.readValue<OrtResult>()
+            val outputDir = createTempDir().also { it.deleteOnExit() }
+
+            NoticeReporter().generateReport(ortResult, DefaultResolutionProvider(), outputDir, "")
+
+            val resultFile = File(outputDir, "NOTICE")
+            val actualText = resultFile.readText()
+
+            actualText shouldBe expectedText
+        }
     }
 })
