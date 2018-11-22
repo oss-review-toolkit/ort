@@ -24,6 +24,7 @@ import com.here.ort.model.Repository
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.RepositoryConfiguration
 
+import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -52,6 +53,12 @@ class EvaluatorTest : WordSpec() {
         }
 
         "evaluate" should {
+            "return no errors for an empty script" {
+                val result = Evaluator(ortResult).run("")
+
+                result.errors should beEmpty()
+            }
+
             "contain rule errors in the result" {
                 val result = Evaluator(ortResult).run("""
                     evalErrors += Error(source = "source 1", message = "message 1")
