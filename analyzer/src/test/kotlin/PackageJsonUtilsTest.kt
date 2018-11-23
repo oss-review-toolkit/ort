@@ -19,9 +19,8 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.managers.PackageJsonUtils
-import com.here.ort.analyzer.managers.PackageJsonUtils.Companion.mapDefinitionFilesForNpm
-import com.here.ort.analyzer.managers.PackageJsonUtils.Companion.mapDefinitionFilesForYarn
+import com.here.ort.analyzer.PackageJsonUtils.Companion.mapDefinitionFilesForNpm
+import com.here.ort.analyzer.PackageJsonUtils.Companion.mapDefinitionFilesForYarn
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
