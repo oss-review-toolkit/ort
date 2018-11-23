@@ -34,8 +34,6 @@ class NoticeReporter : AbstractNoticeReporter() {
 
         val licenseFindings = sortedMapOf<String, SortedSet<String>>()
 
-        // TODO: Decide whether we want to merge the list of detected licenses with declared licenses (which do not come
-        // with a copyright).
         scanRecord.scanResults.forEach { container ->
             if (excludes == null || !excludes.isPackageExcluded(container.id, analyzerResult)) {
                 container.results.forEach { result ->
