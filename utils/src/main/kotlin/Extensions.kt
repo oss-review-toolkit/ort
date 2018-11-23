@@ -212,7 +212,7 @@ fun String.isValidUri() =
         }
 
 /**
- * True if the string is a valid URL, false otherwise.
+ * True if the string is a valid [URL], false otherwise.
  */
 fun String.isValidUrl() =
         try {
