@@ -19,16 +19,16 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.LicenseMapping
 
-import java.util.SortedMap
 import java.util.SortedSet
 
 class NoticeOnlyDeclaredReporter : AbstractNoticeReporter() {
     override val noticeFileName = "NOTICE_ONLY_DECLARED"
 
-    override fun getLicenseFindings(ortResult: OrtResult): SortedMap<String, SortedSet<String>> {
+    override fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap {
         val excludes = ortResult.repository.config.excludes
         val analyzerResult = ortResult.analyzer!!.result
         val scanRecord = ortResult.scanner!!.results

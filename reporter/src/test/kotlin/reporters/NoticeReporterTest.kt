@@ -102,7 +102,7 @@ class NoticeReporterTest : WordSpec() {
 
                 val postProcessingScript = """
                     headers = listOf("Header 1\n", "Header 2\n")
-                    findings = noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() }
+                    findings = noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() }.toSortedMap()
                     footers = listOf("Footer 1\n", "Footer 2\n")
                 """.trimIndent()
 

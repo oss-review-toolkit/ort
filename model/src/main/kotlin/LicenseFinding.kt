@@ -21,8 +21,20 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 
+import java.util.SortedMap
 import java.util.SortedSet
 
+/**
+ * A map that associates licenses with their belonging copyrights. This is provided mostly for convenience as creating
+ * a similar collection based on the [LicenseFinding] class is a bit cumbersome due to its required layout to support
+ * legacy serialized formats.
+ */
+typealias LicenseFindingsMap = SortedMap<String, SortedSet<String>>
+
+/**
+ * A class to store a [license] finding along with its belonging [copyrights]. To support deserializing older versions
+ * of this class which did not include the copyrights a secondary constructor is only taking a [licenseName].
+ */
 data class LicenseFinding @JsonCreator constructor(
         val license: String,
         val copyrights: SortedSet<String>
