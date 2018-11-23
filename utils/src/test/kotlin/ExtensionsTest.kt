@@ -216,4 +216,14 @@ class ExtensionsTest : WordSpec({
             map.zipWithDefault(emptyMap(), 1, operation) shouldBe mapOf("1" to 2)
         }
     }
+
+    "String.isValidUrl" should {
+        "return true for a valid URL" {
+            "https://github.com/heremaps/oss-review-toolkit".isValidUrl() shouldBe true
+        }
+
+        "return false for an invalid URL" {
+            "illegal://github.com/heremaps/oss-review-toolkit".isValidUrl() shouldBe false
+        }
+    }
 })
