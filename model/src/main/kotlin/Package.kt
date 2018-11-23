@@ -127,6 +127,9 @@ data class Package(
     /**
      * Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [errors].
      */
-    fun toReference(dependencies: SortedSet<PackageReference> = sortedSetOf(), errors: List<OrtIssue> = emptyList()) =
-            PackageReference(id, dependencies, errors)
+    fun toReference(
+            linkage: PackageLinkage = PackageLinkage.DYNAMIC,
+            dependencies: SortedSet<PackageReference> = sortedSetOf(),
+            errors: List<OrtIssue> = emptyList()
+    ) = PackageReference(id, linkage, dependencies, errors)
 }

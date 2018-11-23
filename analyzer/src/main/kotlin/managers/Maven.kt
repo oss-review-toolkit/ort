@@ -180,7 +180,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 }
             }.toSortedSet()
 
-            return pkg.toReference(dependencies)
+            return pkg.toReference(dependencies = dependencies)
         } catch (e: ProjectBuildingException) {
             e.showStackTrace()
 
