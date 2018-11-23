@@ -38,7 +38,7 @@ class ExtensionsTest : WordSpec({
     }
 
     "File.safeMkDirs()" should {
-        "should succeed if directory already exists" {
+        "succeed if directory already exists" {
             val directory = createTempDir()
             directory.deleteOnExit()
 
@@ -47,7 +47,7 @@ class ExtensionsTest : WordSpec({
             directory.isDirectory shouldBe true // should still be a directory afterwards
         }
 
-        "should succeed if directory could be created" {
+        "succeed if directory could be created" {
             val parent = createTempDir()
             parent.deleteOnExit()
             val child = File(parent, "child")
@@ -58,7 +58,7 @@ class ExtensionsTest : WordSpec({
             child.isDirectory shouldBe true
         }
 
-        "should succeed if file parent does not yet exist" {
+        "succeed if file parent does not yet exist" {
             // Test case for an unexpected behaviour of File.mkdirs() which returns false for
             // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
             // directory was successfully created.
@@ -76,7 +76,7 @@ class ExtensionsTest : WordSpec({
             child.isDirectory shouldBe true
         }
 
-        "should throw exception if file is not a directory" {
+        "throw exception if file is not a directory" {
             val file = createTempFile()
             file.deleteOnExit()
 
