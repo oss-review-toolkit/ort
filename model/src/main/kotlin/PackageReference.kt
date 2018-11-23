@@ -34,6 +34,14 @@ data class PackageReference(
         val id: Identifier,
 
         /**
+         * The type of linkage used for the referred package from its dependent package. As most of our supported
+         * [PackageManager]s / languages only support dynamic linking or at least default to it, also use that as the
+         * default value here to not blow up our result files.
+         */
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
+
+        /**
          * The list of references to packages this package depends on. Note that this list depends on the scope in
          * which this package reference is used.
          */

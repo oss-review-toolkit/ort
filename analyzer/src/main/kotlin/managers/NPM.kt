@@ -416,15 +416,16 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 }
             }
 
-            return packageInfo.toReference(dependencies)
+            return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
             log.warn {
                 "Could not find package file for '$name' anywhere in '${rootModulesDir.absolutePath}'. This might be " +
                         "fine if the module was not installed because it is specific to a different platform."
             }
 
-            return PackageReference(Identifier(toString(), "", name, ""), sortedSetOf(),
-                    listOf(OrtIssue(source = toString(), message = "Package '$name' was not installed.")))
+            val id = Identifier(toString(), "", name, "")
+            val issue = OrtIssue(source = toString(), message = "Package '$name' was not installed.")
+            return PackageReference(id, errors = listOf(issue))
         } else {
             // Skip the package name directory when going up.
             var parentModulesDir = startModulesDir.parentFile.parentFile

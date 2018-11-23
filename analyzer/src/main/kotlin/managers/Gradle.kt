@@ -215,7 +215,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
         }
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-        return PackageReference(Identifier("Maven", dependency.groupId, dependency.artifactId,
-                dependency.version), transitiveDependencies.toSortedSet(), errors)
+        val id = Identifier("Maven", dependency.groupId, dependency.artifactId, dependency.version)
+        return PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = errors)
     }
 }

@@ -26,12 +26,12 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class PackageReferenceTest : WordSpec() {
-    private val node1_1_1 = PackageReference(Identifier.fromString("::node1_1_1"), sortedSetOf())
-    private val node1_1 = PackageReference(Identifier.fromString("::node1_1"), sortedSetOf(node1_1_1))
-    private val node1_2 = PackageReference(Identifier.fromString("::node1_2"), sortedSetOf())
-    private val node1 = PackageReference(Identifier.fromString("::node1"), sortedSetOf(node1_1, node1_2))
-    private val node2 = PackageReference(Identifier.fromString("::node2"), sortedSetOf())
-    private val root = PackageReference(Identifier.fromString("::root"), sortedSetOf(node1, node2))
+    private val node1_1_1 = PackageReference(Identifier.fromString("::node1_1_1"))
+    private val node1_1 = PackageReference(Identifier.fromString("::node1_1"), dependencies = sortedSetOf(node1_1_1))
+    private val node1_2 = PackageReference(Identifier.fromString("::node1_2"))
+    private val node1 = PackageReference(Identifier.fromString("::node1"), dependencies = sortedSetOf(node1_1, node1_2))
+    private val node2 = PackageReference(Identifier.fromString("::node2"))
+    private val root = PackageReference(Identifier.fromString("::root"), dependencies = sortedSetOf(node1, node2))
 
     init {
         "traverse" should {
