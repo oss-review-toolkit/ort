@@ -201,6 +201,17 @@ fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT)
         }
 
 /**
+ * True if the string is a valid [URI], false otherwise.
+ */
+fun String.isValidUri() =
+        try {
+            URI(this)
+            true
+        } catch (e: URISyntaxException) {
+            false
+        }
+
+/**
  * True if the string is a valid URL, false otherwise.
  */
 fun String.isValidUrl() =
