@@ -23,10 +23,10 @@ import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
 import com.fasterxml.jackson.databind.JsonNode
-
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
@@ -57,7 +57,6 @@ import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 import java.time.Instant
 import java.util.regex.Pattern
-import java.util.SortedMap
 import java.util.SortedSet
 
 import kotlin.math.absoluteValue
@@ -374,7 +373,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      * Associate copyright findings to license findings within a single file.
      */
     private fun associateFileFindings(licenses: JsonNode, copyrights: JsonNode, rootLicense: String = ""):
-            SortedMap<String, SortedSet<String>> {
+            LicenseFindingsMap {
         val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
 
         // While ScanCode 2.9.2 was still using "statements", version 2.97 is using "value".

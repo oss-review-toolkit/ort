@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.LicenseMapping
@@ -32,15 +33,14 @@ import com.here.ort.utils.spdx.getLicenseText
 import com.here.ort.utils.zipWithDefault
 
 import java.io.File
-import java.util.SortedMap
 import java.util.SortedSet
 
-private fun Map<String, SortedSet<String>>.filterBy(copyrightGarbage: CopyrightGarbage) =
+private fun LicenseFindingsMap.filterBy(copyrightGarbage: CopyrightGarbage) =
         mapValues { (_, copyrights) ->
             copyrights.filterNot {
                 it in copyrightGarbage.items
             }.toSortedSet()
-        }
+        }.toSortedMap()
 
 abstract class AbstractNoticeReporter : Reporter() {
     companion object {
@@ -49,7 +49,7 @@ abstract class AbstractNoticeReporter : Reporter() {
 
     data class NoticeReport(
             val headers: List<String>,
-            val findings: Map<String, SortedSet<String>>,
+            val findings: LicenseFindingsMap,
             val footers: List<String>
     )
 
@@ -101,7 +101,7 @@ abstract class AbstractNoticeReporter : Reporter() {
         val findings = spdxLicenseFindings.filterNot { (license, _) ->
             // For now, just skip license references for which SPDX has no license text.
             license.startsWith("LicenseRef-")
-        }
+        }.toSortedMap()
 
         val header = if (findings.isEmpty()) {
             "This project neither contains or depends on any third-party software components.\n"
@@ -119,8 +119,7 @@ abstract class AbstractNoticeReporter : Reporter() {
         return outputFile
     }
 
-    private fun mapSpdxLicenses(licenseFindings: Map<String, Set<String>>)
-            : SortedMap<String, SortedSet<String>> {
+    private fun mapSpdxLicenses(licenseFindings: LicenseFindingsMap): LicenseFindingsMap {
         var result = mapOf<String, SortedSet<String>>()
 
         licenseFindings.forEach { finding ->
@@ -179,5 +178,5 @@ abstract class AbstractNoticeReporter : Reporter() {
 
     abstract val noticeFileName: String
 
-    abstract fun getLicenseFindings(ortResult: OrtResult): SortedMap<String, SortedSet<String>>
+    abstract fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap
 }
