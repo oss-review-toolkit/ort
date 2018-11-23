@@ -23,6 +23,12 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
+// A custom value filter for [PackageLinkage] to work around
+// https://github.com/FasterXML/jackson-module-kotlin/issues/193.
+class PackageLinkageValueFilter {
+    override fun equals(other: Any?) = other == PackageLinkage.DYNAMIC
+}
+
 /**
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
  * references that are dependencies of the package.
@@ -34,6 +40,14 @@ data class PackageReference(
          * The identifier of the package.
          */
         val id: Identifier,
+
+        /**
+         * The type of linkage used for the referred package from its dependent package. As most of our supported
+         * [PackageManager]s / languages only support dynamic linking or at least default to it, also use that as the
+         * default value here to not blow up our result files.
+         */
+        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
+        val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
         /**
          * The list of references to packages this package depends on. Note that this list depends on the scope in

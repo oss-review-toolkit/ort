@@ -30,7 +30,7 @@ class AnalyzerResultTest : WordSpec() {
     private val package3 = Package.EMPTY.copy(id = Identifier("provider-3", "namespace-3", "package-3", "version-3"))
 
     private val pkgRef1 = package1.toReference()
-    private val pkgRef2 = package2.toReference(sortedSetOf(package3.toReference()))
+    private val pkgRef2 = package2.toReference(dependencies = sortedSetOf(package3.toReference()))
 
     private val scope1 = Scope("scope-1", sortedSetOf(pkgRef1))
     private val scope2 = Scope("scope-2", sortedSetOf(pkgRef2))

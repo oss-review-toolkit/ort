@@ -166,7 +166,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
                     parseDependency(workingDir, projectId, it, packages, transitiveDependencies, errors)
                 }
 
-                scopeDependencies += PackageReference(gemId, transitiveDependencies.toSortedSet())
+                scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies.toSortedSet())
             }
         } catch (e: Exception) {
             e.showStackTrace()
