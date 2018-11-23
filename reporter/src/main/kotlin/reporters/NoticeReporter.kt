@@ -35,10 +35,10 @@ class NoticeReporter : AbstractNoticeReporter() {
         val licenseFindings = sortedMapOf<String, SortedSet<String>>()
 
         scanRecord.scanResults.forEach { container ->
-            if (excludes == null || !excludes.isPackageExcluded(container.id, analyzerResult)) {
+            if (excludes?.isPackageExcluded(container.id, analyzerResult) != true) {
                 container.results.forEach { result ->
-                    result.summary.licenseFindings.forEach { licenseFinding ->
-                        licenseFindings.getOrPut(licenseFinding.license) { sortedSetOf() } += licenseFinding.copyrights
+                    result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
+                        licenseFindings.getOrPut(license) { sortedSetOf() } += copyrights
                     }
                 }
             }
