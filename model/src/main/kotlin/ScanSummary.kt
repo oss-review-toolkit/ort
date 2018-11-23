@@ -63,5 +63,5 @@ data class ScanSummary(
         val errors: List<OrtIssue> = emptyList()
 ) {
     @get:JsonIgnore
-    val licenses: SortedSet<String> = licenseFindings.map { it.license }.toSortedSet()
+    val licenses = licenseFindings.map { it.license }.toSortedSet()
 }
