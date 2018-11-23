@@ -24,7 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.ProjectExclude
-import com.here.ort.utils.isValidUrl
+import com.here.ort.utils.isValidUri
 import com.here.ort.utils.log
 
 import java.awt.Color
@@ -169,7 +169,7 @@ class ExcelReporter : TableReporter() {
             sheet.createRow(++currentRow).apply {
                 CellUtil.createCell(this, 0, "$key:", defaultStyle)
                 CellUtil.createCell(this, 1, value, defaultStyle).apply {
-                    if (value.isValidUrl()) {
+                    if (value.isValidUri()) {
                         hyperlink = creationHelper.createHyperlink(HyperlinkType.URL).apply {
                             address = value
                         }
