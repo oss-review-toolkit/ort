@@ -26,9 +26,9 @@ import com.here.ort.utils.ScriptRunner
 
 class Evaluator(ortResult: OrtResult) : ScriptRunner() {
     override val preface = """
-            import com.here.ort.model.OrtIssue
-            import com.here.ort.model.OrtResult
-            import com.here.ort.model.Package
+            import com.here.ort.model.*
+
+            import java.util.*
 
             // Input:
             val ortResult = bindings["ortResult"] as OrtResult
