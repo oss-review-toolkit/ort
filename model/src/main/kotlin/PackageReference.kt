@@ -66,13 +66,15 @@ data class PackageReference(
         val data: CustomData = emptyMap()
 ) : Comparable<PackageReference> {
     /**
-     * Return the set of identifiers for all packages references this package reference depends on.
+     * Return the set of [PackageReference]s this [PackageReference] transitively depends on. If [includeErroneous] is
+     * true, [PackageReference]s with errors (but not their dependencies without errors) are excluded, otherwise they
+     * are included.
      */
-    fun collectDependencyIds(includeErroneous: Boolean = true): SortedSet<Identifier> =
-            dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
-                ids.also {
-                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
-                    it += ref.collectDependencyIds(includeErroneous)
+    fun collectDependencies(includeErroneous: Boolean = true): SortedSet<PackageReference> =
+            dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+                refs.also {
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref
+                    it += ref.collectDependencies(includeErroneous)
                 }
             }
 

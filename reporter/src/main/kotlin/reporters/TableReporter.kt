@@ -264,7 +264,10 @@ abstract class TableReporter : Reporter() {
                 exclude.takeIf { it.isWholeProjectExcluded }
             }
 
-            val tableRows = (listOf(project.id) + project.collectDependencyIds()).map { id ->
+            val allIds = sortedSetOf(project.id)
+            project.collectDependencies().mapTo(allIds) { it.id }
+
+            val tableRows = allIds.map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.let { scopes ->

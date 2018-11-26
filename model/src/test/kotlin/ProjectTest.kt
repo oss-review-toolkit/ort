@@ -25,19 +25,19 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class ProjectTest : StringSpec({
-    "collectDependencyIds contains all dependencies" {
+    "collectDependencies contains all dependencies" {
         val expectedDependencies = listOf(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-lang3:3.5",
                 "Maven:org.apache.commons:commons-text:1.1",
                 "Maven:org.apache.struts:struts2-assembly:2.5.14.1",
                 "Maven:org.hamcrest:hamcrest-core:1.3"
-        ).map { Identifier.fromString(it) }.toSortedSet()
+        )
 
         val analyzerResultsFile =
                 File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
         val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
-        project.collectDependencyIds() shouldBe expectedDependencies
+        project.collectDependencies().map { it.id.toString() } shouldBe expectedDependencies
     }
 })

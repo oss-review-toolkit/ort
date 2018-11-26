@@ -89,9 +89,13 @@ data class Project(
         )
     }
 
-    fun collectDependencyIds(includeErroneous: Boolean = true) =
-            scopes.fold(sortedSetOf<Identifier>()) { ids, scope ->
-                ids.also { it += scope.collectDependencyIds(includeErroneous) }
+    /**
+     * Return the set of [PackageReference]s in this [Project]. If [includeErroneous] is true, [PackageReference]s with
+     * errors (but not their dependencies without errors) are excluded, otherwise they are included.
+     */
+    fun collectDependencies(includeErroneous: Boolean = true) =
+            scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
+                refs.also { it += scope.collectDependencies(includeErroneous) }
             }
 
     /**
