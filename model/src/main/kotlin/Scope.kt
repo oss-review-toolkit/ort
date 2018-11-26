@@ -72,8 +72,5 @@ data class Scope(
     /**
      * Return whether the package identified by [pkgId] is contained as a (transitive) dependency in this scope.
      */
-    operator fun contains(pkgId: Identifier) =
-            dependencies.find { pkgRef ->
-                pkgRef.id == pkgId || pkgRef.dependsOn(pkgId)
-            } != null
+    operator fun contains(pkgId: Identifier) = dependencies.any { it.id == pkgId || it.dependsOn(pkgId) }
 }
