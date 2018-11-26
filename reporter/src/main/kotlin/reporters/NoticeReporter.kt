@@ -35,7 +35,7 @@ class NoticeReporter : AbstractNoticeReporter() {
         val licenseFindings = sortedMapOf<String, SortedSet<String>>()
 
         scanRecord.scanResults.forEach { container ->
-            if (excludes?.isPackageExcluded(container.id, analyzerResult) != true) {
+            if (excludes?.isExcluded(container.id, analyzerResult) != true) {
                 container.results.forEach { result ->
                     result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
                         licenseFindings.getOrPut(license) { sortedSetOf() } += copyrights
