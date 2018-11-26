@@ -27,6 +27,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -115,7 +116,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
             packages += pkg
 
-            packageRefs += pkg.toReference(errors = errors)
+            packageRefs += pkg.toReference(linkage = PackageLinkage.STATIC, errors = errors)
         }
 
         val scope = Scope("default", packageRefs.toSortedSet())
