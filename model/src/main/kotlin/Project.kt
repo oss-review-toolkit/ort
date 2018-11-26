@@ -90,12 +90,14 @@ data class Project(
     }
 
     /**
-     * Return the set of [PackageReference]s in this [Project]. If [includeErroneous] is true, [PackageReference]s with
-     * errors (but not their dependencies without errors) are excluded, otherwise they are included.
+     * Return the set of [PackageReference]s in this [Project], up to and including a depth of [maxDepth] where counting
+     * starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
+     * depth. If [includeErroneous] is true, [PackageReference]s with errors (but not their dependencies without errors)
+     * are excluded, otherwise they are included.
      */
-    fun collectDependencies(includeErroneous: Boolean = true) =
+    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
             scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
-                refs.also { it += scope.collectDependencies(includeErroneous) }
+                refs.also { it += scope.collectDependencies(maxDepth, includeErroneous) }
             }
 
     /**

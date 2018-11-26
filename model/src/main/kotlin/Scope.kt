@@ -52,14 +52,18 @@ data class Scope(
         val data: CustomData = emptyMap()
 ) : Comparable<Scope> {
     /**
-     * Return the set of [PackageReference]s in this [Scope]. If [includeErroneous] is true, [PackageReference]s with
-     * errors (but not their dependencies without errors) are excluded, otherwise they are included.
+     * Return the set of [PackageReference]s in this [Scope], up to and including a depth of [maxDepth] where counting
+     * starts at 0 (for the [Scope] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
+     * depth. If [includeErroneous] is true, [PackageReference]s with errors (but not their dependencies without errors)
+     * are excluded, otherwise they are included.
      */
-    fun collectDependencies(includeErroneous: Boolean = true) =
+    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
             dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
                 refs.also {
-                    if (ref.errors.isEmpty() || includeErroneous) it += ref
-                    it += ref.collectDependencies(includeErroneous)
+                    if (maxDepth != 0) {
+                        if (ref.errors.isEmpty() || includeErroneous) it += ref
+                        it += ref.collectDependencies(maxDepth - 1, includeErroneous)
+                    }
                 }
             }
 
