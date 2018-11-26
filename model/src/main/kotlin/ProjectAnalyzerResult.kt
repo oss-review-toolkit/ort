@@ -49,7 +49,7 @@ data class ProjectAnalyzerResult(
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.
         val packageIds = packages.map { it.pkg.id }
-        val referencedIds = project.collectDependencies(false).map { it.id }
+        val referencedIds = project.collectDependencies(includeErroneous = false).map { it.id }
 
         // Note that not all packageIds have to be contained in the referencedIds, e.g. for NPM optional dependencies.
         require(packageIds.containsAll(referencedIds)) {
