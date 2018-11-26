@@ -58,6 +58,25 @@ data class OrtResult(
         val data: CustomData = emptyMap()
 ) {
     /**
+     * Return all dependencies of the given [pkg], up to and including a depth of [maxDepth] where counting starts at 0
+     * (for the [Package] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the depth.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun collectAllDependencies(pkg: Package, maxLevel: Int = -1): SortedSet<PackageReference> {
+        val dependencies = sortedSetOf<PackageReference>()
+
+        analyzer?.result?.apply {
+            projects.forEach { project ->
+                project.findReferences(pkg.id).forEach { ref ->
+                    dependencies += ref.collectDependencies(maxLevel)
+                }
+            }
+        }
+
+        return dependencies
+    }
+
+    /**
      * Return all projects and packages that are likely to belong to the vendor of the given [name]. If [omitExcluded]
      * is set to true, excluded projects / packages are omitted from the result. Projects are converted to packages in
      * the result. If no analyzer result is present an empty set is returned.
