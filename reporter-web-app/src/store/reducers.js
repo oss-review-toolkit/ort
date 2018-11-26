@@ -1,7 +1,5 @@
 import { convertToRenderFormat } from '../utils';
 
-// FIXME const protobuf = require('protobufjs');
-
 // Parse JSON report data embedded in HTML page
 const reportDataNode = document.querySelector('script[id="ort-report-data"]');
 const reportDataText = reportDataNode ? reportDataNode.textContent : undefined;
