@@ -51,11 +51,15 @@ data class Scope(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) : Comparable<Scope> {
-    fun collectDependencyIds(includeErroneous: Boolean = true) =
-            dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
-                ids.also {
-                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
-                    it += ref.collectDependencyIds(includeErroneous)
+    /**
+     * Return the set of [PackageReference]s in this [Scope]. If [includeErroneous] is true, [PackageReference]s with
+     * errors (but not their dependencies without errors) are excluded, otherwise they are included.
+     */
+    fun collectDependencies(includeErroneous: Boolean = true) =
+            dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+                refs.also {
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref
+                    it += ref.collectDependencies(includeErroneous)
                 }
             }
 
