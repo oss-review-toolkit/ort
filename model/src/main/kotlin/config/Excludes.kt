@@ -56,6 +56,16 @@ data class Excludes(
                     (findProjectExclude(project)?.scopes?.filter { it.matches(scope.name) } ?: emptyList())
 
     /**
+     * Checks if [id] references a [Package] or a [Project] and calls the respective [isPackageExcluded] or
+     * [isProjectExcluded].
+     */
+    fun isExcluded(id: Identifier, analyzerResult: AnalyzerResult) =
+            analyzerResult.projects.find { it.id == id }?.let {
+                // An excluded project could still be included as a dependency of another no-excluded project.
+                isProjectExcluded(it) && isPackageExcluded(id, analyzerResult)
+            } ?: isPackageExcluded(id, analyzerResult)
+
+    /**
      * True if all occurrences of the package identified by [id] in the [analyzerResult] are excluded by this [Excludes]
      * configuration.
      */
