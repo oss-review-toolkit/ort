@@ -47,3 +47,5 @@ task build(type: YarnTask, dependsOn: install) {
 
     outputs.dir 'build'
 }
+
+task check(dependsOn: [build, yarn_lint])
