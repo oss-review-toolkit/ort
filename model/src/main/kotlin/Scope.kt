@@ -73,7 +73,7 @@ data class Scope(
     override fun compareTo(other: Scope) = compareValuesBy(this, other) { it.name }
 
     /**
-     * Return whether the package identified by [pkgId] is contained as a (transitive) dependency in this scope.
+     * Return whether the package identified by [id] is contained as a (transitive) dependency in this scope.
      */
-    operator fun contains(pkgId: Identifier) = dependencies.any { it.id == pkgId || it.dependsOn(pkgId) }
+    operator fun contains(id: Identifier) = dependencies.any { it.id == id || it.dependsOn(id) }
 }
