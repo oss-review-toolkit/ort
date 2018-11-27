@@ -129,6 +129,11 @@ data class Project(
     override fun compareTo(other: Project) = id.compareTo(other.id)
 
     /**
+     * Return all references to [id] as a dependency in this project.
+     */
+    fun findReferences(id: Identifier) = scopes.flatMap { it.findReferences(id) }
+
+    /**
      * Return a [Package] representation of this [Project].
      */
     fun toPackage() = Package(
