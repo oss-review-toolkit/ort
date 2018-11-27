@@ -76,4 +76,10 @@ data class Scope(
      * Return whether the package identified by [id] is contained as a (transitive) dependency in this scope.
      */
     operator fun contains(id: Identifier) = dependencies.any { it.id == id || it.dependsOn(id) }
+
+    /**
+     * Return all references to [id] as a dependency in this scope.
+     */
+    fun findReferences(id: Identifier) =
+            dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 }
