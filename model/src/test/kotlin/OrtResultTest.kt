@@ -26,7 +26,7 @@ import java.io.File
 
 class OrtResultTest : WordSpec({
     "collectAllDependencies" should {
-        "be able to get all direct dependencies a package" {
+        "be able to get all direct dependencies of a package" {
             val expectedDependencies = listOf(
                     "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
                     "Maven:com.typesafe:ssl-config-core_2.12:0.2.2",
