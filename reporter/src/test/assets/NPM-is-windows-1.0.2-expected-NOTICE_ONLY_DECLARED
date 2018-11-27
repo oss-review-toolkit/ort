@@ -84,18 +84,14 @@ limitations under the License.
 
 ----
 
-Copyright (c) 2007, Parakey Inc.
 Copyright (c) 2008 Ariel Flesler
-Copyright (c) 2009-2011, Mozilla Foundation and contributors
-Copyright (c) 2009-2015, Kevin Decker <kpdecker@gmail.com>
-Copyright 2009, Microsoft Corporation.
-Copyright 2009, The Dojo Foundation
-Copyright 2009-2011 Mozilla Foundation and contributors
-Copyright 2011 Mozilla Foundation and contributors
+Copyright (c) 2009-2015 Kevin Decker <kpdecker@gmail.com>
+Copyright 2009 Microsoft Corporation.
+Copyright (c) 2009-2011 Mozilla Foundation and contributors
+Copyright 2009-2012, 2014 Mozilla Foundation and contributors
+Copyright (c) 2007 Parakey Inc.
 Copyright 2011 The Closure Compiler
-Copyright 2011, The Dojo Foundation
-Copyright 2012 Mozilla Foundation and contributors
-Copyright 2014 Mozilla Foundation and contributors
+Copyright 2009, 2011 The Dojo Foundation
 
 Copyright (c) <year> <owner> . All rights reserved.
 
@@ -126,142 +122,92 @@ THE SOFTWARE IS PROVIDED "AS IS" AND ISC DISCLAIMS ALL WARRANTIES WITH REGARD TO
 
 ----
 
-(c) (c) (tm)
-(c) 2005-2009 Sam Stephenson
-(c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
-(c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Underscore
-(c) 2009-2015, Jeremy Ashkenas.
-(c) 2010 Esa-Matti Suuronen
-(c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Backbone
-(c) 2010-2015 Google, Inc. http://angularjs.org
-(c) 2012-2014 http://kitcambridge.be/' Kit Cambridge
-(c) 2012-2015, The Dojo Foundation.copyright
-(c) Sam Verschueren (https://github.com/SamVerschueren)
-(c) Sindre Sorhus (http://sindresorhus.com)
-(c) Sindre Sorhus (https://sindresorhus.com)
-(c) Vasily Polovnyov <vast@whiteants.net>
-(c) copyright 2010-2013 B Cavalier & J Hann
 Code copyright 2012-2018 AJ ONeal
-Copyright (c) 2008-2009, Robert Kieffer
-Copyright (c) 2009 TJ Holowaychuk <tj@vision-media.ca>
-Copyright (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-Copyright (c) 2010-2011 Marcus Westin
-Copyright (c) 2010-2014 Jeremy Ashkenas, DocumentCloud
-Copyright (c) 2010-2014, The Dojo Foundation
-Copyright (c) 2011 Esa-Matti Suuronen esa-matti@suuronen.org
-Copyright (c) 2011 TJ Holowaychuk <tj@vision-media.ca>
-Copyright (c) 2011 by fent
-Copyright (c) 2011-2013, Christopher Jeffrey. (MIT Licensed) https://github.com/chjj/marked
-Copyright (c) 2011-2015 Paul Vorbach <paul@vorba.ch>
-Copyright (c) 2011-2016 Paul Vorbach (https://paul.vorba.ch/) and contributors (https://github.com/pvorb/clone/graphs/contributors).
-Copyright (c) 2011-2017 JS Foundation
-Copyright (c) 2012 Vitaly Puzrin (https://github.com/puzrin).
-Copyright (c) 2012 by Vitaly Puzrin
-Copyright (c) 2012-2014 Kit Cambridge. http://kitcambridge.be
-Copyright (c) 2012-2014 Raynos.
-Copyright (c) 2013 Blaine Bublitz <blaine.bublitz@gmail.com> , Eric Schoffstall <yo@contra.io> and other contributors
-Copyright (c) 2013 Julian Gruber <julian@juliangruber.com>
-Copyright (c) 2013 Rod Vagg rvagg (https://twitter.com/rvagg)
-Copyright (c) 2013 Simon Lydell
-Copyright (c) 2013-2017, Jon Schlinkert.
-Copyright (c) 2014 Blaine Bublitz <blaine.bublitz@gmail.com> , Eric Schoffstall <yo@contra.io> and other contributors
-Copyright (c) 2014 Component
-Copyright (c) 2014 Gregory Jacobs (http://greg-jacobs.com)
-Copyright (c) 2014 Hugh Kennedy
-Copyright (c) 2014 Jon Schlinkert, Vitaly Puzrin.
-Copyright (c) 2014 Jon Schlinkert, contributors.
-Copyright (c) 2014 Nathan Rajlich <nathan@tootallnate.net>
-Copyright (c) 2014 Simon Lydell
-Copyright (c) 2014 TJ Holowaychuk <tj@vision-media.ca>
-Copyright (c) 2014, 2015, 2016, 2017 Simon Lydell
-Copyright (c) 2014, 2017, Jon Schlinkert.
-Copyright (c) 2014-2015 Jon Schlinkert.
-Copyright (c) 2014-2015, 2017, Jon Schlinkert
-Copyright (c) 2014-2015, 2017, Jon Schlinkert.
-Copyright (c) 2014-2015, Jon
-Copyright (c) 2014-2015, Jon Schlinkert.
-Copyright (c) 2014-2016 TJ Holowaychuk <tj@vision-media.ca>
-Copyright (c) 2014-2016, Jon Schlinkert
-Copyright (c) 2014-2016, Jon Schlinkert.
-Copyright (c) 2014-2017, Jon Schlinkert
-Copyright (c) 2014-2017, Jon Schlinkert.
-Copyright (c) 2014-2018, Jon Schlinkert.
-Copyright (c) 2015
-Copyright (c) 2015 AJ ONeal
-Copyright (c) 2015 Calvin Metcalf
-Copyright (c) 2015 Gregory Jacobs <greg@greg-jacobs.com> MIT Licensed. http://www.opensource.org/licenses/mit-license.php
-Copyright (c) 2015 Jon Schlinkert
-Copyright (c) 2015 Jon Schlinkert (https://github.com/jonschlinkert)
-Copyright (c) 2015 Jon Schlinkert.
-Copyright (c) 2015 Zhiye Li
-Copyright (c) 2015, 2017, Jon Schlinkert
-Copyright (c) 2015, 2017, Jon Schlinkert.
-Copyright (c) 2015, 2017-2018, Jon Schlinkert.
-Copyright (c) 2015, Jon Schlinkert.
-Copyright (c) 2015-2016, Jon Schlinkert
-Copyright (c) 2015-2016, Jon Schlinkert.
-Copyright (c) 2015-2017, Jon Schlinkert
-Copyright (c) 2015-2017, Jon Schlinkert.
-Copyright (c) 2015-2018, Jon Schlinkert.
-Copyright (c) 2016 Blaine Bublitz <blaine.bublitz@gmail.com> , Eric Schoffstall <yo@contra.io> and other contributors
-Copyright (c) 2016 Jon Schlinkert (https://github.com/jonschlinkert)
-Copyright (c) 2016 Joshua Boy Nicolai Appelman <joshua@jbna.nl>
-Copyright (c) 2016 Matteo Collina
-Copyright (c) 2016 Rod Vagg
-Copyright (c) 2016 Segment.io, Inc. (friends@segment.com)
-Copyright (c) 2016 Zeit, Inc.
-Copyright (c) 2016, 2018, Jon Schlinkert.
-Copyright (c) 2016, Brian Woodward (https://github.com/doowb).
-Copyright (c) 2016, Brian Woodward.
-Copyright (c) 2016, Jon Schlinkert (http://github.com/jonschlinkert).
-Copyright (c) 2016, Jon Schlinkert (https://github.com/jonschlinkert).
-Copyright (c) 2016, Jon Schlinkert.
-Copyright (c) 2016-2018, Jon Schlinkert.
-Copyright (c) 2017 Jon Schlinkert
-Copyright (c) 2017, Jon Schlinkert (https://github.com/jonschlinkert).
-Copyright (c) 2018, Jon Schlinkert (https://github.com/jonschlinkert).
-Copyright (c) < year() > , Jon Schlinkert.
-Copyright (c) Alexandru Marasteanu
-Copyright (c) Feross Aboukhadijeh
-Copyright (c) Feross Aboukhadijeh (http://feross.org)
-Copyright (c) Feross Aboukhadijeh (http://feross.org).
-Copyright (c) Sam Verschueren <sam.verschueren@gmail.com>
-Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-Copyright 2009, 2010, 2011 Isaac Z. Schlueter.
-Copyright 2009, The Dojo Foundation
-Copyright 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-Copyright 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-Copyright 2010 James Halliday (mail@substack.net)
-Copyright 2010-2014 John-David Dalton <http://allyoucanleet.com/>
-Copyright 2010-2014 Mathias Bynens <http://mths.be/>
-Copyright 2010-2015 Mathias Bynens <http://mathiasbynens.be/>
-Copyright 2010-2015 Mathias Bynens <http://mths.be/>
-Copyright 2011, John Resig
-Copyright 2011, The Dojo Foundation
-Copyright 2011-2014, Kit Cambridge http://kitcambridge.github.com
-Copyright 2012 jQuery Foundation and other contributors
-Copyright 2012, Kit Cambridge
-Copyright 2012-2013 The Dojo Foundation <http://dojofoundation.org/>
-Copyright 2012-2014 The Dojo Foundation <http://dojofoundation.org/>
-Copyright 2012-2014, Kit Cambridge http://kit.mit-license.org
-Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-Copyright 2013 jQuery Foundation and other contributors
-Copyright 2014 Simon Lydell X11 (MIT) Licensed.
-Copyright 2014, 2015, 2016, 2017 Simon Lydell X11 (MIT) Licensed.
-Copyright 2014, 2017 Simon Lydell X11 (MIT) Licensed.
-Copyright 2017 Simon Lydell X11 (MIT) Licensed.
-Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-Copyright Joyent, Inc. and other Node contributors.
-Copyright Mathias Bynens <http://mths.be/>
-Copyright Mathias Bynens <https://mathiasbynens.be/>
-Copyright TJ Holowaychuk <tj@vision-media.ca>
-Copyright jQuery Foundation and other contributors <https://jquery.org/>
 CxD Copyright 2011 by Jan Tonellato.
 TarHeader (c)
-copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors <http://underscorejs.org/>
+(c) (c) (tm)
+Copyright (c) < year() > , Jon Schlinkert.
 copyright 2012-2018 AJ ONeal
+Copyright (c) 2015 AJ ONeal
+Copyright (c) Alexandru Marasteanu
+Copyright (c) 2013-2014, 2016 Blaine Bublitz <blaine.bublitz@gmail.com> , Eric Schoffstall <yo@contra.io> and other contributors
+Copyright (c) 2016 Brian Woodward (https://github.com/doowb).
+Copyright (c) 2016 Brian Woodward.
+Copyright (c) 2015 Calvin Metcalf
+Copyright (c) 2011-2013 Christopher Jeffrey. (MIT Licensed) https://github.com/chjj/marked
+Copyright (c) 2014 Component
+(c) 2010 Esa-Matti Suuronen
+Copyright (c) 2011 Esa-Matti Suuronen esa-matti@suuronen.org
+Copyright (c) Feross Aboukhadijeh
+Copyright (c) Feross Aboukhadijeh (http://feross.org)
+(c) 2010-2015 Google, Inc. http://angularjs.org
+Copyright (c) 2014 Gregory Jacobs (http://greg-jacobs.com)
+Copyright (c) 2015 Gregory Jacobs <greg@greg-jacobs.com> MIT Licensed. http://www.opensource.org/licenses/mit-license.php
+Copyright (c) 2014 Hugh Kennedy
+Copyright 2009-2011 Isaac Z. Schlueter.
+Copyright (c) 2011-2017 JS Foundation
+Copyright 2010 James Halliday (mail@substack.net)
+Copyright (c) 2010-2014 Jeremy Ashkenas, DocumentCloud
+(c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
+Copyright (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors <http://underscorejs.org/>
+(c) 2010-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Backbone
+(c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors Underscore
+(c) 2009-2015 Jeremy Ashkenas.
+Copyright 2011 John Resig
+Copyright 2010-2014 John-David Dalton <http://allyoucanleet.com/>
+Copyright (c) 2014-2015 Jon
+Copyright (c) 2016 Jon Schlinkert (http://github.com/jonschlinkert).
+Copyright (c) 2015-2018 Jon Schlinkert (https://github.com/jonschlinkert)
+Copyright (c) 2014 Jon Schlinkert, Vitaly Puzrin.
+Copyright (c) 2014 Jon Schlinkert, contributors.
+Copyright (c) 2013-2018 Jon Schlinkert.
+Copyright (c) 2016 Joshua Boy Nicolai Appelman <joshua@jbna.nl>
+Copyright Joyent, Inc. and other Node contributors.
+Copyright (c) 2013 Julian Gruber <julian@juliangruber.com>
+Copyright 2012 Kit Cambridge
+Copyright 2012-2014 Kit Cambridge http://kit.mit-license.org
+Copyright 2011-2014 Kit Cambridge http://kitcambridge.github.com
+Copyright (c) 2012-2014 Kit Cambridge. http://kitcambridge.be
+Copyright (c) 2010-2011 Marcus Westin
+Copyright 2010-2015 Mathias Bynens <http://mathiasbynens.be/>
+Copyright 2010-2015 Mathias Bynens <http://mths.be/>
+Copyright Mathias Bynens <https://mathiasbynens.be/>
+Copyright (c) 2016 Matteo Collina
+Copyright (c) 2014 Nathan Rajlich <nathan@tootallnate.net>
+Copyright (c) 2011-2016 Paul Vorbach (https://paul.vorba.ch/) and contributors (https://github.com/pvorb/clone/graphs/contributors).
+Copyright (c) 2011-2015 Paul Vorbach <paul@vorba.ch>
+Copyright (c) 2012-2014 Raynos.
+Copyright (c) 2008-2009 Robert Kieffer
 copyright Robert Kieffer <http://broofa.com/>
+Copyright (c) 2016 Rod Vagg
+Copyright (c) 2013 Rod Vagg rvagg (https://twitter.com/rvagg)
+(c) 2005-2009 Sam Stephenson
+(c) Sam Verschueren (https://github.com/SamVerschueren)
+Copyright (c) Sam Verschueren <sam.verschueren@gmail.com>
+Copyright (c) 2016 Segment.io, Inc. (friends@segment.com)
+Copyright (c) 2013-2017 Simon Lydell
+Copyright 2014-2017 Simon Lydell X11 (MIT) Licensed.
+(c) Sindre Sorhus (http://sindresorhus.com)
+(c) Sindre Sorhus (https://sindresorhus.com)
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+Copyright TJ Holowaychuk <tj@vision-media.ca>
+Copyright (c) 2009, 2011, 2014-2016 TJ Holowaychuk <tj@vision-media.ca>
+Copyright 2009, 2011 The Dojo Foundation
+Copyright (c) 2010-2014 The Dojo Foundation
+Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+(c) 2012-2015 The Dojo Foundation.copyright
+(c) Vasily Polovnyov <vast@whiteants.net>
+Copyright (c) 2012 Vitaly Puzrin (https://github.com/puzrin).
+Copyright (c) 2016 Zeit, Inc.
+Copyright (c) 2015 Zhiye Li
+Copyright (c) 2012 by Vitaly Puzrin
+Copyright (c) 2011 by fent
+(c) 2010-2013 copyright B Cavalier & J Hann
+(c) 2012-2014 http://kitcambridge.be/' Kit Cambridge
+Copyright 2012-2013 jQuery Foundation and other contributors
+Copyright jQuery Foundation and other contributors <https://jquery.org/>
 
 MIT License
 
