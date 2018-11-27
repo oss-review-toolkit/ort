@@ -29,7 +29,7 @@ import java.util.SortedSet
  * a similar collection based on the [LicenseFinding] class is a bit cumbersome due to its required layout to support
  * legacy serialized formats.
  */
-typealias LicenseFindingsMap = SortedMap<String, SortedSet<String>>
+typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
 
 /**
  * A class to store a [license] finding along with its belonging [copyrights]. To support deserializing older versions

@@ -22,8 +22,6 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 
-import java.util.SortedSet
-
 class NoticeReporter : AbstractNoticeReporter() {
     override val noticeFileName = "NOTICE"
 
@@ -32,13 +30,13 @@ class NoticeReporter : AbstractNoticeReporter() {
         val analyzerResult = ortResult.analyzer!!.result
         val scanRecord = ortResult.scanner!!.results
 
-        val licenseFindings = sortedMapOf<String, SortedSet<String>>()
+        val licenseFindings = sortedMapOf<String, MutableSet<String>>()
 
         scanRecord.scanResults.forEach { container ->
             if (excludes?.isExcluded(container.id, analyzerResult) != true) {
                 container.results.forEach { result ->
                     result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
-                        licenseFindings.getOrPut(license) { sortedSetOf() } += copyrights
+                        licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights
                     }
                 }
             }

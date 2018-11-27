@@ -374,7 +374,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      */
     private fun associateFileFindings(licenses: JsonNode, copyrights: JsonNode, rootLicense: String = ""):
             LicenseFindingsMap {
-        val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
+        val copyrightsForLicenses = sortedMapOf<String, MutableSet<String>>()
 
         // While ScanCode 2.9.2 was still using "statements", version 2.97 is using "value".
         val allCopyrightStatements = copyrights.flatMap {
