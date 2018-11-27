@@ -72,10 +72,10 @@ data class Identifier(
         fun fromString(identifier: String): Identifier {
             val components = identifier.split(':')
             return Identifier(
-                    provider = components.getOrNull(0) ?: "",
-                    namespace = components.getOrNull(1) ?: "",
-                    name = components.getOrNull(2) ?: "",
-                    version = components.getOrNull(3) ?: ""
+                    provider = components.getOrElse(0) { "" },
+                    namespace = components.getOrElse(1) { "" },
+                    name = components.getOrElse(2) { "" },
+                    version = components.getOrElse(3) { "" }
             )
         }
     }
