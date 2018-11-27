@@ -128,8 +128,24 @@ data class Package(
      * Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [errors].
      */
     fun toReference(
-            linkage: PackageLinkage = PackageLinkage.DYNAMIC,
-            dependencies: SortedSet<PackageReference> = sortedSetOf(),
-            errors: List<OrtIssue> = emptyList()
-    ) = PackageReference(id, linkage, dependencies, errors)
+            linkage: PackageLinkage? = null,
+            dependencies: SortedSet<PackageReference>? = null,
+            errors: List<OrtIssue>? = null
+    ): PackageReference {
+        var ref = PackageReference(id)
+
+        if (linkage != null) {
+            ref = ref.copy(linkage = linkage)
+        }
+
+        if (dependencies != null) {
+            ref = ref.copy(dependencies = dependencies)
+        }
+
+        if (errors != null) {
+            ref = ref.copy(errors = errors)
+        }
+
+        return ref
+    }
 }
