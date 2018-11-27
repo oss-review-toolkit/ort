@@ -25,6 +25,7 @@ import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.LicenseMapping
+import com.here.ort.reporter.CopyrightStatementsProcessor
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.utils.ScriptRunner
@@ -49,7 +50,7 @@ abstract class AbstractNoticeReporter : Reporter() {
 
     data class NoticeReport(
             val headers: List<String>,
-            val findings: LicenseFindingsMap,
+            val findings: Map<String, List<String>>,
             val footers: List<String>
     )
 
@@ -109,9 +110,14 @@ abstract class AbstractNoticeReporter : Reporter() {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val noticeReport = NoticeReport(listOf(header), findings, emptyList()).let { noticeReport ->
-            postProcessingScript?.let { PostProcessor(ortResult, noticeReport).run(it) } ?: noticeReport
+        val findingsWithProcessedCopyrights = findings.mapValues { (_, copyrights) ->
+            CopyrightStatementsProcessor().process(copyrights).toList()
         }
+
+        val noticeReport = NoticeReport(listOf(header), findingsWithProcessedCopyrights, emptyList())
+                .let { noticeReport ->
+                        postProcessingScript?.let { PostProcessor(ortResult, noticeReport).run(it) } ?: noticeReport
+                }
 
         val outputFile = File(outputDir, noticeFileName)
         writeNoticeReport(noticeReport, outputFile)
