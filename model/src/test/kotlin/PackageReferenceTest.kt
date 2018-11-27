@@ -32,12 +32,13 @@ class PackageReferenceTest : WordSpec() {
     private val node1_2 = PackageReference(Identifier.fromString("::node1_2"))
     private val node1 = PackageReference(Identifier.fromString("::node1"), dependencies = sortedSetOf(node1_1, node1_2))
     private val node2 = PackageReference(Identifier.fromString("::node2"))
-    private val root = PackageReference(Identifier.fromString("::root"), dependencies = sortedSetOf(node1, node2))
+    private val node3 = PackageReference(Identifier.fromString("::node3"), dependencies = sortedSetOf(node1_2))
+    private val root = PackageReference(Identifier.fromString("::root"), dependencies = sortedSetOf(node1, node2, node3))
 
     init {
         "findReferences" should {
             "find references to an existing id" {
-                root.findReferences(Identifier.fromString("::node1_1_1")) shouldBe listOf(node1_1_1)
+                root.findReferences(Identifier.fromString("::node1_2")) shouldBe listOf(node1_2, node1_2)
                 root.findReferences(Identifier.fromString("::node1")) shouldBe listOf(node1)
             }
 
@@ -49,7 +50,7 @@ class PackageReferenceTest : WordSpec() {
 
         "traverse" should {
             "visit each node of the tree depth-first" {
-                val expectedOrder = mutableListOf(node1_1_1, node1_1, node1_2, node1, node2, root)
+                val expectedOrder = mutableListOf(node1_1_1, node1_1, node1_2, node1, node2, node1_2, node3, root)
 
                 root.traverse {
                     val expectedNode = expectedOrder.removeAt(0)
