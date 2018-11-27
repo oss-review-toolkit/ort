@@ -35,6 +35,18 @@ class PackageReferenceTest : WordSpec() {
     private val root = PackageReference(Identifier.fromString("::root"), dependencies = sortedSetOf(node1, node2))
 
     init {
+        "findReferences" should {
+            "find references to an existing id" {
+                root.findReferences(Identifier.fromString("::node1_1_1")) shouldBe listOf(node1_1_1)
+                root.findReferences(Identifier.fromString("::node1")) shouldBe listOf(node1)
+            }
+
+            "find no references to a non-existing id" {
+                root.findReferences(Identifier.fromString("::nodeX_Y_Z")) should beEmpty()
+                root.findReferences(Identifier.fromString("")) should beEmpty()
+            }
+        }
+
         "traverse" should {
             "visit each node of the tree depth-first" {
                 val expectedOrder = mutableListOf(node1_1_1, node1_1, node1_2, node1, node2, root)
@@ -63,18 +75,6 @@ class PackageReferenceTest : WordSpec() {
                     it.errors.first().message shouldBe "error ${it.id.name}"
                     it
                 }
-            }
-        }
-
-        "findReferences" should {
-            "find references to an existing id" {
-                root.findReferences(Identifier.fromString("::node1_1_1")) shouldBe listOf(node1_1_1)
-                root.findReferences(Identifier.fromString("::node1")) shouldBe listOf(node1)
-            }
-
-            "find no references to a non-existing id" {
-                root.findReferences(Identifier.fromString("::nodeX_Y_Z")) should beEmpty()
-                root.findReferences(Identifier.fromString("")) should beEmpty()
             }
         }
     }
