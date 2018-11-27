@@ -27,6 +27,8 @@ import java.util.SortedSet
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
  * references that are dependencies of the package.
  */
+// Do not serialize default values to reduce the size of the result file.
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 data class PackageReference(
         /**
          * The identifier of the package.
@@ -37,23 +39,16 @@ data class PackageReference(
          * The list of references to packages this package depends on. Note that this list depends on the scope in
          * which this package reference is used.
          */
-        // Do not serialize if empty to reduce the size of the result file. There likely are still many cases where this
-        // is not empty, so it is obvious that dependencies are properly recognized.
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
         /**
          * A list of errors that occurred handling this [PackageReference].
          */
-        // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
-        // [AnalyzerResult.hasErrors] already contains that information.
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val errors: List<OrtIssue> = emptyList(),
 
         /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
          */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) : Comparable<PackageReference> {
     /**
