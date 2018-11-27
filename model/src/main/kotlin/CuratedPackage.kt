@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 data class CuratedPackage(
         /**
-         * The cureated package after applying the [curations].
+         * The curated package after applying the [curations].
          */
         @JsonProperty("package")
         val pkg: Package,
