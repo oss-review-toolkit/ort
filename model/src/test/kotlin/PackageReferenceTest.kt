@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
@@ -62,6 +63,18 @@ class PackageReferenceTest : WordSpec() {
                     it.errors.first().message shouldBe "error ${it.id.name}"
                     it
                 }
+            }
+        }
+
+        "findReferences" should {
+            "find references to an existing id" {
+                root.findReferences(Identifier.fromString("::node1_1_1")) shouldBe listOf(node1_1_1)
+                root.findReferences(Identifier.fromString("::node1")) shouldBe listOf(node1)
+            }
+
+            "find no references to a non-existing id" {
+                root.findReferences(Identifier.fromString("::nodeX_Y_Z")) should beEmpty()
+                root.findReferences(Identifier.fromString("")) should beEmpty()
             }
         }
     }

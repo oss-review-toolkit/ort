@@ -93,6 +93,12 @@ data class PackageReference(
     fun dependsOn(id: Identifier): Boolean = dependencies.any { it.id == id || it.dependsOn(id) }
 
     /**
+     * Return all references to [id] as a dependency.
+     */
+    fun findReferences(id: Identifier): List<PackageReference> =
+            dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
+
+    /**
      * Return whether this package reference or any of its dependencies has errors.
      */
     fun hasErrors(): Boolean = errors.isNotEmpty() || dependencies.any { it.hasErrors() }
