@@ -26,14 +26,21 @@ import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
+import java.util.SortedSet
+
 class PackageReferenceTest : WordSpec() {
-    private val node1_1_1 = PackageReference(Identifier.fromString("::node1_1_1"))
-    private val node1_1 = PackageReference(Identifier.fromString("::node1_1"), dependencies = sortedSetOf(node1_1_1))
-    private val node1_2 = PackageReference(Identifier.fromString("::node1_2"))
-    private val node1 = PackageReference(Identifier.fromString("::node1"), dependencies = sortedSetOf(node1_1, node1_2))
-    private val node2 = PackageReference(Identifier.fromString("::node2"))
-    private val node3 = PackageReference(Identifier.fromString("::node3"), dependencies = sortedSetOf(node1_2))
-    private val root = PackageReference(Identifier.fromString("::root"), dependencies = sortedSetOf(node1, node2, node3))
+    companion object {
+        fun pkgRefFromIdStr(id: String, dependencies: SortedSet<PackageReference> = sortedSetOf()) =
+                PackageReference(Identifier.fromString(id), dependencies = dependencies)
+    }
+
+    private val node1_1_1 = pkgRefFromIdStr("::node1_1_1")
+    private val node1_1 = pkgRefFromIdStr("::node1_1", sortedSetOf(node1_1_1))
+    private val node1_2 = pkgRefFromIdStr("::node1_2")
+    private val node1 = pkgRefFromIdStr("::node1", sortedSetOf(node1_1, node1_2))
+    private val node2 = pkgRefFromIdStr("::node2")
+    private val node3 = pkgRefFromIdStr("::node3", sortedSetOf(node1_2))
+    private val root = pkgRefFromIdStr("::root", sortedSetOf(node1, node2, node3))
 
     init {
         "findReferences" should {
