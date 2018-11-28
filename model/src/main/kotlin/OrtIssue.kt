@@ -32,21 +32,21 @@ import com.here.ort.utils.normalizeLineBreaks
 import java.time.Instant
 
 /**
- * An error that occured while executing ORT.
+ * An issue that occured while executing ORT.
  */
 data class OrtIssue(
         /**
-         * The timestamp of the error.
+         * The timestamp of the issue.
          */
         val timestamp: Instant = Instant.now(),
 
         /**
-         * A description of the error source, e.g. the tool that caused the error.
+         * A description of the issue source, e.g. the tool that caused the issue
          */
         val source: String,
 
         /**
-         * The error message.
+         * The issue message.
          */
         val message: String
 ) {
