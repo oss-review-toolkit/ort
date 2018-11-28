@@ -79,6 +79,10 @@ class RepositoryConfigurationTest : WordSpec() {
                       - message: "message"
                         reason: "CANT_FIX_ISSUE"
                         comment: "error comment"
+                      evaluator_errors:
+                      - message: "eval-err-1-msg"
+                        reason: "APPROVED"
+                        comment: "eval-err-1-comment"
                     """.trimIndent()
 
                 val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
@@ -117,6 +121,11 @@ class RepositoryConfigurationTest : WordSpec() {
                 error.message shouldBe "message"
                 error.reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
                 error.comment shouldBe "error comment"
+
+                val evalError = repositoryConfiguration.resolutions!!.evaluatorErrors.first()
+                evalError.message shouldBe "eval-err-1-msg"
+                evalError.reason shouldBe EvaluatorErrorResolutionReason.APPROVED
+                evalError.comment shouldBe "eval-err-1-comment"
             }
         }
     }
