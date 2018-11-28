@@ -112,6 +112,11 @@ class RepositoryConfigurationTest : WordSpec() {
                 scopes.first().name.pattern shouldBe "scope"
                 scopes.first().reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
                 scopes.first().comment shouldBe "scope comment"
+
+                val error = repositoryConfiguration.resolutions!!.errors.first()
+                error.message shouldBe "message"
+                error.reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
+                error.comment shouldBe "error comment"
             }
         }
     }
