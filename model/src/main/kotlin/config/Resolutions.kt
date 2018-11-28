@@ -29,10 +29,20 @@ class Resolutions(
      * Resolutions for issues with the analysis or scan of the projects in this repository and their dependencies.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: List<ErrorResolution> = emptyList()
+    val errors: List<ErrorResolution> = emptyList(),
+
+    /**
+     * Resolutions for license policy violations.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val evaluatorErrors: List<EvaluatorErrorResolution> = emptyList()
 ) {
     /**
      * Merge this [Resolutions] with [other] [Resolutions]. Duplicates are removed.
      */
-    fun merge(other: Resolutions) = Resolutions((errors + other.errors).distinct())
+    fun merge(other: Resolutions) =
+            Resolutions(
+                    errors = (errors + other.errors).distinct(),
+                    evaluatorErrors = (evaluatorErrors + other.evaluatorErrors).distinct()
+            )
 }
