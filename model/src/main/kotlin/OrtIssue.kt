@@ -53,7 +53,7 @@ data class OrtIssue(
     override fun toString() = "${if (timestamp == Instant.EPOCH) "n/a" else timestamp.toString()}: $source - $message"
 }
 
-class ErrorDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
+class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): OrtIssue {
         val node = p.codec.readTree<JsonNode>(p)
         return if (node.isTextual) {
@@ -66,7 +66,7 @@ class ErrorDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
     }
 }
 
-class ErrorSerializer : StdSerializer<OrtIssue>(OrtIssue::class.java) {
+class OrtIssueSerializer : StdSerializer<OrtIssue>(OrtIssue::class.java) {
     override fun serialize(value: OrtIssue, gen: JsonGenerator, provider: SerializerProvider) {
         gen.writeStartObject()
         gen.writeObjectField("timestamp", value.timestamp)
