@@ -1,7 +1,19 @@
+plugins {
+    id 'antlr'
+}
+
 // Apply core plugins.
 apply plugin: 'java-library'
 
+generateGrammarSource {
+    arguments += '-visitor'
+}
+
+compileKotlin.dependsOn(generateGrammarSource)
+
 dependencies {
+    antlr "org.antlr:antlr4:$antlrVersion"
+
     api "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
