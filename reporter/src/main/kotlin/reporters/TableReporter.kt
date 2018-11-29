@@ -32,17 +32,18 @@ import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.reporters.TableReporter.ResolvableError
 import com.here.ort.utils.zipWithDefault
 
 import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
 
-private fun Collection<TableReporter.ResolvableError>.filterUnresolved() = filter { it.isResolved() }
+private fun Collection<ResolvableError>.filterUnresolved() = filter { it.isResolved() }
 
-fun Collection<TableReporter.ResolvableError>.containsUnresolved() = any { !it.isResolved() }
+fun Collection<ResolvableError>.containsUnresolved() = any { !it.isResolved() }
 
-fun <K> Map<K, Collection<TableReporter.ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
+fun <K> Map<K, Collection<ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
 
 /**
  * An abstract [Reporter] that converts the [ScanRecord] to a table representation.
@@ -246,7 +247,7 @@ abstract class TableReporter : Reporter() {
             outputDir: File,
             postProcessingScript: String?
     ): File {
-        fun OrtIssue.toResolvableError(): TableReporter.ResolvableError {
+        fun OrtIssue.toResolvableError(): ResolvableError {
             return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
         }
 
