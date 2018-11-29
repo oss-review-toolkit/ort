@@ -22,16 +22,25 @@ package com.here.ort.reporter.reporters
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtIssue
+import com.here.ort.model.OrtResult
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.ScopeExclude
+import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.reporters.TabularModelMapper.TabularScanRecord
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.log
 
 import java.io.File
 import java.util.SortedMap
 
-class StaticHtmlReporter : TableReporter() {
-    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File {
+class StaticHtmlReporter : Reporter() {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider,
+                            copyrightGarbage: CopyrightGarbage, outputDir: File, postProcessingScript: String?)
+    : File {
+        val tabularScanRecord = TabularModelMapper().mapToTabularModel(ortResult, resolutionProvider)
+
         val html = """
             <!DOCTYPE html>
             <html lang="en">
@@ -374,7 +383,7 @@ class StaticHtmlReporter : TableReporter() {
                 }
             }
 
-    private fun createErrorTable(title: String, errors: TableReporter.ErrorTable, anchor: String) =
+    private fun createErrorTable(title: String, errors: TabularModelMapper.ErrorTable, anchor: String) =
             buildString {
                 append("""
                     <h2><a id="$anchor"></a>$title</h2>
@@ -431,7 +440,7 @@ class StaticHtmlReporter : TableReporter() {
                 append("</tbody></table>")
             }
 
-    private fun createTable(title: String, vcsInfo: VcsInfo?, summary: TableReporter.ProjectTable, anchor: String) =
+    private fun createTable(title: String, vcsInfo: VcsInfo?, summary: TabularModelMapper.ProjectTable, anchor: String) =
             buildString {
                 val excludedClass = if (summary.exclude != null) " excluded" else ""
 

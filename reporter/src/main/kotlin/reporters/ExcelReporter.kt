@@ -20,10 +20,17 @@
 package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
+import com.here.ort.model.OrtResult
 
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.ProjectExclude
+
+import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.reporters.TabularModelMapper.ProjectTable
+
 import com.here.ort.utils.isValidUri
 import com.here.ort.utils.log
 
@@ -53,7 +60,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
  * A [Reporter] that creates an Excel sheet report from a [ScanRecord] in the Open XML XLSX format. It creates one sheet
  * for each project in [ScanRecord.analyzerResult] and an additional sheet that summarizes all dependencies.
  */
-class ExcelReporter : TableReporter() {
+class ExcelReporter : Reporter() {
     private val defaultColumns = 5
 
     private val borderColor = XSSFColor(Color(211, 211, 211))
@@ -76,7 +83,10 @@ class ExcelReporter : TableReporter() {
 
     private lateinit var creationHelper: CreationHelper
 
-    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File {
+    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider,
+                                copyrightGarbage: CopyrightGarbage, outputDir: File, postProcessingScript: String?)
+    : File {
+        val tabularScanRecord = TabularModelMapper().mapToTabularModel(ortResult, resolutionProvider)
         val workbook = XSSFWorkbook()
 
         defaultStyle = workbook.createCellStyle().apply {
@@ -181,7 +191,7 @@ class ExcelReporter : TableReporter() {
         (0..1).forEach { sheet.autoSizeColumn(it) }
     }
 
-    private fun createSummarySheet(workbook: XSSFWorkbook, name: String, file: String, table: SummaryTable,
+    private fun createSummarySheet(workbook: XSSFWorkbook, name: String, file: String, table: TabularModelMapper.SummaryTable,
                                    vcsInfo: VcsInfo, extraColumns: List<String>) {
         val sheetName = createUniqueSheetName(workbook, name)
 
