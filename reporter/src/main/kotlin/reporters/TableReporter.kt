@@ -219,8 +219,8 @@ abstract class TableReporter : Reporter() {
     }
 
     data class ResolvableError(
-            val error: OrtIssue,
-            val resolutions: List<ErrorResolution>
+            private val error: OrtIssue,
+            private val resolutions: List<ErrorResolution>
     ) {
         fun getDescription() = buildString {
             append(error)
@@ -228,6 +228,8 @@ abstract class TableReporter : Reporter() {
                 append(resolutions.joinToString(prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" })
             }
         }
+
+        fun isResolved() = resolutions.isNotEmpty()
     }
 
     override fun generateReport(
@@ -384,8 +386,8 @@ abstract class TableReporter : Reporter() {
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File
 }
 
-fun Collection<TableReporter.ResolvableError>.filterUnresolved() = filter { it.resolutions.isEmpty() }
+fun Collection<TableReporter.ResolvableError>.filterUnresolved() = filter { it.isResolved() }
 
-fun Collection<TableReporter.ResolvableError>.containsUnresolved() = any { it.resolutions.isEmpty() }
+fun Collection<TableReporter.ResolvableError>.containsUnresolved() = any { !it.isResolved() }
 
 fun <K> Map<K, Collection<TableReporter.ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
