@@ -222,14 +222,14 @@ abstract class TableReporter : Reporter() {
             val error: OrtIssue,
             val resolutions: List<ErrorResolution>
     ) {
-        override fun toString() =
-                buildString {
-                    append(error)
-                    if (resolutions.isNotEmpty()) {
-                        append(resolutions.joinToString(prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" })
-                    }
-                }
+        fun getDescription() = buildString {
+            append(error)
+            if (resolutions.isNotEmpty()) {
+                append(resolutions.joinToString(prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" })
+            }
+        }
     }
+
 
     override fun generateReport(
             ortResult: OrtResult,
