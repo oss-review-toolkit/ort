@@ -19,12 +19,9 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 import com.here.ort.utils.encodeOrUnknown
@@ -79,6 +76,20 @@ data class Identifier(
             )
         }
     }
+
+    private constructor(components: List<String>) : this(
+            provider = components.getOrElse(0) { "" },
+            namespace = components.getOrElse(1) { "" },
+            name = components.getOrElse(2) { "" },
+            version = components.getOrElse(3) { "" }
+    )
+
+    /**
+     * Create an [Identifier] from a string with the format "provider:namespace:name:version". If the string has less
+     * than three colon separators the missing values are assigned empty strings.
+     */
+    @JsonCreator
+    constructor(identifier: String) : this(identifier.split(':'))
 
     private val components = listOf(provider, namespace, name, version)
 
@@ -149,17 +160,5 @@ data class Identifier(
 class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class.java) {
     override fun serialize(value: Identifier, gen: JsonGenerator, provider: SerializerProvider) {
         gen.writeString(value.toString())
-    }
-}
-
-class IdentifierFromStringDeserializer : StdDeserializer<Identifier>(Identifier::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Identifier {
-        return Identifier.fromString(p.valueAsString)
-    }
-}
-
-class IdentifierFromStringKeyDeserializer : KeyDeserializer() {
-    override fun deserializeKey(key: String, ctxt: DeserializationContext): Identifier {
-        return Identifier.fromString(key)
     }
 }
