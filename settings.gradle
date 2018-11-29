@@ -2,7 +2,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             // Work around https://github.com/gradle/gradle/issues/1697.
-            if (requested.version == null) {
+            if (requested.id.namespace != null && requested.version == null) {
                 def pluginName = requested.id.name.split('-').collect { it.capitalize() }.join().uncapitalize()
                 def versionPropertyName = (requested.id.id == 'org.jetbrains.kotlin.jvm') ?
                         "kotlinPluginVersion" : "${pluginName}PluginVersion"
