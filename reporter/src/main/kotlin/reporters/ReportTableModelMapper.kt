@@ -23,19 +23,15 @@ import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
-import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.getAllDetectedLicenses
 import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
-import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.reporters.TableReporter.ResolvableError
+import com.here.ort.reporter.reporters.ReportTableModelMapper.ResolvableError
 import com.here.ort.utils.zipWithDefault
 
-import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -46,10 +42,10 @@ fun Collection<ResolvableError>.containsUnresolved() = any { !it.isResolved() }
 fun <K> Map<K, Collection<ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
 
 /**
- * An abstract [Reporter] that converts the [ScanRecord] to a table representation.
+ * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
  */
-abstract class TableReporter : Reporter() {
-    data class TabularScanRecord(
+class ReportTableModelMapper {
+    data class ReportTableModel(
             /**
              * The [VcsInfo] for the scanned project.
              */
@@ -239,14 +235,11 @@ abstract class TableReporter : Reporter() {
         fun isResolved() = !resolutions.isEmpty()
     }
 
-    override fun generateReport(
+    fun mapToReportTableModel(
             ortResult: OrtResult,
-            resolutionProvider: ResolutionProvider,
-            copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
-            postProcessingScript: String?
-    ): File {
-        fun OrtIssue.toResolvableError(): ResolvableError {
+            resolutionProvider: ResolutionProvider
+    ): ReportTableModel {
+        fun OrtIssue.toResolvableError(): ReportTableModelMapper.ResolvableError {
             return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
         }
 
@@ -376,8 +369,7 @@ abstract class TableReporter : Reporter() {
             extraColumns.map { it.toString() }
         }.orEmpty()
 
-        return generateReport(
-                TabularScanRecord(
+        return ReportTableModel(
                         ortResult.repository.vcsProcessed,
                         ortResult.evaluator?.errors,
                         errorSummaryTable,
@@ -385,10 +377,6 @@ abstract class TableReporter : Reporter() {
                         projectTables,
                         metadata,
                         extraColumns
-                ),
-                outputDir
         )
     }
-
-    abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File
 }
