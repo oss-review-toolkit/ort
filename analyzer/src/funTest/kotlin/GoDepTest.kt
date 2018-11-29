@@ -59,8 +59,8 @@ class GoDepTest : WordSpec() {
                 val result = godep.resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
-                result!!.project.id shouldBe Identifier
-                        .fromString("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
+                result!!.project.id shouldBe
+                        Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
                 result.project.definitionFilePath shouldBe
                         "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
                 result.packages.size shouldBe 0

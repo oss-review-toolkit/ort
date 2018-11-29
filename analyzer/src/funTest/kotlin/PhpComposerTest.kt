@@ -66,7 +66,7 @@ class PhpComposerTest : StringSpec() {
                     .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
             result shouldNotBe null
-            result!!.project.id shouldBe Identifier.fromString("PhpComposer::src/funTest/assets/projects/synthetic/" +
+            result!!.project.id shouldBe Identifier("PhpComposer::src/funTest/assets/projects/synthetic/" +
                     "php-composer/no-lockfile/composer.json:")
             result.project.definitionFilePath shouldBe
                     "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"

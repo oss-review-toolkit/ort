@@ -61,20 +61,6 @@ data class Identifier(
                 name = "",
                 version = ""
         )
-
-        /**
-         * Create an [Identifier] from a string with the format "provider:namespace:name:version". If the string
-         * has less than three colon separators the missing values are assigned empty strings.
-         */
-        fun fromString(identifier: String): Identifier {
-            val components = identifier.split(':')
-            return Identifier(
-                    provider = components.getOrElse(0) { "" },
-                    namespace = components.getOrElse(1) { "" },
-                    name = components.getOrElse(2) { "" },
-                    version = components.getOrElse(3) { "" }
-            )
-        }
     }
 
     private constructor(components: List<String>) : this(
