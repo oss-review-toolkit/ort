@@ -404,7 +404,7 @@ class StaticHtmlReporter : TableReporter() {
                                 <a href="#$id">$id</a>
                                 <ul>
                                     ${errors.joinToString("\n") {
-                            "<li>${it.toString().replace("\n", "<br/>")}</li>"
+                            "<li>${it.getDescription().replace("\n", "<br/>")}</li>"
                         }}
                                 </ul>""".trimIndent())
                     }
@@ -418,7 +418,7 @@ class StaticHtmlReporter : TableReporter() {
                                 <a href="#$id">$id</a>
                                 <ul>
                                     ${errors.joinToString("\n") {
-                            "<li>${it.toString().replace("\n", "<br/>")}</li>"
+                            "<li>${it.getDescription().replace("\n", "<br/>")}</li>"
                         }}
                                 </ul>""".trimIndent())
                     }
@@ -506,12 +506,12 @@ class StaticHtmlReporter : TableReporter() {
                             <td>${row.detectedLicenses.joinToString("<br/>")}</td>
                             <td><ul>
                                 ${row.analyzerErrors.joinToString("\n") {
-                                    "<li>${it.toString().replace("\n", "<br/>")}</li>"
+                                    "<li>${it.getDescription().replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>
                             <td><ul>
                                 ${row.scanErrors.joinToString("\n") {
-                                    "<li>${it.toString().replace("\n", "<br/>")}</li>"
+                                    "<li>${it.getDescription().replace("\n", "<br/>")}</li>"
                                 }}
                             </ul></td>
                         </tr>""".trimIndent())
