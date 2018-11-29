@@ -55,7 +55,7 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
 
     registerModule(ortModelModule)
 
-    setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+    propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
 }
 
 val jsonMapper = ObjectMapper().apply(mapperConfig)
