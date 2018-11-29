@@ -38,6 +38,12 @@ import java.io.File
 import java.util.SortedMap
 import java.util.SortedSet
 
+private fun Collection<TableReporter.ResolvableError>.filterUnresolved() = filter { it.isResolved() }
+
+fun Collection<TableReporter.ResolvableError>.containsUnresolved() = any { !it.isResolved() }
+
+fun <K> Map<K, Collection<TableReporter.ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
+
 /**
  * An abstract [Reporter] that converts the [ScanRecord] to a table representation.
  */
@@ -385,9 +391,3 @@ abstract class TableReporter : Reporter() {
 
     abstract fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File
 }
-
-fun Collection<TableReporter.ResolvableError>.filterUnresolved() = filter { it.isResolved() }
-
-fun Collection<TableReporter.ResolvableError>.containsUnresolved() = any { !it.isResolved() }
-
-fun <K> Map<K, Collection<TableReporter.ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
