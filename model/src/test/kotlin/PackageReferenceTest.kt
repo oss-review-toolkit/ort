@@ -29,7 +29,7 @@ import io.kotlintest.specs.WordSpec
 class PackageReferenceTest : WordSpec() {
     companion object {
         fun pkgRefFromIdStr(id: String, vararg dependencies: PackageReference) =
-                PackageReference(Identifier.fromString(id), dependencies = dependencies.toSortedSet())
+                PackageReference(Identifier(id), dependencies = dependencies.toSortedSet())
     }
 
     private val node1_1_1 = pkgRefFromIdStr("::node1_1_1")
@@ -43,13 +43,13 @@ class PackageReferenceTest : WordSpec() {
     init {
         "findReferences" should {
             "find references to an existing id" {
-                root.findReferences(Identifier.fromString("::node1_2")) shouldBe listOf(node1_2, node1_2)
-                root.findReferences(Identifier.fromString("::node1")) shouldBe listOf(node1)
+                root.findReferences(Identifier("::node1_2")) shouldBe listOf(node1_2, node1_2)
+                root.findReferences(Identifier("::node1")) shouldBe listOf(node1)
             }
 
             "find no references to a non-existing id" {
-                root.findReferences(Identifier.fromString("::nodeX_Y_Z")) should beEmpty()
-                root.findReferences(Identifier.fromString("")) should beEmpty()
+                root.findReferences(Identifier("::nodeX_Y_Z")) should beEmpty()
+                root.findReferences(Identifier("")) should beEmpty()
             }
         }
 

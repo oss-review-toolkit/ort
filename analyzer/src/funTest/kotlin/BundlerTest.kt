@@ -71,8 +71,8 @@ class BundlerTest : WordSpec() {
                         .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
-                actualResult!!.project.id shouldBe Identifier
-                        .fromString("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
+                actualResult!!.project.id shouldBe
+                        Identifier("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
                 actualResult.project.definitionFilePath shouldBe
                         "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
                 actualResult.packages.size shouldBe 0

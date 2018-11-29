@@ -86,9 +86,9 @@ class ProjectAnalyzerResultTest : StringSpec({
 
         val errors = result.collectErrors()
         errors.size shouldBe 4
-        errors[Identifier.fromString("provider:namespace:name:version")] shouldBe listOf(error7, error8)
-        errors[Identifier.fromString("provider1:namespace1:name1:version1")] shouldBe listOf(error3, error4)
-        errors[Identifier.fromString("provider2:namespace2:name2:version2")] shouldBe listOf(error1, error2)
-        errors[Identifier.fromString("provider3:namespace3:name3:version3")] shouldBe listOf(error5, error6)
+        errors[Identifier("provider:namespace:name:version")] shouldBe listOf(error7, error8)
+        errors[Identifier("provider1:namespace1:name1:version1")] shouldBe listOf(error3, error4)
+        errors[Identifier("provider2:namespace2:name2:version2")] shouldBe listOf(error1, error2)
+        errors[Identifier("provider3:namespace3:name3:version3")] shouldBe listOf(error5, error6)
     }
 })

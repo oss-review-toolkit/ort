@@ -56,7 +56,7 @@ class IdentifierTest : StringSpec() {
             )
 
             mapping.forEach { stringRepresentation, identifier ->
-                Identifier.fromString(stringRepresentation) shouldBe identifier
+                Identifier(stringRepresentation) shouldBe identifier
             }
         }
 
@@ -85,11 +85,11 @@ class IdentifierTest : StringSpec() {
             )
 
             matching.forEach { id1, id2 ->
-                Identifier.fromString(id1).matches(Identifier.fromString(id2)) shouldBe true
+                Identifier(id1).matches(Identifier(id2)) shouldBe true
             }
 
             nonMatching.forEach { id1, id2 ->
-                Identifier.fromString(id1).matches(Identifier.fromString(id2)) shouldBe false
+                Identifier(id1).matches(Identifier(id2)) shouldBe false
             }
         }
 
