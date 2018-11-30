@@ -17,16 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package com.here.ort.model.spdx
 
-import com.here.ort.model.spdx.SpdxLicense
 import com.here.ort.utils.enumSetOf
 
 /**
  * A mapping from license strings collected from the declared licenses of open source packages to SPDX license
  * identifiers.
  */
-object LicenseMapping {
+object SpdxLicenseMapping {
     private val mapping = mapOf(
             "(0BSD OR MIT)" to enumSetOf(SpdxLicense._0BSD, SpdxLicense.MIT),
             "(BSD-2-Clause OR MIT OR Apache-2.0)"
