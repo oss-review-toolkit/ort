@@ -20,7 +20,6 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
@@ -45,7 +44,7 @@ data class ReportTableModel(
         /**
          * A list containing all evaluator errors. `null` if no evaluator result is available.
          */
-        val evaluatorErrors: List<OrtIssue>?,
+        val evaluatorErrors: List<ResolvableIssue>?,
 
         /**
          * A [ErrorTable] containing all dependencies that caused errors.
@@ -212,6 +211,7 @@ data class ReportTableModel(
     }
 
     data class ResolvableIssue(
+            val source: String,
             val description: String,
             val resolutionDescription: String,
             val isResolved: Boolean

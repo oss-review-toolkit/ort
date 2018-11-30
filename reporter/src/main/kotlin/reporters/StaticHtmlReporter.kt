@@ -21,7 +21,6 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.CopyrightGarbage
@@ -30,6 +29,7 @@ import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
+import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.log
@@ -347,7 +347,7 @@ class StaticHtmlReporter : Reporter() {
                 }
             }
 
-    private fun createEvaluatorTable(evaluatorErrors: List<OrtIssue>) =
+    private fun createEvaluatorTable(evaluatorErrors: List<ResolvableIssue>) =
             buildString {
                 append("<h2><a id=\"license-check-results\"></a>License Check Results</h2>")
 
@@ -366,10 +366,14 @@ class StaticHtmlReporter : Reporter() {
                         """.trimIndent())
 
                     evaluatorErrors.forEach { error ->
+                        val cssClass = when {
+                            error.isResolved -> "ort-addressed"
+                            else -> "ort-error"
+                        }
                         append("""
-                            <tr class="ort-error">
+                            <tr class="$cssClass">
                                 <td>${error.source}</td>
-                                <td>${error.message}</td>
+                                <td><p>${error.description}</p><p>${error.resolutionDescription}</p></td>
                             </tr>
                             """.trimIndent())
                     }
