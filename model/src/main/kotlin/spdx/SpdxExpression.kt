@@ -46,10 +46,16 @@ data class SpdxLicenseRefExpression(
         val id: String
 ) : SpdxExpression()
 
-enum class SpdxOperator {
-    AND,
-    OR,
-    WITH
+enum class SpdxOperator(
+        /**
+         * The priority of the operator. An operator with a larger priority value binds stronger than an operator with a
+         * lower priority value. Operators with the same priority bind left-associative.
+         */
+        val priority: Int
+) {
+    AND(1),
+    OR(0),
+    WITH(2)
 }
 
 fun parseSpdxExpression(expression: String): SpdxExpression {
