@@ -19,14 +19,21 @@
 
 package com.here.ort.model.spdx
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
+
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 
+@JsonSerialize(using = ToStringSerializer::class)
 sealed class SpdxExpression {
     companion object {
+        @JsonCreator
+        @JvmStatic
         fun parse(expression: String): SpdxExpression {
             val charStream = CharStreams.fromString(expression)
             val lexer = SpdxExpressionLexer(charStream)
