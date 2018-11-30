@@ -19,6 +19,7 @@
 
 package com.here.ort.model.config
 
+import com.here.ort.model.spdx.SpdxLicense
 import com.here.ort.utils.enumSetOf
 
 /**
