@@ -21,6 +21,7 @@ package com.here.ort.reporter
 
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.config.ErrorResolution
+import com.here.ort.model.config.EvaluatorErrorResolution
 
 /**
  * A provider for [ErrorResolution]s.
@@ -30,4 +31,9 @@ interface ResolutionProvider {
      * Get all resolutions that match [error].
      */
     fun getResolutionsFor(error: OrtIssue): List<ErrorResolution>
+
+    /**
+     * Get all resolutions that match [error].
+     */
+    fun getEvaluatorResolutionsFor(error: OrtIssue): List<EvaluatorErrorResolution>
 }
