@@ -67,6 +67,12 @@ class StaticHtmlReporter : Reporter() {
                     color: black;
                   }
 
+                  ul {
+                      list-style: none;
+                      margin: 0;
+                      padding: 0;
+                  }
+
                   #report-container {
                     background-color: #fff;
                     border: 1px solid rgba(34,36,38,.15);
@@ -75,7 +81,7 @@ class StaticHtmlReporter : Reporter() {
                     margin: 1em 2em 1em 2em;
                   }
 
-                  .report-label {
+                  .ort-report-label {
                     background-color: #f9fafb;
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-right: 1px solid rgba(34,36,38,.15);
@@ -94,46 +100,43 @@ class StaticHtmlReporter : Reporter() {
                     width: 110px;
                   }
 
-                  .report-metadata {
+                  .ort-report-metadata {
                     font-size: 12px;
                     border-spacing: 0;
                     table-layout:fixed;
                   }
 
-                  .report-metadata tr {
-                  }
-
-                  .report-metadata td {
+                  .ort-report-metadata td {
                     border-bottom: 1px solid rgba(34,36,38,.15);
-                    overflow: hidden; 
+                    overflow: hidden;
                     padding: 5px 20px 5px 0px;
-                    text-overflow: ellipsis; 
+                    text-overflow: ellipsis;
                     word-wrap: break-word;
                   }
 
-                  .report-metadata tr:first-child td {
+                  .ort-report-metadata tr:first-child td {
                     border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages {
+                  .ort-report-table {
                     border-spacing: 0;
                     width: 100%;
                     table-layout:fixed;
                   }
 
-                  .report-packages th {
+                  .ort-report-table th {
                     background-color: #f9fafb;
                     padding: 5px 5px 5px .8em !important;
                     text-align: left;
                   }
 
-                  .report-packages th:first-child {
+                  .ort-report-table th:first-child {
                     border-top-left-radius: .28rem;
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages th {
+                  .ort-report-table th {
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                     overflow: hidden;
@@ -141,18 +144,18 @@ class StaticHtmlReporter : Reporter() {
                     text-overflow: ellipsis;
                   }
 
-                  .report-packages th:last-child {
+                  .ort-report-table th:last-child {
                     border-top-right-radius: .28rem;
                     border-right: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages {
+                  .ort-report-table {
                     overflow: hidden;
                     text-overflow: ellipsis;
                   }
 
-                  .report-packages td {
+                  .ort-report-table td {
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                     padding: 8px;
@@ -162,43 +165,55 @@ class StaticHtmlReporter : Reporter() {
                     word-wrap: break-word;
                   }
 
-                  .report-packages td:last-child {
+                  .ort-report-table td:last-child {
                     border-right: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages tr:last-child td {
+                  .ort-report-table tr:last-child td {
                     border-bottom: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages tr:last-child td:first-child {
+                  .ort-report-table tr:last-child td:first-child {
                     border-bottom-left-radius: .28rem;
                   }
 
-                  .report-packages tr:last-child td:last-child {
+                  .ort-report-table tr:last-child td:last-child {
                     border-bottom-right-radius: .28rem;
                   }
 
-                  .report-packages tr.error {
+                  .ort-report-table tr.ort-error {
                     background: #fff6f6;
                     color: #9f3a38;
                   }
 
-                  .report-packages tr.warning {
+                  .ort-report-table tr.ort-warning {
                     background: #fffaf3;
                     color: #573a08;
                   }
 
-                  .report-packages tr.ok {
+                  .ort-report-table tr.ort-ok {
                     background: #fcfff5;
                     color: #2c662d;
                   }
 
-                  .report-packages tr:hover {
+                  .ort-report-table tr:hover {
                     background: rgba(34,36,38,.15);
                   }
 
+                  .ort-excluded {
+                    filter: opacity(50%);
+                  }
+
+                  .ort-reason {
+                      border-radius: 3px;
+                      background: #EEE;
+                      padding: 2px;
+                      font-size: 12px;
+                      display: inline;
+                  }
+
                   @media all and (max-width: 1000px) {
-                      .report-packages th:nth-child(2), .report-packages td:nth-child(2) {
+                      .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
                           display:none;
                           width:0;
                           height:0;
@@ -208,20 +223,20 @@ class StaticHtmlReporter : Reporter() {
                   }
 
                   @media all and (max-width: 900px) {
-                      .report-packages th:nth-child(3), .report-packages td:nth-child(3) {
+                      .ort-report-table th:nth-child(3), .ort-report-table td:nth-child(3) {
                           display:none;
                           width:0;
                           height:0;
                           opacity:0;
                           visibility: collapse;
-                      } 
+                      }
                   }
 
                   @media all and (max-width: 800px) {
-                      .report-packages th:nth-child(5),
-                      .report-packages td:nth-child(5),
-                      .report-packages th:nth-child(6),
-                      .report-packages td:nth-child(6) {
+                      .ort-report-table th:nth-child(5),
+                      .ort-report-table td:nth-child(5),
+                      .ort-report-table th:nth-child(6),
+                      .ort-report-table td:nth-child(6) {
                           display:none;
                           width:0;
                           height:0;
@@ -229,23 +244,23 @@ class StaticHtmlReporter : Reporter() {
                           visibility: collapse;
                       }
 
-                      .report-packages th:nth-child(4) {
+                      .ort-report-table th:nth-child(4) {
                         border-top-right-radius: .28rem;
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages td:nth-child(4) {
+                      .ort-report-table td:nth-child(4) {
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages tr:last-child td:nth-child(4) {
+                      .ort-report-table tr:last-child td:nth-child(4) {
                         border-bottom-right-radius: .28rem;
                       }
                   }
 
                   @media all and (max-width: 500px) {
-                      .report-packages th:nth-child(4),
-                      .report-packages td:nth-child(4) {
+                      .ort-report-table th:nth-child(4),
+                      .ort-report-table td:nth-child(4) {
                           display:none;
                           width:0;
                           height:0;
@@ -253,46 +268,29 @@ class StaticHtmlReporter : Reporter() {
                           visibility: collapse;
                       }
 
-                      .report-packages th:first-child {
+                      .ort-report-table th:first-child {
                         border-top-right-radius: .28rem;
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages td:first-child {
+                      .ort-report-table td:first-child {
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages tr:last-child td:first-child {
+                      .ort-report-table tr:last-child td:first-child {
                         border-bottom-right-radius: .28rem;
                       }
-                  }
-
-                  ul {
-                      list-style-position: inside;
-                      margin: 0;
-                      padding: 0;
-                  }
-
-                  .excluded {
-                      filter: opacity(50%);
-                  }
-
-                  .reason {
-                      border-radius: 3px;
-                      background: #EEE;
-                      padding: 2px;
-                      font-size: 12px;
-                      display: inline;
                   }
                 </style>
             </head>
             <body>
-                <div id="report-container">
-                  <div class="report-label">Scan Report</div>
+            <div id="report-container">
+                  <div class="ort-report-label">Scan Report</div>
                 ${createContent(tabularScanRecord)}
                 </div>
             </body>
             </html>
+
             """.trimIndent()
 
         val outputFile = File(outputDir, "scan-report.html")
@@ -308,7 +306,7 @@ class StaticHtmlReporter : Reporter() {
             buildString {
                 if (tabularScanRecord.metadata.isNotEmpty()) {
                     append("<h2>Metadata</h2>")
-                    append("<table class=\"report-metadata\"><tbody>")
+                    append("<table class=\"ort-report-metadata\"><tbody>")
                     tabularScanRecord.metadata.forEach { (key, value) ->
                         append("""
                         <tr>
@@ -334,7 +332,7 @@ class StaticHtmlReporter : Reporter() {
                 tabularScanRecord.projectDependencies.forEach { (project, projectTable) ->
                     append("<li><a href=\"#${project.id}\">${project.id}")
                     projectTable.exclude?.let { exclude ->
-                        append(" <div class=\"reason\">Excluded: ${exclude.reason} - ${exclude.comment}</div>")
+                        append(" <div class=\"ort-reason\">Excluded: ${exclude.reason} - ${exclude.comment}</div>")
                     }
                     append("</a></li>")
                 }
@@ -363,7 +361,7 @@ class StaticHtmlReporter : Reporter() {
                     append("No issues found.")
                 } else {
                     append("""
-                        <table class="report-packages">
+                        <table class="ort-report-table ort-violations">
                         <thead>
                         <tr>
                             <th>Source</th>
@@ -375,7 +373,7 @@ class StaticHtmlReporter : Reporter() {
 
                     evaluatorErrors.forEach { error ->
                         append("""
-                            <tr class="error">
+                            <tr class="ort-error">
                                 <td>${error.source}</td>
                                 <td>${error.message}</td>
                             </tr>
@@ -395,7 +393,7 @@ class StaticHtmlReporter : Reporter() {
                     <h2><a id="$anchor"></a>$title</h2>
                     <p>Errors from excluded components are not shown in this summary.</p>
                     <h3>Packages</h3>
-                    <table class="report-packages">
+                    <table class="ort-report-table ort-errors">
                     <thead>
                     <tr>
                         <th>Package</th>
@@ -407,7 +405,7 @@ class StaticHtmlReporter : Reporter() {
                     """.trimIndent())
 
                 errors.rows.forEach { row ->
-                    val cssClass = "error"
+                    val cssClass = "ort-error"
 
                     append("""
                         <tr class="$cssClass">
@@ -448,7 +446,7 @@ class StaticHtmlReporter : Reporter() {
 
     private fun createTable(title: String, vcsInfo: VcsInfo?, summary: ProjectTable, anchor: String) =
             buildString {
-                val excludedClass = if (summary.exclude != null) " excluded" else ""
+                val excludedClass = if (summary.exclude != null) " ort-excluded" else ""
 
                 append("<h2><a id=\"$anchor\"></a>$title</h2>")
 
@@ -464,7 +462,7 @@ class StaticHtmlReporter : Reporter() {
                 if (vcsInfo != null) {
                     append("""
                         <h3 class="$excludedClass">VCS Information</h3>
-                        <table class="report-metadata$excludedClass">
+                        <table class="ort-report-metadata$excludedClass">
                         <tbody>
                             <tr>
                                 <td>Type</td>
@@ -488,7 +486,7 @@ class StaticHtmlReporter : Reporter() {
 
                 append("""
                     <h3 class="$excludedClass">Packages</h3>
-                    <table class="report-packages$excludedClass">
+                    <table class="ort-report-table ort-packages$excludedClass">
                     <thead>
                     <tr>
                         <th>Package</th>
@@ -505,20 +503,28 @@ class StaticHtmlReporter : Reporter() {
                 summary.rows.forEach { row ->
                     // Only mark the row as excluded if all scopes the dependency appears in are excluded.
                     val rowExcludedClass = if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
-                        " excluded" else ""
+                        " ort-excluded" else ""
 
                     val cssClass = when {
-                        row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> "error"
-                        row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "warning"
-                        else -> "success"
+                        row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> "ort-error"
+                        row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "ort-warning"
+                        else -> "ort-success"
                     }
 
                     append("""
                         <tr class="$cssClass$rowExcludedClass">
                             <td>${row.id}</td>
                             <td>${formatScopes(row.scopes)}</td>
-                            <td>${row.declaredLicenses.joinToString("<br/>")}</td>
-                            <td>${row.detectedLicenses.joinToString("<br/>")}</td>
+                            <td><ul>
+                                ${row.declaredLicenses.joinToString("\n") {
+                                    "<li>$it</li>"
+                                }}
+                            </ul></td>
+                            <td><ul>
+                                ${row.detectedLicenses.joinToString("\n") {
+                                    "<li>$it</li>"
+                                }}
+                            </ul></td>
                             <td><ul>
                                 ${row.analyzerErrors.joinToString("\n") {
                                     "<li>${it.description.replace("\n", "<br/>")}</li>"
@@ -538,14 +544,14 @@ class StaticHtmlReporter : Reporter() {
     private fun formatScopes(scopes: SortedMap<String, List<ScopeExclude>>) =
             scopes.entries.asSequence().sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
                     .joinToString(separator = "", prefix = "<ul>", postfix = "</ul>") {
-                        val excludedClass = if (it.value.isNotEmpty()) "excluded" else ""
+                        val excludedClass = if (it.value.isNotEmpty()) "ort-excluded" else ""
                         "<li class=\"$excludedClass\">${it.key}${formatScopeExcludes(it.value)}</li>"
                     }
 
     private fun formatScopeExcludes(scopeExcludes: List<ScopeExclude>) =
             buildString {
                 if (scopeExcludes.isNotEmpty()) {
-                    append(" <div class=\"reason\">Excluded: ")
+                    append(" <div class=\"ort-reason\">Excluded: ")
                     append(scopeExcludes.joinToString { "${it.reason} - ${it.comment}" })
                     append("</div>")
                 }
