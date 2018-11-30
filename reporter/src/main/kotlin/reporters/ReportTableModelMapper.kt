@@ -29,11 +29,11 @@ import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
 import com.here.ort.reporter.reporters.ReportTableModel.ErrorRow
 import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
-import com.here.ort.reporter.reporters.ReportTableModel.ResolvableError
+import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryRow
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 
-private fun Collection<ResolvableError>.filterUnresolved() = filter { !it.isResolved }
+private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
@@ -43,9 +43,9 @@ class ReportTableModelMapper {
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider
     ): ReportTableModel {
-        fun OrtIssue.toResolvableError(): ResolvableError {
+        fun OrtIssue.toResolvableError(): ResolvableIssue {
             val resolutions = resolutionProvider.getResolutionsFor(this)
-            return ResolvableError(
+            return ResolvableIssue(
                     description = buildString {
                         append(this)
                         if (resolutions.isNotEmpty()) {
