@@ -328,8 +328,8 @@ class ExcelReporter : Reporter() {
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
-                createCell(this, 4, row.analyzerErrors.joinToString(" \n") { it.getDescription() }, font, cellStyle)
-                createCell(this, 5, row.scanErrors.joinToString(" \n") { it.getDescription() }, font, cellStyle)
+                createCell(this, 4, row.analyzerErrors.joinToString(" \n") { it.description }, font, cellStyle)
+                createCell(this, 5, row.scanErrors.joinToString(" \n") { it.description }, font, cellStyle)
 
                 val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
                         row.analyzerErrors.size, row.scanErrors.size).max() ?: 1

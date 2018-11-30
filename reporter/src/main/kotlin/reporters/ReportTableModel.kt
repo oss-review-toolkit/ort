@@ -24,7 +24,6 @@ import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.utils.zipWithDefault
@@ -32,7 +31,7 @@ import com.here.ort.utils.zipWithDefault
 import java.util.SortedMap
 import java.util.SortedSet
 
-fun Collection<ReportTableModel.ResolvableError>.containsUnresolved() = any { !it.isResolved() }
+fun Collection<ReportTableModel.ResolvableError>.containsUnresolved() = any { !it.isResolved }
 
 fun <K> Map<K, Collection<ReportTableModel.ResolvableError>>.containsUnresolved() =
         any { it.value.containsUnresolved() }
@@ -213,17 +212,7 @@ data class ReportTableModel(
     }
 
     data class ResolvableError(
-            private val error: OrtIssue,
-            private val resolutions: List<ErrorResolution>
-    ) {
-        fun getDescription() =
-                buildString {
-                    append(error)
-                    if (resolutions.isNotEmpty()) {
-                        append(resolutions.joinToString(prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" })
-                    }
-                }
-
-        fun isResolved() = resolutions.isNotEmpty()
-    }
+            val description: String,
+            val isResolved: Boolean
+    )
 }
