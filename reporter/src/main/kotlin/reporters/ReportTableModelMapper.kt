@@ -33,7 +33,7 @@ import com.here.ort.reporter.reporters.ReportTableModel.ResolvableError
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryRow
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 
-private fun Collection<ResolvableError>.filterUnresolved() = filter { !it.isResolved() }
+private fun Collection<ResolvableError>.filterUnresolved() = filter { !it.isResolved }
 
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
@@ -44,7 +44,17 @@ class ReportTableModelMapper {
             resolutionProvider: ResolutionProvider
     ): ReportTableModel {
         fun OrtIssue.toResolvableError(): ResolvableError {
-            return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
+            val resolutions = resolutionProvider.getResolutionsFor(this)
+            return ResolvableError(
+                    description = buildString {
+                        append(this)
+                        if (resolutions.isNotEmpty()) {
+                            append(resolutions.joinToString(
+                                    prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
+                            )
+                        }
+                    }, isResolved = resolutions.isNotEmpty()
+            )
         }
 
         val errorSummaryRows = mutableMapOf<Identifier, ErrorRow>()
