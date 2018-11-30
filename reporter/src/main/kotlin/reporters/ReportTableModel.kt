@@ -31,9 +31,9 @@ import com.here.ort.utils.zipWithDefault
 import java.util.SortedMap
 import java.util.SortedSet
 
-fun Collection<ReportTableModel.ResolvableError>.containsUnresolved() = any { !it.isResolved }
+fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
 
-fun <K> Map<K, Collection<ReportTableModel.ResolvableError>>.containsUnresolved() =
+fun <K> Map<K, Collection<ReportTableModel.ResolvableIssue>>.containsUnresolved() =
         any { it.value.containsUnresolved() }
 
 data class ReportTableModel(
@@ -108,12 +108,12 @@ data class ReportTableModel(
             /**
              * All analyzer errors related to this package.
              */
-            val analyzerErrors: List<ResolvableError>,
+            val analyzerErrors: List<ResolvableIssue>,
 
             /**
              * All scan errors related to this package.
              */
-            val scanErrors: List<ResolvableError>
+            val scanErrors: List<ResolvableIssue>
     ) {
         fun merge(other: DependencyRow) =
                 DependencyRow(
@@ -155,12 +155,12 @@ data class ReportTableModel(
             /**
              * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val analyzerErrors: SortedMap<Identifier, List<ResolvableError>>,
+            val analyzerErrors: SortedMap<Identifier, List<ResolvableIssue>>,
 
             /**
              * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val scanErrors: SortedMap<Identifier, List<ResolvableError>>
+            val scanErrors: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
         fun merge(other: SummaryRow): SummaryRow {
             fun <T> plus(left: List<T>, right: List<T>) = left + right
@@ -192,15 +192,15 @@ data class ReportTableModel(
             /**
              * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val analyzerErrors: SortedMap<Identifier, List<ResolvableError>>,
+            val analyzerErrors: SortedMap<Identifier, List<ResolvableIssue>>,
 
             /**
              * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val scanErrors: SortedMap<Identifier, List<ResolvableError>>
+            val scanErrors: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
         fun merge(other: ErrorRow): ErrorRow {
-            val plus = { left: List<ResolvableError>, right: List<ResolvableError> -> left + right }
+            val plus = { left: List<ResolvableIssue>, right: List<ResolvableIssue> -> left + right }
 
             return ErrorRow(
                     id = id,
@@ -211,7 +211,7 @@ data class ReportTableModel(
         }
     }
 
-    data class ResolvableError(
+    data class ResolvableIssue(
             val description: String,
             val isResolved: Boolean
     )
