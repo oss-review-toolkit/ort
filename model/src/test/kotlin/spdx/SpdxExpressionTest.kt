@@ -19,6 +19,10 @@
 
 package com.here.ort.model.spdx
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
+import com.here.ort.model.yamlMapper
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -41,6 +45,46 @@ class SpdxExpressionTest : WordSpec() {
                 val spdxString = spdxExpression.toString()
 
                 spdxString shouldBe "license1 OR license2 AND license3 AND (license4 OR license5 WITH exception)"
+            }
+        }
+
+        "Jackson" should {
+            val expression = "license1+ AND ((license2 WITH exception1 OR license3+) AND license4 WITH exception2)"
+
+            "serialize SpdxExpression to its string representation" {
+                val spdxExpression = SpdxExpression.parse(expression)
+
+                val serializedExpression = yamlMapper.writeValueAsString(spdxExpression)
+
+                serializedExpression shouldBe "--- \"$expression\"\n"
+            }
+
+            "be able to deserialize an SpdxExpression from its string representation" {
+                val serializedExpression = "--- \"$expression\"\n"
+
+                val deserializedExpression = yamlMapper.readValue<SpdxExpression>(serializedExpression)
+
+                deserializedExpression shouldBe SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license1", true),
+                        SpdxOperator.AND,
+                        SpdxCompoundExpression(
+                                SpdxCompoundExpression(
+                                        SpdxCompoundExpression(
+                                                SpdxLicenseIdExpression("license2"),
+                                                SpdxOperator.WITH,
+                                                SpdxLicenseExceptionExpression("exception1")
+                                        ),
+                                        SpdxOperator.OR,
+                                        SpdxLicenseIdExpression("license3", true)
+                                ),
+                                SpdxOperator.AND,
+                                SpdxCompoundExpression(
+                                        SpdxLicenseIdExpression("license4"),
+                                        SpdxOperator.WITH,
+                                        SpdxLicenseExceptionExpression("exception2")
+                                )
+                        )
+                )
             }
         }
     }
