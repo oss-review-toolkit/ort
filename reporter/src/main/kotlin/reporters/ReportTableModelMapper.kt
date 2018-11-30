@@ -19,227 +19,31 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
-import com.here.ort.model.Project
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.getAllDetectedLicenses
-import com.here.ort.model.config.ErrorResolution
-import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
+import com.here.ort.model.getAllDetectedLicenses
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.reporters.ReportTableModelMapper.ResolvableError
-import com.here.ort.utils.zipWithDefault
-
-import java.util.SortedMap
-import java.util.SortedSet
+import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
+import com.here.ort.reporter.reporters.ReportTableModel.ErrorRow
+import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
+import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
+import com.here.ort.reporter.reporters.ReportTableModel.ResolvableError
+import com.here.ort.reporter.reporters.ReportTableModel.SummaryRow
+import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 
 private fun Collection<ResolvableError>.filterUnresolved() = filter { it.isResolved() }
-
-fun Collection<ResolvableError>.containsUnresolved() = any { !it.isResolved() }
-
-fun <K> Map<K, Collection<ResolvableError>>.containsUnresolved() = any { it.value.containsUnresolved() }
 
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
  */
 class ReportTableModelMapper {
-    data class ReportTableModel(
-            /**
-             * The [VcsInfo] for the scanned project.
-             */
-            val vcsInfo: VcsInfo,
-
-            /**
-             * A list containing all evaluator errors. `null` if no evaluator result is available.
-             */
-            val evaluatorErrors: List<OrtIssue>?,
-
-            /**
-             * A [ErrorTable] containing all dependencies that caused errors.
-             */
-            val errorSummary: ErrorTable,
-
-            /**
-             * A [SummaryTable] containing the dependencies of all [Project]s.
-             */
-            val summary: SummaryTable,
-
-            /**
-             * The [ProjectTable]s containing the dependencies for each [Project].
-             */
-            val projectDependencies: SortedMap<Project, ProjectTable>,
-
-            /**
-             * Additional metadata read from the [OrtResult.data] field.
-             */
-            val metadata: Map<String, String>,
-
-            /**
-             * Extra columns that shall be added to the results table by the implementing reporter.
-             */
-            val extraColumns: List<String>
-    )
-
-    data class ProjectTable(
-            /**
-             * The dependencies of this project.
-             */
-            val rows: List<DependencyRow>,
-
-            /**
-             * Information about if and why the project is excluded.
-             */
-            val exclude: ProjectExclude? = null
-    )
-
-    data class DependencyRow(
-            /**
-             * The identifier of the package.
-             */
-            val id: Identifier,
-
-            /**
-             * The scopes the package is used in.
-             */
-            val scopes: SortedMap<String, List<ScopeExclude>>,
-
-            /**
-             * The licenses declared by the package.
-             */
-            val declaredLicenses: SortedSet<String>,
-
-            /**
-             * The detected licenses aggregated from all [ScanResult]s for this package.
-             */
-            val detectedLicenses: SortedSet<String>,
-
-            /**
-             * All analyzer errors related to this package.
-             */
-            val analyzerErrors: List<ResolvableError>,
-
-            /**
-             * All scan errors related to this package.
-             */
-            val scanErrors: List<ResolvableError>
-    ) {
-        fun merge(other: DependencyRow) =
-                DependencyRow(
-                        id = id,
-                        scopes = scopes.zipWithDefault(other.scopes, emptyList()) { a, b -> a + b }.toSortedMap(),
-                        declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
-                        detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
-                        analyzerErrors = (analyzerErrors + other.analyzerErrors).distinct(),
-                        scanErrors = (scanErrors + other.scanErrors).distinct()
-                )
-    }
-
-    data class SummaryTable(
-            val rows: List<SummaryRow>,
-            val projectExcludes: Map<Identifier, ProjectExclude?>
-    )
-
-    data class SummaryRow(
-            /**
-             * The identifier of the package.
-             */
-            val id: Identifier,
-
-            /**
-             * The scopes the package is used in, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val scopes: SortedMap<Identifier, SortedMap<String, List<ScopeExclude>>>,
-
-            /**
-             * The licenses declared by the package.
-             */
-            val declaredLicenses: SortedSet<String>,
-
-            /**
-             * The detected licenses aggregated from all [ScanResult]s for this package.
-             */
-            val detectedLicenses: SortedSet<String>,
-
-            /**
-             * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val analyzerErrors: SortedMap<Identifier, List<ResolvableError>>,
-
-            /**
-             * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val scanErrors: SortedMap<Identifier, List<ResolvableError>>
-    ) {
-        fun merge(other: SummaryRow): SummaryRow {
-            fun <T> plus(left: List<T>, right: List<T>) = left + right
-
-            return SummaryRow(
-                    id = id,
-                    scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
-                        left.zipWithDefault(right, emptyList(), ::plus).toSortedMap()
-                    }.toSortedMap(),
-                    declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
-                    detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
-                    analyzerErrors = analyzerErrors.zipWithDefault(other.analyzerErrors, emptyList(), ::plus)
-                            .toSortedMap(),
-                    scanErrors = scanErrors.zipWithDefault(other.scanErrors, emptyList(), ::plus).toSortedMap()
-            )
-        }
-    }
-
-    data class ErrorTable(
-            val rows: List<ErrorRow>
-    )
-
-    data class ErrorRow(
-            /**
-             * The identifier of the package.
-             */
-            val id: Identifier,
-
-            /**
-             * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val analyzerErrors: SortedMap<Identifier, List<ResolvableError>>,
-
-            /**
-             * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val scanErrors: SortedMap<Identifier, List<ResolvableError>>
-    ) {
-        fun merge(other: ErrorRow): ErrorRow {
-            val plus = { left: List<ResolvableError>, right: List<ResolvableError> -> left + right }
-
-            return ErrorRow(
-                    id = id,
-                    analyzerErrors = analyzerErrors.zipWithDefault(other.analyzerErrors, emptyList(), plus)
-                            .toSortedMap(),
-                    scanErrors = scanErrors.zipWithDefault(other.scanErrors, emptyList(), plus).toSortedMap()
-            )
-        }
-    }
-
-    data class ResolvableError(
-            private val error: OrtIssue,
-            private val resolutions: List<ErrorResolution>
-    ) {
-        fun getDescription() = buildString {
-            append(error)
-            if (resolutions.isNotEmpty()) {
-                append(resolutions.joinToString(prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" })
-            }
-        }
-
-        fun isResolved() = resolutions.isNotEmpty()
-    }
-
     fun mapToReportTableModel(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider
     ): ReportTableModel {
-        fun OrtIssue.toResolvableError(): ReportTableModelMapper.ResolvableError {
+        fun OrtIssue.toResolvableError(): ResolvableError {
             return ResolvableError(this, resolutionProvider.getResolutionsFor(this))
         }
 

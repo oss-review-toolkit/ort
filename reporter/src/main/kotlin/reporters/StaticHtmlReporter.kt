@@ -28,9 +28,9 @@ import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.reporters.ReportTableModelMapper.ErrorTable
-import com.here.ort.reporter.reporters.ReportTableModelMapper.ProjectTable
-import com.here.ort.reporter.reporters.ReportTableModelMapper.ReportTableModel
+import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
+import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
+
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.log
 

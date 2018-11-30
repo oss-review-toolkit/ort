@@ -22,15 +22,14 @@ package com.here.ort.reporter.reporters
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtResult
-
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.reporters.ReportTableModelMapper.ProjectTable
-import com.here.ort.reporter.reporters.ReportTableModelMapper.SummaryTable
+import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
+import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 import com.here.ort.utils.isValidUri
 import com.here.ort.utils.log
 
