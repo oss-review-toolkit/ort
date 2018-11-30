@@ -38,25 +38,24 @@ private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isReso
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
  */
-class ReportTableModelMapper {
-    fun mapToReportTableModel(
-            ortResult: OrtResult,
-            resolutionProvider: ResolutionProvider
-    ): ReportTableModel {
-        fun OrtIssue.toResolvableError(): ResolvableIssue {
-            val resolutions = resolutionProvider.getResolutionsFor(this)
-            return ResolvableIssue(
-                    description = buildString {
-                        append(this@toResolvableError)
-                        if (resolutions.isNotEmpty()) {
-                            append(resolutions.joinToString(
-                                    prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
-                            )
-                        }
-                    }, isResolved = resolutions.isNotEmpty()
-            )
-        }
+class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider) {
+    private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
+        val resolutions = resolutionProvider.getResolutionsFor(this)
+        return ResolvableIssue(
+                description = buildString {
+                    append(this@toResolvableIssue)
+                    if (resolutions.isNotEmpty()) {
+                        append(resolutions.joinToString(
+                                prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
+                        )
+                    }
+                }, isResolved = resolutions.isNotEmpty()
+        )
+    }
 
+    fun mapToReportTableModel(
+            ortResult: OrtResult
+    ): ReportTableModel {
         val errorSummaryRows = mutableMapOf<Identifier, ErrorRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
@@ -108,8 +107,8 @@ class ReportTableModelMapper {
                         scopes = scopes,
                         declaredLicenses = declaredLicenses,
                         detectedLicenses = detectedLicenses,
-                        analyzerErrors = analyzerErrors.map { it.toResolvableError() },
-                        scanErrors = scanErrors.map { it.toResolvableError() }
+                        analyzerErrors = analyzerErrors.map { it.toResolvableIssue() },
+                        scanErrors = scanErrors.map { it.toResolvableIssue() }
                 ).also { row ->
                     val isRowExcluded = projectExclude != null
                             || (scopes.isNotEmpty() && scopes.all { it.value.isNotEmpty() })
