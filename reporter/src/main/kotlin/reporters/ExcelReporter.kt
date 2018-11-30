@@ -89,7 +89,7 @@ class ExcelReporter : Reporter() {
             outputDir: File,
             postProcessingScript: String?
     ): File {
-        val tabularScanRecord = ReportTableModelMapper().mapToReportTableModel(ortResult, resolutionProvider)
+        val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val workbook = XSSFWorkbook()
 
         defaultStyle = workbook.createCellStyle().apply {
