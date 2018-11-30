@@ -17,6 +17,12 @@
                     color: black;
                   }
 
+                  ul {
+                      list-style: none;
+                      margin: 0;
+                      padding: 0;
+                  }
+
                   #report-container {
                     background-color: #fff;
                     border: 1px solid rgba(34,36,38,.15);
@@ -25,7 +31,7 @@
                     margin: 1em 2em 1em 2em;
                   }
 
-                  .report-label {
+                  .ort-report-label {
                     background-color: #f9fafb;
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-right: 1px solid rgba(34,36,38,.15);
@@ -44,46 +50,43 @@
                     width: 110px;
                   }
 
-                  .report-metadata {
+                  .ort-report-metadata {
                     font-size: 12px;
                     border-spacing: 0;
                     table-layout:fixed;
                   }
 
-                  .report-metadata tr {
-                  }
-
-                  .report-metadata td {
+                  .ort-report-metadata td {
                     border-bottom: 1px solid rgba(34,36,38,.15);
-                    overflow: hidden; 
+                    overflow: hidden;
                     padding: 5px 20px 5px 0px;
-                    text-overflow: ellipsis; 
+                    text-overflow: ellipsis;
                     word-wrap: break-word;
                   }
 
-                  .report-metadata tr:first-child td {
+                  .ort-report-metadata tr:first-child td {
                     border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages {
+                  .ort-report-table {
                     border-spacing: 0;
                     width: 100%;
                     table-layout:fixed;
                   }
 
-                  .report-packages th {
+                  .ort-report-table th {
                     background-color: #f9fafb;
                     padding: 5px 5px 5px .8em !important;
                     text-align: left;
                   }
 
-                  .report-packages th:first-child {
+                  .ort-report-table th:first-child {
                     border-top-left-radius: .28rem;
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages th {
+                  .ort-report-table th {
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                     overflow: hidden;
@@ -91,18 +94,18 @@
                     text-overflow: ellipsis;
                   }
 
-                  .report-packages th:last-child {
+                  .ort-report-table th:last-child {
                     border-top-right-radius: .28rem;
                     border-right: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages {
+                  .ort-report-table {
                     overflow: hidden;
                     text-overflow: ellipsis;
                   }
 
-                  .report-packages td {
+                  .ort-report-table td {
                     border-left: 1px solid rgba(34,36,38,.15);
                     border-top: 1px solid rgba(34,36,38,.15);
                     padding: 8px;
@@ -112,43 +115,55 @@
                     word-wrap: break-word;
                   }
 
-                  .report-packages td:last-child {
+                  .ort-report-table td:last-child {
                     border-right: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages tr:last-child td {
+                  .ort-report-table tr:last-child td {
                     border-bottom: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .report-packages tr:last-child td:first-child {
+                  .ort-report-table tr:last-child td:first-child {
                     border-bottom-left-radius: .28rem;
                   }
 
-                  .report-packages tr:last-child td:last-child {
+                  .ort-report-table tr:last-child td:last-child {
                     border-bottom-right-radius: .28rem;
                   }
 
-                  .report-packages tr.error {
+                  .ort-report-table tr.ort-error {
                     background: #fff6f6;
                     color: #9f3a38;
                   }
 
-                  .report-packages tr.warning {
+                  .ort-report-table tr.ort-warning {
                     background: #fffaf3;
                     color: #573a08;
                   }
 
-                  .report-packages tr.ok {
+                  .ort-report-table tr.ort-ok {
                     background: #fcfff5;
                     color: #2c662d;
                   }
 
-                  .report-packages tr:hover {
+                  .ort-report-table tr:hover {
                     background: rgba(34,36,38,.15);
                   }
 
+                  .ort-excluded {
+                    filter: opacity(50%);
+                  }
+
+                  .ort-reason {
+                      border-radius: 3px;
+                      background: #EEE;
+                      padding: 2px;
+                      font-size: 12px;
+                      display: inline;
+                  }
+
                   @media all and (max-width: 1000px) {
-                      .report-packages th:nth-child(2), .report-packages td:nth-child(2) {
+                      .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
                           display:none;
                           width:0;
                           height:0;
@@ -158,20 +173,20 @@
                   }
 
                   @media all and (max-width: 900px) {
-                      .report-packages th:nth-child(3), .report-packages td:nth-child(3) {
+                      .ort-report-table th:nth-child(3), .ort-report-table td:nth-child(3) {
                           display:none;
                           width:0;
                           height:0;
                           opacity:0;
                           visibility: collapse;
-                      } 
+                      }
                   }
 
                   @media all and (max-width: 800px) {
-                      .report-packages th:nth-child(5),
-                      .report-packages td:nth-child(5),
-                      .report-packages th:nth-child(6),
-                      .report-packages td:nth-child(6) {
+                      .ort-report-table th:nth-child(5),
+                      .ort-report-table td:nth-child(5),
+                      .ort-report-table th:nth-child(6),
+                      .ort-report-table td:nth-child(6) {
                           display:none;
                           width:0;
                           height:0;
@@ -179,23 +194,23 @@
                           visibility: collapse;
                       }
 
-                      .report-packages th:nth-child(4) {
+                      .ort-report-table th:nth-child(4) {
                         border-top-right-radius: .28rem;
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages td:nth-child(4) {
+                      .ort-report-table td:nth-child(4) {
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages tr:last-child td:nth-child(4) {
+                      .ort-report-table tr:last-child td:nth-child(4) {
                         border-bottom-right-radius: .28rem;
                       }
                   }
 
                   @media all and (max-width: 500px) {
-                      .report-packages th:nth-child(4),
-                      .report-packages td:nth-child(4) {
+                      .ort-report-table th:nth-child(4),
+                      .ort-report-table td:nth-child(4) {
                           display:none;
                           width:0;
                           height:0;
@@ -203,46 +218,28 @@
                           visibility: collapse;
                       }
 
-                      .report-packages th:first-child {
+                      .ort-report-table th:first-child {
                         border-top-right-radius: .28rem;
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages td:first-child {
+                      .ort-report-table td:first-child {
                         border-right: 1px solid rgba(34,36,38,.15);
                       }
 
-                      .report-packages tr:last-child td:first-child {
+                      .ort-report-table tr:last-child td:first-child {
                         border-bottom-right-radius: .28rem;
                       }
-                  }
-
-                  ul {
-                      list-style-position: inside;
-                      margin: 0;
-                      padding: 0;
-                  }
-
-                  .excluded {
-                      filter: opacity(50%);
-                  }
-
-                  .reason {
-                      border-radius: 3px;
-                      background: #EEE;
-                      padding: 2px;
-                      font-size: 12px;
-                      display: inline;
                   }
                 </style>
             </head>
             <body>
-                <div id="report-container">
-                  <div class="report-label">Scan Report</div>
+            <div id="report-container">
+                  <div class="ort-report-label">Scan Report</div>
                 <h2>Index</h2><ul><li><a href="#error-summary">Error Summary (1)</a></li><li><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a></li></ul><h2><a id="error-summary"></a>Error Summary (1)</h2>
 <p>Errors from excluded components are not shown in this summary.</p>
 <h3>Packages</h3>
-<table class="report-packages">
+<table class="ort-report-table ort-errors">
 <thead>
 <tr>
     <th>Package</th>
@@ -250,7 +247,7 @@
     <th>Scanner Errors</th>
 </tr>
 </thead>
-<tbody><tr class="error">
+<tbody><tr class="ort-error">
     <td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td>
     <td></td>
 <td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
@@ -258,7 +255,7 @@
     <li>n/a: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.<br/>Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file</li>
 </ul>    </td>
 </tr></tbody></table><h2><a id="Gradle:com.here.ort.gradle.example:lib:1.0.0"></a>Gradle:com.here.ort.gradle.example:lib:1.0.0 (analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle)</h2><h3 class="">VCS Information</h3>
-<table class="report-metadata">
+<table class="ort-report-metadata">
 <tbody>
     <tr>
         <td>Type</td>
@@ -278,7 +275,7 @@
     </tr>
 </tbody>
 </table><h3 class="">Packages</h3>
-<table class="report-packages">
+<table class="ort-report-table ort-packages">
 <thead>
 <tr>
     <th>Package</th>
@@ -289,55 +286,75 @@
     <th>Scanner Errors</th>
 </tr>
 </thead>
-<tbody><tr class="error">
+<tbody><tr class="ort-error">
     <td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td>
     <td><ul></ul></td>
-    <td></td>
-    <td></td>
+    <td><ul>
+        
+    </ul></td>
+    <td><ul>
+        
+    </ul></td>
     <td><ul>
         
     </ul></td>
     <td><ul>
         <li>n/a: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.<br/>Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file</li>
     </ul></td>
-</tr><tr class="success">
+</tr><tr class="ort-success">
     <td>Maven:junit:junit:4.12</td>
     <td><ul><li class="">testCompile</li></ul></td>
-    <td>Eclipse Public License 1.0</td>
-    <td></td>
+    <td><ul>
+        <li>Eclipse Public License 1.0</li>
+    </ul></td>
+    <td><ul>
+        
+    </ul></td>
     <td><ul>
         
     </ul></td>
     <td><ul>
         
     </ul></td>
-</tr><tr class="success">
+</tr><tr class="ort-success">
     <td>Maven:org.apache.commons:commons-lang3:3.5</td>
     <td><ul><li class="">compile</li><li class="">testCompile</li></ul></td>
-    <td>Apache License, Version 2.0</td>
-    <td></td>
+    <td><ul>
+        <li>Apache License, Version 2.0</li>
+    </ul></td>
+    <td><ul>
+        
+    </ul></td>
     <td><ul>
         
     </ul></td>
     <td><ul>
         
     </ul></td>
-</tr><tr class="success">
+</tr><tr class="ort-success">
     <td>Maven:org.apache.commons:commons-text:1.1</td>
     <td><ul><li class="">compile</li><li class="">testCompile</li></ul></td>
-    <td>Apache License, Version 2.0</td>
-    <td></td>
+    <td><ul>
+        <li>Apache License, Version 2.0</li>
+    </ul></td>
+    <td><ul>
+        
+    </ul></td>
     <td><ul>
         
     </ul></td>
     <td><ul>
         
     </ul></td>
-</tr><tr class="success">
+</tr><tr class="ort-success">
     <td>Maven:org.hamcrest:hamcrest-core:1.3</td>
     <td><ul><li class="">testCompile</li></ul></td>
-    <td>New BSD License</td>
-    <td></td>
+    <td><ul>
+        <li>New BSD License</li>
+    </ul></td>
+    <td><ul>
+        
+    </ul></td>
     <td><ul>
         
     </ul></td>
