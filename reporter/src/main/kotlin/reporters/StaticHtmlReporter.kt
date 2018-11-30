@@ -45,7 +45,7 @@ class StaticHtmlReporter : Reporter() {
             outputDir: File,
             postProcessingScript: String?
     ): File {
-        val tabularScanRecord = ReportTableModelMapper().mapToReportTableModel(ortResult, resolutionProvider)
+        val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
 
         val html = """
             <!DOCTYPE html>
