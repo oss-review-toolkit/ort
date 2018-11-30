@@ -42,7 +42,24 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getResolutionsFor(this)
         return ResolvableIssue(
+                source = this@toResolvableIssue.source,
                 description = this@toResolvableIssue.toString(),
+                resolutionDescription = buildString {
+                    if (resolutions.isNotEmpty()) {
+                        append(resolutions.joinToString(
+                                prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
+                        )
+                    }
+                },
+                isResolved = resolutions.isNotEmpty()
+        )
+    }
+
+    private fun OrtIssue.toResolvableEvaluatorIssue(): ResolvableIssue {
+        val resolutions = resolutionProvider.getEvaluatorResolutionsFor(this)
+        return ResolvableIssue(
+                source = this@toResolvableEvaluatorIssue.source,
+                description = this@toResolvableEvaluatorIssue.toString(),
                 resolutionDescription = buildString {
                     if (resolutions.isNotEmpty()) {
                         append(resolutions.joinToString(
@@ -183,14 +200,18 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             extraColumns.map { it.toString() }
         }.orEmpty()
 
+        val evaluatorErrors = ortResult.evaluator?.let {
+            it.errors.map { it.toResolvableEvaluatorIssue() }
+        } ?: emptyList()
+
         return ReportTableModel(
-                        ortResult.repository.vcsProcessed,
-                        ortResult.evaluator?.errors,
-                        errorSummaryTable,
-                        summaryTable,
-                        projectTables,
-                        metadata,
-                        extraColumns
+                ortResult.repository.vcsProcessed,
+                evaluatorErrors,
+                errorSummaryTable,
+                summaryTable,
+                projectTables,
+                metadata,
+                extraColumns
         )
     }
 }
