@@ -31,20 +31,45 @@ data class SpdxCompoundExpression(
         val left: SpdxExpression,
         val operator: SpdxOperator,
         val right: SpdxExpression
-) : SpdxExpression()
+) : SpdxExpression() {
+    override fun toString(): String {
+        // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
+        // left or right expressions in parenthesis to not change the semantics of the expression.
+        val leftString = when {
+            left is SpdxCompoundExpression && operator.priority > left.operator.priority -> "($left)"
+            else -> "$left"
+        }
+        val rightString = when {
+            right is SpdxCompoundExpression && operator.priority > right.operator.priority -> "($right)"
+            else -> "$right"
+        }
+
+        return "$leftString $operator $rightString"
+    }
+}
 
 data class SpdxLicenseExceptionExpression(
         val id: String
-) : SpdxExpression()
+) : SpdxExpression() {
+    override fun toString() = id
+}
 
 data class SpdxLicenseIdExpression(
         val id: String,
         val anyLaterVersion: Boolean = false
-) : SpdxExpression()
+) : SpdxExpression() {
+    override fun toString() =
+            buildString {
+                append(id)
+                if (anyLaterVersion) append("+")
+            }
+}
 
 data class SpdxLicenseRefExpression(
         val id: String
-) : SpdxExpression()
+) : SpdxExpression() {
+    override fun toString() = id
+}
 
 enum class SpdxOperator(
         /**
