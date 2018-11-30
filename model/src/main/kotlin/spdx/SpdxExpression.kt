@@ -25,7 +25,33 @@ import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 
-sealed class SpdxExpression
+sealed class SpdxExpression {
+    companion object {
+        fun parse(expression: String): SpdxExpression {
+            val charStream = CharStreams.fromString(expression)
+            val lexer = SpdxExpressionLexer(charStream)
+
+            lexer.addErrorListener(object : BaseErrorListener() {
+                override fun syntaxError(
+                        recognizer: Recognizer<*, *>?,
+                        offendingSymbol: Any?,
+                        line: Int,
+                        charPositionInLine: Int,
+                        msg: String?,
+                        e: RecognitionException?
+                ) {
+                    throw SpdxException(msg)
+                }
+            })
+
+            val tokenStream = CommonTokenStream(lexer)
+            val parser = SpdxExpressionParser(tokenStream)
+            val visitor = SpdxExpressionDefaultVisitor()
+
+            return visitor.visit(parser.licenseExpression())
+        }
+    }
+}
 
 data class SpdxCompoundExpression(
         val left: SpdxExpression,
@@ -80,28 +106,4 @@ enum class SpdxOperator(
     AND(1),
     OR(0),
     WITH(2)
-}
-
-fun parseSpdxExpression(expression: String): SpdxExpression {
-    val charStream = CharStreams.fromString(expression)
-    val lexer = SpdxExpressionLexer(charStream)
-
-    lexer.addErrorListener(object : BaseErrorListener() {
-        override fun syntaxError(
-                recognizer: Recognizer<*, *>?,
-                offendingSymbol: Any?,
-                line: Int,
-                charPositionInLine: Int,
-                msg: String?,
-                e: RecognitionException?
-        ) {
-            throw SpdxException(msg)
-        }
-    })
-
-    val tokenStream = CommonTokenStream(lexer)
-    val parser = SpdxExpressionParser(tokenStream)
-    val visitor = SpdxExpressionDefaultVisitor()
-
-    return visitor.visit(parser.licenseExpression())
 }

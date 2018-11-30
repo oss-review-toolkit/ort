@@ -27,7 +27,7 @@ class SpdxExpressionTest : WordSpec() {
         "toString()" should {
             "return the textual SPDX expression" {
                 val expression = "license1+ AND ((license2 WITH exception1 OR license3+) AND license4 WITH exception2)"
-                val spdxExpression = parseSpdxExpression(expression)
+                val spdxExpression = SpdxExpression.parse(expression)
 
                 val spdxString = spdxExpression.toString()
 
@@ -36,7 +36,7 @@ class SpdxExpressionTest : WordSpec() {
 
             "not include unnecessary parenthesis" {
                 val expression = "(license1 OR (license2 AND license3) AND (license4 OR (license5 WITH exception)))"
-                val spdxExpression = parseSpdxExpression(expression)
+                val spdxExpression = SpdxExpression.parse(expression)
 
                 val spdxString = spdxExpression.toString()
 
