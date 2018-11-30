@@ -24,7 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.config.LicenseMapping
+import com.here.ort.model.spdx.SpdxLicenseMapping
 import com.here.ort.reporter.CopyrightStatementsProcessor
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
@@ -128,7 +128,7 @@ abstract class AbstractNoticeReporter : Reporter() {
         var result = mapOf<String, SortedSet<String>>()
 
         licenseFindings.forEach { finding ->
-            LicenseMapping.map(finding.key).map { spdxLicense ->
+            SpdxLicenseMapping.map(finding.key).map { spdxLicense ->
                 sortedMapOf(spdxLicense.id to finding.value)
             }.forEach {
                 result = result.zipWithDefault(it, sortedSetOf()) { left, right ->

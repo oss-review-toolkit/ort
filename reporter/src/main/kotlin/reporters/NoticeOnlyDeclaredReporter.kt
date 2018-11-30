@@ -21,7 +21,7 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
-import com.here.ort.model.config.LicenseMapping
+import com.here.ort.model.spdx.SpdxLicenseMapping
 
 import java.util.SortedSet
 
@@ -50,7 +50,7 @@ class NoticeOnlyDeclaredReporter : AbstractNoticeReporter() {
         } ?: sortedSetOf<String>()
 
         val allDeclaredSpdxLicenses = allDeclaredLicenses
-                .flatMap { LicenseMapping.map(it) }
+                .flatMap { SpdxLicenseMapping.map(it) }
                 .mapTo(sortedSetOf()) { it.id }
 
         return licenseFindings.filterTo(sortedMapOf()) { (license, _) ->
