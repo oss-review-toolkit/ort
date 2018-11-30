@@ -27,31 +27,31 @@ class SpdxExpressionParserTest : WordSpec() {
     init {
         "SpdxExpressionParser" should {
             "parse a license id correctly" {
-                val spdxExpression = parseSpdxExpression("spdx.license-id")
+                val spdxExpression = SpdxExpression.parse("spdx.license-id")
 
                 spdxExpression shouldBe SpdxLicenseIdExpression("spdx.license-id")
             }
 
             "parse a license id starting with a digit correctly" {
-                val spdxExpression = parseSpdxExpression("0license")
+                val spdxExpression = SpdxExpression.parse("0license")
 
                 spdxExpression shouldBe SpdxLicenseIdExpression("0license")
             }
 
             "parse a license id with any later version correctly" {
-                val spdxExpression = parseSpdxExpression("license+")
+                val spdxExpression = SpdxExpression.parse("license+")
 
                 spdxExpression shouldBe SpdxLicenseIdExpression("license", anyLaterVersion = true)
             }
 
             "parse a document ref correctly" {
-                val spdxExpression = parseSpdxExpression("DocumentRef-license")
+                val spdxExpression = SpdxExpression.parse("DocumentRef-license")
 
                 spdxExpression shouldBe SpdxLicenseRefExpression("DocumentRef-license")
             }
 
             "parse a license ref correctly" {
-                val spdxExpression = parseSpdxExpression("LicenseRef-license")
+                val spdxExpression = SpdxExpression.parse("LicenseRef-license")
 
                 spdxExpression shouldBe SpdxLicenseRefExpression("LicenseRef-license")
             }
@@ -59,7 +59,7 @@ class SpdxExpressionParserTest : WordSpec() {
             "parse a complex expression correctly" {
                 val expression = "license1+ and ((license2 with exception1) OR license3+ AND license4 WITH exception2)"
 
-                val spdxExpression = parseSpdxExpression(expression)
+                val spdxExpression = SpdxExpression.parse(expression)
 
                 spdxExpression shouldBe SpdxCompoundExpression(
                         SpdxLicenseIdExpression("license1", anyLaterVersion = true),
@@ -85,7 +85,7 @@ class SpdxExpressionParserTest : WordSpec() {
             }
 
             "bind + stronger than WITH" {
-                val spdxExpression = parseSpdxExpression("license+ WITH exception")
+                val spdxExpression = SpdxExpression.parse("license+ WITH exception")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
                         SpdxLicenseIdExpression("license", anyLaterVersion = true),
@@ -95,7 +95,7 @@ class SpdxExpressionParserTest : WordSpec() {
             }
 
             "bind WITH stronger than AND" {
-                val spdxExpression = parseSpdxExpression("license1 AND license2 WITH exception")
+                val spdxExpression = SpdxExpression.parse("license1 AND license2 WITH exception")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
                         SpdxLicenseIdExpression("license1"),
@@ -109,7 +109,7 @@ class SpdxExpressionParserTest : WordSpec() {
             }
 
             "bind AND stronger than OR" {
-                val spdxExpression = parseSpdxExpression("license1 OR license2 AND license3")
+                val spdxExpression = SpdxExpression.parse("license1 OR license2 AND license3")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
                         SpdxLicenseIdExpression("license1"),
@@ -123,7 +123,7 @@ class SpdxExpressionParserTest : WordSpec() {
             }
 
             "bind the and operator left associative" {
-                val spdxExpression = parseSpdxExpression("license1 AND license2 AND license3")
+                val spdxExpression = SpdxExpression.parse("license1 AND license2 AND license3")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
                         SpdxCompoundExpression(
@@ -137,7 +137,7 @@ class SpdxExpressionParserTest : WordSpec() {
             }
 
             "bind the or operator left associative" {
-                val spdxExpression = parseSpdxExpression("license1 OR license2 OR license3")
+                val spdxExpression = SpdxExpression.parse("license1 OR license2 OR license3")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
                         SpdxCompoundExpression(
@@ -153,7 +153,7 @@ class SpdxExpressionParserTest : WordSpec() {
             "respect parentheses for binding strength of operators" {
                 val expression = "(license1 OR license2) AND license3"
 
-                val spdxExpression = parseSpdxExpression(expression)
+                val spdxExpression = SpdxExpression.parse(expression)
 
                 spdxExpression shouldBe SpdxCompoundExpression(
                         SpdxCompoundExpression(
@@ -168,7 +168,7 @@ class SpdxExpressionParserTest : WordSpec() {
 
             "fail if + is used in an exception expression" {
                 val exception = shouldThrow<SpdxException> {
-                    parseSpdxExpression("license WITH exception+")
+                    SpdxExpression.parse("license WITH exception+")
                 }
 
                 exception.message shouldBe "SpdxExpression has invalid amount of children: '3'"
@@ -176,7 +176,7 @@ class SpdxExpressionParserTest : WordSpec() {
 
             "fail if a compound expression is used before WITH" {
                 val exception = shouldThrow<SpdxException> {
-                    parseSpdxExpression("(license1 AND license2) WITH exception")
+                    SpdxExpression.parse("(license1 AND license2) WITH exception")
                 }
 
                 exception.message shouldBe "SpdxExpression has invalid amount of children: '3'"
@@ -184,7 +184,7 @@ class SpdxExpressionParserTest : WordSpec() {
 
             "fail on an invalid symbol" {
                 val exception = shouldThrow<SpdxException> {
-                    parseSpdxExpression("/")
+                    SpdxExpression.parse("/")
                 }
 
                 exception.message shouldBe "token recognition error at: '/'"
@@ -192,7 +192,7 @@ class SpdxExpressionParserTest : WordSpec() {
 
             "fail on a syntax error" {
                 val exception = shouldThrow<SpdxException> {
-                    parseSpdxExpression("((")
+                    SpdxExpression.parse("((")
                 }
 
                 exception.message shouldBe "Illegal operator '(' in expression '((<missing ')'>'."
