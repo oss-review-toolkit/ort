@@ -57,6 +57,7 @@ abstract class AbstractNoticeReporter : Reporter() {
     class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport) : ScriptRunner() {
         override val preface = """
             import com.here.ort.model.OrtResult
+            import com.here.ort.model.spdx.SpdxLicense
             import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
 
             import java.util.SortedSet
