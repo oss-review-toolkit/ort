@@ -11,6 +11,12 @@ generateGrammarSource {
 
 compileKotlin.dependsOn(generateGrammarSource)
 
+idea.project.settings {
+    taskTriggers {
+        afterSync tasks.getByName('generateGrammarSource')
+    }
+}
+
 dependencies {
     antlr "org.antlr:antlr4:$antlrVersion"
 
