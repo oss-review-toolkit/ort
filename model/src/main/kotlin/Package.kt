@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.spdx.SpdxExpression
+
 import java.util.SortedSet
 
 /**
@@ -37,6 +39,14 @@ data class Package(
          * The unique identifier of this package.
          */
         val id: Identifier,
+
+        /**
+         * The concluded license as [SpdxExpression]. The concluded license is always set by a [PackageCuration] in case
+         * the [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match
+         * reality.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val concludedLicense: SpdxExpression? = null,
 
         /**
          * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
