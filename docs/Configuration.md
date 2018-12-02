@@ -176,6 +176,7 @@ provide the location of source artifacts. The structure of the curations file is
 # Example for a complete curation object:
 #- id: "Maven:org.hamcrest:hamcrest-core:1.3"
 #  curations:
+#    concluded_license: "Apache-2.0 OR MIT" # Has to be a valid SPDX license expression.
 #    declared_licenses:
 #    - "license a"
 #    - "license b"

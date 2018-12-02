@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.here.ort.model.spdx.SpdxExpression
+
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
@@ -44,6 +46,7 @@ class PackageCurationTest : StringSpec() {
                     id = pkg.id,
                     data = PackageCurationData(
                             declaredLicenses = sortedSetOf("license a", "license b"),
+                            concludedLicense = SpdxExpression.parse("license1 OR license2"),
                             description = "description",
                             homepageUrl = "http://home.page",
                             binaryArtifact = RemoteArtifact(
@@ -71,6 +74,7 @@ class PackageCurationTest : StringSpec() {
             curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
                 declaredLicenses shouldBe curation.data.declaredLicenses
+                concludedLicense shouldBe curation.data.concludedLicense
                 description shouldBe curation.data.description
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe curation.data.binaryArtifact
@@ -121,6 +125,7 @@ class PackageCurationTest : StringSpec() {
             curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
                 declaredLicenses shouldBe pkg.declaredLicenses
+                concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe pkg.binaryArtifact

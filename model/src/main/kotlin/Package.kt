@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.spdx.SpdxExpression
+
 import java.util.SortedSet
 
 /**
@@ -43,6 +45,15 @@ data class Package(
          * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
          */
         val declaredLicenses: SortedSet<String>,
+
+        /**
+         * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
+         * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
+         *
+         * ORT itself does not set this field, it needs to be set by the user using a [PackageCuration].
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val concludedLicense: SpdxExpression? = null,
 
         /**
          * The description of the package, as provided by the package manager.
