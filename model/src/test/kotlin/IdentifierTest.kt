@@ -94,43 +94,43 @@ class IdentifierTest : StringSpec() {
         }
 
         "Identifier is serialized to String" {
-            val id = Identifier("provider", "namespace", "name", "version")
+            val id = Identifier("type", "namespace", "name", "version")
 
             val serializedId = yamlMapper.writeValueAsString(id)
 
-            serializedId shouldBe "--- \"provider:namespace:name:version\"\n"
+            serializedId shouldBe "--- \"type:namespace:name:version\"\n"
         }
 
         "Identifier can be deserialized from String" {
-            val serializedId = "--- \"provider:namespace:name:version\""
+            val serializedId = "--- \"type:namespace:name:version\""
 
             val id = yamlMapper.readValue<Identifier>(serializedId)
 
-            id shouldBe Identifier("provider", "namespace", "name", "version")
+            id shouldBe Identifier("type", "namespace", "name", "version")
         }
 
         "Incomplete Identifier can be deserialized from String" {
-            val serializedId = "--- \"provider:namespace:\""
+            val serializedId = "--- \"type:namespace:\""
 
             val id = yamlMapper.readValue<Identifier>(serializedId)
 
-            id shouldBe Identifier("provider", "namespace", "", "")
+            id shouldBe Identifier("type", "namespace", "", "")
         }
 
         "Identifier map key can be deserialized from String" {
-            val serializedMap = "---\nprovider:namespace:name:version: 1"
+            val serializedMap = "---\ntype:namespace:name:version: 1"
 
             val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
 
-            map shouldBe mapOf(Identifier("provider", "namespace", "name", "version") to 1)
+            map shouldBe mapOf(Identifier("type", "namespace", "name", "version") to 1)
         }
 
         "Incomplete Identifier map key can be deserialized from String" {
-            val serializedMap = "---\nprovider:namespace:: 1"
+            val serializedMap = "---\ntype:namespace:: 1"
 
             val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
 
-            map shouldBe mapOf(Identifier("provider", "namespace", "", "") to 1)
+            map shouldBe mapOf(Identifier("type", "namespace", "", "") to 1)
         }
     }
 }

@@ -79,7 +79,7 @@ class HttpCacheTest : StringSpec() {
         start()
     }
 
-    private val id = Identifier("provider", "namespace", "name", "version")
+    private val id = Identifier("type", "namespace", "name", "version")
 
     private val sourceArtifact = RemoteArtifact(
             "url",

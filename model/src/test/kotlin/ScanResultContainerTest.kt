@@ -31,7 +31,7 @@ import java.time.Duration
 import java.time.Instant
 
 class ScanResultContainerTest : WordSpec() {
-    private val id = Identifier("provider", "namespace", "name", "version")
+    private val id = Identifier("type", "namespace", "name", "version")
 
     private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
     private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)

@@ -30,7 +30,7 @@ class PackageCurationTest : StringSpec() {
         "apply overwrites the correct values" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -90,7 +90,7 @@ class PackageCurationTest : StringSpec() {
         "apply changes only curated fields" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -147,7 +147,7 @@ class PackageCurationTest : StringSpec() {
         "applying curation fails when identifiers do not match" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -161,7 +161,7 @@ class PackageCurationTest : StringSpec() {
             )
             val curation = PackageCuration(
                     id = Identifier(
-                            provider = "",
+                            type = "",
                             namespace = "",
                             name = "",
                             version = ""
@@ -182,7 +182,7 @@ class PackageCurationTest : StringSpec() {
         }
 
         "applying multiple curations in a row adds curation results to the curated package" {
-            val id = Identifier("provider", "namespace", "name", "version")
+            val id = Identifier("type", "namespace", "name", "version")
             val pkg = Package.EMPTY.copy(id = id)
             val curation1 = PackageCuration(id, PackageCurationData(description = "description 1"))
             val curation2 = PackageCuration(id, PackageCurationData(description = "description 2"))

@@ -36,7 +36,7 @@ import io.kotlintest.specs.WordSpec
 
 class ExcludesTest : WordSpec() {
     init {
-        val id = Identifier("provider", "namespace", "name", "version")
+        val id = Identifier("type", "namespace", "name", "version")
 
         val projectId1 = id.copy(name = "project1")
         val projectId2 = id.copy(name = "project2")

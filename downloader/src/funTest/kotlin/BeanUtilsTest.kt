@@ -55,7 +55,7 @@ class BeanUtilsTest : StringSpec() {
 
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "commons-beanutils",
                             name = "commons-beanutils-bean-collections",
                             version = "1.8.3"

@@ -31,12 +31,12 @@ import com.here.ort.utils.encodeOrUnknown
  */
 data class Identifier(
         /**
-         * The name of the provider that hosts this package, for example Maven or NPM.
+         * The type of package, i.e. its packaging type, for example "Maven" or "NPM".
          */
-        val provider: String,
+        val type: String,
 
         /**
-         * The namespace of the package, for example the group id in Maven or the scope in NPM.
+         * The namespace of the package, for example the group for "Maven" or the scope for "NPM".
          */
         val namespace: String,
 
@@ -56,7 +56,7 @@ data class Identifier(
          */
         @JvmField
         val EMPTY = Identifier(
-                provider = "",
+                type = "",
                 namespace = "",
                 name = "",
                 version = ""
@@ -64,25 +64,25 @@ data class Identifier(
     }
 
     private constructor(components: List<String>) : this(
-            provider = components.getOrElse(0) { "" },
+            type = components.getOrElse(0) { "" },
             namespace = components.getOrElse(1) { "" },
             name = components.getOrElse(2) { "" },
             version = components.getOrElse(3) { "" }
     )
 
     /**
-     * Create an [Identifier] from a string with the format "provider:namespace:name:version". If the string has less
-     * than three colon separators the missing values are assigned empty strings.
+     * Create an [Identifier] from a string with the format "type:namespace:name:version". If the string has less than
+     * three colon separators the missing values are assigned empty strings.
      */
     @JsonCreator
     constructor(identifier: String) : this(identifier.split(':'))
 
-    private val components = listOf(provider, namespace, name, version)
+    private val components = listOf(type, namespace, name, version)
 
     init {
         require(components.none { ":" in it }) {
             "Properties of Identifier must not contain ':' because it is used as a separator in the String " +
-                    "representation of the Identifier: provider='$provider', namespace='$namespace', name='$name', " +
+                    "representation of the Identifier: type='$type', namespace='$namespace', name='$name', " +
                     "version='$version'"
         }
     }
@@ -94,7 +94,7 @@ data class Identifier(
      */
     fun isFromVendor(name: String): Boolean {
         val lowerName = name.toLowerCase()
-        val vendorNamespace = when (provider) {
+        val vendorNamespace = when (type) {
             "NPM" -> "@$lowerName"
             "Gradle", "Maven", "SBT" -> "com.$lowerName"
             else -> ""
@@ -104,9 +104,8 @@ data class Identifier(
     }
 
     /**
-     * Return true if this matches the other identifier. To match, both identifiers need to have the same
-     * [provider] and [namespace], and the [name] and [version] must be either equal or empty for at least one of
-     * them.
+     * Return true if this matches the other identifier. To match, both identifiers need to have the same [type] and
+     * [namespace], and the [name] and [version] must be either equal or empty for at least one of them.
      *
      * Examples for matching identifiers:
      * * "maven:org.hamcrest:hamcrest-core:1.3" <-> "maven:org.hamcrest:hamcrest-core:"
@@ -118,7 +117,7 @@ data class Identifier(
      * * "maven:org.hamcrest:hamcrest-core:" <-> "maven:org.hamcrest:hamcrest-library:"
      */
     fun matches(other: Identifier): Boolean {
-        if (!provider.equals(other.provider, true)) {
+        if (!type.equals(other.type, true)) {
             return false
         }
 

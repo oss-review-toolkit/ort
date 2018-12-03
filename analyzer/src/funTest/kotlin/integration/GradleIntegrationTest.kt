@@ -32,7 +32,7 @@ import java.io.File
 class GradleIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
             id = Identifier(
-                    provider = "Maven",
+                    type = "Maven",
                     namespace = "org.gradle",
                     name = "Gradle",
                     version = "4.4.0"

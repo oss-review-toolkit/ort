@@ -82,7 +82,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val projects = parseProjects(workingDir, gopath)
         val packages = mutableListOf<Package>()
         val packageRefs = mutableListOf<PackageReference>()
-        val provider = toString()
+        val packageType = toString()
 
         for (project in projects) {
             // parseProjects() made sure that all entries contain these keys
@@ -104,7 +104,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             }
 
             val pkg = Package(
-                    id = Identifier(provider, "", name, version),
+                    id = Identifier(packageType, "", name, version),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
@@ -126,7 +126,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         return ProjectAnalyzerResult(
                 project = Project(
-                        id = Identifier(provider, "", projectDir.name, projectVcs.revision),
+                        id = Identifier(packageType, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = sortedSetOf(),
                         vcs = VcsInfo.EMPTY,

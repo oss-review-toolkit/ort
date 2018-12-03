@@ -135,7 +135,7 @@ class Downloader {
 
         try {
             if (target.vcsProcessed.url.isBlank()) {
-                val details = when (target.id.provider) {
+                val details = when (target.id.type) {
                     "Bundler" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, see: " +
                             "https://guides.rubygems.org/specification-reference/#metadata"
                     "Gradle" -> " Please make sure the release POM file includes the SCM connection, see: " +
