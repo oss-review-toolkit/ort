@@ -250,4 +250,24 @@ class ScanCodeTest : WordSpec({
             actualFindings shouldBe expectedFindings
         }
     }
+
+    "getConfiguration()" should {
+        "return the default values if the scanner configuration is empty" {
+            val scanCode = ScanCode(ScannerConfiguration())
+
+            scanCode.getConfiguration() shouldBe
+                    "--copyright --license --info --strip-root --timeout 300 --json-pp --license-diag"
+        }
+
+        "return the values from the scanner configuration" {
+            val scanCode = ScanCode(ScannerConfiguration(scanner = mapOf(
+                    "ScanCode" to mapOf(
+                            "commandLine" to "--command --line",
+                            "debugCommandLine" to "--debug --commandLine"
+                    )
+            )))
+
+            scanCode.getConfiguration() shouldBe "--command --line --json-pp --debug --commandLine"
+        }
+    }
 })
