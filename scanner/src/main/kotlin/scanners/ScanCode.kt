@@ -23,21 +23,22 @@ import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
 import com.fasterxml.jackson.databind.JsonNode
+
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindingsMap
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.scanner.AbstractScannerFactory
+import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsCache
-import com.here.ort.scanner.AbstractScannerFactory
-import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
@@ -57,8 +58,8 @@ import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 import java.time.Instant
-import java.util.regex.Pattern
 import java.util.SortedSet
+import java.util.regex.Pattern
 
 import kotlin.math.absoluteValue
 
