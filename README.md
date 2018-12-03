@@ -1,6 +1,6 @@
 # OSS Review Toolkit
 
-| Linux (OpenJDK 8)              | Windows (Oracle JDK 9)          |
+| Linux (OpenJDK 10)             | Windows (Oracle JDK 9)          |
 | :----------------------------- | :------------------------------ |
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] |
 | [![Linux code coverage][5]][6] |                                 |
