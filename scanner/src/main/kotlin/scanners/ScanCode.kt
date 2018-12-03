@@ -66,53 +66,58 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         override fun create(config: ScannerConfiguration) = ScanCode(config)
     }
 
-    private val OUTPUT_FORMAT = "json-pp"
-    private val TIMEOUT = 300
+    companion object {
+        private const val OUTPUT_FORMAT = "json-pp"
+        private const val TIMEOUT = 300
 
-    /**
-     * Configuration options that are relevant for [getConfiguration] because they change the result file.
-     */
-    private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
-            "--copyright",
-            "--license",
-            "--info",
-            "--strip-root",
-            "--timeout", TIMEOUT.toString()
-    )
+        /**
+         * Configuration options that are relevant for [getConfiguration] because they change the result file.
+         */
+        private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
+                "--copyright",
+                "--license",
+                "--info",
+                "--strip-root",
+                "--timeout", TIMEOUT.toString()
+        )
 
-    /**
-     * Configuration options that are not relevant for [getConfiguration] because they do not change the result file.
-     */
-    private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
-            "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
-    )
+        /**
+         * Configuration options that are not relevant for [getConfiguration] because they do not change the result
+         * file.
+         */
+        private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
+                "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
+        )
 
-    /**
-     * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
-     */
-    private val DEFAULT_DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
+        /**
+         * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
+         */
+        private val DEFAULT_DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
 
-    /**
-     * Debug configuration options that are not relevant for [getConfiguration] because they do not change the result
-     * file.
-     */
-    private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
+        /**
+         * Debug configuration options that are not relevant for [getConfiguration] because they do not change the
+         * result file.
+         */
+        private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
 
-    private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
-        "--$OUTPUT_FORMAT"
-    } else {
-        "--output-$OUTPUT_FORMAT"
+        private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
+            "--$OUTPUT_FORMAT"
+        } else {
+            "--output-$OUTPUT_FORMAT"
+        }
+
+        // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
+        private val UNKNOWN_ERROR_REGEX = Pattern.compile(
+                "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+                        "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+                Pattern.DOTALL
+        )
+
+        private val TIMEOUT_ERROR_REGEX = Pattern.compile(
+                "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+                        "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
+        )
     }
-
-    // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
-    private val UNKNOWN_ERROR_REGEX = Pattern.compile(
-            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-                    "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
-            Pattern.DOTALL)
-
-    private val TIMEOUT_ERROR_REGEX = Pattern.compile(
-            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-                    "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
 
     override val scannerVersion = "2.9.7"
     override val resultFileExt = "json"
