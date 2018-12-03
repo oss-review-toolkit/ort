@@ -4,9 +4,6 @@ sudo: required
 
 language: java
 
-jdk:
-  - openjdk10
-
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -40,8 +37,6 @@ install:
   - phpenv global 7.1
   - curl -Ls https://git.io/sbt > ~/bin/sbt
   - chmod a+x ~/bin/sbt
-  - curl -sSL https://get.haskellstack.org/ | sh
-  - stack setup > /dev/null # This installs the whole GHC to an isolated location!
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
   - wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
