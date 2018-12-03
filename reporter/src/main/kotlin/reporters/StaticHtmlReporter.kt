@@ -120,53 +120,24 @@ class StaticHtmlReporter : Reporter() {
 
                   .ort-report-table {
                     border-spacing: 0;
-                    width: 100%;
+                    overflow: hidden;
                     table-layout:fixed;
-                  }
-
-                  .ort-report-table th {
-                    background-color: #f9fafb;
-                    padding: 5px 5px 5px .8em !important;
-                    text-align: left;
-                  }
-
-                  .ort-report-table th:first-child {
-                    border-top-left-radius: .28rem;
-                    border-left: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
-                  }
-
-                  .ort-report-table th {
-                    border-left: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
-                    overflow: hidden;
-                    white-space: nowrap;
                     text-overflow: ellipsis;
+                    width: 100%;
                   }
 
-                  .ort-report-table th:last-child {
-                    border-top-right-radius: .28rem;
-                    border-right: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
+                  .ort-report-table tr:hover {
+                    background: rgba(34,36,38,.15);
                   }
 
-                  .ort-report-table {
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+                  .ort-report-table tr.ort-error {
+                    background: #fff6f6;
+                    color: #9f3a38;
                   }
 
-                  .ort-report-table td {
-                    border-left: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
-                    padding: 8px;
-                    vertical-align: top;
-                    overflow: hidden; 
-                    text-overflow: ellipsis; 
-                    word-wrap: break-word;
-                  }
-
-                  .ort-report-table td:last-child {
-                    border-right: 1px solid rgba(34,36,38,.15);
+                  .ort-report-table tr.ort-warning {
+                    background: #fffaf3;
+                    color: #573a08;
                   }
 
                   .ort-report-table tr:last-child td {
@@ -181,35 +152,58 @@ class StaticHtmlReporter : Reporter() {
                     border-bottom-right-radius: .28rem;
                   }
 
-                  .ort-report-table tr.ort-error {
-                    background: #fff6f6;
-                    color: #9f3a38;
+                  .ort-report-table th {
+                    background-color: #f9fafb;
+                    border-left: 1px solid rgba(34,36,38,.15);
+                    border-top: 1px solid rgba(34,36,38,.15);
+                    overflow: hidden;
+                    padding: 5px 5px 5px .8em !important;
+                    text-align: left;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                   }
 
-                  .ort-report-table tr.ort-warning {
-                    background: #fffaf3;
-                    color: #573a08;
+                  .ort-report-table th:first-child {
+                    border-top-left-radius: .28rem;
+                    border-left: 1px solid rgba(34,36,38,.15);
+                    border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .ort-report-table tr.ort-ok {
-                    background: #fcfff5;
-                    color: #2c662d;
+                  .ort-report-table th:last-child {
+                    border-top-right-radius: .28rem;
+                    border-right: 1px solid rgba(34,36,38,.15);
+                    border-top: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .ort-report-table tr:hover {
-                    background: rgba(34,36,38,.15);
+                  .ort-report-table td {
+                    border-left: 1px solid rgba(34,36,38,.15);
+                    border-top: 1px solid rgba(34,36,38,.15);
+                    padding: 8px;
+                    vertical-align: top;
+                    overflow: hidden; 
+                    text-overflow: ellipsis; 
+                    word-wrap: break-word;
                   }
 
-                  .ort-excluded {
+                  .ort-report-table td li.ort-excluded {
                     filter: opacity(50%);
                   }
 
-                  .ort-reason {
+                  .ort-report-table td li div.ort-reason {
                       border-radius: 3px;
                       background: #EEE;
                       padding: 2px;
                       font-size: 12px;
                       display: inline;
+                  }
+
+                  .ort-report-table td:last-child {
+                    border-right: 1px solid rgba(34,36,38,.15);
+                  }
+
+                  .ort-report-table.ort-violations tr.ort-addressed {
+                    background: #fcfff5;
+                    color: #2c662d;
                   }
 
                   @media all and (max-width: 1000px) {
