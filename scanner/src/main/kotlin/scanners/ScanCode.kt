@@ -90,13 +90,13 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     /**
      * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
      */
-    private val DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
+    private val DEFAULT_DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
 
     /**
      * Debug configuration options that are not relevant for [getConfiguration] because they do not change the result
      * file.
      */
-    private val DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
+    private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
 
     private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
         "--$OUTPUT_FORMAT"
@@ -179,7 +179,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             DEFAULT_CONFIGURATION_OPTIONS.toMutableList().run {
                 add(OUTPUT_FORMAT_OPTION)
                 if (log.isEnabledFor(Level.DEBUG)) {
-                    addAll(DEBUG_CONFIGURATION_OPTIONS)
+                    addAll(DEFAULT_DEBUG_CONFIGURATION_OPTIONS)
                 }
                 joinToString(" ")
             }
@@ -189,8 +189,8 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         val options = (DEFAULT_CONFIGURATION_OPTIONS + DEFAULT_NON_CONFIGURATION_OPTIONS).toMutableList()
 
         if (log.isEnabledFor(Level.DEBUG)) {
-            options += DEBUG_CONFIGURATION_OPTIONS
-            options += DEBUG_NON_CONFIGURATION_OPTIONS
+            options += DEFAULT_DEBUG_CONFIGURATION_OPTIONS
+            options += DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
         }
 
         val startTime = Instant.now()
