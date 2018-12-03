@@ -35,6 +35,7 @@ import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
+import com.here.ort.scanner.ScanResultsCache
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.utils.CommandLineTool
@@ -61,6 +62,22 @@ import java.util.SortedSet
 
 import kotlin.math.absoluteValue
 
+/**
+ * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
+ *
+ * This scanner can be configured in [ScannerConfiguration.scanner] using the key "ScanCode". It offers the following
+ * configuration options:
+ *
+ * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
+ *   looking up results from the [ScanResultsCache]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
+ * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
+ *   considered in [getConfiguration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
+ * * **"debugCommandLine":** Debug command line options that modify the result. Only used if the [log] level is set to
+ *   [Level.DEBUG]. Defaults to [DEFAULT_DEBUG_CONFIGURATION_OPTIONS].
+ * * **"debugCommandLineNonConfig":** Debug command line options that do not modify the result and should therefore not
+ *   be considered in [getConfiguration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
+ *   [DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS].
+ */
 class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     class Factory : AbstractScannerFactory<ScanCode>() {
         override fun create(config: ScannerConfiguration) = ScanCode(config)
@@ -122,6 +139,17 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     override val scannerVersion = "2.9.7"
     override val resultFileExt = "json"
 
+    private val scanCodeConfiguration = config.scanner?.get("ScanCode") ?: emptyMap()
+
+    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
+            ?: DEFAULT_CONFIGURATION_OPTIONS
+    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(" ")
+            ?: DEFAULT_NON_CONFIGURATION_OPTIONS
+    private val debugConfigurationOptions = scanCodeConfiguration["debugCommandLine"]?.split(" ")
+            ?: DEFAULT_DEBUG_CONFIGURATION_OPTIONS
+    private val debugNonConfigurationOptions = scanCodeConfiguration["debugCommandLineNonConfig"]?.split(" ")
+            ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
+
     override fun command(workingDir: File?) = if (OS.isWindows) "scancode.bat" else "scancode"
 
     override fun getVersion(dir: File): String {
@@ -181,21 +209,21 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun getConfiguration() =
-            DEFAULT_CONFIGURATION_OPTIONS.toMutableList().run {
+            configurationOptions.toMutableList().run {
                 add(OUTPUT_FORMAT_OPTION)
                 if (log.isEnabledFor(Level.DEBUG)) {
-                    addAll(DEFAULT_DEBUG_CONFIGURATION_OPTIONS)
+                    addAll(debugConfigurationOptions)
                 }
                 joinToString(" ")
             }
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {
-        val options = (DEFAULT_CONFIGURATION_OPTIONS + DEFAULT_NON_CONFIGURATION_OPTIONS).toMutableList()
+        val options = (configurationOptions + nonConfigurationOptions).toMutableList()
 
         if (log.isEnabledFor(Level.DEBUG)) {
-            options += DEFAULT_DEBUG_CONFIGURATION_OPTIONS
-            options += DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
+            options += debugConfigurationOptions
+            options += debugNonConfigurationOptions
         }
 
         val startTime = Instant.now()
