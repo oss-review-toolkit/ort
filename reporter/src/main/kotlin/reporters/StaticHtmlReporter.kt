@@ -416,9 +416,10 @@ class StaticHtmlReporter : Reporter() {
                         append("""
                                 <a href="#$id">$id</a>
                                 <ul>
-                                    ${errors.joinToString("\n") {
-                            "<li>${it.description.replace("\n", "<br/>")}</li>"
-                        }}
+                                ${errors.joinToString("\n") {
+                                    "    <li><p>${it.description.replace("\n", "</br>")}</p>" +
+                                            "<p>${it.resolutionDescription}</p></li>"
+                                }}
                                 </ul>""".trimIndent())
                     }
 
@@ -430,9 +431,10 @@ class StaticHtmlReporter : Reporter() {
                         append("""
                                 <a href="#$id">$id</a>
                                 <ul>
-                                    ${errors.joinToString("\n") {
-                            "<li>${it.description.replace("\n", "<br/>")}</li>"
-                        }}
+                                ${errors.joinToString("\n") {
+                                    "    <li><p>${it.description.replace("\n", "</br>")}</p>" +
+                                            "<p>${it.resolutionDescription}</p></li>"
+                                }}
                                 </ul>""".trimIndent())
                     }
 
@@ -527,12 +529,14 @@ class StaticHtmlReporter : Reporter() {
                             </ul></td>
                             <td><ul>
                                 ${row.analyzerErrors.joinToString("\n") {
-                                    "<li>${it.description.replace("\n", "<br/>")}</li>"
+                                    "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                            "<p>${it.resolutionDescription}</p></li>"
                                 }}
                             </ul></td>
                             <td><ul>
                                 ${row.scanErrors.joinToString("\n") {
-                                    "<li>${it.description.replace("\n", "<br/>")}</li>"
+                                    "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                            "<p>${it.resolutionDescription}</p></li>"
                                 }}
                             </ul></td>
                         </tr>""".trimIndent())
