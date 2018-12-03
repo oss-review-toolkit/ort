@@ -213,6 +213,7 @@ data class ReportTableModel(
 
     data class ResolvableIssue(
             val description: String,
+            val resolutionDescription: String,
             val isResolved: Boolean
     )
 }

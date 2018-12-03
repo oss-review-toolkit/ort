@@ -42,14 +42,15 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getResolutionsFor(this)
         return ResolvableIssue(
-                description = buildString {
-                    append(this@toResolvableIssue)
+                description = this@toResolvableIssue.toString(),
+                resolutionDescription = buildString {
                     if (resolutions.isNotEmpty()) {
                         append(resolutions.joinToString(
                                 prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
                         )
                     }
-                }, isResolved = resolutions.isNotEmpty()
+                },
+                isResolved = resolutions.isNotEmpty()
         )
     }
 
