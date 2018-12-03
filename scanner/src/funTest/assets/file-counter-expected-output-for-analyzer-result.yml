@@ -162,6 +162,7 @@ scanner:
     tool_versions: {}
   config:
     artifactory_cache: null
+    scanner: null
   results:
     scanned_scopes:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
