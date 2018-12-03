@@ -151,6 +151,18 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     private val debugNonConfigurationOptions = scanCodeConfiguration["debugCommandLineNonConfig"]?.split(" ")
             ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
 
+    val commandLineOptions by lazy {
+        mutableListOf<String>().apply {
+            addAll(configurationOptions)
+            addAll(nonConfigurationOptions)
+
+            if (log.isEnabledFor(Level.DEBUG)) {
+                addAll(debugConfigurationOptions)
+                addAll(debugNonConfigurationOptions)
+            }
+        }.toList()
+    }
+
     override fun command(workingDir: File?) = if (OS.isWindows) "scancode.bat" else "scancode"
 
     override fun getVersion(dir: File): String {
@@ -220,18 +232,11 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {
-        val options = (configurationOptions + nonConfigurationOptions).toMutableList()
-
-        if (log.isEnabledFor(Level.DEBUG)) {
-            options += debugConfigurationOptions
-            options += debugNonConfigurationOptions
-        }
-
         val startTime = Instant.now()
 
         val process = ProcessCapture(
                 scannerPath.absolutePath,
-                *options.toTypedArray(),
+                *commandLineOptions.toTypedArray(),
                 path.absolutePath,
                 OUTPUT_FORMAT_OPTION,
                 resultsFile.absolutePath
