@@ -186,3 +186,26 @@ subprojects {
         archives javadocJar
     }
 }
+
+if (!org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+    task checkCopyright(type: Exec) {
+        description = 'Run tools/check-copyright.sh'
+        group = 'Verification'
+
+        commandLine 'tools/check-copyright.sh'
+    }
+
+    task ktlint(type: Exec) {
+        description = 'Run tools/ktlint.sh.'
+        group = 'Verification'
+
+        commandLine 'tools/ktlint.sh'
+    }
+
+    task check {
+        description = 'Runs all checks.'
+        group = 'Verification'
+
+        dependsOn checkCopyright, ktlint
+    }
+}
