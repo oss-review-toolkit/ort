@@ -314,7 +314,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
         val project = Project(
                 id = Identifier(
-                        provider = toString(),
+                        type = toString(),
                         namespace = "",
                         name = projectName,
                         version = projectVersion
@@ -439,7 +439,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
             val pkg = Package(
                     id = Identifier(
-                            provider = "PyPI",
+                            type = "PyPI",
                             namespace = "",
                             name = name,
                             version = version

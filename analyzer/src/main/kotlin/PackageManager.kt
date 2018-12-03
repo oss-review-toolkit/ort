@@ -212,7 +212,7 @@ abstract class PackageManager(
 
                     val errorProject = Project.EMPTY.copy(
                             id = Identifier(
-                                    provider = toString(),
+                                    type = toString(),
                                     namespace = "",
                                     name = relativePath,
                                     version = ""

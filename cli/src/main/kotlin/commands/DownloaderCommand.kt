@@ -170,7 +170,7 @@ object DownloaderCommand : CommandWithHelp() {
 
                 if (archive) {
                     val zipFile = File(outputDir,
-                            "${pkg.id.provider.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
+                            "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
                                     "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip")
 
                     log.info {

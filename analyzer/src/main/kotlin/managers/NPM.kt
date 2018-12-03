@@ -285,7 +285,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
             val module = Package(
                     id = Identifier(
-                            provider = "NPM",
+                            type = "NPM",
                             namespace = namespace,
                             name = name,
                             version = version
@@ -476,7 +476,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
         val project = Project(
                 id = Identifier(
-                        provider = toString(),
+                        type = toString(),
                         namespace = namespace,
                         name = name,
                         version = version

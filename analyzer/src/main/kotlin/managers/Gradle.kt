@@ -141,7 +141,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
             val project = Project(
                     id = Identifier(
-                            provider = toString(),
+                            type = toString(),
                             namespace = dependencyTreeModel.group,
                             name = dependencyTreeModel.name,
                             version = dependencyTreeModel.version
@@ -174,7 +174,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
             val rawPackage by lazy {
                 Package(
                         id = Identifier(
-                                provider = "Maven",
+                                type = "Maven",
                                 namespace = dependency.groupId,
                                 name = dependency.artifactId,
                                 version = dependency.version

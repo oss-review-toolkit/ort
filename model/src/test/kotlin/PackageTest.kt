@@ -26,8 +26,8 @@ import io.kotlintest.specs.StringSpec
 class PackageTest : StringSpec() {
     init {
         "diff throws an exception if the identifiers are not equals" {
-            val pkg = Package.EMPTY.copy(id = Identifier("provider1", "namespace1", "name1", "version1"))
-            val other = Package.EMPTY.copy(id = Identifier("provider2", "namespace2", "name2", "version2"))
+            val pkg = Package.EMPTY.copy(id = Identifier("type1", "namespace1", "name1", "version1"))
+            val other = Package.EMPTY.copy(id = Identifier("type2", "namespace2", "name2", "version2"))
 
             shouldThrow<IllegalArgumentException> {
                 pkg.diff(other)
@@ -37,7 +37,7 @@ class PackageTest : StringSpec() {
         "diff result contains all changed values" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "provider",
+                            type = "type",
                             namespace = "namespace",
                             name = "name",
                             version = "version"
@@ -52,7 +52,7 @@ class PackageTest : StringSpec() {
 
             val other = Package(
                     id = Identifier(
-                            provider = "provider",
+                            type = "type",
                             namespace = "namespace",
                             name = "name",
                             version = "version"
@@ -78,7 +78,7 @@ class PackageTest : StringSpec() {
         "diff result does not contain unchanged values" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "provider",
+                            type = "type",
                             namespace = "namespace",
                             name = "name",
                             version = "version"

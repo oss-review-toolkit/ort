@@ -148,7 +148,7 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         val project = Project(
                 id = Identifier(
-                        provider = if (sbtMode) "SBT" else "Maven",
+                        type = if (sbtMode) "SBT" else "Maven",
                         namespace = mavenProject.groupId,
                         name = mavenProject.artifactId,
                         version = mavenProject.version

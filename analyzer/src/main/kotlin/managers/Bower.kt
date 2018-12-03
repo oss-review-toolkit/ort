@@ -62,10 +62,10 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         private const val REQUIRED_BOWER_VERSION = "1.8.4"
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
-        private const val PROVIDER_NAME = "Bower"
+        private const val PACKAGE_TYPE = "Bower"
 
         private fun extractPackageId(node: JsonNode) = Identifier(
-                provider = PROVIDER_NAME,
+                type = PACKAGE_TYPE,
                 namespace = "",
                 name = node["pkgMeta"]["name"].textValueOrEmpty(),
                 version = node["pkgMeta"]["version"].textValueOrEmpty()
@@ -206,7 +206,7 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 Bower(analyzerConfig, repoConfig)
     }
 
-    override fun toString() = PROVIDER_NAME
+    override fun toString() = PACKAGE_TYPE
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bower.cmd" else "bower"
 

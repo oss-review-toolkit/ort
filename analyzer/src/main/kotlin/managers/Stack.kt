@@ -84,7 +84,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         }
 
         val projectPackage = parseCabalFile(cabalFile.readText())
-        val projectId = projectPackage.id.copy(provider = toString())
+        val projectId = projectPackage.id.copy(type = toString())
 
         // Parse package information from the stack.yaml file.
         fun runStack(vararg command: String): ProcessCapture {
@@ -168,7 +168,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                         id = Identifier(
                                 // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
                                 // on Hackage.
-                                provider = if (childName == "rts") "GHC" else "Hackage",
+                                type = if (childName == "rts") "GHC" else "Hackage",
                                 namespace = "",
                                 name = childName,
                                 version = versionMap[childName] ?: ""
@@ -182,7 +182,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
                 )
 
                 val pkg = allPackages.getOrPut(pkgTemplate) {
-                    if (pkgTemplate.id.provider == "Hackage") {
+                    if (pkgTemplate.id.type == "Hackage") {
                         // Enrich the package with additional meta-data from Hackage.
                         downloadCabalFile(pkgTemplate)?.let {
                             parseCabalFile(it)
@@ -315,7 +315,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val map = parseKeyValue(cabal.lines().listIterator())
 
         val id = Identifier(
-                provider = "Hackage",
+                type = "Hackage",
                 namespace = map["category"] ?: "",
                 name = map["name"] ?: "",
                 version = map["version"] ?: ""

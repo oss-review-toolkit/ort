@@ -49,7 +49,7 @@ class DirectoryTest : StringSpec() {
         "Creates directories for Gradle submodules" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "provider",
+                            type = "type",
                             namespace = "namespace",
                             name = "name",
                             version = "version"
@@ -68,7 +68,7 @@ class DirectoryTest : StringSpec() {
             }
 
             outputDir.list().size shouldBe 1
-            outputDir.list().first() shouldBe pkg.id.provider.fileSystemEncode()
+            outputDir.list().first() shouldBe pkg.id.type.fileSystemEncode()
 
             val namespaceDir = File(outputDir, outputDir.list().first())
             namespaceDir.list().size shouldBe 1

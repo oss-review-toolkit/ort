@@ -193,7 +193,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
         return Project(
                 id = Identifier(
-                        provider = toString(),
+                        type = toString(),
                         namespace = rawName.substringBefore("/"),
                         name = rawName.substringAfter("/"),
                         version = json["version"].textValueOrEmpty()
@@ -225,7 +225,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
                 packages[rawName] = Package(
                         id = Identifier(
-                                provider = toString(),
+                                type = toString(),
                                 namespace = rawName.substringBefore("/"),
                                 name = rawName.substringAfter("/"),
                                 version = version

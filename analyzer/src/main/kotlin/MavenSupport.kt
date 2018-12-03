@@ -494,7 +494,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         return Package(
                 id = Identifier(
-                        provider = "Maven",
+                        type = "Maven",
                         namespace = mavenProject.groupId,
                         name = mavenProject.artifactId,
                         version = mavenProject.version
