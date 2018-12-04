@@ -251,7 +251,7 @@ class ExcelReporter : Reporter() {
                     append("$id\n")
 
                     errors.forEach { error ->
-                        append("  $error\n")
+                        append("  ${error.description}\n")
                     }
                 }
             }
@@ -263,7 +263,7 @@ class ExcelReporter : Reporter() {
                     append("$id\n")
 
                     errors.forEach { error ->
-                        append("  $error\n")
+                        append("  ${error.description}\n")
                     }
                 }
             }
