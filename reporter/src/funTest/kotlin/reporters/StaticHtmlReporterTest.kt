@@ -37,7 +37,11 @@ class StaticHtmlReporterTest : WordSpec({
         "successfully export to a static HTML page" {
             val outputDir = createTempDir().apply { deleteOnExit() }
             StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
-            outputDir.resolve("scan-report.html").isFile shouldBe true
+
+            val actualFile = outputDir.resolve("scan-report.html")
+            val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.html")
+
+            actualFile.readText() shouldBe expectedFile.readText()
         }
     }
 })
