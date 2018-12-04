@@ -17,37 +17,23 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter
+package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
-import com.here.ort.reporter.reporters.ExcelReporter
-import com.here.ort.reporter.reporters.StaticHtmlReporter
-import com.here.ort.reporter.reporters.WebAppReporter
+import com.here.ort.reporter.DefaultResolutionProvider
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class ReporterTest : WordSpec({
+class WebAppReporterTest : WordSpec({
     val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
             .readValue<OrtResult>()
 
-    "A result file" should {
-        "successfully export to an Excel sheet" {
-            val outputDir = createTempDir().apply { deleteOnExit() }
-            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
-            outputDir.resolve("scan-report.xlsx").isFile shouldBe true
-        }
-
-        "successfully export to a static HTML page" {
-            val outputDir = createTempDir().apply { deleteOnExit() }
-            StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
-            outputDir.resolve("scan-report.html").isFile shouldBe true
-        }
-
+    "WebAppReporter" should {
         "successfully export to a web application" {
             val outputDir = createTempDir().apply { deleteOnExit() }
             WebAppReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
