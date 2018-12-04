@@ -70,8 +70,8 @@ class NoticeReporterTest : WordSpec() {
     init {
         "NoticeReporter" should {
             "generate the correct license notes" {
-                val expectedText = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+                val expectedText = File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
+                val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val report = generateReport(ortResult)
 
@@ -79,8 +79,8 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "contain all licenses without excludes" {
-                val expectedText = File("src/test/assets/npm-test-without-exclude-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/npm-test-without-exclude-scan-results.yml")
+                val expectedText = File("src/funTest/assets/npm-test-without-exclude-expected-NOTICE").readText()
+                val ortResult = readOrtResult("src/funTest/assets/npm-test-without-exclude-scan-results.yml")
 
                 val report = generateReport(ortResult)
 
@@ -88,8 +88,8 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "not contain licenses of excluded packages" {
-                val expectedText = File("src/test/assets/npm-test-with-exclude-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+                val expectedText = File("src/funTest/assets/npm-test-with-exclude-expected-NOTICE").readText()
+                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
                 val report = generateReport(ortResult)
 
@@ -97,8 +97,8 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "evaluate the provided post-processing script" {
-                val expectedText = File("src/test/assets/post-processed-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+                val expectedText = File("src/funTest/assets/post-processed-expected-NOTICE").readText()
+                val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val postProcessingScript = """
                     headers = listOf("Header 1\n", "Header 2\n")
@@ -112,8 +112,8 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "return the input as-is for an empty post-processing script" {
-                val expectedText = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+                val expectedText = File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
+                val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val report = generateReport(ortResult, postProcessingScript = "")
 
@@ -121,7 +121,7 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "contain a copyright statement if not contained in copyright garnage" {
-                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
                 val report = generateReport(ortResult, CopyrightGarbage())
 
@@ -129,7 +129,7 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "contain a copyright statement if only its prefix is contained in copyright garbage" {
-                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
                 val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Fel"))
 
@@ -137,7 +137,7 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "contain a copyright statement if only its super string contained in copyright garbage" {
-                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
                 val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix BohmX"))
 
@@ -145,7 +145,7 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "not contain a copyright statement if it is contained in garbage" {
-                val ortResult = readOrtResult("src/test/assets/npm-test-with-exclude-scan-results.yml")
+                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
                 val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix Bohm"))
 

@@ -32,9 +32,9 @@ import java.io.File
 class NoticeOnlyDeclaredReporterTest : WordSpec({
     "NoticesOnlyDeclaredReporter" should {
         "generate the correct license notes" {
-            val expectedResultFile = File("src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE_ONLY_DECLARED")
+            val expectedResultFile = File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE_ONLY_DECLARED")
             val expectedText = expectedResultFile.readText()
-            val scanRecordFile = File("src/test/assets/NPM-is-windows-1.0.2-scan-result.json")
+            val scanRecordFile = File("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
             val ortResult = scanRecordFile.readValue<OrtResult>()
             val outputDir = createTempDir().also { it.deleteOnExit() }
 
