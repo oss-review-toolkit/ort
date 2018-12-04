@@ -186,3 +186,44 @@ subprojects {
         archives javadocJar
     }
 }
+
+task checkCopyright(type: Exec) {
+    description = 'Checks for HERE Copyright headers in Kotlin files.'
+    group = 'Verification'
+
+    commandLine 'git', 'grep', '-EL', 'Copyright.+HERE', '*.kt'
+    ignoreExitValue = true
+    standardOutput = new ByteArrayOutputStream()
+
+    doLast {
+        def output = standardOutput.toString().trim()
+        if (!output.empty) {
+            throw new GradleException("Please add copyright statements to the following Kotlin files:\n$output")
+        }
+    }
+}
+
+task ktlint(type: JavaExec) {
+    description = 'Runs ktlint checks.'
+    group = 'Verification'
+
+    classpath = files('ktlint')
+    main = 'com.github.shyiko.ktlint.Main'
+    ignoreExitValue = true
+    standardOutput = new ByteArrayOutputStream()
+
+    doLast {
+        def output = standardOutput.toString().trim().tokenize('\n')
+        output.removeAll { it.contains('Wildcard import') || it.contains('Unexpected spacing before') }
+        if (!output.empty) {
+            throw new GradleException("Please fix the following issues:\n${output.join('\n')}")
+        }
+    }
+}
+
+task check {
+    description = 'Runs all checks.'
+    group = 'Verification'
+
+    dependsOn checkCopyright, ktlint
+}
