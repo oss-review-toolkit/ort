@@ -94,6 +94,7 @@ class ArtifactoryCache(
 
         if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
 
+        // Only keep scan results whose provenance information matches the package information.
         scanResults.retainAll { it.provenance.matches(pkg) }
         if (scanResults.isEmpty()) {
             log.info {
@@ -103,6 +104,7 @@ class ArtifactoryCache(
             return ScanResultContainer(pkg.id, scanResults)
         }
 
+        // Only keep scan results from compatible scanners.
         scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
         if (scanResults.isEmpty()) {
             log.info {
