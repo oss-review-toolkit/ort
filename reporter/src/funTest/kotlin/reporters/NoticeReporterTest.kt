@@ -120,7 +120,7 @@ class NoticeReporterTest : WordSpec() {
                 report shouldBe expectedText
             }
 
-            "contain a copyright statement if not contained in copyright garnage" {
+            "contain a copyright statement if not contained in copyright garbage" {
                 val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
                 val report = generateReport(ortResult, CopyrightGarbage())
