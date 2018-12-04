@@ -47,7 +47,7 @@ class ReportTableModelMapper {
             val resolutions = resolutionProvider.getResolutionsFor(this)
             return ResolvableIssue(
                     description = buildString {
-                        append(this)
+                        append(this@toResolvableError)
                         if (resolutions.isNotEmpty()) {
                             append(resolutions.joinToString(
                                     prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
