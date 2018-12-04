@@ -23,6 +23,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
+import com.here.ort.utils.OS
 import com.here.ort.utils.unpackZip
 
 import io.kotlintest.shouldBe
@@ -35,7 +36,7 @@ class ExcelReporterTest : WordSpec({
             .readValue<OrtResult>()
 
     "ExcelReporter" should {
-        "successfully export to an Excel sheet" {
+        "successfully export to an Excel sheet".config(enabled = OS.isWindows) {
             val outputDir = createTempDir().apply { deleteOnExit() }
             ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
 
