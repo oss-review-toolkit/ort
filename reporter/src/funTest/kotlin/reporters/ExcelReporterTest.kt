@@ -23,6 +23,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
+import com.here.ort.utils.unpackZip
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -38,6 +39,20 @@ class ExcelReporterTest : WordSpec({
             val outputDir = createTempDir().apply { deleteOnExit() }
             ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
             outputDir.resolve("scan-report.xlsx").isFile shouldBe true
+
+            val actualFile = outputDir.resolve("scan-report.xlsx")
+            val actualXlsxUnpacked = createTempDir().apply { deleteOnExit() }
+            actualFile.unpackZip(actualXlsxUnpacked)
+
+            val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")
+            val expactedXlsxUnpacked = createTempDir().apply { deleteOnExit() }
+            expectedFile.unpackZip(expactedXlsxUnpacked)
+
+            val sheet1 = "xl/worksheets/sheet1.xml"
+            val sheet2 = "xl/worksheets/sheet2.xml"
+            actualFile.isFile shouldBe true
+            actualXlsxUnpacked.resolve(sheet1).readText() shouldBe expactedXlsxUnpacked.resolve(sheet1).readText()
+            actualXlsxUnpacked.resolve(sheet2).readText() shouldBe expactedXlsxUnpacked.resolve(sheet2).readText()
         }
     }
 })
