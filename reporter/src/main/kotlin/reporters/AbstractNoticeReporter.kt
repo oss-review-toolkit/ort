@@ -36,7 +36,7 @@ import com.here.ort.utils.zipWithDefault
 import java.io.File
 import java.util.SortedSet
 
-private fun LicenseFindingsMap.filterBy(copyrightGarbage: CopyrightGarbage) =
+private fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
         mapValues { (_, copyrights) ->
             copyrights.filterNot {
                 it in copyrightGarbage.items
@@ -95,7 +95,7 @@ abstract class AbstractNoticeReporter : Reporter() {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings = getLicenseFindings(ortResult).filterBy(copyrightGarbage)
+        val licenseFindings = getLicenseFindings(ortResult).removeGarbage(copyrightGarbage)
         val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
 
         val findings = spdxLicenseFindings.filterNot { (license, _) ->
