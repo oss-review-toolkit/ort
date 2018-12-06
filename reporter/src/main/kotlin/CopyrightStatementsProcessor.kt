@@ -66,14 +66,8 @@ class CopyrightStatementsProcessor {
         private val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
         private val KNOWN_PREFIX_REGEX = listOf(
                 "^(\\(c\\))",
-                "^(\\(c\\) [C|c]opyright)",
-                "^(\\(c\\) [C|c]opyrighted)",
                 "^([C|c]opyright)",
                 "^([C|c]opyright \\(c\\))",
-                "^([C|c]opyright [O|o]wnership)",
-                "^([C|c]opyright')",
-                "^([C|c]opyright' \\(c\\))",
-                "^(COPYRIGHT)",
                 "^([C|c]opyrighted)",
                 "^([C|c]opyrighted \\(c\\))",
                 "^([P|p]ortions [C|c]opyright)",
