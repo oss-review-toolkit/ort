@@ -45,8 +45,8 @@ class PackageTest : StringSpec() {
                     declaredLicenses = sortedSetOf("declared license"),
                     description = "description",
                     homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
-                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
+                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
                     vcs = VcsInfo("type", "url", "revision")
             )
 
@@ -60,8 +60,8 @@ class PackageTest : StringSpec() {
                     declaredLicenses = sortedSetOf("other declared license"),
                     description = "other description",
                     homepageUrl = "other homepageUrl",
-                    binaryArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.SHA1),
-                    sourceArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.SHA1),
+                    binaryArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
+                    sourceArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
                     vcs = VcsInfo("other type", "other url", "other revision")
             )
 
@@ -86,8 +86,8 @@ class PackageTest : StringSpec() {
                     declaredLicenses = sortedSetOf("declared license"),
                     description = "description",
                     homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
-                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
+                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
                     vcs = VcsInfo("type", "url", "revision")
             )
 
