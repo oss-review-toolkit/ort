@@ -51,6 +51,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.stashDirectories
 import com.here.ort.utils.textValueOrEmpty
+import com.here.ort.utils.toHexString
 
 import com.vdurmont.semver4j.Requirement
 
@@ -60,12 +61,10 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URLEncoder
+import java.util.Base64
 import java.util.SortedSet
 
 import okhttp3.Request
-
-import org.apache.commons.codec.binary.Base64
-import org.apache.commons.codec.binary.Hex
 
 /**
  * The Node package manager for JavaScript, see https://www.npmjs.com/.
@@ -209,7 +208,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 splitHash.count() == 2 -> {
                     // Support Subresource Integrity (SRI) hashes, see
                     // https://w3c.github.io/webappsec-subresource-integrity/
-                    hash = Hex.encodeHexString(Base64.decodeBase64(splitHash.last()))
+                    hash = Base64.getDecoder().decode(splitHash.last()).toHexString()
                     HashAlgorithm.fromString(splitHash.first())
                 }
                 hash.isNotEmpty() -> HashAlgorithm.SHA1
