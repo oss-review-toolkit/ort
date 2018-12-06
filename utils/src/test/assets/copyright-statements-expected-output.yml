@@ -178,6 +178,10 @@ processed_statements:
   - "(c) Bud Xml@"
   (c) C1 a!sSaT DyiYyEM:
   - "(c) C1 a!sSaT DyiYyEM"
+  copyright 2000-2005 CDE:
+  - "copyright 2001,u'2002 CDE"
+  - "copyright u'2000 CDE"
+  - "copyright u'2003 - 2005 CDE"
   Copyright (c) 2015 Calvin Metcalf:
   - "Copyright (c) 2015 Calvin Metcalf"
   Copyright 2010-2014 Caolan McMahon:
@@ -726,6 +730,8 @@ processed_statements:
     \ Stockholm, Sweden)."
   Copyright (c) 2013 Kyle Robinson Young:
   - "Copyright (c) 2013 Kyle Robinson Young"
+  copyright 2011-2017 LLVM Project:
+  - "copyright u'2011-2017, LLVM Project"
   Copyright (c) 2015 Lars Kanis:
   - "Copyright (c) 2015 Lars Kanis"
   Copyright 2013 LinkedIn Corp.:
@@ -779,6 +785,8 @@ processed_statements:
   Copyright (c) 2010-2018 Michael Bleigh, Josh Kalderimis, Erik Michaels-Ober, and Pavel Pravosud.:
   - "Copyright (c) 2010-2018 Michael Bleigh, Josh Kalderimis, Erik Michaels-Ober,\
     \ and Pavel Pravosud."
+  copyright 2015 Michael Dowling:
+  - "copyright u'2015, Michael Dowling"
   Copyright (c) 2015 Michael Dowling <https://github.com/mtdowling>:
   - "Copyright (c) 2015 Michael Dowling <https://github.com/mtdowling>"
   Copyright (c) 2011-2018 Michael Dowling, https://github.com/mtdowling <mtdowling@gmail.com>:
@@ -816,6 +824,8 @@ processed_statements:
   - "Copyright 2014 Mozilla Foundation and contributors"
   Copyright (c) 2013 My C-Sense:
   - "Copyright (c) 2013 My C-Sense"
+  copyright 2009 N EN:
+  - "copyright u'2009 N EN"
   Copyright (c) 2018 NAN WG Members:
   - "Copyright (c) 2018 NAN WG Members"
   Copyright (c) 2018 NAN contributors:
@@ -1391,16 +1401,6 @@ processed_statements:
   - "(c) 2008 thawte, Inc."
   Copyright 2014 the Melange authors.:
   - "Copyright 2014 the Melange authors."
-  copyright 2000-2005 u' CDE:
-  - "copyright 2001,u'2002 CDE"
-  - "copyright u'2000 CDE"
-  - "copyright u'2003 - 2005 CDE"
-  copyright 2009 u' N EN:
-  - "copyright u'2009 N EN"
-  copyright 2011-2017 u', LLVM Project:
-  - "copyright u'2011-2017, LLVM Project"
-  copyright 2015 u', Michael Dowling:
-  - "copyright u'2015, Michael Dowling"
   Copyright (c) 2000-2006 www.hamcrest.org:
   - "Copyright (c) 2000-2006, www.hamcrest.org"
   copyright xmlns https://phar.io/xml/manifest/1.0:
