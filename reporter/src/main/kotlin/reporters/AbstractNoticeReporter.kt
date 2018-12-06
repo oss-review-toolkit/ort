@@ -36,13 +36,6 @@ import com.here.ort.utils.zipWithDefault
 import java.io.File
 import java.util.SortedSet
 
-private fun LicenseFindingsMap.filterBy(copyrightGarbage: CopyrightGarbage) =
-        mapValues { (_, copyrights) ->
-            copyrights.filterNot {
-                it in copyrightGarbage.items
-            }.toMutableSet()
-        }.toSortedMap()
-
 abstract class AbstractNoticeReporter : Reporter() {
     companion object {
         const val NOTICE_SEPARATOR = "\n----\n\n"
@@ -52,7 +45,22 @@ abstract class AbstractNoticeReporter : Reporter() {
             val headers: List<String>,
             val findings: LicenseFindingsMap,
             val footers: List<String>
-    )
+    ) {
+        fun cleanedFindings(copyrightGarbage: CopyrightGarbage) =
+                findings.removeGarbage(copyrightGarbage).processStatements()
+
+        private fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
+                mapValues { (_, copyrights) ->
+                    copyrights.filterNot {
+                        it in copyrightGarbage.items
+                    }.toMutableSet()
+                }.toSortedMap()
+
+        private fun LicenseFindingsMap.processStatements() =
+                mapValues { (_, copyrights) ->
+                    CopyrightStatementsProcessor().process(copyrights).toMutableSet()
+                }.toSortedMap()
+    }
 
     class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport) : ScriptRunner() {
         override val preface = """
@@ -95,7 +103,7 @@ abstract class AbstractNoticeReporter : Reporter() {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings = getLicenseFindings(ortResult).filterBy(copyrightGarbage)
+        val licenseFindings = getLicenseFindings(ortResult)
         val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
 
         val findings = spdxLicenseFindings.filterNot { (license, _) ->
@@ -109,16 +117,12 @@ abstract class AbstractNoticeReporter : Reporter() {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val processedFindings = findings.mapValues { (_, copyrights) ->
-            CopyrightStatementsProcessor().process(copyrights).toMutableSet()
-        }.toSortedMap()
-
-        val noticeReport = NoticeReport(listOf(header), processedFindings, emptyList()).let { noticeReport ->
+        val noticeReport = NoticeReport(listOf(header), findings, emptyList()).let { noticeReport ->
             postProcessingScript?.let { PostProcessor(ortResult, noticeReport).run(it) } ?: noticeReport
         }
 
         val outputFile = File(outputDir, noticeFileName)
-        writeNoticeReport(noticeReport, outputFile)
+        writeNoticeReport(noticeReport, copyrightGarbage, outputFile)
 
         return outputFile
     }
@@ -139,14 +143,14 @@ abstract class AbstractNoticeReporter : Reporter() {
         return result.toSortedMap()
     }
 
-    private fun writeNoticeReport(noticeReport: NoticeReport, outputFile: File) {
+    private fun writeNoticeReport(noticeReport: NoticeReport, copyrightGarbage: CopyrightGarbage, outputFile: File) {
         log.info { "Writing $noticeFileName file to '${outputFile.absolutePath}'." }
 
         val headers = noticeReport.headers.joinToString(NOTICE_SEPARATOR)
         outputFile.appendText(headers)
 
         if (noticeReport.findings.isNotEmpty()) {
-            val findings = noticeReport.findings.map { (license, copyrights) ->
+            val findings = noticeReport.cleanedFindings(copyrightGarbage).map { (license, copyrights) ->
                 val notice = buildString {
                     // Note: Do not use appendln() here as that would write out platform-native line endings, but we
                     // want to normalize on Unix-style line endings for consistency.
