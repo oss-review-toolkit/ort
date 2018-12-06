@@ -59,15 +59,18 @@ abstract class AbstractNoticeReporter : Reporter() {
             val footers: List<String>
     )
 
-    class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport) : ScriptRunner() {
+    class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport, copyrightGarbage: CopyrightGarbage)
+        : ScriptRunner() {
         override val preface = """
             import com.here.ort.model.*
+            import com.here.ort.model.config.*
             import com.here.ort.model.spdx.*
             import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
 
             // Input:
             val ortResult = bindings["ortResult"] as OrtResult
             val noticeReport = bindings["noticeReport"] as NoticeReport
+            val copyrightGarbage = bindings["copyrightGarbage"] as CopyrightGarbage
 
             var headers = noticeReport.headers
             var findings = noticeReport.findings
@@ -84,6 +87,7 @@ abstract class AbstractNoticeReporter : Reporter() {
         init {
             engine.put("ortResult", ortResult)
             engine.put("noticeReport", noticeReport)
+            engine.put("copyrightGarbage", copyrightGarbage)
         }
 
         override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
@@ -117,7 +121,8 @@ abstract class AbstractNoticeReporter : Reporter() {
         val processedFindings = findings.processStatements()
 
         val noticeReport = NoticeReport(listOf(header), processedFindings, emptyList()).let { noticeReport ->
-            postProcessingScript?.let { PostProcessor(ortResult, noticeReport).run(it) } ?: noticeReport
+            postProcessingScript?.let { PostProcessor(ortResult, noticeReport, copyrightGarbage).run(it) }
+                    ?: noticeReport
         }
 
         val outputFile = File(outputDir, noticeFileName)
