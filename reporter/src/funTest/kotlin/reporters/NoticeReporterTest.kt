@@ -112,7 +112,8 @@ class NoticeReporterTest : WordSpec() {
             }
 
             "return the input as-is for an empty post-processing script" {
-                val expectedText = File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
+                val expectedText =
+                        File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE_UNPROCESSED").readText()
                 val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val report = generateReport(ortResult, postProcessingScript = "")

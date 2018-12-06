@@ -65,6 +65,7 @@ abstract class AbstractNoticeReporter : Reporter() {
             import com.here.ort.model.*
             import com.here.ort.model.config.*
             import com.here.ort.model.spdx.*
+            import com.here.ort.reporter.reporters.*
             import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
 
             // Input:
@@ -104,7 +105,7 @@ abstract class AbstractNoticeReporter : Reporter() {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings = getLicenseFindings(ortResult).removeGarbage(copyrightGarbage)
+        val licenseFindings = getLicenseFindings(ortResult)
 
         // Remove all non-SPDX licenses because we can currently only get the license texts for SPDX licenses.
         val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
@@ -115,11 +116,15 @@ abstract class AbstractNoticeReporter : Reporter() {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val processedFindings = spdxLicenseFindings.processStatements()
-
-        val noticeReport = NoticeReport(listOf(header), processedFindings, emptyList()).let { noticeReport ->
-            postProcessingScript?.let { PostProcessor(ortResult, noticeReport, copyrightGarbage).run(it) }
-                    ?: noticeReport
+        val noticeReport = if (postProcessingScript != null) {
+            PostProcessor(
+                    ortResult,
+                    NoticeReport(listOf(header), spdxLicenseFindings, emptyList()),
+                    copyrightGarbage
+            ).run(postProcessingScript)
+        } else {
+            val processedFindings = spdxLicenseFindings.removeGarbage(copyrightGarbage).processStatements()
+            NoticeReport(listOf(header), processedFindings, emptyList())
         }
 
         val outputFile = File(outputDir, noticeFileName)
