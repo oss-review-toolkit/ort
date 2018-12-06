@@ -36,6 +36,11 @@ import com.here.ort.utils.zipWithDefault
 import java.io.File
 import java.util.SortedSet
 
+fun LicenseFindingsMap.processStatements() =
+        mapValues { (_, copyrights) ->
+            CopyrightStatementsProcessor().process(copyrights).toMutableSet()
+        }.toSortedMap()
+
 fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
         mapValues { (_, copyrights) ->
             copyrights.filterNot {
@@ -109,9 +114,7 @@ abstract class AbstractNoticeReporter : Reporter() {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val processedFindings = findings.mapValues { (_, copyrights) ->
-            CopyrightStatementsProcessor().process(copyrights).toMutableSet()
-        }.toSortedMap()
+        val processedFindings = findings.processStatements()
 
         val noticeReport = NoticeReport(listOf(header), processedFindings, emptyList()).let { noticeReport ->
             postProcessingScript?.let { PostProcessor(ortResult, noticeReport).run(it) } ?: noticeReport
