@@ -36,7 +36,7 @@ import com.here.ort.utils.zipWithDefault
 import java.io.File
 import java.util.SortedSet
 
-private fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
+fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
         mapValues { (_, copyrights) ->
             copyrights.filterNot {
                 it in copyrightGarbage.items
