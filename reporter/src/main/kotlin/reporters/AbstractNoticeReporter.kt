@@ -109,18 +109,13 @@ abstract class AbstractNoticeReporter : Reporter() {
         // Remove all non-SPDX licenses because we can currently only get the license texts for SPDX licenses.
         val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
 
-        val findings = spdxLicenseFindings.filterNot { (license, _) ->
-            // For now, just skip license references for which SPDX has no license text.
-            license.startsWith("LicenseRef-")
-        }.toSortedMap()
-
-        val header = if (findings.isEmpty()) {
+        val header = if (spdxLicenseFindings.isEmpty()) {
             "This project neither contains or depends on any third-party software components.\n"
         } else {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val processedFindings = findings.processStatements()
+        val processedFindings = spdxLicenseFindings.processStatements()
 
         val noticeReport = NoticeReport(listOf(header), processedFindings, emptyList()).let { noticeReport ->
             postProcessingScript?.let { PostProcessor(ortResult, noticeReport, copyrightGarbage).run(it) }
