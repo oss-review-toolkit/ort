@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonValue
 
 enum class HashAlgorithm(private vararg val aliases: String) {
     UNKNOWN("", "UNKNOWN"),
-    MD2("MD2"),
     MD5("MD5"),
     SHA1("SHA-1", "SHA1"),
     SHA256("SHA-256", "SHA256"),
