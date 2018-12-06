@@ -28,10 +28,6 @@ env:
     - GIMME_GO_VERSION="1.10"
     - DEP_RELEASE_TAG="v0.4.1"
 
-before_install:
-  - rm -f $JAVA_HOME/lib/security/cacerts
-  - ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
-
 install:
   - sudo apt install -y cvs
   - eval "$(gimme)"
