@@ -105,6 +105,8 @@ abstract class AbstractNoticeReporter : Reporter() {
         }
 
         val licenseFindings = getLicenseFindings(ortResult).removeGarbage(copyrightGarbage)
+
+        // Remove all non-SPDX licenses because we can currently only get the license texts for SPDX licenses.
         val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
 
         val findings = spdxLicenseFindings.filterNot { (license, _) ->
