@@ -2,14 +2,6 @@
 processed_statements:
   "(c) \eL (c) GNC":
   - "(c) \eL (c) GNC"
-  Copyright 1990 ' (c) ABC:
-  - "Copyright' (c) 1990 ABC"
-  copyright 1990 ' (c) ABC:
-  - "copyright' (c) 1990 ABC"
-  Copyright 1990 ' ABC:
-  - "Copyright' 1990 ABC"
-  copyright 1990 ' ABC:
-  - "copyright' 1990 ABC"
   (c) (c) 11LE:
   - "(c) (c) 11LE"
   (c) (c) U0Vju:
@@ -34,6 +26,20 @@ processed_statements:
   - "(c) A3 nu omNG0C Oopa34E"
   (c) AAEB EuCY:
   - "(c) AAEB EuCY"
+  (c) Copyright 1990 ABC:
+  - "(c) Copyright 1990 ABC"
+  (c) copyright 1990 ABC:
+  - "(c) copyright 1990 ABC"
+  COPYRIGHT 1990 ABC:
+  - "COPYRIGHT 1990 ABC"
+  Copyright' 1990 ABC:
+  - "Copyright' 1990 ABC"
+  Copyright' (c) 1990 ABC:
+  - "Copyright' (c) 1990 ABC"
+  copyright' 1990 ABC:
+  - "copyright' 1990 ABC"
+  copyright' (c) 1990 ABC:
+  - "copyright' (c) 1990 ABC"
   (c) AE Ess0:
   - "(c) AE Ess0"
   (c) AG:
@@ -224,13 +230,6 @@ processed_statements:
   - "Copyright Cop"
   Copyright 2016 Copyright (c):
   - "Copyright Copyright (c) 2016"
-  (c) 2008 Copyright , Joe Gregorio.:
-  - "(c) Copyright 2008, Joe Gregorio."
-  (c) 1990 Copyright ABC:
-  - "(c) Copyright 1990 ABC"
-  - "(c) copyright 1990 ABC"
-  (c) 1996-2008 Copyright Hewlett-Packard Development Company, L.P.:
-  - "(c) Copyright 1996-2008 Hewlett-Packard Development Company, L.P."
   Copyright (c) 2010, 2012-2016 Cowboy Ben Alman:
   - "Copyright (c) 2010 Cowboy Ben Alman"
   - "Copyright (c) 2012-2016 Cowboy Ben Alman"
@@ -484,6 +483,8 @@ processed_statements:
   - "Copyright (c) 2011-2013 Hal Brodigan"
   (c) HeOEs i AicWoae:
   - "(c) HeOEs i AicWoae"
+  (c) Copyright 1996-2008 Hewlett-Packard Development Company, L.P.:
+  - "(c) Copyright 1996-2008 Hewlett-Packard Development Company, L.P."
   Copyright (c) 2010 Hiroshi Nakamura <nahi@ruby-lang.org>:
   - "Copyright (c) 2010 Hiroshi Nakamura <nahi@ruby-lang.org>"
   Copyright (c) 2009 Hongli Lai <hongli@phusion.nl>:
@@ -629,6 +630,8 @@ processed_statements:
   - "Copyright 2006, Joe Gregorio contributors Mark Pilgrim"
   Copyright 2006 Joe Gregorio contributors Thomas Broyer:
   - "Copyright 2006, Joe Gregorio contributors Thomas Broyer"
+  (c) Copyright 2008 Joe Gregorio.:
+  - "(c) Copyright 2008, Joe Gregorio."
   Copyright (c) 2009 John Resig:
   - "Copyright (c) 2009 John Resig"
   Copyright 2010-2011 John Resig:
@@ -1033,6 +1036,8 @@ processed_statements:
   - "(c) Th 8+-UfyAioO!P3@ Od"
   "(c) ThAEKG^u 2OZja u$?|wuIadaiom\\00a$!oY-eTh3\x15 xa\x02e\" cO":
   - "(c) ThAEKG^u 2OZja u$?|wuIadaiom\\00a$!oY-eTh3\x15 xa\x02e\" cO"
+  copyright ownership The ASF:
+  - "copyright ownership. The ASF"
   Copyright 2017 The Abseil Authors.:
   - "Copyright 2017 The Abseil Authors."
   Copyright (c) 2009-2010, 2015, 2017 The Android Open Source Project:
@@ -1372,8 +1377,6 @@ processed_statements:
   "(c) o!ZO\x03S O!'NaC/m1/2Di1/2f4 \x025!\"/GEi::!bk *k\"-\x0f\x16S\x01E-G2 M\x04 W SAM":
   - "(c) o!ZO\x03S O!'NaC/m1/2Di1/2f4 \x025!\"/GEi::!bk *k\"-\x0f\x16S\x01E-G2 M\x04\
     \ W SAM"
-  copyright ownership. The ASF:
-  - "copyright ownership. The ASF"
   Copyright (c) 2015 present, Jon Schlinkert.:
   - "Copyright (c) 2015-present, Jon Schlinkert."
   Copyright 2014-2016 s:
@@ -1406,7 +1409,6 @@ unprocessed_statements:
 - "Alloc1 a2 (c) R1"
 - "Ao (c) Y1"
 - "BbCcDW (c) WdYYFfGgMmPwpwSyWwsAAAAACEEEEIIIIWNOOOOOTUUUUYYaaaaaaceeeeiiiiwnoooootuuuuyyy"
-- "COPYRIGHT 1990 ABC"
 - "Code copyright 2012-2018 AJ ONeal"
 - "Cw (c) Ie"
 - "DAeX (c) OjNduV"
