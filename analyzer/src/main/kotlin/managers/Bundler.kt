@@ -294,7 +294,8 @@ data class GemSpec(
             }
 
             val artifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
-                RemoteArtifact(json["gem_uri"].textValue(), json["sha"].textValue(), HashAlgorithm.SHA256)
+                val sha = json["sha"].textValue()
+                RemoteArtifact(json["gem_uri"].textValue(), sha, HashAlgorithm.fromHash(sha))
             } else {
                 RemoteArtifact.EMPTY
             }

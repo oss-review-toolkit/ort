@@ -286,11 +286,8 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
     private fun parseArtifact(packageInfo: JsonNode): RemoteArtifact {
         return packageInfo["dist"]?.let {
-            val sha = it["shasum"].textValueOrEmpty()
-            // "shasum" is SHA-1: https://github.com/composer/composer/blob/ \
-            // 285ff274accb24f45ffb070c2b9cfc0722c31af4/src/Composer/Repository/ArtifactRepository.php#L149
-            val algo = if (sha.isEmpty()) HashAlgorithm.UNKNOWN else HashAlgorithm.SHA1
-            RemoteArtifact(it["url"].textValueOrEmpty(), sha, algo)
+            val shasum = it["shasum"].textValueOrEmpty()
+            RemoteArtifact(it["url"].textValueOrEmpty(), shasum, HashAlgorithm.fromHash(shasum))
         } ?: RemoteArtifact.EMPTY
     }
 

@@ -263,7 +263,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                                     }
 
                                     hash = dist["shasum"].textValueOrEmpty()
-                                    hashAlgorithm = HashAlgorithm.SHA1
+                                    hashAlgorithm = HashAlgorithm.fromHash(hash)
                                 }
 
                                 vcsFromPackage = parseVcsInfo(versionInfo)

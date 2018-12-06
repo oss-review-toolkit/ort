@@ -339,11 +339,10 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             it["packagetype"].textValue() == "bdist_wheel"
         } ?: pkgReleases[0]
 
-        return RemoteArtifact(
-                url = pkgRelease["url"]?.textValue() ?: pkg.binaryArtifact.url,
-                hash = pkgRelease["md5_digest"]?.textValue() ?: pkg.binaryArtifact.hash,
-                hashAlgorithm = HashAlgorithm.MD5
-        )
+        val url = pkgRelease["url"]?.textValue() ?: pkg.binaryArtifact.url
+        val hash = pkgRelease["md5_digest"]?.textValue() ?: pkg.binaryArtifact.hash
+
+        return RemoteArtifact(url = url, hash = hash, hashAlgorithm = HashAlgorithm.fromHash(hash))
     }
 
     private fun getSourceArtifact(pkgReleases: ArrayNode): RemoteArtifact {
@@ -360,7 +359,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         val url = pkgSource["url"]?.textValue() ?: return RemoteArtifact.EMPTY
         val hash = pkgSource["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
 
-        return RemoteArtifact(url, hash, HashAlgorithm.MD5)
+        return RemoteArtifact(url, hash, HashAlgorithm.fromHash(hash))
     }
 
     private fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
