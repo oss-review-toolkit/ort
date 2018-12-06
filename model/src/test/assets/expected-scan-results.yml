@@ -6,7 +6,7 @@ results:
     source_artifact:
       url: "url"
       hash: "hash"
-      hash_algorithm: "SHA-1"
+      hash_algorithm: ""
   scanner:
     name: "name 1"
     version: "version 1"
