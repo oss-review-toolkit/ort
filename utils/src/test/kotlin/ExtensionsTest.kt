@@ -28,6 +28,12 @@ import java.io.File
 import java.io.IOException
 
 class ExtensionsTest : WordSpec({
+    "ByteArray.toHexString" should {
+        "correctly convert a byte array to a string of hexadecimal digits" {
+            byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).toHexString() shouldBe "deadbeef"
+        }
+    }
+
     "File.searchUpwardsForSubdirectory" should {
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")

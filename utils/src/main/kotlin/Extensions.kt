@@ -40,6 +40,11 @@ import java.nio.file.attribute.BasicFileAttributes
 import org.apache.commons.codec.digest.DigestUtils
 
 /**
+ * Return a string of hexadecimal digits representing the bytes in the array.
+ */
+fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
+
+/**
  * Return the hexadecimal digest of the given hash [algorithm] for this [File].
  */
 fun File.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).digestAsHex(this)
