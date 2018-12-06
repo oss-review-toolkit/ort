@@ -37,6 +37,19 @@ enum class HashAlgorithm(private vararg val aliases: String) {
                 enumValues<HashAlgorithm>().find {
                     alias.toUpperCase() in it.aliases
                 } ?: UNKNOWN
+
+        fun fromHash(hash: String): HashAlgorithm {
+            if (hash.isBlank()) return HashAlgorithm.UNKNOWN
+
+            return when (hash.length) {
+                128 -> SHA512
+                96 -> SHA384
+                64 -> SHA256
+                40 -> SHA1
+                32 -> MD5
+                else -> UNKNOWN
+            }
+        }
     }
 
     @JsonValue
