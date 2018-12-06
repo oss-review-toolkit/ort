@@ -53,7 +53,5 @@ enum class HashAlgorithm(private vararg val aliases: String) {
     }
 
     @JsonValue
-    override fun toString(): String {
-        return aliases.first()
-    }
+    override fun toString(): String = aliases.first()
 }
