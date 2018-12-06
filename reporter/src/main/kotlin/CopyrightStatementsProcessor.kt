@@ -194,11 +194,8 @@ class CopyrightStatementsProcessor {
     private fun replaceYears(copyrightStatement: String, placeholder: String): Pair<String, Set<Int>> {
         val resultYears = mutableSetOf<Int>()
 
-        // Fix up strings containing e.g.: 'copyright u'2013'
-        var currentStatement = copyrightStatement.replace("(?=.*\\b)(u')(?=\\d{4}\\b)".toRegex(), "")
-
-        val replaceRangeResult = replaceAllYearRanges(currentStatement, placeholder)
-        currentStatement = replaceRangeResult.first
+        val replaceRangeResult = replaceAllYearRanges(copyrightStatement, placeholder)
+        var currentStatement = replaceRangeResult.first
         resultYears += replaceRangeResult.second
 
         // Replace comma separated years.
