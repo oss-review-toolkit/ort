@@ -65,13 +65,13 @@ class CopyrightStatementsProcessor {
     companion object {
         private val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
         private val KNOWN_PREFIX_REGEX = listOf(
-                "^(\\(c\\))",
-                "^([C|c]opyright)",
-                "^([C|c]opyright \\(c\\))",
-                "^([C|c]opyrighted)",
                 "^([C|c]opyrighted \\(c\\))",
+                "^([C|c]opyrighted)",
+                "^([C|c]opyright \\(c\\))",
+                "^([C|c]opyright)",
+                "^([P|p]ortions [C|c]opyright \\(c\\))",
                 "^([P|p]ortions [C|c]opyright)",
-                "^([P|p]ortions [C|c]opyright \\(c\\))"
+                "^(\\(c\\))"
         ).map { it.toRegex() }
 
         private fun prettyPrintYears(years: Collection<Int>) =
@@ -162,17 +162,16 @@ class CopyrightStatementsProcessor {
     }
 
     private fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
-        val match = KNOWN_PREFIX_REGEX.mapNotNull { regex ->
-            regex.find(copyrightStatement)
-        }.maxWith(
-                compareBy { it.groups[1]!!.value.length }
-        )
-        if (match == null) return Pair(first = copyrightStatement, second = "")
+        KNOWN_PREFIX_REGEX.forEach { regex ->
+            regex.find(copyrightStatement)?.let { matchResult ->
+                return Pair(
+                        first = copyrightStatement.removeRange(matchResult.groups[1]!!.range),
+                        second = matchResult.groups[1]!!.value
+                )
+            }
+        }
 
-        return Pair(
-                first = copyrightStatement.removeRange(match.groups[1]!!.range),
-                second = match.groups[1]!!.value
-        )
+        return Pair(first = copyrightStatement, second = "")
     }
 
     private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
