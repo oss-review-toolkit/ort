@@ -45,6 +45,7 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
@@ -72,6 +73,58 @@ const val PYDEP_REVISION = "license-and-classifiers"
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,16.1]")
+}
+
+object PythonVersion : CommandLineTool {
+    // To use a specific version of Python on Windows we can use the "py" command with argument "-2" or "-3", see
+    // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
+    override fun command(workingDir: File?) = if (OS.isWindows) "py" else "python3"
+
+    /**
+     * Check all Python files in [workingDir] return with which version of Python they are compatible. If all files are
+     * compatible with Python 3, "3" is returned. If at least one file is incompatible with Python 3, "2" is returned.
+     */
+    fun getPythonVersion(workingDir: File): Int {
+        val scriptFile = File.createTempFile("python_compatibility", ".py")
+        scriptFile.writeBytes(javaClass.getResource("/scripts/python_compatibility.py").readBytes())
+
+        try {
+            // The helper script itself always has to be run with Python 3.
+            val scriptCmd = if (OS.isWindows) {
+                run("-3", scriptFile.absolutePath, "-d", workingDir.absolutePath)
+            } else {
+                run(scriptFile.absolutePath, "-d", workingDir.absolutePath)
+            }
+
+            return scriptCmd.stdout.toInt()
+        } finally {
+            if (!scriptFile.delete()) {
+                log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+            }
+        }
+    }
+
+    /**
+     * Return the absolute path to the Python interpreter for the given [version]. This is helpful as esp. on Windows
+     * different Python versions can by installed in arbitrary locations, and the Python executable is even usually
+     * called the same in those locations.
+     */
+    fun getPythonInterpreter(version: Int): String {
+        return if (OS.isWindows) {
+            val scriptFile = File.createTempFile("python_interpreter", ".py")
+            scriptFile.writeBytes(javaClass.getResource("/scripts/python_interpreter.py").readBytes())
+
+            try {
+                run("-$version", scriptFile.absolutePath).stdout
+            } finally {
+                if (!scriptFile.delete()) {
+                    log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+                }
+            }
+        } else {
+            getPathFromEnvironment("python$version")?.absolutePath ?: ""
+        }
+    }
 }
 
 /**
@@ -383,13 +436,50 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
         log.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
+
+        // Try to determine the Python version the project requires.
+        var projectPythonVersion = PythonVersion.getPythonVersion(workingDir)
+
+        // Try to create a virtualenv specific to the detected Python version anmd install dependencies in there.
+        var virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
+
+        if (installDependencies(workingDir, definitionFile, virtualEnvDir).isSuccess) {
+            log.info {
+                "Successfully installed dependencies for project '$definitionFile' using Python $projectPythonVersion."
+            }
+            return virtualEnvDir
+        }
+
+        // If there was a problem with creating the virtualenv, maybe the required Python version was detected
+        // incorrectly. So simply try again with the other version.
+        projectPythonVersion = when (projectPythonVersion) {
+            2 -> 3
+            3 -> 2
+            else -> throw IllegalArgumentException("Unsupported Python version $projectPythonVersion.")
+        }
+
+        virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
+        installDependencies(workingDir, definitionFile, virtualEnvDir).requireSuccess()
+
+        log.info {
+            "Successfully installed dependencies for project '$definitionFile' using Python $projectPythonVersion."
+        }
+
+        return virtualEnvDir
+    }
+
+    private fun createVirtualEnv(workingDir: File, pythonVersion: Int): File {
         val virtualEnvDir = createTempDir(workingDir.name.padEnd(3, '_'), "virtualenv")
-        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
 
-        var pip: ProcessCapture
+        val pythonInterpreter = PythonVersion.getPythonInterpreter(pythonVersion)
+        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()
 
+        return virtualEnvDir
+    }
+
+    private fun installDependencies(workingDir: File, definitionFile: File, virtualEnvDir: File): ProcessCapture {
         // Ensure to have installed a version of pip that is know to work for us.
-        pip = if (OS.isWindows) {
+        var pip = if (OS.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
             runInVirtualEnv(virtualEnvDir, workingDir, "python", "-m", command(workingDir),
@@ -427,7 +517,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             }
         }
 
-        return virtualEnvDir
+        return pip
     }
 
     private fun parseDependencies(dependencies: Iterable<JsonNode>,
