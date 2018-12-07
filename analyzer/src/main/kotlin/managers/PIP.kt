@@ -74,6 +74,57 @@ object VirtualEnv : CommandLineTool {
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("15.1.+")
 }
 
+object PythonVersion : CommandLineTool {
+    // For using correct version of Python on Windows we can use "py" command with arg -2 or -3.
+    // See: https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel
+    override fun command(workingDir: File?) = if (OS.isWindows) "py" else "python3"
+
+    /**
+     * Checking the directory and return with what version of Python  all .py files are compatible.
+     * If there is all files compatible with Python 3, script return 3. If there is at least one file incompatible
+     * with Python 3 script return 2.
+     */
+    fun getPythonVersion(workingDir: File): Int {
+        val scriptFile = File.createTempFile("python_compatibility", ".py")
+        scriptFile.writeBytes(javaClass.classLoader.getResource("python/python_compatibility.py").readBytes())
+        try {
+            val scriptCmd = when (OS.isWindows) {
+                true -> run("-3", scriptFile.absolutePath, "-d", workingDir.absolutePath)
+                false -> run(scriptFile.absolutePath, "-d", workingDir.absolutePath)
+            }
+            return scriptCmd.stdout.toInt()
+        } finally {
+            if (!scriptFile.delete()) {
+                log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+            }
+        }
+    }
+
+    /**
+     * Because we don't know where Pythons were installed on Windows, we have to run a short script to find out
+     * the path to correct Python interpreter. See: https://stackoverflow.com/a/2589722/5877109
+     *
+     * @return Full path to Python interpreter.
+     */
+    fun getPythonInterpreter(pythonVer: Int): String {
+        val scriptFile = File.createTempFile("python_path", ".py")
+        scriptFile.writeBytes(javaClass.classLoader.getResource("python/python_path.py").readBytes())
+        return when (OS.isWindows) {
+            true -> {
+                try {
+                    run("-$pythonVer", scriptFile.absolutePath).stdout
+                } finally {
+                    if (!scriptFile.delete()) {
+                        log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+                    }
+                }
+            }
+            // On linux we don't have to look for Python path, because by default we can use python2 or python3.
+            false -> "python$pythonVer"
+        }
+    }
+}
+
 /**
  * The PIP package manager for Python, see https://pip.pypa.io/. Also see
  * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
@@ -384,9 +435,42 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
         log.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
-        val virtualEnvDir = createTempDir(workingDir.name.padEnd(3, '_'), "virtualenv")
-        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
+        val projectPythonVer = PythonVersion.getPythonVersion(workingDir)
 
+        var virtualEnvDir = createVirtualEnv(workingDir, projectPythonVer)
+        val process = installDependencies(workingDir, definitionFile, virtualEnvDir)
+
+        if (process.isSuccess) {
+            return virtualEnvDir
+        }
+
+        // If there was a problem with creating a virtual environment,  maybe the script detected an incorrect version
+        // of Python (because e.g. not all files was written in the same Python version).
+        // To be sure, try again with another version of Python.
+        virtualEnvDir = when (projectPythonVer == 3) {
+            true -> createVirtualEnv(workingDir, 2)
+            false -> createVirtualEnv(workingDir, 3)
+        }
+
+        installDependencies(workingDir, definitionFile, virtualEnvDir)
+
+        return virtualEnvDir
+    }
+
+    private fun createVirtualEnv(workingDir: File, pythonVer: Int): File {
+        val virtualEnvDir = createTempDir(workingDir.name.padEnd(3, '_'), "virtualenv")
+
+        // Create a virtual environment with correct pip version. Basically, we don't know where Pythons were installed.
+        // On Windows, we have to run a short script to find out the path to correct Python version.
+        // See: https://stackoverflow.com/a/2589722/5877109
+        // On Linux by default is the same place and we can use "python2" or "python3" command.
+        val pythonInterpreter = PythonVersion.getPythonInterpreter(pythonVer)
+        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()
+
+        return virtualEnvDir
+    }
+
+    private fun installDependencies(workingDir: File, definitionFile: File, virtualEnvDir: File): ProcessCapture {
         var pip: ProcessCapture
 
         // Ensure to have installed a version of pip that is know to work for us.
@@ -428,7 +512,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             }
         }
 
-        return virtualEnvDir
+        return pip
     }
 
     private fun parseDependencies(dependencies: Iterable<JsonNode>,
