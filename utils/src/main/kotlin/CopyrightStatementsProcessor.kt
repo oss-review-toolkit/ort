@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter
+package com.here.ort.utils
 
 private data class Parts(
         val prefix: String,
