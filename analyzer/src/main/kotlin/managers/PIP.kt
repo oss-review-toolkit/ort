@@ -74,6 +74,19 @@ object VirtualEnv : CommandLineTool {
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("15.1.+")
 }
 
+object ProjectVersion : CommandLineTool {
+    override fun command(workingDir: File?) = if (OS.isWindows) "python" else "python3"
+
+    fun isPython3(workingDir: File): Boolean{
+        val scriptFile = File.createTempFile("python_compatibility",".py" )
+
+        scriptFile.writeBytes(javaClass.classLoader.getResource("python_compatibility.py").readBytes())
+        val scriptCmd = run(scriptFile.absolutePath, "-d", workingDir.absolutePath)
+
+        return scriptCmd.stdout.toBoolean()
+    }
+}
+
 /**
  * The PIP package manager for Python, see https://pip.pypa.io/. Also see
  * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
@@ -385,7 +398,22 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // Create an out-of-tree virtualenv.
         log.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
         val virtualEnvDir = createTempDir(workingDir.name.padEnd(3, '_'), "virtualenv")
-        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path).requireSuccess()
+
+        //Create virtual environment with correct pip version. Basically we don't know where Pythons were installed.
+        //By default on Linux commands "python" and "python2" are using for Python version 2. After install Python version >3, should be active also command "python3".
+        //On Windows we have to add Python interpreters to environment variables and they should have another names.
+        //See: https://stackoverflow.com/a/22626734/5877109
+        val projectHasPython3 = ProjectVersion.isPython3(workingDir)
+        var virtualEnv = when (Pair(projectHasPython3, OS.isWindows)){
+            Pair(true, true) -> ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", "python.exe")
+            Pair(false, true) -> ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", "python2.exe")
+            Pair(true, false) -> ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", "python3")
+            Pair(false, false) -> ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", "python2")
+
+            else -> throw IllegalArgumentException("Unanle to create virtual environment fot Python.")
+        }
+
+        virtualEnv.requireSuccess()
 
         var pip: ProcessCapture
 
