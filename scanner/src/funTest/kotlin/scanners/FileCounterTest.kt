@@ -46,7 +46,7 @@ class FileCounterTest : StringSpec() {
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        outputRootDir.safeDeleteRecursively()
+        outputRootDir.safeDeleteRecursively(true)
         ScanResultsCache.stats = CacheStatistics()
     }
 

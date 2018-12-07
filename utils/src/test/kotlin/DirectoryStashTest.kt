@@ -48,7 +48,7 @@ class DirectoryStashTest : StringSpec() {
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        sandboxDir.safeDeleteRecursively()
+        sandboxDir.safeDeleteRecursively(true)
     }
 
     private fun sandboxDirShouldBeInOriginalState() {

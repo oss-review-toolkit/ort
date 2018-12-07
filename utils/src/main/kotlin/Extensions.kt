@@ -60,7 +60,7 @@ fun File.realFile(): File = toPath().toRealPath().toFile()
  *
  * @throws IOException if the directory could not be deleted.
  */
-fun File.safeDeleteRecursively() {
+fun File.safeDeleteRecursively(force: Boolean = false) {
     if (!exists()) {
         return
     }
@@ -82,6 +82,8 @@ fun File.safeDeleteRecursively() {
             try {
                 Files.delete(file)
             } catch (e: java.nio.file.AccessDeniedException) {
+                if (!force) throw e
+
                 if (file.toFile().setWritable(true)) {
                     // Try again.
                     Files.delete(file)

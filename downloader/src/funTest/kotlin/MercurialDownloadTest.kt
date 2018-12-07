@@ -48,7 +48,7 @@ class MercurialDownloadTest : StringSpec() {
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        outputDir.safeDeleteRecursively()
+        outputDir.safeDeleteRecursively(true)
     }
 
     init {

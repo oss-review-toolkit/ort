@@ -145,7 +145,7 @@ class ExtensionsTest : WordSpec({
             fileFromStr.isFile shouldBe true
 
             // This should not throw an IOException.
-            tempDir.safeDeleteRecursively()
+            tempDir.safeDeleteRecursively(true)
         }
     }
 

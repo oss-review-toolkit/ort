@@ -48,7 +48,7 @@ class NpmVersionUrlTest : WordSpec() {
         val nodeModulesDir = projectDir.resolve("node_modules")
         val gitKeepFile = nodeModulesDir.resolve(".gitkeep")
         if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
-            nodeModulesDir.safeDeleteRecursively()
+            nodeModulesDir.safeDeleteRecursively(true)
         }
     }
 
