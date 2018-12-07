@@ -57,6 +57,8 @@ abstract class AbstractNoticeReporter : Reporter() {
             import com.here.ort.utils.*
             import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
 
+            import java.util.*
+
             // Input:
             val ortResult = bindings["ortResult"] as OrtResult
             val noticeReport = bindings["noticeReport"] as NoticeReport
