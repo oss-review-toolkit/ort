@@ -71,10 +71,8 @@ fun File.safeDeleteRecursively() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
             if (OS.isWindows && attrs.isOther) {
                 // Unlink junctions to turn them into empty directories.
-                val fsutil = ProcessCapture("fsutil", "reparsepoint", "delete", dir.toString())
-                if (fsutil.isSuccess) {
-                    return FileVisitResult.SKIP_SUBTREE
-                }
+                ProcessCapture("fsutil", "reparsepoint", "delete", dir.toString())
+                return FileVisitResult.SKIP_SUBTREE
             }
 
             return FileVisitResult.CONTINUE
