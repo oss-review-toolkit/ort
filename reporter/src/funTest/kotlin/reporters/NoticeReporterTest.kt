@@ -48,7 +48,7 @@ class NoticeReporterTest : WordSpec() {
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        tempDir.safeDeleteRecursively()
+        tempDir.safeDeleteRecursively(force = true)
         super.afterTest(description, result)
     }
 

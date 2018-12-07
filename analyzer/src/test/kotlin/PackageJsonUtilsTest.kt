@@ -159,7 +159,7 @@ class PackageJsonUtilsTest : WordSpec() {
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        tempDir.safeDeleteRecursively()
+        tempDir.safeDeleteRecursively(force = true)
         definitionFiles.clear()
         super.afterTest(description, result)
     }
