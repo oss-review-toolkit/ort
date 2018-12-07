@@ -21,6 +21,9 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 
+import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.utils.CopyrightStatementsProcessor
+
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -30,6 +33,18 @@ import java.util.SortedSet
  * legacy serialized formats.
  */
 typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
+
+fun LicenseFindingsMap.processStatements() =
+        mapValues { (_, copyrights) ->
+            CopyrightStatementsProcessor().process(copyrights).toMutableSet()
+        }.toSortedMap()
+
+fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
+        mapValues { (_, copyrights) ->
+            copyrights.filterNot {
+                it in copyrightGarbage.items
+            }.toMutableSet()
+        }.toSortedMap()
 
 /**
  * A class to store a [license] finding along with its belonging [copyrights]. To support deserializing older versions

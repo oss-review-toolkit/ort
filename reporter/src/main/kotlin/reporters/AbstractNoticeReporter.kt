@@ -24,10 +24,11 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.processStatements
+import com.here.ort.model.removeGarbage
 import com.here.ort.model.spdx.SpdxLicenseMapping
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 import com.here.ort.utils.spdx.getLicenseText
@@ -35,18 +36,6 @@ import com.here.ort.utils.zipWithDefault
 
 import java.io.File
 import java.util.SortedSet
-
-fun LicenseFindingsMap.processStatements() =
-        mapValues { (_, copyrights) ->
-            CopyrightStatementsProcessor().process(copyrights).toMutableSet()
-        }.toSortedMap()
-
-fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
-        mapValues { (_, copyrights) ->
-            copyrights.filterNot {
-                it in copyrightGarbage.items
-            }.toMutableSet()
-        }.toSortedMap()
 
 abstract class AbstractNoticeReporter : Reporter() {
     companion object {
@@ -65,7 +54,7 @@ abstract class AbstractNoticeReporter : Reporter() {
             import com.here.ort.model.*
             import com.here.ort.model.config.*
             import com.here.ort.model.spdx.*
-            import com.here.ort.reporter.reporters.*
+            import com.here.ort.utils.*
             import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
 
             // Input:
