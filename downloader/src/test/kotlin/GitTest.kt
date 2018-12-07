@@ -45,7 +45,7 @@ class GitTest : StringSpec() {
     }
 
     override fun afterSpec(description: Description, spec: Spec) {
-        zipContentDir.safeDeleteRecursively()
+        zipContentDir.safeDeleteRecursively(force = true)
     }
 
     init {

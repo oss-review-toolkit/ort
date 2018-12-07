@@ -51,7 +51,7 @@ class BabelTest : WordSpec() {
                 val nodeModulesDir = File(it, "node_modules")
                 val gitKeepFile = File(nodeModulesDir, ".gitkeep")
                 if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
-                    nodeModulesDir.safeDeleteRecursively()
+                    nodeModulesDir.safeDeleteRecursively(force = true)
                 }
             }
         }

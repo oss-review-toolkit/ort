@@ -122,7 +122,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val scope = Scope("default", packageRefs.toSortedSet())
 
         // TODO Keeping this between scans would speed things up considerably.
-        gopath.safeDeleteRecursively()
+        gopath.safeDeleteRecursively(force = true)
 
         return ProjectAnalyzerResult(
                 project = Project(
