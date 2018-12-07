@@ -941,3 +941,6 @@ copyright' 1990 ABC
 Copyright' (c) 1990 ABC
 copyright' (c) 1990 ABC
 COPYRIGHT 1990 ABC
+copyright u'2000 CDE
+copyright 2001,u'2002 CDE
+copyright u'2003 - 2005 CDE

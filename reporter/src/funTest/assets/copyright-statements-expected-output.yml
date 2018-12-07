@@ -1391,6 +1391,10 @@ processed_statements:
   - "(c) 2008 thawte, Inc."
   Copyright 2014 the Melange authors.:
   - "Copyright 2014 the Melange authors."
+  copyright 2000-2005 u' CDE:
+  - "copyright 2001,u'2002 CDE"
+  - "copyright u'2000 CDE"
+  - "copyright u'2003 - 2005 CDE"
   copyright 2009 u' N EN:
   - "copyright u'2009 N EN"
   copyright 2011-2017 u', LLVM Project:
