@@ -2,6 +2,14 @@
 processed_statements:
   "(c) \eL (c) GNC":
   - "(c) \eL (c) GNC"
+  Copyright 1990 ' (c) ABC:
+  - "Copyright' (c) 1990 ABC"
+  copyright 1990 ' (c) ABC:
+  - "copyright' (c) 1990 ABC"
+  Copyright 1990 ' ABC:
+  - "Copyright' 1990 ABC"
+  copyright 1990 ' ABC:
+  - "copyright' 1990 ABC"
   (c) (c) 11LE:
   - "(c) (c) 11LE"
   (c) (c) U0Vju:
@@ -218,6 +226,9 @@ processed_statements:
   - "Copyright Copyright (c) 2016"
   (c) 2008 Copyright , Joe Gregorio.:
   - "(c) Copyright 2008, Joe Gregorio."
+  (c) 1990 Copyright ABC:
+  - "(c) Copyright 1990 ABC"
+  - "(c) copyright 1990 ABC"
   (c) 1996-2008 Copyright Hewlett-Packard Development Company, L.P.:
   - "(c) Copyright 1996-2008 Hewlett-Packard Development Company, L.P."
   Copyright (c) 2010, 2012-2016 Cowboy Ben Alman:
@@ -850,6 +861,12 @@ processed_statements:
   - "Copyright (c) 2007, 2008 Ola Bini <ola@ologix.com>"
   "(c) Oo E\x16P\x1aIAyMoU1/4Hl+-BD En":
   - "(c) Oo E\x16P\x1aIAyMoU1/4Hl+-BD En"
+  Copyrighted 1990 Ownership ABC:
+  - "Copyrighted Ownership 1990 ABC"
+  - "Copyrighted ownership 1990 ABC"
+  copyrighted 1990 Ownership ABC:
+  - "copyrighted Ownership 1990 ABC"
+  - "copyrighted ownership 1990 ABC"
   (c) Ox Ao:
   - "(c) Ox Ao"
   Copyright (c) 2012, 2014-2015 PHP Framework Interoperability Group:
@@ -1389,6 +1406,7 @@ unprocessed_statements:
 - "Alloc1 a2 (c) R1"
 - "Ao (c) Y1"
 - "BbCcDW (c) WdYYFfGgMmPwpwSyWwsAAAAACEEEEIIIIWNOOOOOTUUUUYYaaaaaaceeeeiiiiwnoooootuuuuyyy"
+- "COPYRIGHT 1990 ABC"
 - "Code copyright 2012-2018 AJ ONeal"
 - "Cw (c) Ie"
 - "DAeX (c) OjNduV"
