@@ -25,9 +25,9 @@ import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.spdx.SpdxLicenseMapping
-import com.here.ort.reporter.CopyrightStatementsProcessor
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 import com.here.ort.utils.spdx.getLicenseText
