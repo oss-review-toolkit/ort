@@ -27,7 +27,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class CopyrightStatementsProcessorTest : WordSpec() {
-    val processor = CopyrightStatementsProcessor()
+    private val processor = CopyrightStatementsProcessor()
 
     init {
         "process" should {
