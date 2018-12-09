@@ -47,6 +47,10 @@ subprojects {
         jcenter()
     }
 
+    dependencies {
+        detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detektPluginVersion"
+    }
+
     plugins.withType(JavaLibraryPlugin) {
         dependencies {
             api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
@@ -203,27 +207,9 @@ task checkCopyright(type: Exec) {
     }
 }
 
-task ktlint(type: JavaExec) {
-    description = 'Runs ktlint checks.'
-    group = 'Verification'
-
-    classpath = files('ktlint')
-    main = 'com.github.shyiko.ktlint.Main'
-    ignoreExitValue = true
-    standardOutput = new ByteArrayOutputStream()
-
-    doLast {
-        def output = standardOutput.toString().trim().tokenize('\n\r')
-        output.removeAll { it ==~ /.*(Wildcard import|Unexpected spacing before).*/ }
-        if (!output.empty) {
-            throw new GradleException("Please fix the following issues:\n${output.join('\n')}")
-        }
-    }
-}
-
 task check {
     description = 'Runs all checks.'
     group = 'Verification'
 
-    dependsOn checkCopyright, ktlint
+    dependsOn checkCopyright
 }
