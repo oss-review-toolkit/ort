@@ -24,9 +24,9 @@ project:
       dependencies:
       - id: "PyPI::isodate:0.6.0"
         dependencies:
-        - id: "PyPI::six:1.11.0"
+        - id: "PyPI::six:1.12.0"
       - id: "PyPI::pyparsing:2.3.0"
-    - id: "PyPI::six:1.11.0"
+    - id: "PyPI::six:1.12.0"
 packages:
 - package:
     id: "PyPI::isodate:0.6.0"
@@ -131,18 +131,18 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::six:1.11.0"
+    id: "PyPI::six:1.12.0"
     declared_licenses:
     - "MIT"
     description: "Python 2 and 3 compatibility utilities"
-    homepage_url: "http://pypi.python.org/pypi/six/"
+    homepage_url: "https://github.com/benjaminp/six"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl"
-      hash: "866ab722be6bdfed6830f3179af65468"
+      url: "https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl"
+      hash: "b0dc15d494e2d6e6c19cbbe482e91c5d"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz"
-      hash: "d12789f9baf7e9fb2524c0c64f1773f8"
+      url: "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz"
+      hash: "9ae5d1feed8c0215f4ae4adcd9207fcb"
       hash_algorithm: "MD5"
     vcs:
       type: ""
@@ -150,8 +150,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "https://github.com/benjaminp/six.git"
       revision: ""
       path: ""
   curations: []
