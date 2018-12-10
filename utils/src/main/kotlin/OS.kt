@@ -30,3 +30,5 @@ object OS {
     val isMac = "mac" in nameLowerCase
     val isWindows = "windows" in nameLowerCase
 }
+
+val isTravisCi = listOf("TRAVIS", "CI").all { System.getenv(it)?.toBoolean() == true }
