@@ -71,8 +71,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
 
         // Work around Travis CI not being able to handle gem user installs, see
         // https://github.com/travis-ci/travis-ci/issues/9412.
-        // TODO: Use toBoolean() here once https://github.com/JetBrains/kotlin/pull/1644 is merged.
-        val isTravisCi = listOf("TRAVIS", "CI").all { java.lang.Boolean.parseBoolean(System.getenv(it)) }
+        val isTravisCi = listOf("TRAVIS", "CI").all { System.getenv(it)?.toBoolean() == true }
         return if (isTravisCi) {
             ProcessCapture(gem, "install", "licensee", "-v", scannerVersion).requireSuccess()
             getPathFromEnvironment(command())?.parentFile
