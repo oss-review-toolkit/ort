@@ -35,6 +35,7 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.CI
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
@@ -71,8 +72,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
 
         // Work around Travis CI not being able to handle gem user installs, see
         // https://github.com/travis-ci/travis-ci/issues/9412.
-        val isTravisCi = listOf("TRAVIS", "CI").all { System.getenv(it)?.toBoolean() == true }
-        return if (isTravisCi) {
+        return if (CI.isTravis) {
             ProcessCapture(gem, "install", "licensee", "-v", scannerVersion).requireSuccess()
             getPathFromEnvironment(command())?.parentFile
                     ?: throw IOException("Install directory for licensee not found.")
