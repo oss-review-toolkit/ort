@@ -39,6 +39,7 @@ install:
   - set PATH=%PATH%;C:\msys64\usr\bin # For CVS.
   - set PATH=C:\Ruby25\bin;%PATH% # For licensee.
   # Install git-repo.
+  - echo %PATH%
   - ps: Start-FileDownload 'https://gerrit.googlesource.com/git-repo/+archive/refs/heads/master.tar.gz'
   - 7z x -so master.tar.gz | 7z x -o%APPDATA%\local\bin -si -ttar -y -i!repo
   # Install the Android SDK.
