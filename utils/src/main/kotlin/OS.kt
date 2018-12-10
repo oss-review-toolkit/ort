@@ -31,4 +31,5 @@ object OS {
     val isWindows = "windows" in nameLowerCase
 }
 
+val isAppVeyorCi = listOf("APPVEYOR", "CI").all { System.getenv(it)?.toBoolean() == true }
 val isTravisCi = listOf("TRAVIS", "CI").all { System.getenv(it)?.toBoolean() == true }
