@@ -255,8 +255,8 @@ class TableView extends React.Component {
                     }}
                     pagination={
                         {
+                            defaultPageSize: 100,
                             hideOnSinglePage: true,
-                            pageSize: 100,
                             pageSizeOptions: ['50', '100', '250', '500'],
                             position: 'both',
                             showSizeChanger: true
