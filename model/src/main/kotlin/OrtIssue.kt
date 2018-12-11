@@ -48,7 +48,12 @@ data class OrtIssue(
         /**
          * The issue's message.
          */
-        val message: String
+        val message: String,
+
+        /**
+         * The issue's severity.
+         */
+        val severity: Severity = Severity.ERROR
 ) {
     override fun toString() = "${if (timestamp == Instant.EPOCH) "n/a" else timestamp.toString()}: $source - $message"
 }
