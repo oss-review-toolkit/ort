@@ -206,6 +206,19 @@ class StaticHtmlReporter : Reporter() {
                     color: #2c662d;
                   }
 
+                  .ort-report-table.ort-packages tr.ort-error {
+                    color: black;
+                  }
+
+                  .ort-report-table.ort-packages tr.ort-error td:nth-child(5),
+                  .ort-report-table.ort-packages tr.ort-error td:nth-child(6) {
+                    color: #9f3a38;
+                  }
+
+                  .ort-report-table li.ort-addressed {
+                    color: #2c662d;
+                  }
+
                   @media all and (max-width: 1000px) {
                       .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
                           display:none;
@@ -527,14 +540,22 @@ class StaticHtmlReporter : Reporter() {
                             </ul></td>
                             <td><ul>
                                 ${row.analyzerErrors.joinToString("\n") {
-                                    "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
-                                            "<p>${it.resolutionDescription}</p></li>"
+                                    if (it.isResolved) {
+                                        "<li class=\"ort-addressed\"><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                                "<p>${it.resolutionDescription}</p></li>"
+                                    } else {
+                                        "<li><p>${it.description.replace("\n", "<br/>")}</p></li>"
+                                    }
                                 }}
                             </ul></td>
                             <td><ul>
                                 ${row.scanErrors.joinToString("\n") {
-                                    "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                    if (it.isResolved) {
+                                    "<li class=\"ort-addressed\"><p>${it.description.replace("\n", "<br/>")}</p>" +
                                             "<p>${it.resolutionDescription}</p></li>"
+                                    } else {
+                                        "<li><p>${it.description.replace("\n", "<br/>")}</p></li>"
+                                    }
                                 }}
                             </ul></td>
                         </tr>""".trimIndent())
