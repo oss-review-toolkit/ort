@@ -1,43 +1,33 @@
-plugins {
-    id 'com.moowork.node' version '1.2.0'
+import org.apache.tools.ant.taskdefs.condition.Os
+
+tasks.addRule('Pattern: yarn<Command>') { String taskName ->
+    if (taskName.startsWith('yarn')) {
+        def yarn = Os.isFamily(Os.FAMILY_WINDOWS) ? "yarn.cmd" : "yarn"
+        def command = (taskName - 'yarn').uncapitalize()
+        task(taskName, type: Exec) {
+            commandLine yarn, command
+        }
+    }
 }
 
-node {
-    version = '8.11.4'
-    // Version 1.12.1 of Yarn does not work on AppVeyor and gives
-    //
-    //     Failed to capture fingerprint of output files for task ':reporter-web-app:install' property '$1' during up-to-date check.
-    //     > Could not read path 'reporter-web-app\node_modules\@babel\generator\node_modules\jsesc\.bin\jsesc'.
-    //
-    // Maybe this is because of https://github.com/gradle/gradle/issues/1365.
-    yarnVersion = '1.9.4'
-    // Installing NPM is needed for installing Yarn because the Gradle Node plugin installs Yarn via NPM.
-    npmVersion = '6.4.0'
-    // Setting download flag is required for bootstrapping NPM.
-    download = true
-    nodeModulesDir = file("${project.projectDir}/node")
-}
-
-task clean(type: Delete) {
-    delete 'build'
-    delete 'node_modules'
-    delete 'yarn-error.log'
-}
-
-task install(type: YarnTask) {
-    description 'Use Yarn to install the node dependencies. Similar to the "yarn" task but with up-to-date checks.'
+// Further configure the rule task with inputs and outputs.
+yarnInstall {
+    description 'Use Yarn to install the Node.js dependencies.'
     group = 'Node'
-    args = ['install']
 
     inputs.files 'package.json', 'yarn.lock'
-
     outputs.dir 'node_modules'
 }
 
-task build(type: YarnTask, dependsOn: install) {
-    description 'Use Yarn to build the package. Similar to the "yarn_build" task but with up-to-date checks.'
+// Create an alias task for convenience.
+task install(dependsOn: yarnInstall)
+
+// Further configure the rule task with inputs and outputs.
+yarnBuild {
+    description 'Use Yarn to build the Node.js application.'
     group = 'Node'
-    args = ['build']
+
+    dependsOn yarnInstall
 
     inputs.dir 'config'
     inputs.dir 'node_modules'
@@ -48,4 +38,13 @@ task build(type: YarnTask, dependsOn: install) {
     outputs.dir 'build'
 }
 
-task check(dependsOn: [build, yarn_lint])
+// Create an alias task for convenience.
+task build(dependsOn: yarnBuild)
+
+task check(dependsOn: [yarnBuild, yarnLint])
+
+task clean(type: Delete) {
+    delete 'build'
+    delete 'node_modules'
+    delete 'yarn-error.log'
+}
