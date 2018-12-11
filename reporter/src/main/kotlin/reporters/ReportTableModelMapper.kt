@@ -33,7 +33,7 @@ import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryRow
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 
-private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
+private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isAddressed }
 
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
@@ -47,11 +47,11 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 resolutionDescription = buildString {
                     if (resolutions.isNotEmpty()) {
                         append(resolutions.joinToString(
-                                prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
+                                prefix = "\nAddressed: ") { "${it.reason} - ${it.comment}" }
                         )
                     }
                 },
-                isResolved = resolutions.isNotEmpty()
+                isAddressed = resolutions.isNotEmpty()
         )
     }
 
@@ -63,11 +63,11 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 resolutionDescription = buildString {
                     if (resolutions.isNotEmpty()) {
                         append(resolutions.joinToString(
-                                prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
+                                prefix = "\nAddressed: ") { "${it.reason} - ${it.comment}" }
                         )
                     }
                 },
-                isResolved = resolutions.isNotEmpty()
+                isAddressed = resolutions.isNotEmpty()
         )
     }
 

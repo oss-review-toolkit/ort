@@ -30,7 +30,7 @@ import com.here.ort.utils.zipWithDefault
 import java.util.SortedMap
 import java.util.SortedSet
 
-fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
+fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isAddressed }
 
 fun <K> Map<K, Collection<ReportTableModel.ResolvableIssue>>.containsUnresolved() =
         any { it.value.containsUnresolved() }
@@ -214,6 +214,6 @@ data class ReportTableModel(
             val source: String,
             val description: String,
             val resolutionDescription: String,
-            val isResolved: Boolean
+            val isAddressed: Boolean
     )
 }

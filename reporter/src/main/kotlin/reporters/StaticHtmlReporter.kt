@@ -380,7 +380,7 @@ class StaticHtmlReporter : Reporter() {
 
                     evaluatorErrors.forEach { error ->
                         val cssClass = when {
-                            error.isResolved -> "ort-addressed"
+                            error.isAddressed -> "ort-addressed"
                             else -> "ort-error"
                         }
                         append("""
@@ -540,7 +540,7 @@ class StaticHtmlReporter : Reporter() {
                             </ul></td>
                             <td><ul>
                                 ${row.analyzerErrors.joinToString("\n") {
-                                    if (it.isResolved) {
+                                    if (it.isAddressed) {
                                         "<li class=\"ort-addressed\"><p>${it.description.replace("\n", "<br/>")}</p>" +
                                                 "<p>${it.resolutionDescription}</p></li>"
                                     } else {
@@ -550,7 +550,7 @@ class StaticHtmlReporter : Reporter() {
                             </ul></td>
                             <td><ul>
                                 ${row.scanErrors.joinToString("\n") {
-                                    if (it.isResolved) {
+                                    if (it.isAddressed) {
                                     "<li class=\"ort-addressed\"><p>${it.description.replace("\n", "<br/>")}</p>" +
                                             "<p>${it.resolutionDescription}</p></li>"
                                     } else {
