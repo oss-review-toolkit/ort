@@ -19,6 +19,7 @@ tools need to be installed. In the context of this tutorial the following tools 
 * Git (any recent version will do)
 * [Node.js](https://nodejs.org) 8.*
 * [NPM](https://www.npmjs.com) 5.5.* - 6.4.*
+* [Yarn](https://yarnpkg.com) 1.9.* - 1.12.*
 
 For the full list of supported package managers and Version Control Systems see the [README](../README.md).
 
