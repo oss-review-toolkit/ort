@@ -527,14 +527,22 @@ class StaticHtmlReporter : Reporter() {
                             </ul></td>
                             <td><ul>
                                 ${row.analyzerErrors.joinToString("\n") {
-                                    "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
-                                            "<p>${it.resolutionDescription}</p></li>"
+                                    if (it.isResolved) {
+                                        "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                                "<p>${it.resolutionDescription}</p></li>"
+                                    } else {
+                                        "<li><p>${it.description.replace("\n", "<br/>")}</p></li>"
+                                    }
                                 }}
                             </ul></td>
                             <td><ul>
                                 ${row.scanErrors.joinToString("\n") {
-                                    "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
-                                            "<p>${it.resolutionDescription}</p></li>"
+                                    if (it.isResolved) {
+                                        "<li><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                                "<p>${it.resolutionDescription}</p></li>"
+                                    } else {
+                                        "<li><p>${it.description.replace("\n", "<br/>")}</p></li>"
+                                    }
                                 }}
                             </ul></td>
                         </tr>""".trimIndent())
