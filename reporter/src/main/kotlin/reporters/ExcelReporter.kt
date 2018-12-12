@@ -21,8 +21,8 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
-import com.here.ort.model.ScanRecord
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.ProjectExclude
@@ -56,8 +56,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
- * A [Reporter] that creates an Excel sheet report from a [ScanRecord] in the Open XML XLSX format. It creates one sheet
- * for each project in [ScanRecord.analyzerResult] and an additional sheet that summarizes all dependencies.
+ * A [Reporter] that creates an Excel sheet report from an [OrtResult] in the Open XML XLSX format. It creates one sheet
+ * for each project in the [AnalyzerResult] from [OrtResult.analyzer] and an additional sheet that summarizes all
+ * dependencies.
  */
 class ExcelReporter : Reporter() {
     private val defaultColumns = 5
