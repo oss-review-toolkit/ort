@@ -77,6 +77,7 @@ class CopyrightStatementsProcessor {
                 "^([C|c]opyrighted)",
                 "^([C|c]opyrighted \\(c\\))",
                 "^([P|p]ortions [C|c]opyright)",
+                "^([P|p]ortions \\(c\\))",
                 "^([P|p]ortions [C|c]opyright \\(c\\))"
         ).map { it.toRegex() }
 
