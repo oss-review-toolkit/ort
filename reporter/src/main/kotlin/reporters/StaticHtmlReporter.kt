@@ -374,7 +374,12 @@ class StaticHtmlReporter : Reporter() {
 
     private fun createEvaluatorTable(evaluatorErrors: List<ResolvableIssue>) =
             buildString {
-                append("<h2><a id=\"policy-violation-summary\"></a>Policy Violation Summary</h2>")
+                append("""
+                    <h2>
+                        <a id="policy-violation-summary"></a>
+                        Policy Violation Summary (${evaluatorErrors.size})
+                    </h2>
+                    """.trimIndent())
 
                 if (evaluatorErrors.isEmpty()) {
                     append("No issues found.")
