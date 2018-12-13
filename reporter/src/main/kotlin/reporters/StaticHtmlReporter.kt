@@ -375,8 +375,7 @@ class StaticHtmlReporter : Reporter() {
     private fun createEvaluatorTable(evaluatorErrors: List<ResolvableIssue>) =
             buildString {
                 append("""
-                    <h2>
-                        <a id="policy-violation-summary"></a>
+                    <h2 id="policy-violation-summary">
                         Policy Violation Summary (${evaluatorErrors.size})
                     </h2>
                     """.trimIndent())
@@ -418,7 +417,7 @@ class StaticHtmlReporter : Reporter() {
     private fun createErrorTable(title: String, errors: ErrorTable, anchor: String) =
             buildString {
                 append("""
-                    <h2><a id="$anchor"></a>$title</h2>
+                    <h2 id="$anchor">$title</h2>
                     <p>Errors from excluded components are not shown in this summary.</p>
                     <h3>Packages</h3>
                     <table class="ort-report-table ort-errors">
@@ -478,7 +477,7 @@ class StaticHtmlReporter : Reporter() {
             buildString {
                 val excludedClass = if (summary.exclude != null) " ort-excluded" else ""
 
-                append("<h2><a id=\"$anchor\"></a>$title</h2>")
+                append("<h2 id=\"$anchor\">$title</h2>")
 
                 summary.exclude?.let { exclude ->
                     append("""
