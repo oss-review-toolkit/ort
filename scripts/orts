@@ -1,0 +1,134 @@
+#!/bin/bash
+
+orts_dir=".orts"
+temp_dir=".orts/tmp"
+ort_result_file="$orts_dir/ort-result.json"
+ort_result_url_file="$orts_dir/target-url.txt"
+
+ort="$HOME/devel/oss-review-toolkit/cli/build/install/ort/bin/ort"
+configuration="$HOME/devel/configuration"
+c_garbage_file="$configuration/copyright-garbage.yml"
+c_notice_script="$configuration/notice-post-processor.kts"
+c_rules_file="$configuration/rules.kts"
+c_resolutions_file="$configuration/resolutions.yml"
+
+notice_file="NOTICE"
+config_file="ort.yml"
+copyrights_file="copyrights.txt"
+copyrights_processed_file="copyrights-processed.txt"
+copyrights_debug_file="copyrights-debug.txt"
+html_report_file="report.html"
+evaluator_result_file="evaluator-result.json"
+new_garbage_file="new-copyright-garbage.txt"
+licenses_file="licenses.txt"
+
+function usage {
+  echo "usage:"
+  echo "    orts COMMAND [PARAMS]"
+  echo ""
+  echo "commands: init"
+  exit 1
+}
+
+function init {
+  echo "init: $1"
+  clean
+  rm -rf $orts_dir
+  mkdir -p $orts_dir
+  wget -O $ort_result_file $1
+  echo "$1" > $ort_result_url_file
+  touch $new_garbage_file
+  touch $config_file
+}
+
+function clean {
+  rm -f $notice_file
+  rm -f $copyrights_file
+  rm -f $copyrights_processed_file
+  rm -f $copyrights_debug_file
+  rm -f $html_report_file
+}
+
+function merge_garbage {
+   $ort merge-copyrights -i $new_garbage_file -o $c_garbage_file
+}
+
+function generate_notice {
+  echo "generate notice..."
+  rm -rf $temp_dir
+  $ort report -f NOTICE -i $ort_result_file -o $temp_dir
+  mv "$temp_dir/NOTICE" "./$notice_file"
+}
+
+function generate_report {
+  echo "generate html report..."
+  rm -rf $temp_dir
+  $ort evaluate -i $ort_result_file -o $temp_dir -f JSON --rules-file $c_rules_file --repository-configuration-file $config_file
+  $ort report -f STATICHTML -i $temp_dir/evaluation-result.json -o $temp_dir/report --copyright-garbage-file $c_garbage_file \
+     --post-processing-script $c_notice_script --repository-configuration-file $config_file --resolutions-file $c_resolutions_file
+  mv "$temp_dir/report/scan-report.html" "./$html_report_file"
+}
+
+
+function generate_config {
+  echo "generate config..."
+  $ort generate-config -i $ort_result_file -o "ort.yml" --resolutions-file $c_resolutions_file
+}
+
+function generate_copyrights {
+  echo "generate copyrights..."
+  $ort extract-copyrights -i $ort_result_file -o $copyrights_file 
+  $ort process-copyrights -i $copyrights_file -o $copyrights_processed_file -g $c_garbage_file
+  $ort process-copyrights -i $copyrights_file -o $copyrights_debug_file -g $c_garbage_file --debug
+  touch $new_garbage_file
+}
+
+function list_licenses {
+  echo "list licenses..."
+
+  if [ $# -eq 1 ]; then
+     $ort list-licenses -i $ort_result_file -o $licenses_file --repository-configuration-file $config_file -s $1
+  else
+     $ort list-licenses -i $ort_result_file -o $licenses_file --repository-configuration-file $config_file
+  fi
+}
+
+if [ $# -lt 1 ]; then 
+  usage
+fi
+
+command="$1"
+if [ "$command" = "init" ]; then
+  if [ $# -eq 2 ]; then 
+     init "$2"
+  else
+     echo "usage: orts init SCAN_RESULT"
+  fi
+elif [ ! -d $orts_dir ]; then
+  echo "Not initialized, run init first"
+elif [ "$command" = "clean" ]; then
+  clean
+elif [ "$command" = "notice" ]; then
+  generate_notice
+elif [ "$command" = "report" ]; then
+  generate_report
+elif [ "$command" = "config" ]; then
+  generate_config
+elif [ "$command" = "copyrights" ]; then
+  generate_copyrights
+elif [ "$command" = "target" ]; then
+  cat $ort_result_url_file
+elif [ "$command" = "merge-garbage" ]; then
+  merge_garbage
+elif [ "$command" = "licenses" ]; then
+  if [ $# -eq 2 ]; then
+     list_licenses "$2"
+  else
+     list_licenses
+  fi
+else
+  echo "unknown command: '$command'" 
+  usage
+fi
+	
+
