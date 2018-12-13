@@ -118,6 +118,22 @@ class StaticHtmlReporter : Reporter() {
                     border-top: 1px solid rgba(34,36,38,.15);
                   }
 
+                  .ort-excluded {
+                    filter: opacity(50%);
+                  }
+
+                  table.ort-excluded tr.ort-excluded {
+                    filter: opacity(100%);
+                  }
+
+                  table tr.ort-excluded td li.ort-excluded {
+                    filter: opacity(100%);
+                  }
+
+                  table.ort-excluded tr.ort-excluded td li.ort-excluded {
+                    filter: opacity(100%);
+                  }
+
                   .ort-report-table {
                     border-spacing: 0;
                     overflow: hidden;
@@ -180,13 +196,9 @@ class StaticHtmlReporter : Reporter() {
                     border-top: 1px solid rgba(34,36,38,.15);
                     padding: 8px;
                     vertical-align: top;
-                    overflow: hidden; 
+                    overflow: hidden;
                     text-overflow: ellipsis; 
                     word-wrap: break-word;
-                  }
-
-                  .ort-report-table td li.ort-excluded {
-                    filter: opacity(50%);
                   }
 
                   .ort-report-table td li div.ort-reason {
