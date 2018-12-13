@@ -23,6 +23,11 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
+import com.here.ort.utils.enumSetOf
+import com.here.ort.utils.plus
+
+import java.util.EnumSet
+
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
@@ -58,6 +63,11 @@ sealed class SpdxExpression {
             return visitor.visit(parser.licenseExpression())
         }
     }
+
+    /**
+     * Return all valid SPDX licenses contained in this expression. LicenseRefs and invalid licenses are ignored.
+     */
+    abstract fun spdxLicenses(): EnumSet<SpdxLicense>
 }
 
 data class SpdxCompoundExpression(
@@ -65,6 +75,8 @@ data class SpdxCompoundExpression(
         val operator: SpdxOperator,
         val right: SpdxExpression
 ) : SpdxExpression() {
+    override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
+
     override fun toString(): String {
         // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
         // left or right expressions in parenthesis to not change the semantics of the expression.
@@ -84,6 +96,8 @@ data class SpdxCompoundExpression(
 data class SpdxLicenseExceptionExpression(
         val id: String
 ) : SpdxExpression() {
+    override fun spdxLicenses() = enumSetOf<SpdxLicense>()
+
     override fun toString() = id
 }
 
@@ -91,6 +105,8 @@ data class SpdxLicenseIdExpression(
         val id: String,
         val anyLaterVersion: Boolean = false
 ) : SpdxExpression() {
+    override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
+
     override fun toString() =
             buildString {
                 append(id)
@@ -101,6 +117,8 @@ data class SpdxLicenseIdExpression(
 data class SpdxLicenseRefExpression(
         val id: String
 ) : SpdxExpression() {
+    override fun spdxLicenses() = enumSetOf<SpdxLicense>()
+
     override fun toString() = id
 }
 

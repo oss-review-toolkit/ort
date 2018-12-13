@@ -22,12 +22,24 @@ package com.here.ort.model.spdx
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.enumSetOf
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class SpdxExpressionTest : WordSpec() {
     init {
+        "spdxLicenses()" should {
+            "contain all valid SPDX licenses" {
+                val expression = "MIT OR (invalid1 AND Apache-2.0 WITH exp) AND (BSD-3-Clause OR invalid2 WITH exp)"
+                val spdxExpression = SpdxExpression.parse(expression)
+
+                val spdxLicenses = spdxExpression.spdxLicenses()
+
+                spdxLicenses shouldBe enumSetOf(SpdxLicense.APACHE_2_0, SpdxLicense.BSD_3_CLAUSE, SpdxLicense.MIT)
+            }
+        }
+
         "toString()" should {
             "return the textual SPDX expression" {
                 val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
