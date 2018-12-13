@@ -213,7 +213,7 @@ class StaticHtmlReporter : Reporter() {
                     border-right: 1px solid rgba(34,36,38,.15);
                   }
 
-                  .ort-report-table.ort-violations tr.ort-addressed {
+                  .ort-report-table.ort-violations tr.ort-resolved {
                     background: #fcfff5;
                     color: #2c662d;
                   }
@@ -227,7 +227,7 @@ class StaticHtmlReporter : Reporter() {
                     color: #9f3a38;
                   }
 
-                  .ort-report-table li.ort-addressed {
+                  .ort-report-table li.ort-resolved {
                     color: #2c662d;
                   }
 
@@ -397,7 +397,7 @@ class StaticHtmlReporter : Reporter() {
 
                     evaluatorErrors.forEach { error ->
                         val cssClass = when {
-                            error.isResolved -> "ort-addressed"
+                            error.isResolved -> "ort-resolved"
                             else -> "ort-error"
                         }
                         append("""
@@ -558,7 +558,7 @@ class StaticHtmlReporter : Reporter() {
                             <td><ul>
                                 ${row.analyzerErrors.joinToString("\n") {
                                     if (it.isResolved) {
-                                        "<li class=\"ort-addressed\"><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                        "<li class=\"ort-resolved\"><p>${it.description.replace("\n", "<br/>")}</p>" +
                                                 "<p>${it.resolutionDescription}</p></li>"
                                     } else {
                                         "<li><p>${it.description.replace("\n", "<br/>")}</p></li>"
@@ -568,7 +568,7 @@ class StaticHtmlReporter : Reporter() {
                             <td><ul>
                                 ${row.scanErrors.joinToString("\n") {
                                     if (it.isResolved) {
-                                        "<li class=\"ort-addressed\"><p>${it.description.replace("\n", "<br/>")}</p>" +
+                                        "<li class=\"ort-resolved\"><p>${it.description.replace("\n", "<br/>")}</p>" +
                                                 "<p>${it.resolutionDescription}</p></li>"
                                     } else {
                                         "<li><p>${it.description.replace("\n", "<br/>")}</p></li>"
