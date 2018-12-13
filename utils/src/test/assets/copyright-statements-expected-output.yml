@@ -288,6 +288,12 @@ processed_statements:
   - "Copyright (c) 2011 Dominic Tarr"
   (c) Duoa E1:
   - "(c) Duoa E1"
+  Portions (c) 2001-2002 EFG:
+  - "Portions (c) 2001 EFG"
+  - "Portions (c) 2002 EFG"
+  portions (c) 2003-2004 EFG:
+  - "portions (c) 2003 EFG"
+  - "portions (c) 2004 EFG"
   (c) EU8 YK4s:
   - "(c) EU8 YK4s"
   (c) EY6Iq NNco:
@@ -1420,11 +1426,7 @@ unprocessed_statements:
 - "EdI (c) O0"
 - "Na (c) EAv"
 - "OOa (c) Ea"
-- "Portions (c) 2001 EFG"
-- "Portions (c) 2002 EFG"
 - "TarHeader (c)"
 - "Ui vEak.\x19O7!Y\x0eciBuqu2kim',cJoSo2olm\x13 (c) EMoK"
 - "Vi EEL64eaae!2TeOau\x19 (c) Noj"
-- "portions (c) 2003 EFG"
-- "portions (c) 2004 EFG"
 - "use (c)"
