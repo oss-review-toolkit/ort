@@ -944,3 +944,7 @@ COPYRIGHT 1990 ABC
 copyright u'2000 CDE
 copyright 2001,u'2002 CDE
 copyright u'2003 - 2005 CDE
+portions (c) 2003 EFG
+portions (c) 2004 EFG
+Portions (c) 2001 EFG
+Portions (c) 2002 EFG
