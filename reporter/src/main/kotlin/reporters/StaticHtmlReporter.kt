@@ -197,7 +197,7 @@ class StaticHtmlReporter : Reporter() {
                     padding: 8px;
                     vertical-align: top;
                     overflow: hidden;
-                    text-overflow: ellipsis; 
+                    text-overflow: ellipsis;
                     word-wrap: break-word;
                   }
 
@@ -342,8 +342,8 @@ class StaticHtmlReporter : Reporter() {
                 append("<h2>Index</h2>")
                 append("<ul>")
                 tabularScanRecord.evaluatorErrors?.let { evaluatorErrors ->
-                    append("<li><a href=\"#license-check-results\">" +
-                            "License Check Results (${evaluatorErrors.size} errors)</a></li>")
+                    append("<li><a href=\"#policy-violation-summary\">" +
+                            "Policy Violation Summary (${evaluatorErrors.size})</a></li>")
                 }
                 if (numberOfErrors > 0) {
                     append("<li><a href=\"#error-summary\">Error Summary ($numberOfErrors)</a></li>")
@@ -374,7 +374,7 @@ class StaticHtmlReporter : Reporter() {
 
     private fun createEvaluatorTable(evaluatorErrors: List<ResolvableIssue>) =
             buildString {
-                append("<h2><a id=\"license-check-results\"></a>License Check Results</h2>")
+                append("<h2><a id=\"policy-violation-summary\"></a>Policy Violation Summary</h2>")
 
                 if (evaluatorErrors.isEmpty()) {
                     append("No issues found.")
