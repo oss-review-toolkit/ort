@@ -7,7 +7,7 @@ sourceSets {
     }
 }
 
-task copyWebAppTemplate(type: Copy, dependsOn: ':reporter-web-app:build') {
+task copyWebAppTemplate(type: Copy, dependsOn: ':reporter-web-app:yarnBuild') {
     from(project(':reporter-web-app').file('build')) {
         include 'scan-report-template.html'
     }
