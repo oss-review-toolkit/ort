@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.spdx.SpdxExpression
+
 import java.util.SortedSet
 
 /**
@@ -102,6 +104,29 @@ data class OrtResult(
 
         return vendorPackages
     }
+
+    /**
+     * Return the concluded license for the given package [id], or null if there is no concluded license.
+     */
+    fun getConcludedLicensesForId(id: Identifier) =
+            analyzer?.result?.run {
+                packages.find { it.pkg.id == id }?.pkg?.concludedLicense
+            }
+
+    /**
+     * Return all concluded licenses associated to their package. If [omitExcluded] is set to true, excluded packages
+     * are omitted from the result.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun collectAllConcludedLicenses(omitExcluded: Boolean = false) =
+            sortedMapOf<Identifier, SpdxExpression?>().also { licenses ->
+                val excludes = repository.config.excludes.takeIf { omitExcluded }
+
+                analyzer?.result?.let { result ->
+                    result.packages.filter { excludes?.isPackageExcluded(it.pkg.id, result) != true }
+                            .associateTo(licenses) { it.pkg.id to it.pkg.concludedLicense }
+                }
+            }
 
     /**
      * Return the declared licenses for the given [id] which may either refer to a project or to a package. If [id] is
