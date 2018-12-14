@@ -31,5 +31,5 @@ class DefaultResolutionProvider : ResolutionProvider {
 
     override fun getResolutionsFor(error: OrtIssue) = resolutions.errors.filter { it.matches(error) }
 
-    override fun getEvaluatorResolutionsFor(error: OrtIssue) = resolutions.evaluatorErrors.filter { it.matches(error) }
+    override fun getEvaluatorResolutionsFor(error: OrtIssue) = resolutions.ruleViolations.filter { it.matches(error) }
 }
