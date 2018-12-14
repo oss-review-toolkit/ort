@@ -69,12 +69,21 @@ object EvaluatorCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var syntaxCheck = false
 
+    @Parameter(description = "A file containing the repository configuration. If set the .ort.yml " +
+            "overrides the repository configuration contained in the ort result from the input file.",
+            names = ["--repository-configuration-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var repositoryConfigurationFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         require((rulesFile == null) != (rulesResource == null)) {
             "Either '--rules-file' or '--rules-resource' must be specified."
         }
 
-        val ortResultInput = ortFile.readValue<OrtResult>()
+        var ortResultInput = ortFile.readValue<OrtResult>()
+        if (repositoryConfigurationFile != null) {
+            ortResultInput = ortResultInput.replaceConfig(repositoryConfigurationFile!!.readValue())
+        }
 
         val script = rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()
 
