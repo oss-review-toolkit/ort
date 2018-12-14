@@ -110,11 +110,11 @@ object AnalyzerCommand : CommandWithHelp() {
             return 2
         }
 
-        require(packageCurationsFile?.isFile ?: true) {
+        require(packageCurationsFile?.isFile != false) {
             "The package curations file '${packageCurationsFile!!.invariantSeparatorsPath}' could not be found."
         }
 
-        require(repositoryConfigurationFile?.isFile ?: true) {
+        require(repositoryConfigurationFile?.isFile != false) {
             "The repository configuration file '${repositoryConfigurationFile!!.invariantSeparatorsPath}' could " +
                     "not be found."
         }
