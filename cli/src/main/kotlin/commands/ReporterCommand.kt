@@ -92,6 +92,12 @@ object ReporterCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var copyrightGarbageFile: File? = null
 
+    @Parameter(description = "A file containing the repository configuration. If set the .ort.yml " +
+            "overrides the repository configuration contained in the ort result from the input file.",
+            names = ["--repository-configuration-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var repositoryConfigurationFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         require(!outputDir.exists()) {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
@@ -99,7 +105,10 @@ object ReporterCommand : CommandWithHelp() {
 
         outputDir.safeMkdirs()
 
-        val ortResult = ortFile.readValue<OrtResult>()
+        var ortResult = ortFile.readValue<OrtResult>()
+        if (repositoryConfigurationFile != null) {
+            ortResult = ortResult.replaceConfig(repositoryConfigurationFile!!.readValue())
+        }
 
         val resolutionProvider = DefaultResolutionProvider()
         ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
