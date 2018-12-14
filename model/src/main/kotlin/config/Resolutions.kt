@@ -35,7 +35,7 @@ class Resolutions(
      * Resolutions for license policy violations.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val evaluatorErrors: List<EvaluatorErrorResolution> = emptyList()
+    val ruleViolations: List<RuleViolationResolution> = emptyList()
 ) {
     /**
      * Merge this [Resolutions] with [other] [Resolutions]. Duplicates are removed.
@@ -43,6 +43,6 @@ class Resolutions(
     fun merge(other: Resolutions) =
             Resolutions(
                     errors = (errors + other.errors).distinct(),
-                    evaluatorErrors = (evaluatorErrors + other.evaluatorErrors).distinct()
+                    ruleViolations = (ruleViolations + other.ruleViolations).distinct()
             )
 }

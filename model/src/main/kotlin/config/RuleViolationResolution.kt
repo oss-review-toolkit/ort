@@ -24,20 +24,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.here.ort.model.OrtIssue
 
 /**
- * Defines the resolution of an error. This can be used to silence errors that have been identified as not being
- * relevant.
+ * Defines the resolution of a rule violation. This can be used to silence rule violations that have been identified
+ * as not being relevant or are acceptable / approved.
  */
-data class EvaluatorErrorResolution(
+data class RuleViolationResolution(
         /**
-         * A regular expression string to match the messages of errors to resolve. Will be converted to a [Regex] using
+         * A regular expression string to match the messages of rule violations to resolve. Will be converted to
+         * a [Regex] using
          * [RegexOption.DOT_MATCHES_ALL].
          */
         val message: String,
 
         /**
-         * The reason why the errors is resolved.
+         * The reason why the rule violation is resolved.
          */
-        val reason: EvaluatorErrorResolutionReason,
+        val reason: RuleViolationResolutionReason,
 
         /**
          * A comment to further explain why the [reason] is applicable here.

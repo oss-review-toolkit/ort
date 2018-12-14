@@ -19,7 +19,7 @@ package com.here.ort.model.config
  * License-Filename: LICENSE
  */
 
-enum class EvaluatorErrorResolutionReason {
+enum class RuleViolationResolutionReason {
     /**
      * The evaluator rule violation leading has been approved.
      */
