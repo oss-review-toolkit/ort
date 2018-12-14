@@ -81,8 +81,8 @@ object EvaluatorCommand : CommandWithHelp() {
         }
 
         var ortResultInput = ortFile.readValue<OrtResult>()
-        if (repositoryConfigurationFile != null) {
-            ortResultInput = ortResultInput.replaceConfig(repositoryConfigurationFile!!.readValue())
+        repositoryConfigurationFile?.let {
+            ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
         val script = rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()

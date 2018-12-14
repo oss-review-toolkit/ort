@@ -106,8 +106,8 @@ object ReporterCommand : CommandWithHelp() {
         outputDir.safeMkdirs()
 
         var ortResult = ortFile.readValue<OrtResult>()
-        if (repositoryConfigurationFile != null) {
-            ortResult = ortResult.replaceConfig(repositoryConfigurationFile!!.readValue())
+        repositoryConfigurationFile?.let {
+            ortResult = ortResult.replaceConfig(it.readValue())
         }
 
         val resolutionProvider = DefaultResolutionProvider()
