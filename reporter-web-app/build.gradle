@@ -49,8 +49,6 @@ yarnLint {
  * Resemble the Java plugin tasks for convenience.
  */
 
-
-task install(dependsOn: yarnInstall)
 task build(dependsOn: [yarnBuild, yarnLint])
 task check(dependsOn: yarnLint)
 
