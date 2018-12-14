@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.spdx.SpdxExpression
 
 import java.util.SortedSet
@@ -194,4 +195,10 @@ data class OrtResult(
                     }
                 }
             }
+
+    /**
+     * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
+     */
+    fun replaceConfig(config: RepositoryConfiguration) =
+            copy(repository = repository.copy(config = config))
 }
