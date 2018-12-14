@@ -415,7 +415,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             LicenseFindingsMap {
         val copyrightsForLicenses = sortedMapOf<String, MutableSet<String>>()
 
-        // While ScanCode 2.9.2 was still using "statements", version 2.97 is using "value".
+        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
         val allCopyrightStatements = copyrights.flatMap {
             it["statements"] ?: listOf(it["value"])
         }.map { it.asText() }.toSortedSet()
