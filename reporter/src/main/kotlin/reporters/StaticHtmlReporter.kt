@@ -343,7 +343,7 @@ class StaticHtmlReporter : Reporter() {
                 append("<ul>")
                 tabularScanRecord.evaluatorErrors?.let { evaluatorErrors ->
                     append("<li><a href=\"#policy-violation-summary\">" +
-                            "Policy Violation Summary (${evaluatorErrors.size} violations)</a></li>")
+                            "Rule Violation Summary (${evaluatorErrors.size} violations)</a></li>")
                 }
                 if (numberOfErrors > 0) {
                     append("<li><a href=\"#error-summary\">Error Summary ($numberOfErrors)</a></li>")
@@ -376,7 +376,7 @@ class StaticHtmlReporter : Reporter() {
             buildString {
                 append("""
                     <h2 id="policy-violation-summary">
-                        Policy Violation Summary (${evaluatorErrors.size} violations)
+                        Rule Violation Summary (${evaluatorErrors.size} violations)
                     </h2>
                     """.trimIndent())
 
