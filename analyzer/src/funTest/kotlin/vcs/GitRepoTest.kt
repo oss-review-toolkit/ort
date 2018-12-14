@@ -38,7 +38,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 private const val REPO_URL = "https://github.com/heremaps/oss-review-toolkit-test-data"
-private const val REPO_REV = "1c0b86e578349f38acd43de354f815370112a213"
+private const val REPO_REV = "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
 private const val REPO_MANIFEST = "git-repo/manifest.xml"
 
 class GitRepoTest : StringSpec() {
