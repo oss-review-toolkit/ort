@@ -71,26 +71,22 @@ class GitRepoDownloadTest : StringSpec() {
                     "third_party",
                     "tools",
                     "vsprojects"
-            ).map { File(grpcDir, it) }
+            )
 
-            val actualGrpcFiles = grpcDir.listFiles(FileFilter {
-                it.isDirectory
-            }).sorted()
+            val actualGrpcFiles = grpcDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
 
             val spdxDir = File(outputDir, "spdx-tools")
             val expectedSpdxFiles = listOf(
                     ".git",
-                    "doc",
                     "Examples",
-                    "resources",
-                    "src",
                     "Test",
-                    "TestFiles"
-            ).map { File(spdxDir, it) }
+                    "TestFiles",
+                    "doc",
+                    "resources",
+                    "src"
+            )
 
-            val actualSpdxFiles = spdxDir.listFiles(FileFilter {
-                it.isDirectory
-            }).sorted()
+            val actualSpdxFiles = spdxDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getInfo() shouldBe vcs
