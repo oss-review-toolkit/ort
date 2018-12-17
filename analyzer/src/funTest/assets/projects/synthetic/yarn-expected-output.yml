@@ -70,6 +70,9 @@ project:
         dependencies:
         - id: "NPM:@types:node:6.0.79"
     - id: "NPM::long:3.2.0"
+    - id: "NPM::promise:7.3.1"
+      dependencies:
+      - id: "NPM::asap:2.0.5"
   - name: "devDependencies"
     dependencies:
     - id: "NPM::cson:4.1.0"
