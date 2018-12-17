@@ -12,7 +12,7 @@ mainClassName = 'com.here.ort.Main'
 task dockerBuildBaseImage(type: com.bmuschko.gradle.docker.tasks.image.DockerBuildImage) {
     // This task uses 'docker/Dockerfile' as the input file.
     description = 'Builds the base Docker image to run ORT.'
-    tag = 'ort-base:latest'
+    tags = ['ort-base:latest']
 }
 
 docker {
