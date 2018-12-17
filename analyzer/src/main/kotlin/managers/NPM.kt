@@ -350,18 +350,15 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         // Read package.json
         val json = jsonMapper.readTree(packageJson)
         val dependencies = sortedSetOf<PackageReference>()
-        if (json[scope] != null) {
+        json[scope]?.let { dependencyMap ->
             log.debug { "Looking for dependencies in scope '$scope'." }
-            val dependencyMap = json[scope]
             dependencyMap.fields().forEach { (name, _) ->
                 val modulesDir = packageJson.resolveSibling("node_modules")
                 buildTree(modulesDir, modulesDir, name, packages)?.let { dependency ->
                     dependencies += dependency
                 }
             }
-        } else {
-            log.debug { "Could not find scope '$scope' in '${packageJson.absolutePath}'." }
-        }
+        } ?: log.debug { "Could not find scope '$scope' in '${packageJson.absolutePath}'." }
 
         return dependencies
     }
@@ -404,14 +401,10 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                     ?: throw IOException("Could not find package info for $identifier")
             val dependencies = sortedSetOf<PackageReference>()
 
-            if (packageJson["dependencies"] != null) {
-                val dependencyMap = packageJson["dependencies"]
+            packageJson["dependencies"]?.let { dependencyMap ->
                 dependencyMap.fields().forEach { (dependencyName, _) ->
-                    val dependency = buildTree(rootModulesDir, packageFile.resolveSibling("node_modules"),
-                            dependencyName, packages, newDependencyBranch)
-                    if (dependency != null) {
-                        dependencies += dependency
-                    }
+                    buildTree(rootModulesDir, packageFile.resolveSibling("node_modules"),
+                            dependencyName, packages, newDependencyBranch)?.let { dependencies += it }
                 }
             }
 
