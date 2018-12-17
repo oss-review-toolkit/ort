@@ -144,13 +144,19 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
             val packages = parseInstalledModules(workingDir)
 
-            val dependencies = Scope("dependencies", parseDependencies(definitionFile, "dependencies", packages))
-            val devDependencies = Scope("devDependencies", parseDependencies(definitionFile, "devDependencies",
-                    packages))
+            // Optional dependencies are just like regular dependencies except that NPM ignores failures when installing
+            // them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are not a separate
+            // scope in our semantics.
+            val dependencies = parseDependencies(definitionFile, "dependencies", packages) +
+                    parseDependencies(definitionFile, "optionalDependencies", packages)
+            val dependenciesScope = Scope("dependencies", dependencies.toSortedSet())
 
-            // TODO: add support for peerDependencies, bundledDependencies, and optionalDependencies.
+            val devDependencies = parseDependencies(definitionFile, "devDependencies", packages)
+            val devDependenciesScope = Scope("devDependencies", devDependencies)
 
-            return parseProject(definitionFile, sortedSetOf(dependencies, devDependencies),
+            // TODO: add support for peerDependencies and bundledDependencies.
+
+            return parseProject(definitionFile, sortedSetOf(dependenciesScope, devDependenciesScope),
                     packages.values.toSortedSet())
         }
     }
@@ -396,18 +402,20 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                 return null
             }
 
-            val newDependencyBranch = dependencyBranch + identifier
-            val packageInfo = packages[identifier]
-                    ?: throw IOException("Could not find package info for $identifier")
             val dependencies = sortedSetOf<PackageReference>()
 
-            packageJson["dependencies"]?.let { dependencyMap ->
-                dependencyMap.fields().forEach { (dependencyName, _) ->
-                    buildTree(rootModulesDir, packageFile.resolveSibling("node_modules"),
-                            dependencyName, packages, newDependencyBranch)?.let { dependencies += it }
-                }
+            val dependencyNames = mutableSetOf<String>()
+            packageJson["dependencies"]?.fieldNames()?.forEach { dependencyNames += it }
+            packageJson["optionalDependencies"]?.fieldNames()?.forEach { dependencyNames += it }
+
+            val newDependencyBranch = dependencyBranch + identifier
+            dependencyNames.forEach { dependencyName ->
+                buildTree(rootModulesDir, packageFile.resolveSibling("node_modules"),
+                        dependencyName, packages, newDependencyBranch)?.let { dependencies += it }
             }
 
+            val packageInfo = packages[identifier]
+                    ?: throw IOException("Could not find package info for $identifier")
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
             log.warn {
