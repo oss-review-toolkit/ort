@@ -109,6 +109,7 @@ data class OrtResult(
     /**
      * Return the concluded license for the given package [id], or null if there is no concluded license.
      */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getConcludedLicensesForId(id: Identifier) =
             analyzer?.result?.run {
                 packages.find { it.pkg.id == id }?.pkg?.concludedLicense
