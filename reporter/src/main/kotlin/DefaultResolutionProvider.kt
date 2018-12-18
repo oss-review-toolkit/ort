@@ -29,7 +29,8 @@ class DefaultResolutionProvider : ResolutionProvider {
         this.resolutions = this.resolutions.merge(resolutions)
     }
 
-    override fun getResolutionsFor(error: OrtIssue) = resolutions.errors.filter { it.matches(error) }
+    override fun getErrorResolutionsFor(issue: OrtIssue) = resolutions.errors.filter { it.matches(issue) }
 
-    override fun getEvaluatorResolutionsFor(error: OrtIssue) = resolutions.ruleViolations.filter { it.matches(error) }
+    override fun getRuleViolationResolutionsFor(issue: OrtIssue) =
+            resolutions.ruleViolations.filter { it.matches(issue) }
 }

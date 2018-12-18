@@ -40,7 +40,7 @@ private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isReso
  */
 class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider) {
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
-        val resolutions = resolutionProvider.getResolutionsFor(this)
+        val resolutions = resolutionProvider.getErrorResolutionsFor(this)
         return ResolvableIssue(
                 source = this@toResolvableIssue.source,
                 description = this@toResolvableIssue.toString(),
@@ -56,7 +56,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
     }
 
     private fun OrtIssue.toResolvableEvaluatorIssue(): ResolvableIssue {
-        val resolutions = resolutionProvider.getEvaluatorResolutionsFor(this)
+        val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
         return ResolvableIssue(
                 source = this@toResolvableEvaluatorIssue.source,
                 description = this@toResolvableEvaluatorIssue.toString(),
