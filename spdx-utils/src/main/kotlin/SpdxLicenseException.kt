@@ -64,4 +64,9 @@ enum class SpdxLicenseException(val id: String) {
          */
         fun forId(id: String) = SpdxLicenseException.values().find { it.id == id }
     }
+
+    /**
+     * The full license exception text as a string.
+     */
+    val text = javaClass.getResource("/exceptions/$id").readText()
 }

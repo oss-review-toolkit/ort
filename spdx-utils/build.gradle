@@ -86,7 +86,7 @@ task generateSpdxLicenseList {
 
         def enumValues = spdxLicenseIds.collect { "    ${licenseToEnumEntry(it.toString())}" }.sort().join(',\n') + ';'
         licenseEnumFile.append(enumValues)
-        licenseEnumFile.append("""
+        licenseEnumFile.append('''
 
                 companion object {
                     /**
@@ -94,8 +94,47 @@ task generateSpdxLicenseList {
                      */
                     fun forId(id: String) = SpdxLicense.values().find { it.id == id }
                 }
+
+                /**
+                 * The full license text as a string.
+                 */
+                val text by lazy { javaClass.getResource("/licenses/$id").readText() }
             }
-            """.stripIndent())
+            '''.stripIndent())
+
+        println 'Fetching SPDX license texts...'
+        def count = 0
+
+        spdxLicenseIds.each { id ->
+            def licenseTextResourceFile = file("src/main/resources/licenses/$id")
+
+            // Prefer the license texts from ScanCode as these have better formatting than those from SPDX.
+            def urls = [
+                    "https://raw.githubusercontent.com/nexB/scancode-toolkit/develop/src/licensedcode/data/licenses/${id.toLowerCase()}.LICENSE",
+                    "https://raw.githubusercontent.com/spdx/license-list-data/master/text/${id}.txt",
+                    "https://raw.githubusercontent.com/spdx/license-list-data/master/text/deprecated_${id}.txt"
+            ]
+
+            def i = urls.iterator()
+            while (true) {
+                if (i.hasNext()) {
+                    def url = i.next()
+
+                    try {
+                        def text = url.toURL().text
+                        if (!text.endsWith('\n')) text += '\n'
+                        licenseTextResourceFile.write(text)
+                    } catch (FileNotFoundException e) {
+                        continue
+                    }
+
+                    println "Fetched licence text ${++count} of ${spdxLicenseIds.size()} for id '$id' from $url."
+                    break
+                } else {
+                    throw new GradleException("Failed to fetch licence text for id '$id' from any of $urls.")
+                }
+            }
+        }
 
         println "Generated SPDX license enum '$licenseEnumFile'."
     }
@@ -128,7 +167,7 @@ task generateSpdxLicenseExceptionList {
 
         def enumValues = spdxLicenseExceptionIds.collect { "    ${licenseToEnumEntry(it.toString())}" }.sort().join(',\n') + ';'
         licenseExceptionEnumFile.append(enumValues)
-        licenseExceptionEnumFile.append("""
+        licenseExceptionEnumFile.append('''
 
                 companion object {
                     /**
@@ -136,8 +175,47 @@ task generateSpdxLicenseExceptionList {
                      */
                     fun forId(id: String) = SpdxLicenseException.values().find { it.id == id }
                 }
+
+                /**
+                 * The full license exception text as a string.
+                 */
+                val text by lazy { javaClass.getResource("/exceptions/$id").readText() }
             }
-            """.stripIndent())
+            '''.stripIndent())
+
+        println 'Fetching SPDX license exception texts...'
+        def count = 0
+
+        spdxLicenseExceptionIds.each { id ->
+            def exceptionTextResourceFile = file("src/main/resources/exceptions/$id")
+
+            // Prefer the license texts from ScanCode as these have better formatting than those from SPDX.
+            def urls = [
+                    "https://raw.githubusercontent.com/nexB/scancode-toolkit/develop/src/licensedcode/data/licenses/${id.toLowerCase()}.LICENSE",
+                    "https://raw.githubusercontent.com/spdx/license-list-data/master/text/${id}.txt",
+                    "https://raw.githubusercontent.com/spdx/license-list-data/master/text/deprecated_${id}.txt"
+            ]
+
+            def i = urls.iterator()
+            while (true) {
+                if (i.hasNext()) {
+                    def url = i.next()
+
+                    try {
+                        def text = url.toURL().text
+                        if (!text.endsWith('\n')) text += '\n'
+                        exceptionTextResourceFile.write(text)
+                    } catch (FileNotFoundException e) {
+                        continue
+                    }
+
+                    println "Fetched licence exception text ${++count} of ${spdxLicenseExceptionIds.size()} for id '$id' from $url."
+                    break
+                } else {
+                    throw new GradleException("Failed to fetch licence exception text for id '$id' from any of $urls.")
+                }
+            }
+        }
 
         println "Generated SPDX license exception enum '$licenseExceptionEnumFile'."
     }
