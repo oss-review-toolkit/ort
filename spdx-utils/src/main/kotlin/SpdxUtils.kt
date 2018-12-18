@@ -19,13 +19,11 @@
 
 package com.here.ort.spdx
 
-import com.fasterxml.jackson.databind.ObjectMapper
-
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 
 import java.io.File
-import java.net.URL
+import java.io.IOException
 import java.util.EnumSet
 
 /**
@@ -73,15 +71,6 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
  * Retrieve the full text for the license with the provided SPDX [id]. If [handleExceptions] is enabled, the [id] may
  * also refer to an exception instead of a license.
  */
-fun getLicenseText(id: String, handleExceptions: Boolean = false): String {
-    val version = "v3.3"
-    val (url, key) = if (handleExceptions && id.contains("-exception") && !id.contains("-with")) {
-        Pair("https://github.com/spdx/license-list-data/raw/$version/json/exceptions/$id.json", "licenseExceptionText")
-    } else {
-        Pair("https://github.com/spdx/license-list-data/raw/$version/json/details/$id.json", "licenseText")
-    }
-
-    // TODO: Change this to use built-in resources instead of making HTTP requests, but for now only make it independent
-    // of "OkHttpClientHelper" from the "utils" module.
-    return ObjectMapper().readTree(URL(url).readText())[key].textValue()
-}
+fun getLicenseText(id: String, handleExceptions: Boolean = false) =
+        SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
+                ?: throw IOException("No license text found for id '$id'.")
