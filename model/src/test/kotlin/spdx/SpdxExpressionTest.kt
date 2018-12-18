@@ -60,10 +60,10 @@ class SpdxExpressionTest : WordSpec() {
             }
         }
 
-        "Jackson" should {
+        "An SpdxExpression" should {
             val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
 
-            "serialize SpdxExpression to its string representation" {
+            "be serializable to a string representation" {
                 val spdxExpression = SpdxExpression.parse(expression)
 
                 val serializedExpression = yamlMapper.writeValueAsString(spdxExpression)
@@ -71,7 +71,7 @@ class SpdxExpressionTest : WordSpec() {
                 serializedExpression shouldBe "--- \"$expression\"\n"
             }
 
-            "be able to deserialize an SpdxExpression from its string representation" {
+            "be deserializable from a string representation" {
                 val serializedExpression = "--- \"$expression\"\n"
 
                 val deserializedExpression = yamlMapper.readValue<SpdxExpression>(serializedExpression)
