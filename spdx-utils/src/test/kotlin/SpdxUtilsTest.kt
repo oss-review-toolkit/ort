@@ -81,14 +81,14 @@ class SpdxUtilsTest : WordSpec({
         }
 
         "return the exception text for an SPDX exception id if handling exceptions is enabled" {
-            val text = getLicenseText("Autoconf-exception-2.0", true).trim()
+            val text = getLicenseText("Autoconf-exception-3.0", true).trim()
 
-            text should startWith("As a special exception,")
-            text should endWith("this special exception to the GPL from your modified version.")
+            text should startWith("AUTOCONF CONFIGURE SCRIPT EXCEPTION")
+            text should endWith("the copyleft requirements of the license of Autoconf.")
         }
 
         "throw an exception for an SPDX exception id if handling exceptions is disabled" {
-            shouldThrow<IOException> { getLicenseText("Autoconf-exception-2.0", false) }
+            shouldThrow<IOException> { getLicenseText("Autoconf-exception-3.0", false) }
         }
 
         "return a non-blank string for all SPDX ids" {
