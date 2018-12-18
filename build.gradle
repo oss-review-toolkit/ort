@@ -58,7 +58,7 @@ subprojects {
             testImplementation "io.kotlintest:kotlintest-core:$kotlintestVersion"
             testImplementation "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
             testImplementation "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
-            testImplementation project(':utils-test')
+            testImplementation project(':test-utils')
 
             funTestImplementation sourceSets.main.output
             funTestImplementation sourceSets.test.output
