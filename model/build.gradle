@@ -144,7 +144,7 @@ task generateSpdxLicenseExceptionList {
 task generateSpdxEnums(dependsOn: [generateSpdxLicenseList, generateSpdxLicenseExceptionList])
 
 def licenseToEnumEntry(String license) {
-    def enumName = license.toUpperCase().replaceAll('[-\\.]', '_').replace('+', 'PLUS')
+    def enumName = license.toUpperCase().replaceAll('[-.]', '_').replace('+', 'PLUS')
     if (enumName[0].isNumber()) {
         enumName = "_$enumName"
     }
