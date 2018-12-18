@@ -97,7 +97,7 @@ task generateSpdxLicenseList {
             }
             """.stripIndent())
 
-        println("Generated SPDX license enum '$licenseEnumFile'.")
+        println "Generated SPDX license enum '$licenseEnumFile'."
     }
 }
 
@@ -139,7 +139,7 @@ task generateSpdxLicenseExceptionList {
             }
             """.stripIndent())
 
-        println("Generated SPDX license exception enum '$licenseExceptionEnumFile'.")
+        println "Generated SPDX license exception enum '$licenseExceptionEnumFile'."
     }
 }
 
