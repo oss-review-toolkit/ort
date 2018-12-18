@@ -50,7 +50,7 @@ dependencies {
 
     compile "org.reflections:reflections:$reflectionsVersion"
 
-    testCompile project(':utils-test')
+    testCompile project(':test-utils')
 
     testCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
     testCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
