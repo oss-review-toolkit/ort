@@ -61,13 +61,13 @@ def licenseToEnumEntry(String license) {
 
 task generateSpdxLicenseList {
     doLast {
-        println "Fetching SPDX license list..."
+        println 'Fetching SPDX license list...'
 
         def jsonSlurper = new groovy.json.JsonSlurper()
-        def spdxUrl = "https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json".toURL()
+        def spdxUrl = 'https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json'.toURL()
         def json = jsonSlurper.parse(spdxUrl)
         def spdxLicenseIds = json.licenses.collect {
-            it["licenseId"]
+            it['licenseId']
         }
 
         println "Found ${spdxLicenseIds.size()} SPDX license identifiers."
@@ -103,13 +103,13 @@ task generateSpdxLicenseList {
 
 task generateSpdxLicenseExceptionList {
     doLast {
-        println "Fetching SPDX license exception list..."
+        println 'Fetching SPDX license exception list...'
 
         def jsonSlurper = new groovy.json.JsonSlurper()
-        def spdxUrl = "https://raw.githubusercontent.com/spdx/license-list-data/master/json/exceptions.json".toURL()
+        def spdxUrl = 'https://raw.githubusercontent.com/spdx/license-list-data/master/json/exceptions.json'.toURL()
         def json = jsonSlurper.parse(spdxUrl)
         def spdxLicenseExceptionIds = json.exceptions.collect {
-            it["licenseExceptionId"]
+            it['licenseExceptionId']
         }
 
         println "Found ${spdxLicenseExceptionIds.size()} SPDX license exception identifiers."
