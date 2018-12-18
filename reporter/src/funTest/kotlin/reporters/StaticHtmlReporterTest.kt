@@ -29,11 +29,19 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
+import javax.xml.transform.TransformerFactory
+
 class StaticHtmlReporterTest : WordSpec({
     val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
             .readValue<OrtResult>()
 
     "StaticHtmlReporter" should {
+        "use the Apache Xalan TransformerFactory" {
+            val transformer = TransformerFactory.newInstance().newTransformer()
+
+            transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
+        }
+
         "successfully export to a static HTML page" {
             val outputDir = createTempDir().apply { deleteOnExit() }
             StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
