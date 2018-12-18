@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.spdx
+package com.here.ort.spdx
 
 class SpdxException : Exception {
     constructor(message: String?, cause: Throwable?): super(message, cause)

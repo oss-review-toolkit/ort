@@ -24,7 +24,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
 import java.util.Collections
-import java.util.EnumSet
 
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
@@ -68,12 +67,6 @@ fun disjoint(c1: Collection<*>, c2: Collection<*>, vararg cN: Collection<*>): Bo
 
     return true
 }
-
-/**
- * A Kotlin-style conveniece function to replace EnumSet.of() and EnumSet.noneOf().
- */
-inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
-        EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].

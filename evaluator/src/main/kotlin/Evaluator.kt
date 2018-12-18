@@ -28,7 +28,7 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
     override val preface = """
             import com.here.ort.model.*
             import com.here.ort.model.config.*
-            import com.here.ort.model.spdx.*
+            import com.here.ort.spdx.*
             import com.here.ort.utils.*
 
             import java.util.*

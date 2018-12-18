@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils.spdx
+package com.here.ort.spdx
 
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.startWith

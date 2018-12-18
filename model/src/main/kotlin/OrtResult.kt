@@ -22,7 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.spdx.SpdxExpression
+import com.here.ort.spdx.SpdxExpression
 
 import java.util.SortedSet
 
