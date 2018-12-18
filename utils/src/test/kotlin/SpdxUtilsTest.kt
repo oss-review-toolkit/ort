@@ -67,25 +67,25 @@ class SpdxUtilsTest : WordSpec({
     }
 
     "getLicenseText" should {
-        "return the full license text for a valid license id" {
+        "return the full license text for a valid SPDX license id" {
             val text = getLicenseText("Apache-2.0").trim()
 
             text should startWith("Apache License")
             text should endWith("limitations under the License.")
         }
 
-        "throw an exception for an invalid license id" {
+        "throw an exception for an invalid SPDX license id" {
             shouldThrow<IOException> { getLicenseText("FooBar-1.0") }
         }
 
-        "return the exception text for an exception id if handling exceptions is enabled" {
+        "return the exception text for an SPDX exception id if handling exceptions is enabled" {
             val text = getLicenseText("Autoconf-exception-2.0", true).trim()
 
             text should startWith("As a special exception,")
             text should endWith("this special exception to the GPL from your modified version.")
         }
 
-        "throw an exception for an exception id if handling exceptions is disabled" {
+        "throw an exception for an SPDX exception id if handling exceptions is disabled" {
             shouldThrow<IOException> { getLicenseText("Autoconf-exception-2.0", false) }
         }
     }
