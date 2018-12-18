@@ -68,5 +68,5 @@ enum class SpdxLicenseException(val id: String) {
     /**
      * The full license exception text as a string.
      */
-    val text = javaClass.getResource("/exceptions/$id").readText()
+    val text by lazy { javaClass.getResource("/exceptions/$id").readText() }
 }

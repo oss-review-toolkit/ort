@@ -417,5 +417,5 @@ enum class SpdxLicense(val id: String) {
     /**
      * The full license text as a string.
      */
-    val text = javaClass.getResource("/licenses/$id").readText()
+    val text by lazy { javaClass.getResource("/licenses/$id").readText() }
 }
