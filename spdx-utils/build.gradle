@@ -51,7 +51,7 @@ def getLicenseHeader(fromYear = 2017, toYear = java.time.Year.now().value) {
      """.stripIndent()
 }
 
-def licenseToEnumEntry(String license) {
+def licenseToEnumEntry(license) {
     def enumName = license.toUpperCase().replaceAll('[-\\.]', '_').replace('+', 'PLUS')
     if (enumName[0].isNumber()) {
         enumName = "_$enumName"
