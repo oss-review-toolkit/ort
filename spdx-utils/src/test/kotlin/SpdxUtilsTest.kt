@@ -19,10 +19,12 @@
 
 package com.here.ort.spdx
 
+import io.kotlintest.matchers.string.beBlank
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.startWith
 import io.kotlintest.should
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNot
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
@@ -87,6 +89,12 @@ class SpdxUtilsTest : WordSpec({
 
         "throw an exception for an SPDX exception id if handling exceptions is disabled" {
             shouldThrow<IOException> { getLicenseText("Autoconf-exception-2.0", false) }
+        }
+
+        "return a non-blank string for all SPDX ids" {
+            enumValues<SpdxLicense>().forEach {
+                getLicenseText(it.id) shouldNot beBlank()
+            }
         }
     }
 })
