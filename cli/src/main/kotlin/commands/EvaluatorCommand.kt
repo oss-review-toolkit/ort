@@ -85,7 +85,7 @@ object EvaluatorCommand : CommandWithHelp() {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
-        val script = rulesFile?.readText() ?: javaClass.getResource(rulesResource).readText()
+        val script = rulesFile?.readText() ?: javaClass.classLoader.getResource(rulesResource).readText()
 
         val evaluator = Evaluator(ortResultInput)
 
