@@ -41,5 +41,7 @@ style:
       com.here.ort.commands.*,
       com.here.ort.downloader.vcs.*,
       com.here.ort.reporter.reporters.*,
-      com.here.ort.scanner.scanners.*
+      com.here.ort.scanner.scanners.*,
+      kotlinx.html.*,
+      kotlinx.html.dom.*
       '
