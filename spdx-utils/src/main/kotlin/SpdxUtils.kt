@@ -74,7 +74,7 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
  * also refer to an exception instead of a license.
  */
 fun getLicenseText(id: String, handleExceptions: Boolean = false): String {
-    val version = "v3.1.1"
+    val version = "v3.3"
     val (url, key) = if (handleExceptions && id.contains("-exception") && !id.contains("-with")) {
         Pair("https://github.com/spdx/license-list-data/raw/$version/json/exceptions/$id.json", "licenseExceptionText")
     } else {
