@@ -115,6 +115,8 @@ object ReporterCommand : CommandWithHelp() {
         resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
         val copyrightGarbage = copyrightGarbageFile?.readValue() ?: CopyrightGarbage()
 
+        var exitCode = 0
+
         reportFormats.distinct().forEach {
             val name = it.toString().removeSuffix("Reporter")
             try {
@@ -130,9 +132,11 @@ object ReporterCommand : CommandWithHelp() {
                 e.showStackTrace()
 
                 log.error { "Could not create '$name' report: ${e.message}" }
+
+                exitCode = 1
             }
         }
 
-        return 0
+        return exitCode
     }
 }
