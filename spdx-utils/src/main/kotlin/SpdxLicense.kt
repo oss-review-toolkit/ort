@@ -412,4 +412,9 @@ enum class SpdxLicense(val id: String) {
          */
         fun forId(id: String) = SpdxLicense.values().find { it.id == id }
     }
+
+    /**
+     * The full license text as a string.
+     */
+    val text = javaClass.getResource("/licenses/$id").readText()
 }
