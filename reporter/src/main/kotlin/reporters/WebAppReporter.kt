@@ -39,8 +39,14 @@ class WebAppReporter : Reporter() {
             postProcessingScript: String?
     ): File {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
-        val json = jsonMapper.writeValueAsString(ortResult)
-        val result = template.replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$json<")
+        val resultJson = jsonMapper.writeValueAsString(ortResult)
+
+        val relevantResolutions = resolutionProvider.getResolutionsFor(ortResult)
+        val resolutionsJson = jsonMapper.writeValueAsString(relevantResolutions)
+
+        val result = template
+                .replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$resultJson<")
+                .replace("id=\"ort-report-resolution-data\"><", "id=\"ort-report-resolution-data\">$resolutionsJson<")
 
         val outputFile = File(outputDir, "scan-report-web-app.html")
 
