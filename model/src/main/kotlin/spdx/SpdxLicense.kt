@@ -132,6 +132,7 @@ enum class SpdxLicense(val id: String) {
     CNRI_PYTHON("CNRI-Python"),
     CNRI_PYTHON_GPL_COMPATIBLE("CNRI-Python-GPL-Compatible"),
     CONDOR_1_1("Condor-1.1"),
+    COPYLEFT_NEXT_0_3_0("copyleft-next-0.3.0"),
     COPYLEFT_NEXT_0_3_1("copyleft-next-0.3.1"),
     CPAL_1_0("CPAL-1.0"),
     CPL_1_0("CPL-1.0"),
