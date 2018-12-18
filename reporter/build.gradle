@@ -22,4 +22,6 @@ dependencies {
 
     implementation 'org.apache.poi:ooxml-schemas:1.4'
     implementation 'org.apache.poi:poi-ooxml:3.17'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlVersion"
 }
