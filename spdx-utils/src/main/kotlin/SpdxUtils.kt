@@ -17,20 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils.spdx
+package com.here.ort.spdx
 
 import com.fasterxml.jackson.databind.ObjectMapper
-
-import com.here.ort.utils.OkHttpClientHelper
-
-import okhttp3.Request
 
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
+import java.net.URL
+import java.util.EnumSet
 
 /**
  * A list of globs that match typical license file names.
@@ -68,6 +64,12 @@ fun calculatePackageVerificationCode(files: List<File>) =
         })
 
 /**
+ * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
+ */
+inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
+        EnumSet.noneOf(T::class.java).apply { addAll(elems) }
+
+/**
  * Retrieve the full text for the license with the provided SPDX [id]. If [handleExceptions] is enabled, the [id] may
  * also refer to an exception instead of a license.
  */
@@ -78,15 +80,8 @@ fun getLicenseText(id: String, handleExceptions: Boolean = false): String {
     } else {
         Pair("https://github.com/spdx/license-list-data/raw/$version/json/details/$id.json", "licenseText")
     }
-    val request = Request.Builder().get().url(url).build()
 
-    return OkHttpClientHelper.execute("utils/cache/http", request).use { response ->
-        val body = response.body()
-
-        if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
-            throw IOException("Failed to download the text for license '$id' from $url.")
-        }
-
-        ObjectMapper().readTree(body.string())[key].textValue()
-    }
+    // TODO: Change this to use built-in resources instead of making HTTP requests, but for now only make it independent
+    // of "OkHttpClientHelper" from the "utils" module.
+    return ObjectMapper().readTree(URL(url).readText())[key].textValue()
 }

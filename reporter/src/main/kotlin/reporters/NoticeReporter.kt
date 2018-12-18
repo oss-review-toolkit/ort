@@ -26,12 +26,12 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
-import com.here.ort.model.spdx.SpdxLicenseMapping
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.spdx.SpdxLicenseMapping
+import com.here.ort.spdx.getLicenseText
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
-import com.here.ort.utils.spdx.getLicenseText
 import com.here.ort.utils.zipWithDefault
 
 import java.io.File
@@ -54,7 +54,7 @@ class NoticeReporter : Reporter() {
         override val preface = """
             import com.here.ort.model.*
             import com.here.ort.model.config.*
-            import com.here.ort.model.spdx.*
+            import com.here.ort.spdx.*
             import com.here.ort.utils.*
             import com.here.ort.reporter.reporters.NoticeReporter.NoticeReport
 

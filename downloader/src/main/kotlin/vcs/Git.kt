@@ -24,12 +24,12 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
+import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.OS
 import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
 
 import com.vdurmont.semver4j.Semver
 

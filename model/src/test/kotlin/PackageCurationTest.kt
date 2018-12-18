@@ -19,7 +19,7 @@
 
 package com.here.ort.model
 
-import com.here.ort.model.spdx.SpdxExpression
+import com.here.ort.spdx.SpdxExpression
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow

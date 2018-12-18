@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.spdx
+package com.here.ort.spdx
 
-import com.here.ort.model.spdx.SpdxExpressionParser.CompoundExpressionContext
-import com.here.ort.model.spdx.SpdxExpressionParser.LicenseExceptionExpressionContext
-import com.here.ort.model.spdx.SpdxExpressionParser.LicenseExpressionContext
-import com.here.ort.model.spdx.SpdxExpressionParser.LicenseIdExpressionContext
-import com.here.ort.model.spdx.SpdxExpressionParser.LicenseRefExpressionContext
-import com.here.ort.model.spdx.SpdxExpressionParser.SimpleExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.CompoundExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.LicenseExceptionExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.LicenseExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.LicenseIdExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.LicenseRefExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.SimpleExpressionContext
 
 class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>() {
     override fun visitLicenseExpression(ctx: LicenseExpressionContext): SpdxExpression {

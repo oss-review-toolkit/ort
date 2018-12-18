@@ -17,9 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.spdx
-
-import com.here.ort.utils.enumSetOf
+package com.here.ort.spdx
 
 /**
  * A mapping from license strings collected from the declared licenses of open source packages to SPDX license

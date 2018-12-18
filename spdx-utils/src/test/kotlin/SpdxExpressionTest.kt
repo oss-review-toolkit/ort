@@ -17,17 +17,18 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.spdx
+package com.here.ort.spdx
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
-
-import com.here.ort.model.yamlMapper
-import com.here.ort.utils.enumSetOf
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class SpdxExpressionTest : WordSpec() {
+    private val yamlMapper = ObjectMapper(YAMLFactory())
+
     init {
         "spdxLicenses()" should {
             "contain all valid SPDX licenses" {

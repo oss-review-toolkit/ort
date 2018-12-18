@@ -39,12 +39,12 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsCache
+import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
-import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.unpack
 
 import okhttp3.Request

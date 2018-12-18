@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.spdx
+package com.here.ort.spdx
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow

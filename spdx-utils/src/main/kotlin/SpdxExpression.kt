@@ -17,14 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.spdx
+package com.here.ort.spdx
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
-
-import com.here.ort.utils.enumSetOf
-import com.here.ort.utils.plus
 
 import java.util.EnumSet
 

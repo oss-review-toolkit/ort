@@ -36,7 +36,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
-import java.util.EnumSet
 
 import org.apache.commons.codec.digest.DigestUtils
 
@@ -44,11 +43,6 @@ import org.apache.commons.codec.digest.DigestUtils
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
 fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
-
-/**
- * Return an [EnumSet] that contains the elements of [this] and [other].
- */
-operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
 
 /**
  * Return the hexadecimal digest of the given hash [algorithm] for this [File].
