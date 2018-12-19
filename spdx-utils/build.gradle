@@ -27,7 +27,7 @@ dependencies {
     testImplementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
 }
 
-def getLicenseHeader(fromYear = 2017, toYear = java.time.Year.now().value) {
+def getLicenseHeader(int fromYear = 2017, int toYear = java.time.Year.now().value) {
     """\
         /*
          * Copyright (C) $fromYear-$toYear HERE Europe B.V.
