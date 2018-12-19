@@ -503,7 +503,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        if (hasLockFile(workingDir) && this !is Yarn) {
+        if (hasLockFile(workingDir) && this::class.java == NPM::class.java) {
             run(workingDir, "ci")
         } else {
             run(workingDir, "install", "--ignore-scripts")
