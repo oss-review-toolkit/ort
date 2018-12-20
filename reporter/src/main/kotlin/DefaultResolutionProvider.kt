@@ -20,6 +20,7 @@
 package com.here.ort.reporter
 
 import com.here.ort.model.OrtIssue
+import com.here.ort.model.OrtResult
 import com.here.ort.model.config.Resolutions
 
 class DefaultResolutionProvider : ResolutionProvider {
@@ -33,4 +34,16 @@ class DefaultResolutionProvider : ResolutionProvider {
 
     override fun getRuleViolationResolutionsFor(issue: OrtIssue) =
             resolutions.ruleViolations.filter { it.matches(issue) }
+
+    override fun getResolutionsFor(ortResult: OrtResult): Resolutions {
+        val errorResolutions = ortResult.collectErrors().values.flatten().let { errors ->
+            resolutions.errors.filter { resolution -> errors.any { resolution.matches(it) } }
+        }
+
+        val ruleViolationResolutions = ortResult.evaluator?.errors?.let { errors ->
+            resolutions.ruleViolations.filter { resolution -> errors.any { resolution.matches(it) } }
+        } ?: emptyList()
+
+        return Resolutions(errorResolutions, ruleViolationResolutions)
+    }
 }
