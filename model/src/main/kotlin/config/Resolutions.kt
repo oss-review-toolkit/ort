@@ -19,6 +19,7 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
@@ -34,6 +35,7 @@ class Resolutions(
     /**
      * Resolutions for license policy violations.
      */
+    @JsonAlias("evaluator_errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val ruleViolations: List<RuleViolationResolution> = emptyList()
 ) {
