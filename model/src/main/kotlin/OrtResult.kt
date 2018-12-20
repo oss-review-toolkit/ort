@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.spdx.SpdxExpression
+import com.here.ort.utils.zipWithDefault
 
 import java.util.SortedSet
 
@@ -77,6 +78,15 @@ data class OrtResult(
         }
 
         return dependencies
+    }
+
+    /**
+     * Return a de-duplicated map of all errors mapped by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val analyzerErrors = analyzer?.result?.collectErrors() ?: emptyMap()
+        val scannerErrors = scanner?.results?.collectErrors() ?: emptyMap()
+        return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
     }
 
     /**
