@@ -1,0 +1,73 @@
+---
+project:
+  id: "PIP::example-python-django:542a70d1eccfbd8a35d69a8d48eb51e457135453"
+  definition_file_path: "analyzer/src/funTest/assets/projects/external/example-python-django/requirements.txt"
+  declared_licenses: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    revision: "542a70d1eccfbd8a35d69a8d48eb51e457135453"
+    path: "analyzer/src/funTest/assets/projects/external/example-python-django"
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::Django:1.10.6"
+    - id: "PyPI::gunicorn:19.6.0"
+packages:
+- package:
+    id: "PyPI::Django:1.10.6"
+    declared_licenses:
+    - "BSD"
+    description: "A high-level Python Web framework that encourages rapid development\
+      \ and clean, pragmatic design."
+    homepage_url: "http://www.djangoproject.com/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/b9/bb/723f78e6f6aea78590331eba4e42b8a09c33ce154204a942525a91101d0b/Django-1.10.6-py2.py3-none-any.whl"
+      hash: "31a63e4c21a4e12d5ebbafc137523e40"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/1d/07/fb81c7ed26abbfadd84185be80b5b949219948c4bfd7c30c5c1436d5fd7d/Django-1.10.6.tar.gz"
+      hash: "aaf0e61104bca75f2dea179d666537cf"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::gunicorn:19.6.0"
+    declared_licenses:
+    - "MIT"
+    description: "WSGI HTTP Server for UNIX"
+    homepage_url: "http://gunicorn.org"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/72/de/ec28a64885e0b390063379cca601b60b1f9e51367e0c76030ac8a5cddd5e/gunicorn-19.6.0-py2.py3-none-any.whl"
+      hash: "ab69dff52e2e0bccb25bf1e3a82e1448"
+      hash_algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80/gunicorn-19.6.0.tar.gz"
+      hash: "338e5e8a83ea0f0625f768dba4597530"
+      hash_algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []

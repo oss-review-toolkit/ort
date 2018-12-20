@@ -34,3 +34,7 @@
 	path = analyzer/src/funTest/assets/projects/external/sbt-multi-project-example
 	url = https://github.com/pbassiner/sbt-multi-project-example.git
 	ignore = untracked
+[submodule "example-python-django"]
+	path = analyzer/src/funTest/assets/projects/external/example-python-django
+	url = https://github.com/deis/example-python-django.git
+	ignore = untracked

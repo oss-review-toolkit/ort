@@ -56,6 +56,16 @@ class PipTest : StringSpec({
         yamlMapper.writeValueAsString(result) shouldBe expectedResult
     }
 
+    "dependencies on Python 3 should be resolved correctly for example-python-django" {
+        val definitionFile = File(projectsDir, "external/example-python-django/requirements.txt")
+
+        val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+                .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+        val expectedResult = File(projectsDir, "external/example-python-django-expected-output.yml").readText()
+
+        yamlMapper.writeValueAsString(result) shouldBe expectedResult
+    }
+
     "metadata should be captured from setup.py even if requirements.txt is present" {
         val definitionFile = File(projectsDir, "synthetic/pip/requirements.txt")
         val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
