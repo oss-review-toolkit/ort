@@ -72,6 +72,21 @@ data class AnalyzerResult(
     }
 
     /**
+     * Return a de-duplicated map of all errors mapped by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val collectedErrors = errors.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
+
+        projects.forEach { project ->
+            project.collectErrors().forEach { id, errors ->
+                collectedErrors.getOrPut(id) { mutableSetOf() } += errors
+            }
+        }
+
+        return collectedErrors
+    }
+
+    /**
      * True if there were any errors during the analysis, false otherwise.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
