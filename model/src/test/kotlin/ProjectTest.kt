@@ -25,6 +25,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
+import java.time.Instant
 
 class ProjectTest : WordSpec({
     "collectDependencies" should {
@@ -64,6 +65,33 @@ class ProjectTest : WordSpec({
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
             project.collectDependencies(maxDepth = 1).map { it.id.toString() } shouldBe expectedDependencies
+        }
+    }
+
+    "collectErrors" should {
+        "find all errors" {
+            val analyzerResultsFile = File("../analyzer/src/funTest/assets/projects/synthetic/" +
+                    "gradle-expected-output-lib-without-repo.yml")
+            val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
+
+            project.collectErrors() shouldBe mapOf(
+                    Identifier("Maven:org.apache.commons:commons-text:1.1") to setOf(
+                            OrtIssue(
+                                    Instant.EPOCH,
+                                    "Gradle",
+                                    "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
+                                            "org.apache.commons:commons-text:1.1 because no repositories are defined."
+                            )
+                    ),
+                    Identifier("Maven:junit:junit:4.12") to setOf(
+                            OrtIssue(
+                                    Instant.EPOCH,
+                                    "Gradle",
+                                    "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
+                                            "junit:junit:4.12 because no repositories are defined."
+                            )
+                    )
+            )
         }
     }
 })
