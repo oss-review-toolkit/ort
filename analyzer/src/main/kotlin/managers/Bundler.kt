@@ -180,7 +180,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
         val scriptFile = File.createTempFile("bundler_dependencies", ".rb")
-        scriptFile.writeBytes(javaClass.classLoader.getResource("bundler_dependencies.rb").readBytes())
+        scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies.rb").readBytes())
 
         try {
             val scriptCmd = run(workingDir, "exec", "ruby", scriptFile.absolutePath)
