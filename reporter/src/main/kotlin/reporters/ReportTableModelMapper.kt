@@ -108,6 +108,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                             ?: scopes.associateTo(sortedMapOf()) { Pair(it.name, emptyList<ScopeExclude>()) }
                 }
 
+                val concludedLicense = ortResult.getConcludedLicensesForId(id)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
                 val detectedLicenses = scanResult.getAllDetectedLicenses()
 
@@ -123,6 +124,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 DependencyRow(
                         id = id,
                         scopes = scopes,
+                        concludedLicense = concludedLicense,
                         declaredLicenses = declaredLicenses,
                         detectedLicenses = detectedLicenses,
                         analyzerErrors = analyzerErrors.map { it.toResolvableIssue() },
@@ -137,6 +139,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     val summaryRow = SummaryRow(
                             id = row.id,
                             scopes = sortedMapOf(project.id to row.scopes),
+                            concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
                             declaredLicenses = row.declaredLicenses,
                             detectedLicenses = row.detectedLicenses,
                             analyzerErrors = if (nonExcludedAnalyzerErrors.isNotEmpty())

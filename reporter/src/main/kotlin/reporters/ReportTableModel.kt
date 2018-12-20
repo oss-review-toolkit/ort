@@ -26,6 +26,7 @@ import com.here.ort.model.ScanResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
+import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.zipWithDefault
 
 import java.util.SortedMap
@@ -96,6 +97,11 @@ data class ReportTableModel(
             val scopes: SortedMap<String, List<ScopeExclude>>,
 
             /**
+             * The concluded license of the package.
+             */
+            val concludedLicense: SpdxExpression?,
+
+            /**
              * The licenses declared by the package.
              */
             val declaredLicenses: SortedSet<String>,
@@ -133,6 +139,11 @@ data class ReportTableModel(
             val scopes: SortedMap<Identifier, SortedMap<String, List<ScopeExclude>>>,
 
             /**
+             * The concluded licenses of the package.
+             */
+            val concludedLicenses: Set<SpdxExpression>,
+
+            /**
              * The licenses declared by the package.
              */
             val declaredLicenses: SortedSet<String>,
@@ -160,6 +171,7 @@ data class ReportTableModel(
                     scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
                         left.zipWithDefault(right, emptyList(), ::plus).toSortedMap()
                     }.toSortedMap(),
+                    concludedLicenses = (concludedLicenses + other.concludedLicenses),
                     declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
                     detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
                     analyzerErrors = analyzerErrors.zipWithDefault(other.analyzerErrors, emptyList(), ::plus)

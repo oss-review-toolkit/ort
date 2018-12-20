@@ -591,6 +591,11 @@ class StaticHtmlReporter : Reporter() {
 
             td {
                 dl {
+                    row.concludedLicense?.let {
+                        dt { em { +"Concluded License:"}}
+                        dd { +"${row.concludedLicense}"}
+                    }
+
                     if (row.declaredLicenses.isNotEmpty()) {
                         dt { em { +"Declared Licenses:" } }
                         dd { +row.declaredLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } }
