@@ -51,6 +51,21 @@ data class ScanRecord(
         val data: CustomData = emptyMap()
 ) {
     /**
+     * Return a de-duplicated map of all errors mapped by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+
+        scanResults.forEach { container ->
+            container.results.forEach {  result ->
+                collectedErrors.getOrPut(container.id) { mutableSetOf() } += result.summary.errors
+            }
+        }
+
+        return collectedErrors
+    }
+
+    /**
      * True if any of the [scanResults] contain errors.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
