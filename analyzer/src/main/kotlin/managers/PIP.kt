@@ -71,7 +71,7 @@ const val PYDEP_REVISION = "license-and-classifiers"
 // installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("15.1.+")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,16.1]")
 }
 
 /**
