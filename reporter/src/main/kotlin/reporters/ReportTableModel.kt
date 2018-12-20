@@ -114,17 +114,7 @@ data class ReportTableModel(
              * All scan errors related to this package.
              */
             val scanErrors: List<ResolvableIssue>
-    ) {
-        fun merge(other: DependencyRow) =
-                DependencyRow(
-                        id = id,
-                        scopes = scopes.zipWithDefault(other.scopes, emptyList()) { a, b -> a + b }.toSortedMap(),
-                        declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
-                        detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
-                        analyzerErrors = (analyzerErrors + other.analyzerErrors).distinct(),
-                        scanErrors = (scanErrors + other.scanErrors).distinct()
-                )
-    }
+    )
 
     data class SummaryTable(
             val rows: List<SummaryRow>,
