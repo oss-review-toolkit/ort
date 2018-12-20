@@ -101,6 +101,29 @@ data class Project(
             }
 
     /**
+     * Return a map of all de-duplicated errors associated by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+
+        fun addErrors(pkgRef: PackageReference) {
+            if (pkgRef.errors.isNotEmpty()) {
+                collectedErrors.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.errors
+            }
+
+            pkgRef.dependencies.forEach { addErrors(it) }
+        }
+
+        for (scope in scopes) {
+            for (dependency in scope.dependencies) {
+                addErrors(dependency)
+            }
+        }
+
+        return collectedErrors
+    }
+
+    /**
      * Return a de-duplicated list of all errors for the provided [id].
      */
     fun collectErrors(id: Identifier): List<OrtIssue> {
