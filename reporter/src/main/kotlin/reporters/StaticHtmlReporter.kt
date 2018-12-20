@@ -471,7 +471,7 @@ class StaticHtmlReporter : Reporter() {
                     ul {
                         errors.forEach { error ->
                             li {
-                                p { unsafe { +error.description.replace(Regex("\\r\\n|\\r|\\n"), "<br/>") } }
+                                p { unsafe { raw(error.description.replace(Regex("\\r\\n|\\r|\\n"), "<br/>")) } }
                                 p { +error.resolutionDescription }
                             }
                         }
@@ -486,7 +486,7 @@ class StaticHtmlReporter : Reporter() {
                     ul {
                         errors.forEach { error ->
                             li {
-                                p { unsafe { +error.description.replace(Regex("\\r\\n|\\r|\\n"), "<br/>") } }
+                                p { unsafe { raw(error.description.replace(Regex("\\r\\n|\\r|\\n"), "<br/>")) } }
                                 p { +error.resolutionDescription }
                             }
                         }
@@ -604,7 +604,7 @@ class StaticHtmlReporter : Reporter() {
         ul {
             errors.forEach {
                 li {
-                    p { unsafe { +it.description.replace(Regex("\\r\\n|\\r|\\n"), "<br/>") } }
+                    p { unsafe { raw(it.description.replace(Regex("\\r\\n|\\r|\\n"), "<br/>")) } }
 
                     if (it.isResolved) {
                         classes = setOf("ort-resolved")

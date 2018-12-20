@@ -37,9 +37,10 @@ class StaticHtmlReporterTest : WordSpec({
 
     "StaticHtmlReporter" should {
         "use the correct transformer factory" {
-            val transformerClass = TransformerFactory.newInstance().newTransformer().javaClass.name
+            val transformer= TransformerFactory.newInstance().newTransformer()
 
-            transformerClass shouldBe "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl"
+            transformer.javaClass.name shouldBe "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl"
+            transformer.outputProperties.entries.joinToString() shouldBe ""
         }
 
         "successfully export to a static HTML page" {
