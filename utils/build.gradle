@@ -2,7 +2,7 @@
 apply plugin: 'java-library'
 
 dependencies {
-    api('ch.frankel.log4k:slf4k-api:1.0.0') {
+    api("ch.frankel.log4k:slf4k-api:$slf4kVersion") {
         // Our version of the Kotlin runtime is provided by the Gradle plugin.
         exclude module: 'kotlin-runtime'
         // The Kotlin standard library we use is now called "kotlin-stdlib-jdk8".
@@ -10,7 +10,7 @@ dependencies {
     }
 
     // Use logback-classic as the logger for slf4k as it allows to change the log level at runtime.
-    api 'ch.qos.logback:logback-classic:1.2.3'
+    api "ch.qos.logback:logback-classic:$logbackVersion"
 
     api "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     api "com.squareup.okhttp3:okhttp:$okhttpVersion"
