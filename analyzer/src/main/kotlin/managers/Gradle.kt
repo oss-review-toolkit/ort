@@ -110,7 +110,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
         gradleConnection.use { connection ->
             val initScriptFile = File.createTempFile("init", ".gradle")
-            initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
+            initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
 
             val dependencyTreeModel = connection
                     .model(DependencyTreeModel::class.java)
