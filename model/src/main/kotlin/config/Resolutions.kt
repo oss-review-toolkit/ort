@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 /**
  * Resolutions for issues with a repository.
  */
-class Resolutions(
+data class Resolutions(
     /**
      * Resolutions for issues with the analysis or scan of the projects in this repository and their dependencies.
      */
