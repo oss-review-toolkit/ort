@@ -61,17 +61,18 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-const val PIP_VERSION = "9.0.3"
+// The lowest version that supports "--prefer-binary".
+const val PIP_VERSION = "18.0"
 
 const val PIPDEPTREE_VERSION = "0.13.0"
 val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
 const val PYDEP_REVISION = "license-and-classifiers"
 
-// virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
-// installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
+
+    // Allow to use versions that are known to work. Note that virtualenv bundles a version of pip.
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,16.1]")
 }
 
@@ -503,10 +504,11 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         log.info { "Installing dependencies for the '${workingDir.name}' project directory..." }
         pip = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", ".")
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "--prefer-binary", ".")
         } else {
             // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "-r", definitionFile.name)
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "--prefer-binary", "-r",
+                    definitionFile.name)
         }
 
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
