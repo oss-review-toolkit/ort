@@ -31,6 +31,13 @@ import java.io.IOException
  * An interface to implement by classes that are backed by a command line tool.
  */
 interface CommandLineTool {
+    companion object {
+        /**
+         * A convenience property to require any version.
+         */
+        val ANY_VERSION = Requirement.buildNPM("*")
+    }
+
     /**
      * Return the name of the executable command. As the preferred command might depend on the directory to operate in
      * the [workingDir] can be provided.
@@ -40,7 +47,7 @@ interface CommandLineTool {
     /**
      * Return the requirement for the version of the command. Defaults to any version.
      */
-    fun getVersionRequirement() = Requirement.buildNPM("*")
+    fun getVersionRequirement() = ANY_VERSION
 
     /**
      * Return whether the executable for this command is available in the system PATH.

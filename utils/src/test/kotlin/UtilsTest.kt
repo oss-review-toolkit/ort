@@ -27,6 +27,16 @@ import java.io.File
 import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
+    "disjoint" should {
+        "return true for collections that have no common elememts" {
+            disjoint(setOf(1), setOf(2), setOf(3)) shouldBe true
+        }
+
+        "return false for collections that have common elememts" {
+            disjoint(setOf(1, 2), setOf(2, 3), setOf(3, 4)) shouldBe false
+        }
+    }
+
     "filterVersionNames" should {
         "return an empty list for a blank version" {
             val names = listOf("dummy")
@@ -181,6 +191,25 @@ class UtilsTest : WordSpec({
             )
 
             filterVersionNames("1.11.6", names).joinToString("\n") shouldBe "1.11.6"
+        }
+
+        "find names with only a single revision number as the version" {
+            val names = listOf("my_project-123", "my_project-4711", "my_project-8888")
+
+            filterVersionNames("4711", names).joinToString("\n") shouldBe "my_project-4711"
+        }
+
+        "find names that have a numeric suffix as part of the name" {
+            val names = listOf("my_project_v1-1.0.2", "my_project_v1-1.0.3", "my_project_v1-1.1.0")
+
+            filterVersionNames("1.0.3", names).joinToString("\n") shouldBe "my_project_v1-1.0.3"
+        }
+
+        "find names that use an abbreviated SHA1 as the suffix" {
+            val names = listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
+
+            filterVersionNames("3.9.0.99", names).joinToString("\n") shouldBe
+                    listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99").joinToString("\n")
         }
     }
 

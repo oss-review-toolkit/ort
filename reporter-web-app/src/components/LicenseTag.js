@@ -75,7 +75,7 @@ export default class LicenseTag extends React.Component {
                     <Tag
                         className="ort-license"
                         color={this.license ? this.license.color : ''}
-                        checked="true"
+                        checked
                         onClick={this.license && this.showLicenseInfoModal}
                     >
                         {(this.ellipsisAtChar
@@ -93,8 +93,12 @@ export default class LicenseTag extends React.Component {
 }
 
 LicenseTag.propTypes = {
-    ellipsisAtChar: PropTypes.number.isRequired,
+    ellipsisAtChar: PropTypes.number,
     text: PropTypes.string.isRequired
+};
+
+LicenseTag.defaultProps = {
+    ellipsisAtChar: 0
 };
 
 // Generates the HTML for the additional license information

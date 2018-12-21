@@ -29,6 +29,7 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
 import com.here.ort.utils.getCommonFilePrefix
 import com.here.ort.utils.log
+import com.here.ort.utils.suppressInput
 
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
@@ -105,7 +106,10 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             definitionFiles.first().parentFile
         }
 
-        fun runSBT(vararg command: String) = run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
+        fun runSBT(vararg command: String) =
+                suppressInput {
+                    run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
+                }
 
         // Get the list of project names.
         val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {

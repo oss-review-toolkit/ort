@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.spdx.SpdxExpression
+
 import java.util.SortedSet
 
 /**
@@ -35,6 +37,13 @@ data class PackageCurationData(
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
         val declaredLicenses: SortedSet<String>? = null,
+
+        /**
+         * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
+         * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val concludedLicense: SpdxExpression? = null,
 
         /**
          * The description of the package, as provided by the package manager.
@@ -104,6 +113,7 @@ data class PackageCurationData(
             Package(
                     id = pkg.id,
                     declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
+                    concludedLicense = concludedLicense ?: pkg.concludedLicense,
                     description = description ?: pkg.description,
                     homepageUrl = homepageUrl ?: pkg.homepageUrl,
                     binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,

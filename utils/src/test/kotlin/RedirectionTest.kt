@@ -20,10 +20,13 @@
 package com.here.ort.utils
 
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
+import java.util.Scanner
+
 class RedirectionTest : WordSpec({
-    "redirecting output" should {
+    "Redirecting output" should {
         // Use a relatively large number of lines that results in more than 64k to be written to test against the pipe
         // buffer limit on Linux, see https://unix.stackexchange.com/a/11954/53328.
         val numberOfLines = 10000
@@ -88,6 +91,18 @@ class RedirectionTest : WordSpec({
             val stdoutLines = stdout.lines().dropLast(1)
             stdoutLines.count() shouldBe numberOfLines
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
+        }
+    }
+
+    "Suppressing input" should {
+        "avoid blocking for user input" {
+            shouldThrow<NoSuchElementException> {
+                suppressInput {
+                    Scanner(System.`in`).use {
+                        it.nextLine()
+                    }
+                }
+            }
         }
     }
 })

@@ -44,14 +44,14 @@ class DownloaderTest : StringSpec() {
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        outputDir.safeDeleteRecursively()
+        outputDir.safeDeleteRecursively(force = true)
     }
 
     init {
         "Downloads and unpacks JAR source package".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "junit",
                             name = "junit",
                             version = "4.12"
@@ -85,7 +85,7 @@ class DownloaderTest : StringSpec() {
         "Download of JAR source package fails when hash is incorrect".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "junit",
                             name = "junit",
                             version = "4.12"
@@ -113,7 +113,7 @@ class DownloaderTest : StringSpec() {
         "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "junit",
                             name = "junit",
                             version = "4.12"
@@ -152,7 +152,7 @@ class DownloaderTest : StringSpec() {
             val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "tyrex",
                             name = "tyrex",
                             version = "1.0.1"

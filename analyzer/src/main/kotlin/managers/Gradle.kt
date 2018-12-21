@@ -29,7 +29,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.identifier
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -110,7 +110,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
         gradleConnection.use { connection ->
             val initScriptFile = File.createTempFile("init", ".gradle")
-            initScriptFile.writeBytes(javaClass.classLoader.getResource("init.gradle").readBytes())
+            initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
 
             val dependencyTreeModel = connection
                     .model(DependencyTreeModel::class.java)
@@ -141,7 +141,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
             val project = Project(
                     id = Identifier(
-                            provider = toString(),
+                            type = toString(),
                             namespace = dependencyTreeModel.group,
                             name = dependencyTreeModel.name,
                             version = dependencyTreeModel.version
@@ -155,7 +155,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
             )
 
             val errors = dependencyTreeModel.errors.map {
-                Error(source = toString(), message = it)
+                OrtIssue(source = toString(), message = it)
             }
 
             return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), errors)
@@ -164,7 +164,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
                                 repositories: List<RemoteRepository>): PackageReference {
-        val errors = dependency.error?.let { mutableListOf(Error(source = toString(), message = it)) }
+        val errors = dependency.error?.let { mutableListOf(OrtIssue(source = toString(), message = it)) }
                 ?: mutableListOf()
 
         // Only look for a package when there was no error resolving the dependency.
@@ -174,7 +174,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
             val rawPackage by lazy {
                 Package(
                         id = Identifier(
-                                provider = "Maven",
+                                type = "Maven",
                                 namespace = dependency.groupId,
                                 name = dependency.artifactId,
                                 version = dependency.version
@@ -201,7 +201,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
                             "Could not get package information for dependency '$identifier': ${e.message}"
                         }
 
-                        errors += Error(source = toString(), message = e.collectMessagesAsString())
+                        errors += OrtIssue(source = toString(), message = e.collectMessagesAsString())
 
                         rawPackage
                     }
@@ -215,7 +215,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
         }
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-        return PackageReference(Identifier("Maven", dependency.groupId, dependency.artifactId,
-                dependency.version), transitiveDependencies.toSortedSet(), errors)
+        val id = Identifier("Maven", dependency.groupId, dependency.artifactId, dependency.version)
+        return PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = errors)
     }
 }

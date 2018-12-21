@@ -27,7 +27,7 @@ import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -74,7 +74,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bundle.bat" else "bundle"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("1.16.+")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,1.18[")
 
     override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
@@ -90,7 +90,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
         stashDirectories(File(workingDir, "vendor")).use {
             val scopes = mutableSetOf<Scope>()
             val packages = mutableSetOf<Package>()
-            val errors = mutableListOf<Error>()
+            val errors = mutableListOf<OrtIssue>()
 
             installDependencies(workingDir)
 
@@ -117,7 +117,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
     }
 
     private fun parseScope(workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<Error>) {
+                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<OrtIssue>) {
         log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
@@ -130,7 +130,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
     }
 
     private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
-                                scopeDependencies: MutableSet<PackageReference>, errors: MutableList<Error>) {
+                                scopeDependencies: MutableSet<PackageReference>, errors: MutableList<OrtIssue>) {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
@@ -166,7 +166,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
                     parseDependency(workingDir, projectId, it, packages, transitiveDependencies, errors)
                 }
 
-                scopeDependencies += PackageReference(gemId, transitiveDependencies.toSortedSet())
+                scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies.toSortedSet())
             }
         } catch (e: Exception) {
             e.showStackTrace()
@@ -174,13 +174,13 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.collectMessagesAsString()}"
             log.error { errorMsg }
 
-            errors += Error(source = toString(), message = errorMsg)
+            errors += OrtIssue(source = toString(), message = errorMsg)
         }
     }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> {
         val scriptFile = File.createTempFile("bundler_dependencies", ".rb")
-        scriptFile.writeBytes(javaClass.classLoader.getResource("bundler_dependencies.rb").readBytes())
+        scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies.rb").readBytes())
 
         try {
             val scriptCmd = run(workingDir, "exec", "ruby", scriptFile.absolutePath)
@@ -237,7 +237,8 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
                     }
                     return null
                 }
-                return GemSpec.createFromJson(body!!)
+
+                return GemSpec.createFromJson(body)
             }
         } catch (e: IOException) {
             e.showStackTrace()
@@ -293,7 +294,8 @@ data class GemSpec(
             }
 
             val artifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
-                RemoteArtifact(json["gem_uri"].textValue(), json["sha"].textValue(), HashAlgorithm.SHA256)
+                val sha = json["sha"].textValue()
+                RemoteArtifact(json["gem_uri"].textValue(), sha, HashAlgorithm.fromHash(sha))
             } else {
                 RemoteArtifact.EMPTY
             }

@@ -25,91 +25,143 @@ import ch.qos.logback.classic.Level
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Error
 import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindingsMap
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.scanner.AbstractScannerFactory
+import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
-import com.here.ort.scanner.AbstractScannerFactory
+import com.here.ort.scanner.ScanResultsCache
+import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OS
+import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
-import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
+import com.here.ort.utils.unpack
+
+import okhttp3.Request
+
+import okio.Okio
 
 import java.io.File
 import java.io.IOException
+import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 import java.time.Instant
-import java.util.regex.Pattern
-import java.util.SortedMap
 import java.util.SortedSet
+import java.util.regex.Pattern
 
 import kotlin.math.absoluteValue
 
+/**
+ * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
+ *
+ * This scanner can be configured in [ScannerConfiguration.scanner] using the key "ScanCode". It offers the following
+ * configuration options:
+ *
+ * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
+ *   looking up results from the [ScanResultsCache]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
+ * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
+ *   considered in [getConfiguration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
+ * * **"debugCommandLine":** Debug command line options that modify the result. Only used if the [log] level is set to
+ *   [Level.DEBUG]. Defaults to [DEFAULT_DEBUG_CONFIGURATION_OPTIONS].
+ * * **"debugCommandLineNonConfig":** Debug command line options that do not modify the result and should therefore not
+ *   be considered in [getConfiguration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
+ *   [DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS].
+ */
 class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     class Factory : AbstractScannerFactory<ScanCode>() {
         override fun create(config: ScannerConfiguration) = ScanCode(config)
     }
 
-    private val OUTPUT_FORMAT = "json-pp"
-    private val TIMEOUT = 300
+    companion object {
+        private const val OUTPUT_FORMAT = "json-pp"
+        private const val TIMEOUT = 300
 
-    /**
-     * Configuration options that are relevant for [getConfiguration] because they change the result file.
-     */
-    private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
-            "--copyright",
-            "--license",
-            "--info",
-            "--strip-root",
-            "--timeout", TIMEOUT.toString()
-    )
+        /**
+         * Configuration options that are relevant for [getConfiguration] because they change the result file.
+         */
+        private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
+                "--copyright",
+                "--license",
+                "--info",
+                "--strip-root",
+                "--timeout", TIMEOUT.toString()
+        )
 
-    /**
-     * Configuration options that are not relevant for [getConfiguration] because they do not change the result file.
-     */
-    private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
-            "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
-    )
+        /**
+         * Configuration options that are not relevant for [getConfiguration] because they do not change the result
+         * file.
+         */
+        private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
+                "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
+        )
 
-    /**
-     * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
-     */
-    private val DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
+        /**
+         * Debug configuration options that are relevant for [getConfiguration] because they change the result file.
+         */
+        private val DEFAULT_DEBUG_CONFIGURATION_OPTIONS = listOf("--license-diag")
 
-    /**
-     * Debug configuration options that are not relevant for [getConfiguration] because they do not change the result
-     * file.
-     */
-    private val DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
+        /**
+         * Debug configuration options that are not relevant for [getConfiguration] because they do not change the
+         * result file.
+         */
+        private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
 
-    private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
-        "--$OUTPUT_FORMAT"
-    } else {
-        "--output-$OUTPUT_FORMAT"
+        private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
+            "--$OUTPUT_FORMAT"
+        } else {
+            "--output-$OUTPUT_FORMAT"
+        }
+
+        // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
+        private val UNKNOWN_ERROR_REGEX = Pattern.compile(
+                "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+                        "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+                Pattern.DOTALL
+        )
+
+        private val TIMEOUT_ERROR_REGEX = Pattern.compile(
+                "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+                        "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
+        )
     }
 
-    // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
-    private val UNKNOWN_ERROR_REGEX = Pattern.compile(
-            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-                    "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
-            Pattern.DOTALL)
-
-    private val TIMEOUT_ERROR_REGEX = Pattern.compile(
-            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-                    "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)")
-
-    override val scannerVersion = "2.9.2"
+    override val scannerVersion = "2.9.7"
     override val resultFileExt = "json"
+
+    private val scanCodeConfiguration = config.scanner?.get("ScanCode") ?: emptyMap()
+
+    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
+            ?: DEFAULT_CONFIGURATION_OPTIONS
+    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(" ")
+            ?: DEFAULT_NON_CONFIGURATION_OPTIONS
+    private val debugConfigurationOptions = scanCodeConfiguration["debugCommandLine"]?.split(" ")
+            ?: DEFAULT_DEBUG_CONFIGURATION_OPTIONS
+    private val debugNonConfigurationOptions = scanCodeConfiguration["debugCommandLineNonConfig"]?.split(" ")
+            ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
+
+    val commandLineOptions by lazy {
+        mutableListOf<String>().apply {
+            addAll(configurationOptions)
+            addAll(nonConfigurationOptions)
+
+            if (log.isEnabledFor(Level.DEBUG)) {
+                addAll(debugConfigurationOptions)
+                addAll(debugNonConfigurationOptions)
+            }
+        }.toList()
+    }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "scancode.bat" else "scancode"
 
@@ -128,41 +180,63 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun bootstrap(): File {
-        val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
-        val scancodeDir = File(gitRoot, "scanner/src/funTest/assets/scanners/scancode-toolkit")
-        if (!scancodeDir.isDirectory) throw IOException("Directory '$scancodeDir' not found.")
+        val archive = when {
+            // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
+            // reason does not complete to unpack on Windows.
+            OS.isWindows -> "v$scannerVersion.zip"
+            else -> "v$scannerVersion.tar.gz"
+        }
 
-        val configureExe = if (OS.isWindows) "configure.bat" else "configure"
-        val configurePath = File(scancodeDir, configureExe)
-        ProcessCapture(configurePath.absolutePath, "--clean").requireSuccess()
-        ProcessCapture(configurePath.absolutePath).requireSuccess()
+        // Use the source code archive instead of the release artifact from S3 to enable OkHttp to cache the download
+        // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
+        val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
-        return scancodeDir
+        log.info { "Downloading $this from '$url'... " }
+
+        val request = Request.Builder().get().url(url).build()
+
+        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+            val body = response.body()
+
+            if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
+                throw IOException("Failed to download $this from $url.")
+            }
+
+            if (response.cacheResponse() != null) {
+                log.info { "Retrieved $this from local cache." }
+            }
+
+            val scannerArchive = createTempFile(suffix = url.substringAfterLast("/"))
+            Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
+
+            val unpackDir = createTempDir()
+            unpackDir.deleteOnExit()
+
+            log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
+            scannerArchive.unpack(unpackDir)
+
+            val scannerDir = unpackDir.resolve("scancode-toolkit-$scannerVersion")
+
+            scannerDir
+        }
     }
 
     override fun getConfiguration() =
-            DEFAULT_CONFIGURATION_OPTIONS.toMutableList().run {
+            configurationOptions.toMutableList().run {
                 add(OUTPUT_FORMAT_OPTION)
                 if (log.isEnabledFor(Level.DEBUG)) {
-                    addAll(DEBUG_CONFIGURATION_OPTIONS)
+                    addAll(debugConfigurationOptions)
                 }
                 joinToString(" ")
             }
 
     override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
             : ScanResult {
-        val options = (DEFAULT_CONFIGURATION_OPTIONS + DEFAULT_NON_CONFIGURATION_OPTIONS).toMutableList()
-
-        if (log.isEnabledFor(Level.DEBUG)) {
-            options += DEBUG_CONFIGURATION_OPTIONS
-            options += DEBUG_NON_CONFIGURATION_OPTIONS
-        }
-
         val startTime = Instant.now()
 
         val process = ProcessCapture(
                 scannerPath.absolutePath,
-                *options.toTypedArray(),
+                *commandLineOptions.toTypedArray(),
                 path.absolutePath,
                 OUTPUT_FORMAT_OPTION,
                 resultsFile.absolutePath
@@ -206,12 +280,12 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["files_count"].intValue()
         val findings = associateFindings(result)
-        val errors = mutableListOf<Error>()
+        val errors = mutableListOf<OrtIssue>()
 
         result["files"]?.forEach { file ->
             val path = file["path"].textValue()
             errors += file["scan_errors"].map {
-                Error(source = javaClass.simpleName, message = "${it.textValue()} (File: $path)")
+                OrtIssue(source = javaClass.simpleName, message = "${it.textValue()} (File: $path)")
             }
         }
 
@@ -222,7 +296,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return
      * false otherwise.
      */
-    internal fun mapUnknownErrors(errors: MutableList<Error>): Boolean {
+    internal fun mapUnknownErrors(errors: MutableList<OrtIssue>): Boolean {
         if (errors.isEmpty()) {
             return false
         }
@@ -258,7 +332,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return
      * false otherwise.
      */
-    internal fun mapTimeoutErrors(errors: MutableList<Error>): Boolean {
+    internal fun mapTimeoutErrors(errors: MutableList<OrtIssue>): Boolean {
         if (errors.isEmpty()) {
             return false
         }
@@ -328,16 +402,23 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             (it["start_line"].asInt() - startLine).absoluteValue <= toleranceLines
         }
 
-        return closestCopyrights.flatMap { it["statements"] }.map { it.asText() }.toSortedSet()
+        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
+        return closestCopyrights.flatMap {
+            it["statements"] ?: listOf(it["value"])
+        }.map { it.asText() }.toSortedSet()
     }
 
     /**
      * Associate copyright findings to license findings within a single file.
      */
     private fun associateFileFindings(licenses: JsonNode, copyrights: JsonNode, rootLicense: String = ""):
-            SortedMap<String, SortedSet<String>> {
-        val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
-        val allCopyrightStatements = copyrights.flatMap { it["statements"] }.map { it.asText() }.toSortedSet()
+            LicenseFindingsMap {
+        val copyrightsForLicenses = sortedMapOf<String, MutableSet<String>>()
+
+        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
+        val allCopyrightStatements = copyrights.flatMap {
+            it["statements"] ?: listOf(it["value"])
+        }.map { it.asText() }.toSortedSet()
 
         when (licenses.size()) {
             0 -> {

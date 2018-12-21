@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.Environment
@@ -33,6 +34,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.utils.log
+import com.here.ort.utils.realFile
 
 import java.io.File
 
@@ -49,7 +51,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             packageCurationsFile: File? = null,
             repositoryConfigurationFile: File? = null
     ): OrtResult {
-        val actualRepositoryConfigurationFile = repositoryConfigurationFile ?: File(absoluteProjectPath, ".ort.yml")
+        val actualRepositoryConfigurationFile = repositoryConfigurationFile
+                ?: locateRepositoryConfigurationFile(absoluteProjectPath)
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             actualRepositoryConfigurationFile.readValue()
@@ -58,7 +61,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         // Map files by the package manager factory that manages them.
-        var factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
             mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
@@ -128,4 +131,12 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         return OrtResult(repository, run)
     }
+
+    private fun locateRepositoryConfigurationFile(absoluteProjectPath: File) =
+            if (GitRepo().getWorkingTree(absoluteProjectPath).isValid()) {
+                val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
+                manifestFile.resolveSibling("${manifestFile.name}.ort.yml")
+            } else {
+                File(absoluteProjectPath, ".ort.yml")
+            }
 }

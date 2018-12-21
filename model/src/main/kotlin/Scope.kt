@@ -51,11 +51,19 @@ data class Scope(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) : Comparable<Scope> {
-    fun collectDependencyIds(includeErroneous: Boolean = true) =
-            dependencies.fold(sortedSetOf<Identifier>()) { ids, ref ->
-                ids.also {
-                    if (ref.errors.isEmpty() || includeErroneous) it += ref.id
-                    it += ref.collectDependencyIds(includeErroneous)
+    /**
+     * Return the set of [PackageReference]s in this [Scope], up to and including a depth of [maxDepth] where counting
+     * starts at 0 (for the [Scope] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
+     * depth. If [includeErroneous] is true, [PackageReference]s with errors (but not their dependencies without errors)
+     * are excluded, otherwise they are included.
+     */
+    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
+            dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+                refs.also {
+                    if (maxDepth != 0) {
+                        if (ref.errors.isEmpty() || includeErroneous) it += ref
+                        it += ref.collectDependencies(maxDepth - 1, includeErroneous)
+                    }
                 }
             }
 
@@ -65,17 +73,13 @@ data class Scope(
     override fun compareTo(other: Scope) = compareValuesBy(this, other) { it.name }
 
     /**
-     * Return whether the given package is contained as a (transitive) dependency in this scope.
+     * Return whether the package identified by [id] is contained as a (transitive) dependency in this scope.
      */
-    operator fun contains(pkg: Package) = contains(pkg.id)
+    operator fun contains(id: Identifier) = dependencies.any { it.id == id || it.dependsOn(id) }
 
     /**
-     * Return whether the package identified by [pkgId] is contained as a (transitive) dependency in this scope.
+     * Return all references to [id] as a dependency in this scope.
      */
-    operator fun contains(pkgId: Identifier) =
-            dependencies.find { pkgRef ->
-                // Strip the package manager part from the packageIdentifier because it is not part of the
-                // PackageReference.
-                pkgRef.id == pkgId || pkgRef.dependsOn(pkgId)
-            } != null
+    fun findReferences(id: Identifier) =
+            dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 }

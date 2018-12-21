@@ -21,10 +21,16 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.ScanRecord
+import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.OrtResult
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.ProjectExclude
-import com.here.ort.utils.isValidUrl
+import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
+import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
+import com.here.ort.utils.isValidUri
 import com.here.ort.utils.log
 
 import java.awt.Color
@@ -50,10 +56,11 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 /**
- * A [Reporter] that creates an Excel sheet report from a [ScanRecord] in the Open XML XLSX format. It creates one sheet
- * for each project in [ScanRecord.analyzerResult] and an additional sheet that summarizes all dependencies.
+ * A [Reporter] that creates an Excel sheet report from an [OrtResult] in the Open XML XLSX format. It creates one sheet
+ * for each project in the [AnalyzerResult] from [OrtResult.analyzer] and an additional sheet that summarizes all
+ * dependencies.
  */
-class ExcelReporter : TableReporter() {
+class ExcelReporter : Reporter() {
     private val defaultColumns = 5
 
     private val borderColor = XSSFColor(Color(211, 211, 211))
@@ -76,7 +83,14 @@ class ExcelReporter : TableReporter() {
 
     private lateinit var creationHelper: CreationHelper
 
-    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File {
+    override fun generateReport(
+            ortResult: OrtResult,
+            resolutionProvider: ResolutionProvider,
+            copyrightGarbage: CopyrightGarbage,
+            outputDir: File,
+            postProcessingScript: String?
+    ): File {
+        val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val workbook = XSSFWorkbook()
 
         defaultStyle = workbook.createCellStyle().apply {
@@ -169,7 +183,7 @@ class ExcelReporter : TableReporter() {
             sheet.createRow(++currentRow).apply {
                 CellUtil.createCell(this, 0, "$key:", defaultStyle)
                 CellUtil.createCell(this, 1, value, defaultStyle).apply {
-                    if (value.isValidUrl()) {
+                    if (value.isValidUri()) {
                         hyperlink = creationHelper.createHyperlink(HyperlinkType.URL).apply {
                             address = value
                         }
@@ -238,7 +252,7 @@ class ExcelReporter : TableReporter() {
                     append("$id\n")
 
                     errors.forEach { error ->
-                        append("  $error\n")
+                        append("  ${error.description}\n")
                     }
                 }
             }
@@ -250,7 +264,7 @@ class ExcelReporter : TableReporter() {
                     append("$id\n")
 
                     errors.forEach { error ->
-                        append("  $error\n")
+                        append("  ${error.description}\n")
                     }
                 }
             }
@@ -315,8 +329,8 @@ class ExcelReporter : TableReporter() {
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
-                createCell(this, 4, row.analyzerErrors.map { it.toString() }.joinToString(" \n"), font, cellStyle)
-                createCell(this, 5, row.scanErrors.map { it.toString() }.joinToString(" \n"), font, cellStyle)
+                createCell(this, 4, row.analyzerErrors.joinToString(" \n") { it.description }, font, cellStyle)
+                createCell(this, 5, row.scanErrors.joinToString(" \n") { it.description }, font, cellStyle)
 
                 val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
                         row.analyzerErrors.size, row.scanErrors.size).max() ?: 1

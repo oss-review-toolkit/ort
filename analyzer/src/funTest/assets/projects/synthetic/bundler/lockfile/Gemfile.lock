@@ -7,7 +7,7 @@ GEM
       mini_portile2 (~> 2.3.0)
     nokogiri (1.8.2-x64-mingw32)
       mini_portile2 (~> 2.3.0)
-    rack (1.6.10)
+    rack (1.6.11)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -32,4 +32,4 @@ DEPENDENCIES
   rspec
 
 BUNDLED WITH
-   1.16.1
+   1.17.1

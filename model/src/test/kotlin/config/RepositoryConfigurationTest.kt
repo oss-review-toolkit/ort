@@ -45,6 +45,19 @@ class RepositoryConfigurationTest : WordSpec() {
                 repositoryConfiguration.excludes shouldBe null
             }
 
+            "deserialize to a path regex working with escaped dots" {
+                val configuration = """
+                    excludes:
+                      projects:
+                      - path: "android/.*build\\.gradle"
+                        reason: "BUILD_TOOL_OF"
+                        comment: "project comment"
+                    """.trimIndent()
+
+                val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
+                config.excludes!!.projects[0].path.matches("android/project1/build.gradle") shouldBe true
+            }
+
             "be deserializable" {
                 val configuration = """
                     excludes:
@@ -66,6 +79,10 @@ class RepositoryConfigurationTest : WordSpec() {
                       - message: "message"
                         reason: "CANT_FIX_ISSUE"
                         comment: "error comment"
+                      rule_violations:
+                      - message: "rule message"
+                        reason: "APPROVED"
+                        comment: "rule comment"
                     """.trimIndent()
 
                 val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
@@ -99,6 +116,20 @@ class RepositoryConfigurationTest : WordSpec() {
                 scopes.first().name.pattern shouldBe "scope"
                 scopes.first().reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
                 scopes.first().comment shouldBe "scope comment"
+
+                val errors = repositoryConfiguration.resolutions!!.errors
+                errors should haveSize(1)
+                val error = errors.first()
+                error.message shouldBe "message"
+                error.reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
+                error.comment shouldBe "error comment"
+
+                val evalErrors = repositoryConfiguration.resolutions!!.ruleViolations
+                evalErrors should haveSize(1)
+                val evalError = evalErrors.first()
+                evalError.message shouldBe "rule message"
+                evalError.reason shouldBe RuleViolationResolutionReason.APPROVED
+                evalError.comment shouldBe "rule comment"
             }
         }
     }

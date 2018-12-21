@@ -52,7 +52,7 @@ class Unmanaged(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryCon
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val project = Project(
                 id = Identifier(
-                        provider = toString(),
+                        type = toString(),
                         namespace = "",
                         name = definitionFile.name,
                         version = ""

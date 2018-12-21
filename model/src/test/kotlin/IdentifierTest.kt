@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -54,7 +56,7 @@ class IdentifierTest : StringSpec() {
             )
 
             mapping.forEach { stringRepresentation, identifier ->
-                Identifier.fromString(stringRepresentation) shouldBe identifier
+                Identifier(stringRepresentation) shouldBe identifier
             }
         }
 
@@ -83,12 +85,52 @@ class IdentifierTest : StringSpec() {
             )
 
             matching.forEach { id1, id2 ->
-                Identifier.fromString(id1).matches(Identifier.fromString(id2)) shouldBe true
+                Identifier(id1).matches(Identifier(id2)) shouldBe true
             }
 
             nonMatching.forEach { id1, id2 ->
-                Identifier.fromString(id1).matches(Identifier.fromString(id2)) shouldBe false
+                Identifier(id1).matches(Identifier(id2)) shouldBe false
             }
+        }
+
+        "Identifier is serialized to String" {
+            val id = Identifier("type", "namespace", "name", "version")
+
+            val serializedId = yamlMapper.writeValueAsString(id)
+
+            serializedId shouldBe "--- \"type:namespace:name:version\"\n"
+        }
+
+        "Identifier can be deserialized from String" {
+            val serializedId = "--- \"type:namespace:name:version\""
+
+            val id = yamlMapper.readValue<Identifier>(serializedId)
+
+            id shouldBe Identifier("type", "namespace", "name", "version")
+        }
+
+        "Incomplete Identifier can be deserialized from String" {
+            val serializedId = "--- \"type:namespace:\""
+
+            val id = yamlMapper.readValue<Identifier>(serializedId)
+
+            id shouldBe Identifier("type", "namespace", "", "")
+        }
+
+        "Identifier map key can be deserialized from String" {
+            val serializedMap = "---\ntype:namespace:name:version: 1"
+
+            val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
+
+            map shouldBe mapOf(Identifier("type", "namespace", "name", "version") to 1)
+        }
+
+        "Incomplete Identifier map key can be deserialized from String" {
+            val serializedMap = "---\ntype:namespace:: 1"
+
+            val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
+
+            map shouldBe mapOf(Identifier("type", "namespace", "", "") to 1)
         }
     }
 }

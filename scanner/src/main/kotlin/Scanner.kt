@@ -85,7 +85,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
 
         val ortResult = dependenciesFile.readValue<OrtResult>()
 
-        require(ortResult.analyzer != null) {
+        requireNotNull(ortResult.analyzer) {
             "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
                     "analyzer result."
         }
@@ -112,9 +112,9 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
         }.toSortedSet()
 
         val packagesToScan = if (scopesToScan.isNotEmpty()) {
-            consolidatedReferencePackages + analyzerResult.packages.filter { pkg ->
+            consolidatedReferencePackages + analyzerResult.packages.filter { (pkg, _) ->
                 analyzerResult.projects.any { project ->
-                    project.scopes.any { it.name in scopesToScan && pkg.pkg in it }
+                    project.scopes.any { it.name in scopesToScan && pkg.id in it }
                 }
             }
         } else {

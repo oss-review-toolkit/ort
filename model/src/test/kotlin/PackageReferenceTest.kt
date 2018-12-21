@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
@@ -26,17 +27,35 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class PackageReferenceTest : WordSpec() {
-    private val node1_1_1 = PackageReference(Identifier.fromString("::node1_1_1"), sortedSetOf())
-    private val node1_1 = PackageReference(Identifier.fromString("::node1_1"), sortedSetOf(node1_1_1))
-    private val node1_2 = PackageReference(Identifier.fromString("::node1_2"), sortedSetOf())
-    private val node1 = PackageReference(Identifier.fromString("::node1"), sortedSetOf(node1_1, node1_2))
-    private val node2 = PackageReference(Identifier.fromString("::node2"), sortedSetOf())
-    private val root = PackageReference(Identifier.fromString("::root"), sortedSetOf(node1, node2))
+    companion object {
+        fun pkgRefFromIdStr(id: String, vararg dependencies: PackageReference) =
+                PackageReference(Identifier(id), dependencies = dependencies.toSortedSet())
+    }
+
+    private val node1_1_1 = pkgRefFromIdStr("::node1_1_1")
+    private val node1_1 = pkgRefFromIdStr("::node1_1", node1_1_1)
+    private val node1_2 = pkgRefFromIdStr("::node1_2")
+    private val node1 = pkgRefFromIdStr("::node1", node1_1, node1_2)
+    private val node2 = pkgRefFromIdStr("::node2")
+    private val node3 = pkgRefFromIdStr("::node3", node1_2)
+    private val root = pkgRefFromIdStr("::root", node1, node2, node3)
 
     init {
+        "findReferences" should {
+            "find references to an existing id" {
+                root.findReferences(Identifier("::node1_2")) shouldBe listOf(node1_2, node1_2)
+                root.findReferences(Identifier("::node1")) shouldBe listOf(node1)
+            }
+
+            "find no references to a non-existing id" {
+                root.findReferences(Identifier("::nodeX_Y_Z")) should beEmpty()
+                root.findReferences(Identifier("")) should beEmpty()
+            }
+        }
+
         "traverse" should {
             "visit each node of the tree depth-first" {
-                val expectedOrder = mutableListOf(node1_1_1, node1_1, node1_2, node1, node2, root)
+                val expectedOrder = mutableListOf(node1_1_1, node1_1, node1_2, node1, node2, node1_2, node3, root)
 
                 root.traverse {
                     val expectedNode = expectedOrder.removeAt(0)
@@ -52,7 +71,7 @@ class PackageReferenceTest : WordSpec() {
                     val name = "${it.id.name}_suffix"
                     it.copy(
                             id = it.id.copy(name = name),
-                            errors = listOf(com.here.ort.model.Error(source = "test", message = "error $name"))
+                            errors = listOf(com.here.ort.model.OrtIssue(source = "test", message = "error $name"))
                     )
                 }
 

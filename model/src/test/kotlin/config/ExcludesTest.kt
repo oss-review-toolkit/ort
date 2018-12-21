@@ -36,7 +36,7 @@ import io.kotlintest.specs.WordSpec
 
 class ExcludesTest : WordSpec() {
     init {
-        val id = Identifier("provider", "namespace", "name", "version")
+        val id = Identifier("type", "namespace", "name", "version")
 
         val projectId1 = id.copy(name = "project1")
         val projectId2 = id.copy(name = "project2")
@@ -50,8 +50,8 @@ class ExcludesTest : WordSpec() {
         val projectExclude2 = ProjectExclude("path2", ProjectExcludeReason.BUILD_TOOL_OF, "")
         val projectExclude3 = ProjectExclude("path3", ProjectExcludeReason.BUILD_TOOL_OF, "")
 
-        val scope1 = Scope("scope1", sortedSetOf(PackageReference(id, sortedSetOf())))
-        val scope2 = Scope("scope2", sortedSetOf(PackageReference(id, sortedSetOf())))
+        val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
+        val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
 
         val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_BY, "")
         val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_BY, "")

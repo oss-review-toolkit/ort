@@ -19,7 +19,7 @@
 
 package com.here.ort.reporter
 
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.config.Resolutions
 
 class DefaultResolutionProvider : ResolutionProvider {
@@ -29,5 +29,8 @@ class DefaultResolutionProvider : ResolutionProvider {
         this.resolutions = this.resolutions.merge(resolutions)
     }
 
-    override fun getResolutionsFor(error: Error) = resolutions.errors.filter { it.matches(error) }
+    override fun getErrorResolutionsFor(issue: OrtIssue) = resolutions.errors.filter { it.matches(issue) }
+
+    override fun getRuleViolationResolutionsFor(issue: OrtIssue) =
+            resolutions.ruleViolations.filter { it.matches(issue) }
 }

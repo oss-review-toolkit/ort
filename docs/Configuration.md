@@ -8,6 +8,9 @@ ORT's behavior can be customized for a specific repository by adding an `.ort.ym
 Currently this file can only be used to configure the excludes described below, but more features are planned for the
 future.
 
+Note that for Git-Repo repositories the default location of the configuration file is next to the manifest file. For
+example, if the manifest is called `manifest.xml` the configuration is expected to be called `manifest.xml.ort.yml`.
+
 ### Excludes
 
 ORT's philosophy is to always analyze and scan everything it can find to get a complete picture of a repository and its
@@ -49,7 +52,7 @@ a single exclude:
 ```yaml
 excludes:
   projects:
-  - path: ".*build\.gradle"
+  - path: ".*build\\.gradle"
     reason: "EXAMPLE_OF"
     comment: "The project contains example code which is not distributed."
 ```
@@ -173,6 +176,7 @@ provide the location of source artifacts. The structure of the curations file is
 # Example for a complete curation object:
 #- id: "Maven:org.hamcrest:hamcrest-core:1.3"
 #  curations:
+#    concluded_license: "Apache-2.0 OR MIT" # Has to be a valid SPDX license expression.
 #    declared_licenses:
 #    - "license a"
 #    - "license b"

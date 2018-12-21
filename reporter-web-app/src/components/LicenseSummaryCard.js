@@ -18,12 +18,13 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Badge, Card, Popover, List
 } from 'antd';
 import { LICENSES_PROVIDERS } from '../data/licenses';
 
-export default (props) => {
+const LicenseSummaryCard = (props) => {
     const { summary } = props;
     let licenseDataAttributed = false;
     const licenseAttributionText = (item) => {
@@ -122,3 +123,9 @@ export default (props) => {
 
     return null;
 };
+
+LicenseSummaryCard.propTypes = {
+    summary: PropTypes.array.isRequired
+};
+
+export default LicenseSummaryCard;

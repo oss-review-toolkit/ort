@@ -33,7 +33,7 @@ import java.io.File
 class DrupalIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
             id = Identifier(
-                    provider = "PhpComposer",
+                    type = "PhpComposer",
                     namespace = "",
                     name = "Drupal",
                     version = ""

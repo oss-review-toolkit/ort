@@ -28,7 +28,7 @@ import com.here.ort.downloader.Downloader
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Environment
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
@@ -105,7 +105,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      */
     protected val scannerPath by lazy { File(scannerDir, command()) }
 
-    override fun getVersionRequirement() = Requirement.buildLoose(scannerVersion)
+    override fun getVersionRequirement(): Requirement = Requirement.buildLoose(scannerVersion)
 
     /**
      * Return the actual version of the scanner, or an empty string in case of failure.
@@ -164,7 +164,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                                 endTime = now,
                                 fileCount = 0,
                                 licenseFindings = sortedSetOf(),
-                                errors = listOf(Error(source = javaClass.simpleName,
+                                errors = listOf(OrtIssue(source = javaClass.simpleName,
                                         message = e.collectMessagesAsString()))
                         ),
                         rawResult = EMPTY_JSON_NODE)
@@ -200,7 +200,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
             val now = Instant.now()
             val summary = ScanSummary(now, now, 0, sortedSetOf(),
-                    listOf(Error(source = toString(), message = e.collectMessagesAsString())))
+                    listOf(OrtIssue(source = toString(), message = e.collectMessagesAsString())))
             ScanResult(Provenance(now), getDetails(), summary)
         }
 
@@ -269,7 +269,10 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                             endTime = now,
                             fileCount = 0,
                             licenseFindings = sortedSetOf(),
-                            errors = listOf(Error(source = javaClass.simpleName, message = e.collectMessagesAsString()))
+                            errors = listOf(OrtIssue(
+                                    source = javaClass.simpleName,
+                                    message = e.collectMessagesAsString()
+                            ))
                     ),
                     EMPTY_JSON_NODE
             )

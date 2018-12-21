@@ -28,9 +28,9 @@ import com.beust.jcommander.Parameters
 import com.here.ort.CommandWithHelp
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Downloader
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -46,15 +46,13 @@ import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
-import kotlin.system.exitProcess
-
 @Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
 object DownloaderCommand : CommandWithHelp() {
     @Parameter(description = "An ORT result file with an analyzer result to use. Must not be used together with " +
             "'--project-url'.",
             names = ["--ort-file", "-a"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var dependenciesFile: File? = null
+    private var ortFile: File? = null
 
     @Parameter(description = "A VCS or archive URL of a project to download. Must not be used together with " +
             "'--ort-file'.",
@@ -109,18 +107,23 @@ object DownloaderCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var allowMovingRevisions = false
 
-    override fun runCommand(jc: JCommander) {
-        if ((dependenciesFile != null) == (projectUrl != null)) {
+    override fun runCommand(jc: JCommander): Int {
+        if ((ortFile != null) == (projectUrl != null)) {
             throw IllegalArgumentException(
                     "Either '--ort-file' or '--project-url' must be specified.")
         }
 
-        val packages = dependenciesFile?.let {
+        val packages = ortFile?.let {
             require(it.isFile) {
                 "Provided path is not a file: ${it.absolutePath}"
             }
 
-            val analyzerResult = it.readValue<AnalyzerResult>()
+            val analyzerResult = it.readValue<OrtResult>().analyzer?.result
+
+            requireNotNull(analyzerResult) {
+                "The provided dependencies file '${it.invariantSeparatorsPath}' does not contain an " +
+                        "analyzer result."
+            }
 
             mutableListOf<Package>().apply {
                 entities = entities.distinct()
@@ -167,7 +170,7 @@ object DownloaderCommand : CommandWithHelp() {
 
                 if (archive) {
                     val zipFile = File(outputDir,
-                            "${pkg.id.provider.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
+                            "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
                                     "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip")
 
                     log.info {
@@ -196,6 +199,6 @@ object DownloaderCommand : CommandWithHelp() {
             }
         }
 
-        if (error) exitProcess(1)
+        return if (error) 2 else 0
     }
 }

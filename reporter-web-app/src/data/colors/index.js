@@ -24,7 +24,8 @@ export const metadata = {
     packageCopyrightText: 'Federico Spini',
     packageComment: 'Expanded version for ORT of unique-colors with additional colors',
     packageDescription: 'Perceptually unique colors generator (up to 92)',
-    packageDownloadLocation: 'git+https://github.com/federicospini/unique-colors.git@e642ae332f1b92b6e204df1cd05b930ae61ee79a',
+    packageDownloadLocation:
+        'git+https://github.com/federicospini/unique-colors.git@e642ae332f1b92b6e204df1cd05b930ae61ee79a',
     packageHomePage: 'https://github.com/federicospini/unique-colors/',
     packageLicenseDeclared: 'MIT',
     packageSupplier: 'Federico Spini',

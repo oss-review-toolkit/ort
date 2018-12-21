@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.here.ort.spdx.SpdxExpression
+
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
@@ -28,7 +30,7 @@ class PackageCurationTest : StringSpec() {
         "apply overwrites the correct values" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -44,6 +46,7 @@ class PackageCurationTest : StringSpec() {
                     id = pkg.id,
                     data = PackageCurationData(
                             declaredLicenses = sortedSetOf("license a", "license b"),
+                            concludedLicense = SpdxExpression.parse("license1 OR license2"),
                             description = "description",
                             homepageUrl = "http://home.page",
                             binaryArtifact = RemoteArtifact(
@@ -71,6 +74,7 @@ class PackageCurationTest : StringSpec() {
             curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
                 declaredLicenses shouldBe curation.data.declaredLicenses
+                concludedLicense shouldBe curation.data.concludedLicense
                 description shouldBe curation.data.description
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe curation.data.binaryArtifact
@@ -86,7 +90,7 @@ class PackageCurationTest : StringSpec() {
         "apply changes only curated fields" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -121,6 +125,7 @@ class PackageCurationTest : StringSpec() {
             curatedPkg.pkg.apply {
                 id.toString() shouldBe pkg.id.toString()
                 declaredLicenses shouldBe pkg.declaredLicenses
+                concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe pkg.binaryArtifact
@@ -142,7 +147,7 @@ class PackageCurationTest : StringSpec() {
         "applying curation fails when identifiers do not match" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "Maven",
+                            type = "Maven",
                             namespace = "org.hamcrest",
                             name = "hamcrest-core",
                             version = "1.3"
@@ -156,7 +161,7 @@ class PackageCurationTest : StringSpec() {
             )
             val curation = PackageCuration(
                     id = Identifier(
-                            provider = "",
+                            type = "",
                             namespace = "",
                             name = "",
                             version = ""
@@ -177,7 +182,7 @@ class PackageCurationTest : StringSpec() {
         }
 
         "applying multiple curations in a row adds curation results to the curated package" {
-            val id = Identifier("provider", "namespace", "name", "version")
+            val id = Identifier("type", "namespace", "name", "version")
             val pkg = Package.EMPTY.copy(id = id)
             val curation1 = PackageCuration(id, PackageCurationData(description = "description 1"))
             val curation2 = PackageCuration(id, PackageCurationData(description = "description 2"))

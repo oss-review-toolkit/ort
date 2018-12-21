@@ -19,15 +19,21 @@
 
 package com.here.ort.reporter
 
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.config.ErrorResolution
+import com.here.ort.model.config.RuleViolationResolution
 
 /**
- * A provider for [ErrorResolution]s.
+ * A provider for resolutions of [OrtIssue]s.
  */
 interface ResolutionProvider {
     /**
-     * Get all resolutions that match [error].
+     * Get all error resolutions that match [error].
      */
-    fun getResolutionsFor(error: Error): List<ErrorResolution>
+    fun getErrorResolutionsFor(issue: OrtIssue): List<ErrorResolution>
+
+    /**
+     * Get all rule violation resolutions that match [error].
+     */
+    fun getRuleViolationResolutionsFor(issue: OrtIssue): List<RuleViolationResolution>
 }

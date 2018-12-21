@@ -24,12 +24,14 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
+import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.OS
 import com.here.ort.utils.log
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.spdx.LICENSE_FILE_NAMES
+
+import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
@@ -69,6 +71,12 @@ class Git : GitBase() {
         // Do not use "git clone" to have more control over what is being fetched.
         run(targetDir, "init")
         run(targetDir, "remote", "add", "origin", pkg.vcsProcessed.url)
+
+        // Enable the more efficient Git Wire Protocol version 2, if possible. See
+        // https://github.com/git/git/blob/master/Documentation/technical/protocol-v2.txt
+        if (Semver(getVersion()).isGreaterThanOrEqualTo("2.18.0")) {
+            run(targetDir, "config", "protocol.version", "2")
+        }
 
         if (OS.isWindows) {
             run(targetDir, "config", "core.longpaths", "true")

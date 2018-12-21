@@ -554,3 +554,4 @@ analyzer:
           comment: "Declared license in pom.xml is wrong."
     has_errors: true
 scanner: null
+evaluator: null

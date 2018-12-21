@@ -34,14 +34,11 @@ import com.here.ort.model.config.AnalyzerConfigurationDeserializer
 
 private val ortModelModule = SimpleModule("OrtModelModule").apply {
     addDeserializer(AnalyzerConfiguration::class.java, AnalyzerConfigurationDeserializer())
-    addDeserializer(Error::class.java, ErrorDeserializer())
-    addDeserializer(Identifier::class.java, IdentifierFromStringDeserializer())
+    addDeserializer(OrtIssue::class.java, OrtIssueDeserializer())
     addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
 
-    addSerializer(Error::class.java, ErrorSerializer())
+    addSerializer(OrtIssue::class.java, OrtIssueSerializer())
     addSerializer(Identifier::class.java, IdentifierToStringSerializer())
-
-    addKeyDeserializer(Identifier::class.java, IdentifierFromStringKeyDeserializer())
 }
 
 /**
@@ -55,7 +52,7 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
 
     registerModule(ortModelModule)
 
-    setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+    propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
 }
 
 val jsonMapper = ObjectMapper().apply(mapperConfig)

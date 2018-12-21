@@ -19,12 +19,9 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 import com.here.ort.utils.encodeOrUnknown
@@ -34,12 +31,12 @@ import com.here.ort.utils.encodeOrUnknown
  */
 data class Identifier(
         /**
-         * The name of the provider that hosts this package, for example Maven or NPM.
+         * The type of package, i.e. its packaging type, for example "Maven" or "NPM".
          */
-        val provider: String,
+        val type: String,
 
         /**
-         * The namespace of the package, for example the group id in Maven or the scope in NPM.
+         * The namespace of the package, for example the group for "Maven" or the scope for "NPM".
          */
         val namespace: String,
 
@@ -59,33 +56,33 @@ data class Identifier(
          */
         @JvmField
         val EMPTY = Identifier(
-                provider = "",
+                type = "",
                 namespace = "",
                 name = "",
                 version = ""
         )
-
-        /**
-         * Create an [Identifier] from a string with the format "provider:namespace:name:version". If the string
-         * has less than three colon separators the missing values are assigned empty strings.
-         */
-        fun fromString(identifier: String): Identifier {
-            val components = identifier.split(':')
-            return Identifier(
-                    provider = components.getOrNull(0) ?: "",
-                    namespace = components.getOrNull(1) ?: "",
-                    name = components.getOrNull(2) ?: "",
-                    version = components.getOrNull(3) ?: ""
-            )
-        }
     }
 
-    private val components = listOf(provider, namespace, name, version)
+    private constructor(components: List<String>) : this(
+            type = components.getOrElse(0) { "" },
+            namespace = components.getOrElse(1) { "" },
+            name = components.getOrElse(2) { "" },
+            version = components.getOrElse(3) { "" }
+    )
+
+    /**
+     * Create an [Identifier] from a string with the format "type:namespace:name:version". If the string has less than
+     * three colon separators the missing values are assigned empty strings.
+     */
+    @JsonCreator
+    constructor(identifier: String) : this(identifier.split(':'))
+
+    private val components = listOf(type, namespace, name, version)
 
     init {
         require(components.none { ":" in it }) {
             "Properties of Identifier must not contain ':' because it is used as a separator in the String " +
-                    "representation of the Identifier: provider='$provider', namespace='$namespace', name='$name', " +
+                    "representation of the Identifier: type='$type', namespace='$namespace', name='$name', " +
                     "version='$version'"
         }
     }
@@ -93,9 +90,22 @@ data class Identifier(
     override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
-     * Return true if this matches the other identifier. To match, both identifiers need to have the same
-     * [provider] and [namespace], and the [name] and [version] must be either equal or empty for at least one of
-     * them.
+     * Return whether this [Identifier] is likely to belong to the vendor of the given [name].
+     */
+    fun isFromVendor(name: String): Boolean {
+        val lowerName = name.toLowerCase()
+        val vendorNamespace = when (type) {
+            "NPM" -> "@$lowerName"
+            "Gradle", "Maven", "SBT" -> "com.$lowerName"
+            else -> ""
+        }
+
+        return vendorNamespace.isNotEmpty() && namespace.startsWith(vendorNamespace)
+    }
+
+    /**
+     * Return true if this matches the other identifier. To match, both identifiers need to have the same [type] and
+     * [namespace], and the [name] and [version] must be either equal or empty for at least one of them.
      *
      * Examples for matching identifiers:
      * * "maven:org.hamcrest:hamcrest-core:1.3" <-> "maven:org.hamcrest:hamcrest-core:"
@@ -107,7 +117,7 @@ data class Identifier(
      * * "maven:org.hamcrest:hamcrest-core:" <-> "maven:org.hamcrest:hamcrest-library:"
      */
     fun matches(other: Identifier): Boolean {
-        if (!provider.equals(other.provider, true)) {
+        if (!type.equals(other.type, true)) {
             return false
         }
 
@@ -135,17 +145,5 @@ data class Identifier(
 class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class.java) {
     override fun serialize(value: Identifier, gen: JsonGenerator, provider: SerializerProvider) {
         gen.writeString(value.toString())
-    }
-}
-
-class IdentifierFromStringDeserializer : StdDeserializer<Identifier>(Identifier::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Identifier {
-        return Identifier.fromString(p.valueAsString)
-    }
-}
-
-class IdentifierFromStringKeyDeserializer : KeyDeserializer() {
-    override fun deserializeKey(key: String, ctxt: DeserializationContext): Identifier {
-        return Identifier.fromString(key)
     }
 }

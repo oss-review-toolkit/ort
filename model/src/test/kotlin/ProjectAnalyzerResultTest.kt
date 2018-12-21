@@ -24,18 +24,18 @@ import io.kotlintest.specs.StringSpec
 
 class ProjectAnalyzerResultTest : StringSpec({
     "collectErrors should find all errors" {
-        val error1 = Error(source = "source-1", message = "error-1")
-        val error2 = Error(source = "source-2", message = "error-2")
-        val error3 = Error(source = "source-3", message = "error-3")
-        val error4 = Error(source = "source-4", message = "error-4")
-        val error5 = Error(source = "source-5", message = "error-5")
-        val error6 = Error(source = "source-6", message = "error-6")
-        val error7 = Error(source = "source-7", message = "error-7")
-        val error8 = Error(source = "source-8", message = "error-8")
+        val error1 = OrtIssue(source = "source-1", message = "error-1")
+        val error2 = OrtIssue(source = "source-2", message = "error-2")
+        val error3 = OrtIssue(source = "source-3", message = "error-3")
+        val error4 = OrtIssue(source = "source-4", message = "error-4")
+        val error5 = OrtIssue(source = "source-5", message = "error-5")
+        val error6 = OrtIssue(source = "source-6", message = "error-6")
+        val error7 = OrtIssue(source = "source-7", message = "error-7")
+        val error8 = OrtIssue(source = "source-8", message = "error-8")
 
         val result = ProjectAnalyzerResult(
                 project = Project(
-                        id = Identifier("provider", "namespace", "name", "version"),
+                        id = Identifier("type", "namespace", "name", "version"),
                         definitionFilePath = "definitionFilePath",
                         declaredLicenses = sortedSetOf(),
                         vcs = VcsInfo.EMPTY,
@@ -47,7 +47,7 @@ class ProjectAnalyzerResultTest : StringSpec({
                                         dependencies = sortedSetOf(
                                                 PackageReference(
                                                         Identifier(
-                                                                provider = "provider1",
+                                                                type = "type1",
                                                                 namespace = "namespace1",
                                                                 name = "name1",
                                                                 version = "version1"
@@ -55,7 +55,7 @@ class ProjectAnalyzerResultTest : StringSpec({
                                                         dependencies = sortedSetOf(
                                                                 PackageReference(
                                                                         Identifier(
-                                                                                provider = "provider2",
+                                                                                type = "type2",
                                                                                 namespace = "namespace2",
                                                                                 name = "name2",
                                                                                 version = "version2"
@@ -68,7 +68,7 @@ class ProjectAnalyzerResultTest : StringSpec({
                                                 ),
                                                 PackageReference(
                                                         Identifier(
-                                                                provider = "provider3",
+                                                                type = "type3",
                                                                 namespace = "namespace3",
                                                                 name = "name3",
                                                                 version = "version3"
@@ -86,9 +86,9 @@ class ProjectAnalyzerResultTest : StringSpec({
 
         val errors = result.collectErrors()
         errors.size shouldBe 4
-        errors[Identifier.fromString("provider:namespace:name:version")] shouldBe listOf(error7, error8)
-        errors[Identifier.fromString("provider1:namespace1:name1:version1")] shouldBe listOf(error3, error4)
-        errors[Identifier.fromString("provider2:namespace2:name2:version2")] shouldBe listOf(error1, error2)
-        errors[Identifier.fromString("provider3:namespace3:name3:version3")] shouldBe listOf(error5, error6)
+        errors[Identifier("type:namespace:name:version")] shouldBe listOf(error7, error8)
+        errors[Identifier("type1:namespace1:name1:version1")] shouldBe listOf(error3, error4)
+        errors[Identifier("type2:namespace2:name2:version2")] shouldBe listOf(error1, error2)
+        errors[Identifier("type3:namespace3:name3:version3")] shouldBe listOf(error5, error6)
     }
 })

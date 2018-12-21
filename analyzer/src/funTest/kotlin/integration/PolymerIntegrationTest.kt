@@ -33,7 +33,7 @@ import java.io.File
 class PolymerIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
             id = Identifier(
-                    provider = "Bower",
+                    type = "Bower",
                     namespace = "",
                     name = "polymer",
                     version = "2.4.0"

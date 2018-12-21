@@ -23,7 +23,7 @@ import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
-import java.util.EnumSet
+import java.util.Collections
 
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
@@ -53,8 +53,20 @@ const val PARAMETER_ORDER_LOGGING = 2
  */
 const val PARAMETER_ORDER_HELP = 100
 
-inline fun <reified T : kotlin.Enum<T>> enumSetOf(vararg elems: T) =
-        EnumSet.noneOf(T::class.java).apply { addAll(elems) }
+/**
+ * Check whether the specified two or more collections have no elemets in common.
+ */
+fun disjoint(c1: Collection<*>, c2: Collection<*>, vararg cN: Collection<*>): Boolean {
+    val c = listOf(c1, c2, *cN)
+
+    for (a in c.indices) {
+        for (b in a + 1 until c.size) {
+            if (!Collections.disjoint(c[a], c[b])) return false
+        }
+    }
+
+    return true
+}
 
 /**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
@@ -62,36 +74,57 @@ inline fun <reified T : kotlin.Enum<T>> enumSetOf(vararg elems: T) =
 fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
     if (version.isBlank() || names.isEmpty()) return emptyList()
 
-    // If there is a full match, return it right away.
-    names.find { it == version }?.let { return listOf(it) }
+    // If there are full matches, return them right away.
+    names.filter { it.equals(version, true) }.let { if (it.isNotEmpty()) return it }
 
-    val normalizedSeparator = '_'
-    val normalizedVersion = version.replace(Regex("([.-])"), normalizedSeparator.toString()).toLowerCase()
+    // The list of supported version separators.
+    val versionSeparators = listOf('-', '_', '.')
+    val versionHasSeparator = versionSeparators.any { version.contains(it) }
+
+    // Create variants of the version string to recognize.
+    data class VersionVariant(val name: String, val separators: List<Char>)
+
+    val versionLower = version.toLowerCase()
+    val versionVariants = mutableListOf(VersionVariant(versionLower, versionSeparators))
+
+    val separatorRegex = Regex(versionSeparators.joinToString("", "[", "]"))
+    versionSeparators.forEach {
+        versionVariants += VersionVariant(versionLower.replace(separatorRegex, it.toString()), listOf(it))
+    }
 
     val filteredNames = names.filter {
-        val normalizedName = it.replace(Regex("([.-])"), normalizedSeparator.toString()).toLowerCase()
+        val name = it.toLowerCase()
 
-        when {
-            // Allow to ignore suffixes in names that are separated by something else than the current
-            // separator, e.g. for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
-            normalizedName.startsWith(normalizedVersion) -> {
-                val tail = normalizedName.removePrefix(normalizedVersion)
-                tail.firstOrNull() != normalizedSeparator
+        versionVariants.any { versionVariant ->
+            when {
+                // Allow to ignore suffixes in names that are separated by something else than the current
+                // separator, e.g. for version "3.3.1" accept "3.3.1-npm-packages" but not "3.3.1.0".
+                name.startsWith(versionVariant.name) -> {
+                    val tail = name.removePrefix(versionVariant.name)
+                    tail.firstOrNull() !in versionVariant.separators
+                }
+
+                // Allow to ignore prefixes in names that are separated by something else than the current
+                // separator, e.g. for version "0.10" accept "docutils-0.10" but not "1.0.10".
+                name.endsWith(versionVariant.name) -> {
+                    val head = name.removeSuffix(versionVariant.name)
+                    val last = head.lastOrNull()
+                    val forelast = head.dropLast(1).lastOrNull()
+
+                    val currentSeparators = if (versionHasSeparator) versionVariant.separators else versionSeparators
+
+                    // Full match with the current version variant.
+                    last == null
+                            // The prefix does not end with the current separators or a digit.
+                            || (last !in currentSeparators && !last.isDigit())
+                            // The prefix ends with the current separators but the forelast character is not a digit.
+                            || (last in currentSeparators && (forelast == null || !forelast.isDigit()))
+                            // The prefix ends with 'v' and the forelast character is a separator.
+                            || (last == 'v' && (forelast == null || forelast in currentSeparators))
+                }
+
+                else -> false
             }
-
-            // Allow to ignore prefixes in names that are separated by something else than the current
-            // separator, e.g. for version "0.10" accept "docutils-0.10" but not "1.0.10".
-            normalizedName.endsWith(normalizedVersion) -> {
-                val head = normalizedName.removeSuffix(normalizedVersion)
-                val last = head.lastOrNull()
-                val forelast = head.dropLast(1).lastOrNull()
-                last == null
-                        || (last != normalizedSeparator && !last.isDigit())
-                        || (last == normalizedSeparator && (forelast == null || !forelast.isDigit()))
-                        || (last.toLowerCase() == 'v' && (forelast == null || forelast == normalizedSeparator))
-            }
-
-            else -> false
         }
     }
 
@@ -107,7 +140,7 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 /**
  * Return the longest prefix that is common to all [files].
  */
-fun getCommonFilePrefix(files: List<File>) =
+fun getCommonFilePrefix(files: Collection<File>) =
         files.map {
             it.normalize().absolutePath
         }.reduce { prefix, path ->

@@ -52,13 +52,13 @@ fun redirectStdout(block: () -> Unit) = redirectOutput(System.out, System::setOu
 /**
  * Suppress any prompts for input by redirecting standard input to the null device.
  */
-fun suppressInput(block: () -> Unit) {
+fun <T> suppressInput(block: () -> T): T {
     val originalInput = System.`in`
 
     val nullDevice = FileInputStream(if (OS.isWindows) "NUL" else "/dev/null")
     System.setIn(nullDevice)
 
-    try {
+    return try {
         block()
     } finally {
         System.setIn(originalInput)

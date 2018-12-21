@@ -18,7 +18,9 @@
  */
 
 import React, { Component } from 'react';
-import { Alert, Row, Tabs } from 'antd';
+import {
+    Alert, Col, Progress, Row, Tabs
+} from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SummaryView from './components/SummaryView';
@@ -26,11 +28,10 @@ import TableView from './components/TableView';
 import TreeView from './components/TreeView';
 import 'antd/dist/antd.css';
 import './App.css';
-import store from './store/setup';
+import store from './store';
+import { getAppView } from './reducers/selectors';
 
 const { TabPane } = Tabs;
-
-// TODO for state management look into https://github.com/solkimicreb/react-easy-state
 
 /* TODO for combine CSS, JS and fonts into single HTML file look into https://webpack.js.org
  * combined with https://www.npmjs.com/package/html-webpack-inline-source-plugin or
@@ -40,54 +41,160 @@ const { TabPane } = Tabs;
 class ReporterApp extends Component {
     constructor(props) {
         super(props);
-        store.dispatch({ type: 'CONVERT_REPORT_DATA' });
+
+        store.dispatch({ type: 'APP::LOADING_START' });
+    }
+
+    onChangeTab = (activeKey) => {
+        store.dispatch({ type: 'APP::CHANGE_TAB', key: activeKey });
     }
 
     render() {
-        const { reportData } = this.props;
+        const { appView: { loading, showKey } } = this.props;
 
-        if (Object.keys(reportData).length === 0) {
+        switch (showKey) {
+        case 'ort-tabs-summary':
+        case 'ort-tabs-table':
+        case 'ort-tabs-tree':
+        case 'ort-tabs': {
             return (
-                <Row className="ort-app">
-                    <Tabs>
-                        <TabPane tab="Summary" key="1">
-                            <Alert
-                                message="No review results found"
-                                description={
-                                    'Either something went wrong or'
-                                    + 'you are looking at an ORT report template file.'
-                                }
-                                type="error"
-                            />
+                <Row
+                    className="ort-app"
+                    key="ort-tabs"
+                >
+                    <Tabs
+                        activeKey={showKey}
+                        animated={false}
+                        onChange={this.onChangeTab}
+                    >
+                        <TabPane tab="Summary" key="ort-tabs-summary">
+                            <SummaryView />
+                        </TabPane>
+                        <TabPane tab="Table" key="ort-tabs-table">
+                            <TableView />
+                        </TabPane>
+                        <TabPane tab="Tree" key="ort-tabs-tree">
+                            <TreeView />
                         </TabPane>
                     </Tabs>
                 </Row>
             );
         }
+        case 'ort-loading': {
+            const {
+                percentage: loadingPercentage,
+                text: loadingText
+            } = loading;
 
-        return (
-            <Row className="ort-app">
-                <Tabs>
-                    <TabPane tab="Summary" key="1">
-                        <SummaryView />
-                    </TabPane>
-                    <TabPane tab="Table" key="2">
-                        <TableView />
-                    </TabPane>
-                    <TabPane tab="Tree" key="3">
-                        <TreeView />
-                    </TabPane>
-                </Tabs>
-            </Row>
-        );
+            return (
+                <Row
+                    align="middle"
+                    justify="space-around"
+                    className="ort-app"
+                    key="ort-loading"
+                    type="flex"
+                >
+                    <Col span={6}>
+                        <p>
+                            OSS Review Toolkit:
+                            {' '}
+                            {loadingText}
+                        </p>
+                        {loadingPercentage === 100 ? (
+                            <Progress percent={100} />
+                        ) : (
+                            <Progress percent={loadingPercentage} status="active" />
+                        )}
+                    </Col>
+                </Row>
+            );
+        }
+        case 'ort-no-report-data':
+            return (
+                <Row
+                    align="middle"
+                    className="ort-app"
+                    justify="space-around"
+                    key="ort-no-report-data"
+                    type="flex"
+                >
+                    <Col span={8}>
+                        <Alert
+                            message="No review results could be loaded..."
+                            description={(
+                                <div>
+                                    <p>
+                                        Either something went wrong or you are looking at an ORT report template file.
+                                    </p>
+                                    <p>
+                                        If you believe you found a bug please fill a
+                                        {' '}
+                                        <a
+                                            href="https://github.com/heremaps/oss-review-toolkit/issues"
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                        >
+                                            issue on GitHub
+                                        </a>
+                                        .
+                                    </p>
+                                </div>
+                            )}
+                            type="error"
+                        />
+                    </Col>
+                </Row>
+            );
+        default:
+            return (
+                <Row
+                    align="middle"
+                    className="ort-app"
+                    justify="space-around"
+                    key="ort-error-msg"
+                    type="flex"
+                >
+                    <Col span={8}>
+                        <Alert
+                            message="Oops, something went wrong..."
+                            description={(
+                                <div>
+                                    <p>
+                                        Try reloading this report. If that does not solve the issue please
+                                        contact your OSS Review Toolkit admin(s) for support.
+                                    </p>
+                                    <p>
+                                        If you believe you found a bug please fill a
+                                        {' '}
+                                        <a
+                                            href="https://github.com/heremaps/oss-review-toolkit/issues"
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                        >
+                                            issue on GitHub
+                                        </a>
+                                        .
+                                    </p>
+                                </div>
+                            )}
+                            type="error"
+                        />
+                    </Col>
+                </Row>
+            );
+        }
     }
 }
 
 ReporterApp.propTypes = {
-    reportData: PropTypes.object.isRequired
+    appView: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+    appView: getAppView(state)
+});
+
 export default connect(
-    state => ({ reportData: state }),
+    mapStateToProps,
     () => ({})
 )(ReporterApp);

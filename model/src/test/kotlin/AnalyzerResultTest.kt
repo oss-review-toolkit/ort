@@ -25,27 +25,27 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class AnalyzerResultTest : WordSpec() {
-    private val package1 = Package.EMPTY.copy(id = Identifier("provider-1", "namespace-1", "package-1", "version-1"))
-    private val package2 = Package.EMPTY.copy(id = Identifier("provider-2", "namespace-2", "package-2", "version-2"))
-    private val package3 = Package.EMPTY.copy(id = Identifier("provider-3", "namespace-3", "package-3", "version-3"))
+    private val package1 = Package.EMPTY.copy(id = Identifier("type-1", "namespace-1", "package-1", "version-1"))
+    private val package2 = Package.EMPTY.copy(id = Identifier("type-2", "namespace-2", "package-2", "version-2"))
+    private val package3 = Package.EMPTY.copy(id = Identifier("type-3", "namespace-3", "package-3", "version-3"))
 
     private val pkgRef1 = package1.toReference()
-    private val pkgRef2 = package2.toReference(sortedSetOf(package3.toReference()))
+    private val pkgRef2 = package2.toReference(dependencies = sortedSetOf(package3.toReference()))
 
     private val scope1 = Scope("scope-1", sortedSetOf(pkgRef1))
     private val scope2 = Scope("scope-2", sortedSetOf(pkgRef2))
 
     private val project1 = Project.EMPTY.copy(
-            id = Identifier("provider-1", "namespace-1", "project-1", "version-1"),
+            id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
             scopes = sortedSetOf(scope1)
     )
     private val project2 = Project.EMPTY.copy(
-            id = Identifier("provider-2", "namespace-2", "project-2", "version-2"),
+            id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
             scopes = sortedSetOf(scope1, scope2)
     )
 
-    private val error1 = Error(source = "source-1", message = "message-1")
-    private val error2 = Error(source = "source-2", message = "message-2")
+    private val error1 = OrtIssue(source = "source-1", message = "message-1")
+    private val error2 = OrtIssue(source = "source-2", message = "message-2")
 
     private val analyzerResult1 = ProjectAnalyzerResult(project1, sortedSetOf(package1.toCuratedPackage()),
             listOf(error1, error2))

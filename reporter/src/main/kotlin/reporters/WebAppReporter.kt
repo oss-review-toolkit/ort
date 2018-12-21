@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.jsonMapper
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
@@ -30,7 +31,13 @@ import com.here.ort.utils.log
 import java.io.File
 
 class WebAppReporter : Reporter() {
-    override fun generateReport(ortResult: OrtResult, resolutionProvider: ResolutionProvider, outputDir: File): File? {
+    override fun generateReport(
+            ortResult: OrtResult,
+            resolutionProvider: ResolutionProvider,
+            copyrightGarbage: CopyrightGarbage,
+            outputDir: File,
+            postProcessingScript: String?
+    ): File {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val json = jsonMapper.writeValueAsString(ortResult)
         val result = template.replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$json<")

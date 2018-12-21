@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -168,15 +168,16 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
                 val packageInfo = packages[packageName]
                         ?: throw IOException("Could not find package info for $packageName")
                 try {
-                    val transitiveDependencies = getRuntimeDependencies(packageName, lockFile)
-                    packageReferences += packageInfo.toReference(
-                            buildDependencyTree(transitiveDependencies, lockFile, packages, virtualPackages))
+                    val runtimeDependencies = getRuntimeDependencies(packageName, lockFile)
+                    val transitiveDependencies = buildDependencyTree(runtimeDependencies, lockFile, packages,
+                            virtualPackages)
+                    packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
                 } catch (e: Exception) {
                     e.showStackTrace()
 
                     log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
 
-                    packageInfo.toReference(errors = listOf(Error(source = toString(),
+                    packageInfo.toReference(errors = listOf(OrtIssue(source = toString(),
                             message = e.collectMessagesAsString())))
                 }
             }
@@ -192,7 +193,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
         return Project(
                 id = Identifier(
-                        provider = toString(),
+                        type = toString(),
                         namespace = rawName.substringBefore("/"),
                         name = rawName.substringAfter("/"),
                         version = json["version"].textValueOrEmpty()
@@ -224,7 +225,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
                 packages[rawName] = Package(
                         id = Identifier(
-                                provider = toString(),
+                                type = toString(),
                                 namespace = rawName.substringBefore("/"),
                                 name = rawName.substringAfter("/"),
                                 version = version
@@ -285,11 +286,8 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
     private fun parseArtifact(packageInfo: JsonNode): RemoteArtifact {
         return packageInfo["dist"]?.let {
-            val sha = it["shasum"].textValueOrEmpty()
-            // "shasum" is SHA-1: https://github.com/composer/composer/blob/ \
-            // 285ff274accb24f45ffb070c2b9cfc0722c31af4/src/Composer/Repository/ArtifactRepository.php#L149
-            val algo = if (sha.isEmpty()) HashAlgorithm.UNKNOWN else HashAlgorithm.SHA1
-            RemoteArtifact(it["url"].textValueOrEmpty(), sha, algo)
+            val shasum = it["shasum"].textValueOrEmpty()
+            RemoteArtifact(it["url"].textValueOrEmpty(), shasum, HashAlgorithm.fromHash(shasum))
         } ?: RemoteArtifact.EMPTY
     }
 

@@ -19,298 +19,300 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import {
-    Tree, Input, Tooltip, Button, Row
+    Alert, Drawer, Tree, Input, Button, Row
 } from 'antd';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
+import scrollIntoView from 'scroll-into-view-if-needed';
+import PackageDetails from './PackageDetails';
+import PackageErrors from './PackageErrors';
+import PackageLicenses from './PackageLicenses';
+import PackagePaths from './PackagePaths';
+import PackageScansSummary from './PackageScansSummary';
+import {
+    getSingleTree,
+    getSingleTreeNodes,
+    getTreeView,
+    getTreeViewShouldComponentUpdate
+} from '../reducers/selectors';
+import store from '../store';
 
 const { TreeNode } = Tree;
 const { Search } = Input;
 
+const getParentKey = (key, tree) => {
+    let parentKey;
+    for (let i = 0; i < tree.length; i++) {
+        const node = tree[i];
+        if (node.children) {
+            if (node.children.some(item => item.key === key)) {
+                parentKey = node.key;
+            } else if (getParentKey(key, node.children)) {
+                parentKey = getParentKey(key, node.children);
+            }
+        }
+    }
+    return parentKey;
+};
+
 class TreeView extends React.Component {
-    static get propTypes() {
-        return {
-            reportData: PropTypes.any
-        };
+    componentDidMount() {
+        this.scrollIntoView();
     }
 
-    static get defaultProps() {
-        return {
-            reportData: null
-        };
+    shouldComponentUpdate() {
+        const { shouldComponentUpdate } = this.props;
+        return shouldComponentUpdate;
     }
 
-    treeNodes = {};
-
-    constructor(props) {
-        super(props);
-        this.state = { search: '' };
-
-        if (props.reportData) {
-            this.state = {
-                ...this.state,
-                tree: this.createSingleTreeFromProjects(props.reportData),
-                expandedKeys: [],
-                selectedIndex: 0,
-                sorted: []
-            };
-        }
+    componentDidUpdate() {
+        this.scrollIntoView();
     }
 
-    componentDidUpdate(_, prevState) {
-        const { search } = this.state;
+    onChangeSearch = (e) => {
+        e.stopPropagation();
 
-        if (prevState.search !== search) {
-            this.onSearchCalculateSorted();
-        }
-    }
+        const { value } = e.target;
+        const { tree, treeNodes } = this.props;
+        const expandedKeys = (value === '') ? [] : treeNodes
+            .map((item) => {
+                if (item.id.indexOf(value) > -1) {
+                    return getParentKey(item.key, tree);
+                }
+                return null;
+            })
+            .filter((item, i, self) => item && self.indexOf(item) === i);
+        const matchedKeys = (value === '') ? [] : treeNodes
+            .filter(item => item.id.indexOf(value) > -1);
 
-    onExpand = (expandedKeys) => {
-        this.setState({
-            expandedKeys,
-            autoExpandParent: false
+        store.dispatch({
+            type: 'TREE::SEARCH',
+            payload: {
+                expandedKeys,
+                matchedKeys,
+                searchValue: value
+            }
+        });
+    };
+
+    onExpandTreeNode = (expandedKeys) => {
+        store.dispatch({ type: 'TREE::NODE_EXPAND', expandedKeys });
+    };
+
+    onSelectTreeNode = (selectedKeys, e) => {
+        const { node: { props: { dataRef } } } = e;
+
+        store.dispatch({
+            type: 'TREE::NODE_SELECT',
+            payload: {
+                selectedPackage: dataRef,
+                selectedKeys
+            }
         });
     }
 
-    onSearchChange = (e) => {
-        const { tree } = this.state;
-        const searchVal = e.target.value;
-        const reccurSearch = (arr, parent, search, index = '') => arr.reduce((accumulator, item, childIndex) => {
-            const matches = item.id.indexOf(search) >= 0;
-            let keys = [];
+    onClickPreviousSearchMatch = (e) => {
+        e.stopPropagation();
+        this.scrollIntoView();
+        store.dispatch({ type: 'TREE::SEARCH_PREVIOUS_MATCH' });
+    }
 
-            if (item.children) {
-                keys = reccurSearch(
-                    item.children,
-                    item,
-                    search,
-                    index ? `${index}-${childIndex}` : childIndex
-                );
+    onClickNextSearchMatch = (e) => {
+        e.stopPropagation();
+        this.scrollIntoView();
+        store.dispatch({ type: 'TREE::SEARCH_NEXT_MATCH' });
+    }
+
+    onCloseDrawer = (e) => {
+        e.stopPropagation();
+        store.dispatch({ type: 'TREE::DRAWER_CLOSE' });
+    }
+
+    scrollIntoView = () => {
+        const {
+            treeView: {
+                selectedKeys
             }
+        } = this.props;
 
-            if (matches) {
-                keys.push(`${index}-${parent.id}`);
-            }
+        if (selectedKeys.length === 0) {
+            return;
+        }
 
-            return [...accumulator, ...keys];
-        }, []);
+        const selectedElemId = `ort-tree-node-${selectedKeys[0]}`;
+        const selectedElem = document.querySelector(`#${selectedElemId}`);
 
-        if (tree) {
-            this.setState({
-                selectedIndex: 0,
-                expandedKeys: searchVal ? reccurSearch(tree, { key: 'root' }, searchVal) : [],
-                autoExpandParent: true,
-                search: searchVal
+        if (selectedElem) {
+            scrollIntoView(selectedElem, {
+                scrollMode: 'if-needed',
+                boundary: document.querySelector('.ort-tree-wrapper')
             });
         }
     }
 
-    onSearchPreviousClick = (e) => {
-        e.stopPropagation();
-
-        const { selectedIndex, sorted } = this.state;
-        const index = selectedIndex - 1 < 0 ? sorted.length - 1 : selectedIndex - 1;
-
-        this.scrollTo(sorted[index]);
-        this.setState({
-            selectedIndex: index
-        });
-    }
-
-    onSearchNextClick = (e) => {
-        e.stopPropagation();
-
-        const { selectedIndex, sorted } = this.state;
-        const index = selectedIndex + 1 > sorted.length - 1 ? 0 : selectedIndex + 1;
-
-        this.scrollTo(sorted[index]);
-        this.setState({
-            selectedIndex: index
-        });
-    }
-
-    onSearchCalculateSorted = () => {
-        const { search } = this.state;
-        const selectedNodes = search ? Object.keys(this.treeNodes).filter(
-            node => this.treeNodes[node].id.indexOf(search) >= 0
-        ) : [];
-        const sorted = selectedNodes.sort((a, b) => {
-            const aIndexes = a.split('-');
-            const bIndexes = b.split('-');
-            const maxIndex = Math.min(aIndexes.length, bIndexes.length);
-
-            let diff = 0;
-
-            for (let i = 0; i < maxIndex; i += 1) {
-                diff += parseInt(aIndexes[i], 10) - parseInt(bIndexes[i], 10);
-                if (diff !== 0) {
-                    return diff;
-                }
+    renderDrawer = () => {
+        const {
+            treeView: {
+                selectedPackage,
+                showDrawer
             }
+        } = this.props;
 
-            return aIndexes.length > bIndexes.length ? 1 : -1;
-        });
-
-        if (sorted) {
-            this.scrollTo(sorted[0]);
-            this.setState({
-                sorted
-            });
-        }
-    }
-
-    createSingleTreeFromProjects = (reportData) => {
-        if (reportData && reportData.projects && reportData.projects.data) {
-            return Object.values(reportData.projects.data).reduce((accumulator, project) => {
-                if (project.packages && project.packages.tree) {
-                    accumulator.push(project.packages.tree);
-                }
-
-                return accumulator;
-            }, []);
+        if (!showDrawer) {
+            return null;
         }
 
-        return [];
-    }
-
-    scrollTo = (index) => {
-        if (index && this.treeNodes[index].ref) {
-            let elem = ReactDOM.findDOMNode(this.treeNodes[index].ref);
-            let top = elem.offsetHeight / 2;
-
-            while (elem && elem !== this.tree) {
-                top += elem.offsetTop;
-                elem = elem.offsetParent;
-            }
-
-            top -= Math.round(this.tree.clientHeight / 2);
-
-            window.setTimeout(() => {
-                this.tree.scrollTop = top;
-            }, 0);
-        }
-    }
-
-    renderTreeNode = (treeLeaf, indexElem) => {
-        const { id } = treeLeaf;
-        const { search, sorted, selectedIndex } = this.state;
-
-        let idMapped = (
-            <span>
-                {id}
-            </span>
+        return (
+            <Drawer
+                title={selectedPackage.id}
+                placement="right"
+                closable
+                onClose={this.onCloseDrawer}
+                mask={false}
+                visible={showDrawer}
+                width="60%"
+            >
+                <div>
+                    <PackageDetails data={selectedPackage} show={false} />
+                    <PackageErrors data={selectedPackage} show />
+                    <PackageLicenses data={selectedPackage} show />
+                    <PackagePaths data={selectedPackage} show />
+                    <PackageScansSummary data={selectedPackage} show={false} />
+                </div>
+            </Drawer>
         );
+    }
 
-        if (search && id.indexOf(search) >= 0) {
-            const index = id.indexOf(search);
-            const pre = id.substring(0, index);
-            const post = id.substring(index + search.length);
-            const selected = `${indexElem}` === sorted[selectedIndex];
+    renderTreeNode = data => data.map((item) => {
+        const {
+            treeView: {
+                searchValue
+            }
+        } = this.props;
 
-            idMapped = (
-                <span>
-                    {pre}
-                    <span
-                        className={classNames({
-                            'ort-tree-searched-item': !selected,
-                            'ort-tree-selected-item': selected
-                        })}
-                    >
-                        {search}
+        const index = item.id.indexOf(searchValue);
+        const beforeSearchValueStr = item.id.substr(0, index);
+        const afterSearchValueStr = item.id.substr(index + searchValue.length);
+        let title;
+
+        if (index > -1) {
+            title = (
+                <span id={`ort-tree-node-${item.key}`}>
+                    {beforeSearchValueStr}
+                    <span className="ort-tree-search-match">
+                        {searchValue}
                     </span>
-                    {post}
+                    {afterSearchValueStr}
                 </span>
+            );
+        } else {
+            title = (
+                <span id={`ort-tree-node-${item.key}`}>{item.id}</span>
+            );
+        }
+        if (item.children) {
+            return (
+                <TreeNode
+                    className={item.key}
+                    dataRef={item}
+                    key={item.key}
+                    title={title}
+                >
+                    {this.renderTreeNode(item.children)}
+                </TreeNode>
             );
         }
 
-        const tooltip = (
-            treeLeaf.path.length >= 1 && (
-                <div className="ort-tooltip-list">
-                    <div>
-                        {treeLeaf.path.slice(0).join(' / ')}
-                    </div>
-                </div>
-            )
-        );
-
-        const idWithTooltip = (
-            <Tooltip overlayClassName="ort-tree-tooltip" placement="right" title={tooltip}>
-                {idMapped}
-            </Tooltip>
-        );
-
         return (
             <TreeNode
-                key={`${indexElem}-${treeLeaf.id}`}
-                title={idWithTooltip}
-                ref={
-                    (ref) => {
-                        this.treeNodes[`${indexElem}`] = {
-                            ref,
-                            id
-                        };
-                    }
-                }
-            >
-                {
-                    treeLeaf.children.map((childLeaf, nodeIndex) => this.renderTreeNode(
-                        childLeaf,
-                        `${indexElem}-${nodeIndex}`
-                    ))
-                }
-            </TreeNode>
+                className={item.key}
+                dataRef={item}
+                key={item.key}
+                title={title}
+            />
         );
-    }
+    });
+
 
     render() {
         const {
-            tree, expandedKeys, autoExpandParent, selectedIndex, sorted
-        } = this.state;
+            tree,
+            treeView: {
+                autoExpandParent,
+                expandedKeys,
+                matchedKeys,
+                searchIndex,
+                searchValue,
+                selectedKeys
+            }
+        } = this.props;
 
-        return tree && (
-            <div className="ort-tree-view">
+        return (
+            <div className="ort-tree">
                 <div className="ort-tree-search">
-                    <Search placeholder="Input search text and press Enter" onPressEnter={this.onSearchChange} />
+                    <Search placeholder="Input search text and press Enter" onPressEnter={this.onChangeSearch} />
                     {
-                        sorted.length ? (
-                            <Row type="flex" align="middle" style={{ marginLeft: 8, flexWrap: 'nowrap' }}>
-                                <Button onClick={this.onSearchNextClick} icon="arrow-down" />
-                                <Button onClick={this.onSearchPreviousClick} icon="arrow-up" />
+                        matchedKeys.length ? (
+                            <Row
+                                type="flex"
+                                align="middle"
+                                className="ort-tree-navigation"
+                            >
+                                <Button onClick={this.onClickNextSearchMatch} icon="arrow-down" />
+                                <Button onClick={this.onClickPreviousSearchMatch} icon="arrow-up" />
                                 <span className="ort-tree-navigation-counter">
-                                    {selectedIndex + 1}
+                                    {searchIndex + 1}
                                     {' '}
                                     /
-                                    {sorted.length}
+                                    {matchedKeys.length}
                                 </span>
                             </Row>
                         ) : null
                     }
                 </div>
-                <div
-                    ref={
-                        (treeContainer) => {
-                            this.tree = treeContainer;
-                        }
-                    }
-                    className="ort-tree-wrapper"
-                >
+                {
+                    matchedKeys.length === 0 && searchValue !== '' && (
+                        <Alert
+                            message={`No package names found which include '${searchValue}'`}
+                            type="info"
+                        />
+                    )
+                }
+                <div className="ort-tree-wrapper">
                     <Tree
-                        onExpand={this.onExpand}
-                        showLine
                         autoExpandParent={autoExpandParent}
                         expandedKeys={expandedKeys}
+                        onExpand={this.onExpandTreeNode}
+                        onSelect={this.onSelectTreeNode}
+                        showLine
+                        selectedKeys={selectedKeys}
                     >
-                        {tree.map((rootLeaf, index) => this.renderTreeNode(rootLeaf, index))}
+                        {this.renderTreeNode(tree)}
                     </Tree>
+                </div>
+                <div className="ort-tree-drawer">
+                    {this.renderDrawer()}
                 </div>
             </div>
         );
     }
 }
 
+TreeView.propTypes = {
+    shouldComponentUpdate: PropTypes.bool.isRequired,
+    tree: PropTypes.array.isRequired,
+    treeNodes: PropTypes.array.isRequired,
+    treeView: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    shouldComponentUpdate: getTreeViewShouldComponentUpdate(state),
+    tree: getSingleTree(state),
+    treeNodes: getSingleTreeNodes(state),
+    treeView: getTreeView(state)
+});
+
 export default connect(
-    state => ({ reportData: state }),
+    mapStateToProps,
     () => ({}),
 )(TreeView);

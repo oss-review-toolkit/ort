@@ -40,6 +40,11 @@ import java.nio.file.attribute.BasicFileAttributes
 import org.apache.commons.codec.digest.DigestUtils
 
 /**
+ * Return a string of hexadecimal digits representing the bytes in the array.
+ */
+fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
+
+/**
  * Return the hexadecimal digest of the given hash [algorithm] for this [File].
  */
 fun File.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).digestAsHex(this)
@@ -55,7 +60,7 @@ fun File.realFile(): File = toPath().toRealPath().toFile()
  *
  * @throws IOException if the directory could not be deleted.
  */
-fun File.safeDeleteRecursively() {
+fun File.safeDeleteRecursively(force: Boolean = false) {
     if (!exists()) {
         return
     }
@@ -66,10 +71,8 @@ fun File.safeDeleteRecursively() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
             if (OS.isWindows && attrs.isOther) {
                 // Unlink junctions to turn them into empty directories.
-                val fsutil = ProcessCapture("fsutil", "reparsepoint", "delete", dir.toString())
-                if (fsutil.isSuccess) {
-                    return FileVisitResult.SKIP_SUBTREE
-                }
+                dir.toFile().delete()
+                return FileVisitResult.SKIP_SUBTREE
             }
 
             return FileVisitResult.CONTINUE
@@ -79,6 +82,8 @@ fun File.safeDeleteRecursively() {
             try {
                 Files.delete(file)
             } catch (e: java.nio.file.AccessDeniedException) {
+                if (!force) throw e
+
                 if (file.toFile().setWritable(true)) {
                     // Try again.
                     Files.delete(file)
@@ -201,7 +206,18 @@ fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT)
         }
 
 /**
- * True if the string is a valid URL, false otherwise.
+ * True if the string is a valid [URI], false otherwise.
+ */
+fun String.isValidUri() =
+        try {
+            URI(this)
+            true
+        } catch (e: URISyntaxException) {
+            false
+        }
+
+/**
+ * True if the string is a valid [URL], false otherwise.
  */
 fun String.isValidUrl() =
         try {

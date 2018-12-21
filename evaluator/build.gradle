@@ -1,0 +1,8 @@
+// Apply core plugins.
+apply plugin: 'java-library'
+
+dependencies {
+    api project(':model')
+
+    implementation project(':utils')
+}

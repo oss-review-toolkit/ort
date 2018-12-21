@@ -535,3 +535,4 @@ analyzer:
       curations: []
     has_errors: true
 scanner: null
+evaluator: null

@@ -1,9 +1,11 @@
+dist: xenial
+
 sudo: required
 
 language: java
 
 jdk:
-  - openjdk8
+  - openjdk10
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -26,27 +28,26 @@ env:
     - GIMME_GO_VERSION="1.10"
     - DEP_RELEASE_TAG="v0.4.1"
 
+before_install:
+  - sudo rm -f $JAVA_HOME/lib/security/cacerts
+  - sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
+
 install:
   - sudo apt install -y cvs
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh
-  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.9.4
+  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.12.1
   - phpenv global 7.1
   - curl -Ls https://git.io/sbt > ~/bin/sbt
   - chmod a+x ~/bin/sbt
-  - curl -sSL https://get.haskellstack.org/ | sh
-  - stack setup > /dev/null # This installs the whole GHC to an isolated location!
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
-  - wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-  - unzip -q sdk-tools-linux-3859397.zip -d $ANDROID_HOME
+  - wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+  - unzip -q sdk-tools-linux-4333796.zip -d $ANDROID_HOME
+  - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
 
 script:
-  - set -e
-  - ./tools/check-copyright.sh
-  - ./tools/ktlint.sh
-  - set +e
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
       ./gradlew --no-daemon -Dkotlintest.tags.exclude=ScanCodeTag --stacktrace check jacocoReport | tee log.txt;
@@ -59,4 +60,6 @@ script:
     fi
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*'
+  - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
+      bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*'
+    fi

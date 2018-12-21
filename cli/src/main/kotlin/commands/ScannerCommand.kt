@@ -53,7 +53,7 @@ object ScannerCommand : CommandWithHelp() {
             "automatically if needed. This parameter and '--input-path' are mutually exclusive.",
             names = ["--ort-file", "-a"],
             order = PARAMETER_ORDER_OPTIONAL)
-    private var dependenciesFile: File? = null
+    private var ortFile: File? = null
 
     @Parameter(description = "An input directory or file to scan. This parameter and '--ort-file' are mutually " +
             "exclusive.",
@@ -84,7 +84,7 @@ object ScannerCommand : CommandWithHelp() {
             names = ["--scanner", "-s"],
             converter = ScannerConverter::class,
             order = PARAMETER_ORDER_OPTIONAL)
-    private var scannerFactory = ScanCode.Factory()
+    private var scannerFactory: ScannerFactory = ScanCode.Factory()
 
     @Parameter(description = "The path to a configuration file.",
             names = ["--config", "-c"],
@@ -96,13 +96,8 @@ object ScannerCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputFormats = listOf(OutputFormat.YAML)
 
-    @Parameter(description = "Remove binary and zip files from project",
-            names = ["--remove-binary-zip", "-r"],
-            order = PARAMETER_ORDER_OPTIONAL)
-    private var removeBinaryAndZipFiles = false
-
-    override fun runCommand(jc: JCommander) {
-        require((dependenciesFile == null) != (inputPath == null)) {
+    override fun runCommand(jc: JCommander): Int {
+        require((ortFile == null) != (inputPath == null)) {
             "Either '--ort-file' or '--input-path' must be specified."
         }
 
@@ -132,17 +127,14 @@ object ScannerCommand : CommandWithHelp() {
 
         println("Using scanner '$scanner'.")
 
-        val ortResult = dependenciesFile?.let {
-            scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet(), removeBinaryAndZipFiles)
+        val ortResult = ortFile?.let {
+            scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet())
         } ?: run {
-            // The check is not useless as we do not know what scanners plugins might add.
-            @Suppress("USELESS_IS_CHECK")
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."
             }
 
-            val localScanner = scanner as LocalScanner
-            localScanner.scanInputPath(inputPath!!, outputDir)
+            scanner.scanInputPath(inputPath!!, outputDir)
         }
 
         outputFormats.distinct().forEach { format ->
@@ -150,5 +142,7 @@ object ScannerCommand : CommandWithHelp() {
             println("Writing scan result to '${scanResultFile.absolutePath}'.")
             format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanResultFile, ortResult)
         }
+
+        return 0
     }
 }

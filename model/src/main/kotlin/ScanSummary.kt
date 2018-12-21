@@ -60,9 +60,15 @@ data class ScanSummary(
         // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
         // [ScanRecord.hasErrors] already contains that information.
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<Error> = emptyList()
+        val errors: List<OrtIssue> = emptyList()
 ) {
-    val licenses: SortedSet<String>
-        @JsonIgnore
-        get() = licenseFindings.map { it.license }.toSortedSet()
+    @get:JsonIgnore
+    val licenseFindingsMap = sortedMapOf<String, SortedSet<String>>().also {
+        licenseFindings.forEach { finding ->
+            it.getOrPut(finding.license) { sortedSetOf() } += finding.copyrights
+        }
+    }
+
+    @get:JsonIgnore
+    val licenses = licenseFindingsMap.keys
 }

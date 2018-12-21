@@ -3,12 +3,12 @@ repository:
   vcs:
     type: "GitRepo"
     url: "https://github.com/heremaps/oss-review-toolkit-test-data"
-    revision: "1c0b86e578349f38acd43de354f815370112a213"
+    revision: "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
     path: "git-repo/manifest.xml"
   vcs_processed:
     type: "gitrepo"
     url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
-    revision: "1c0b86e578349f38acd43de354f815370112a213"
+    revision: "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
     path: "git-repo/manifest.xml"
   config: {}
 analyzer:
@@ -76,7 +76,7 @@ analyzer:
       vcs_processed:
         type: "GitRepo"
         url: "https://github.com/heremaps/oss-review-toolkit-test-data"
-        revision: "1c0b86e578349f38acd43de354f815370112a213"
+        revision: "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
         path: "git-repo/manifest.xml"
       homepage_url: ""
       scopes: []
@@ -99,3 +99,4 @@ analyzer:
           \ dependency versions are unstable."
     has_errors: true
 scanner: null
+evaluator: null

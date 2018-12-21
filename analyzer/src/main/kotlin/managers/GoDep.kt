@@ -24,9 +24,10 @@ import ch.frankel.slf4k.*
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Error
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -81,7 +82,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val projects = parseProjects(workingDir, gopath)
         val packages = mutableListOf<Package>()
         val packageRefs = mutableListOf<PackageReference>()
-        val provider = toString()
+        val packageType = toString()
 
         for (project in projects) {
             // parseProjects() made sure that all entries contain these keys
@@ -89,7 +90,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             val revision = project["revision"]!!
             val version = project["version"]!!
 
-            val errors = mutableListOf<Error>()
+            val errors = mutableListOf<OrtIssue>()
 
             val vcsProcessed = try {
                 resolveVcsInfo(name, revision, gopath)
@@ -98,12 +99,12 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
                 log.error { "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}" }
 
-                errors += Error(source = toString(), message = e.collectMessagesAsString())
+                errors += OrtIssue(source = toString(), message = e.collectMessagesAsString())
                 VcsInfo.EMPTY
             }
 
             val pkg = Package(
-                    id = Identifier(provider, "", name, version),
+                    id = Identifier(packageType, "", name, version),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
@@ -115,17 +116,17 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
             packages += pkg
 
-            packageRefs += pkg.toReference(errors = errors)
+            packageRefs += pkg.toReference(linkage = PackageLinkage.STATIC, errors = errors)
         }
 
         val scope = Scope("default", packageRefs.toSortedSet())
 
         // TODO Keeping this between scans would speed things up considerably.
-        gopath.safeDeleteRecursively()
+        gopath.safeDeleteRecursively(force = true)
 
         return ProjectAnalyzerResult(
                 project = Project(
-                        id = Identifier(provider, "", projectDir.name, projectVcs.revision),
+                        id = Identifier(packageType, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = sortedSetOf(),
                         vcs = VcsInfo.EMPTY,

@@ -31,7 +31,7 @@ import java.io.File
 class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
             id = Identifier(
-                    provider = "Bundler",
+                    type = "Bundler",
                     namespace = "",
                     name = "Simple Form",
                     version = ""

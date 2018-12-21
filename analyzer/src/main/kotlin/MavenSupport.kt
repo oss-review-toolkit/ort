@@ -291,7 +291,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         val allRepositories = (artifactDescriptorResult.repositories + repositories).distinct()
 
         // Filter out local repositories, as remote artifacts should never point to files on the local disk.
-        val remoteRepositories = allRepositories.filterNot { it.url.startsWith("file://") }
+        val remoteRepositories = allRepositories.filterNot {
+            // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
+            it.url.startsWith("file:/")
+        }
 
         if (log.isDebugEnabled) {
             val localRepositories = allRepositories - remoteRepositories
@@ -491,7 +494,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         return Package(
                 id = Identifier(
-                        provider = "Maven",
+                        type = "Maven",
                         namespace = mavenProject.groupId,
                         name = mavenProject.artifactId,
                         version = mavenProject.version

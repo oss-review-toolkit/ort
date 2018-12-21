@@ -43,7 +43,7 @@ class BabelTest : StringSpec() {
     }
 
     override fun afterTest(description: Description, result: TestResult) {
-        outputDir.safeDeleteRecursively()
+        outputDir.safeDeleteRecursively(force = true)
     }
 
     init {
@@ -58,7 +58,7 @@ class BabelTest : StringSpec() {
 
             val pkg = Package(
                     id = Identifier(
-                            provider = "NPM",
+                            type = "NPM",
                             namespace = "",
                             name = "babel-cli",
                             version = "6.26.0"

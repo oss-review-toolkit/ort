@@ -28,6 +28,12 @@ import java.io.File
 import java.io.IOException
 
 class ExtensionsTest : WordSpec({
+    "ByteArray.toHexString" should {
+        "correctly convert a byte array to a string of hexadecimal digits" {
+            byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).toHexString() shouldBe "deadbeef"
+        }
+    }
+
     "File.searchUpwardsForSubdirectory" should {
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
@@ -38,7 +44,7 @@ class ExtensionsTest : WordSpec({
     }
 
     "File.safeMkDirs()" should {
-        "should succeed if directory already exists" {
+        "succeed if directory already exists" {
             val directory = createTempDir()
             directory.deleteOnExit()
 
@@ -47,7 +53,7 @@ class ExtensionsTest : WordSpec({
             directory.isDirectory shouldBe true // should still be a directory afterwards
         }
 
-        "should succeed if directory could be created" {
+        "succeed if directory could be created" {
             val parent = createTempDir()
             parent.deleteOnExit()
             val child = File(parent, "child")
@@ -58,7 +64,7 @@ class ExtensionsTest : WordSpec({
             child.isDirectory shouldBe true
         }
 
-        "should succeed if file parent does not yet exist" {
+        "succeed if file parent does not yet exist" {
             // Test case for an unexpected behaviour of File.mkdirs() which returns false for
             // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
             // directory was successfully created.
@@ -76,7 +82,7 @@ class ExtensionsTest : WordSpec({
             child.isDirectory shouldBe true
         }
 
-        "should throw exception if file is not a directory" {
+        "throw exception if file is not a directory" {
             val file = createTempFile()
             file.deleteOnExit()
 
@@ -139,7 +145,7 @@ class ExtensionsTest : WordSpec({
             fileFromStr.isFile shouldBe true
 
             // This should not throw an IOException.
-            tempDir.safeDeleteRecursively()
+            tempDir.safeDeleteRecursively(force = true)
         }
     }
 
@@ -214,6 +220,26 @@ class ExtensionsTest : WordSpec({
             val map = mapOf("1" to 1)
 
             map.zipWithDefault(emptyMap(), 1, operation) shouldBe mapOf("1" to 2)
+        }
+    }
+
+    "String.isValidUri" should {
+        "return true for a valid URI" {
+            "https://github.com/heremaps/oss-review-toolkit".isValidUri() shouldBe true
+        }
+
+        "return false for an invalid URI" {
+            "https://github.com/heremaps/oss-review-toolkit, ".isValidUri() shouldBe false
+        }
+    }
+
+    "String.isValidUrl" should {
+        "return true for a valid URL" {
+            "https://github.com/heremaps/oss-review-toolkit".isValidUrl() shouldBe true
+        }
+
+        "return false for an invalid URL" {
+            "illegal://github.com/heremaps/oss-review-toolkit".isValidUrl() shouldBe false
         }
     }
 })

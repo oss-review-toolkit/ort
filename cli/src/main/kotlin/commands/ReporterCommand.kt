@@ -29,6 +29,7 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
@@ -60,7 +61,7 @@ object ReporterCommand : CommandWithHelp() {
             names = ["--ort-file", "-i"],
             required = true,
             order = PARAMETER_ORDER_MANDATORY)
-    private lateinit var ortResultFile: File
+    private lateinit var ortFile: File
 
     @Parameter(description = "The output directory to store the generated reports in.",
             names = ["--output-dir", "-o"],
@@ -81,33 +82,61 @@ object ReporterCommand : CommandWithHelp() {
             order = PARAMETER_ORDER_OPTIONAL)
     private var resolutionsFile: File? = null
 
-    override fun runCommand(jc: JCommander) {
+    @Parameter(description = "The path to a Kotlin script to post-process the notice report before writing it to disk.",
+            names = ["--post-processing-script"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var postProcessingScript: File? = null
+
+    @Parameter(description = "A file containing garbage copyright statements entries which are to be ignored.",
+            names = ["--copyright-garbage-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var copyrightGarbageFile: File? = null
+
+    @Parameter(description = "A file containing the repository configuration. If set the .ort.yml " +
+            "overrides the repository configuration contained in the ort result from the input file.",
+            names = ["--repository-configuration-file"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var repositoryConfigurationFile: File? = null
+
+    override fun runCommand(jc: JCommander): Int {
         require(!outputDir.exists()) {
             "The output directory '${outputDir.absolutePath}' must not exist yet."
         }
 
         outputDir.safeMkdirs()
 
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        var ortResult = ortFile.readValue<OrtResult>()
+        repositoryConfigurationFile?.let {
+            ortResult = ortResult.replaceConfig(it.readValue())
+        }
 
         val resolutionProvider = DefaultResolutionProvider()
         ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
         resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
+        val copyrightGarbage = copyrightGarbageFile?.readValue() ?: CopyrightGarbage()
+
+        var exitCode = 0
 
         reportFormats.distinct().forEach {
             val name = it.toString().removeSuffix("Reporter")
             try {
-                val reportFile = it.generateReport(ortResult, resolutionProvider, outputDir)
-                if (reportFile != null) {
-                    println("Created '$name' report:\n\t$reportFile")
-                } else {
-                    println("Not creating any output for '$name' report.")
-                }
+                val reportFile = it.generateReport(
+                        ortResult,
+                        resolutionProvider,
+                        copyrightGarbage,
+                        outputDir,
+                        postProcessingScript?.readText()
+                )
+                println("Created '$name' report:\n\t$reportFile")
             } catch (e: Exception) {
                 e.showStackTrace()
 
                 log.error { "Could not create '$name' report: ${e.message}" }
+
+                exitCode = 1
             }
         }
+
+        return exitCode
     }
 }

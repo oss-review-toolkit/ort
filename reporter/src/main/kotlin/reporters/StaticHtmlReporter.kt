@@ -21,263 +21,286 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.ScopeExclude
+import com.here.ort.model.OrtResult
+import com.here.ort.model.Project
+import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
+import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
+import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.log
+import com.here.ort.utils.normalizeLineBreaks
 
 import java.io.File
-import java.util.SortedMap
 
-class StaticHtmlReporter : TableReporter() {
-    override fun generateReport(tabularScanRecord: TabularScanRecord, outputDir: File): File {
-        val html = """
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Scan Report</title>
-                <style>
-                  body {
-                    background-color: #f7f7f7;
-                    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial,
-                                 "Lucida Grande", sans-serif;
-                    font-weight: 300;
-                    font-size: 14px;
-                  }
+import javax.xml.parsers.DocumentBuilderFactory
 
-                  a, a:visited {
-                    color: black;
-                  }
+import kotlinx.html.*
+import kotlinx.html.dom.*
 
-                  #report-container {
-                    background-color: #fff;
-                    border: 1px solid rgba(34,36,38,.15);
-                    border-radius: .28rem;
-                    padding: 0em 1em 0.5em 1em;
-                    margin: 1em 2em 1em 2em;
-                  }
+class StaticHtmlReporter : Reporter() {
 
-                  .report-label {
-                    background-color: #f9fafb;
-                    border-left: 1px solid rgba(34,36,38,.15);
-                    border-right: 1px solid rgba(34,36,38,.15);
-                    border-bottom: 1px solid rgba(34,36,38,.15);
-                    border-top: none;
-                    border-bottom-left-radius: .28rem;
-                    border-bottom-right-radius: .28rem;
-                    border-collapse: separate;
-                    border-spacing: 0;
-                    color: rgba(34,36,38,.7);
-                    font-size: 18px;
-                    font-weight: 700;
-                    padding: 0.4em 0.4em 0.4em 0.4em;
-                    margin-bottom: 1em;
-                    top: -10px;
-                    width: 110px;
-                  }
+    private val css = """
 
-                  .report-metadata {
-                    font-size: 12px;
-                    border-spacing: 0;
-                    table-layout:fixed;
-                  }
+        body {
+          background-color: #f7f7f7;
+          font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial,
+                       "Lucida Grande", sans-serif;
+          font-weight: 300;
+          font-size: 14px;
+        }
 
-                  .report-metadata tr {
-                  }
+        a, a:visited {
+          color: black;
+        }
 
-                  .report-metadata td {
-                    border-bottom: 1px solid rgba(34,36,38,.15);
-                    overflow: hidden; 
-                    padding: 5px 20px 5px 0px;
-                    text-overflow: ellipsis; 
-                    word-wrap: break-word;
-                  }
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
 
-                  .report-metadata tr:first-child td {
-                    border-top: 1px solid rgba(34,36,38,.15);
-                  }
+        #report-container {
+          background-color: #fff;
+          border: 1px solid rgba(34,36,38,.15);
+          border-radius: .28rem;
+          padding: 0em 1em 0.5em 1em;
+          margin: 1em 2em 1em 2em;
+        }
 
-                  .report-packages {
-                    border-spacing: 0;
-                    width: 100%;
-                    table-layout:fixed;
-                  }
+        .ort-report-label {
+          background-color: #f9fafb;
+          border-left: 1px solid rgba(34,36,38,.15);
+          border-right: 1px solid rgba(34,36,38,.15);
+          border-bottom: 1px solid rgba(34,36,38,.15);
+          border-top: none;
+          border-bottom-left-radius: .28rem;
+          border-bottom-right-radius: .28rem;
+          border-collapse: separate;
+          border-spacing: 0;
+          color: rgba(34,36,38,.7);
+          font-size: 18px;
+          font-weight: 700;
+          padding: 0.4em 0.4em 0.4em 0.4em;
+          margin-bottom: 1em;
+          top: -10px;
+          width: 110px;
+        }
 
-                  .report-packages th {
-                    background-color: #f9fafb;
-                    padding: 5px 5px 5px .8em !important;
-                    text-align: left;
-                  }
+        .ort-report-metadata {
+          font-size: 12px;
+          border-spacing: 0;
+          table-layout:fixed;
+        }
 
-                  .report-packages th:first-child {
-                    border-top-left-radius: .28rem;
-                    border-left: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
-                  }
+        .ort-report-metadata td {
+          border-bottom: 1px solid rgba(34,36,38,.15);
+          overflow: hidden;
+          padding: 5px 20px 5px 0px;
+          text-overflow: ellipsis;
+          word-wrap: break-word;
+        }
 
-                  .report-packages th {
-                    border-left: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                  }
+        .ort-report-metadata tr:first-child td {
+          border-top: 1px solid rgba(34,36,38,.15);
+        }
 
-                  .report-packages th:last-child {
-                    border-top-right-radius: .28rem;
-                    border-right: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
-                  }
+        .ort-excluded {
+          filter: opacity(50%);
+        }
 
-                  .report-packages {
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                  }
+        table.ort-excluded tr.ort-excluded {
+          filter: opacity(100%);
+        }
 
-                  .report-packages td {
-                    border-left: 1px solid rgba(34,36,38,.15);
-                    border-top: 1px solid rgba(34,36,38,.15);
-                    padding: 8px;
-                    vertical-align: top;
-                    overflow: hidden; 
-                    text-overflow: ellipsis; 
-                    word-wrap: break-word;
-                  }
+        table tr.ort-excluded td li.ort-excluded {
+          filter: opacity(100%);
+        }
 
-                  .report-packages td:last-child {
-                    border-right: 1px solid rgba(34,36,38,.15);
-                  }
+        table.ort-excluded tr.ort-excluded td li.ort-excluded {
+          filter: opacity(100%);
+        }
 
-                  .report-packages tr:last-child td {
-                    border-bottom: 1px solid rgba(34,36,38,.15);
-                  }
+        .ort-report-table {
+          border-spacing: 0;
+          overflow: hidden;
+          table-layout:fixed;
+          text-overflow: ellipsis;
+          width: 100%;
+        }
 
-                  .report-packages tr:last-child td:first-child {
-                    border-bottom-left-radius: .28rem;
-                  }
+        .ort-report-table tr:hover {
+          background: rgba(34,36,38,.15);
+        }
 
-                  .report-packages tr:last-child td:last-child {
-                    border-bottom-right-radius: .28rem;
-                  }
+        .ort-report-table tr.ort-error {
+          background: #fff6f6;
+          color: #9f3a38;
+        }
 
-                  .report-packages tr.error {
-                    background: #fff6f6;
-                    color: #9f3a38;
-                  }
+        .ort-report-table tr.ort-warning {
+          background: #fffaf3;
+          color: #573a08;
+        }
 
-                  .report-packages tr.warning {
-                    background: #fffaf3;
-                    color: #573a08;
-                  }
+        .ort-report-table tr:last-child td {
+          border-bottom: 1px solid rgba(34,36,38,.15);
+        }
 
-                  .report-packages tr.ok {
-                    background: #fcfff5;
-                    color: #2c662d;
-                  }
+        .ort-report-table tr:last-child td:first-child {
+          border-bottom-left-radius: .28rem;
+        }
 
-                  .report-packages tr:hover {
-                    background: rgba(34,36,38,.15);
-                  }
+        .ort-report-table tr:last-child td:last-child {
+          border-bottom-right-radius: .28rem;
+        }
 
-                  @media all and (max-width: 1000px) {
-                      .report-packages th:nth-child(2), .report-packages td:nth-child(2) {
-                          display:none;
-                          width:0;
-                          height:0;
-                          opacity:0;
-                          visibility: collapse;
-                      }
-                  }
+        .ort-report-table th {
+          background-color: #f9fafb;
+          border-left: 1px solid rgba(34,36,38,.15);
+          border-top: 1px solid rgba(34,36,38,.15);
+          overflow: hidden;
+          padding: 5px 5px 5px .8em !important;
+          text-align: left;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
 
-                  @media all and (max-width: 900px) {
-                      .report-packages th:nth-child(3), .report-packages td:nth-child(3) {
-                          display:none;
-                          width:0;
-                          height:0;
-                          opacity:0;
-                          visibility: collapse;
-                      } 
-                  }
+        .ort-report-table th:first-child {
+          border-top-left-radius: .28rem;
+          border-left: 1px solid rgba(34,36,38,.15);
+          border-top: 1px solid rgba(34,36,38,.15);
+        }
 
-                  @media all and (max-width: 800px) {
-                      .report-packages th:nth-child(5),
-                      .report-packages td:nth-child(5),
-                      .report-packages th:nth-child(6),
-                      .report-packages td:nth-child(6) {
-                          display:none;
-                          width:0;
-                          height:0;
-                          opacity:0;
-                          visibility: collapse;
-                      }
+        .ort-report-table th:last-child {
+          border-top-right-radius: .28rem;
+          border-right: 1px solid rgba(34,36,38,.15);
+          border-top: 1px solid rgba(34,36,38,.15);
+        }
 
-                      .report-packages th:nth-child(4) {
-                        border-top-right-radius: .28rem;
-                        border-right: 1px solid rgba(34,36,38,.15);
-                      }
+        .ort-report-table td {
+          border-left: 1px solid rgba(34,36,38,.15);
+          border-top: 1px solid rgba(34,36,38,.15);
+          padding: 8px;
+          vertical-align: top;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-wrap: break-word;
+        }
 
-                      .report-packages td:nth-child(4) {
-                        border-right: 1px solid rgba(34,36,38,.15);
-                      }
+        .ort-report-table td li div.ort-reason {
+            border-radius: 3px;
+            background: #EEE;
+            padding: 2px;
+            font-size: 12px;
+            display: inline;
+        }
 
-                      .report-packages tr:last-child td:nth-child(4) {
-                        border-bottom-right-radius: .28rem;
-                      }
-                  }
+        .ort-report-table td:last-child {
+          border-right: 1px solid rgba(34,36,38,.15);
+        }
 
-                  @media all and (max-width: 500px) {
-                      .report-packages th:nth-child(4),
-                      .report-packages td:nth-child(4) {
-                          display:none;
-                          width:0;
-                          height:0;
-                          opacity:0;
-                          visibility: collapse;
-                      }
+        .ort-report-table.ort-violations tr.ort-resolved {
+          background: #fcfff5;
+          color: #2c662d;
+        }
 
-                      .report-packages th:first-child {
-                        border-top-right-radius: .28rem;
-                        border-right: 1px solid rgba(34,36,38,.15);
-                      }
+        .ort-report-table.ort-packages tr.ort-error {
+          color: black;
+        }
 
-                      .report-packages td:first-child {
-                        border-right: 1px solid rgba(34,36,38,.15);
-                      }
+        .ort-report-table.ort-packages tr.ort-error td:nth-child(5),
+        .ort-report-table.ort-packages tr.ort-error td:nth-child(6) {
+          color: #9f3a38;
+        }
 
-                      .report-packages tr:last-child td:first-child {
-                        border-bottom-right-radius: .28rem;
-                      }
-                  }
+        .ort-report-table li.ort-resolved {
+          color: #2c662d;
+        }
 
-                  ul {
-                      list-style-position: inside;
-                      margin: 0;
-                      padding: 0;
-                  }
+        @media all and (max-width: 1000px) {
+            .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
+                display:none;
+                width:0;
+                height:0;
+                opacity:0;
+                visibility: collapse;
+            }
+        }
 
-                  .excluded {
-                      filter: opacity(50%);
-                  }
+        @media all and (max-width: 900px) {
+            .ort-report-table th:nth-child(3), .ort-report-table td:nth-child(3) {
+                display:none;
+                width:0;
+                height:0;
+                opacity:0;
+                visibility: collapse;
+            }
+        }
 
-                  .reason {
-                      border-radius: 3px;
-                      background: #EEE;
-                      padding: 2px;
-                      font-size: 12px;
-                      display: inline;
-                  }
-                </style>
-            </head>
-            <body>
-                <div id="report-container">
-                  <div class="report-label">Scan Report</div>
-                ${createContent(tabularScanRecord)}
-                </div>
-            </body>
-            </html>
-            """.trimIndent()
+        @media all and (max-width: 800px) {
+            .ort-report-table th:nth-child(5),
+            .ort-report-table td:nth-child(5),
+            .ort-report-table th:nth-child(6),
+            .ort-report-table td:nth-child(6) {
+                display:none;
+                width:0;
+                height:0;
+                opacity:0;
+                visibility: collapse;
+            }
+
+            .ort-report-table th:nth-child(4) {
+              border-top-right-radius: .28rem;
+              border-right: 1px solid rgba(34,36,38,.15);
+            }
+
+            .ort-report-table td:nth-child(4) {
+              border-right: 1px solid rgba(34,36,38,.15);
+            }
+
+            .ort-report-table tr:last-child td:nth-child(4) {
+              border-bottom-right-radius: .28rem;
+            }
+        }
+
+        @media all and (max-width: 500px) {
+            .ort-report-table th:nth-child(4),
+            .ort-report-table td:nth-child(4) {
+                display:none;
+                width:0;
+                height:0;
+                opacity:0;
+                visibility: collapse;
+            }
+
+            .ort-report-table th:first-child {
+              border-top-right-radius: .28rem;
+              border-right: 1px solid rgba(34,36,38,.15);
+            }
+
+            .ort-report-table td:first-child {
+              border-right: 1px solid rgba(34,36,38,.15);
+            }
+
+            .ort-report-table tr:last-child td:first-child {
+              border-bottom-right-radius: .28rem;
+            }
+        }
+
+        """.trimIndent()
+
+    override fun generateReport(
+            ortResult: OrtResult,
+            resolutionProvider: ResolutionProvider,
+            copyrightGarbage: CopyrightGarbage,
+            outputDir: File,
+            postProcessingScript: String?
+    ): File {
+        val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
+        val html = renderHtml(tabularScanRecord)
 
         val outputFile = File(outputDir, "scan-report.html")
 
@@ -288,208 +311,321 @@ class StaticHtmlReporter : TableReporter() {
         return outputFile
     }
 
-    private fun createContent(tabularScanRecord: TabularScanRecord) =
-            buildString {
-                if (tabularScanRecord.metadata.isNotEmpty()) {
-                    append("<h2>Metadata</h2>")
-                    append("<table class=\"report-metadata\"><tbody>")
-                    tabularScanRecord.metadata.forEach { (key, value) ->
-                        append("""
-                        <tr>
-                            <td>$key</td>
-                            <td>${if (value.isValidUrl()) "<a href=\"$value\">$value</a>" else value}</td>
-                        </tr>
-                        """.trimIndent())
+    private fun renderHtml(reportTableModel: ReportTableModel): String {
+        val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
+
+        document.append.html {
+            lang = "en"
+
+            head {
+                meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
+                title("Scan Report")
+                style {
+                    unsafe {
+                        +css
                     }
-                    append("</tbody></table>")
                 }
+            }
+            body {
+                div {
+                    id = "report-container"
 
-                val numberOfErrors = tabularScanRecord.errorSummary.rows.count()
-
-                append("<h2>Index</h2>")
-                append("<ul>")
-                if (numberOfErrors > 0) {
-                    append("<li><a href=\"#error-summary\">Error Summary ($numberOfErrors)</a></li>")
-                }
-                tabularScanRecord.projectDependencies.forEach { (project, projectTable) ->
-                    append("<li><a href=\"#${project.id}\">${project.id}")
-                    projectTable.exclude?.let { exclude ->
-                        append(" <div class=\"reason\">Excluded: ${exclude.reason} - ${exclude.comment}</div>")
+                    div("ort-report-label") {
+                        +"Scan Report"
                     }
-                    append("</a></li>")
-                }
-                append("</ul>")
 
-                if (numberOfErrors > 0) {
-                    append(createErrorTable("Error Summary ($numberOfErrors)", tabularScanRecord.errorSummary,
-                            "error-summary"))
+                    if (reportTableModel.metadata.isNotEmpty()) {
+                        metadataTable(reportTableModel.metadata)
+                    }
+
+                    index(reportTableModel)
+
+                    reportTableModel.evaluatorErrors?.let {
+                        evaluatorTable(it)
+                    }
+
+                    if (reportTableModel.errorSummary.rows.count() > 0) {
+                        errorTable(reportTableModel.errorSummary)
+                    }
+
+                    reportTableModel.projectDependencies.forEach { project, table ->
+                        projectTable(project, table)
+                    }
+                }
+            }
+        }
+
+        return document.serialize().normalizeLineBreaks()
+    }
+
+    private fun DIV.metadataTable(metadata: Map<String, String>) {
+        h2 { +"Metadata" }
+        table("ort-report-metadata") {
+            tbody { metadata.forEach { key, value -> metadataRow(key, value) } }
+        }
+    }
+
+    private fun TBODY.metadataRow(key: String, value: String) {
+        tr {
+            td { +key }
+            td { if (value.isValidUrl()) a(value) { +value } else +value }
+        }
+    }
+
+    private fun DIV.index(reportTableModel: ReportTableModel) {
+        h2 { +"Index" }
+
+        ul {
+            reportTableModel.evaluatorErrors?.let {
+                li { a("#policy-violation-summary") { +"Rule Violation Summary (${it.size} violations)" } }
+            }
+
+            val numberOfErrors = reportTableModel.errorSummary.rows.count()
+            if (numberOfErrors > 0) {
+                li { a("#error-summary") { +"Error Summary ($numberOfErrors errors)" } }
+            }
+
+            reportTableModel.projectDependencies.forEach { project, projectTable ->
+                li {
+                    a("#${project.id}") {
+                        +"${project.id}"
+
+                        projectTable.exclude?.let { exclude ->
+                            +" "
+                            div("ort-reason") { +"Excluded: ${exclude.reason} - ${exclude.comment}" }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun DIV.evaluatorTable(evaluatorErrors: List<ResolvableIssue>) {
+        h2 {
+            id = "policy-violation-summary"
+            +"Rule Violation Summary (${evaluatorErrors.size} violations)"
+        }
+
+        if (evaluatorErrors.isEmpty()) {
+            +"No issues found."
+        } else {
+            table("ort-report-table ort-violations") {
+                thead {
+                    tr {
+                        th { +"Source" }
+                        th { +"Error" }
+                    }
                 }
 
-                tabularScanRecord.projectDependencies.forEach { project, table ->
-                    append(createTable("${project.id} (${project.definitionFilePath})", project.vcsProcessed, table,
-                            project.id.toString()))
+                tbody { evaluatorErrors.forEach { evaluatorRow(it) } }
+            }
+        }
+    }
+
+    private fun TBODY.evaluatorRow(error: ResolvableIssue) {
+        val cssClass = when {
+            error.isResolved -> "ort-resolved"
+            else -> "ort-error"
+        }
+
+        tr(cssClass) {
+            td { +error.source }
+            td {
+                p { +error.description }
+                p { +error.resolutionDescription }
+            }
+        }
+    }
+
+    private fun DIV.errorTable(errorSummary: ErrorTable) {
+        h2 {
+            id = "error-summary"
+            +"Error Summary (${errorSummary.rows.count()} errors)"
+        }
+
+        p { +"Errors from excluded components are not shown in this summary." }
+
+        h3 { +"Packages" }
+
+        table("ort-report-table ort-errors") {
+            thead {
+                tr {
+                    th { +"Package" }
+                    th { +"Analyzer Errors" }
+                    th { +"Scanner Errors" }
                 }
             }
 
-    private fun createErrorTable(title: String, errors: TableReporter.ErrorTable, anchor: String) =
-            buildString {
-                append("""
-                    <h2><a id="$anchor"></a>$title</h2>
-                    <p>Errors from excluded components are not shown in this summary.</p>
-                    <h3>Packages</h3>
-                    <table class="report-packages">
-                    <thead>
-                    <tr>
-                        <th>Package</th>
-                        <th>Analyzer Errors</th>
-                        <th>Scanner Errors</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    """.trimIndent())
+            tbody { errorSummary.rows.forEach { errorRow(it) } }
+        }
+    }
 
-                errors.rows.forEach { row ->
-                    val cssClass = "error"
+    private fun TBODY.errorRow(row: ReportTableModel.ErrorRow) {
+        tr("ort-error") {
+            td { +"${row.id}" }
 
-                    append("""
-                        <tr class="$cssClass">
-                            <td>${row.id}</td>
-                            <td>""".trimIndent())
+            td {
+                row.analyzerErrors.forEach { id, errors ->
+                    a("#$id") { +"$id" }
 
-                    row.analyzerErrors.forEach { id, errors ->
-                        append("""
-                                <a href="#$id">$id</a>
-                                <ul>
-                                    ${errors.joinToString("\n") {
-                            "<li>${it.toString().replace("\n", "<br/>")}</li>"
-                        }}
-                                </ul>""".trimIndent())
+                    ul {
+                        errors.forEach { error ->
+                            li {
+                                p { unsafe { +error.description.replace("\n", "<br/>") } }
+                                p { +error.resolutionDescription }
+                            }
+                        }
                     }
-
-                    append("""
-                            </td>
-                            <td>""".trimIndent())
-
-                    row.scanErrors.forEach { id, errors ->
-                        append("""
-                                <a href="#$id">$id</a>
-                                <ul>
-                                    ${errors.joinToString("\n") {
-                            "<li>${it.toString().replace("\n", "<br/>")}</li>"
-                        }}
-                                </ul>""".trimIndent())
-                    }
-
-                    append("""
-                            </td>
-                        </tr>""".trimIndent())
                 }
-
-                append("</tbody></table>")
             }
 
-    private fun createTable(title: String, vcsInfo: VcsInfo?, summary: TableReporter.ProjectTable, anchor: String) =
-            buildString {
-                val excludedClass = if (summary.exclude != null) " excluded" else ""
+            td {
+                row.scanErrors.forEach { id, errors ->
+                    a("#$id") { +"$id" }
 
-                append("<h2><a id=\"$anchor\"></a>$title</h2>")
-
-                summary.exclude?.let { exclude ->
-                    append("""
-                        <h3>Project is Excluded</h3>
-                        <p>
-                            The project is excluded for the following reason:<br/>
-                            <div class="reason">${exclude.reason} - ${exclude.comment}</div>
-                        </p>""".trimIndent())
-                }
-
-                if (vcsInfo != null) {
-                    append("""
-                        <h3 class="$excludedClass">VCS Information</h3>
-                        <table class="report-metadata$excludedClass">
-                        <tbody>
-                            <tr>
-                                <td>Type</td>
-                                <td>${vcsInfo.type}</td>
-                            </tr>
-                            <tr>
-                                <td>URL</td>
-                                <td>${vcsInfo.url}</td>
-                            </tr>
-                            <tr>
-                                <td>Path</td>
-                                <td>${vcsInfo.path}</td>
-                            </tr>
-                            <tr>
-                                <td>Revision</td>
-                                <td>${vcsInfo.revision}</td>
-                            </tr>
-                        </tbody>
-                        </table>""".trimIndent())
-                }
-
-                append("""
-                    <h3 class="$excludedClass">Packages</h3>
-                    <table class="report-packages$excludedClass">
-                    <thead>
-                    <tr>
-                        <th>Package</th>
-                        <th>Scopes</th>
-                        <th>Declared Licenses</th>
-                        <th>Detected Licenses</th>
-                        <th>Analyzer Errors</th>
-                        <th>Scanner Errors</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    """.trimIndent())
-
-                summary.rows.forEach { row ->
-                    // Only mark the row as excluded if all scopes the dependency appears in are excluded.
-                    val rowExcludedClass = if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
-                        " excluded" else ""
-
-                    val cssClass = when {
-                        row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> "error"
-                        row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "warning"
-                        else -> "success"
+                    ul {
+                        errors.forEach { error ->
+                            li {
+                                p { unsafe { +error.description.replace("\n", "<br/>") } }
+                                p { +error.resolutionDescription }
+                            }
+                        }
                     }
-
-                    append("""
-                        <tr class="$cssClass$rowExcludedClass">
-                            <td>${row.id}</td>
-                            <td>${formatScopes(row.scopes)}</td>
-                            <td>${row.declaredLicenses.joinToString("<br/>")}</td>
-                            <td>${row.detectedLicenses.joinToString("<br/>")}</td>
-                            <td><ul>
-                                ${row.analyzerErrors.joinToString("\n") {
-                                    "<li>${it.toString().replace("\n", "<br/>")}</li>"
-                                }}
-                            </ul></td>
-                            <td><ul>
-                                ${row.scanErrors.joinToString("\n") {
-                                    "<li>${it.toString().replace("\n", "<br/>")}</li>"
-                                }}
-                            </ul></td>
-                        </tr>""".trimIndent())
-                }
-
-                append("</tbody></table>")
-            }
-
-    private fun formatScopes(scopes: SortedMap<String, List<ScopeExclude>>) =
-            scopes.entries.asSequence().sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
-                    .joinToString(separator = "", prefix = "<ul>", postfix = "</ul>") {
-                        val excludedClass = if (it.value.isNotEmpty()) "excluded" else ""
-                        "<li class=\"$excludedClass\">${it.key}${formatScopeExcludes(it.value)}</li>"
-                    }
-
-    private fun formatScopeExcludes(scopeExcludes: List<ScopeExclude>) =
-            buildString {
-                if (scopeExcludes.isNotEmpty()) {
-                    append(" <div class=\"reason\">Excluded: ")
-                    append(scopeExcludes.joinToString { "${it.reason} - ${it.comment}" })
-                    append("</div>")
                 }
             }
+        }
+    }
+
+    private fun DIV.projectTable(project: Project, table: ProjectTable) {
+        val excludedClass = if (table.exclude != null) "ort-excluded" else ""
+
+        h2 {
+            id = "${project.id}"
+            +"${project.id} (${project.definitionFilePath})"
+        }
+
+        table.exclude?.let { exclude ->
+            h3 { +"Project is Excluded" }
+            p {
+                +"The project is excluded for the following reason:"
+                br
+                div("reason") { +"${exclude.reason} - ${exclude.comment}" }
+            }
+        }
+
+        project.vcsProcessed.let { vcsInfo ->
+            h3(excludedClass) { +"VCS Information" }
+
+            table("ort-report-metadata $excludedClass") {
+                tbody {
+                    tr {
+                        td { +"Type" }
+                        td { +vcsInfo.type }
+                    }
+                    tr {
+                        td { +"URL" }
+                        td { +vcsInfo.url }
+                    }
+                    tr {
+                        td { +"Path" }
+                        td { +vcsInfo.path }
+                    }
+                    tr {
+                        td { +"Revision" }
+                        td { +vcsInfo.revision }
+                    }
+                }
+            }
+        }
+
+        h3(excludedClass) { +"Packages" }
+
+        table("ort-report-table ort-packages $excludedClass") {
+            thead {
+                tr {
+                    th { +"Package" }
+                    th { +"Scopes" }
+                    th { +"Licenses" }
+                    th { +"Analyzer Errors" }
+                    th { +"Scanner Errors" }
+                }
+            }
+
+            tbody { table.rows.forEach { projectRow(it) } }
+        }
+    }
+
+    private fun TBODY.projectRow(row: ReportTableModel.DependencyRow) {
+        // Only mark the row as excluded if all scopes the dependency appears in are excluded.
+        val rowExcludedClass =
+                if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
+
+        val cssClass = when {
+            row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> "ort-error"
+            row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "ort-warning"
+            else -> "ort-success"
+        }
+
+        tr("$cssClass $rowExcludedClass") {
+            td { +"${row.id}" }
+
+            td {
+                if (row.scopes.isNotEmpty()) {
+                    ul {
+                        row.scopes.entries.sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key })).forEach {
+                            val excludedClass = if (it.value.isNotEmpty()) "ort-excluded" else ""
+                            li(excludedClass) {
+                                +it.key
+                                if (it.value.isNotEmpty()) {
+                                    +" "
+                                    div("ort-reason") {
+                                        +"Excluded: "
+                                        +it.value.joinToString { "${it.reason} - ${it.comment}" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            td {
+                dl {
+                    row.concludedLicense?.let {
+                        dt { em { +"Concluded License:"}}
+                        dd { +"${row.concludedLicense}"}
+                    }
+
+                    if (row.declaredLicenses.isNotEmpty()) {
+                        dt { em { +"Declared Licenses:" } }
+                        dd { +row.declaredLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } }
+                    }
+
+                    if (row.detectedLicenses.isNotEmpty()) {
+                        dt { em { +"Declared Licenses:" } }
+                        dd { +row.detectedLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } }
+                    }
+                }
+            }
+
+            td { errorList(row.analyzerErrors) }
+
+            td { errorList(row.scanErrors) }
+        }
+    }
+
+    private fun TD.errorList(errors: List<ResolvableIssue>) {
+        ul {
+            errors.forEach {
+                li {
+                    p { unsafe { +it.description.replace("\n", "<br/>") } }
+
+                    if (it.isResolved) {
+                        classes = setOf("ort-resolved")
+                        p { +it.resolutionDescription }
+                    }
+                }
+            }
+        }
+    }
 }

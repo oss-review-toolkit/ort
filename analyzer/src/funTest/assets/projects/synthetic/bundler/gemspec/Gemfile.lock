@@ -17,7 +17,7 @@ GEM
     multi_json (1.13.1)
     multipart-post (2.0.0)
     public_suffix (3.0.2)
-    rack (1.6.10)
+    rack (1.6.11)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -46,4 +46,4 @@ DEPENDENCIES
   test-project!
 
 BUNDLED WITH
-   1.16.1
+   1.17.1

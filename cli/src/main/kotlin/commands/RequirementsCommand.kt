@@ -34,20 +34,17 @@ import com.here.ort.scanner.Scanner
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.log
 
-import com.vdurmont.semver4j.Requirement
-
 import org.reflections.Reflections
 
 import java.lang.reflect.Modifier
 
 @Parameters(commandNames = ["requirements"], commandDescription = "List the required command line tools.")
 object RequirementsCommand : CommandWithHelp() {
-    override fun runCommand(jc: JCommander) {
+    override fun runCommand(jc: JCommander): Int {
         val reflections = Reflections("com.here.ort")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
         val allTools = mutableMapOf<String, MutableList<CommandLineTool>>()
-        val anyVersion = Requirement.buildNPM("*").toString()
 
         classes.filterNot {
             Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
@@ -100,7 +97,7 @@ object RequirementsCommand : CommandWithHelp() {
         allTools.forEach { category, tools ->
             println("${category}s:")
             tools.forEach { tool ->
-                val message = if (tool.getVersionRequirement().toString() == anyVersion) {
+                val message = if (tool.getVersionRequirement().toString() == CommandLineTool.ANY_VERSION.toString()) {
                     "${tool.javaClass.simpleName} requires '${tool.command()}' in no specific version."
                 } else {
                     "${tool.javaClass.simpleName} has ${tool.getVersionRequirement()} on the version of " +
@@ -118,5 +115,11 @@ object RequirementsCommand : CommandWithHelp() {
                 println(prefix + message + suffix)
             }
         }
+
+        println("Legend:")
+        println("\tA '-' prefix means that the tool was not found in the PATH environment.")
+        println("\tA '*' prefix means that some version of the tool was found in the PATH environment.")
+
+        return 0
     }
 }

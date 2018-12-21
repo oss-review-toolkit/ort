@@ -1,8 +1,28 @@
+plugins {
+    id 'com.bmuschko.docker-java-application'
+    id 'com.bmuschko.docker-remote-api'
+}
+
 // Apply core plugins.
 apply plugin: 'application'
 
 applicationName = 'ort'
 mainClassName = 'com.here.ort.Main'
+
+task dockerBuildBaseImage(type: com.bmuschko.gradle.docker.tasks.image.DockerBuildImage) {
+    // This task uses 'docker/Dockerfile' as the input file.
+    description = 'Builds the base Docker image to run ORT.'
+    tags = ['ort-base:latest']
+}
+
+docker {
+    javaApplication {
+        baseImage = 'ort-base:latest'
+        tag = 'ort:latest'
+    }
+}
+
+dockerBuildImage.dependsOn dockerBuildBaseImage
 
 repositories {
     jcenter()
@@ -17,12 +37,27 @@ repositories {
 dependencies {
     compile project(':analyzer')
     compile project(':downloader')
+    compile project(':evaluator')
     compile project(':model')
     compile project(':reporter')
     compile project(':scanner')
     compile project(':utils')
 
     compile "com.beust:jcommander:$jcommanderVersion"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
+
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compile 'org.jetbrains.kotlin:kotlin-reflect'
+
     compile "org.reflections:reflections:$reflectionsVersion"
+
+    testCompile project(':test-utils')
+
+    testCompile "io.kotlintest:kotlintest-core:$kotlintestVersion"
+    testCompile "io.kotlintest:kotlintest-assertions:$kotlintestVersion"
+    testCompile "io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion"
+
+    funTestCompile sourceSets.main.output
+    funTestCompile sourceSets.test.output
+    funTestCompile configurations.testCompile
+    funTestRuntime configurations.testRuntime
 }

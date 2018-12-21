@@ -22,10 +22,8 @@ clone_depth: 50
 
 install:
   - git submodule update --init --recursive
-  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.9.4
+  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.12.1
   - pip install virtualenv==15.1.0
-  - cinst haskell-stack --version 1.7.1 -y
-  - stack setup > nul # This installs the whole GHC to an isolated location!
   - cinst sbt --version 1.0.2 -y
   - cinst php --version 7.2.0 -y
   - cinst composer --version 4.8.0 -y # The version refers to the installer, not to Composer.
@@ -42,7 +40,7 @@ install:
   - set PATH=C:\Ruby25\bin;%PATH% # For licensee.
   # Install git-repo.
   - ps: Start-FileDownload 'https://gerrit.googlesource.com/git-repo/+archive/refs/heads/master.tar.gz'
-  - 7z x -so master.tar.gz | 7z x -o%APPDATA%\local\bin -si -ttar -y -i!repo
+  - 7z x -so master.tar.gz | 7z x -o"%PROGRAMFILES%\Git\usr\bin" -si -ttar -y -i!repo
   # Install the Android SDK.
   - ps: Start-FileDownload 'https://dl.google.com/android/repository/sdk-tools-windows-3859397.zip'
   - 7z x sdk-tools-windows-3859397.zip -o%ANDROID_HOME% > nul

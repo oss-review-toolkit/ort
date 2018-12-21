@@ -21,6 +21,8 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.SortedSet
+
 /**
  * A container for [ScanResult]s for the package identified by [id].
  */
@@ -46,3 +48,15 @@ data class ScanResultContainer(
      */
     override fun compareTo(other: ScanResultContainer) = id.compareTo(other.id)
 }
+
+/**
+ * Return all detected licenses for the container's package [id], or an empty set if the container is null.
+ */
+fun ScanResultContainer?.getAllDetectedLicenses(): SortedSet<String> =
+        sortedSetOf<String>().also { licenses ->
+            if (this != null) {
+                results.flatMapTo(licenses) {
+                    it.summary.licenses
+                }
+            }
+        }

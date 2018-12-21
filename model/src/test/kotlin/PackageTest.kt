@@ -26,8 +26,8 @@ import io.kotlintest.specs.StringSpec
 class PackageTest : StringSpec() {
     init {
         "diff throws an exception if the identifiers are not equals" {
-            val pkg = Package.EMPTY.copy(id = Identifier("provider1", "namespace1", "name1", "version1"))
-            val other = Package.EMPTY.copy(id = Identifier("provider2", "namespace2", "name2", "version2"))
+            val pkg = Package.EMPTY.copy(id = Identifier("type1", "namespace1", "name1", "version1"))
+            val other = Package.EMPTY.copy(id = Identifier("type2", "namespace2", "name2", "version2"))
 
             shouldThrow<IllegalArgumentException> {
                 pkg.diff(other)
@@ -37,7 +37,7 @@ class PackageTest : StringSpec() {
         "diff result contains all changed values" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "provider",
+                            type = "type",
                             namespace = "namespace",
                             name = "name",
                             version = "version"
@@ -45,14 +45,14 @@ class PackageTest : StringSpec() {
                     declaredLicenses = sortedSetOf("declared license"),
                     description = "description",
                     homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
-                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
+                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
                     vcs = VcsInfo("type", "url", "revision")
             )
 
             val other = Package(
                     id = Identifier(
-                            provider = "provider",
+                            type = "type",
                             namespace = "namespace",
                             name = "name",
                             version = "version"
@@ -60,8 +60,8 @@ class PackageTest : StringSpec() {
                     declaredLicenses = sortedSetOf("other declared license"),
                     description = "other description",
                     homepageUrl = "other homepageUrl",
-                    binaryArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.SHA1),
-                    sourceArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.SHA1),
+                    binaryArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
+                    sourceArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
                     vcs = VcsInfo("other type", "other url", "other revision")
             )
 
@@ -78,7 +78,7 @@ class PackageTest : StringSpec() {
         "diff result does not contain unchanged values" {
             val pkg = Package(
                     id = Identifier(
-                            provider = "provider",
+                            type = "type",
                             namespace = "namespace",
                             name = "name",
                             version = "version"
@@ -86,8 +86,8 @@ class PackageTest : StringSpec() {
                     declaredLicenses = sortedSetOf("declared license"),
                     description = "description",
                     homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
-                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.SHA1),
+                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
                     vcs = VcsInfo("type", "url", "revision")
             )
 

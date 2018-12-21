@@ -1,2 +1,9 @@
-*/src/*/assets/**/*expected*.yml text eol=lf
-reporter/src/test/assets/NPM-is-windows-1.0.2-expected-NOTICE text eol=lf
+*/src/*/assets/**/*expected*.yml		text eol=lf
+reporter/src/funTest/assets/*-expected-*	text eol=lf
+
+# Fix GitHub language statistics, see https://github.com/github/linguist#using-gitattributes.
+reporter-web-app/public/index.html		linguist-generated=true
+spdx-utils/src/main/resources/exceptions/*	linguist-detectable=false
+spdx-utils/src/main/resources/licenses/*	linguist-detectable=false
+
+reporter-web-app/**/*.js			text eol=lf
