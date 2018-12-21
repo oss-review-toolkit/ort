@@ -133,8 +133,7 @@ class Downloader {
     fun download(
             target: Package,
             outputDirectory: File,
-            allowMovingRevisions: Boolean = false,
-            removeBinaryAndZipFiles: Boolean = false
+            allowMovingRevisions: Boolean = false
     ): DownloadResult {
         log.info { "Trying to download source code for '${target.id}'." }
 
@@ -161,7 +160,7 @@ class Downloader {
                 }
                 throw DownloadException("No VCS URL provided for '${target.id}'.$details")
             } else {
-                return downloadFromVcs(target, targetDir, allowMovingRevisions, removeBinaryAndZipFiles)
+                return downloadFromVcs(target, targetDir, allowMovingRevisions)
             }
         } catch (vcsDownloadException: DownloadException) {
             log.debug { "VCS download failed for '${target.id}': ${vcsDownloadException.message}" }
@@ -185,8 +184,7 @@ class Downloader {
     private fun downloadFromVcs(
             target: Package,
             outputDirectory: File,
-            allowMovingRevisions: Boolean,
-            removeBinaryAndZipFiles: Boolean
+            allowMovingRevisions: Boolean
     ): DownloadResult {
         log.info {
             "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from VCS..."
@@ -247,10 +245,6 @@ class Downloader {
         }
         val revision = workingTree.getRevision()
 
-        if (removeBinaryAndZipFiles) {
-            filterFilesInDirectory(outputDirectory.absolutePath)
-        }
-
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
 
         val vcsInfo = VcsInfo(
@@ -272,13 +266,6 @@ class Downloader {
             if (File(url).delete()) {
                 log.info("removed file $url")
             }
-        }
-    }
-
-    fun filterFilesInDirectory(path: String) {
-
-        File("$path").walkTopDown().forEach {
-            checkType(it.toString())
         }
     }
 
