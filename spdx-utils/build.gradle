@@ -140,7 +140,7 @@ def downloadLicenseTexts(String description, List<String> ids, String resourcePa
     }
 }
 
-task generateSpdxLicenseList {
+task generateSpdxLicenseEnum {
     group = "SPDX"
     description = "Generates the enum class of SPDX license ids and their associated texts as resources."
 
@@ -159,7 +159,7 @@ task generateSpdxLicenseList {
     }
 }
 
-task generateSpdxLicenseExceptionList {
+task generateSpdxLicenseExceptionEnum {
     group = "SPDX"
     description = "Generates the enum class of SPDX license exception ids and their associated texts as resources."
 
@@ -178,7 +178,7 @@ task generateSpdxLicenseExceptionList {
     }
 }
 
-task generateSpdxEnums(dependsOn: [generateSpdxLicenseList, generateSpdxLicenseExceptionList]) {
+task generateSpdxEnums(dependsOn: [generateSpdxLicenseEnum, generateSpdxLicenseExceptionEnum]) {
     group = "SPDX"
     description = "Generates the enum classes of SPDX license and exception ids and their associated texts as resources."
 }
