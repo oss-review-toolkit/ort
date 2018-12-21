@@ -169,7 +169,7 @@ class NoticeReporter : Reporter() {
 
         if (noticeReport.findings.isNotEmpty()) {
             val findings = noticeReport.findings.map { (license, copyrights) ->
-                val notice = buildString {
+                buildString {
                     // Note: Do not use appendln() here as that would write out platform-native line endings, but we
                     // want to normalize on Unix-style line endings for consistency.
                     copyrights.forEach { copyright ->
@@ -179,19 +179,8 @@ class NoticeReporter : Reporter() {
                     if (copyrights.isNotEmpty()) append("\n")
 
                     val licenseText = getLicenseText(license, true)
-                    append("$licenseText\n")
+                    append(licenseText)
                 }
-
-                // Trim lines and remove consecutive blank lines as the license text formatting in SPDX JSON files is
-                // broken, see https://github.com/spdx/LicenseListPublisher/issues/30.
-                var previousLine = ""
-                val trimmedNoticeLines = notice.lines().mapNotNull { line ->
-                    val trimmedLine = line.trim()
-                    trimmedLine.takeIf { it.isNotBlank() || previousLine.isNotBlank() }
-                            .also { previousLine = trimmedLine }
-                }
-
-                trimmedNoticeLines.joinToString("\n")
             }.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
             outputFile.appendText(findings)
         }
