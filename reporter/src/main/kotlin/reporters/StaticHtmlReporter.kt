@@ -590,21 +590,19 @@ class StaticHtmlReporter : Reporter() {
             }
 
             td {
-                dl {
-                    row.concludedLicense?.let {
-                        dt { em { +"Concluded License:"}}
-                        dd { +"${row.concludedLicense}"}
-                    }
+                row.concludedLicense?.let {
+                    em { +"Concluded License:"}
+                    dl { dd { +"${row.concludedLicense}"} }
+                }
 
-                    if (row.declaredLicenses.isNotEmpty()) {
-                        dt { em { +"Declared Licenses:" } }
-                        dd { +row.declaredLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } }
-                    }
+                if (row.declaredLicenses.isNotEmpty()) {
+                    em { +"Declared Licenses:" }
+                    dl { dd { +row.declaredLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } } }
+                }
 
-                    if (row.detectedLicenses.isNotEmpty()) {
-                        dt { em { +"Declared Licenses:" } }
-                        dd { +row.detectedLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } }
-                    }
+                if (row.detectedLicenses.isNotEmpty()) {
+                    em { +"Declared Licenses:" }
+                    dl { dd { +row.detectedLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } } }
                 }
             }
 
