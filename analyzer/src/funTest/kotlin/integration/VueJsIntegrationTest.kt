@@ -45,7 +45,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
             vcs = VcsInfo(
                     type = "Git",
                     url = "https://github.com/vuejs/vue.git",
-                    revision = "v2.5.10"
+                    revision = "v2.5.11"
             )
     )
 
@@ -73,6 +73,4 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
         mapOf(NPM.Factory() as PackageManagerFactory to
                 listOf(File(downloadResult.downloadDirectory, "package.json")))
     }
-
-    override val identifiersWithExpectedErrors = setOf(Identifier("NPM::fsevents:"))
 }
