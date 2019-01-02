@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
+import com.here.ort.model.Severity
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
@@ -423,9 +424,14 @@ class StaticHtmlReporter : Reporter() {
     }
 
     private fun TBODY.evaluatorRow(error: ResolvableIssue) {
-        val cssClass = when {
-            error.isResolved -> "ort-resolved"
-            else -> "ort-error"
+        val cssClass = if (error.isResolved) {
+            "ort-resolved"
+        } else {
+            when (error.severity) {
+                Severity.ERROR -> "ort-error"
+                Severity.WARNING -> "ort-warning"
+                Severity.HINT -> "ort-warning"
+            }
         }
 
         tr(cssClass) {
