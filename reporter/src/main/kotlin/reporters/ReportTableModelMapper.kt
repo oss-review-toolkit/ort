@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Severity
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.getAllDetectedLicenses
 import com.here.ort.reporter.ResolutionProvider
@@ -51,7 +52,8 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         )
                     }
                 },
-                isResolved = resolutions.isNotEmpty()
+                isResolved = resolutions.isNotEmpty(),
+                severity = severity
         )
     }
 
@@ -67,7 +69,8 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         )
                     }
                 },
-                isResolved = resolutions.isNotEmpty()
+                isResolved = resolutions.isNotEmpty(),
+                severity = severity
         )
     }
 
@@ -202,6 +205,8 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val extraColumns = (scanRecord.data["excel_report_extra_columns"] as? List<*>)?.let { extraColumns ->
             extraColumns.map { it.toString() }
         }.orEmpty()
+
+        ortResult.evaluator?.errors?.forEach { println(it.severity) }
 
         val evaluatorErrors = ortResult.evaluator?.let {
             it.errors.map { it.toResolvableEvaluatorIssue() }
