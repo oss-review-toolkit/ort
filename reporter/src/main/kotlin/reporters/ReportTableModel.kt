@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanResult
+import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
@@ -217,6 +218,7 @@ data class ReportTableModel(
             val source: String,
             val description: String,
             val resolutionDescription: String,
-            val isResolved: Boolean
+            val isResolved: Boolean,
+            val severity: Severity
     )
 }
