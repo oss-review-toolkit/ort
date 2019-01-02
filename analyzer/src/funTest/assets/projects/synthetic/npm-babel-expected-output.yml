@@ -687,6 +687,7 @@ project:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "NPM"
             message: "Package 'fsevents' was not installed."
+            severity: "ERROR"
         - id: "NPM::glob-parent:2.0.0"
           dependencies:
           - id: "NPM::is-glob:2.0.1"

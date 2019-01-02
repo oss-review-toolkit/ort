@@ -191,6 +191,7 @@ scanner:
               Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\
               \ Please make sure the release POM file includes the SCM connection,\
               \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file"
+            severity: "ERROR"
     - id: "Maven:junit:junit:4.12"
       results:
       - provenance:
