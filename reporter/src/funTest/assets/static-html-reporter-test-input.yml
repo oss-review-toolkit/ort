@@ -277,4 +277,3 @@ evaluator:
     source: "GPL-3.0-only"
     message: "GPL 3 hint"
     severity: "HINT"
-    
