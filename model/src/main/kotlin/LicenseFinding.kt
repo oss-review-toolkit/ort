@@ -53,18 +53,23 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
  */
 data class LicenseFinding @JsonCreator constructor(
         val license: String,
+        val locations: SortedSet<TextLocation> = sortedSetOf(),
         val copyrights: SortedSet<String>
 ) : Comparable<LicenseFinding> {
     companion object {
         private val COPYRIGHTS_COMPARATOR = SortedSetComparator<String>()
+        private val LOCATIONS_COMPARATOR = SortedSetComparator<TextLocation>()
     }
 
     @JsonCreator
-    constructor(licenseName: String) : this(licenseName, sortedSetOf())
+    constructor(licenseName: String) : this(licenseName, sortedSetOf(), sortedSetOf())
 
     override fun compareTo(other: LicenseFinding) =
-            when {
-                license != other.license -> license.compareTo(other.license)
-                else -> COPYRIGHTS_COMPARATOR.compare(copyrights, other.copyrights)
-            }
+            compareValuesBy(
+                    this,
+                    other,
+                    compareBy(LicenseFinding::license)
+                            .thenBy(LOCATIONS_COMPARATOR, LicenseFinding::locations)
+                            .thenBy(COPYRIGHTS_COMPARATOR, LicenseFinding::copyrights)
+            ) { it }
 }

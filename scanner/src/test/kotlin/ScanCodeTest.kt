@@ -20,10 +20,12 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.LicenseFinding
+import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.scanners.ScanCode
 
+import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.match
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -167,11 +169,15 @@ class ScanCodeTest : WordSpec({
             val result = jsonMapper.readTree(resultFile)
 
             scanner.associateFindings(result) shouldBe sortedSetOf(
-                    LicenseFinding("Apache-2.0", sortedSetOf("Copyright (C) 2017-2019 HERE Europe B.V."))
+                    LicenseFinding(
+                            "Apache-2.0",
+                            sortedSetOf(TextLocation("LICENSE", 1, 201)),
+                            sortedSetOf("Copyright (C) 2017-2019 HERE Europe B.V.")
+                    )
             )
         }
 
-        "properly associate licenses to copyrights" {
+        "properly associate licenses to locations and copyrights" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getResult(resultFile)
 
@@ -179,11 +185,36 @@ class ScanCodeTest : WordSpec({
                     LicenseFinding(
                             "BSD-2-Clause",
                             sortedSetOf(
+                                    TextLocation(path="esprima.js", startLine=4, endLine=22),
+                                    TextLocation(path="LICENSE.BSD", startLine=3, endLine=21),
+                                    TextLocation(path="bin/esvalidate.js", startLine=5, endLine=23),
+                                    TextLocation(path="bin/esparse.js", startLine=5, endLine=23),
+                                    TextLocation(path="tools/generate-fixtures.js", startLine=3, endLine=19),
+                                    TextLocation(path="test/check-complexity.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/regression-tests.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/downstream.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/browser-tests.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/profile.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/unit-tests.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/check-version.js", startLine=6, endLine=24),
+                                    TextLocation(path="test/grammar-tests.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/benchmarks.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/utils/evaluate-testcase.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/utils/create-testcases.js", startLine=4, endLine=22),
+                                    TextLocation(path="test/utils/error-to-object.js", startLine=4, endLine=22)
+                            ),
+                            sortedSetOf(
                                     "Copyright (c) jQuery Foundation, Inc. and Contributors"
                             )
                     ),
                     LicenseFinding(
                             "BSD-3-Clause",
+                            sortedSetOf(
+                                    TextLocation(path="package.json", startLine=37, endLine=37),
+                                    TextLocation(path="bower.json", startLine=20, endLine=20),
+                                    TextLocation(path="test/3rdparty/yui-3.12.0.js", startLine=4, endLine=4),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=1910, endLine=1910)
+                            ),
                             sortedSetOf(
                                     "copyright (c) 2012 Scott Jehl, Paul Irish, Nicholas Zakas.",
                                     "Copyright 2013 Yahoo! Inc."
@@ -191,6 +222,15 @@ class ScanCodeTest : WordSpec({
                     ),
                     LicenseFinding(
                             "GPL-1.0+",
+                            sortedSetOf(
+                                    TextLocation(path="test/3rdparty/jquery-1.9.1.js", startLine=10, endLine=10),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=8, endLine=8),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=233, endLine=233),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=832, endLine=832),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=1522, endLine=1523),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=1538, endLine=1539),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=14001, endLine=14001)
+                            ),
                             sortedSetOf(
                                     "Copyright (c) 2010 Cowboy Ben Alman",
                                     "Copyright 2005, 2012 jQuery Foundation, Inc.",
@@ -201,6 +241,10 @@ class ScanCodeTest : WordSpec({
                     LicenseFinding(
                             "LGPL-2.0+",
                             sortedSetOf(
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=28, endLine=28),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=4718, endLine=4718)
+                            ),
+                            sortedSetOf(
                                     "Copyright (c) 2005-2007 Sam Stephenson",
                                     "Copyright (c) 2006 Dean Edwards, GNU Lesser General Public",
                                     "Copyright (c) 2006-2012 Valerio Proietti"
@@ -208,6 +252,55 @@ class ScanCodeTest : WordSpec({
                     ),
                     LicenseFinding(
                             "MIT",
+                            sortedSetOf(
+                                    TextLocation(path="test/3rdparty/benchmark.js", startLine=6, endLine=6),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=21, endLine=21),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=29, endLine=29),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=542, endLine=542),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=723, endLine=723),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=807, endLine=807),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=861, endLine=861),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=991, endLine=991),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=1202, endLine=1202),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=1457, endLine=1457),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=1584, endLine=1584),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=1701, endLine=1701),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=1881, endLine=1881),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=3043, endLine=3043),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=4103, endLine=4103),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=4322, endLine=4322),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=4514, endLine=4514),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=4715, endLine=4715),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=4999, endLine=4999),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=5180, endLine=5180),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=5350, endLine=5350),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=5463, endLine=5463),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=5542, endLine=5542),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=5657, endLine=5657),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=5937, endLine=5937),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=6027, endLine=6027),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=6110, endLine=6110),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=6158, endLine=6158),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=6234, endLine=6234),
+                                    TextLocation(path="test/3rdparty/mootools-1.4.5.js", startLine=6341, endLine=6341),
+                                    TextLocation(path="test/3rdparty/angular-1.2.5.js", startLine=4, endLine=4),
+                                    TextLocation(path="test/3rdparty/jquery-1.9.1.js", startLine=9, endLine=9),
+                                    TextLocation(path="test/3rdparty/jquery-1.9.1.js", startLine=10, endLine=10),
+                                    TextLocation(path="test/3rdparty/jquery-1.9.1.js", startLine=3690, endLine=3690),
+                                    TextLocation(path="test/3rdparty/underscore-1.5.2.js", startLine=4, endLine=4),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=7, endLine=7),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=8, endLine=8),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=232, endLine=232),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=233, endLine=233),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=831, endLine=831),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=832, endLine=832),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=1522, endLine=1523),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=1538, endLine=1539),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=1910, endLine=1910),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=14000, endLine=14000),
+                                    TextLocation(path="test/3rdparty/jquery.mobile-1.4.2.js", startLine=14001, endLine=14001),
+                                    TextLocation(path="test/3rdparty/backbone-1.1.0.js", startLine=5, endLine=5)
+                            ),
                             sortedSetOf(
                                     "(c) 2007-2008 Steven Levithan",
                                     "(c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & " +
@@ -235,35 +328,49 @@ class ScanCodeTest : WordSpec({
             actualFindings shouldBe expectedFindings
         }
 
-        "properly associate licenses to copyrights for the new output format" {
+        "properly associate licenses to locations and copyrights for the new output format" {
             val resultFile = File("src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json")
             val result = scanner.getResult(resultFile)
 
-            val expectedFindings = sortedSetOf(
-                    LicenseFinding(
-                            "Apache-2.0",
-                            sortedSetOf(
-                                    "Copyright (c) 2016 Amazon.com, Inc.",
-                                    "Copyright (c) 2016. Amazon.com, Inc.",
-                                    "Copyright 2010-2017 Amazon.com, Inc.",
-                                    "Copyright 2011-2017 Amazon Technologies, Inc.",
-                                    "Copyright 2011-2017 Amazon.com, Inc.",
-                                    "Copyright 2012-2017 Amazon Technologies, Inc.",
-                                    "Copyright 2012-2017 Amazon.com, Inc.",
-                                    "Copyright 2013-2017 Amazon Technologies, Inc.",
-                                    "Copyright 2013-2017 Amazon.com, Inc.",
-                                    "Copyright 2014-2017 Amazon Technologies, Inc.",
-                                    "Copyright 2014-2017 Amazon.com, Inc.",
-                                    "Copyright 2015-2017 Amazon Technologies, Inc.",
-                                    "Copyright 2015-2017 Amazon.com, Inc.",
-                                    "Copyright 2016-2017 Amazon.com, Inc.",
-                                    "Portions copyright 2006-2009 James Murty."
-                            )
-                    )
-            )
             val actualFindings = scanner.associateFindings(result)
 
-            actualFindings shouldBe expectedFindings
+            actualFindings should haveSize(1)
+
+            val finding = actualFindings.first()
+            finding.license shouldBe "Apache-2.0"
+
+            // Only compare the first 10 elements because the result contains too many locations to list them all.
+            finding.locations should haveSize(517)
+            finding.locations.toList().subList(0, 10) shouldBe listOf(
+                    TextLocation(path="com/amazonaws/AbortedException.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/AmazonClientException.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/AmazonServiceException.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/AmazonWebServiceClient.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/AmazonWebServiceRequest.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/AmazonWebServiceResponse.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/AmazonWebServiceResult.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/ApacheHttpClientConfig.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/ClientConfiguration.java", startLine=4, endLine=13),
+                    TextLocation(path="com/amazonaws/ClientConfigurationFactory.java", startLine=4, endLine=13)
+            )
+
+            finding.copyrights shouldBe sortedSetOf(
+                    "Copyright (c) 2016 Amazon.com, Inc.",
+                    "Copyright (c) 2016. Amazon.com, Inc.",
+                    "Copyright 2010-2017 Amazon.com, Inc.",
+                    "Copyright 2011-2017 Amazon Technologies, Inc.",
+                    "Copyright 2011-2017 Amazon.com, Inc.",
+                    "Copyright 2012-2017 Amazon Technologies, Inc.",
+                    "Copyright 2012-2017 Amazon.com, Inc.",
+                    "Copyright 2013-2017 Amazon Technologies, Inc.",
+                    "Copyright 2013-2017 Amazon.com, Inc.",
+                    "Copyright 2014-2017 Amazon Technologies, Inc.",
+                    "Copyright 2014-2017 Amazon.com, Inc.",
+                    "Copyright 2015-2017 Amazon Technologies, Inc.",
+                    "Copyright 2015-2017 Amazon.com, Inc.",
+                    "Copyright 2016-2017 Amazon.com, Inc.",
+                    "Portions copyright 2006-2009 James Murty."
+            )
         }
     }
 

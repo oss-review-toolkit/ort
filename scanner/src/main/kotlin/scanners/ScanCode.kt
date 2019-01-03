@@ -32,6 +32,7 @@ import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.AbstractScannerFactory
@@ -453,11 +454,23 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      * Associate copyright findings to license findings throughout the whole result.
      */
     internal fun associateFindings(result: JsonNode): SortedSet<LicenseFinding> {
+        val locationsForLicenses = sortedMapOf<String, SortedSet<TextLocation>>()
         val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
         val rootLicense = getRootLicense(result)
 
         result["files"].forEach { file ->
+            val path = file["path"].asText()
+
             val licenses = file["licenses"] ?: EMPTY_JSON_NODE
+            licenses.forEach {
+                val licenseId = getLicenseId(it)
+                val licenseStartLine = it["start_line"].asInt()
+                val licenseEndLine = it["end_line"].asInt()
+
+                locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
+                        TextLocation(path, licenseStartLine, licenseEndLine)
+            }
+
             val copyrights = file["copyrights"] ?: EMPTY_JSON_NODE
             val findings = associateFileFindings(licenses, copyrights, rootLicense)
             findings.forEach { license, copyrightsForLicense ->
@@ -465,8 +478,12 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             }
         }
 
-        return copyrightsForLicenses.map { (license, copyrights) ->
-            LicenseFinding(license, copyrights)
+        return (copyrightsForLicenses.keys + locationsForLicenses.keys).map { license ->
+            LicenseFinding(
+                    license,
+                    locationsForLicenses[license] ?: sortedSetOf(),
+                    copyrightsForLicenses[license] ?: sortedSetOf()
+            )
         }.toSortedSet()
     }
 }
