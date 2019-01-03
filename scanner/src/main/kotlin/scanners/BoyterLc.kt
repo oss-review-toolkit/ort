@@ -167,7 +167,7 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
 
         result.forEach { file ->
             file["LicenseGuesses"].mapTo(findings) { license ->
-                LicenseFinding(license["LicenseId"].textValue(), sortedSetOf())
+                LicenseFinding(license["LicenseId"].textValue(), sortedSetOf(), sortedSetOf())
             }
         }
 
