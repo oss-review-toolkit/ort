@@ -243,7 +243,21 @@ class ScanCodeTest : WordSpec({
                     LicenseFinding(
                             "Apache-2.0",
                             sortedSetOf(
-                                    "Copyright 2013-2017 Amazon.com, Inc."
+                                    "Copyright (c) 2016 Amazon.com, Inc.",
+                                    "Copyright (c) 2016. Amazon.com, Inc.",
+                                    "Copyright 2010-2017 Amazon.com, Inc.",
+                                    "Copyright 2011-2017 Amazon Technologies, Inc.",
+                                    "Copyright 2011-2017 Amazon.com, Inc.",
+                                    "Copyright 2012-2017 Amazon Technologies, Inc.",
+                                    "Copyright 2012-2017 Amazon.com, Inc.",
+                                    "Copyright 2013-2017 Amazon Technologies, Inc.",
+                                    "Copyright 2013-2017 Amazon.com, Inc.",
+                                    "Copyright 2014-2017 Amazon Technologies, Inc.",
+                                    "Copyright 2014-2017 Amazon.com, Inc.",
+                                    "Copyright 2015-2017 Amazon Technologies, Inc.",
+                                    "Copyright 2015-2017 Amazon.com, Inc.",
+                                    "Copyright 2016-2017 Amazon.com, Inc.",
+                                    "Portions copyright 2006-2009 James Murty."
                             )
                     )
             )

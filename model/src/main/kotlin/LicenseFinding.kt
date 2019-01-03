@@ -57,5 +57,10 @@ data class LicenseFinding @JsonCreator constructor(
     @JsonCreator
     constructor(licenseName: String) : this(licenseName, sortedSetOf())
 
-    override fun compareTo(other: LicenseFinding) = license.compareTo(other.license)
+    override fun compareTo(other: LicenseFinding) =
+            when {
+                license != other.license -> license.compareTo(other.license)
+                copyrights != other.copyrights -> copyrights.hashCode() - other.copyrights.hashCode()
+                else -> 0
+            }
 }
