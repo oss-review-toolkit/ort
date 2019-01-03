@@ -32,6 +32,7 @@ import com.here.ort.utils.textValueOrEmpty
 
 import java.util.SortedMap
 import java.util.SortedSet
+import java.util.TreeSet
 
 /**
  * A map that associates licenses with their belonging copyrights. This is provided mostly for convenience as creating
@@ -58,17 +59,22 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
  */
 data class LicenseFinding(
         val license: String,
+        val locations: SortedSet<TextLocation>,
         val copyrights: SortedSet<String>
 ) : Comparable<LicenseFinding> {
     companion object {
         private val COPYRIGHTS_COMPARATOR = SortedSetComparator<String>()
+        private val LOCATIONS_COMPARATOR = SortedSetComparator<TextLocation>()
     }
 
     override fun compareTo(other: LicenseFinding) =
-            when {
-                license != other.license -> license.compareTo(other.license)
-                else -> COPYRIGHTS_COMPARATOR.compare(copyrights, other.copyrights)
-            }
+            compareValuesBy(
+                    this,
+                    other,
+                    compareBy(LicenseFinding::license)
+                            .thenBy(LOCATIONS_COMPARATOR, LicenseFinding::locations)
+                            .thenBy(COPYRIGHTS_COMPARATOR, LicenseFinding::copyrights)
+            ) { it }
 }
 
 /**
@@ -78,11 +84,25 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFinding {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
-            node.isTextual -> LicenseFinding(node.textValueOrEmpty(), sortedSetOf())
+            node.isTextual -> LicenseFinding(node.textValueOrEmpty(), sortedSetOf(), sortedSetOf())
             else -> {
                 val license = jsonMapper.treeToValue<String>(node["license"])
                 val copyrights = jsonMapper.treeToValue<SortedSet<String>>(node["copyrights"])
-                return LicenseFinding(license, copyrights)
+                val locations = when {
+                    node.has("locations") -> {
+                        val collectionType = jsonMapper.typeFactory.constructCollectionType(
+                                TreeSet::class.java,
+                                TextLocation::class.java
+                        )
+
+                        jsonMapper.readValue<TreeSet<TextLocation>>(
+                                jsonMapper.treeAsTokens(node["locations"]),
+                                collectionType
+                        )
+                    }
+                    else -> sortedSetOf()
+                }
+                return LicenseFinding(license, locations, copyrights)
             }
         }
     }

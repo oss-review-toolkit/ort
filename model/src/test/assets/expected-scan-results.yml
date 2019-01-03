@@ -17,9 +17,17 @@ results:
     file_count: 1
     license_findings:
     - license: "license 1.1"
+      locations:
+      - path: "path 1.1"
+        start_line: 1
+        end_line: 1
       copyrights:
       - "copyright 1"
     - license: "license 1.2"
+      locations:
+      - path: "path 1.2"
+        start_line: 1
+        end_line: 2
       copyrights:
       - "copyright 2"
     errors:
@@ -50,9 +58,11 @@ results:
     file_count: 2
     license_findings:
     - license: "license 2.1"
+      locations: []
       copyrights:
       - "copyright 3"
     - license: "license 2.2"
+      locations: []
       copyrights:
       - "copyright 4"
     errors:
