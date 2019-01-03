@@ -32,7 +32,7 @@ import java.io.File
 import javax.xml.transform.TransformerFactory
 
 class StaticHtmlReporterTest : WordSpec({
-    val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
+    val ortResult = File("src/funTest/assets/static-html-reporter-test-input.yml")
             .readValue<OrtResult>()
 
     "StaticHtmlReporter" should {
