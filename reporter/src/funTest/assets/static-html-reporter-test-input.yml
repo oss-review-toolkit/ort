@@ -263,4 +263,17 @@ scanner:
       num_reads: 5
       num_hits: 0
     has_errors: true
-evaluator: null
+evaluator:
+  errors:
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "GPL-1.0-only"
+    message: "GPL 1 error"
+    severity: "ERROR"
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "GPL-2.0-only"
+    message: "GPL 2 warning"
+    severity: "WARNING"
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "GPL-3.0-only"
+    message: "GPL 3 HINT"
+    severity: "HINT"
