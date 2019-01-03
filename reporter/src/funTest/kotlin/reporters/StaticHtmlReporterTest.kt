@@ -47,7 +47,7 @@ class StaticHtmlReporterTest : WordSpec({
             StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
 
             val actualFile = outputDir.resolve("scan-report.html")
-            val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.html")
+            val expectedFile = File("src/funTest/assets/static-html-reporter-test-expected-output.html")
 
             actualFile.readText() shouldBe expectedFile.readText()
         }
