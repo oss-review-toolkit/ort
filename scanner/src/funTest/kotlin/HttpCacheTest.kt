@@ -41,6 +41,7 @@ import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.specs.StringSpec
 import io.kotlintest.matchers.collections.contain
+import io.kotlintest.matchers.sorted
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 
@@ -135,8 +136,8 @@ class HttpCacheTest : StringSpec() {
             scannerEndTime1,
             1,
             sortedSetOf(
-                    LicenseFinding("license 1.1", sortedSetOf()),
-                    LicenseFinding("license 1.2", sortedSetOf())
+                    LicenseFinding("license 1.1", sortedSetOf(), sortedSetOf()),
+                    LicenseFinding("license 1.2", sortedSetOf(), sortedSetOf())
             ),
             mutableListOf(error1, error2)
     )
