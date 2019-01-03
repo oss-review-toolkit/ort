@@ -263,4 +263,17 @@ scanner:
       num_reads: 5
       num_hits: 0
     has_errors: true
-evaluator: null
+evaluator:
+  errors:
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "CC-BY-NC-SA-1.0"
+    message: "Legal has forbidden the use of this license, for details see http://s.here.com/FqrW2g or contact Legal. The license was detected in the following packages: [Maven:com.google.code.findbugs:annotations:3.0.1]"
+    severity: "ERROR"
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "CC-BY-NC-SA-1.0"
+    message: "Legal has forbidden the use of this license, for details see http://s.here.com/FqrW2g or contact Legal. The license was detected in the following packages: [Maven:com.google.code.findbugs:annotations:3.0.1]"
+    severity: "WARNING"
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "CC-BY-NC-SA-1.0"
+    message: "Legal has forbidden the use of this license, for details see http://s.here.com/FqrW2g or contact Legal. The license was detected in the following packages: [Maven:com.google.code.findbugs:annotations:3.0.1]"
+    severity: "HINT"
