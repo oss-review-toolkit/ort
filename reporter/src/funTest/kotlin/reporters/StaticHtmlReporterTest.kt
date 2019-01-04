@@ -31,25 +31,27 @@ import java.io.File
 
 import javax.xml.transform.TransformerFactory
 
-class StaticHtmlReporterTest : WordSpec({
-    val ortResult = File("src/funTest/assets/static-html-reporter-test-input.yml")
-            .readValue<OrtResult>()
+class StaticHtmlReporterTest : WordSpec()
+{
+    val ortResult = File("src/funTest/assets/static-html-reporter-test-input.yml").readValue<OrtResult>()
 
-    "StaticHtmlReporter" should {
-        "use the Apache Xalan TransformerFactory" {
-            val transformer = TransformerFactory.newInstance().newTransformer()
+    init {
+        "StaticHtmlReporter" should {
+            "use the Apache Xalan TransformerFactory" {
+                val transformer = TransformerFactory.newInstance().newTransformer()
 
-            transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
-        }
+                transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
+            }
 
-        "successfully export to a static HTML page" {
-            val outputDir = createTempDir().apply { deleteOnExit() }
-            StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
+            "successfully export to a static HTML page" {
+                val outputDir = createTempDir().apply { deleteOnExit() }
+                StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
 
-            val actualFile = outputDir.resolve("scan-report.html")
-            val expectedFile = File("src/funTest/assets/static-html-reporter-test-expected-output.html")
+                val actualFile = outputDir.resolve("scan-report.html")
+                val expectedFile = File("src/funTest/assets/static-html-reporter-test-expected-output.html")
 
-            actualFile.readText() shouldBe expectedFile.readText()
+                actualFile.readText() shouldBe expectedFile.readText()
+            }
         }
     }
-})
+}
