@@ -45,14 +45,19 @@ class StaticHtmlReporterTest : WordSpec()
             }
 
             "successfully export to a static HTML page" {
-                val outputDir = createTempDir().apply { deleteOnExit() }
-                StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
+                val actualReport = generateReport(ortResult)
 
-                val actualFile = outputDir.resolve("scan-report.html")
-                val expectedFile = File("src/funTest/assets/static-html-reporter-test-expected-output.html")
-
-                actualFile.readText() shouldBe expectedFile.readText()
+                val expectedReport = File("src/funTest/assets/static-html-reporter-test-expected-output.html")
+                        .readText()
+                actualReport shouldBe expectedReport
             }
         }
+    }
+
+    private fun generateReport(ortResult: OrtResult): String {
+        val outputDir = createTempDir().apply { deleteOnExit() }
+        StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
+
+        return outputDir.resolve("scan-report.html").readText()
     }
 }
