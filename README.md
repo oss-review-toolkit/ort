@@ -51,6 +51,13 @@ Follow these steps to run the OSS Review Toolkit from source code:
 1. Ensure OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler) is installed and the
    `JAVA_HOME` environment variable set.
 
+   In addition to Java (version >= 8) the following tools are required:
+
+   * Git (any recent version will do)
+   * [Node.js](https://nodejs.org) 8.*
+   * [NPM](https://www.npmjs.com) 5.5.* - 6.4.*
+   * [Yarn](https://yarnpkg.com) 1.9.* - 1.12.*
+
 2. Clone this repository with submodules by running `git clone --recurse-submodules`. If you have already cloned
    non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`.
 
