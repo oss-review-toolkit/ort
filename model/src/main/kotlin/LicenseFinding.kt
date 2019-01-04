@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.utils.CopyrightStatementsProcessor
+import com.here.ort.utils.SortedSetComparator
 
 import java.util.SortedMap
 import java.util.SortedSet
@@ -55,25 +56,7 @@ data class LicenseFinding @JsonCreator constructor(
         val copyrights: SortedSet<String>
 ) : Comparable<LicenseFinding> {
     companion object {
-        private val COPYRIGHTS_COMPARATOR = Comparator<SortedSet<String>> { o1, o2 ->
-            val iterator1 = o1.iterator()
-            val iterator2 = o2.iterator()
-
-            while (iterator1.hasNext() && iterator2.hasNext()) {
-                val value1 = iterator1.next()
-                val value2 = iterator2.next()
-
-                value1.compareTo(value2).let {
-                    if (it != 0) return@Comparator it
-                }
-            }
-
-            return@Comparator when {
-                iterator1.hasNext() -> 1
-                iterator2.hasNext() -> -1
-                else -> 0
-            }
-        }
+        private val COPYRIGHTS_COMPARATOR = SortedSetComparator<String>()
     }
 
     @JsonCreator
