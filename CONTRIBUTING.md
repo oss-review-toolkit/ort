@@ -5,8 +5,8 @@ sign off the [Developer Certificate of Origin](https://developercertificate.org/
 
 In order to maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 
-- We pay more attention to the quality of commit messages than most other projects on GitHub. In general, we share the
-  view on how commit message should be written with
+- We pay more attention to the quality of commit messages than most other projects on GitHub do. In general, we share the
+  view on how commit messages should be written with
   [the Git project itself](https://github.com/git/git/blob/master/Documentation/SubmittingPatches):
 
   - [Make separate commits for logically separate changes.](https://github.com/git/git/blob/e6932248fcb41fb94a0be484050881e03c7eb298/Documentation/SubmittingPatches#L43)
@@ -27,7 +27,7 @@ In order to maintain a high software quality standard, we strongly prefer contri
   [Jeff King's commits](https://github.com/git/git/commits?author=peff) in the Git project.
 
 - When addressing review comments in a pull request, please fix the issue in the commit where it appears, not in a new
-  commit on top of the pull request's history. While this requires force-pushing of the new iteration of you pull
+  commit on top of the pull request's history. While this requires force-pushing of the new iteration of your pull
   request's branch, it has several advantages:
 
   - Reviewers that go through (larger) pull requests commit by commit are always up-to-date with latest fixes, instead
