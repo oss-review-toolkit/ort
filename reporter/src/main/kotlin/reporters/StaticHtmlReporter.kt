@@ -607,7 +607,7 @@ class StaticHtmlReporter : Reporter() {
                 }
 
                 if (row.detectedLicenses.isNotEmpty()) {
-                    em { +"Declared Licenses:" }
+                    em { +"Detected Licenses:" }
                     dl { dd { +row.detectedLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } } }
                 }
             }
