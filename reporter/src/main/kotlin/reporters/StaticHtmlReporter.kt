@@ -477,7 +477,7 @@ class StaticHtmlReporter : Reporter() {
                     ul {
                         errors.forEach { error ->
                             li {
-                                p { unsafe { +error.description.replace("\n", "<br/>") } }
+                                errorDescription(error)
                                 p { +error.resolutionDescription }
                             }
                         }
@@ -492,7 +492,7 @@ class StaticHtmlReporter : Reporter() {
                     ul {
                         errors.forEach { error ->
                             li {
-                                p { unsafe { +error.description.replace("\n", "<br/>") } }
+                                errorDescription(error)
                                 p { +error.resolutionDescription }
                             }
                         }
@@ -622,13 +622,23 @@ class StaticHtmlReporter : Reporter() {
         ul {
             errors.forEach {
                 li {
-                    p { unsafe { +it.description.replace("\n", "<br/>") } }
+                    errorDescription(it)
 
                     if (it.isResolved) {
                         classes = setOf("ort-resolved")
                         p { +it.resolutionDescription }
                     }
                 }
+            }
+        }
+    }
+
+    private fun LI.errorDescription(error: ResolvableIssue) {
+        p {
+            var first = true
+            error.description.lines().forEach {
+                if (first) first = false else br
+                +it
             }
         }
     }
