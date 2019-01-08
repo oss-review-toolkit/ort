@@ -52,7 +52,8 @@ Follow these steps to run the OSS Review Toolkit from source code:
    `JAVA_HOME` environment variable set.
 
 2. Clone this repository with submodules by running `git clone --recurse-submodules`. If you have already cloned
-   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`.
+   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`. Note
+   that submodules are only required if you intend to run tests, though.
 
 3. Change into the created directory and run `./gradlew installDist` to build / install the start script for ORT. On
    the first run, this will also bootstrap Gradle and download required dependencies. The start script can then be run
