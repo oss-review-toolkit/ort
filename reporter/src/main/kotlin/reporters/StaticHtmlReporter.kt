@@ -146,6 +146,11 @@ class StaticHtmlReporter : Reporter() {
           color: #573a08;
         }
 
+        .ort-report-table tr.ort-hint {
+          background: #fffaf3;
+          color: #573a08;
+        }
+
         .ort-report-table tr:last-child td {
           border-bottom: 1px solid rgba(34,36,38,.15);
         }
@@ -430,7 +435,7 @@ class StaticHtmlReporter : Reporter() {
             when (error.severity) {
                 Severity.ERROR -> "ort-error"
                 Severity.WARNING -> "ort-warning"
-                Severity.HINT -> "ort-warning"
+                Severity.HINT -> "ort-hint"
             }
         }
 
