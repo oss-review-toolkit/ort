@@ -81,14 +81,16 @@ Follow these steps to run the OSS Review Toolkit from source code:
 
 Alternatively, you can also run the OSS Review Toolkit by building its Docker image:
 
-1. Ensure you have recent versions of Git and Docker installed.
+1. Ensure you have Docker installed and its daemon running.
 
 2. Clone this repository with submodules by running `git clone --recurse-submodules`. If you have already cloned
-   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`.
+   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`. Note
+   that submodules are only required if you intend to run tests, though.
 
-3. Change into the created directory and run `./gradlew cli:dockerBuildImage` to build the Docker image.
+3. Change into the created directory and run `./gradlew cli:dockerBuildImage` to build the Docker image and send it to
+   the locally running daemon.
 
-4. Run `docker run ort requirements` to execute the image and install required command line tools into the container.
+4. Execute `docker run ort requirements` to verify all required command line tools are available in the container.
 
 ## Tools
 
