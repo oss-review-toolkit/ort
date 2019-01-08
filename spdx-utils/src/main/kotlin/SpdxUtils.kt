@@ -23,7 +23,9 @@ import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
+import java.net.URL
 import java.util.EnumSet
 
 /**
@@ -68,9 +70,20 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
         EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
- * Retrieve the full text for the license with the provided SPDX [id]. If [handleExceptions] is enabled, the [id] may
- * also refer to an exception instead of a license.
+ * Retrieve the full text for the license with the provided SPDX [id], including "LicenseRefs". If [handleExceptions] is
+ * enabled, the [id] may also refer to an exception instead of a license.
  */
 fun getLicenseText(id: String, handleExceptions: Boolean = false) =
-        SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
-                ?: throw IOException("No license text found for id '$id'.")
+        if (id.startsWith("LicenseRef-")) {
+            val ref = id.removePrefix("LicenseRef-").toLowerCase()
+            val url = "https://raw.githubusercontent.com/nexB/scancode-toolkit/develop/" +
+                    "src/licensedcode/data/licenses/$ref.LICENSE"
+            try {
+                URL(url).readText()
+            } catch (e: FileNotFoundException) {
+                throw IOException("No license text found for id '$id'.")
+            }
+        } else {
+            SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
+                    ?: throw IOException("No license text found for id '$id'.")
+        }
