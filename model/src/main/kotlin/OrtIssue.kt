@@ -65,12 +65,20 @@ class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
             // For backward-compatibility if only an error string is specified.
             OrtIssue(Instant.EPOCH, "", node.textValue())
         } else {
-            OrtIssue(
-                    timestamp = Instant.parse(node.get("timestamp").textValue()),
-                    source = node.get("source").textValue(),
-                    message = node.get("message").textValue(),
-                    severity = node.get("severity")?.let { Severity.valueOf(it.textValue()) } ?: Severity.ERROR
-            )
+            if (node.has("severity")) {
+                OrtIssue(
+                        timestamp = Instant.parse(node.get("timestamp").textValue()),
+                        source = node.get("source").textValue(),
+                        message = node.get("message").textValue(),
+                        severity = Severity.valueOf(node.get("severity").textValue())
+                )
+            } else {
+                OrtIssue(
+                        timestamp = Instant.parse(node.get("timestamp").textValue()),
+                        source = node.get("source").textValue(),
+                        message = node.get("message").textValue()
+                )
+            }
         }
     }
 }
