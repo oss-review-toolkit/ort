@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -167,7 +167,7 @@ class ScanCodeTest : WordSpec({
             val result = jsonMapper.readTree(resultFile)
 
             scanner.associateFindings(result) shouldBe sortedSetOf(
-                    LicenseFinding("Apache-2.0", sortedSetOf("Copyright (c) 2017-2018 HERE Europe B.V."))
+                    LicenseFinding("Apache-2.0", sortedSetOf("Copyright (C) 2017-2019 HERE Europe B.V."))
             )
         }
 
