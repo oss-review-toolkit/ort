@@ -147,8 +147,8 @@ class StaticHtmlReporter : Reporter() {
         }
 
         .ort-report-table tr.ort-hint {
-          background: #fffaf3;
-          color: #573a08;
+          background: #f7f5ff;
+          color: #1c0859;
         }
 
         .ort-report-table tr:last-child td {
