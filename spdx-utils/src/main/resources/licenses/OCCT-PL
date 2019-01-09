@@ -16,7 +16,7 @@ Unless there is something in the subject matter or in the context inconsistent t
 
 "Derivative Program": means a new program combining the Software or portions thereof with other source code not governed by the terms of this License.
 
-"Initial Developer": means OPEN CASCADE, with main offices at 1, place des FrÃ¨res Montgolfier, 78280, Guyancourt, France.
+"Initial Developer": means OPEN CASCADE, with main offices at 1, place des Frères Montgolfier, 78280, Guyancourt, France.
 
 "Modifications": mean any addition to, deletion from or change to the substance or the structure of the Software. When source code of the Software is released as a series of files, a Modification is: (a) any addition to, deletion from or change to the contents of a file containing the Software or (b) any new file or other representation of computer program statements that contains any part of the Software. By way of example, Modifications include any debug of, or improvement to, the Original Code or any of its components or portions as well as its next versions or releases thereof.
 
@@ -64,7 +64,7 @@ Under no circumstances shall You, the Initial Developer or any Contributor be li
 This License does not grant any rights to use the trademarks, trade names and domain names "MATRA", "EADS Matra Datavision", "CAS.CADE", "Open CASCADE", "opencascade.com" and "opencascade.org" or any other trademarks, trade names or domain names used or owned by the Initial Developer.
 
 11. Copyright 
-The Initial Developer retains all rights, title and interest in and to the Original Code. You may not remove the copyright Â© notice which appears when You download the Software.
+The Initial Developer retains all rights, title and interest in and to the Original Code. You may not remove the copyright © notice which appears when You download the Software.
 
 12. Term 
 This License is granted to You for a term equal to the remaining period of protection covered by the intellectual property rights applicable to the Original Code.
@@ -84,14 +84,14 @@ The Initial Developer may publish new versions of this License from time to time
 
 END OF THE TERMS AND CONDITIONS OF THIS LICENSE
 
-OPEN CASCADE is a French sociÃ©tÃ© par actions simplifiÃ©e having its registered head office at 1, place des FrÃ¨res Montgolfier, 78280, Guyancourt, France and main offices at 1, place des FrÃ¨res Montgolfier, 78280, Guyancourt, France. Its web site is located at the following address opencascade.com
+OPEN CASCADE is a French société par actions simplifiée having its registered head office at 1, place des Frères Montgolfier, 78280, Guyancourt, France and main offices at 1, place des Frères Montgolfier, 78280, Guyancourt, France. Its web site is located at the following address opencascade.com
 
 Open CASCADE Technology Public License 
 Schedule "A"
 
 The content of this file is subject to the Open CASCADE Technology Public License (the "License"). You may not use the content of this file except in compliance with the License. Please obtain a copy of the License at opencascade.com and read it completely before using this file.
 
-The Initial Developer of the Original Code is OPEN CASCADE, with main offices at 1, place des FrÃ¨res Montgolfier, 78280, Guyancourt, France. The Original Code is copyright Â© OPEN CASCADE SAS, 2001. All rights reserved. "The Original Code and all software distributed under the License are distributed on an "AS IS" basis, without warranty of any kind, and the Initial Developer hereby disclaims all such warranties, including without limitation, any warranties of merchantability, fitness for a particular purpose or non-infringement.
+The Initial Developer of the Original Code is OPEN CASCADE, with main offices at 1, place des Frères Montgolfier, 78280, Guyancourt, France. The Original Code is copyright © OPEN CASCADE SAS, 2001. All rights reserved. "The Original Code and all software distributed under the License are distributed on an "AS IS" basis, without warranty of any kind, and the Initial Developer hereby disclaims all such warranties, including without limitation, any warranties of merchantability, fitness for a particular purpose or non-infringement.
 
 Please see the License for the specific terms and conditions governing rights and limitations under the License". 
 End of Schedule "A"
@@ -101,9 +101,9 @@ Schedule "B"
 
 "The content of this file is subject to the Open CASCADE Technology Public License (the "License"). You may not use the content of this file except in compliance with the License. Please obtain a copy of the License at opencascade.com and read it completely before using this file.
 
-The Initial Developer of the Original Code is OPEN CASCADE, with main offices at 1, place des FrÃ¨res Montgolfier, 78280, Guyancourt, France. The Original Code is copyright Â© Open CASCADE SAS, 2001. All rights reserved.
+The Initial Developer of the Original Code is OPEN CASCADE, with main offices at 1, place des Frères Montgolfier, 78280, Guyancourt, France. The Original Code is copyright © Open CASCADE SAS, 2001. All rights reserved.
 
-Modifications to the Original Code have been made by  . Modifications are copyright Â© [Year to be included]. All rights reserved.
+Modifications to the Original Code have been made by  . Modifications are copyright © [Year to be included]. All rights reserved.
 
 The software Open CASCADE Technology and all software distributed under the License are distributed on an "AS IS" basis, without warranty of any kind, and the Initial Developer hereby disclaims all such warranties, including without limitation, any warranties of merchantability, fitness for a particular purpose or non-infringement.
 

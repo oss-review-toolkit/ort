@@ -25,4 +25,4 @@ It is not permitted to copy, sublicense, distribute or transfer any of the SMP S
 
 The SMP uses the Enhanced SNACC (eSNACC) Abstract Syntax Notation One (ASN.1) C++ Library to ASN.1 encode and decode security-related data objects. The eSNACC ASN.1 C++ Library is covered by the ENHANCED SNACC SOFTWARE PUBLIC LICENSE. None of the GNU public licenses apply to the eSNACC ASN.1 C++ Library. The eSNACC Compiler is not distributed as part of the SMP.
 
-Copyright Â© 1997-2002 National Security Agency
+Copyright © 1997-2002 National Security Agency
