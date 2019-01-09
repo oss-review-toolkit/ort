@@ -165,6 +165,32 @@ def generateLicenseTextResources(String description, List<String> ids, String re
     }
 }
 
+task generateLicenseRefTextResources(dependsOn: importScanCodeLicenseTexts) {
+    group = 'SPDX'
+    description = 'Generates the LicenseRef text resources.'
+    finalizedBy cleanImportScanCodeLicenseTexts
+
+    doLast {
+        def licensesDir = file("$buildDir/SvnExport/licenses/scancode-toolkit")
+        def resourcesDir = file('src/main/resources/licenserefs').tap { mkdirs() }
+        licensesDir.listFiles({ it.name.endsWith('.yml') && !it.name.endsWith('-exception.yml')} as FileFilter).each {
+            def isSpdxLicense = it.readLines().any { it.startsWith('spdx_license_key: ') }
+            if (!isSpdxLicense) {
+                def baseName = it.name.take(it.name.lastIndexOf('.'))
+                def licenseFile = new File(licensesDir, "${baseName}.LICENSE")
+                if (licenseFile.file) {
+                    def resourceFile = new File(resourcesDir, baseName)
+                    def text = licenseFile.getText('UTF-8')
+                    if (!text.endsWith('\n')) text += '\n'
+                    resourceFile.write(text, 'UTF-8')
+                } else {
+                    logger.warn("No license text found for license '$baseName'.")
+                }
+            }
+        }
+    }
+}
+
 task generateSpdxLicenseEnum(dependsOn: importLicenseTexts) {
     group = 'SPDX'
     description = 'Generates the enum class of SPDX license ids and their associated texts as resources.'
