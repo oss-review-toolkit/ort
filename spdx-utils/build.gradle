@@ -1,5 +1,6 @@
 plugins {
     id 'antlr'
+    id 'at.bxm.svntools'
 }
 
 // Apply core plugins.
@@ -25,6 +26,31 @@ dependencies {
     implementation "commons-codec:commons-codec:$commonsCodecVersion"
 
     testImplementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+}
+
+task importScanCodeLicenseTexts(type: at.bxm.gradleplugins.svntools.tasks.SvnExport) {
+    group = 'SPDX'
+    description = 'Imports license texts from the ScanCode repository.'
+
+    svnUrl = 'https://github.com/nexB/scancode-toolkit/trunk/src/licensedcode/data/licenses'
+    targetDir = "$buildDir/SvnExport/licenses/scancode-toolkit"
+    outputs.dir targetDir
+}
+
+task importSpdxLicenseTexts(type: at.bxm.gradleplugins.svntools.tasks.SvnExport) {
+    group = 'SPDX'
+    description = 'Imports license texts from the SPDX repository.'
+
+    svnUrl = 'https://github.com/spdx/license-list-data/trunk/text'
+    targetDir = "$buildDir/SvnExport/licenses/spdx"
+    outputs.dir targetDir
+}
+
+task importLicenseTexts {
+    group = 'SPDX'
+    description = 'Imports license texts from all known sources.'
+    dependsOn tasks.matching { it.name ==~ /import.+LicenseTexts/ }
+    outputs.files dependsOn.collectMany { it*.outputs.files }
 }
 
 def getLicenseHeader(int fromYear = 2017, int toYear = java.time.Year.now().value) {
@@ -104,45 +130,45 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
     return ids
 }
 
-def downloadLicenseTexts(String description, List<String> ids, String resourcePath) {
-    logger.quiet("Downloading SPDX $description texts...")
-    def count = 0
+def generateLicenseTextResources(String description, List<String> ids, String resourcePath) {
+    logger.quiet("Determining SPDX $description texts...")
 
     ids.each { id ->
         def resourceFile = file("src/main/resources/$resourcePath/$id")
 
         // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
-        def urls = [
-                "https://raw.githubusercontent.com/nexB/scancode-toolkit/develop/src/licensedcode/data/licenses/${id.toLowerCase()}.LICENSE",
-                "https://raw.githubusercontent.com/spdx/license-list-data/master/text/${id}.txt",
-                "https://raw.githubusercontent.com/spdx/license-list-data/master/text/deprecated_${id}.txt"
+        def candidates = [
+                "$buildDir/SvnExport/licenses/scancode-toolkit/${id.toLowerCase()}.LICENSE",
+                "$buildDir/SvnExport/licenses/spdx/${id}.txt",
+                "$buildDir/SvnExport/licenses/spdx/deprecated_${id}.txt"
         ]
 
-        def i = urls.iterator()
+        def i = candidates.iterator()
         while (true) {
             if (i.hasNext()) {
-                def url = i.next()
+                def candidate = i.next()
 
                 try {
-                    def text = url.toURL().text
+                    def text = file(candidate).getText('UTF-8')
                     if (!text.endsWith('\n')) text += '\n'
-                    resourceFile.write(text)
+                    resourceFile.write(text, 'UTF-8')
                 } catch (FileNotFoundException e) {
+                    logger.quiet("Falling back to license text from SPDX for '$id'.")
                     continue
                 }
 
-                logger.quiet("Downloaded $description text ${++count} of ${ids.size()} for id '$id' from $url.")
                 break
             } else {
-                throw new GradleException("Failed to download $description text for id '$id' from any of $urls.")
+                throw new GradleException("Failed to determine $description text for id '$id' from any of $candidates.")
             }
         }
     }
 }
 
-task generateSpdxLicenseEnum {
+task generateSpdxLicenseEnum(dependsOn: importLicenseTexts) {
     group = 'SPDX'
     description = 'Generates the enum class of SPDX license ids and their associated texts as resources.'
+    finalizedBy cleanImportLicenseTexts
 
     doLast {
         def description = 'license'
@@ -155,13 +181,14 @@ task generateSpdxLicenseEnum {
                 resourcePath,
                 { json -> json.licenses.collect { it['licenseId'] } }
         )
-        downloadLicenseTexts(description, ids, resourcePath)
+        generateLicenseTextResources(description, ids, resourcePath)
     }
 }
 
-task generateSpdxLicenseExceptionEnum {
+task generateSpdxLicenseExceptionEnum(dependsOn: importLicenseTexts) {
     group = 'SPDX'
     description = 'Generates the enum class of SPDX license exception ids and their associated texts as resources.'
+    finalizedBy cleanImportLicenseTexts
 
     doLast {
         def description = 'license exception'
@@ -174,7 +201,7 @@ task generateSpdxLicenseExceptionEnum {
                 resourcePath,
                 { json -> json.exceptions.collect { it['licenseExceptionId'] } }
         )
-        downloadLicenseTexts(description, ids, resourcePath)
+        generateLicenseTextResources(description, ids, resourcePath)
     }
 }
 
