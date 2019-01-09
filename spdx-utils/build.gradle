@@ -178,7 +178,8 @@ task generateSpdxLicenseExceptionEnum {
     }
 }
 
-task generateSpdxEnums(dependsOn: [generateSpdxLicenseEnum, generateSpdxLicenseExceptionEnum]) {
+task generateSpdxEnums {
     group = "SPDX"
     description = "Generates the enum classes of SPDX license and exception ids and their associated texts as resources."
+    dependsOn tasks.matching { it.name ==~ /generateSpdx.+Enum/ }
 }
