@@ -458,7 +458,7 @@ class StaticHtmlReporter : Reporter() {
 
         h3 { +"Packages" }
 
-        table("ort-report-table ort-errors") {
+        table("ort-report-table") {
             thead {
                 tr {
                     th { +"Package" }
