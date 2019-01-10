@@ -135,6 +135,8 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
 }
 
 .ort-report-table th:first-child {
+  width: 30px;
+  white-space: nowrap;
   border-top-left-radius: .28rem;
   border-left: 1px solid rgba(34,36,38,.15);
   border-top: 1px solid rgba(34,36,38,.15);
@@ -276,24 +278,24 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
       <table class="ort-report-table ort-violations">
         <thead>
           <tr>
-            <th>Source</th><th>Error</th>
+            <th>#</th><th>Source</th><th>Error</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="ort-error">
-            <td>GPL-1.0-only</td><td>
+          <tr class="ort-ruleViolation">
+            <td>1</td><td>GPL-1.0-only</td><td>
               <p>2019-01-02T17:23:55.486Z: GPL-1.0-only - GPL 1 error</p>
               <p></p>
             </td>
           </tr>
           <tr class="ort-warning">
-            <td>GPL-2.0-only</td><td>
+            <td>2</td><td>GPL-2.0-only</td><td>
               <p>2019-01-02T17:23:55.486Z: GPL-2.0-only - GPL 2 warning</p>
               <p></p>
             </td>
           </tr>
           <tr class="ort-hint">
-            <td>GPL-3.0-only</td><td>
+            <td>3</td><td>GPL-3.0-only</td><td>
               <p>2019-01-02T17:23:55.486Z: GPL-3.0-only - GPL 3 hint</p>
               <p></p>
             </td>
@@ -306,12 +308,12 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
       <table class="ort-report-table">
         <thead>
           <tr>
-            <th>Package</th><th>Analyzer Errors</th><th>Scanner Errors</th>
+            <th>#</th><th>Package</th><th>Analyzer Errors</th><th>Scanner Errors</th>
           </tr>
         </thead>
         <tbody>
           <tr class="ort-error">
-            <td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
+            <td>1</td><td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
               <ul>
                 <li>
                   <p>n/a: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file</p>
@@ -344,12 +346,12 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
       <table class="ort-report-table ort-packages ">
         <thead>
           <tr>
-            <th>Package</th><th>Scopes</th><th>Licenses</th><th>Analyzer Errors</th><th>Scanner Errors</th>
+            <th>#</th><th>Package</th><th>Scopes</th><th>Licenses</th><th>Analyzer Errors</th><th>Scanner Errors</th>
           </tr>
         </thead>
         <tbody>
           <tr class="ort-error ">
-            <td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><em>Detected Licenses:</em>
+            <td>1</td><td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><em>Detected Licenses:</em>
               <dl>
                 <dd>MIT</dd>
               </dl>
@@ -364,7 +366,7 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
             </td>
           </tr>
           <tr class="ort-success ">
-            <td>Maven:junit:junit:4.12</td><td>
+            <td>2</td><td>Maven:junit:junit:4.12</td><td>
               <ul>
                 <li class="">testCompile</li>
               </ul>
@@ -379,7 +381,7 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
             </td>
           </tr>
           <tr class="ort-success ">
-            <td>Maven:org.apache.commons:commons-lang3:3.5</td><td>
+            <td>3</td><td>Maven:org.apache.commons:commons-lang3:3.5</td><td>
               <ul>
                 <li class="">compile</li>
                 <li class="">testCompile</li>
@@ -395,7 +397,7 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
             </td>
           </tr>
           <tr class="ort-success ">
-            <td>Maven:org.apache.commons:commons-text:1.1</td><td>
+            <td>4</td><td>Maven:org.apache.commons:commons-text:1.1</td><td>
               <ul>
                 <li class="">compile</li>
                 <li class="">testCompile</li>
@@ -411,7 +413,7 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
             </td>
           </tr>
           <tr class="ort-success ">
-            <td>Maven:org.hamcrest:hamcrest-core:1.3</td><td>
+            <td>5</td><td>Maven:org.hamcrest:hamcrest-core:1.3</td><td>
               <ul>
                 <li class="">testCompile</li>
               </ul>
