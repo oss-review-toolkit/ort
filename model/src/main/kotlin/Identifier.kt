@@ -95,12 +95,12 @@ data class Identifier(
     fun isFromVendor(name: String): Boolean {
         val lowerName = name.toLowerCase()
         val vendorNamespace = when (type) {
-            "NPM" -> "@$lowerName"
-            "Gradle", "Maven", "SBT" -> "com.$lowerName"
+            "NPM" -> "^@$lowerName$"
+            "Gradle", "Maven", "SBT" -> "^(com|net|org)\\.$lowerName"
             else -> ""
         }
 
-        return vendorNamespace.isNotEmpty() && namespace.startsWith(vendorNamespace)
+        return vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
     }
 
     /**
