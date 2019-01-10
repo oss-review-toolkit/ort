@@ -244,7 +244,7 @@ then, and also for curations for internal packages that cannot be published, the
 
 ### Resolving errors and rule violations
 
-Global error resolutions works the same way as the project specific error resolutions described
+Global error resolutions work the same way as the project specific error resolutions described
 in [resolving errors](#resolving-errors) and in [resolving rule violations](#resolving-rule-violations), but instead of
 adding them to the `.ort.yml` file of the project, they are added to a separate configuration file, which makes them
 reusable for different projects. Global error resolutions should only be used for generic errors that can always be
