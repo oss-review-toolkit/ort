@@ -175,6 +175,8 @@ class StaticHtmlReporter : Reporter() {
         }
 
         .ort-report-table th:first-child {
+          width: 30px;
+          white-space: nowrap;
           border-top-left-radius: .28rem;
           border-left: 1px solid rgba(34,36,38,.15);
           border-top: 1px solid rgba(34,36,38,.15);
@@ -418,17 +420,22 @@ class StaticHtmlReporter : Reporter() {
             table("ort-report-table ort-violations") {
                 thead {
                     tr {
+                        th { +"#" }
                         th { +"Source" }
                         th { +"Error" }
                     }
                 }
 
-                tbody { ruleViolations.forEach { evaluatorRow(it) } }
+                tbody {
+                    ruleViolations.forEachIndexed { rowIndex, ruleViolation ->
+                        evaluatorRow(rowIndex + 1, ruleViolation)
+                    }
+                }
             }
         }
     }
 
-    private fun TBODY.evaluatorRow(ruleViolation: ResolvableIssue) {
+    private fun TBODY.evaluatorRow(rowIndex: Int, ruleViolation: ResolvableIssue) {
         val cssClass = if (ruleViolation.isResolved) {
             "ort-resolved"
         } else {
@@ -440,6 +447,7 @@ class StaticHtmlReporter : Reporter() {
         }
 
         tr(cssClass) {
+            td { +rowIndex.toString() }
             td { +ruleViolation.source }
             td {
                 p { +ruleViolation.description }
@@ -461,18 +469,24 @@ class StaticHtmlReporter : Reporter() {
         table("ort-report-table") {
             thead {
                 tr {
+                    th { +"#" }
                     th { +"Package" }
                     th { +"Analyzer Errors" }
                     th { +"Scanner Errors" }
                 }
             }
 
-            tbody { errorSummary.rows.forEach { errorRow(it) } }
+            tbody {
+                errorSummary.rows.forEachIndexed { rowIndex, error ->
+                    errorRow(rowIndex + 1, error)
+                }
+            }
         }
     }
 
-    private fun TBODY.errorRow(row: ReportTableModel.ErrorRow) {
+    private fun TBODY.errorRow(rowIndex: Int, row: ReportTableModel.ErrorRow) {
         tr("ort-error") {
+            td { +rowIndex.toString() }
             td { +"${row.id}" }
 
             td {
@@ -554,6 +568,7 @@ class StaticHtmlReporter : Reporter() {
         table("ort-report-table ort-packages $excludedClass") {
             thead {
                 tr {
+                    th { +"#" }
                     th { +"Package" }
                     th { +"Scopes" }
                     th { +"Licenses" }
@@ -562,11 +577,15 @@ class StaticHtmlReporter : Reporter() {
                 }
             }
 
-            tbody { table.rows.forEach { projectRow(it) } }
+            tbody {
+                table.rows.forEachIndexed { rowIndex, pkg ->
+                    projectRow(rowIndex + 1, pkg)
+                }
+            }
         }
     }
 
-    private fun TBODY.projectRow(row: ReportTableModel.DependencyRow) {
+    private fun TBODY.projectRow(rowIndex: Int, row: ReportTableModel.DependencyRow) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
                 if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
@@ -578,6 +597,7 @@ class StaticHtmlReporter : Reporter() {
         }
 
         tr("$cssClass $rowExcludedClass") {
+            td { +rowIndex.toString() }
             td { +"${row.id}" }
 
             td {
