@@ -446,8 +446,16 @@ class StaticHtmlReporter : Reporter() {
             }
         }
 
-        tr(cssClass) {
-            td { +rowIndex.toString() }
+        val rowId = "violation-$rowIndex"
+
+        tr(classes = cssClass) {
+            id = rowId
+            td {
+                a  {
+                    href = "#$rowId"
+                    +rowIndex.toString()
+                }
+            }
             td { +ruleViolation.source }
             td {
                 p { +ruleViolation.description }
@@ -485,8 +493,16 @@ class StaticHtmlReporter : Reporter() {
     }
 
     private fun TBODY.errorRow(rowIndex: Int, row: ReportTableModel.ErrorRow) {
+        val rowId = "error-$rowIndex"
+
         tr("ort-error") {
-            td { +rowIndex.toString() }
+            id = rowId
+            td {
+                a  {
+                    href = "#$rowId"
+                    +rowIndex.toString()
+                }
+            }
             td { +"${row.id}" }
 
             td {
@@ -579,13 +595,13 @@ class StaticHtmlReporter : Reporter() {
 
             tbody {
                 table.rows.forEachIndexed { rowIndex, pkg ->
-                    projectRow(rowIndex + 1, pkg)
+                    projectRow(project.id.toString(), rowIndex + 1, pkg)
                 }
             }
         }
     }
 
-    private fun TBODY.projectRow(rowIndex: Int, row: ReportTableModel.DependencyRow) {
+    private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ReportTableModel.DependencyRow) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
                 if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
@@ -596,8 +612,16 @@ class StaticHtmlReporter : Reporter() {
             else -> "ort-success"
         }
 
+        val rowId = "$projectId-pkg-$rowIndex"
+
         tr("$cssClass $rowExcludedClass") {
-            td { +rowIndex.toString() }
+            id = rowId
+            td {
+                a  {
+                    href = "#$rowId"
+                    +rowIndex.toString()
+                }
+            }
             td { +"${row.id}" }
 
             td {
