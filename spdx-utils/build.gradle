@@ -61,13 +61,13 @@ def licenseToEnumEntry(String license) {
 
 def generateEnumClass(String taskName, String description, String jsonUrl, String className, String resourcePath,
         Closure collectIds) {
-    println "Fetching $description list..."
+    logger.quiet("Fetching $description list...")
 
     def jsonSlurper = new groovy.json.JsonSlurper()
     def json = jsonSlurper.parse(jsonUrl.toURL())
     def ids = collectIds(json)
 
-    println "Found ${ids.size()} SPDX $description identifiers."
+    logger.quiet("Found ${ids.size()} SPDX $description identifiers.")
 
     def enumFile = file("src/main/kotlin/${className}.kt")
     enumFile.write(getLicenseHeader())
@@ -99,13 +99,13 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
             }
             """.stripIndent())
 
-    println "Generated SPDX $description enum file '$enumFile'."
+    logger.quiet("Generated SPDX $description enum file '$enumFile'.")
 
     return ids
 }
 
 def downloadLicenseTexts(String description, List<String> ids, String resourcePath) {
-    println "Downloading SPDX $description texts..."
+    logger.quiet("Downloading SPDX $description texts...")
     def count = 0
 
     ids.each { id ->
@@ -131,7 +131,7 @@ def downloadLicenseTexts(String description, List<String> ids, String resourcePa
                     continue
                 }
 
-                println "Downloaded $description text ${++count} of ${ids.size()} for id '$id' from $url."
+                logger.quiet("Downloaded $description text ${++count} of ${ids.size()} for id '$id' from $url.")
                 break
             } else {
                 throw new GradleException("Failed to download $description text for id '$id' from any of $urls.")
