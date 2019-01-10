@@ -406,13 +406,13 @@ class StaticHtmlReporter : Reporter() {
         }
     }
 
-    private fun DIV.evaluatorTable(evaluatorErrors: List<ResolvableIssue>) {
+    private fun DIV.evaluatorTable(ruleViolations: List<ResolvableIssue>) {
         h2 {
             id = "policy-violation-summary"
-            +"Rule Violation Summary (${evaluatorErrors.size} violations)"
+            +"Rule Violation Summary (${ruleViolations.size} violations)"
         }
 
-        if (evaluatorErrors.isEmpty()) {
+        if (ruleViolations.isEmpty()) {
             +"No issues found."
         } else {
             table("ort-report-table ort-violations") {
@@ -423,27 +423,27 @@ class StaticHtmlReporter : Reporter() {
                     }
                 }
 
-                tbody { evaluatorErrors.forEach { evaluatorRow(it) } }
+                tbody { ruleViolations.forEach { evaluatorRow(it) } }
             }
         }
     }
 
-    private fun TBODY.evaluatorRow(error: ResolvableIssue) {
-        val cssClass = if (error.isResolved) {
+    private fun TBODY.evaluatorRow(ruleViolation: ResolvableIssue) {
+        val cssClass = if (ruleViolation.isResolved) {
             "ort-resolved"
         } else {
-            when (error.severity) {
-                Severity.ERROR -> "ort-error"
+            when (ruleViolation.severity) {
+                Severity.ERROR -> "ort-ruleViolation"
                 Severity.WARNING -> "ort-warning"
                 Severity.HINT -> "ort-hint"
             }
         }
 
         tr(cssClass) {
-            td { +error.source }
+            td { +ruleViolation.source }
             td {
-                p { +error.description }
-                p { +error.resolutionDescription }
+                p { +ruleViolation.description }
+                p { +ruleViolation.resolutionDescription }
             }
         }
     }
