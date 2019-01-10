@@ -156,6 +156,23 @@ If the error resolutions are not specific to the project, they should not be con
 global resolutions file. This makes the resolutions reusable for different projects. For details, see
 [below](#resolving-errors-1).
 
+### Resolving rule violations
+
+Analog to [resolving errors](#resolving-errors) rule violations can be resolved by providing a regular expression
+matching the rule violation message along with a reason and a comment further explaining why the reason provided is
+applicable:
+
+```yaml
+resolutions:
+  rule_violations:
+  - message: "A regular expression matching the rule violation message."
+    reason: "One of: APPROVED"
+    comment: "A comment further explaining why the reason above is applicable."
+```
+
+For details about the available reasons, see
+[RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt)
+
 ## Global configuration
 
 This section describes repository-independent configuration options for ORT.
@@ -225,14 +242,14 @@ cli/build/install/ort/bin/ort analyze -i [input-path] -o [analyzer-output-path] 
 In the future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until
 then, and also for curations for internal packages that cannot be published, the curations file can be used.
 
-### Resolving errors
+### Resolving errors and rule violations
 
 Global error resolutions works the same way as the project specific error resolutions described
-[above](#resolving-errors), but instead of adding them to the `.ort.yml` file of the project, they are added to a
-separate configuration file, which makes them reusable for different projects. Global error resolutions should only be
-used for generic errors that can always be ignored. One example where this applies would be scan errors in the
-repositories of third-party packages which affect files that are not built into the package, like documentation or test
-files.
+in [resolving errors](#resolving-errors) and in [resolving rule violations](#resolving-rule-violations), but instead of
+adding them to the `.ort.yml` file of the project, they are added to a separate configuration file, which makes them
+reusable for different projects. Global error resolutions should only be used for generic errors that can always be
+ignored. One example where this applies would be scan errors in the repositories of third-party packages which affect
+files that are not built into the package, like documentation or test files.
 
 The structure of the resolutions file is:
 
@@ -240,6 +257,10 @@ The structure of the resolutions file is:
 errors:
 - message: "A regular expression matching the error message."
   reason: "One of: BUILD_TOOL_ISSUE|CANT_FIX_ISSUE|SCANNER_ISSUE"
+  comment: "A comment further explaining why the reason above is applicable here."
+rule_violations:
+- message: "A regular expression matching the rule violation message."
+  reason: "One of: APPROVED"
   comment: "A comment further explaining why the reason above is applicable here."
 ```
 
