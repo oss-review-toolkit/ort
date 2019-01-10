@@ -166,7 +166,7 @@ applicable:
 resolutions:
   rule_violations:
   - message: "A regular expression matching the rule violation message."
-    reason: "One of: APPROVED"
+    reason: "One of: PATENT_GRANT_EXCEPTION"
     comment: "A comment further explaining why the reason above is applicable."
 ```
 
@@ -260,7 +260,7 @@ errors:
   comment: "A comment further explaining why the reason above is applicable here."
 rule_violations:
 - message: "A regular expression matching the rule violation message."
-  reason: "One of: APPROVED"
+  reason: "One of: PATENT_GRANT_EXCEPTION"
   comment: "A comment further explaining why the reason above is applicable here."
 ```
 
