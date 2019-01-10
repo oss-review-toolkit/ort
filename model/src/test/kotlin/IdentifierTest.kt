@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -131,6 +132,17 @@ class IdentifierTest : StringSpec() {
             val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
 
             map shouldBe mapOf(Identifier("type", "namespace", "", "") to 1)
+        }
+
+        "Checking the vendor works as expected" {
+            assertSoftly {
+                Identifier("Maven:com.here:name:version").isFromVendor("here") shouldBe true
+                Identifier("Maven:org.apache:name:version").isFromVendor("apache") shouldBe true
+                Identifier("NPM:@scope:name:version").isFromVendor("scope") shouldBe true
+
+                Identifier("").isFromVendor("here") shouldBe false
+                Identifier("type:namespace:name:version").isFromVendor("here") shouldBe false
+            }
         }
     }
 }
