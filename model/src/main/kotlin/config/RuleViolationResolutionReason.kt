@@ -23,5 +23,10 @@ enum class RuleViolationResolutionReason {
     /**
      * The implied patent grant is acceptable in this case.
      */
-    PATENT_GRANT_EXCEPTION
+    PATENT_GRANT_EXCEPTION,
+
+    /**
+     * The rule violation is acceptable given the fact that the dependency it relates to is dynamically linked.
+     */
+    DYNAMIC_LINKAGE_EXCEPTION
 }
