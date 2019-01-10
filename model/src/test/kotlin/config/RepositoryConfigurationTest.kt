@@ -81,7 +81,7 @@ class RepositoryConfigurationTest : WordSpec() {
                         comment: "error comment"
                       rule_violations:
                       - message: "rule message"
-                        reason: "APPROVED"
+                        reason: "PATENT_GRANT_EXCEPTION"
                         comment: "rule comment"
                     """.trimIndent()
 
@@ -128,7 +128,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 evalErrors should haveSize(1)
                 val evalError = evalErrors.first()
                 evalError.message shouldBe "rule message"
-                evalError.reason shouldBe RuleViolationResolutionReason.APPROVED
+                evalError.reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
                 evalError.comment shouldBe "rule comment"
             }
         }

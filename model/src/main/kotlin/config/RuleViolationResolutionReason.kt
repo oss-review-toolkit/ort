@@ -21,7 +21,7 @@ package com.here.ort.model.config
 
 enum class RuleViolationResolutionReason {
     /**
-     * The evaluator rule violation leading has been approved.
+     * The patent grant implied by a rule violation is accepted or say an exception is made.
      */
-    APPROVED
+    PATENT_GRANT_EXCEPTION
 }
