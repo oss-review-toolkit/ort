@@ -63,7 +63,7 @@ data class ScanSummary(
         val errors: List<OrtIssue> = emptyList()
 ) {
     @get:JsonIgnore
-    val licenseFindingsMap = sortedMapOf<String, SortedSet<String>>().also {
+    val licenseFindingsMap = sortedMapOf<String, SortedSet<CopyrightFinding>>().also {
         licenseFindings.forEach { finding ->
             it.getOrPut(finding.license) { sortedSetOf() } += finding.copyrights
         }

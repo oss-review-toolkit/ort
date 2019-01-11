@@ -60,10 +60,10 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
 data class LicenseFinding(
         val license: String,
         val locations: SortedSet<TextLocation>,
-        val copyrights: SortedSet<String>
+        val copyrights: SortedSet<CopyrightFinding>
 ) : Comparable<LicenseFinding> {
     companion object {
-        private val COPYRIGHTS_COMPARATOR = SortedSetComparator<String>()
+        private val COPYRIGHTS_COMPARATOR = SortedSetComparator<CopyrightFinding>()
         private val LOCATIONS_COMPARATOR = SortedSetComparator<TextLocation>()
     }
 
@@ -86,18 +86,28 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
         return when {
             node.isTextual -> LicenseFinding(node.textValueOrEmpty(), sortedSetOf(), sortedSetOf())
             else -> {
+                val copyrightsType = jsonMapper.typeFactory.constructCollectionType(
+                        TreeSet::class.java,
+                        CopyrightFinding::class.java
+                )
+
                 val license = jsonMapper.treeToValue<String>(node["license"])
-                val copyrights = jsonMapper.treeToValue<SortedSet<String>>(node["copyrights"])
+
+                val copyrights = jsonMapper.readValue<TreeSet<CopyrightFinding>>(
+                        jsonMapper.treeAsTokens(node["copyrights"]),
+                        copyrightsType
+                )
+
                 val locations = when {
                     node.has("locations") -> {
-                        val collectionType = jsonMapper.typeFactory.constructCollectionType(
+                        val locationsType = jsonMapper.typeFactory.constructCollectionType(
                                 TreeSet::class.java,
                                 TextLocation::class.java
                         )
 
                         jsonMapper.readValue<TreeSet<TextLocation>>(
                                 jsonMapper.treeAsTokens(node["locations"]),
-                                collectionType
+                                locationsType
                         )
                     }
                     else -> sortedSetOf()

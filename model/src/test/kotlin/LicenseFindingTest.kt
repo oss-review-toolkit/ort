@@ -32,8 +32,8 @@ class LicenseFindingTest : StringSpec({
                     TextLocation("path 2", 3, 4)
             ),
             sortedSetOf(
-                    "copyright 1",
-                    "copyright 2"
+                    CopyrightFinding("copyright 1", sortedSetOf()),
+                    CopyrightFinding("copyright 2", sortedSetOf())
             )
     )
 
@@ -58,8 +58,10 @@ class LicenseFindingTest : StringSpec({
               start_line: 3
               end_line: 4
             copyrights:
-            - "copyright 1"
-            - "copyright 2"
+            - statement: "copyright 1"
+              locations: []
+            - statement: "copyright 2"
+              locations: []
             """.trimIndent()
     }
 
@@ -88,7 +90,10 @@ class LicenseFindingTest : StringSpec({
         deserializedLicenseFinding shouldBe LicenseFinding(
                 "license",
                 sortedSetOf(),
-                sortedSetOf("copyright 1", "copyright 2")
+                sortedSetOf(
+                        CopyrightFinding("copyright 1", sortedSetOf()),
+                        CopyrightFinding("copyright 2", sortedSetOf())
+                )
         )
     }
 })
