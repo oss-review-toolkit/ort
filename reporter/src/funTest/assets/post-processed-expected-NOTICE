@@ -798,6 +798,87 @@ Creative Commons may be contacted at creativecommons.org.
 
 ----
 
+
+
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+
+
+----
+
+Public Domain
+
+No warranty expressed or implied. Use at your own risk.
+
+This file has been superceded by http://www.JSON.org/json2.js
+
+See http://www.JSON.org/js.html
+
+----
+
+json2.js
+ 2011-10-19
+
+ Public Domain.
+
+ NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+
+ See http://www.JSON.org/js.html
+
+This code should be minified before deployment.
+See http://javascript.crockford.com/jsmin.html
+
+USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO NOT CONTROL.
+
+----
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with
+or without fee is hereby granted, provided that the above copyright notice and this
+permission notice appear in all copies.
+
+The software is  provided "as is", without warranty of any kind, including all
+implied warranties of merchantability and fitness. In no event shall the authors or
+copyright holders be liable for any claim, damages, or other liability, whether in an
+action of contract, tort, or otherwise, arising from, out of, or in connection with
+the software or the use or other dealings in the software.
+
+----
+
 Footer 1
 
 ----
