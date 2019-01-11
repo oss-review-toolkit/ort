@@ -59,8 +59,8 @@ const PackageScansSummary = (props) => {
                                             </dl>
                                             <dl>
                                                 {row.copyrights.map(holder => (
-                                                    <dd key={`${row.license}-holder-${holder}`}>
-                                                        {holder}
+                                                    <dd key={`${row.license}-holder-${holder.statement}`}>
+                                                        {holder.statement}
                                                     </dd>
                                                 ))}
                                             </dl>

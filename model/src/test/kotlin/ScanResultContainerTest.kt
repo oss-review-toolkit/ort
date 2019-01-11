@@ -66,12 +66,18 @@ class ScanResultContainerTest : WordSpec() {
                     LicenseFinding(
                             "license 1.1",
                             sortedSetOf(TextLocation("path 1.1", 1, 1)),
-                            sortedSetOf("copyright 1")
+                            sortedSetOf(CopyrightFinding(
+                                    "copyright 1",
+                                    sortedSetOf(TextLocation("copyright path 1.1", 1, 1))
+                            ))
                     ),
                     LicenseFinding(
                             "license 1.2",
                             sortedSetOf(TextLocation("path 1.2", 1, 2)),
-                            sortedSetOf("copyright 2")
+                            sortedSetOf(CopyrightFinding(
+                                    "copyright 2",
+                                    sortedSetOf(TextLocation("copyright path 1.2", 1, 2))
+                            ))
                     )
             ),
             mutableListOf(error11, error12)
@@ -81,8 +87,16 @@ class ScanResultContainerTest : WordSpec() {
             scannerEndTime2,
             2,
             sortedSetOf(
-                    LicenseFinding("license 2.1", sortedSetOf(), sortedSetOf("copyright 3")),
-                    LicenseFinding("license 2.2", sortedSetOf(), sortedSetOf("copyright 4"))
+                    LicenseFinding(
+                            "license 2.1",
+                            sortedSetOf(),
+                            sortedSetOf(CopyrightFinding("copyright 3", sortedSetOf()))
+                    ),
+                    LicenseFinding(
+                            "license 2.2",
+                            sortedSetOf(),
+                            sortedSetOf(CopyrightFinding("copyright 4", sortedSetOf()))
+                    )
             ),
             mutableListOf(error21, error22)
     )
