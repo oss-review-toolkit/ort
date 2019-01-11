@@ -131,7 +131,7 @@ class NoticeReporter : Reporter() {
             if (excludes?.isExcluded(container.id, analyzerResult) != true) {
                 container.results.forEach { result ->
                     result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
-                        licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights
+                        licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights.map { it.statement }
                     }
                 }
             }
