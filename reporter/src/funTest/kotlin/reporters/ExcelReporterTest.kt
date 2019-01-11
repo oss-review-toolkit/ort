@@ -26,6 +26,7 @@ import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.OS
 import com.here.ort.utils.unpackZip
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -48,10 +49,16 @@ class ExcelReporterTest : WordSpec({
             val expectedXlsxUnpacked = createTempDir().apply { deleteOnExit() }
             expectedFile.unpackZip(expectedXlsxUnpacked)
 
+            val sharedStrings = "xl/sharedStrings.xml"
             val sheet1 = "xl/worksheets/sheet1.xml"
             val sheet2 = "xl/worksheets/sheet2.xml"
-            actualXlsxUnpacked.resolve(sheet1).readText() shouldBe expectedXlsxUnpacked.resolve(sheet1).readText()
-            actualXlsxUnpacked.resolve(sheet2).readText() shouldBe expectedXlsxUnpacked.resolve(sheet2).readText()
+
+            assertSoftly {
+                actualXlsxUnpacked.resolve(sharedStrings).readText() shouldBe
+                        expectedXlsxUnpacked.resolve(sharedStrings).readText()
+                actualXlsxUnpacked.resolve(sheet1).readText() shouldBe expectedXlsxUnpacked.resolve(sheet1).readText()
+                actualXlsxUnpacked.resolve(sheet2).readText() shouldBe expectedXlsxUnpacked.resolve(sheet2).readText()
+            }
         }
     }
 })
