@@ -213,7 +213,7 @@ class ExcelReporter : Reporter() {
 
             val cellStyle = when {
                 isExcluded -> excludedStyle
-                row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> errorStyle
+                row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> errorStyle
                 row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> warningStyle
                 else -> successStyle
             }
@@ -247,40 +247,40 @@ class ExcelReporter : Reporter() {
             val scopesLines = row.scopes.size + row.scopes.toList().sumBy { it.second.size } +
                     row.scopes.flatMap { it.value.values }.size
 
-            val analyzerErrorsText = buildString {
-                row.analyzerErrors.forEach { (id, errors) ->
+            val analyzerIssuesText = buildString {
+                row.analyzerIssues.forEach { (id, issues) ->
                     append("$id\n")
 
-                    errors.forEach { error ->
-                        append("  ${error.description}\n")
+                    issues.forEach { issue ->
+                        append("  ${issue.description}\n")
                     }
                 }
             }
 
-            val analyzerErrorsLines = row.analyzerErrors.size + row.analyzerErrors.flatMap { it.value }.size
+            val analyzerIssuesLines = row.analyzerIssues.size + row.analyzerIssues.flatMap { it.value }.size
 
-            val scanErrorsText = buildString {
-                row.scanErrors.forEach { (id, errors) ->
+            val scanIssuesText = buildString {
+                row.scanIssues.forEach { (id, issues) ->
                     append("$id\n")
 
-                    errors.forEach { error ->
-                        append("  ${error.description}\n")
+                    issues.forEach { issue ->
+                        append("  ${issue.description}\n")
                     }
                 }
             }
 
-            val scanErrorsLines = row.scanErrors.size + row.scanErrors.flatMap { it.value }.size
+            val scanIssuesLines = row.scanIssues.size + row.scanIssues.flatMap { it.value }.size
 
             sheet.createRow(currentRow).apply {
                 createCell(this, 0, row.id.toString(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
-                createCell(this, 4, analyzerErrorsText, font, cellStyle)
-                createCell(this, 5, scanErrorsText, font, cellStyle)
+                createCell(this, 4, analyzerIssuesText, font, cellStyle)
+                createCell(this, 5, scanIssuesText, font, cellStyle)
 
                 val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
-                        analyzerErrorsLines, scanErrorsLines).max() ?: 1
+                        analyzerIssuesLines, scanIssuesLines).max() ?: 1
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }
             ++currentRow
@@ -306,7 +306,7 @@ class ExcelReporter : Reporter() {
 
             val cellStyle = when {
                 isExcluded -> excludedStyle
-                row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> errorStyle
+                row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> errorStyle
                 row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> warningStyle
                 else -> successStyle
             }
@@ -329,11 +329,11 @@ class ExcelReporter : Reporter() {
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
-                createCell(this, 4, row.analyzerErrors.joinToString(" \n") { it.description }, font, cellStyle)
-                createCell(this, 5, row.scanErrors.joinToString(" \n") { it.description }, font, cellStyle)
+                createCell(this, 4, row.analyzerIssues.joinToString(" \n") { it.description }, font, cellStyle)
+                createCell(this, 5, row.scanIssues.joinToString(" \n") { it.description }, font, cellStyle)
 
                 val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
-                        row.analyzerErrors.size, row.scanErrors.size).max() ?: 1
+                        row.analyzerIssues.size, row.scanIssues.size).max() ?: 1
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }
             ++currentRow
@@ -398,8 +398,8 @@ class ExcelReporter : Reporter() {
             CellUtil.createCell(this, 1, "Scopes", headerStyle)
             CellUtil.createCell(this, 2, "Declared Licenses", headerStyle)
             CellUtil.createCell(this, 3, "Detected Licenses", headerStyle)
-            CellUtil.createCell(this, 4, "Analyzer Errors", headerStyle)
-            CellUtil.createCell(this, 5, "Scan Errors", headerStyle)
+            CellUtil.createCell(this, 4, "Analyzer Issues", headerStyle)
+            CellUtil.createCell(this, 5, "Scan Issues", headerStyle)
 
             extraColumns.forEachIndexed { index, column ->
                 CellUtil.createCell(this, 6 + index, column, headerStyle)

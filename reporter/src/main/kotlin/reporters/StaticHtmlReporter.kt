@@ -27,7 +27,7 @@ import com.here.ort.model.Severity
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
+import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.utils.isValidUrl
@@ -348,12 +348,12 @@ class StaticHtmlReporter : Reporter() {
 
                     index(reportTableModel)
 
-                    reportTableModel.evaluatorErrors?.let {
+                    reportTableModel.evaluatorIssues?.let {
                         evaluatorTable(it)
                     }
 
-                    if (reportTableModel.errorSummary.rows.count() > 0) {
-                        errorTable(reportTableModel.errorSummary)
+                    if (reportTableModel.issueSummary.rows.count() > 0) {
+                        issueTable(reportTableModel.issueSummary)
                     }
 
                     reportTableModel.projectDependencies.forEach { project, table ->
@@ -384,13 +384,13 @@ class StaticHtmlReporter : Reporter() {
         h2 { +"Index" }
 
         ul {
-            reportTableModel.evaluatorErrors?.let {
+            reportTableModel.evaluatorIssues?.let {
                 li { a("#policy-violation-summary") { +"Rule Violation Summary (${it.size} violations)" } }
             }
 
-            val numberOfErrors = reportTableModel.errorSummary.rows.count()
-            if (numberOfErrors > 0) {
-                li { a("#error-summary") { +"Error Summary ($numberOfErrors errors)" } }
+            val numberOfIssues = reportTableModel.issueSummary.rows.count()
+            if (numberOfIssues > 0) {
+                li { a("#issue-summary") { +"Issue Summary ($numberOfIssues issues)" } }
             }
 
             reportTableModel.projectDependencies.forEach { project, projectTable ->
@@ -422,7 +422,7 @@ class StaticHtmlReporter : Reporter() {
                     tr {
                         th { +"#" }
                         th { +"Source" }
-                        th { +"Error" }
+                        th { +"Issue" }
                     }
                 }
 
@@ -464,13 +464,13 @@ class StaticHtmlReporter : Reporter() {
         }
     }
 
-    private fun DIV.errorTable(errorSummary: ErrorTable) {
+    private fun DIV.issueTable(issueSummary: IssueTable) {
         h2 {
-            id = "error-summary"
-            +"Error Summary (${errorSummary.rows.count()} errors)"
+            id = "issue-summary"
+            +"Issue Summary (${issueSummary.rows.count()} issues)"
         }
 
-        p { +"Errors from excluded components are not shown in this summary." }
+        p { +"Issues from excluded components are not shown in this summary." }
 
         h3 { +"Packages" }
 
@@ -479,21 +479,21 @@ class StaticHtmlReporter : Reporter() {
                 tr {
                     th { +"#" }
                     th { +"Package" }
-                    th { +"Analyzer Errors" }
-                    th { +"Scanner Errors" }
+                    th { +"Analyzer Issues" }
+                    th { +"Scanner Issues" }
                 }
             }
 
             tbody {
-                errorSummary.rows.forEachIndexed { rowIndex, error ->
-                    errorRow(rowIndex + 1, error)
+                issueSummary.rows.forEachIndexed { rowIndex, issue ->
+                    issueRow(rowIndex + 1, issue)
                 }
             }
         }
     }
 
-    private fun TBODY.errorRow(rowIndex: Int, row: ReportTableModel.ErrorRow) {
-        val rowId = "error-$rowIndex"
+    private fun TBODY.issueRow(rowIndex: Int, row: ReportTableModel.IssueRow) {
+        val rowId = "issue-$rowIndex"
 
         tr("ort-error") {
             id = rowId
@@ -506,14 +506,14 @@ class StaticHtmlReporter : Reporter() {
             td { +"${row.id}" }
 
             td {
-                row.analyzerErrors.forEach { id, errors ->
+                row.analyzerIssues.forEach { id, issues ->
                     a("#$id") { +"$id" }
 
                     ul {
-                        errors.forEach { error ->
+                        issues.forEach { issue ->
                             li {
-                                errorDescription(error)
-                                p { +error.resolutionDescription }
+                                issueDescription(issue)
+                                p { +issue.resolutionDescription }
                             }
                         }
                     }
@@ -521,14 +521,14 @@ class StaticHtmlReporter : Reporter() {
             }
 
             td {
-                row.scanErrors.forEach { id, errors ->
+                row.scanIssues.forEach { id, issues ->
                     a("#$id") { +"$id" }
 
                     ul {
-                        errors.forEach { error ->
+                        issues.forEach { issue ->
                             li {
-                                errorDescription(error)
-                                p { +error.resolutionDescription }
+                                issueDescription(issue)
+                                p { +issue.resolutionDescription }
                             }
                         }
                     }
@@ -588,8 +588,8 @@ class StaticHtmlReporter : Reporter() {
                     th { +"Package" }
                     th { +"Scopes" }
                     th { +"Licenses" }
-                    th { +"Analyzer Errors" }
-                    th { +"Scanner Errors" }
+                    th { +"Analyzer Issues" }
+                    th { +"Scanner Issues" }
                 }
             }
 
@@ -607,7 +607,7 @@ class StaticHtmlReporter : Reporter() {
                 if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
 
         val cssClass = when {
-            row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> "ort-error"
+            row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "ort-error"
             row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "ort-warning"
             else -> "ort-success"
         }
@@ -661,17 +661,17 @@ class StaticHtmlReporter : Reporter() {
                 }
             }
 
-            td { errorList(row.analyzerErrors) }
+            td { issueList(row.analyzerIssues) }
 
-            td { errorList(row.scanErrors) }
+            td { issueList(row.scanIssues) }
         }
     }
 
-    private fun TD.errorList(errors: List<ResolvableIssue>) {
+    private fun TD.issueList(issues: List<ResolvableIssue>) {
         ul {
-            errors.forEach {
+            issues.forEach {
                 li {
-                    errorDescription(it)
+                    issueDescription(it)
 
                     if (it.isResolved) {
                         classes = setOf("ort-resolved")
@@ -682,10 +682,10 @@ class StaticHtmlReporter : Reporter() {
         }
     }
 
-    private fun LI.errorDescription(error: ResolvableIssue) {
+    private fun LI.issueDescription(issue: ResolvableIssue) {
         p {
             var first = true
-            error.description.lines().forEach {
+            issue.description.lines().forEach {
                 if (first) first = false else br
                 +it
             }
