@@ -34,6 +34,7 @@ import com.here.ort.model.config.AnalyzerConfigurationDeserializer
 
 private val ortModelModule = SimpleModule("OrtModelModule").apply {
     addDeserializer(AnalyzerConfiguration::class.java, AnalyzerConfigurationDeserializer())
+    addDeserializer(CopyrightFinding::class.java, CopyrightFindingDeserializer())
     addDeserializer(LicenseFinding::class.java, LicenseFindingDeserializer())
     addDeserializer(OrtIssue::class.java, OrtIssueDeserializer())
     addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
