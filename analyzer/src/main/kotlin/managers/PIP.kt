@@ -441,7 +441,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // Try to determine the Python version the project requires.
         var projectPythonVersion = PythonVersion.getPythonVersion(workingDir)
 
-        // Try to create a virtualenv specific to the detected Python version anmd install dependencies in there.
+        // Try to create a virtualenv specific to the detected Python version and install dependencies in there.
         var virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
 
         if (installDependencies(workingDir, definitionFile, virtualEnvDir).isSuccess) {
