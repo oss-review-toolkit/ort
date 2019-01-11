@@ -55,7 +55,10 @@ data class OrtIssue(
          */
         val severity: Severity = Severity.ERROR
 ) {
-    override fun toString() = "${if (timestamp == Instant.EPOCH) "n/a" else timestamp.toString()}: $source - $message"
+    override fun toString(): String {
+        val time = if (timestamp == Instant.EPOCH) "Unknown time" else timestamp.toString()
+        return "$time: $source - $message"
+    }
 }
 
 class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
