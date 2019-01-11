@@ -90,17 +90,19 @@ data class Identifier(
     override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
-     * Return whether this [Identifier] is likely to belong to the vendor of the given [name].
+     * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].
      */
-    fun isFromVendor(name: String): Boolean {
-        val lowerName = name.toLowerCase()
-        val vendorNamespace = when (type) {
-            "NPM" -> "^@$lowerName$"
-            "Gradle", "Maven", "SBT" -> "^(com|net|org)\\.$lowerName"
-            else -> ""
-        }
+    fun isFromOrg(vararg names: String): Boolean {
+        return names.any { name ->
+            val lowerName = name.toLowerCase()
+            val vendorNamespace = when (type) {
+                "NPM" -> "^@$lowerName$"
+                "Gradle", "Maven", "SBT" -> "^(com|net|org)\\.$lowerName"
+                else -> ""
+            }
 
-        return vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
+            vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
+        }
     }
 
     /**
