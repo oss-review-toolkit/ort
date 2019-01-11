@@ -57,7 +57,7 @@ data class OrtIssue(
 ) {
     override fun toString(): String {
         val time = if (timestamp == Instant.EPOCH) "Unknown time" else timestamp.toString()
-        return "$time: $source - $message"
+        return "$time [$severity]: $source - $message"
     }
 }
 
