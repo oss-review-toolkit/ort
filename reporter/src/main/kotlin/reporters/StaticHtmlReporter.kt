@@ -440,7 +440,7 @@ class StaticHtmlReporter : Reporter() {
             "ort-resolved"
         } else {
             when (ruleViolation.severity) {
-                Severity.ERROR -> "ort-ruleViolation"
+                Severity.ERROR -> "ort-error"
                 Severity.WARNING -> "ort-warning"
                 Severity.HINT -> "ort-hint"
             }
