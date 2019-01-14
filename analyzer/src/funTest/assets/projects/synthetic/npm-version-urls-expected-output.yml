@@ -330,7 +330,7 @@ project:
                 dependencies:
                 - id: "NPM::is-number:4.0.0"
                 - id: "NPM::kind-of:6.0.2"
-                - id: "NPM::math-random:1.0.1"
+                - id: "NPM::math-random:1.0.2"
               - id: "NPM::repeat-element:1.1.3"
               - id: "NPM::repeat-string:1.6.1"
           - id: "NPM::extend-shallow:2.0.1"
@@ -368,7 +368,7 @@ project:
                   dependencies:
                   - id: "NPM::is-number:4.0.0"
                   - id: "NPM::kind-of:6.0.2"
-                  - id: "NPM::math-random:1.0.1"
+                  - id: "NPM::math-random:1.0.2"
                 - id: "NPM::repeat-element:1.1.3"
                 - id: "NPM::repeat-string:1.6.1"
             - id: "NPM::extend-shallow:2.0.1"
@@ -2719,7 +2719,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::math-random:1.0.1"
+    id: "NPM::math-random:1.0.2"
     declared_licenses:
     - "MIT"
     description: "a drop-in replacement for Math.random that uses cryptographically\
@@ -2730,18 +2730,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/math-random/-/math-random-1.0.1.tgz"
-      hash: "8b3aac588b8a66e4975e3cdea67f7bb329601fac"
+      url: "https://registry.npmjs.org/math-random/-/math-random-1.0.2.tgz"
+      hash: "8ab7f026363816c1e00b774d87dee67f61e37ad6"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
-      url: "git@github.com:michaelrhodes/math-random"
-      revision: "14f9d4cb231e26156e1295d4d55b624dfdb54d3c"
+      url: "git+ssh://git@github.com/michaelrhodes/math-random.git"
+      revision: "ca65e6a55a02f36488c69c049be80225b4a2891a"
       path: ""
     vcs_processed:
       type: "git"
       url: "ssh://git@github.com/michaelrhodes/math-random.git"
-      revision: "14f9d4cb231e26156e1295d4d55b624dfdb54d3c"
+      revision: "ca65e6a55a02f36488c69c049be80225b4a2891a"
       path: ""
   curations: []
 - package:
