@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -98,6 +99,16 @@ class SpdxExpressionTest : WordSpec() {
                                 SpdxLicenseExceptionExpression("exception2")
                         )
                 )
+            }
+        }
+
+        "The expression parser" should {
+            "work for deprecated license identifiers" {
+                assertSoftly {
+                    SpdxExpression.parse("Nunit") shouldBe SpdxLicenseIdExpression("Nunit")
+                    SpdxExpression.parse("StandardML-NJ") shouldBe SpdxLicenseIdExpression("StandardML-NJ")
+                    SpdxExpression.parse("wxWindows") shouldBe SpdxLicenseIdExpression("wxWindows")
+                }
             }
         }
     }
