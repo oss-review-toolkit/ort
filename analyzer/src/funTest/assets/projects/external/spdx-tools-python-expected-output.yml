@@ -25,7 +25,7 @@ project:
       - id: "PyPI::isodate:0.6.0"
         dependencies:
         - id: "PyPI::six:1.12.0"
-      - id: "PyPI::pyparsing:2.3.0"
+      - id: "PyPI::pyparsing:2.3.1"
     - id: "PyPI::six:1.12.0"
 packages:
 - package:
@@ -79,18 +79,18 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::pyparsing:2.3.0"
+    id: "PyPI::pyparsing:2.3.1"
     declared_licenses:
     - "MIT"
     description: "Python parsing module"
     homepage_url: "https://github.com/pyparsing/pyparsing/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/71/e8/6777f6624681c8b9701a8a0a5654f3eb56919a01a78e12bf3c73f5a3c714/pyparsing-2.3.0-py2.py3-none-any.whl"
-      hash: "5d4046349b4acf6dabbd2f3080c76078"
+      url: "https://files.pythonhosted.org/packages/de/0a/001be530836743d8be6c2d85069f46fecf84ac6c18c7f5fb8125ee11d854/pyparsing-2.3.1-py2.py3-none-any.whl"
+      hash: "4e803a2811d0c92847281dbd37172c91"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/d0/09/3e6a5eeb6e04467b737d55f8bba15247ac0876f98fae659e58cd744430c6/pyparsing-2.3.0.tar.gz"
-      hash: "f855a0a8d0259b36fac1fa6581f401ef"
+      url: "https://files.pythonhosted.org/packages/b9/b8/6b32b3e84014148dcd60dd05795e35c2e7f4b72f918616c61fdce83d27fc/pyparsing-2.3.1.tar.gz"
+      hash: "630e86b719619a251de0ba4a97239cec"
       hash_algorithm: "MD5"
     vcs:
       type: ""
