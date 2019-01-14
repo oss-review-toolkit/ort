@@ -104,14 +104,16 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
                 log.info { "Retrieved $this from local cache." }
             }
 
-            val scannerArchive = createTempFile(suffix = url.substringAfterLast("/"))
+            val scannerArchive = createTempFile("ort", url.substringAfterLast("/"))
             Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir()
-            unpackDir.deleteOnExit()
+            val unpackDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)
+            if (!scannerArchive.delete()) {
+                log.warn { "Unable to delete temporary file '$scannerArchive'." }
+            }
 
             if (!OS.isWindows) {
                 // The Linux version is distributed as a ZIP, but without having the Unix executable mode bits stored.

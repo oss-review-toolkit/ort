@@ -324,7 +324,7 @@ class Downloader {
                 throw DownloadException("Failed to download source artifact: $response")
             }
 
-            createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
+            createTempFile("ort", target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
                 Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
                 tempFile.deleteOnExit()
             }
@@ -335,7 +335,7 @@ class Downloader {
         try {
             if (sourceArchive.extension == "gem") {
                 // Unpack the nested data archive for Ruby Gems.
-                val gemDirectory = createTempDir()
+                val gemDirectory = createTempDir("ort", "gem")
                 val dataFile = File(gemDirectory, "data.tar.gz")
 
                 try {

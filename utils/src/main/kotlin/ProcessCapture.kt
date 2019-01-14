@@ -48,7 +48,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         }
     }
 
-    private val tempDir = createTempDir("ort")
+    private val tempDir = createTempDir("ort", "process")
     private val tempPrefix = command.first().substringAfterLast(File.separatorChar)
 
     val stdoutFile = File(tempDir, "$tempPrefix.stdout").apply { deleteOnExit() }

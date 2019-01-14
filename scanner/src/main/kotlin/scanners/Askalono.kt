@@ -101,8 +101,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
                 log.info { "Retrieved $this from local cache." }
             }
 
-            val scannerDir = createTempDir()
-            scannerDir.deleteOnExit()
+            val scannerDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
 
             val scannerFile = File(scannerDir, scannerExe)
             Okio.buffer(Okio.sink(scannerFile)).use { it.writeAll(body.source()) }
