@@ -57,7 +57,7 @@ class ArtifactoryCache(
                 .url("$url/$cachePath")
                 .build()
 
-        val tempFile = createTempFile("scan-results-", ".yml")
+        val tempFile = createTempFile("ort", "scan-results.yml")
 
         try {
             OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
@@ -148,7 +148,7 @@ class ArtifactoryCache(
 
         val scanResults = ScanResultContainer(id, read(id).results + scanResult)
 
-        val tempFile = createTempFile("scan-results-")
+        val tempFile = createTempFile("ort", "scan-results.yml")
         yamlMapper.writeValue(tempFile, scanResults)
 
         val cachePath = cachePath(id)

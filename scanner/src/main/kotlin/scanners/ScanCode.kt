@@ -206,14 +206,16 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
                 log.info { "Retrieved $this from local cache." }
             }
 
-            val scannerArchive = createTempFile(suffix = url.substringAfterLast("/"))
+            val scannerArchive = createTempFile("ort", "${getName()}-${url.substringAfterLast("/")}")
             Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir()
-            unpackDir.deleteOnExit()
+            val unpackDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)
+            if (!scannerArchive.delete()) {
+                log.warn { "Unable to delete temporary file '$scannerArchive'." }
+            }
 
             val scannerDir = unpackDir.resolve("scancode-toolkit-$scannerVersion")
 

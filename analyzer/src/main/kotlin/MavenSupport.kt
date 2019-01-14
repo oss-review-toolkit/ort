@@ -363,7 +363,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 log.debug { "Checksums: $checksums" }
 
                 val checksum = checksums.first()
-                val tempFile = File.createTempFile("checksum", checksum.algorithm)
+                val tempFile = File.createTempFile("ort", "checksum-${checksum.algorithm}")
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
                 val actualChecksum = try {

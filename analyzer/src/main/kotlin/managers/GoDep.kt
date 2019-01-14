@@ -72,7 +72,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
-        val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
+        val gopath = createTempDir("ort", "${projectDir.name}-gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
         if (definitionFile.name in GO_LEGACY_MANIFESTS.keys) {
