@@ -23,6 +23,7 @@ import com.here.ort.analyzer.managers.SBT
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
@@ -44,7 +45,7 @@ class SbtTest : StringSpec({
         val actualResult = yamlMapper.writeValueAsString(ortResult)
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
-        actualResult shouldBe expectedResult
+        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
     }
 
     "Dependencies of the 'sbt-multi-project-example' multi-project should be detected correctly" {
@@ -60,6 +61,6 @@ class SbtTest : StringSpec({
         val actualResult = yamlMapper.writeValueAsString(ortResult)
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
-        actualResult shouldBe expectedResult
+        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
     }
 })
