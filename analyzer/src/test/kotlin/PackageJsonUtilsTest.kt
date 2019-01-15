@@ -24,7 +24,7 @@ import com.here.ort.analyzer.PackageJsonUtils.Companion.mapDefinitionFilesForYar
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.matchers.collections.shouldBeEmpty
 import io.kotlintest.matchers.collections.shouldContainExactly
@@ -152,16 +152,16 @@ class PackageJsonUtilsTest : WordSpec() {
     private lateinit var tempDir: File
     private val definitionFiles = mutableSetOf<File>()
 
-    override fun beforeTest(description: Description) {
-        super.beforeTest(description)
+    override fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
         tempDir = createTempDir()
         definitionFiles.clear()
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         tempDir.safeDeleteRecursively(force = true)
         definitionFiles.clear()
-        super.afterTest(description, result)
+        super.afterTest(testCase, result)
     }
 
     private fun setupProject(path: String, matchers: List<String> = emptyList(), hasNpmLockFile: Boolean = false,

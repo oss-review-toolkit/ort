@@ -21,15 +21,14 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Stack
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.CI
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 
-import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -39,8 +38,8 @@ import java.io.File
 class StackTest : StringSpec() {
     private val projectsDir = File("src/funTest/assets/projects")
 
-    override fun beforeSpec(description: Description, spec: Spec) {
-        super.beforeSpec(description, spec)
+    override fun beforeSpec(spec: Spec) {
+        super.beforeSpec(spec)
 
         // Only install GHC, which takes along time, if we really are running this test until
         // https://github.com/commercialhaskell/stack/issues/4390 is resolved.

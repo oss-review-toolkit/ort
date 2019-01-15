@@ -25,7 +25,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -43,11 +43,11 @@ class GitDownloadTest : StringSpec() {
     private val git = Git()
     private lateinit var outputDir: File
 
-    override fun beforeTest(description: Description) {
+    override fun beforeTest(testCase: TestCase) {
         outputDir = createTempDir()
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         outputDir.safeDeleteRecursively(force = true)
     }
 

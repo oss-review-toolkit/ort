@@ -25,7 +25,7 @@ import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.matchers.string.shouldNotContain
@@ -41,14 +41,14 @@ class NoticeReporterTest : WordSpec() {
 
     private lateinit var tempDir: File
 
-    override fun beforeTest(description: Description) {
-        super.beforeTest(description)
+    override fun beforeTest(testCase: TestCase) {
+        super.beforeTest(testCase)
         tempDir = createTempDir()
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         tempDir.safeDeleteRecursively(force = true)
-        super.afterTest(description, result)
+        super.afterTest(testCase, result)
     }
 
     private fun generateReport(ortResult: OrtResult,

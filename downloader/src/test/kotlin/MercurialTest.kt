@@ -24,7 +24,6 @@ import com.here.ort.utils.getUserConfigDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
-import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -36,7 +35,7 @@ class MercurialTest : StringSpec() {
     private val hg = Mercurial()
     private lateinit var zipContentDir: File
 
-    override fun beforeSpec(description: Description, spec: Spec) {
+    override fun beforeSpec(spec: Spec) {
         val zipFile = File("src/test/assets/lz4revlog-2018-01-03-hg.zip")
 
         zipContentDir = createTempDir()
@@ -45,7 +44,7 @@ class MercurialTest : StringSpec() {
         zipFile.unpack(zipContentDir)
     }
 
-    override fun afterSpec(description: Description, spec: Spec) {
+    override fun afterSpec(spec: Spec) {
         zipContentDir.safeDeleteRecursively(force = true)
     }
 

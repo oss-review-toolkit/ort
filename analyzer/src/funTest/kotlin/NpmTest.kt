@@ -26,15 +26,13 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
-import com.here.ort.utils.test.USER_DIR
-
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
-
 import java.io.File
 
 class NpmTest : WordSpec() {
@@ -43,7 +41,7 @@ class NpmTest : WordSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
         // from failing tests.
         projectsDir.listFiles().forEach {

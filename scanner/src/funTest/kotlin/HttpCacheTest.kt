@@ -20,10 +20,10 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.Provenance
 import com.here.ort.model.RemoteArtifact
@@ -37,12 +37,12 @@ import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
 
-import io.kotlintest.Description
 import io.kotlintest.Spec
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.TestCase
 import io.kotlintest.matchers.collections.contain
 import io.kotlintest.should
 import io.kotlintest.shouldBe
+import io.kotlintest.specs.StringSpec
 
 import java.net.HttpURLConnection
 import java.net.InetAddress
@@ -151,17 +151,17 @@ class HttpCacheTest : StringSpec() {
     private val rawResultWithContent = jsonMapper.readTree("\"key 1\": \"value 1\"")
     private val rawResultEmpty = EMPTY_JSON_NODE
 
-    override fun beforeTest(description: Description) {
+    override fun beforeTest(testCase: TestCase) {
         handler.requests.clear()
 
-        super.beforeTest(description)
+        super.beforeTest(testCase)
     }
 
-    override fun afterSpec(description: Description, spec: Spec) {
+    override fun afterSpec(spec: Spec) {
         // Ensure the server is properly stopped even in case of exceptions, but wait at most 5 seconds.
         server.stop(5)
 
-        super.afterSpec(description, spec)
+        super.afterSpec(spec)
     }
 
     init {
