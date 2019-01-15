@@ -159,7 +159,7 @@ class MainTest : StringSpec() {
 
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            patchActualResult(result) shouldBe expectedResult
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
@@ -187,7 +187,7 @@ class MainTest : StringSpec() {
 
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            patchActualResult(result) shouldBe expectedResult
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 }
