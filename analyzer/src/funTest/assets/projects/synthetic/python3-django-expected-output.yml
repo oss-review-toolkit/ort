@@ -17,24 +17,24 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Django:2.1.4"
+    - id: "PyPI::Django:2.1.5"
       dependencies:
       - id: "PyPI::pytz:2018.9"
 packages:
 - package:
-    id: "PyPI::Django:2.1.4"
+    id: "PyPI::Django:2.1.5"
     declared_licenses:
     - "BSD"
     description: "A high-level Python Web framework that encourages rapid development\
       \ and clean, pragmatic design."
     homepage_url: "https://www.djangoproject.com/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/fd/9a/0c028ea0fe4f5803dda1a7afabeed958d0c8b79b0fe762ffbf728db3b90d/Django-2.1.4-py3-none-any.whl"
-      hash: "96ce7a0bfe0237df2e16f3a6f82d9ea7"
+      url: "https://files.pythonhosted.org/packages/36/50/078a42b4e9bedb94efd3e0278c0eb71650ed9672cdc91bd5542953bec17f/Django-2.1.5-py3-none-any.whl"
+      hash: "90ac057753cff4d5b154ef4ca3d0e1e6"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/83/f7/4939b60c4127d5f49ccb570e34f4c59ecc222949220234a88e4f363f1456/Django-2.1.4.tar.gz"
-      hash: "3afc8bcec941e37221287f1a5323b1f1"
+      url: "https://files.pythonhosted.org/packages/5c/7f/4c750e09b246621e5e90fa08f93dec1b991f5c203b0ff615d62a891c8f41/Django-2.1.5.tar.gz"
+      hash: "9309c48c8b92503b8969a7603a97e2a1"
       hash_algorithm: "MD5"
     vcs:
       type: ""
