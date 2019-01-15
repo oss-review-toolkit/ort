@@ -19,11 +19,16 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.SortedSetComparator
+import com.here.ort.utils.textValueOrEmpty
 
 import java.util.SortedMap
 import java.util.SortedSet
@@ -51,7 +56,7 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
  * A class to store a [license] finding along with its belonging [copyrights]. To support deserializing older versions
  * of this class which did not include the copyrights a secondary constructor is only taking a [licenseName].
  */
-data class LicenseFinding @JsonCreator constructor(
+data class LicenseFinding(
         val license: String,
         val copyrights: SortedSet<String>
 ) : Comparable<LicenseFinding> {
@@ -59,12 +64,26 @@ data class LicenseFinding @JsonCreator constructor(
         private val COPYRIGHTS_COMPARATOR = SortedSetComparator<String>()
     }
 
-    @JsonCreator
-    constructor(licenseName: String) : this(licenseName, sortedSetOf())
-
     override fun compareTo(other: LicenseFinding) =
             when {
                 license != other.license -> license.compareTo(other.license)
                 else -> COPYRIGHTS_COMPARATOR.compare(copyrights, other.copyrights)
             }
+}
+
+/**
+ * Custom deserializer to support old versions of the [LicenseFinding] class.
+ */
+class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFinding::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFinding {
+        val node = p.codec.readTree<JsonNode>(p)
+        return when {
+            node.isTextual -> LicenseFinding(node.textValueOrEmpty(), sortedSetOf())
+            else -> {
+                val license = jsonMapper.treeToValue<String>(node["license"])
+                val copyrights = jsonMapper.treeToValue<SortedSet<String>>(node["copyrights"])
+                return LicenseFinding(license, copyrights)
+            }
+        }
+    }
 }
