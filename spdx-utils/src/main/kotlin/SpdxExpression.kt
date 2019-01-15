@@ -31,9 +31,16 @@ import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 
+/**
+ * An SPDX expression as defined by version 2.1 of the SPDX specification, appendix IV, see
+ * https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
+ */
 @JsonSerialize(using = ToStringSerializer::class)
 sealed class SpdxExpression {
     companion object {
+        /**
+         * Parse a string into an [SpdxExpression]. Throws an [SpdxException] if the string cannot be parsed.
+         */
         @JsonCreator
         @JvmStatic
         fun parse(expression: String): SpdxExpression {
@@ -62,11 +69,14 @@ sealed class SpdxExpression {
     }
 
     /**
-     * Return all valid SPDX licenses contained in this expression. LicenseRefs and invalid licenses are ignored.
+     * Return all valid [SpdxLicense]s contained in this expression. LicenseRefs and invalid licenses are ignored.
      */
     abstract fun spdxLicenses(): EnumSet<SpdxLicense>
 }
 
+/**
+ * An SPDX expression compound of two expressions with an operator.
+ */
 data class SpdxCompoundExpression(
         val left: SpdxExpression,
         val operator: SpdxOperator,
@@ -90,6 +100,10 @@ data class SpdxCompoundExpression(
     }
 }
 
+/**
+ * An SPDX expression for a license exception as defined by version 2.1 of the SPDX specification, appendix I, see
+ * https://spdx.org/spdx-specification-21-web-version#h.ruv3yl8g6czd.
+ */
 data class SpdxLicenseExceptionExpression(
         val id: String
 ) : SpdxExpression() {
@@ -98,6 +112,10 @@ data class SpdxLicenseExceptionExpression(
     override fun toString() = id
 }
 
+/**
+ * An SPDX expression for a license id as defined by version 2.1 of the SPDX specification, appendix I, see
+ * https://spdx.org/spdx-specification-21-web-version#h.luq9dgcle9mo.
+ */
 data class SpdxLicenseIdExpression(
         val id: String,
         val anyLaterVersion: Boolean = false
@@ -111,6 +129,10 @@ data class SpdxLicenseIdExpression(
             }
 }
 
+/**
+ * An SPDX expression for a LicenseRef as defined by version 2.1 of the SPDX specification, appendix IV, see
+ * https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
+ */
 data class SpdxLicenseRefExpression(
         val id: String
 ) : SpdxExpression() {
@@ -119,6 +141,10 @@ data class SpdxLicenseRefExpression(
     override fun toString() = id
 }
 
+/**
+ * An SPDX operator for use in compound expressions as defined by version 2.1 of the SPDX specification, appendix IV,
+ * see https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
+ */
 enum class SpdxOperator(
         /**
          * The priority of the operator. An operator with a larger priority value binds stronger than an operator with a
