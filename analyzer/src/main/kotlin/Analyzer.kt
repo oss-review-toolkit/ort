@@ -37,6 +37,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 
 import java.io.File
+import java.time.Instant
 
 const val TOOL_NAME = "analyzer"
 const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
@@ -51,6 +52,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             packageCurationsFile: File? = null,
             repositoryConfigurationFile: File? = null
     ): OrtResult {
+        val startTime = Instant.now()
+
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
                 ?: locateRepositoryConfigurationFile(absoluteProjectPath)
 
@@ -127,7 +130,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
         val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
-        val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())
+        val run = AnalyzerRun(startTime, Instant.now(), Environment(), config, analyzerResultBuilder.build())
 
         return OrtResult(repository, run)
     }
