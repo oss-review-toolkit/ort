@@ -26,6 +26,11 @@ enum class RuleViolationResolutionReason {
     DYNAMIC_LINKAGE_EXCEPTION,
 
     /**
+     * The rule violation is due to an inclusion of example code into a document and is acceptable in this case.
+     */
+    EXAMPLE_OF_EXCEPTION,
+
+    /**
      * The implied patent grant is acceptable in this case.
      */
     PATENT_GRANT_EXCEPTION
