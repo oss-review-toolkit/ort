@@ -65,7 +65,7 @@ class GitRepoTest : StringSpec() {
                     revision = REPO_REV,
                     path = outputDir.invariantSeparatorsPath)
 
-            patchActualResult(actualResult) shouldBe expectedResult
+            patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 }
