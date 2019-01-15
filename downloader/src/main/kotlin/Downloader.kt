@@ -43,6 +43,7 @@ import okio.Okio
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.net.MalformedURLException
 import java.net.URI
 import java.net.URL
 import java.time.Instant
@@ -383,6 +384,10 @@ class Downloader {
 
             DownloadResult(startTime, outputDirectory, sourceArtifact = pomArtifact)
         } catch (e: FileNotFoundException) {
+            throw DownloadException("Failed to download the Maven POM for '${target.id}'.")
+        } catch (e: MalformedURLException) {
+            // TODO: Investigate why the binary artifact URL is actually empty and update
+            // the implementation according to root cause.
             throw DownloadException("Failed to download the Maven POM for '${target.id}'.")
         }
     }
