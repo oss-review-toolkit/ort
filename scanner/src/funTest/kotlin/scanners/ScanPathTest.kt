@@ -24,9 +24,9 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.ScanCodeTag
 
-import io.kotlintest.Description
-import io.kotlintest.shouldBe
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -35,11 +35,11 @@ class ScanPathTest : StringSpec() {
     private val config = ScannerConfiguration()
     private lateinit var outputDir: File
 
-    override fun beforeTest(description: Description) {
+    override fun beforeTest(testCase: TestCase) {
         outputDir = createTempDir()
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         outputDir.safeDeleteRecursively(force = true)
     }
 

@@ -29,11 +29,10 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.ExpensiveTag
+import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
-import com.here.ort.utils.test.USER_DIR
 
-import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -53,7 +52,7 @@ class GradleTest : StringSpec() {
 
     private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 
-    override fun afterSpec(description: Description, spec: Spec) {
+    override fun afterSpec(spec: Spec) {
         // Reset the Gradle version in the test project to clean up after the tests.
         Git().run(projectDir, "checkout", ".")
     }
