@@ -138,7 +138,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
         val matchedFiles = result["matched_files"]
 
         val findings = matchedFiles.map {
-            LicenseFinding(it["matched_license"].textValue())
+            LicenseFinding(it["matched_license"].textValue(), sortedSetOf())
         }.toSortedSet()
 
         return ScanSummary(startTime, endTime, matchedFiles.count(), findings, errors = mutableListOf())
