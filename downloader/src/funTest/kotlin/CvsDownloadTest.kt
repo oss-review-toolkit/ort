@@ -93,7 +93,7 @@ class CvsDownloadTest : StringSpec() {
 
         "CVS can download based on a version".config(enabled = cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("CVS", REPO_URL, "")
             )
 
@@ -112,7 +112,7 @@ class CvsDownloadTest : StringSpec() {
         "CVS can download only a single path based on a version"
                 .config(enabled = cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("CVS", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(

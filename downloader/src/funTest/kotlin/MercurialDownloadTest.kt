@@ -106,7 +106,7 @@ class MercurialDownloadTest : StringSpec() {
 
         "Mercurial can download based on a version".config(enabled = hg.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
             )
 
@@ -120,7 +120,7 @@ class MercurialDownloadTest : StringSpec() {
                 .config(enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
                         tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(

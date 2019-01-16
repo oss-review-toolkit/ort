@@ -95,7 +95,7 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Git", REPO_URL, "")
             )
 
@@ -107,7 +107,7 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Git", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
