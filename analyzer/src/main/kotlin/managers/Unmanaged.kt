@@ -19,6 +19,8 @@
 
 package com.here.ort.analyzer.managers
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
@@ -28,6 +30,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.utils.log
 
 import java.io.File
 
@@ -50,17 +53,55 @@ class Unmanaged(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryCon
      * @param definitionFile The directory containing the unmanaged project.
      */
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        val project = Project(
-                id = Identifier(
+        val vcsInfo = VersionControlSystem.getCloneInfo(definitionFile)
+
+        val id = when {
+            vcsInfo == VcsInfo.EMPTY -> {
+                // This seems to be an analysis of a local directory that is not under version control, i.e. that is not
+                // a VCS working tree. In this case we have no change to get a version.
+                val projectDir = definitionFile.absoluteFile
+
+                log.warn {
+                    "Analysis of local directory '$projectDir' which is not under version control will produce" +
+                            "non-cacheable results as no version for the cache key can be determined."
+                }
+
+                Identifier(
                         type = toString(),
                         namespace = "",
-                        name = definitionFile.name,
+                        name = projectDir.name,
                         version = ""
-                ),
+                )
+            }
+
+            vcsInfo.type == "GitRepo" -> {
+                // For GitRepo looking at the URL and revision only is not enough, we also need to take the used
+                // manifest into account.
+                Identifier(
+                        type = toString(),
+                        namespace = vcsInfo.path.substringBeforeLast('/'),
+                        name = vcsInfo.path.substringAfterLast('/').removeSuffix(".xml"),
+                        version = vcsInfo.revision
+                )
+            }
+
+            else -> {
+                // For all non-GitRepo VCSes derive the name from the VCS URL.
+                Identifier(
+                        type = toString(),
+                        namespace = "",
+                        name = vcsInfo.url.split('/').last().removeSuffix(".git"),
+                        version = vcsInfo.revision
+                )
+            }
+        }
+
+        val project = Project(
+                id = id,
                 definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = VersionControlSystem.getCloneInfo(definitionFile),
+                vcsProcessed = vcsInfo,
                 homepageUrl = "",
                 scopes = sortedSetOf()
         )
