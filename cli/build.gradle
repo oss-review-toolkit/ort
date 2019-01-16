@@ -1,10 +1,11 @@
 plugins {
+    // Apply core plugins.
+    id 'application'
+
+    // Apply third-party plugins.
     id 'com.bmuschko.docker-java-application'
     id 'com.bmuschko.docker-remote-api'
 }
-
-// Apply core plugins.
-apply plugin: 'application'
 
 applicationName = 'ort'
 mainClassName = 'com.here.ort.Main'

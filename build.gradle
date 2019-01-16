@@ -29,13 +29,13 @@ subprojects {
 
     if (it.name == 'reporter-web-app') return
 
+    // Apply core plugins.
+    apply plugin: 'jacoco'
+
     // Apply third-party plugins.
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.jetbrains.dokka'
     apply plugin: 'io.gitlab.arturbosch.detekt'
-
-    // Apply core plugins.
-    apply plugin: 'jacoco'
 
     sourceSets {
         funTest {
