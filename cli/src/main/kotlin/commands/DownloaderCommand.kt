@@ -144,7 +144,7 @@ object DownloaderCommand : CommandWithHelp() {
                 projectName = projectFile.nameWithoutExtension
             }
 
-            val dummyId = Identifier.EMPTY.copy(name = projectName!!)
+            val dummyId = Identifier("Downloader::$projectName:")
             val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
                 Package.EMPTY.copy(
                         id = dummyId,

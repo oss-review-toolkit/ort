@@ -115,7 +115,7 @@ class SubversionDownloadTest : StringSpec() {
         "Subversion can download based on a version"
                 .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Subversion", REPO_URL, "")
             )
 
@@ -128,7 +128,7 @@ class SubversionDownloadTest : StringSpec() {
         "Subversion can download only a single path based on a version"
                 .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
