@@ -62,7 +62,7 @@ class GitRepoTest : StringSpec() {
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(
                     File("src/funTest/assets/projects/external/grpc-bundler-expected-output.yml"),
-                    custom = Pair("<REPLACE_TMP>", outputDir.name),
+                    revision = REPO_REV,
                     path = outputDir.invariantSeparatorsPath)
 
             patchActualResult(actualResult) shouldBe expectedResult

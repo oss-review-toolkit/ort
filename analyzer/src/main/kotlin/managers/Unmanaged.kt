@@ -50,17 +50,18 @@ class Unmanaged(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryCon
      * @param definitionFile The directory containing the unmanaged project.
      */
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+        val vcsInfo = VersionControlSystem.getCloneInfo(definitionFile)
         val project = Project(
                 id = Identifier(
                         type = toString(),
                         namespace = "",
-                        name = definitionFile.name,
-                        version = ""
+                        name = vcsInfo.url.split('/').last().removeSuffix(".git"),
+                        version = vcsInfo.revision
                 ),
                 definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = VersionControlSystem.getCloneInfo(definitionFile),
+                vcsProcessed = vcsInfo,
                 homepageUrl = "",
                 scopes = sortedSetOf()
         )
