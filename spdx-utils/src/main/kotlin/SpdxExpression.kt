@@ -69,9 +69,14 @@ sealed class SpdxExpression {
     }
 
     /**
-     * Return all valid [SpdxLicense]s contained in this expression. LicenseRefs and invalid licenses are ignored.
+     * Return all [SpdxLicense]s contained in this expression. Non-SPDX licenses and LicenseRefs are ignored.
      */
     abstract fun spdxLicenses(): EnumSet<SpdxLicense>
+
+    /**
+     * Validate this expression to only contain SPDX identifiers. This includes licenses, exceptions and LicenseRefs.
+     */
+    abstract fun validate(): Boolean
 }
 
 /**
@@ -83,6 +88,12 @@ data class SpdxCompoundExpression(
         val right: SpdxExpression
 ) : SpdxExpression() {
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
+
+    override fun validate() =
+            left.validate() && right.validate() && (
+                    (operator == SpdxOperator.WITH && right is SpdxLicenseExceptionExpression) ||
+                    (operator != SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression)
+            )
 
     override fun toString(): String {
         // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
@@ -109,6 +120,8 @@ data class SpdxLicenseExceptionExpression(
 ) : SpdxExpression() {
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
+    override fun validate() = SpdxLicenseException.forId(id) != null
+
     override fun toString() = id
 }
 
@@ -121,6 +134,8 @@ data class SpdxLicenseIdExpression(
         val anyLaterVersion: Boolean = false
 ) : SpdxExpression() {
     override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
+
+    override fun validate() = SpdxLicense.forId(id) != null
 
     override fun toString() =
             buildString {
@@ -137,6 +152,9 @@ data class SpdxLicenseRefExpression(
         val id: String
 ) : SpdxExpression() {
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
+
+    // TODO: Think about whether we should also accept "DocumentRef-" here, or model those as a separate class.
+    override fun validate() = id.startsWith("LicenseRef-")
 
     override fun toString() = id
 }
