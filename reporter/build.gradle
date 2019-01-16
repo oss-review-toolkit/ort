@@ -1,5 +1,7 @@
-// Apply core plugins.
-apply plugin: 'java-library'
+plugins {
+    // Apply core plugins.
+    id 'java-library'
+}
 
 sourceSets {
     main {

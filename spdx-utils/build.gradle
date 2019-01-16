@@ -1,10 +1,11 @@
 plugins {
+    // Apply core plugins.
     id 'antlr'
+    id 'java-library'
+
+    // Apply third-party plugins.
     id 'at.bxm.svntools'
 }
-
-// Apply core plugins.
-apply plugin: 'java-library'
 
 generateGrammarSource {
     arguments += '-visitor'
