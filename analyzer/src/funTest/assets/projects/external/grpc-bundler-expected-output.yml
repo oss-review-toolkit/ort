@@ -65,7 +65,7 @@ analyzer:
         path: "test/distrib/ruby"
       homepage_url: ""
       scopes: []
-    - id: "Unmanaged::<REPLACE_TMP>:"
+    - id: "Unmanaged:git-repo:manifest:<REPLACE_REVISION>"
       definition_file_path: ""
       declared_licenses: []
       vcs:
