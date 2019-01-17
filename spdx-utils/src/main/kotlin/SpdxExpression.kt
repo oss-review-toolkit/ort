@@ -69,12 +69,14 @@ sealed class SpdxExpression {
     }
 
     /**
-     * Return all [SpdxLicense]s contained in this expression. Non-SPDX licenses and LicenseRefs are ignored.
+     * Return all [SpdxLicense]s contained in this expression. Non-SPDX licenses and SPDX license references are
+     * ignored.
      */
     abstract fun spdxLicenses(): EnumSet<SpdxLicense>
 
     /**
-     * Validate this expression to only contain SPDX identifiers. This includes licenses, exceptions and LicenseRefs.
+     * Validate this expression to only contain SPDX identifiers. This includes SPDX licenses, exceptions and license
+     * references.
      */
     abstract fun validate(): Boolean
 }
@@ -145,16 +147,16 @@ data class SpdxLicenseIdExpression(
 }
 
 /**
- * An SPDX expression for a LicenseRef as defined by version 2.1 of the SPDX specification, appendix IV, see
+ * An SPDX expression for a license reference as defined by version 2.1 of the SPDX specification, appendix IV, see
  * https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
  */
-data class SpdxLicenseRefExpression(
+data class SpdxLicenseReferenceExpression(
         val id: String
 ) : SpdxExpression() {
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
-    // TODO: Think about whether we should also accept "DocumentRef-" here, or model those as a separate class.
-    override fun validate() = id.startsWith("LicenseRef-")
+    override fun validate() = id.startsWith("LicenseRef-") ||
+            (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-"))
 
     override fun toString() = id
 }

@@ -31,9 +31,9 @@ package com.here.ort.spdx;
  * Parser Rules
  */
 
-licenseRefExpression
+licenseReferenceExpression
     :
-    LICENSEREF
+    LICENSEREFERENCE
     ;
 
 licenseExceptionExpression
@@ -49,7 +49,7 @@ licenseIdExpression
 
 simpleExpression
     :
-    licenseRefExpression
+    licenseReferenceExpression
     | licenseIdExpression
     ;
 
@@ -83,7 +83,7 @@ OPEN  : '(' ;
 CLOSE : ')' ;
 PLUS  : '+' ;
 
-LICENSEREF : ('DocumentRef-' | 'LicenseRef-') IDSTRING ;
+LICENSEREFERENCE : ('DocumentRef-' IDSTRING ':')? 'LicenseRef-' IDSTRING ;
 IDSTRING   : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
 
 WHITESPACE : ' ' -> skip ;
