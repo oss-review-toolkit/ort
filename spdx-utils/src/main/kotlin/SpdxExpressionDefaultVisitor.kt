@@ -91,7 +91,8 @@ class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>()
     override fun visitLicenseReferenceExpression(ctx: LicenseReferenceExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
             1 -> SpdxLicenseReferenceExpression(ctx.text)
-            else -> throw SpdxException("SpdxLicenseRefExpression has invalid amount of children: '${ctx.childCount}'")
+            else -> throw SpdxException("SpdxLicenseReferenceExpression has invalid amount of children:" +
+                    "'${ctx.childCount}'")
         }
     }
 }
