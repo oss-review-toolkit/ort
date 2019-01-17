@@ -19,10 +19,13 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotlintest.matchers.containAll
 import io.kotlintest.should
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 
 class VcsInfoTest : StringSpec({
@@ -72,6 +75,28 @@ class VcsInfoTest : StringSpec({
             vcsInfo.url shouldBe ""
             vcsInfo.revision shouldBe ""
             vcsInfo.path shouldBe "path"
+        }
+
+        "fail if the input contains unknown fields" {
+            val yaml = """
+                ---
+                type: "type"
+                url: "url"
+                revision: "revision"
+                resolved_revision: "resolved_revision"
+                path: "path"
+                data:
+                  key: "value"
+                unknown: "unknown"
+                """.trimIndent()
+
+            val exception = shouldThrow<UnrecognizedPropertyException> {
+                yamlMapper.readValue<VcsInfo>(yaml)
+            }
+
+            exception.propertyName shouldBe "unknown"
+            exception.knownPropertyIds should
+                    containAll<Any>("type", "url", "revision", "resolved_revision", "path", "data")
         }
     }
 
