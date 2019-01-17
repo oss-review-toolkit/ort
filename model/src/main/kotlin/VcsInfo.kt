@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 
 import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.normalizeVcsUrl
@@ -124,8 +125,20 @@ data class VcsInfo(
 }
 
 class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
+    companion object {
+        val KNOWN_FIELDS = listOf("type", "url", "revision", "resolvedRevision", "path", "data")
+    }
+
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
         val node = p.codec.readTree<JsonNode>(p)
+
+        val fields = node.fields().asSequence().map { it.key }.toList()
+        (fields - KNOWN_FIELDS).let { unknownFields ->
+            if (unknownFields.isNotEmpty()) {
+                throw UnrecognizedPropertyException.from(p, VcsInfo::class.java, unknownFields.first(), KNOWN_FIELDS)
+            }
+        }
+
         return VcsInfo(
                 node["type"].textValueOrEmpty(),
                 node["url"].textValueOrEmpty(),
