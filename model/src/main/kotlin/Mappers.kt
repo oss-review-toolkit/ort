@@ -42,6 +42,8 @@ private val ortModelModule = SimpleModule("OrtModelModule").apply {
     addSerializer(Identifier::class.java, IdentifierToStringSerializer())
 }
 
+val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategy.SNAKE_CASE as PropertyNamingStrategy.PropertyNamingStrategyBase
+
 /**
  * A lambda expression that can be [applied][apply] to all [ObjectMapper]s to configure them the same way.
  */
@@ -53,7 +55,7 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
 
     registerModule(ortModelModule)
 
-    propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
+    propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
 }
 
 val jsonMapper = ObjectMapper().apply(mapperConfig)
