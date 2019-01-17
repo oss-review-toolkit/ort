@@ -63,18 +63,18 @@ class SpdxExpressionTest : WordSpec() {
         }
 
         "An SpdxExpression" should {
-            val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
+            val dummyExpression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
 
             "be serializable to a string representation" {
-                val spdxExpression = SpdxExpression.parse(expression)
+                val spdxExpression = SpdxExpression.parse(dummyExpression)
 
                 val serializedExpression = yamlMapper.writeValueAsString(spdxExpression)
 
-                serializedExpression shouldBe "--- \"$expression\"\n"
+                serializedExpression shouldBe "--- \"$dummyExpression\"\n"
             }
 
             "be deserializable from a string representation" {
-                val serializedExpression = "--- \"$expression\"\n"
+                val serializedExpression = "--- \"$dummyExpression\"\n"
 
                 val deserializedExpression = yamlMapper.readValue<SpdxExpression>(serializedExpression)
 
@@ -99,6 +99,19 @@ class SpdxExpressionTest : WordSpec() {
                                 SpdxLicenseExceptionExpression("exception2")
                         )
                 )
+            }
+
+            "be invalid if it contains undefined license strings" {
+                val spdxExpression = SpdxExpression.parse(dummyExpression)
+
+                spdxExpression.validate() shouldBe false
+            }
+
+            "be valid if it only contains licenses, exceptions and LicenseRefs" {
+                val validExpression = "((CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND LicenseRef-aop-pd)"
+                val spdxExpression = SpdxExpression.parse(validExpression)
+
+                spdxExpression.validate() shouldBe true
             }
         }
 
