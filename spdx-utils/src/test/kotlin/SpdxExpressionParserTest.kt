@@ -45,15 +45,15 @@ class SpdxExpressionParserTest : WordSpec() {
             }
 
             "parse a document ref correctly" {
-                val spdxExpression = SpdxExpression.parse("DocumentRef-license")
+                val spdxExpression = SpdxExpression.parse("DocumentRef-document:LicenseRef-license")
 
-                spdxExpression shouldBe SpdxLicenseRefExpression("DocumentRef-license")
+                spdxExpression shouldBe SpdxLicenseReferenceExpression("DocumentRef-document:LicenseRef-license")
             }
 
             "parse a license ref correctly" {
                 val spdxExpression = SpdxExpression.parse("LicenseRef-license")
 
-                spdxExpression shouldBe SpdxLicenseRefExpression("LicenseRef-license")
+                spdxExpression shouldBe SpdxLicenseReferenceExpression("LicenseRef-license")
             }
 
             "parse a complex expression correctly" {

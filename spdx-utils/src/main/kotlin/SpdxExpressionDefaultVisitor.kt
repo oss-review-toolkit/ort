@@ -23,7 +23,7 @@ import com.here.ort.spdx.SpdxExpressionParser.CompoundExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseExceptionExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseIdExpressionContext
-import com.here.ort.spdx.SpdxExpressionParser.LicenseRefExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.LicenseReferenceExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.SimpleExpressionContext
 
 class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>() {
@@ -88,9 +88,9 @@ class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>()
         }
     }
 
-    override fun visitLicenseRefExpression(ctx: LicenseRefExpressionContext): SpdxExpression {
+    override fun visitLicenseReferenceExpression(ctx: LicenseReferenceExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
-            1 -> SpdxLicenseRefExpression(ctx.text)
+            1 -> SpdxLicenseReferenceExpression(ctx.text)
             else -> throw SpdxException("SpdxLicenseRefExpression has invalid amount of children: '${ctx.childCount}'")
         }
     }
