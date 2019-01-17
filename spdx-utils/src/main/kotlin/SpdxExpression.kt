@@ -76,9 +76,9 @@ sealed class SpdxExpression {
 
     /**
      * Validate this expression to only contain SPDX identifiers. This includes SPDX licenses, exceptions and license
-     * references.
+     * references. Throws an [SpdxException] if validation fails.
      */
-    abstract fun validate(): Boolean
+    abstract fun validate()
 }
 
 /**
@@ -91,11 +91,19 @@ data class SpdxCompoundExpression(
 ) : SpdxExpression() {
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
 
-    override fun validate() =
-            left.validate() && right.validate() && (
-                    (operator == SpdxOperator.WITH && right is SpdxLicenseExceptionExpression) ||
-                    (operator != SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression)
-            )
+    override fun validate() {
+        left.validate()
+
+        if (operator == SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression) {
+            throw SpdxException("Argument '$right' for WITH is not an SPDX license exception id.")
+        }
+
+        if (operator != SpdxOperator.WITH && right is SpdxLicenseExceptionExpression) {
+            throw SpdxException("Argument '$right' for $operator must not be an SPDX license exception id.")
+        }
+
+        right.validate()
+    }
 
     override fun toString(): String {
         // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
@@ -122,7 +130,9 @@ data class SpdxLicenseExceptionExpression(
 ) : SpdxExpression() {
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
-    override fun validate() = SpdxLicenseException.forId(id) != null
+    override fun validate() {
+        SpdxLicenseException.forId(id) ?: throw SpdxException("'$id' is not an SPDX license exception id.")
+    }
 
     override fun toString() = id
 }
@@ -137,7 +147,9 @@ data class SpdxLicenseIdExpression(
 ) : SpdxExpression() {
     override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
 
-    override fun validate() = SpdxLicense.forId(id) != null
+    override fun validate() {
+        SpdxLicense.forId(id) ?: throw SpdxException("'$id' is not an SPDX license id.")
+    }
 
     override fun toString() =
             buildString {
@@ -155,8 +167,12 @@ data class SpdxLicenseReferenceExpression(
 ) : SpdxExpression() {
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
-    override fun validate() = id.startsWith("LicenseRef-") ||
-            (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-"))
+    override fun validate() {
+        if (!(id.startsWith("LicenseRef-") ||
+                (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")))) {
+            throw SpdxException("'$id' is not an SPDX license reference.")
+        }
+    }
 
     override fun toString() = id
 }
