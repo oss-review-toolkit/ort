@@ -25,6 +25,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 class SpdxExpressionTest : WordSpec() {
@@ -104,14 +105,18 @@ class SpdxExpressionTest : WordSpec() {
             "be invalid if it contains undefined license strings" {
                 val spdxExpression = SpdxExpression.parse(dummyExpression)
 
-                spdxExpression.validate() shouldBe false
+                shouldThrow<SpdxException> {
+                    spdxExpression.validate()
+                }
             }
 
             "be valid if it only contains licenses, exceptions and LicenseRefs" {
                 val validExpression = "(CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND LicenseRef-aop-pd"
                 val spdxExpression = SpdxExpression.parse(validExpression)
 
-                spdxExpression.validate() shouldBe true
+                // This should not throw SpdxException. Unfortunately there is not better way to check this as
+                // https://github.com/kotlintest/kotlintest/issues/205 was never implemented.
+                spdxExpression.validate()
             }
         }
 
