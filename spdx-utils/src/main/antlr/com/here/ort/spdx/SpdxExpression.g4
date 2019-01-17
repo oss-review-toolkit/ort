@@ -81,7 +81,7 @@ WITH : ('WITH' | 'with') ;
 
 OPEN  : '(' ;
 CLOSE : ')' ;
-PLUS  : '+';
+PLUS  : '+' ;
 
 LICENSEREF : ('DocumentRef-' | 'LicenseRef-') IDSTRING ;
 IDSTRING   : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
