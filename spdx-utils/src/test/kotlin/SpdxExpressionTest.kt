@@ -108,7 +108,7 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "be valid if it only contains licenses, exceptions and LicenseRefs" {
-                val validExpression = "((CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND LicenseRef-aop-pd)"
+                val validExpression = "(CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND LicenseRef-aop-pd"
                 val spdxExpression = SpdxExpression.parse(validExpression)
 
                 spdxExpression.validate() shouldBe true
