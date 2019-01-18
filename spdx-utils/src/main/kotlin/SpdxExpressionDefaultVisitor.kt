@@ -52,11 +52,6 @@ class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>()
 
                     val right = visit(ctx.getChild(2))
 
-                    if (operator == SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression) {
-                        throw SpdxException("Argument '$right' for WITH is not an SPDX license exception id in " +
-                                "'${ctx.text}'.")
-                    }
-
                     SpdxCompoundExpression(left, operator, right)
                 }
             }
