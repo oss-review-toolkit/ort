@@ -149,6 +149,10 @@ data class SpdxLicenseIdExpression(
 
     override fun validate() {
         SpdxLicense.forId(id) ?: throw SpdxException("'$id' is not an SPDX license id.")
+
+        if (anyLaterVersion && !(id.startsWith("GPL-") || id.startsWith("LGPL-"))) {
+            throw SpdxException("The + operator is only allowed for GPL and LGPL licenses.")
+        }
     }
 
     override fun toString() =
