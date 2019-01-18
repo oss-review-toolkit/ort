@@ -103,20 +103,17 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "be invalid if it contains undefined license strings" {
-                val spdxExpression = SpdxExpression.parse(dummyExpression)
-
                 shouldThrow<SpdxException> {
-                    spdxExpression.validate()
+                    SpdxExpression.parse(dummyExpression, true)
                 }
             }
 
             "be valid if it only contains licenses, exceptions and LicenseRefs" {
                 val validExpression = "(CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND LicenseRef-aop-pd"
-                val spdxExpression = SpdxExpression.parse(validExpression)
 
                 // This should not throw SpdxException. Unfortunately there is not better way to check this as
                 // https://github.com/kotlintest/kotlintest/issues/205 was never implemented.
-                spdxExpression.validate()
+                SpdxExpression.parse(validExpression, true)
             }
         }
 

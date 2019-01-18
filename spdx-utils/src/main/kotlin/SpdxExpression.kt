@@ -39,11 +39,20 @@ import org.antlr.v4.runtime.Recognizer
 sealed class SpdxExpression {
     companion object {
         /**
-         * Parse a string into an [SpdxExpression]. Throws an [SpdxException] if the string cannot be parsed.
+         * Parse a string into an [SpdxExpression]. Parsing only checks the syntax and the individual license
+         * expressions may be invalid SPDX identifiers, which is useful to parse expressions with non-SPDX declared
+         * licenses. Throws an [SpdxException] if the string cannot be parsed.
          */
         @JsonCreator
         @JvmStatic
-        fun parse(expression: String): SpdxExpression {
+        fun parse(expression: String) = parse(expression, false)
+
+        /**
+         * Parse a string into an [SpdxExpression]. If [strict] is enabled, not only the syntax is checked but license
+         * expressions are also semantically checked to be valid SPDX identifiers. Throws an [SpdxException] if the
+         * string cannot be parsed.
+         */
+        fun parse(expression: String, strict: Boolean): SpdxExpression {
             val charStream = CharStreams.fromString(expression)
             val lexer = SpdxExpressionLexer(charStream)
 
@@ -62,7 +71,7 @@ sealed class SpdxExpression {
 
             val tokenStream = CommonTokenStream(lexer)
             val parser = SpdxExpressionParser(tokenStream)
-            val visitor = SpdxExpressionDefaultVisitor()
+            val visitor = SpdxExpressionDefaultVisitor(strict)
 
             return visitor.visit(parser.licenseExpression())
         }
