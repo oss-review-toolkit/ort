@@ -44,7 +44,7 @@ licenseExceptionExpression
 licenseIdExpression
     :
     IDSTRING
-    (PLUS)?
+    PLUS?
     ;
 
 simpleExpression
