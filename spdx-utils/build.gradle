@@ -158,9 +158,9 @@ def generateLicenseTextResources(String description, Map<String, Boolean> ids, S
                 def candidate = i.next()
 
                 try {
-                    def text = file(candidate).getText('UTF-8')
-                    if (!text.endsWith('\n')) text += '\n'
-                    resourceFile.write(text, 'UTF-8')
+                    def lines = file(candidate).readLines('UTF-8').collect { it.replaceAll(/\s+$/, '') }
+                            .reverse().dropWhile { it.empty }.reverse().dropWhile { it.empty }
+                    resourceFile.write(lines.join('\n') + '\n', 'UTF-8')
                 } catch (FileNotFoundException e) {
                     logger.quiet("Falling back to license text from SPDX for '$license'.")
                     continue
@@ -190,9 +190,9 @@ task generateLicenseRefTextResources(dependsOn: importScanCodeLicenseTexts) {
                 def licenseFile = new File(licensesDir, "${baseName}.LICENSE")
                 if (licenseFile.file) {
                     def resourceFile = new File(resourcesDir, baseName)
-                    def text = licenseFile.getText('UTF-8')
-                    if (!text.endsWith('\n')) text += '\n'
-                    resourceFile.write(text, 'UTF-8')
+                    def lines = licenseFile.readLines('UTF-8').collect { it.replaceAll(/\s+$/, '') }
+                            .reverse().dropWhile { it.empty }.reverse().dropWhile { it.empty }
+                    resourceFile.write(lines.join('\n') + '\n', 'UTF-8')
                 } else {
                     logger.warn("No license text found for license '$baseName'.")
                 }
