@@ -84,6 +84,6 @@ CLOSE : ')' ;
 PLUS  : '+' ;
 
 LICENSEREFERENCE : ('DocumentRef-' IDSTRING ':')? 'LicenseRef-' IDSTRING ;
-IDSTRING   : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
+IDSTRING         : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
 
 WHITESPACE : ' ' -> skip ;
