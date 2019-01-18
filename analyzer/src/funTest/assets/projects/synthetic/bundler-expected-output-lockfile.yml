@@ -17,7 +17,7 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "Bundler::nokogiri:1.8.2"
+    - id: "Bundler::nokogiri:1.8.5"
       dependencies:
       - id: "Bundler::mini_portile2:2.3.0"
     - id: "Bundler::rack:1.6.11"
@@ -100,19 +100,19 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::nokogiri:1.8.2"
+    id: "Bundler::nokogiri:1.8.5"
     declared_licenses:
     - "MIT"
     description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
       \ many features is the ability to search documents via XPath\nor CSS3 selectors."
-    homepage_url: "http://nokogiri.org"
+    homepage_url: ""
     binary_artifact:
       url: ""
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/nokogiri-1.8.2.gem"
-      hash: "382af505a11b735e97f52ec6279ea484be7a7560d5599e81def40943601fd515"
+      url: "https://rubygems.org/gems/nokogiri-1.8.5.gem"
+      hash: "1f93a829257b621d40c4cbfce3acdcd688b0b3d70497ceae4fa2baf955eede2f"
       hash_algorithm: "SHA-256"
     vcs:
       type: "git"
