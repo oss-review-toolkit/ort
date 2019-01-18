@@ -162,7 +162,7 @@ def generateLicenseTextResources(String description, Map<String, Boolean> ids, S
                             .reverse().dropWhile { it.empty }.reverse().dropWhile { it.empty }
                     resourceFile.write(lines.join('\n') + '\n', 'UTF-8')
                 } catch (FileNotFoundException e) {
-                    logger.quiet("Falling back to license text from SPDX for '$license'.")
+                    logger.quiet("Trying the next candiate for getting the text for license '$license'.")
                     continue
                 }
 
