@@ -402,7 +402,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     internal fun getClosestCopyrightStatements(copyrights: JsonNode, startLine: Int, toleranceLines: Int = 5):
             SortedSet<String> {
         val closestCopyrights = copyrights.filter {
-            (it["start_line"].asInt() - startLine).absoluteValue <= toleranceLines
+            (it["start_line"].intValue() - startLine).absoluteValue <= toleranceLines
         }
 
         // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
@@ -442,7 +442,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
                 // for each of these, if any.
                 licenses.forEach {
                     val licenseId = getLicenseId(it)
-                    val licenseStartLine = it["start_line"].asInt()
+                    val licenseStartLine = it["start_line"].intValue()
                     val closestCopyrights = getClosestCopyrightStatements(copyrights, licenseStartLine)
                     copyrightsForLicenses.getOrPut(licenseId) { sortedSetOf() } += closestCopyrights
                 }
@@ -466,8 +466,8 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             val licenses = file["licenses"] ?: EMPTY_JSON_NODE
             licenses.forEach {
                 val licenseId = getLicenseId(it)
-                val licenseStartLine = it["start_line"].asInt()
-                val licenseEndLine = it["end_line"].asInt()
+                val licenseStartLine = it["start_line"].intValue()
+                val licenseEndLine = it["end_line"].intValue()
 
                 locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
                         TextLocation(path, licenseStartLine, licenseEndLine)
