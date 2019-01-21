@@ -19,6 +19,7 @@
 
 package com.here.ort.spdx
 
+import com.here.ort.spdx.SpdxExpression.Strictness
 import com.here.ort.spdx.SpdxExpressionParser.CompoundExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseExceptionExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseExpressionContext
@@ -26,7 +27,8 @@ import com.here.ort.spdx.SpdxExpressionParser.LicenseIdExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseReferenceExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.SimpleExpressionContext
 
-class SpdxExpressionDefaultVisitor(private val strict: Boolean) : SpdxExpressionBaseVisitor<SpdxExpression>() {
+class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
+        SpdxExpressionBaseVisitor<SpdxExpression>() {
     override fun visitLicenseExpression(ctx: LicenseExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
             2 -> visit(ctx.getChild(0))
@@ -71,7 +73,7 @@ class SpdxExpressionDefaultVisitor(private val strict: Boolean) : SpdxExpression
             1 -> SpdxLicenseExceptionExpression(ctx.text)
             else -> throw SpdxException("SpdxLicenseExceptionExpression has invalid amount of children: " +
                     "'${ctx.childCount}'")
-        }.apply { if (strict) validate() }
+        }.apply { validate(strictness) }
     }
 
     override fun visitLicenseIdExpression(ctx: LicenseIdExpressionContext): SpdxExpression {
@@ -79,7 +81,7 @@ class SpdxExpressionDefaultVisitor(private val strict: Boolean) : SpdxExpression
             1 -> SpdxLicenseIdExpression(ctx.text)
             2 -> SpdxLicenseIdExpression(ctx.text.dropLast(1), anyLaterVersion = true)
             else -> throw SpdxException("SpdxLicenseIdExpression has invalid amount of children: '${ctx.childCount}'")
-        }.apply { if (strict) validate() }
+        }.apply { validate(strictness) }
     }
 
     override fun visitLicenseReferenceExpression(ctx: LicenseReferenceExpressionContext): SpdxExpression {
@@ -87,6 +89,6 @@ class SpdxExpressionDefaultVisitor(private val strict: Boolean) : SpdxExpression
             1 -> SpdxLicenseReferenceExpression(ctx.text)
             else -> throw SpdxException("SpdxLicenseReferenceExpression has invalid amount of children:" +
                     "'${ctx.childCount}'")
-        }.apply { if (strict) validate() }
+        }.apply { validate(strictness) }
     }
 }
