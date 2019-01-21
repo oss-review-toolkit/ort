@@ -33,6 +33,7 @@ import com.here.ort.model.Repository
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
+import com.here.ort.utils.ORT_CONFIG_FILE
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 
@@ -135,8 +136,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
     private fun locateRepositoryConfigurationFile(absoluteProjectPath: File) =
             if (GitRepo().getWorkingTree(absoluteProjectPath).isValid()) {
                 val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
-                manifestFile.resolveSibling("${manifestFile.name}.ort.yml")
+                manifestFile.resolveSibling("${manifestFile.name}$ORT_CONFIG_FILE")
             } else {
-                File(absoluteProjectPath, ".ort.yml")
+                File(absoluteProjectPath, ORT_CONFIG_FILE)
             }
 }
