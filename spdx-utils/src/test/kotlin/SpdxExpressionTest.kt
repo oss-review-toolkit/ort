@@ -23,6 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import com.here.ort.spdx.SpdxExpression.Strictness
+
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
@@ -63,7 +65,7 @@ class SpdxExpressionTest : WordSpec() {
             }
         }
 
-        "An SpdxExpression" should {
+        "An dummy SpdxExpression" should {
             val dummyExpression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
 
             "be serializable to a string representation" {
@@ -102,18 +104,76 @@ class SpdxExpressionTest : WordSpec() {
                 )
             }
 
-            "be invalid if it contains undefined license strings" {
+            "be valid in lenient mode" {
+                SpdxExpression.parse(dummyExpression, Strictness.ALLOW_ANY)
+            }
+
+            "be invalid in deprecated mode" {
                 shouldThrow<SpdxException> {
-                    SpdxExpression.parse(dummyExpression, true)
+                    SpdxExpression.parse(dummyExpression, Strictness.ALLOW_DEPRECATED)
                 }
             }
 
-            "be valid if it only contains licenses, exceptions and LicenseRefs" {
-                val validExpression = "(CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0) AND LicenseRef-aop-pd"
+            "be invalid in strict mode" {
+                shouldThrow<SpdxException> {
+                    SpdxExpression.parse(dummyExpression, Strictness.ALLOW_CURRENT)
+                }
+            }
+        }
 
-                // This should not throw SpdxException. Unfortunately there is not better way to check this as
-                // https://github.com/kotlintest/kotlintest/issues/205 was never implemented.
-                SpdxExpression.parse(validExpression, true)
+        "An SpdxExpression with deprecated identifiers" should {
+            val deprecatedExpression = "GPL-1.0+"
+            val deprecatedExpressionWithException = "GPL-2.0-with-classpath-exception"
+
+            "be valid in lenient mode" {
+                assertSoftly {
+                    SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_ANY)
+                    SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_ANY)
+                }
+            }
+
+            "be valid in deprecated mode" {
+                assertSoftly {
+                    SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_DEPRECATED)
+                    SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_DEPRECATED)
+                }
+            }
+
+            "be invalid in strict mode" {
+                assertSoftly {
+                    shouldThrow<SpdxException> {
+                        SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_CURRENT)
+                    }
+                    shouldThrow<SpdxException> {
+                        SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_CURRENT)
+                    }
+                }
+            }
+        }
+
+        "An SpdxExpression with current identifiers" should {
+            val currentExpression = "GPL-1.0-only"
+            val currentExpressionWithException = "GPL-2.0-or-later WITH Classpath-exception-2.0"
+
+            "be valid in lenient mode" {
+                assertSoftly {
+                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_ANY)
+                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_ANY)
+                }
+            }
+
+            "be valid in deprecated mode" {
+                assertSoftly {
+                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_DEPRECATED)
+                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_DEPRECATED)
+                }
+            }
+
+            "be valid in strict mode" {
+                assertSoftly {
+                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_CURRENT)
+                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_CURRENT)
+                }
             }
         }
 
