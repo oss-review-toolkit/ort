@@ -34,6 +34,11 @@ val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.clas
 var printStackTrace = false
 
 /**
+ * The name of the ORT configuration file.
+ */
+const val ORT_CONFIG_FILENAME = ".ort.yml"
+
+/**
  * Ordinal for mandatory program parameters.
  */
 const val PARAMETER_ORDER_MANDATORY = 0

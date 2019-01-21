@@ -379,7 +379,8 @@ class ScanCodeTest : WordSpec({
             val scanCode = ScanCode(ScannerConfiguration())
 
             scanCode.getConfiguration() shouldBe
-                    "--copyright --license --info --strip-root --timeout 300 --json-pp --license-diag"
+                    "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --json-pp " +
+                    "--license-diag"
         }
 
         "return the non config values from the scanner configuration" {
@@ -401,8 +402,8 @@ class ScanCodeTest : WordSpec({
             val scanCode = ScanCode(ScannerConfiguration())
 
             scanCode.commandLineOptions.joinToString(" ") should
-                    match("--copyright --license --info --strip-root --timeout 300 --processes \\d+ --license-diag " +
-                            "--verbose")
+                    match("--copyright --license --ignore \\*.ort.yml --info --strip-root --timeout 300 " +
+                            "--processes \\d+ --license-diag --verbose")
         }
 
         "contain the values from the scanner configuration" {

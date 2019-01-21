@@ -42,6 +42,7 @@ import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsCache
 import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
@@ -95,6 +96,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
                 "--copyright",
                 "--license",
+                "--ignore", "*$ORT_CONFIG_FILENAME",
                 "--info",
                 "--strip-root",
                 "--timeout", TIMEOUT.toString()
