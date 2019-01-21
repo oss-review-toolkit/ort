@@ -62,7 +62,8 @@ import org.gradle.tooling.GradleConnector
 class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Gradle>() {
-        override val globsForDefinitionFiles = listOf("build.gradle", "settings.gradle")
+        override val globsForDefinitionFiles = listOf("build.gradle", "settings.gradle",
+                "build.gradle.kts", "settings.gradle.kts")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Gradle(analyzerConfig, repoConfig)
