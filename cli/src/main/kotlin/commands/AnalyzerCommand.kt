@@ -132,6 +132,8 @@ object AnalyzerCommand : CommandWithHelp() {
         val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile,
                 repositoryConfigurationFile)
 
+        println("Found ${ortResult?.analyzer?.result?.projects.orEmpty().size} project(s) in total.")
+
         absoluteOutputPath.safeMkdirs()
 
         outputFormats.distinct().forEach { format ->
