@@ -57,6 +57,13 @@ object Main : CommandWithHelp() {
      */
     @JvmStatic
     fun main(args: Array<String>) {
+        exitProcess(run(args))
+    }
+
+    /**
+     * Run the ORT CLI with the provided [args] and return the exit code of [CommandWithHelp.run].
+     */
+    fun run(args: Array<String>): Int {
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
             addCommand(AnalyzerCommand)
@@ -68,7 +75,7 @@ object Main : CommandWithHelp() {
             parse(*args)
         }
 
-        exitProcess(run(jc))
+        return run(jc)
     }
 
     override fun runCommand(jc: JCommander): Int {
