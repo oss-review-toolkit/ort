@@ -93,10 +93,11 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
     def jsonSlurper = new groovy.json.JsonSlurper()
     def json = jsonSlurper.parse(jsonUrl.toURL())
     def ids = collectIds(json)
-
     logger.quiet("Found ${ids.size()} SPDX $description identifiers.")
 
     def enumFile = file("src/main/kotlin/${className}.kt")
+    logger.quiet("Writing enum entries to file '$enumFile'...")
+
     enumFile.write(getLicenseHeader())
     enumFile.append("""\
             package com.here.ort.spdx
