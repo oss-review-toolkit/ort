@@ -184,6 +184,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "compileClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -193,6 +194,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "compileOnly"
         dependencies: []
       - name: "default"
@@ -204,6 +206,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "runtime"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -213,6 +216,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "runtimeClasspath"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -222,6 +226,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "testAnnotationProcessor"
         dependencies: []
       - name: "testCompile"
@@ -232,6 +237,7 @@ analyzer:
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
+            severity: "ERROR"
         - id: "Maven:org.apache.commons:commons-text:1.1"
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
@@ -239,6 +245,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "testCompileClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -247,6 +254,7 @@ analyzer:
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
+            severity: "ERROR"
         - id: "Maven:org.apache.commons:commons-text:1.1"
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
@@ -254,6 +262,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "testCompileOnly"
         dependencies: []
       - name: "testRuntime"
@@ -264,6 +273,7 @@ analyzer:
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
+            severity: "ERROR"
         - id: "Maven:org.apache.commons:commons-text:1.1"
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
@@ -271,6 +281,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -279,6 +290,7 @@ analyzer:
             source: "Gradle"
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency junit:junit:4.12 because no repositories are defined."
+            severity: "ERROR"
         - id: "Maven:org.apache.commons:commons-text:1.1"
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
@@ -286,6 +298,7 @@ analyzer:
             message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
+            severity: "ERROR"
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []

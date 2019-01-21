@@ -63,12 +63,14 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                Main.main(arrayOf(
+                val exitCode = Main.run(arrayOf(
                         "analyze",
                         "-m", "Gradle",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "gradle").path
                 ))
+
+                exitCode shouldBe 0
 
                 val lines = streamOut.toString().lineSequence().iterator()
 
@@ -89,12 +91,14 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                Main.main(arrayOf(
+                val exitCode = Main.run(arrayOf(
                         "analyze",
                         "-m", "NPM",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "package-lock").path
                 ))
+
+                exitCode shouldBe 0
 
                 val lines = streamOut.toString().lineSequence().iterator()
 
@@ -115,13 +119,15 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                Main.main(arrayOf(
+                val exitCode = Main.run(arrayOf(
                         "analyze",
                         "-m", "Gradle",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "gradle").path,
                         "-f", "json,yaml,json"
                 ))
+
+                exitCode shouldBe 0
 
                 val lines = streamOut.toString().lines().filter { it.startsWith("Writing analyzer result to ") }
 
@@ -142,12 +148,14 @@ class MainTest : StringSpec() {
                     urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            Main.main(arrayOf(
+            val exitCode = Main.run(arrayOf(
                     "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
                     "-o", analyzerOutputDir.path
             ))
+
+            exitCode shouldBe 0
 
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
@@ -167,13 +175,15 @@ class MainTest : StringSpec() {
             // The command below should include the "--merge-results" option, but setting this option here would disable
             // the feature because JCommander just switches the value of boolean options, and the option was already set
             // to true by the test before. See: https://github.com/cbeust/jcommander/issues/378
-            Main.main(arrayOf(
+            val exitCode = Main.run(arrayOf(
                     "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
                     "-o", analyzerOutputDir.path,
                     "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
             ))
+
+            exitCode shouldBe 0
 
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
