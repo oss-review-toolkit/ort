@@ -35,6 +35,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.log
 
 import java.io.File
+import java.time.Instant
 import java.util.ServiceLoader
 
 const val TOOL_NAME = "scanner"
@@ -78,6 +79,8 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
         require(dependenciesFile.isFile) {
             "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
         }
+
+        val startTime = Instant.now()
 
         val ortResult = dependenciesFile.readValue<OrtResult>()
 
@@ -133,7 +136,9 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
 
         val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsCache.stats)
 
-        val scannerRun = ScannerRun(Environment(), config, scanRecord)
+        val endTime = Instant.now()
+
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
 
         // Note: This overwrites any existing ScannerRun from the input file.
         return ortResult.copy(scanner = scannerRun)
