@@ -196,7 +196,7 @@ task checkCopyright(type: Exec) {
     description = 'Checks for HERE Copyright headers in Kotlin files.'
     group = 'Verification'
 
-    commandLine 'git', 'grep', '-EL', 'Copyright.+HERE', '*.kt'
+    commandLine 'git', 'grep', '-EL', 'Copyright.+HERE', '*.kt', ':!analyzer/src/funTest/assets/projects/external'
     ignoreExitValue = true
     standardOutput = new ByteArrayOutputStream()
 
