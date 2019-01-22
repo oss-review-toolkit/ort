@@ -32,13 +32,12 @@ import com.here.ort.spdx.getLicenseText
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 
-import java.io.File
 import java.io.IOException
+import java.io.OutputStream
 
 class NoticeReporter : Reporter() {
     companion object {
         private const val NOTICE_SEPARATOR = "\n----\n\n"
-        private const val NOTICE_FILE_NAME = "NOTICE"
     }
 
     data class NoticeReport(
@@ -84,13 +83,15 @@ class NoticeReporter : Reporter() {
         override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
     }
 
+    override val defaultFilename = "NOTICE"
+
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String?
-    ): File {
+    ) {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
@@ -114,10 +115,9 @@ class NoticeReporter : Reporter() {
             NoticeReport(listOf(header), processedFindings, emptyList())
         }
 
-        val outputFile = File(outputDir, NOTICE_FILE_NAME)
-        writeNoticeReport(noticeReport, outputFile)
-
-        return outputFile
+        outputStream.bufferedWriter().use {
+            it.write(generateNotices(noticeReport))
+        }
     }
 
     private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap {
@@ -140,45 +140,39 @@ class NoticeReporter : Reporter() {
         return licenseFindings
     }
 
-    private fun writeNoticeReport(noticeReport: NoticeReport, outputFile: File) {
-        log.info { "Writing $NOTICE_FILE_NAME file to '${outputFile.absolutePath}'." }
+    private fun generateNotices(noticeReport: NoticeReport) =
+            buildString {
+                append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-        val headers = noticeReport.headers.joinToString(NOTICE_SEPARATOR)
-        outputFile.appendText(headers)
+                noticeReport.findings.forEach { (license, copyrights) ->
+                    try {
+                        val licenseText = getLicenseText(license, true)
 
-        if (noticeReport.findings.isNotEmpty()) {
-            val findings = noticeReport.findings.mapNotNull { (license, copyrights) ->
-                try {
-                    val licenseText = getLicenseText(license, true)
+                        append(NOTICE_SEPARATOR)
 
-                    buildString {
                         // Note: Do not use appendln() here as that would write out platform-native line endings, but we
                         // want to normalize on Unix-style line endings for consistency.
                         copyrights.forEach { copyright ->
                             append("$copyright\n")
                         }
-
                         if (copyrights.isNotEmpty()) append("\n")
 
                         append(licenseText)
+                    } catch (e: IOException) {
+                        // Public domain licenses do not require attribution.
+                        if (license != "LicenseRef-public-domain") {
+                            // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
+                            // find license texts for non-public-domain licenses.
+                            log.warn {
+                                "No license text found for license '$license', it will be omitted from the report."
+                            }
+                        }
                     }
-                } catch (e: IOException) {
-                    // Public domain licenses do not require attribution.
-                    if (license != "LicenseRef-public-domain") {
-                        // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot find
-                        // license texts for non-public-domain licenses.
-                        log.warn { "No license text found for license '$license', it will be omitted from the report." }
-                    }
-
-                    null
                 }
-            }.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
-            outputFile.appendText(findings)
-        }
 
-        if (noticeReport.footers.isNotEmpty()) {
-            val footers = noticeReport.footers.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
-            outputFile.appendText(footers)
-        }
-    }
+                noticeReport.footers.forEach { footer ->
+                    append(NOTICE_SEPARATOR)
+                    append(footer)
+                }
+            }
 }

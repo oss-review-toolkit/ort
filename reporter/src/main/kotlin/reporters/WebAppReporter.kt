@@ -19,25 +19,24 @@
 
 package com.here.ort.reporter.reporters
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.jsonMapper
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.utils.log
 
-import java.io.File
+import java.io.OutputStream
 
 class WebAppReporter : Reporter() {
+    override val defaultFilename = "scan-report-web-app.html"
+
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String?
-    ): File {
+    ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val resultJson = jsonMapper.writeValueAsString(ortResult)
 
@@ -48,12 +47,8 @@ class WebAppReporter : Reporter() {
                 .replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$resultJson<")
                 .replace("id=\"ort-report-resolution-data\"><", "id=\"ort-report-resolution-data\">$resolutionsJson<")
 
-        val outputFile = File(outputDir, "scan-report-web-app.html")
-
-        log.info { "Writing web app report to '${outputFile.absolutePath}'." }
-
-        outputFile.writeText(result)
-
-        return outputFile
+        outputStream.bufferedWriter().use {
+            it.write(result)
+        }
     }
 }
