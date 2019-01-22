@@ -19,6 +19,8 @@
 
 package com.here.ort.commands
 
+import ch.frankel.slf4k.*
+
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
@@ -27,6 +29,7 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.evaluator.Evaluator
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
+import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
@@ -96,20 +99,25 @@ object EvaluatorCommand : CommandWithHelp() {
 
         val evaluatorRun = evaluator.run(script)
 
-        outputDir?.let { dir ->
-            require(!dir.exists()) {
-                "The output directory '${dir.absolutePath}' must not exist yet."
+        outputDir?.absoluteFile?.let { absoluteOutputDir ->
+            val outputFiles = outputFormats.distinct().map { format ->
+                File(absoluteOutputDir, "evaluation-result.${format.fileExtension}")
             }
 
-            dir.safeMkdirs()
+            val existingOutputFiles = outputFiles.filter { it.exists() }
+            if (existingOutputFiles.isNotEmpty()) {
+                log.error { "None of the output files $existingOutputFiles must exist yet." }
+                return 2
+            }
 
             // Note: This overwrites any existing EvaluatorRun from the input file.
             val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
 
-            outputFormats.distinct().forEach { format ->
-                val evaluationResultFile = File(dir, "evaluation-result.${format.fileExtension}")
-                println("Writing evaluation result to '${evaluationResultFile.absolutePath}'.")
-                format.mapper.writerWithDefaultPrettyPrinter().writeValue(evaluationResultFile, ortResultOutput)
+            absoluteOutputDir.safeMkdirs()
+
+            outputFiles.forEach { file ->
+                println("Writing evaluation result to '${file.absolutePath}'.")
+                file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResultOutput)
             }
         }
 
