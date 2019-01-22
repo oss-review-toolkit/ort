@@ -19,8 +19,6 @@
 
 package com.here.ort.reporter.reporters
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.Severity
@@ -31,10 +29,9 @@ import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.utils.isValidUrl
-import com.here.ort.utils.log
 import com.here.ort.utils.normalizeLineBreaks
 
-import java.io.File
+import java.io.OutputStream
 
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -42,7 +39,6 @@ import kotlinx.html.*
 import kotlinx.html.dom.*
 
 class StaticHtmlReporter : Reporter() {
-
     private val css = """
 
         body {
@@ -300,23 +296,21 @@ class StaticHtmlReporter : Reporter() {
 
         """.trimIndent()
 
+    override val defaultFilename = "scan-report.html"
+
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String?
-    ): File {
+    ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val html = renderHtml(tabularScanRecord)
 
-        val outputFile = File(outputDir, "scan-report.html")
-
-        log.info { "Writing static HTML report to '${outputFile.absolutePath}'." }
-
-        outputFile.writeText(html)
-
-        return outputFile
+        outputStream.bufferedWriter().use {
+            it.write(html)
+        }
     }
 
     private fun renderHtml(reportTableModel: ReportTableModel): String {

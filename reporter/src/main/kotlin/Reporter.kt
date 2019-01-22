@@ -24,7 +24,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.config.CopyrightGarbage
 
-import java.io.File
+import java.io.OutputStream
 import java.util.ServiceLoader
 
 /**
@@ -42,19 +42,25 @@ abstract class Reporter {
     }
 
     /**
+     * The default output filename to use with this reporter format.
+     */
+    abstract val defaultFilename: String
+
+    /**
      * Return the Java class name as a simple way to refer to the [Reporter].
      */
     override fun toString(): String = javaClass.simpleName
 
     /**
-     * Generate a report for the [ortResult] taking into account any issue resolutions provided by [resolutionProvider].
-     * The report, whose file name is determined internally, is written to [outputDir] and returned as the result.
+     * Generate a report for the [ortResult], taking into account any issue resolutions provided by [resolutionProvider]
+     * and the given known [copyrightGarbage]. The report may be post-processed by a [postProcessingScript] before it is
+     * written to [outputStream].
      */
     abstract fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String? = null
-    ): File
+    )
 }

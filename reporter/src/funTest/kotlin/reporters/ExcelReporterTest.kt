@@ -39,9 +39,10 @@ class ExcelReporterTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = OS.isWindows) {
             val outputDir = createTempDir().apply { deleteOnExit() }
-            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
 
             val actualFile = outputDir.resolve("scan-report.xlsx")
+            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(),
+                    actualFile.outputStream())
             val actualXlsxUnpacked = createTempDir().apply { deleteOnExit() }
             actualFile.unpackZip(actualXlsxUnpacked)
 
