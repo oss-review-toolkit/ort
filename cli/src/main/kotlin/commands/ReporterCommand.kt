@@ -99,11 +99,17 @@ object ReporterCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
-        require(!outputDir.exists()) {
-            "The output directory '${outputDir.absolutePath}' must not exist yet."
+        val absoluteOutputDir = outputDir.absoluteFile
+
+        val reports = reportFormats.associateWith { format ->
+            File(absoluteOutputDir, format.defaultFilename)
         }
 
-        outputDir.safeMkdirs()
+        val existingReportFiles = reports.values.filter { it.exists() }
+        if (existingReportFiles.isNotEmpty()) {
+            log.error { "None of the report files $existingReportFiles must exist yet." }
+            return 2
+        }
 
         var ortResult = ortFile.readValue<OrtResult>()
         repositoryConfigurationFile?.let {
@@ -113,21 +119,26 @@ object ReporterCommand : CommandWithHelp() {
         val resolutionProvider = DefaultResolutionProvider()
         ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
         resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
+
         val copyrightGarbage = copyrightGarbageFile?.readValue() ?: CopyrightGarbage()
 
         var exitCode = 0
 
-        reportFormats.distinct().forEach {
-            val name = it.toString().removeSuffix("Reporter")
+        absoluteOutputDir.safeMkdirs()
+
+        reports.forEach { reporter, file ->
+            val name = reporter.toString().removeSuffix("Reporter")
+
             try {
-                val reportFile = it.generateReport(
+                reporter.generateReport(
                         ortResult,
                         resolutionProvider,
                         copyrightGarbage,
-                        outputDir,
+                        file.outputStream(),
                         postProcessingScript?.readText()
                 )
-                println("Created '$name' report:\n\t$reportFile")
+
+                println("Created '$name' report:\n\t$file")
             } catch (e: Exception) {
                 e.showStackTrace()
 

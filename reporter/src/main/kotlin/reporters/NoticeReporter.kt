@@ -32,13 +32,12 @@ import com.here.ort.spdx.getLicenseText
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 
-import java.io.File
 import java.io.IOException
+import java.io.OutputStream
 
 class NoticeReporter : Reporter() {
     companion object {
         private const val NOTICE_SEPARATOR = "\n----\n\n"
-        private const val NOTICE_FILE_NAME = "NOTICE"
     }
 
     data class NoticeReport(
@@ -84,13 +83,15 @@ class NoticeReporter : Reporter() {
         override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
     }
 
+    override val defaultFilename = "NOTICE"
+
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String?
-    ): File {
+    ) {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
@@ -114,10 +115,9 @@ class NoticeReporter : Reporter() {
             NoticeReport(listOf(header), processedFindings, emptyList())
         }
 
-        val outputFile = File(outputDir, NOTICE_FILE_NAME)
-        writeNoticeReport(noticeReport, outputFile)
-
-        return outputFile
+        outputStream.bufferedWriter().use {
+            it.write(writeNoticeReport(noticeReport))
+        }
     }
 
     private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap {
@@ -140,14 +140,11 @@ class NoticeReporter : Reporter() {
         return licenseFindings
     }
 
-    private fun writeNoticeReport(noticeReport: NoticeReport, outputFile: File) {
-        log.info { "Writing $NOTICE_FILE_NAME file to '${outputFile.absolutePath}'." }
-
+    private fun writeNoticeReport(noticeReport: NoticeReport): String {
         val headers = noticeReport.headers.joinToString(NOTICE_SEPARATOR)
-        outputFile.appendText(headers)
 
-        if (noticeReport.findings.isNotEmpty()) {
-            val findings = noticeReport.findings.mapNotNull { (license, copyrights) ->
+        val findings = if (noticeReport.findings.isNotEmpty()) {
+            noticeReport.findings.mapNotNull { (license, copyrights) ->
                 try {
                     val licenseText = getLicenseText(license, true)
 
@@ -173,12 +170,16 @@ class NoticeReporter : Reporter() {
                     null
                 }
             }.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
-            outputFile.appendText(findings)
+        } else {
+            ""
         }
 
-        if (noticeReport.footers.isNotEmpty()) {
-            val footers = noticeReport.footers.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
-            outputFile.appendText(footers)
+        val footers = if (noticeReport.footers.isNotEmpty()) {
+            noticeReport.footers.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
+        } else {
+            ""
         }
+
+        return headers + findings + footers
     }
 }

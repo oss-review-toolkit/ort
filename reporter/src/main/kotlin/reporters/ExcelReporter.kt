@@ -19,8 +19,6 @@
 
 package com.here.ort.reporter.reporters
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.VcsInfo
@@ -31,10 +29,9 @@ import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 import com.here.ort.utils.isValidUri
-import com.here.ort.utils.log
 
 import java.awt.Color
-import java.io.File
+import java.io.OutputStream
 
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
@@ -83,13 +80,15 @@ class ExcelReporter : Reporter() {
 
     private lateinit var creationHelper: CreationHelper
 
+    override val defaultFilename = "scan-report.xlsx"
+
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String?
-    ): File {
+    ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val workbook = XSSFWorkbook()
 
@@ -157,15 +156,7 @@ class ExcelReporter : Reporter() {
                     tabularScanRecord.extraColumns)
         }
 
-        val outputFile = File(outputDir, "scan-report.xlsx")
-
-        log.info { "Writing Excel report to '${outputFile.absolutePath}'." }
-
-        outputFile.outputStream().use {
-            workbook.write(it)
-        }
-
-        return outputFile
+        workbook.write(outputStream)
     }
 
     private fun createMetadataSheet(workbook: XSSFWorkbook, metadata: Map<String, String>) {

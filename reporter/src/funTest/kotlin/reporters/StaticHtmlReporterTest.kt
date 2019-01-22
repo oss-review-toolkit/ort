@@ -27,6 +27,7 @@ import com.here.ort.reporter.DefaultResolutionProvider
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 import javax.xml.transform.TransformerFactory
@@ -34,6 +35,16 @@ import javax.xml.transform.TransformerFactory
 class StaticHtmlReporterTest : WordSpec() {
     private val ortResult = File("src/funTest/assets/static-html-reporter-test-input.yml")
             .readValue<OrtResult>()
+
+    private fun generateReport(ortResult: OrtResult) =
+            ByteArrayOutputStream().also { outputStream ->
+                StaticHtmlReporter().generateReport(
+                        ortResult,
+                        DefaultResolutionProvider(),
+                        CopyrightGarbage(),
+                        outputStream
+                )
+            }.toString("UTF-8")
 
     init {
         "StaticHtmlReporter" should {
@@ -52,12 +63,5 @@ class StaticHtmlReporterTest : WordSpec() {
                 actualReport shouldBe expectedReport
             }
         }
-    }
-
-    private fun generateReport(ortResult: OrtResult): String {
-        val outputDir = createTempDir().apply { deleteOnExit() }
-        StaticHtmlReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
-
-        return outputDir.resolve("scan-report.html").readText()
     }
 }
