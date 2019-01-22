@@ -24,38 +24,71 @@ package com.here.ort.spdx
  * 'generateSpdxLicenseExceptionEnum'.
  */
 enum class SpdxLicenseException(val id: String, val deprecated: Boolean = false) {
+    /** Autoconf exception 2.0 */
     AUTOCONF_EXCEPTION_2_0("Autoconf-exception-2.0"),
+    /** Autoconf exception 3.0 */
     AUTOCONF_EXCEPTION_3_0("Autoconf-exception-3.0"),
+    /** Bison exception 2.2 */
     BISON_EXCEPTION_2_2("Bison-exception-2.2"),
+    /** Bootloader Distribution Exception */
     BOOTLOADER_EXCEPTION("Bootloader-exception"),
+    /** Classpath exception 2.0 */
     CLASSPATH_EXCEPTION_2_0("Classpath-exception-2.0"),
+    /** CLISP exception 2.0 */
     CLISP_EXCEPTION_2_0("CLISP-exception-2.0"),
+    /** DigiRule FOSS License Exception */
     DIGIRULE_FOSS_EXCEPTION("DigiRule-FOSS-exception"),
+    /** eCos exception 2.0 */
     ECOS_EXCEPTION_2_0("eCos-exception-2.0"),
+    /** Fawkes Runtime Exception */
     FAWKES_RUNTIME_EXCEPTION("Fawkes-Runtime-exception"),
+    /** FLTK exception */
     FLTK_EXCEPTION("FLTK-exception"),
+    /** Font exception 2.0 */
     FONT_EXCEPTION_2_0("Font-exception-2.0"),
+    /** FreeRTOS Exception 2.0 */
     FREERTOS_EXCEPTION_2_0("freertos-exception-2.0"),
+    /** GCC Runtime Library exception 2.0 */
     GCC_EXCEPTION_2_0("GCC-exception-2.0"),
+    /** GCC Runtime Library exception 3.1 */
     GCC_EXCEPTION_3_1("GCC-exception-3.1"),
+    /** GNU JavaMail exception */
     GNU_JAVAMAIL_EXCEPTION("gnu-javamail-exception"),
+    /** i2p GPL+Java Exception */
     I2P_GPL_JAVA_EXCEPTION("i2p-gpl-java-exception"),
+    /** Libtool Exception */
     LIBTOOL_EXCEPTION("Libtool-exception"),
+    /** Linux Syscall Note */
     LINUX_SYSCALL_NOTE("Linux-syscall-note"),
+    /** LLVM Exception */
     LLVM_EXCEPTION("LLVM-exception"),
+    /** LZMA exception */
     LZMA_EXCEPTION("LZMA-exception"),
+    /** Macros and Inline Functions Exception */
     MIF_EXCEPTION("mif-exception"),
+    /** Nokia Qt LGPL exception 1.1 */
     NOKIA_QT_EXCEPTION_1_1("Nokia-Qt-exception-1.1", true),
+    /** OCaml LGPL Linking Exception */
     OCAML_LGPL_LINKING_EXCEPTION("OCaml-LGPL-linking-exception"),
+    /** Open CASCADE Exception 1.0 */
     OCCT_EXCEPTION_1_0("OCCT-exception-1.0"),
+    /** OpenJDK Assembly exception 1.0 */
     OPENJDK_ASSEMBLY_EXCEPTION_1_0("OpenJDK-assembly-exception-1.0"),
+    /** OpenVPN OpenSSL Exception */
     OPENVPN_OPENSSL_EXCEPTION("openvpn-openssl-exception"),
+    /** PS/PDF font exception (2017-08-17) */
     PS_OR_PDF_FONT_EXCEPTION_20170817("PS-or-PDF-font-exception-20170817"),
+    /** Qt GPL exception 1.0 */
     QT_GPL_EXCEPTION_1_0("Qt-GPL-exception-1.0"),
+    /** Qt LGPL exception 1.1 */
     QT_LGPL_EXCEPTION_1_1("Qt-LGPL-exception-1.1"),
+    /** Qwt exception 1.0 */
     QWT_EXCEPTION_1_0("Qwt-exception-1.0"),
+    /** U-Boot exception 2.0 */
     U_BOOT_EXCEPTION_2_0("u-boot-exception-2.0"),
+    /** WxWindows Library Exception 3.1 */
     WXWINDOWS_EXCEPTION_3_1("WxWindows-exception-3.1"),
+    /** 389 Directory Server Exception */
     _389_EXCEPTION("389-exception");
 
     companion object {
