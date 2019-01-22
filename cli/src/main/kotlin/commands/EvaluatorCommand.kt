@@ -54,7 +54,8 @@ object EvaluatorCommand : CommandWithHelp() {
     private var rulesResource: String? = null
 
     @Parameter(description = "The directory to write the evaluation results as ORT result file(s) to, in the " +
-            "specified output format(s).",
+            "specified output format(s). If no output directory is specified, no output formats are written and " +
+            "only the exit code signals a success or failure.",
             names = ["--output-dir", "-o"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputDir: File? = null
