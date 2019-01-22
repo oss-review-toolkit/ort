@@ -19,9 +19,21 @@
 
 package com.here.ort.model
 
+import java.time.Instant
+
 /**
  * The summary of a single run of the evaluator.
  */
 data class EvaluatorRun(
+        /**
+         * The [Instant] the scanner was started. The default value exists only for backward compatibility.
+         */
+        val startTime: Instant = Instant.EPOCH,
+
+        /**
+         * The [Instant] the scanner has finished. The default value exists only for backward compatibility.
+         */
+        val endTime: Instant = Instant.EPOCH,
+
         val errors: List<OrtIssue>
 )

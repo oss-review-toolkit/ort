@@ -24,6 +24,8 @@ import com.here.ort.model.EvaluatorRun
 import com.here.ort.model.OrtResult
 import com.here.ort.utils.ScriptRunner
 
+import java.time.Instant
+
 class Evaluator(ortResult: OrtResult) : ScriptRunner() {
     override val preface = """
             import com.here.ort.model.*
@@ -51,9 +53,13 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
     }
 
     override fun run(script: String): EvaluatorRun {
+        val startTime = Instant.now()
+
         @Suppress("UNCHECKED_CAST")
         val errors = super.run(script) as List<OrtIssue>
 
-        return EvaluatorRun(errors)
+        val endTime = Instant.now()
+
+        return EvaluatorRun(startTime, endTime, errors)
     }
 }
