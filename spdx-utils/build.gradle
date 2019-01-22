@@ -78,13 +78,13 @@ def getLicenseHeader(int fromYear = 2017, int toYear = java.time.Year.now().valu
      """.stripIndent()
 }
 
-def licenseToEnumEntry(String license, boolean deprecated) {
-    def enumName = license.toUpperCase().replaceAll('[-\\.]', '_').replace('+', 'PLUS')
+def licenseToEnumEntry(String id, Map<String, String> meta) {
+    def enumName = id.toUpperCase().replaceAll('[-\\.]', '_').replace('+', 'PLUS')
     if (enumName[0].isNumber()) {
         enumName = "_$enumName"
     }
 
-    return deprecated ? "$enumName(\"$license\", true)" : "$enumName(\"$license\")"
+    return [meta.deprecated ? "$enumName(\"$id\", true)" : "$enumName(\"$id\")", "/** ${meta.name} */"]
 }
 
 def generateEnumClass(String taskName, String description, String jsonUrl, String className, String resourcePath,
@@ -110,9 +110,11 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
             enum class $className(val id: String, val deprecated: Boolean = false) {
             """.stripIndent())
 
-    def enumValues = ids.collect { license, deprecated ->
-        "    ${licenseToEnumEntry(license, deprecated)}"
-    }.sort().join(',\n') + ';'
+    def enumValues = ids.collectEntries { id, meta ->
+        licenseToEnumEntry(id, meta)
+    }.sort().collect { entry, comment ->
+        "    $comment\n    $entry"
+    }.join(',\n') + ';'
 
     enumFile.append(enumValues)
     enumFile.append("""
@@ -136,20 +138,20 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
     return ids
 }
 
-def generateLicenseTextResources(String description, Map<String, Boolean> ids, String resourcePath) {
+def generateLicenseTextResources(String description, Map<String, Map<String, String>> ids, String resourcePath) {
     logger.quiet("Determining SPDX $description texts...")
 
-    ids.each { license, deprecated ->
-        def resourceFile = file("src/main/resources/$resourcePath/$license")
+    ids.each { id, meta ->
+        def resourceFile = file("src/main/resources/$resourcePath/$id")
 
         // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
         def candidates = [
-                "$buildDir/SvnExport/licenses/scancode-toolkit/${license.toLowerCase()}.LICENSE",
-                "$buildDir/SvnExport/licenses/spdx/${license}.txt"
+                "$buildDir/SvnExport/licenses/scancode-toolkit/${id.toLowerCase()}.LICENSE",
+                "$buildDir/SvnExport/licenses/spdx/${id}.txt"
         ]
 
-        if (deprecated) {
-            candidates += "$buildDir/SvnExport/licenses/spdx/deprecated_${license}.txt"
+        if (meta.deprecated) {
+            candidates += "$buildDir/SvnExport/licenses/spdx/deprecated_${id}.txt"
         }
 
         def i = candidates.iterator()
@@ -162,13 +164,13 @@ def generateLicenseTextResources(String description, Map<String, Boolean> ids, S
                             .reverse().dropWhile { it.empty }.reverse().dropWhile { it.empty }
                     resourceFile.write(lines.join('\n') + '\n', 'UTF-8')
                 } catch (FileNotFoundException e) {
-                    logger.quiet("Trying the next candiate for getting the text for license '$license'.")
+                    logger.quiet("Trying the next candiate for getting the text for license '$id'.")
                     continue
                 }
 
                 break
             } else {
-                throw new GradleException("Failed to determine $description text for license '$license' from any of " +
+                throw new GradleException("Failed to determine $description text for license '$id' from any of " +
                         "$candidates.")
             }
         }
@@ -217,7 +219,7 @@ task generateSpdxLicenseEnum(dependsOn: importLicenseTexts) {
                 resourcePath,
                 { json ->
                     json.licenses.collectEntries {
-                        [it['licenseId'], it['isDeprecatedLicenseId']]
+                        [it['licenseId'], [name: it['name'], deprecated: it['isDeprecatedLicenseId']]]
                     }
                 }
         )
@@ -241,7 +243,7 @@ task generateSpdxLicenseExceptionEnum(dependsOn: importLicenseTexts) {
                 resourcePath,
                 { json ->
                     json.exceptions.collectEntries {
-                        [it['licenseExceptionId'], it['isDeprecatedLicenseId']]
+                        [it['licenseExceptionId'], [name: it['name'], deprecated: it['isDeprecatedLicenseId']]]
                     }
                 }
         )
