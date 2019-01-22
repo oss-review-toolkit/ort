@@ -175,6 +175,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      * Scan all files in [inputPath] using this [Scanner] and store the scan results in [outputDirectory].
      */
     fun scanInputPath(inputPath: File, outputDirectory: File): OrtResult {
+        val startTime = Instant.now()
+
         val absoluteInputPath = inputPath.absoluteFile
 
         require(inputPath.exists()) {
@@ -206,7 +208,10 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
         val scanResultContainer = ScanResultContainer(id, listOf(result))
         val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
-        val scannerRun = ScannerRun(Environment(), config, scanRecord)
+
+        val endTime = Instant.now()
+
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
 
         val vcs = VersionControlSystem.getCloneInfo(inputPath)
         val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration())
