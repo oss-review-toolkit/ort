@@ -19,6 +19,8 @@
 
 package com.here.ort.commands
 
+import ch.frankel.slf4k.*
+
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
@@ -28,6 +30,7 @@ import com.beust.jcommander.Parameters
 import com.here.ort.CommandWithHelp
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.config.ScannerConfiguration
+import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanResultsCache
@@ -36,6 +39,7 @@ import com.here.ort.scanner.ScannerFactory
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.log
 
 import java.io.File
 
@@ -97,14 +101,26 @@ object ScannerCommand : CommandWithHelp() {
     private var outputFormats = listOf(OutputFormat.YAML)
 
     override fun runCommand(jc: JCommander): Int {
-        val absoluteOutputDir = outputDir.absoluteFile.normalize()
-
         require((ortFile == null) != (inputPath == null)) {
             "Either '--ort-file' or '--input-path' must be specified."
         }
 
-        require(!absoluteOutputDir.exists()) {
-            "The output directory '$absoluteOutputDir' must not exist yet."
+        val absoluteOutputDir = outputDir.absoluteFile.normalize()
+        val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
+
+        val outputFiles = outputFormats.distinct().map { format ->
+            File(absoluteOutputDir, "scan-result.${format.fileExtension}")
+        }
+
+        val existingOutputFiles = outputFiles.filter { it.exists() }
+        if (existingOutputFiles.isNotEmpty()) {
+            log.error { "None of the output files $existingOutputFiles must exist yet." }
+            return 2
+        }
+
+        if (absoluteNativeOutputDir.exists() && absoluteNativeOutputDir.list().isNotEmpty()) {
+            log.error { "The directory '$absoluteNativeOutputDir' must not contain any files yet." }
+            return 2
         }
 
         downloadDir?.let {
@@ -129,8 +145,6 @@ object ScannerCommand : CommandWithHelp() {
 
         println("Using scanner '$scanner'.")
 
-        val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
-
         val ortResult = ortFile?.let {
             val absoluteDownloadDir = downloadDir?.absoluteFile ?: absoluteOutputDir.resolve("downloads")
             scanner.scanOrtResult(it, absoluteNativeOutputDir, absoluteDownloadDir, scopesToScan.toSet())
@@ -143,10 +157,9 @@ object ScannerCommand : CommandWithHelp() {
             scanner.scanInputPath(absoluteInputPath, absoluteNativeOutputDir)
         }
 
-        outputFormats.distinct().forEach { format ->
-            val scanResultFile = File(absoluteOutputDir, "scan-result.${format.fileExtension}")
-            println("Writing scan result to '${scanResultFile.absolutePath}'.")
-            format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanResultFile, ortResult)
+        outputFiles.forEach { file ->
+            println("Writing scan result to '$file'.")
+            file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
         }
 
         return 0
