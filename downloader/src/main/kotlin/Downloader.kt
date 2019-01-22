@@ -136,6 +136,10 @@ class Downloader {
 
         val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
 
+        require(!targetDir.exists() || targetDir.list().isEmpty()) {
+            "The output directory '$targetDir' must not contain any files yet."
+        }
+
         var previousException: DownloadException? = null
 
         // Try downloading from VCS.
