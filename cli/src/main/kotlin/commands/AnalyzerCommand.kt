@@ -33,6 +33,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.mapper
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
@@ -104,9 +105,15 @@ object AnalyzerCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
-        val absoluteOutputPath = outputDir.absoluteFile
-        if (absoluteOutputPath.exists()) {
-            log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
+        val absoluteOutputDir = outputDir.absoluteFile
+
+        val outputFiles = outputFormats.distinct().map { format ->
+            File(absoluteOutputDir, "analyzer-result.${format.fileExtension}")
+        }
+
+        val existingOutputFiles = outputFiles.filter { it.exists() }
+        if (existingOutputFiles.isNotEmpty()) {
+            log.error { "None of the output files $existingOutputFiles must exist yet." }
             return 2
         }
 
@@ -134,12 +141,11 @@ object AnalyzerCommand : CommandWithHelp() {
 
         println("Found ${ortResult.analyzer?.result?.projects.orEmpty().size} project(s) in total.")
 
-        absoluteOutputPath.safeMkdirs()
+        absoluteOutputDir.safeMkdirs()
 
-        outputFormats.distinct().forEach { format ->
-            val outputFile = File(absoluteOutputPath, "analyzer-result.${format.fileExtension}")
-            println("Writing analyzer result to '$outputFile'.")
-            format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, ortResult)
+        outputFiles.forEach { file ->
+            println("Writing analyzer result to '$file'.")
+            file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
         }
 
         return 0
