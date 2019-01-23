@@ -70,22 +70,25 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
             : Map<Package, List<ScanResult>>
 
     /**
-     * Scan the [Project]s and [Package]s specified in [dependenciesFile] and store the scan results in
-     * [outputDirectory]. The [downloadDirectory] is used to download the source code to for scanning. Return scan
-     * results as an [OrtResult].
+     * Scan the [Project]s and [Package]s specified in [ortFile] and store the scan results in [outputDirectory]. The
+     * [downloadDirectory] is used to download the source code to for scanning. Return scan results as an [OrtResult].
      */
-    fun scanDependenciesFile(dependenciesFile: File, outputDirectory: File, downloadDirectory: File,
-                             scopesToScan: Set<String> = emptySet()): OrtResult {
-        require(dependenciesFile.isFile) {
-            "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
+    fun scanOrtFile(
+            ortFile: File,
+            outputDirectory: File,
+            downloadDirectory: File,
+            scopesToScan: Set<String> = emptySet()
+    ): OrtResult {
+        require(ortFile.isFile) {
+            "Provided path for the configuration does not refer to a file: ${ortFile.absolutePath}"
         }
 
         val startTime = Instant.now()
 
-        val ortResult = dependenciesFile.readValue<OrtResult>()
+        val ortResult = ortFile.readValue<OrtResult>()
 
         requireNotNull(ortResult.analyzer) {
-            "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
+            "The provided dependencies file '${ortFile.invariantSeparatorsPath}' does not contain an " +
                     "analyzer result."
         }
 
