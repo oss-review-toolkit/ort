@@ -49,6 +49,12 @@ data class CopyrightFinding(
 }
 
 class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(CopyrightFinding::class.java) {
+    companion object {
+        private val LOCATIONS_TYPE by lazy {
+            jsonMapper.typeFactory.constructCollectionType(TreeSet::class.java, TextLocation::class.java)
+        }
+    }
+
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): CopyrightFinding {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
@@ -56,14 +62,9 @@ class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(Copyright
             else -> {
                 val statement = jsonMapper.treeToValue<String>(node["statement"])
 
-                val locationsType = jsonMapper.typeFactory.constructCollectionType(
-                        TreeSet::class.java,
-                        TextLocation::class.java
-                )
-
                 val locations = jsonMapper.readValue<TreeSet<TextLocation>>(
                         jsonMapper.treeAsTokens(node["locations"]),
-                        locationsType
+                        LOCATIONS_TYPE
                 )
 
                 CopyrightFinding(statement, locations)
