@@ -121,8 +121,7 @@ object DownloaderCommand : CommandWithHelp() {
             val analyzerResult = it.readValue<OrtResult>().analyzer?.result
 
             requireNotNull(analyzerResult) {
-                "The provided dependencies file '${it.invariantSeparatorsPath}' does not contain an " +
-                        "analyzer result."
+                "The provided ORT result file '${it.invariantSeparatorsPath}' does not contain an analyzer result."
             }
 
             mutableListOf<Package>().apply {
