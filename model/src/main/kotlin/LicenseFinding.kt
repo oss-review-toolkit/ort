@@ -113,7 +113,7 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
                     }
                     else -> sortedSetOf()
                 }
-                return LicenseFinding(license, locations, copyrights)
+                LicenseFinding(license, locations, copyrights)
             }
         }
     }
