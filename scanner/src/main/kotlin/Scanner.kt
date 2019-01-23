@@ -66,7 +66,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
      * contain multiple results for the same [Package] if the cache contains more than one result for the specification
      * of this scanner.
      */
-    abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
+    protected abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
             : Map<Package, List<ScanResult>>
 
     /**
