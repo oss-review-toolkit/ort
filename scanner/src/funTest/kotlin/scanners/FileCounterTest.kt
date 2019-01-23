@@ -61,7 +61,7 @@ class FileCounterTest : StringSpec() {
             val expectedResult = patchExpectedResult(
                     File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml"))
 
-            val ortResult = FileCounter(ScannerConfiguration()).scanDependenciesFile(analyzerResultFile, outputDir,
+            val ortResult = FileCounter(ScannerConfiguration()).scanOrtResult(analyzerResultFile, outputDir,
                     outputDir.resolve("downloads"))
             val result = yamlMapper.writeValueAsString(ortResult)
 
