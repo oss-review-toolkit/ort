@@ -66,7 +66,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
      * contain multiple results for the same [Package] if the cache contains more than one result for the specification
      * of this scanner.
      */
-    abstract fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
+    abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
             : Map<Package, List<ScanResult>>
 
     /**
@@ -124,7 +124,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
             consolidatedReferencePackages + analyzerResult.packages
         }.toSortedSet()
 
-        val results = scan(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory)
+        val results = scanPackages(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory)
         val resultContainers = results.map { (pkg, results) ->
             ScanResultContainer(pkg.id, results)
         }.toSortedSet()

@@ -59,8 +59,8 @@ import java.io.IOException
 import java.time.Instant
 
 /**
- * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scan] are processed in serial
- * order. Scan results can be cached in a [ScanResultsCache].
+ * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
+ * serial order. Scan results can be cached in a [ScanResultsCache].
  */
 abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), CommandLineTool {
     /**
@@ -134,7 +134,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      */
     fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
 
-    override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
+    override fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
             : Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
