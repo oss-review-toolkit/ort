@@ -104,17 +104,21 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
                         COPYRIGHTS_TYPE
                 )
 
-                val locations = when {
-                    node.has("locations") -> {
-                        jsonMapper.readValue<TreeSet<TextLocation>>(
-                                jsonMapper.treeAsTokens(node["locations"]),
-                                LOCATIONS_TYPE
-                        )
-                    }
-                    else -> sortedSetOf()
-                }
+                val locations = deserializeLocations(node)
+
                 LicenseFinding(license, locations, copyrights)
             }
         }
     }
+
+    private fun deserializeLocations(node: JsonNode) =
+            when {
+                node.has("locations") -> {
+                    jsonMapper.readValue<TreeSet<TextLocation>>(
+                            jsonMapper.treeAsTokens(node["locations"]),
+                            LOCATIONS_TYPE
+                    )
+                }
+                else -> sortedSetOf()
+            }
 }
