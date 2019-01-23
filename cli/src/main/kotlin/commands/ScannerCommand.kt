@@ -128,7 +128,8 @@ object ScannerCommand : CommandWithHelp() {
         println("Using scanner '$scanner'.")
 
         val ortResult = ortFile?.let {
-            scanner.scanDependenciesFile(it, outputDir, downloadDir, scopesToScan.toSet())
+            scanner.scanDependenciesFile(it, outputDir, downloadDir ?: outputDir.resolve("downloads"),
+                    scopesToScan.toSet())
         } ?: run {
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."
