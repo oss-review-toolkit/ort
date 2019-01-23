@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import com.here.ort.utils.SortedSetComparator
+import com.here.ort.utils.constructTreeSetType
 import com.here.ort.utils.textValueOrEmpty
 
 import java.util.SortedSet
@@ -51,7 +52,7 @@ data class CopyrightFinding(
 class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(CopyrightFinding::class.java) {
     companion object {
         private val LOCATIONS_TYPE by lazy {
-            jsonMapper.typeFactory.constructCollectionType(TreeSet::class.java, TextLocation::class.java)
+            jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java)
         }
     }
 
