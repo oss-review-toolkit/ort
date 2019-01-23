@@ -62,8 +62,11 @@ import org.gradle.tooling.GradleConnector
 class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Gradle>() {
-        override val globsForDefinitionFiles = listOf("build.gradle", "settings.gradle",
-                "build.gradle.kts", "settings.gradle.kts")
+        // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
+        // "settings" files as we should consider "settings" files only if the same directory does not also contain a
+        // "build" file.
+        override val globsForDefinitionFiles = listOf("build.gradle", "build.gradle.kts",
+                "settings.gradle", "settings.gradle.kts")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
                 Gradle(analyzerConfig, repoConfig)
