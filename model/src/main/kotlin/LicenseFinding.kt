@@ -81,33 +81,33 @@ data class LicenseFinding(
  * Custom deserializer to support old versions of the [LicenseFinding] class.
  */
 class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFinding::class.java) {
+    companion object {
+        private val COPYRIGHTS_TYPE by lazy {
+            jsonMapper.typeFactory.constructCollectionType(TreeSet::class.java, CopyrightFinding::class.java)
+        }
+
+        private val LOCATIONS_TYPE by lazy {
+            jsonMapper.typeFactory.constructCollectionType(TreeSet::class.java, TextLocation::class.java)
+        }
+    }
+
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFinding {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
             node.isTextual -> LicenseFinding(node.textValueOrEmpty(), sortedSetOf(), sortedSetOf())
             else -> {
-                val copyrightsType = jsonMapper.typeFactory.constructCollectionType(
-                        TreeSet::class.java,
-                        CopyrightFinding::class.java
-                )
-
                 val license = jsonMapper.treeToValue<String>(node["license"])
 
                 val copyrights = jsonMapper.readValue<TreeSet<CopyrightFinding>>(
                         jsonMapper.treeAsTokens(node["copyrights"]),
-                        copyrightsType
+                        COPYRIGHTS_TYPE
                 )
 
                 val locations = when {
                     node.has("locations") -> {
-                        val locationsType = jsonMapper.typeFactory.constructCollectionType(
-                                TreeSet::class.java,
-                                TextLocation::class.java
-                        )
-
                         jsonMapper.readValue<TreeSet<TextLocation>>(
                                 jsonMapper.treeAsTokens(node["locations"]),
-                                locationsType
+                                LOCATIONS_TYPE
                         )
                     }
                     else -> sortedSetOf()
