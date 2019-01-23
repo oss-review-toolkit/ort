@@ -20,6 +20,8 @@
 package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.type.CollectionType
+import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.databind.util.ClassUtil
 
 import com.vdurmont.semver4j.Semver
@@ -36,6 +38,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
+import java.util.TreeSet
 
 import org.apache.commons.codec.digest.DigestUtils
 
@@ -276,6 +279,12 @@ fun Throwable.showStackTrace() {
     // https://discuss.kotlinlang.org/t/if-operator-in-function-expression/7227.
     if (printStackTrace) printStackTrace()
 }
+
+/**
+ * Function for constructing a [TreeSet] [CollectionType].
+ */
+fun TypeFactory.constructTreeSetType(elementClass: Class<*>): CollectionType =
+        constructCollectionType(TreeSet::class.java, elementClass)
 
 /**
  * Check whether the URI has a fragment that looks like a VCS revision.
