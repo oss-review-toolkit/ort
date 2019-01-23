@@ -134,7 +134,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      */
     fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
 
-    override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File?)
+    override fun scan(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
             : Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
@@ -226,15 +226,14 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      *
      * @param pkg The package to scan.
      * @param outputDirectory The base directory to store scan results in.
-     * @param downloadDirectory The directory to download source code to. Defaults to [outputDirectory]/downloads if
-     *                          null.
+     * @param downloadDirectory The directory to download source code to for scanning.
      *
      * @return The set of found licenses.
      *
      * @throws ScanException In case the package could not be scanned.
      */
     private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
-                    downloadDirectory: File? = null): List<ScanResult> {
+                    downloadDirectory: File): List<ScanResult> {
         val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
         val scanResultsForPackageDirectory = File(scanResultsDirectory, pkg.id.toPath()).apply { safeMkdirs() }
         val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
@@ -250,7 +249,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
         }
 
         val downloadResult = try {
-            Downloader().download(pkg, downloadDirectory ?: File(outputDirectory, "downloads"))
+            Downloader().download(pkg, downloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
 
