@@ -142,6 +142,11 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
                 PIP(analyzerConfig, repoConfig)
     }
 
+    private val INSTALL_OPTIONS = listOf(
+            "--no-warn-conflicts",
+            "--prefer-binary"
+    ).toTypedArray()
+
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
     private val TRUSTED_HOSTS = listOf(
             "pypi.org",
@@ -504,10 +509,10 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         log.info { "Installing dependencies for the '${workingDir.name}' project directory..." }
         pip = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "--prefer-binary", ".")
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, ".")
         } else {
             // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "--prefer-binary", "-r",
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, "-r",
                     definitionFile.name)
         }
 
