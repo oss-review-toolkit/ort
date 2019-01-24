@@ -27,7 +27,6 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import com.here.ort.utils.SortedSetComparator
 import com.here.ort.utils.constructTreeSetType
-import com.here.ort.utils.textValueOrEmpty
 
 import java.util.SortedSet
 import java.util.TreeSet
@@ -59,7 +58,7 @@ class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(Copyright
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): CopyrightFinding {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
-            node.isTextual -> CopyrightFinding(node.textValueOrEmpty(), sortedSetOf())
+            node.isTextual -> CopyrightFinding(node.textValue(), sortedSetOf())
             else -> {
                 val statement = jsonMapper.treeToValue<String>(node["statement"])
 
