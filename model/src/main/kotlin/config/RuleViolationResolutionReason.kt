@@ -21,6 +21,11 @@ package com.here.ort.model.config
 
 enum class RuleViolationResolutionReason {
     /**
+     * The rule violation cannot be fixed and is acceptable in this case.
+     */
+    CANT_FIX_EXCEPTION,
+
+    /**
      * The rule violation is acceptable given the fact that the dependency it relates to is dynamically linked.
      */
     DYNAMIC_LINKAGE_EXCEPTION,
