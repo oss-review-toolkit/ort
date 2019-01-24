@@ -27,7 +27,6 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.utils.CopyrightStatementsProcessor
-import com.here.ort.utils.constructTreeSetType
 
 import java.util.SortedMap
 import java.util.SortedSet
@@ -75,16 +74,6 @@ data class LicenseFinding(
  * Custom deserializer to support old versions of the [LicenseFinding] class.
  */
 class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFinding::class.java) {
-    companion object {
-        private val COPYRIGHTS_TYPE by lazy {
-            jsonMapper.typeFactory.constructTreeSetType(CopyrightFinding::class.java)
-        }
-
-        private val LOCATIONS_TYPE by lazy {
-            jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java)
-        }
-    }
-
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFinding {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
@@ -94,7 +83,7 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
 
                 val copyrights = jsonMapper.readValue<TreeSet<CopyrightFinding>>(
                         jsonMapper.treeAsTokens(node["copyrights"]),
-                        COPYRIGHTS_TYPE
+                        CopyrightFinding.TREE_SET_TYPE
                 )
 
                 val locations = deserializeLocations(node)
@@ -106,6 +95,9 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
 
     private fun deserializeLocations(node: JsonNode) =
             node["locations"]?.let { locations ->
-                jsonMapper.readValue<TreeSet<TextLocation>>(jsonMapper.treeAsTokens(locations), LOCATIONS_TYPE)
+                jsonMapper.readValue<TreeSet<TextLocation>>(
+                        jsonMapper.treeAsTokens(locations),
+                        TextLocation.TREE_SET_TYPE
+                )
             } ?: sortedSetOf()
 }

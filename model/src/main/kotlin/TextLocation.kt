@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import com.here.ort.utils.SortedSetComparator
+import com.here.ort.utils.constructTreeSetType
 
 /**
  * A [TextLocation] references text located in a file.
@@ -43,6 +44,7 @@ data class TextLocation(
     companion object {
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
         val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
+        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
     }
 
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
