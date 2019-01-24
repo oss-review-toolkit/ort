@@ -55,8 +55,8 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
         }.toSortedMap()
 
 /**
- * A class to store a [license] finding along with its belonging [copyrights]. To support deserializing older versions
- * of this class which did not include the copyrights a secondary constructor is only taking a [licenseName].
+ * A class to store a [license] finding along with its belonging [copyrights] and the [locations] where the license was
+ * found.
  */
 data class LicenseFinding(
         val license: String,
