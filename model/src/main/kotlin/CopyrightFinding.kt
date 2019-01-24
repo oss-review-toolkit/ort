@@ -37,6 +37,7 @@ data class CopyrightFinding(
 ) : Comparable<CopyrightFinding> {
     companion object {
         val SORTED_SET_COMPARATOR = SortedSetComparator<CopyrightFinding>()
+        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(CopyrightFinding::class.java) }
     }
 
     override fun compareTo(other: CopyrightFinding) =
@@ -49,12 +50,6 @@ data class CopyrightFinding(
 }
 
 class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(CopyrightFinding::class.java) {
-    companion object {
-        private val LOCATIONS_TYPE by lazy {
-            jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java)
-        }
-    }
-
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): CopyrightFinding {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
@@ -64,7 +59,7 @@ class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(Copyright
 
                 val locations = jsonMapper.readValue<TreeSet<TextLocation>>(
                         jsonMapper.treeAsTokens(node["locations"]),
-                        LOCATIONS_TYPE
+                        TextLocation.TREE_SET_TYPE
                 )
 
                 CopyrightFinding(statement, locations)
