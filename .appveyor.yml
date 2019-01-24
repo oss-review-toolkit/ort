@@ -5,18 +5,18 @@ environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
 
 cache:
-  - $(HOME)\.gradle\caches\build-cache-1
-  - $(HOME)\.gradle\caches\jars-1
-  - $(HOME)\.gradle\caches\jars-2
-  - $(HOME)\.gradle\caches\jars-3
-  - $(HOME)\.gradle\caches\modules-2
-  - $(HOME)\.gradle\caches\transforms-1
-  - $(HOME)\.ivy2
-  - $(HOME)\.m2\repository
-  - $(HOME)\.ort\analyzer\cache\http
-  - $(HOME)\.ort\analyzer\cache\remote_artifacts
-  - $(HOME)\.ort\downloader\cache\http
-  - $(HOME)\.ort\scanner\cache\http
+  - $(HOME)\.gradle\caches\build-cache-1 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\jars-1 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\jars-2 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\jars-3 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\modules-2 -> .appveyor.yml
+  - $(HOME)\.gradle\caches\transforms-1 -> .appveyor.yml
+  - $(HOME)\.ivy2 -> .appveyor.yml
+  - $(HOME)\.m2\repository -> .appveyor.yml
+  - $(HOME)\.ort\analyzer\cache\http -> .appveyor.yml
+  - $(HOME)\.ort\analyzer\cache\remote_artifacts -> .appveyor.yml
+  - $(HOME)\.ort\downloader\cache\http -> .appveyor.yml
+  - $(HOME)\.ort\scanner\cache\http -> .appveyor.yml
 
 clone_depth: 50
 
