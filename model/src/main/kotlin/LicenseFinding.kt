@@ -27,7 +27,6 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.utils.CopyrightStatementsProcessor
-import com.here.ort.utils.SortedSetComparator
 import com.here.ort.utils.constructTreeSetType
 import com.here.ort.utils.textValueOrEmpty
 
@@ -63,18 +62,13 @@ data class LicenseFinding(
         val locations: SortedSet<TextLocation>,
         val copyrights: SortedSet<CopyrightFinding>
 ) : Comparable<LicenseFinding> {
-    companion object {
-        private val COPYRIGHTS_COMPARATOR = SortedSetComparator<CopyrightFinding>()
-        private val LOCATIONS_COMPARATOR = SortedSetComparator<TextLocation>()
-    }
-
     override fun compareTo(other: LicenseFinding) =
             compareValuesBy(
                     this,
                     other,
                     compareBy(LicenseFinding::license)
-                            .thenBy(LOCATIONS_COMPARATOR, LicenseFinding::locations)
-                            .thenBy(COPYRIGHTS_COMPARATOR, LicenseFinding::copyrights)
+                            .thenBy(TextLocation.SORTED_SET_COMPARATOR, LicenseFinding::locations)
+                            .thenBy(CopyrightFinding.SORTED_SET_COMPARATOR, LicenseFinding::copyrights)
             ) { it }
 }
 
