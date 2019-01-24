@@ -182,18 +182,18 @@ def generateLicenseTextResources(String description, Map<String, Map<String, Str
                 def candidate = i.next()
 
                 try {
-                    def lines = file(candidate).readLines('UTF-8').collect { it.replaceAll(/\s+$/, '') }
+                    def licenseFile = file(candidate)
+                    def lines = licenseFile.readLines('UTF-8').collect { it.replaceAll(/\s+$/, '') }
                             .reverse().dropWhile { it.empty }.reverse().dropWhile { it.empty }
                     resourceFile.write(lines.join('\n') + '\n', 'UTF-8')
+                    logger.quiet("Got $description text for id '$id' from:\n\t$licenseFile.")
                 } catch (FileNotFoundException e) {
-                    logger.quiet("Trying the next candiate for getting the text for license '$id'.")
                     continue
                 }
 
                 break
             } else {
-                throw new GradleException("Failed to determine $description text for license '$id' from any of " +
-                        "$candidates.")
+                throw new GradleException("Failed to determine $description text for '$id' from any of $candidates.")
             }
         }
     }
