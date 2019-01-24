@@ -105,13 +105,7 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
     }
 
     private fun deserializeLocations(node: JsonNode) =
-            when {
-                node.has("locations") -> {
-                    jsonMapper.readValue<TreeSet<TextLocation>>(
-                            jsonMapper.treeAsTokens(node["locations"]),
-                            LOCATIONS_TYPE
-                    )
-                }
-                else -> sortedSetOf()
-            }
+            node["locations"]?.let { locations ->
+                jsonMapper.readValue<TreeSet<TextLocation>>(jsonMapper.treeAsTokens(locations), LOCATIONS_TYPE)
+            } ?: sortedSetOf()
 }
