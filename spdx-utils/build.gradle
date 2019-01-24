@@ -151,12 +151,24 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
 def generateLicenseTextResources(String description, Map<String, Map<String, String>> ids, String resourcePath) {
     logger.quiet("Determining SPDX $description texts...")
 
+    def scanCodeLicensePath = "$buildDir/SvnExport/licenses/scancode-toolkit"
+    def spdxIdToScanCodeKey = [:]
+
+    file(scanCodeLicensePath).listFiles({ it.name.endsWith('.yml') } as FileFilter).each { file ->
+        file.readLines().each { line ->
+            def keyAndValue = line.split(/^spdx_license_key:/, 2)
+            if (keyAndValue.size() == 2) {
+                spdxIdToScanCodeKey[keyAndValue.last().trim()] = file.name - '.yml'
+            }
+        }
+    }
+
     ids.each { id, meta ->
         def resourceFile = file("src/main/resources/$resourcePath/$id")
 
         // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
         def candidates = [
-                "$buildDir/SvnExport/licenses/scancode-toolkit/${id.toLowerCase()}.LICENSE",
+                "$scanCodeLicensePath/${spdxIdToScanCodeKey[id]}.LICENSE",
                 "$buildDir/SvnExport/licenses/spdx/${id}.txt"
         ]
 
