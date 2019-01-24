@@ -28,7 +28,6 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.constructTreeSetType
-import com.here.ort.utils.textValueOrEmpty
 
 import java.util.SortedMap
 import java.util.SortedSet
@@ -89,7 +88,7 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFinding {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
-            node.isTextual -> LicenseFinding(node.textValueOrEmpty(), sortedSetOf(), sortedSetOf())
+            node.isTextual -> LicenseFinding(node.textValue(), sortedSetOf(), sortedSetOf())
             else -> {
                 val license = jsonMapper.treeToValue<String>(node["license"])
 
