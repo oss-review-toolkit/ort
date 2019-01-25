@@ -105,7 +105,7 @@ object AnalyzerCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
-        val absoluteOutputDir = outputDir.absoluteFile
+        val absoluteOutputDir = outputDir.absoluteFile.normalize()
 
         val outputFiles = outputFormats.distinct().map { format ->
             File(absoluteOutputDir, "analyzer-result.${format.fileExtension}")
@@ -131,12 +131,12 @@ object AnalyzerCommand : CommandWithHelp() {
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
 
-        val absoluteProjectPath = inputDir.absoluteFile
-        println("Scanning project path:\n\t$absoluteProjectPath")
+        val absoluteInputDir = inputDir.absoluteFile.normalize()
+        println("Scanning project path:\n\t$absoluteInputDir")
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(config)
-        val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile,
+        val ortResult = analyzer.analyze(absoluteInputDir, packageManagers, packageCurationsFile,
                 repositoryConfigurationFile)
 
         println("Found ${ortResult.analyzer?.result?.projects.orEmpty().size} project(s) in total.")

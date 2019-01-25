@@ -99,7 +99,7 @@ object ReporterCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
-        val absoluteOutputDir = outputDir.absoluteFile
+        val absoluteOutputDir = outputDir.absoluteFile.normalize()
 
         val reports = reporters.associateWith { reporter ->
             File(absoluteOutputDir, reporter.defaultFilename)

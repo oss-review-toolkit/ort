@@ -97,12 +97,14 @@ object ScannerCommand : CommandWithHelp() {
     private var outputFormats = listOf(OutputFormat.YAML)
 
     override fun runCommand(jc: JCommander): Int {
+        val absoluteOutputDir = outputDir.absoluteFile.normalize()
+
         require((ortFile == null) != (inputPath == null)) {
             "Either '--ort-file' or '--input-path' must be specified."
         }
 
-        require(!outputDir.exists()) {
-            "The output directory '${outputDir.absolutePath}' must not exist yet."
+        require(!absoluteOutputDir.exists()) {
+            "The output directory '$absoluteOutputDir' must not exist yet."
         }
 
         downloadDir?.let {
@@ -128,17 +130,19 @@ object ScannerCommand : CommandWithHelp() {
         println("Using scanner '$scanner'.")
 
         val ortResult = ortFile?.let {
-            scanner.scanOrtResult(it, outputDir, downloadDir ?: outputDir.resolve("downloads"), scopesToScan.toSet())
+            scanner.scanOrtResult(it, absoluteOutputDir, downloadDir ?: absoluteOutputDir.resolve("downloads"),
+                    scopesToScan.toSet())
         } ?: run {
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."
             }
 
-            scanner.scanInputPath(inputPath!!, outputDir)
+            val absoluteInputPath = inputPath!!.absoluteFile.normalize()
+            scanner.scanInputPath(absoluteInputPath, absoluteOutputDir)
         }
 
         outputFormats.distinct().forEach { format ->
-            val scanResultFile = File(outputDir, "scan-result.${format.fileExtension}")
+            val scanResultFile = File(absoluteOutputDir, "scan-result.${format.fileExtension}")
             println("Writing scan result to '${scanResultFile.absolutePath}'.")
             format.mapper.writerWithDefaultPrettyPrinter().writeValue(scanResultFile, ortResult)
         }
