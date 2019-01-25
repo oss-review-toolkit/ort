@@ -73,7 +73,7 @@ fun File.safeDeleteRecursively(force: Boolean = false) {
     Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
             if (OS.isWindows && attrs.isOther) {
-                // Unlink junctions to turn them into empty directories.
+                // delete() actually works to delete only the junction and not the directory it points to.
                 dir.toFile().delete()
                 return FileVisitResult.SKIP_SUBTREE
             }
