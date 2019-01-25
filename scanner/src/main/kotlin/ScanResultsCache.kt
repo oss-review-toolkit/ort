@@ -30,12 +30,15 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryCacheConfiguration
 import com.here.ort.utils.log
 
+import java.util.SortedSet
+
 interface ScanResultsCache {
     companion object : ScanResultsCache {
         var cache = object : ScanResultsCache {
             override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
             override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
             override fun add(id: Identifier, scanResult: ScanResult) = false
+            override fun listPackages() = sortedSetOf<Identifier>()
         }
             private set
 
@@ -75,6 +78,8 @@ interface ScanResultsCache {
                 }
 
         override fun add(id: Identifier, scanResult: ScanResult) = cache.add(id, scanResult)
+
+        override fun listPackages() = cache.listPackages()
     }
 
     /**
@@ -109,4 +114,9 @@ interface ScanResultsCache {
      * @return If the [ScanResult] could be written to the cache.
      */
     fun add(id: Identifier, scanResult: ScanResult): Boolean
+
+    /**
+     * List the [Identifier]s of all cached packages.
+     */
+    fun listPackages(): SortedSet<Identifier>
 }
