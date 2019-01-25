@@ -99,7 +99,7 @@ object EvaluatorCommand : CommandWithHelp() {
 
         val evaluatorRun = evaluator.run(script)
 
-        outputDir?.absoluteFile?.let { absoluteOutputDir ->
+        outputDir?.absoluteFile?.normalize()?.let { absoluteOutputDir ->
             val outputFiles = outputFormats.distinct().map { format ->
                 File(absoluteOutputDir, "evaluation-result.${format.fileExtension}")
             }
