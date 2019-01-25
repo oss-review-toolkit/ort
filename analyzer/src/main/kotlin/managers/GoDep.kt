@@ -40,6 +40,7 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
+import com.here.ort.utils.safeCopyRecursively
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
 
@@ -176,7 +177,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         log.debug { "Copying $projectDir to temporary directory $destination" }
 
-        projectDir.copyRecursively(destination)
+        projectDir.safeCopyRecursively(destination)
 
         val dotGit = File(destination, ".git")
         if (dotGit.isFile) {
