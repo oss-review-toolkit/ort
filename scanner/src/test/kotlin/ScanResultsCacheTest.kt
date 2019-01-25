@@ -37,22 +37,33 @@ class ScanResultsCacheTest : WordSpec() {
 
     private fun ArtifactoryCache.getApiToken() = getStringField("apiToken")
 
+    private fun ArtifactoryCache.getRepository() = getStringField("repository")
+
     private fun ArtifactoryCache.getUrl() = getStringField("url")
 
     init {
         "ScanResultsCache.configure" should {
             "fail if the Artifactory URL is empty" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    val config = ArtifactoryCacheConfiguration("", "someApiToken")
+                    val config = ArtifactoryCacheConfiguration("", "someRepository", "someApiToken")
 
                     ScanResultsCache.configure(config)
                 }
                 exception.message shouldBe "URL for Artifactory cache is missing."
             }
 
+            "fail if the Artifactory repository is empty" {
+                val exception = shouldThrow<java.lang.IllegalArgumentException> {
+                    val config = ArtifactoryCacheConfiguration("someUrl", "", "someApiToken")
+
+                    ScanResultsCache.configure(config)
+                }
+                exception.message shouldBe "Repository for Artifactory cache is missing."
+            }
+
             "fail if the Artifactory apiToken is empty" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    val config = ArtifactoryCacheConfiguration("someUrl", "")
+                    val config = ArtifactoryCacheConfiguration("someUrl", "someRepository", "")
 
                     ScanResultsCache.configure(config)
                 }
@@ -60,14 +71,17 @@ class ScanResultsCacheTest : WordSpec() {
             }
 
             "configure the Artifactory cache correctly" {
-                val config = ArtifactoryCacheConfiguration("someUrl", "someApiToken")
+                val config = ArtifactoryCacheConfiguration("someUrl", "someRepository", "someApiToken")
 
                 ScanResultsCache.configure(config)
 
                 ScanResultsCache.cache shouldNotBe null
                 ScanResultsCache.cache::class shouldBe ArtifactoryCache::class
-                (ScanResultsCache.cache as ArtifactoryCache).getApiToken() shouldBe "someApiToken"
-                (ScanResultsCache.cache as ArtifactoryCache).getUrl() shouldBe "someUrl"
+                (ScanResultsCache.cache as ArtifactoryCache).apply {
+                    getUrl() shouldBe "someUrl"
+                    getRepository() shouldBe "someRepository"
+                    getApiToken() shouldBe "someApiToken"
+                }
             }
         }
     }

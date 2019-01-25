@@ -164,7 +164,7 @@ class HttpCacheTest : StringSpec() {
         super.afterSpec(spec)
     }
 
-    private fun createCache() = ArtifactoryCache("http://${loopback.hostAddress}:$port", "apiToken")
+    private fun createCache() = ArtifactoryCache("http://${loopback.hostAddress}:$port", "repository", "apiToken")
 
     init {
         "Scan result can be added to the cache" {

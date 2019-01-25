@@ -42,7 +42,19 @@ import okhttp3.Request
 import okio.Okio
 
 class ArtifactoryCache(
+        /**
+         * The URL of the Artifactory server, e.g. "https://example.com/artifactory".
+         */
         private val url: String,
+
+        /**
+         * The name of the Artifactory repository to use for caching scan results.
+         */
+        private val repository: String,
+
+        /**
+         * An Artifactory API token with read/write access to [repository].
+         */
         private val apiToken: String
 ) : ScanResultsCache {
     override fun read(id: Identifier): ScanResultContainer {
@@ -54,7 +66,7 @@ class ArtifactoryCache(
                 .header("X-JFrog-Art-Api", apiToken)
                 .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
                 .get()
-                .url("$url/$cachePath")
+                .url("$url/$repository/$cachePath")
                 .build()
 
         val tempFile = createTempFile("ort", "scan-results.yml")
@@ -158,7 +170,7 @@ class ArtifactoryCache(
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
                 .put(OkHttpClientHelper.createRequestBody(tempFile))
-                .url("$url/$cachePath")
+                .url("$url/$repository/$cachePath")
                 .build()
 
         try {

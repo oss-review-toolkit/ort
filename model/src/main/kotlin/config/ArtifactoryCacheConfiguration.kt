@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ArtifactoryCacheConfiguration(
         val url: String,
+        val repository: String,
 
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         val apiToken: String = ""
