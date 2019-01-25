@@ -33,10 +33,13 @@ import java.net.MalformedURLException
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URL
+import java.nio.file.CopyOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
+import java.nio.file.LinkOption
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
+import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.TreeSet
 
@@ -57,6 +60,45 @@ fun File.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).dige
  * resolve symbolic links on Windows.
  */
 fun File.realFile(): File = toPath().toRealPath().toFile()
+
+/**
+ * Copy files recursively without following symbolic links (Unix) or junctions (Windows).
+ */
+fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
+    if (!exists()) {
+        return
+    }
+
+    val sourcePath = absoluteFile.toPath()
+    val targetPath = target.absoluteFile.toPath()
+
+    val copyOptions = mutableListOf<CopyOption>(LinkOption.NOFOLLOW_LINKS).apply {
+        if (overwrite) add(StandardCopyOption.REPLACE_EXISTING)
+    }.toTypedArray()
+
+    // This call to walkFileTree() implicitly uses EnumSet.noneOf(FileVisitOption.class), i.e.
+    // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
+    Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
+        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+            if ((!OS.isWindows && attrs.isSymbolicLink) || (OS.isWindows && attrs.isOther)) {
+                // Do not follow symbolic links or junctions.
+                return FileVisitResult.SKIP_SUBTREE
+            }
+
+            val targetDir = targetPath.resolve(sourcePath.relativize(dir))
+            targetDir.toFile().safeMkdirs()
+
+            return FileVisitResult.CONTINUE
+        }
+
+        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+            val targetFile = targetPath.resolve(sourcePath.relativize(file))
+            Files.copy(file, targetFile, *copyOptions)
+
+            return FileVisitResult.CONTINUE
+        }
+    })
+}
 
 /**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
