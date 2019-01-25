@@ -46,11 +46,15 @@ interface ScanResultsCache {
                 "URL for Artifactory cache is missing."
             }
 
+            require(config.repository.isNotBlank()) {
+                "Repository for Artifactory cache is missing."
+            }
+
             require(config.apiToken.isNotBlank()) {
                 "API token for Artifactory cache is missing."
             }
 
-            cache = ArtifactoryCache(config.url, config.apiToken)
+            cache = ArtifactoryCache(config.url, config.repository, config.apiToken)
             log.info { "Using Artifactory cache '${config.url}'." }
         }
 
