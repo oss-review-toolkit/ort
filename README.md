@@ -20,7 +20,7 @@
 
 # Introduction
 
-The goal of the OSS Review Toolkit (ORT) is to verify Free and Open Source Software licence compliance by checking
+The goal of the OSS Review Toolkit (ORT) is to verify Free and Open Source Software license compliance by checking
 project source code and dependencies.
 
 At a high level, it works by analyzing the source code for dependencies, downloading the
