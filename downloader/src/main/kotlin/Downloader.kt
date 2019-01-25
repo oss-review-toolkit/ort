@@ -367,7 +367,8 @@ class Downloader {
     }
 
     private fun downloadPomArtifact(target: Package, outputDirectory: File): DownloadResult {
-        val pomUrl = target.binaryArtifact.url.replaceAfterLast('.', "pom")
+        val pomFilename = "${target.id.name}-${target.id.version}.pom"
+        val pomUrl = target.binaryArtifact.url.replaceAfterLast('/', pomFilename)
 
         log.info {
             "Trying to download POM artifact for '${target.id}' from '$pomUrl'..."
@@ -376,8 +377,7 @@ class Downloader {
         return try {
             val startTime = Instant.now()
 
-            val pomName = pomUrl.substringAfterLast('/')
-            val pomFile = File(outputDirectory, pomName)
+            val pomFile = File(outputDirectory, pomFilename)
             pomFile.writeBytes(URL(pomUrl).readBytes())
 
             val pomArtifact = RemoteArtifact(
