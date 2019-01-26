@@ -30,6 +30,7 @@ val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 
 val USER_DIR = File(System.getProperty("user.dir"))
 
+private val DOWNLOAD_TIME_REGEX = Regex("(download_time): \".*\"")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
@@ -51,10 +52,13 @@ fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, defi
             .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
 }
 
-fun patchActualResult(result: String, patchStartAndEndTime: Boolean = false): String {
+fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchStartAndEndTime: Boolean = false)
+        : String {
     fun String.replaceIf(condition: Boolean, regex: Regex, transform: (MatchResult) -> CharSequence) =
             if (condition) replace(regex, transform) else this
 
-    return result.replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
+    return result
+            .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
+            .replaceIf(patchDownloadTime, DOWNLOAD_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
             .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }
