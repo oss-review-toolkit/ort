@@ -31,7 +31,16 @@ data class Environment(
         val os: String = OS.name,
 
         /**
+         * Map of selected environment variables that might be relevant for debugging.
+         */
+        val variables: Map<String, String> = System.getenv().filterKeys { it.toUpperCase() in RELEVANT_VARIABLES },
+
+        /**
          * Map of used tools and their installed versions, defaults to an empty map.
          */
         val toolVersions: Map<String, String> = emptyMap()
-)
+) {
+    companion object {
+        private val RELEVANT_VARIABLES = listOf("COMSPEC", "OS", "OSTYPE", "SHELL")
+    }
+}
