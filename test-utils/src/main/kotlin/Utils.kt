@@ -30,6 +30,7 @@ val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 
 val USER_DIR = File(System.getProperty("user.dir"))
 
+private val ORT_VERSION_REGEX = Regex("(ort_version): \".*\"")
 private val ENV_VAR_REGEX = Regex("(variables):.*?^(\\s{4}\\w+):",
         setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
 private val DOWNLOAD_TIME_REGEX = Regex("(download_time): \".*\"")
@@ -60,6 +61,7 @@ fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchS
             if (condition) replace(regex, transform) else this
 
     return result
+            .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
             .replace(ENV_VAR_REGEX) { "${it.groupValues[1]}: {}\n${it.groupValues[2]}:" }
             .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
             .replaceIf(patchDownloadTime, DOWNLOAD_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
