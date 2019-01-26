@@ -28,7 +28,7 @@ import java.time.Instant
 val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(false, false)
 val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 
-val START_AND_END_TIME_REGEX = Regex("(start_time|end_time): \".*\"")
+val DOWNLOAD_START_END_TIME_REGEX = Regex("((download|start|end)_time): \".*\"")
 val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 val USER_DIR = File(System.getProperty("user.dir"))
 
@@ -50,10 +50,12 @@ fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, defi
             .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
 }
 
-fun patchActualResult(result: String, patchStartAndEndTime: Boolean = false): String {
+fun patchActualResult(result: String, patchDownloadStartEndTime: Boolean = false): String {
     fun String.replaceIf(condition: Boolean, regex: Regex, transform: (MatchResult) -> CharSequence) =
             if (condition) replace(regex, transform) else this
 
     return result.replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
-            .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
+            .replaceIf(patchDownloadStartEndTime, DOWNLOAD_START_END_TIME_REGEX) {
+                "${it.groupValues[1]}: \"${Instant.EPOCH}\""
+            }
 }

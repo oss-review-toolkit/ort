@@ -45,7 +45,7 @@ class SbtTest : StringSpec({
         val actualResult = yamlMapper.writeValueAsString(ortResult)
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
-        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResult(actualResult, patchDownloadStartEndTime = true) shouldBe expectedResult
     }
 
     "Dependencies of the 'sbt-multi-project-example' multi-project should be detected correctly" {
@@ -61,6 +61,6 @@ class SbtTest : StringSpec({
         val actualResult = yamlMapper.writeValueAsString(ortResult)
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
-        patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResult(actualResult, patchDownloadStartEndTime = true) shouldBe expectedResult
     }
 })
