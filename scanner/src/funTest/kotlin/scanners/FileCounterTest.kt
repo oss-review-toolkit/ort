@@ -24,6 +24,7 @@ import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.ScanResultsCache
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.TestCase
@@ -32,7 +33,6 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
-import java.time.Instant
 
 class FileCounterTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")
@@ -50,11 +50,6 @@ class FileCounterTest : StringSpec() {
         ScanResultsCache.stats = CacheStatistics()
     }
 
-    private val timeRegex = Regex("((download|end|start)_time|timestamp): \".*\"")
-
-    private fun patchActualResult(result: String) = result
-            .replace(timeRegex) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
-
     init {
         "Gradle project scan results for a given analyzer result are correct" {
             val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
@@ -65,7 +60,7 @@ class FileCounterTest : StringSpec() {
                     outputDir.resolve("downloads"))
             val result = yamlMapper.writeValueAsString(ortResult)
 
-            patchActualResult(result) shouldBe expectedResult
+            patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 }
