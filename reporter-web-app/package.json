@@ -17,6 +17,7 @@
         "memoize-one": "^5.0.0",
         "prop-types": "^15.6.2",
         "react": "^16.7.0",
+        "react-app-polyfill": "^0.2.0",
         "react-dom": "^16.7.0",
         "react-redux": "^6.0.0",
         "recharts": "^1.4.2",
