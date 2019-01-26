@@ -5,6 +5,7 @@ plugins {
     id 'io.gitlab.arturbosch.detekt' apply false
 
     id 'com.github.ben-manes.versions'
+    id 'org.ajoberstar.grgit'
     id 'org.jetbrains.gradle.plugin.idea-ext'
 }
 
