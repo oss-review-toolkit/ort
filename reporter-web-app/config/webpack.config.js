@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const fse = require('fs-extra');
 const path = require('path');
 const webpack = require('webpack');
 const resolve = require('resolve');
@@ -23,6 +24,8 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const WebpackEventPlugin = require('webpack-event-plugin');
 
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -475,6 +478,7 @@ module.exports = function(webpackEnv) {
           {},
           {
             inject: true,
+            inlineSource: '.(js|css)$',
             template: paths.appHtml,
           },
           isEnvProduction
@@ -548,6 +552,53 @@ module.exports = function(webpackEnv) {
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // Embed Javascript and CSS source inline of created index.html
+      new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
+      new WebpackEventPlugin([{
+        hook: 'done',
+        callback: (compilation) => {
+          console.log('Removing unneeded files in build dir...');
+          fse.remove('./build/static')
+            .catch(err => {
+              console.error(err);
+            });
+
+          fse.remove('./build/asset-manifest.json')
+            .catch(err => {
+              console.error(err);
+            });
+
+          fs.readdir('./build', (err, files) => {
+            for (let i = files.length - 1; i >= 0; i -= 1) {
+              let match = files[i].match(/precache-manifest.*.js/);
+                if (match !== null)
+                  fse.remove(`./build/${match[0]}`)
+                    .catch(err => {
+                      console.error(err);
+                  });
+              }
+          });
+
+          fse.remove('./build/service-worker.js')
+            .catch(err => {
+              console.error(err);
+            });
+
+          console.log('Creating ORT template file...');
+
+          fs.readFile('./build/index.html', 'utf8', (err, data) => {
+            if (err) {
+              return console.log(err);
+            }
+
+            const result = data.replace(/(<script.*? id="ort-report-data">)([\s\S]*?)(<\/script>)/g, '$1$3');
+
+            fs.writeFile('./build/scan-report-template.html', result, 'utf8', (err) => {
+              if (err) return console.log(err);
+            });
+          });
+        }
+      }]),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
       isEnvProduction &&
