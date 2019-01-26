@@ -95,11 +95,16 @@ class ReporterApp extends Component {
                     type="flex"
                 >
                     <Col span={6}>
-                        <p>
-                            OSS Review Toolkit:
-                            {' '}
+                        <a
+                            href="https://github.com/heremaps/oss-review-toolkit"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            <div className="ort-loading-logo ort-logo" />
+                        </a>
+                        <span>
                             {loadingText}
-                        </p>
+                        </span>
                         {loadingPercentage === 100 ? (
                             <Progress percent={100} />
                         ) : (
