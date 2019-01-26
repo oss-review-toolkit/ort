@@ -26,6 +26,11 @@ import com.here.ort.utils.OS
  */
 data class Environment(
         /**
+         * The version of ORT used.
+         */
+        val ortVersion: String = ORT_VERSION,
+
+        /**
          * Name of the operating system, defaults to [OS.name].
           */
         val os: String = OS.name,
@@ -41,6 +46,8 @@ data class Environment(
         val toolVersions: Map<String, String> = emptyMap()
 ) {
     companion object {
+        val ORT_VERSION = this::class.java.getResource("/VERSION").readText()
+
         private val RELEVANT_VARIABLES = listOf("COMSPEC", "OS", "OSTYPE", "SHELL")
     }
 }
