@@ -4865,6 +4865,15 @@ html-minifier@^3.5.20:
     relateurl "0.2.x"
     uglify-js "3.4.x"
 
+html-webpack-inline-source-plugin@1.0.0-beta.2:
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/html-webpack-inline-source-plugin/-/html-webpack-inline-source-plugin-1.0.0-beta.2.tgz#71a9234c170ef18df6e51f4594a09b540ff03111"
+  integrity sha512-ydsEKdp0tnbmnqRAH2WSSMXerCNYhjes5b79uvP2BU3p6cyk+6ucNMsw5b5xD1QxphgvBBA3QqVmdcpu8QLlRQ==
+  dependencies:
+    escape-string-regexp "^1.0.5"
+    slash "^1.0.0"
+    source-map-url "^0.4.0"
+
 html-webpack-plugin@4.0.0-beta.5:
   version "4.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-4.0.0-beta.5.tgz#2c53083c1151bfec20479b1f8aaf0039e77b5513"
@@ -10821,6 +10830,11 @@ webpack-dev-server@3.1.14:
     webpack-dev-middleware "3.4.0"
     webpack-log "^2.0.0"
     yargs "12.0.2"
+
+webpack-event-plugin@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/webpack-event-plugin/-/webpack-event-plugin-1.1.1.tgz#dd2148f5c2747111fd473e516e485c11ccd4b536"
+  integrity sha512-bdTU1n5aYg3Pm+4gtF2mRlb0pm3c2BTOSlZID9JyF8Yyyzl/Qeb1x4Thn5l/p1AE0Cw8I0h3SxBrRNA4UB8SNw==
 
 webpack-log@^2.0.0:
   version "2.0.0"

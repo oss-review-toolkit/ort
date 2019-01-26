@@ -64,6 +64,7 @@
         "fork-ts-checker-webpack-plugin-alt": "0.4.14",
         "fs-extra": "7.0.0",
         "html-webpack-plugin": "4.0.0-beta.5",
+        "html-webpack-inline-source-plugin": "1.0.0-beta.2",
         "identity-obj-proxy": "3.0.0",
         "jest": "23.6.0",
         "jest-pnp-resolver": "1.0.1",
@@ -82,6 +83,7 @@
         "url-loader": "1.1.1",
         "webpack": "4.19.1",
         "webpack-dev-server": "3.1.14",
+        "webpack-event-plugin": "^1.1.1",
         "webpack-manifest-plugin": "2.0.4",
         "workbox-webpack-plugin": "3.6.3"
     },
