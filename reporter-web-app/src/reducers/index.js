@@ -74,7 +74,7 @@ export default (state = initState, action) => {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: 'processing data for optimal rendering...',
+                    text: 'Processing data for optimal rendering...',
                     percentage: 25
                 }
             }
@@ -87,7 +87,7 @@ export default (state = initState, action) => {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: 'processing done...',
+                    text: 'Processing done...',
                     percentage: 100
                 }
             },
@@ -109,7 +109,7 @@ export default (state = initState, action) => {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: `processing project (${index}/${total})...`,
+                    text: `Processing project (${index}/${total})...`,
                     percentage: newPercentage
                 }
             }
@@ -122,7 +122,7 @@ export default (state = initState, action) => {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: 'loading done...',
+                    text: 'Ready to display scan report...',
                     percentage: 100
                 }
             }
