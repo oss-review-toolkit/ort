@@ -73,8 +73,9 @@ class MainTest : StringSpec() {
                 exitCode shouldBe 0
 
                 val lines = streamOut.toString().lineSequence().iterator()
+                while (lines.hasNext() && lines.next() != "The following package managers are activated:")
 
-                lines.next() shouldBe "The following package managers are activated:"
+                lines.hasNext() shouldBe true
                 lines.next() shouldBe "\tGradle"
             } finally {
                 // Restore standard output.
@@ -101,8 +102,9 @@ class MainTest : StringSpec() {
                 exitCode shouldBe 0
 
                 val lines = streamOut.toString().lineSequence().iterator()
+                while (lines.hasNext() && lines.next() != "The following package managers are activated:")
 
-                lines.next() shouldBe "The following package managers are activated:"
+                lines.hasNext() shouldBe true
                 lines.next() shouldBe "\tNPM"
             } finally {
                 // Restore standard output.

@@ -23,6 +23,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
 import com.here.ort.commands.*
+import com.here.ort.model.Environment
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
@@ -86,6 +87,8 @@ object Main : CommandWithHelp() {
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
+
+        println("Running ORT with ${Environment()}.")
 
         // JCommander already validates the command names.
         val command = jc.commands[jc.parsedCommand]!!
