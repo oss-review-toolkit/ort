@@ -17,14 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import { delay } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { delay, put, select } from 'redux-saga/effects';
 import { getReportData } from '../reducers/selectors';
 import { hashCode, removeDuplicatesInArray } from '../utils';
 
 function* convertReportData() {
     const reportData = yield select(getReportData);
-    yield call(delay, 200);
+    yield delay(200);
 
     if (Object.keys(reportData).length === 0
         || !reportData.analyzer.result
@@ -645,7 +644,7 @@ function* convertReportData() {
             projects[projectIndex].packages.list
         ).reverse();
 
-        yield call(delay, 50);
+        yield delay(50);
         yield put({
             type: 'APP::LOADING_CONVERTING_REPORT',
             index: projectsFromAnalyzer.length - i,
@@ -681,9 +680,9 @@ function* convertReportData() {
     };
 
     yield put({ type: 'APP::LOADING_CONVERTING_REPORT_DONE', payload: convertedData });
-    yield call(delay, 300);
+    yield delay(300);
     yield put({ type: 'APP::LOADING_DONE' });
-    yield call(delay, 300);
+    yield delay(300);
     yield put({ type: 'APP::SHOW_TABS' });
 
     return convertedData;
