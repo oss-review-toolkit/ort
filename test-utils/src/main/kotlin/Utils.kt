@@ -30,7 +30,7 @@ val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 
 val USER_DIR = File(System.getProperty("user.dir"))
 
-private val START_AND_END_TIME_REGEX = Regex("(start_time|end_time): \".*\"")
+private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
 fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, definitionFilePath: String? = null,
