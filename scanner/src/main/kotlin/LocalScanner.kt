@@ -153,7 +153,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
                 val now = Instant.now()
                 listOf(ScanResult(
-                        provenance = Provenance(now),
+                        provenance = Provenance(),
                         scanner = scannerDetails,
                         summary = ScanSummary(
                                 startTime = now,
@@ -199,7 +199,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
             val now = Instant.now()
             val summary = ScanSummary(now, now, 0, sortedSetOf(),
                     listOf(OrtIssue(source = toString(), message = e.collectMessagesAsString())))
-            ScanResult(Provenance(now), getDetails(), summary)
+            ScanResult(Provenance(), getDetails(), summary)
         }
 
         // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
@@ -257,7 +257,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
             val now = Instant.now()
             val scanResult = ScanResult(
-                    Provenance(now),
+                    Provenance(),
                     scannerDetails,
                     ScanSummary(
                             startTime = now,
