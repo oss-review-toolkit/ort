@@ -241,7 +241,12 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
     }
 
     /**
-     * Scan all files in [inputPath] using this [Scanner] and store the scan results in [outputDirectory].
+     * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
+     * scanner's native file format. The results file name is derived from [inputPath] and [getDetails].
+     *
+     * No scan results cache is used by this function.
+     *
+     * The return value is an [OrtResult]. If the path could not be scanned, a [ScanException] is thrown.
      */
     fun scanInputPath(inputPath: File, outputDirectory: File): OrtResult {
         val startTime = Instant.now()
@@ -256,8 +261,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
         log.info { "Scanning path '$absoluteInputPath' with $scannerDetails..." }
 
         val result = try {
-            val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-            val resultsFile = File(scanResultsDirectory,
+            val resultsFile = File(outputDirectory.apply { safeMkdirs() },
                     "${inputPath.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
             scanPath(inputPath, resultsFile).also {
                 log.info {
