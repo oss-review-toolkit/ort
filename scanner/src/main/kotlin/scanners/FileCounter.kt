@@ -25,7 +25,6 @@ import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
@@ -55,8 +54,7 @@ class FileCounter(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun getConfiguration() = ""
 
-    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
-            : ScanResult {
+    override fun scanPath(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val fileCountResult = FileCountResult(path.walk().count())
@@ -67,7 +65,7 @@ class FileCounter(config: ScannerConfiguration) : LocalScanner(config) {
 
         val result = getResult(resultsFile)
         val summary = generateSummary(startTime, endTime, result)
-        return ScanResult(provenance, scannerDetails, summary, result)
+        return ScanResult(Provenance(), getDetails(), summary, result)
     }
 
     override fun getResult(resultsFile: File): JsonNode {
