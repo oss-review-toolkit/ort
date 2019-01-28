@@ -132,8 +132,8 @@ object ScannerCommand : CommandWithHelp() {
         val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
 
         val ortResult = ortFile?.let {
-            scanner.scanOrtResult(it, absoluteOutputDir, downloadDir ?: absoluteOutputDir.resolve("downloads"),
-                    scopesToScan.toSet())
+            val absoluteDownloadDir = downloadDir?.absoluteFile ?: absoluteOutputDir.resolve("downloads")
+            scanner.scanOrtResult(it, absoluteNativeOutputDir, absoluteDownloadDir, scopesToScan.toSet())
         } ?: run {
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."
