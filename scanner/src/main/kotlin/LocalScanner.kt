@@ -172,22 +172,17 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
     }
 
     /**
-     * Scan the provided [pkg] for license information, writing results to [outputDirectory]. If a scan result is found
-     * in the cache, it is used without running the actual scan. If no cached scan result is found, the package's source
-     * code is downloaded and scanned afterwards.
+     * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
+     * native file format. The results file name is derived from [pkg] and [scannerDetails].
      *
-     * @param pkg The package to scan.
-     * @param outputDirectory The base directory to store scan results in.
-     * @param downloadDirectory The directory to download source code to for scanning.
+     * If a scan result is found in the cache, it is used without running the actual scan. If no cached scan result is
+     * found, the package's source code is downloaded to [downloadDirectory] and scanned afterwards.
      *
-     * @return The set of found licenses.
-     *
-     * @throws ScanException In case the package could not be scanned.
+     * The return value is a list of [ScanResult]s. If a package could not be scanned, a [ScanException] is thrown.
      */
     private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
                     downloadDirectory: File): List<ScanResult> {
-        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scanResultsForPackageDirectory = File(scanResultsDirectory, pkg.id.toPath()).apply { safeMkdirs() }
+        val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
         val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
 
         val cachedResults = ScanResultsCache.read(pkg, scannerDetails)
