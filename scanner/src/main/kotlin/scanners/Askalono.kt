@@ -28,7 +28,6 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.LocalScanner
@@ -117,8 +116,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun getConfiguration() = ""
 
-    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
-            : ScanResult {
+    override fun scanPath(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -137,7 +135,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, result)
-                return ScanResult(provenance, scannerDetails, summary, result)
+                return ScanResult(Provenance(), getDetails(), summary, result)
             } else {
                 throw ScanException(errorMessage)
             }

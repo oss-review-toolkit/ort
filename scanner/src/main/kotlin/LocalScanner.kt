@@ -66,7 +66,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
     /**
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
-    protected abstract val resultFileExt: String
+    abstract val resultFileExt: String
 
     /**
      * The directory the scanner was bootstrapped to, if so.
@@ -233,7 +233,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
         val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
                 downloadResult.originalVcsInfo)
-        val scanResult = scanPath(scannerDetails, downloadResult.downloadDirectory, provenance, resultsFile)
+        val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
         ScanResultsCache.add(pkg.id, scanResult)
 
@@ -252,10 +252,14 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
             "Specified path '$absoluteInputPath' does not exist."
         }
 
-        log.info { "Scanning path '$absoluteInputPath'..." }
+        val scannerDetails = getDetails()
+        log.info { "Scanning path '$absoluteInputPath' with $scannerDetails..." }
 
         val result = try {
-            scanPath(inputPath, outputDirectory).also {
+            val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
+            val resultsFile = File(scanResultsDirectory,
+                    "${inputPath.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
+            scanPath(inputPath, resultsFile).also {
                 log.info {
                     "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
                 }
@@ -289,44 +293,14 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
     }
 
     /**
-     * Scan the provided [path] for license information, writing results to [outputDirectory] using the scanner's native
-     * output file format. Note that no scan results cache is used by this function.
+     * Scan the provided [path] for license information and write the results to [resultsFile] using the scanner's
+     * native file format.
      *
-     * @param path The directory or file to scan.
-     * @param outputDirectory The base directory to store scan results in.
+     * No scan results cache is used by this function.
      *
-     * @return The [ScanResult] with empty [Provenance] except for the download time.
-     *
-     * @throws ScanException In case the path could not be scanned.
+     * The return value is a [ScanResult]. If the path could not be scanned, a [ScanException] is thrown.
      */
-    fun scanPath(path: File, outputDirectory: File): ScanResult {
-        val scannerDetails = getDetails()
-        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val resultsFile = File(scanResultsDirectory,
-                "${path.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
-
-        log.info { "Running $this version ${scannerDetails.version} on path '${path.absolutePath}'." }
-
-        return scanPath(scannerDetails, path, Provenance(), resultsFile).also {
-            log.info { "Stored $this results in '${resultsFile.absolutePath}'." }
-        }
-    }
-
-    /**
-     * Scan the provided [path] for license information, writing results to [resultsFile] using the scanner's native
-     * output file format. Note that no scan results cache is used by this function.
-     *
-     * @param scannerDetails The [ScannerDetails] of the current scanner.
-     * @param path The directory or file to scan.
-     * @param provenance [Provenance] information about the files in [path].
-     * @param resultsFile The file to store scan results in.
-     *
-     * @return The [ScanResult], containing the provided [provenance] and [scannerDetails].
-     *
-     * @throws ScanException In case the path could not be scanned.
-     */
-    protected abstract fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance,
-                                    resultsFile: File): ScanResult
+    abstract fun scanPath(path: File, resultsFile: File): ScanResult
 
     internal abstract fun getResult(resultsFile: File): JsonNode
 
