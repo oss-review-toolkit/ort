@@ -307,7 +307,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
         log.info { "Running $this version ${scannerDetails.version} on path '${path.absolutePath}'." }
 
-        return scanPath(scannerDetails, path, Provenance(downloadTime = Instant.now()), resultsFile).also {
+        return scanPath(scannerDetails, path, Provenance(), resultsFile).also {
             log.info { "Stored $this results in '${resultsFile.absolutePath}'." }
         }
     }
