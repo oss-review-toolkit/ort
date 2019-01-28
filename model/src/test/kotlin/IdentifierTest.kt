@@ -137,6 +137,8 @@ class IdentifierTest : StringSpec() {
         "Checking the vendor works as expected" {
             assertSoftly {
                 Identifier("Maven:com.here:name:version").isFromOrg("here", "traffic") shouldBe true
+                Identifier("Maven:com.here.project:name:version").isFromOrg("here") shouldBe true
+                Identifier("Maven:project.com.here:name:version").isFromOrg("here") shouldBe false
                 Identifier("Maven:org.apache:name:version").isFromOrg("apache") shouldBe true
                 Identifier("NPM:@scope:name:version").isFromOrg("scope") shouldBe true
 
