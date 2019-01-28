@@ -224,7 +224,7 @@ abstract class VersionControlSystem {
                             VcsInfo("git", "$url.git", "", null, path)
                         }
 
-                        vcsUrl.contains(".git#") || Regex("^git.+#[a-fA-F0-9]{7,}$").matches(vcsUrl) -> {
+                        vcsUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(vcsUrl) -> {
                             val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
                             val revision = vcsUrl.substringAfterLast('#')
                             VcsInfo("git", url, revision, null, "")
