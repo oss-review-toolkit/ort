@@ -30,10 +30,11 @@ import java.time.Instant
  */
 data class Provenance(
         /**
-         * The time when the source code was downloaded.
+         * The time when the source code was downloaded, or [Instant.EPOCH] if unknown (e.g. for source code that was
+         * downloaded separately from running ORT).
          */
         @JsonAlias("downloadTime")
-        val downloadTime: Instant,
+        val downloadTime: Instant = Instant.EPOCH,
 
         /**
          * The source artifact that was downloaded, or null.
