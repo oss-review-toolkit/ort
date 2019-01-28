@@ -28,9 +28,10 @@ import java.time.Instant
 val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(false, false)
 val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 
-val START_AND_END_TIME_REGEX = Regex("(start_time|end_time): \".*\"")
-val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 val USER_DIR = File(System.getProperty("user.dir"))
+
+private val START_AND_END_TIME_REGEX = Regex("(start_time|end_time): \".*\"")
+private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
 fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, definitionFilePath: String? = null,
                         url: String? = null, revision: String? = null, path: String? = null,
