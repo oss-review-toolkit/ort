@@ -236,8 +236,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
                 joinToString(" ")
             }
 
-    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
-            : ScanResult {
+    override fun scanPath(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -264,7 +263,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
 
         with(process) {
             if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(provenance, scannerDetails, summary.copy(errors = errors), result)
+                return ScanResult(Provenance(), getDetails(), summary.copy(errors = errors), result)
             } else {
                 throw ScanException(errorMessage)
             }

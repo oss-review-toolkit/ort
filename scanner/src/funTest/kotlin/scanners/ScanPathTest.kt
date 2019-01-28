@@ -24,8 +24,7 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.ScanCodeTag
 
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
+import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -33,37 +32,60 @@ import java.io.File
 
 class ScanPathTest : StringSpec() {
     private val config = ScannerConfiguration()
+    private val path = File("../LICENSE")
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override fun beforeSpec(spec: Spec) {
+        super.beforeSpec(spec)
         outputDir = createTempDir()
     }
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override fun afterSpec(spec: Spec) {
         outputDir.safeDeleteRecursively(force = true)
+        super.afterSpec(spec)
     }
 
     init {
         "Askalono recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val result = Askalono(config).scanPath(File("../LICENSE"), outputDir)
+            val scanner = Askalono(config)
+            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+
+            val result = scanner.scanPath(path, resultsFile)
+
+            resultsFile.isFile shouldBe true
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe sortedSetOf("Apache-2.0")
         }
 
         "BoyterLc recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val result = BoyterLc(config).scanPath(File("../LICENSE"), outputDir)
+            val scanner = BoyterLc(config)
+            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+
+            val result = scanner.scanPath(path, resultsFile)
+
+            resultsFile.isFile shouldBe true
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe sortedSetOf("Apache-2.0", "ECL-2.0")
         }
 
         "Licensee recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val result = Licensee(config).scanPath(File("../LICENSE"), outputDir)
+            val scanner = Licensee(config)
+            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+
+            val result = scanner.scanPath(path, resultsFile)
+
+            resultsFile.isFile shouldBe true
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe sortedSetOf("Apache-2.0")
         }
 
         "ScanCode recognizes our own LICENSE".config(tags = setOf(ExpensiveTag, ScanCodeTag)) {
-            val result = ScanCode(config).scanPath(File("../LICENSE"), outputDir)
+            val scanner = ScanCode(config)
+            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+
+            val result = scanner.scanPath(path, resultsFile)
+
+            resultsFile.isFile shouldBe true
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe sortedSetOf("Apache-2.0")
         }

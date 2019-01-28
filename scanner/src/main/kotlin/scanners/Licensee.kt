@@ -28,7 +28,6 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.LocalScanner
@@ -88,8 +87,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
-            : ScanResult {
+    override fun scanPath(path: File, resultsFile: File): ScanResult {
         // Licensee has issues with absolute Windows paths passed as an argument. Work around that by using the path to
         // scan as the working directory.
         val (parentPath, relativePath) = if (path.isDirectory) {
@@ -119,7 +117,7 @@ class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, result)
-                return ScanResult(provenance, scannerDetails, summary, result)
+                return ScanResult(Provenance(), getDetails(), summary, result)
             } else {
                 throw ScanException(errorMessage)
             }
