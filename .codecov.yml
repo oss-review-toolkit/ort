@@ -1,3 +1,6 @@
+# Help Codecov to map Kotlin package paths to paths stores in Git, see
+# https://docs.codecov.io/docs/fixing-paths.
+
 fixes:
   - "com/here/ort/::cli/src/main/kotlin/"
   - "com/here/ort/analyzer/::analyzer/src/main/kotlin/"
