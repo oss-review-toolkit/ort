@@ -129,6 +129,8 @@ object ScannerCommand : CommandWithHelp() {
 
         println("Using scanner '$scanner'.")
 
+        val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
+
         val ortResult = ortFile?.let {
             scanner.scanOrtResult(it, absoluteOutputDir, downloadDir ?: absoluteOutputDir.resolve("downloads"),
                     scopesToScan.toSet())
@@ -138,7 +140,7 @@ object ScannerCommand : CommandWithHelp() {
             }
 
             val absoluteInputPath = inputPath!!.absoluteFile.normalize()
-            scanner.scanInputPath(absoluteInputPath, absoluteOutputDir)
+            scanner.scanInputPath(absoluteInputPath, absoluteNativeOutputDir)
         }
 
         outputFormats.distinct().forEach { format ->
