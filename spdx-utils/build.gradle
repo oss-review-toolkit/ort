@@ -16,6 +16,7 @@ compileKotlin.dependsOn(generateGrammarSource)
 idea.project.settings {
     taskTriggers {
         afterSync tasks.getByName('generateGrammarSource')
+        beforeBuild tasks.getByName('generateGrammarSource')
     }
 }
 
