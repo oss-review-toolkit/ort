@@ -53,9 +53,9 @@ build_script:
 
 test_script:
   - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
-      gradlew --stacktrace -Pkotlin.parallel.tasks.in.project=false dokkaJar check
+      gradlew --stacktrace dokkaJar check
     ) else (
-      gradlew --stacktrace -Pkotlin.parallel.tasks.in.project=false -Dkotlintest.tags.exclude=ExpensiveTag dokkaJar check
+      gradlew -Dkotlintest.tags.exclude=ExpensiveTag --stacktrace dokkaJar check
     )
 
 artifacts:
