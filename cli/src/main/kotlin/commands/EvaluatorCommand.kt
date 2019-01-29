@@ -97,7 +97,7 @@ object EvaluatorCommand : CommandWithHelp() {
             return if (evaluator.checkSyntax(script)) 0 else 2
         }
 
-        val evaluatorRun = evaluator.run(script)
+        val evaluatorRun by lazy { evaluator.run(script) }
 
         outputDir?.absoluteFile?.normalize()?.let { absoluteOutputDir ->
             val outputFiles = outputFormats.distinct().map { format ->
