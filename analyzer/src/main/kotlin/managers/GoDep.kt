@@ -78,7 +78,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         GO_LEGACY_MANIFESTS[definitionFile.name]?.let { lockfileName ->
             log.debug { "Importing legacy manifest file at '$definitionFile'." }
-            importLegacyManifest(lockfileName, projectDir, workingDir, gopath)
+            importLegacyManifest(lockfileName, workingDir, gopath)
         }
 
         val projects = parseProjects(workingDir, gopath)
@@ -158,10 +158,10 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         return projectDir.toPath().normalize().toFile()
     }
 
-    private fun importLegacyManifest(lockfileName: String, projectDir: File, workingDir: File, gopath: File) {
+    private fun importLegacyManifest(lockfileName: String, workingDir: File, gopath: File) {
         if (lockfileName.isNotEmpty() && !File(workingDir, lockfileName).isFile &&
                 !analyzerConfig.allowDynamicVersions) {
-            throw IllegalArgumentException("No lockfile found in ${projectDir.invariantSeparatorsPath}, dependency " +
+            throw IllegalArgumentException("No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency " +
                     "versions are unstable.")
         }
 
