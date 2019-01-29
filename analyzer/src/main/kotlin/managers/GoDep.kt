@@ -53,7 +53,7 @@ import java.nio.file.Paths
 
 val GO_LEGACY_MANIFESTS = mapOf(
         "glide.yaml" to "glide.lock",
-        "Godeps.json" to null
+        "Godeps.json" to ""
 )
 
 /**
@@ -76,8 +76,9 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val gopath = createTempDir("ort", "${projectDir.name}-gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
-        if (definitionFile.name in GO_LEGACY_MANIFESTS.keys) {
-            importLegacyManifest(definitionFile, projectDir, workingDir, gopath)
+        GO_LEGACY_MANIFESTS[definitionFile.name]?.let { lockfileName ->
+            log.debug { "Importing legacy manifest file at '$definitionFile'." }
+            importLegacyManifest(lockfileName, projectDir, workingDir, gopath)
         }
 
         val projects = parseProjects(workingDir, gopath)
@@ -157,16 +158,12 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         return projectDir.toPath().normalize().toFile()
     }
 
-    private fun importLegacyManifest(definitionFile: File, projectDir: File, workingDir: File, gopath: File) {
-        val lockfileName = GO_LEGACY_MANIFESTS[definitionFile.name]
-
-        if (lockfileName != null && !File(workingDir, lockfileName).isFile &&
+    private fun importLegacyManifest(lockfileName: String, projectDir: File, workingDir: File, gopath: File) {
+        if (lockfileName.isNotEmpty() && !File(workingDir, lockfileName).isFile &&
                 !analyzerConfig.allowDynamicVersions) {
             throw IllegalArgumentException("No lockfile found in ${projectDir.invariantSeparatorsPath}, dependency " +
                     "versions are unstable.")
         }
-
-        log.debug { "Running 'dep init' to import legacy manifest file ${definitionFile.name}" }
 
         run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.absolutePath))
     }
