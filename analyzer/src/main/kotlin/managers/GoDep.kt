@@ -139,14 +139,13 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         )
     }
 
-    fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File {
-        if (vcs == VcsInfo.EMPTY) {
-            return Paths.get(gopath.path, "src", projectDir.name).toAbsolutePath().toFile()
-        }
-
-        val uri = URI(vcs.url)
-        return Paths.get(gopath.path, "src", uri.host, uri.path).toAbsolutePath().toFile()
-    }
+    fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
+            if (vcs == VcsInfo.EMPTY) {
+                Paths.get(gopath.path, "src", projectDir.name)
+            } else {
+                val uri = URI(vcs.url)
+                Paths.get(gopath.path, "src", uri.host, uri.path)
+            }.toAbsolutePath().toFile()
 
     private fun resolveProjectRoot(definitionFile: File): File {
         val projectDir = when (definitionFile.name) {
