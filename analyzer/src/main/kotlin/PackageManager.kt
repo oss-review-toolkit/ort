@@ -235,8 +235,15 @@ abstract class PackageManager(
             }
         }
 
+        afterResolution(definitionFiles)
+
         return result
     }
+
+    /**
+     * Optional step to run after dependency resolution, like cleaning up temporary files.
+     */
+    protected open fun afterResolution(definitionFiles: List<File>) {}
 
     /**
      * Resolve dependencies for a single absolute [definitionFile] and return a [ProjectAnalyzerResult].
