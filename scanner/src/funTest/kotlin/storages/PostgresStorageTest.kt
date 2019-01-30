@@ -21,10 +21,25 @@ package com.here.ort.scanner.storages
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
 
+import io.kotlintest.IsolationMode
+import io.kotlintest.Spec
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
 
-class PostgresStorageTest : StringSpec() {
+class PostgresStorageTest : AbstractStorageTest() {
+    private lateinit var postgres: EmbeddedPostgres
+
+    override fun beforeSpec(spec: Spec) {
+        postgres = EmbeddedPostgres.start()
+    }
+
+    override fun afterSpec(spec: Spec) {
+        postgres.close()
+    }
+
+    override fun isolationMode() = IsolationMode.InstancePerTest
+
+    override fun createStorage() = PostgresStorage(postgres.postgresDatabase.connection).also { it.init() }
+
     init {
         "Embedded postgres works" {
             EmbeddedPostgres.start().use { postgres ->
