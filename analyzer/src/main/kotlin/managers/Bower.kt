@@ -220,7 +220,7 @@ class Bower(
 
     override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_BOWER_VERSION)
 
-    override fun prepareResolution(definitionFiles: List<File>) =
+    override fun beforeResolution(definitionFiles: List<File>) =
         checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

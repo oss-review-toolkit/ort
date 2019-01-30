@@ -94,7 +94,7 @@ class PhpComposer(
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.5,)")
 
-    override fun prepareResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(definitionFiles: List<File>) {
         // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
         // required and hence we skip the version check.
         if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) {
