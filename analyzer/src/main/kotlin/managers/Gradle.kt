@@ -41,6 +41,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.collectMessagesAsString
+import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
@@ -77,7 +78,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
      */
     private class GradleCacheReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository("gradleCache")
-        private val gradleCacheRoot = File(System.getProperty("user.home"), ".gradle/caches/modules-2/files-2.1")
+        private val gradleCacheRoot = getUserHomeDirectory().resolve(".gradle/caches/modules-2/files-2.1")
 
         override fun findArtifact(artifact: Artifact): File? {
             val artifactRootDir = File(gradleCacheRoot,

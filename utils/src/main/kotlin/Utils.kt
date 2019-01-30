@@ -190,9 +190,14 @@ fun getPathFromEnvironment(executable: String): File? {
 }
 
 /**
+ * Return the current user's home directory.
+ */
+fun getUserHomeDirectory() = File(System.getProperty("user.home"))
+
+/**
  * Return the directory to store user-specific ORT data in.
  */
-fun getUserOrtDirectory() = File(System.getProperty("user.home"), ".ort")
+fun getUserOrtDirectory() = getUserHomeDirectory().resolve(".ort")
 
 /**
  * Normalize a VCS URL by converting it to a common pattern.

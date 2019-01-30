@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.Maven
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -117,8 +118,8 @@ class MavenTest : StringSpec() {
 
         "Parent POM from Maven central can be resolved" {
             // Delete the parent POM from the local repository to make sure it has to be resolved from Maven central.
-            val userHome = File(System.getProperty("user.home"))
-            File(userHome, ".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
+            getUserHomeDirectory()
+                    .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                     .safeDeleteRecursively(force = true)
 
             val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent")
