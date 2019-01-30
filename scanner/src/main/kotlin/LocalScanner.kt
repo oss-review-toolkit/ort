@@ -60,7 +60,7 @@ import java.time.Instant
 
 /**
  * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
- * serial order. Scan results can be cached in a [ScanResultsCache].
+ * serial order. Scan results can be stored in a [ScanResultsStorage].
  */
 abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), CommandLineTool {
     /**
@@ -175,7 +175,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
      * native file format. The results file name is derived from [pkg] and [scannerDetails].
      *
-     * If a scan result is found in the cache, it is used without running the actual scan. If no cached scan result is
+     * If a scan result is found in the storage, it is used without running the actual scan. If no stored scan result is
      * found, the package's source code is downloaded to [downloadDirectory] and scanned afterwards.
      *
      * The return value is a list of [ScanResult]s. If a package could not be scanned, a [ScanException] is thrown.
@@ -185,14 +185,14 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
         val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
         val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
 
-        val cachedResults = ScanResultsCache.read(pkg, scannerDetails)
+        val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
 
-        if (cachedResults.results.isNotEmpty()) {
+        if (storedResults.results.isNotEmpty()) {
             // Some external tools rely on the raw results filer to be written to the scan results directory, so write
-            // the first cached result to resultsFile. This feature will be removed when the reporter tool becomes
+            // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
             // available.
-            resultsFile.mapper().writeValue(resultsFile, cachedResults.results.first().rawResult)
-            return cachedResults.results
+            resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
+            return storedResults.results
         }
 
         val downloadResult = try {
@@ -230,7 +230,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                 downloadResult.originalVcsInfo)
         val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
-        ScanResultsCache.add(pkg.id, scanResult)
+        ScanResultsStorage.add(pkg.id, scanResult)
 
         return listOf(scanResult)
     }
@@ -239,7 +239,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
      * scanner's native file format. The results file name is derived from [inputPath] and [getDetails].
      *
-     * No scan results cache is used by this function.
+     * No scan results storage is used by this function.
      *
      * The return value is an [OrtResult]. If the path could not be scanned, a [ScanException] is thrown.
      */
@@ -279,7 +279,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                 inputPath.name.fileSystemEncode(), "")
 
         val scanResultContainer = ScanResultContainer(id, listOf(result))
-        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
+        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsStorage.stats)
 
         val endTime = Instant.now()
 
@@ -295,7 +295,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      * Scan the provided [path] for license information and write the results to [resultsFile] using the scanner's
      * native file format.
      *
-     * No scan results cache is used by this function.
+     * No scan results storage is used by this function.
      *
      * The return value is a [ScanResult]. If the path could not be scanned, a [ScanException] is thrown.
      */

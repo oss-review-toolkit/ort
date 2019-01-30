@@ -33,7 +33,7 @@ import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.scanner.LocalScanner
-import com.here.ort.scanner.ScanResultsCache
+import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.scanner.Scanner
 import com.here.ort.scanner.ScannerFactory
 import com.here.ort.scanner.scanners.ScanCode
@@ -137,8 +137,8 @@ object ScannerCommand : CommandWithHelp() {
             it.readValue<ScannerConfiguration>()
         } ?: ScannerConfiguration()
 
-        config.artifactoryCache?.let {
-            ScanResultsCache.configure(it)
+        config.artifactoryStorage?.let {
+            ScanResultsStorage.configure(it)
         }
 
         val scanner = scannerFactory.create(config)

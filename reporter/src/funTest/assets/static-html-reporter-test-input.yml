@@ -169,7 +169,7 @@ scanner:
     variables: {}
     tool_versions: {}
   config:
-    artifactory_cache: null
+    artifactory_storage: null
     scanner: null
   results:
     scanned_scopes:
@@ -270,7 +270,7 @@ scanner:
           end_time: "1970-01-01T00:00:00Z"
           file_count: 47
           license_findings: []
-    cache_stats:
+    storage_stats:
       num_reads: 5
       num_hits: 0
     has_errors: true

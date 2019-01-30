@@ -324,7 +324,7 @@ scanner:
     variables: {}
     tool_versions: {}
   config:
-    artifactory_cache: null
+    artifactory_storage: null
   results:
     scanned_scopes:
     - id: "NPM::npm-excludes-test-project:1.0.0"
@@ -621,7 +621,7 @@ scanner:
           - license: "MIT"
             copyrights:
             - "Copyright (c) 2011-2012 http://balupton.com' Benjamin Lupton"
-    cache_stats:
+    storage_stats:
       num_reads: 11
       num_hits: 0
     has_errors: true

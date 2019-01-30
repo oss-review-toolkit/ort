@@ -63,8 +63,8 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
     /**
      * Scan the list of [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to
      * download the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may
-     * contain multiple results for the same [Package] if the cache contains more than one result for the specification
-     * of this scanner.
+     * contain multiple results for the same [Package] if the storage contains more than one result for the
+     * specification of this scanner.
      */
     protected abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
             : Map<Package, List<ScanResult>>
@@ -138,7 +138,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
             }
         }
 
-        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsCache.stats)
+        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsStorage.stats)
 
         val endTime = Instant.now()
 

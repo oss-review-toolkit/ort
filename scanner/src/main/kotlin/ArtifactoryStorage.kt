@@ -45,14 +45,14 @@ import okhttp3.RequestBody
 
 import okio.Okio
 
-class ArtifactoryCache(
+class ArtifactoryStorage(
         /**
          * The URL of the Artifactory server, e.g. "https://example.com/artifactory".
          */
         private val url: String,
 
         /**
-         * The name of the Artifactory repository to use for caching scan results.
+         * The name of the Artifactory repository to use for storing scan results.
          */
         private val repository: String,
 
@@ -60,17 +60,17 @@ class ArtifactoryCache(
          * An Artifactory API token with read/write access to [repository].
          */
         private val apiToken: String
-) : ScanResultsCache {
+) : ScanResultsStorage {
     override fun read(id: Identifier): ScanResultContainer {
-        val cachePath = cachePath(id)
+        val storagePath = storagePath(id)
 
-        log.info { "Trying to read scan results for '$id' from Artifactory cache: $cachePath" }
+        log.info { "Trying to read scan results for '$id' from Artifactory storage: $storagePath" }
 
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
                 .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
                 .get()
-                .url("$url/$repository/$cachePath")
+                .url("$url/$repository/$storagePath")
                 .build()
 
         val tempFile = createTempFile("ort", "scan-results.yml")
@@ -83,15 +83,15 @@ class ArtifactoryCache(
                     }
 
                     if (response.cacheResponse() != null) {
-                        log.info { "Retrieved $cachePath from local cache." }
+                        log.info { "Retrieved $storagePath from local storage." }
                     } else {
-                        log.info { "Downloaded $cachePath from Artifactory cache." }
+                        log.info { "Downloaded $storagePath from Artifactory storage." }
                     }
 
                     return tempFile.readValue()
                 } else {
                     log.info {
-                        "Could not get $cachePath from Artifactory cache: ${response.code()} - " +
+                        "Could not get $storagePath from Artifactory storage: ${response.code()} - " +
                                 response.message()
                     }
                 }
@@ -99,7 +99,7 @@ class ArtifactoryCache(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.warn { "Could not get $cachePath from Artifactory cache: ${e.message}" }
+            log.warn { "Could not get $storagePath from Artifactory storage: ${e.message}" }
         }
 
         return ScanResultContainer(id, emptyList())
@@ -114,7 +114,7 @@ class ArtifactoryCache(
         scanResults.retainAll { it.provenance.matches(pkg) }
         if (scanResults.isEmpty()) {
             log.info {
-                "No cached scan results found for $pkg. The following entries with non-matching provenance have " +
+                "No stored scan results found for $pkg. The following entries with non-matching provenance have " +
                         "been ignored: ${scanResults.map { it.provenance }}"
             }
             return ScanResultContainer(pkg.id, scanResults)
@@ -124,40 +124,40 @@ class ArtifactoryCache(
         scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
         if (scanResults.isEmpty()) {
             log.info {
-                "No cached scan results found for $scannerDetails. The following entries with incompatible scanners " +
+                "No stored scan results found for $scannerDetails. The following entries with incompatible scanners " +
                         "have been ignored: ${scanResults.map { it.scanner }}"
             }
             return ScanResultContainer(pkg.id, scanResults)
         }
 
         log.info {
-            "Found ${scanResults.size} cached scan result(s) for $pkg that are compatible with $scannerDetails."
+            "Found ${scanResults.size} stored scan result(s) for $pkg that are compatible with $scannerDetails."
         }
 
         return ScanResultContainer(pkg.id, scanResults)
     }
 
     override fun add(id: Identifier, scanResult: ScanResult): Boolean {
-        // Do not cache empty scan results. It is likely that something went wrong when they were created, and if not,
+        // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
         // it is cheap to re-create them.
         if (scanResult.summary.fileCount == 0) {
-            log.info { "Not caching scan result for '$id' because no files were scanned." }
+            log.info { "Not storing scan result for '$id' because no files were scanned." }
 
             return false
         }
 
-        // Do not cache scan results without raw result. The raw result can be set to null for other usages, but in the
-        // cache it must never be null.
+        // Do not store scan results without raw result. The raw result can be set to null for other usages, but in the
+        // storage it must never be null.
         if (scanResult.rawResult == null) {
-            log.info { "Not caching scan result for '$id' because the raw result is null." }
+            log.info { "Not storing scan result for '$id' because the raw result is null." }
 
             return false
         }
 
-        // Do not cache scan results without provenance information, because they cannot be assigned to the revision of
+        // Do not store scan results without provenance information, because they cannot be assigned to the revision of
         // the package source code later.
         if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
-            log.info { "Not caching scan result for '$id' because no provenance information is available." }
+            log.info { "Not storing scan result for '$id' because no provenance information is available." }
 
             return false
         }
@@ -167,14 +167,14 @@ class ArtifactoryCache(
         val tempFile = createTempFile("ort", "scan-results.yml")
         yamlMapper.writeValue(tempFile, scanResults)
 
-        val cachePath = cachePath(id)
+        val storagePath = storagePath(id)
 
-        log.info { "Writing scan results for '$id' to Artifactory cache: $cachePath" }
+        log.info { "Writing scan results for '$id' to Artifactory storage: $storagePath" }
 
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
                 .put(OkHttpClientHelper.createRequestBody(tempFile))
-                .url("$url/$repository/$cachePath")
+                .url("$url/$repository/$storagePath")
                 .build()
 
         try {
@@ -182,9 +182,9 @@ class ArtifactoryCache(
                 (response.code() == HttpURLConnection.HTTP_CREATED).also {
                     log.info {
                         if (it) {
-                            "Uploaded $cachePath to Artifactory cache."
+                            "Uploaded $storagePath to Artifactory storage."
                         } else {
-                            "Could not upload $cachePath to Artifactory cache: ${response.code()} - " +
+                            "Could not upload $storagePath to Artifactory storage: ${response.code()} - " +
                                     response.message()
                         }
                     }
@@ -193,7 +193,7 @@ class ArtifactoryCache(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.warn { "Could not upload $cachePath to Artifactory cache: ${e.message}" }
+            log.warn { "Could not upload $storagePath to Artifactory storage: ${e.message}" }
 
             return false
         }
@@ -233,5 +233,5 @@ class ArtifactoryCache(
         }
     }
 
-    private fun cachePath(id: Identifier) = "scan-results/${id.toPath()}/scan-results.yml"
+    private fun storagePath(id: Identifier) = "scan-results/${id.toPath()}/scan-results.yml"
 }
