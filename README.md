@@ -128,13 +128,14 @@ This tool wraps underlying license / copyright scanners with a common API so all
 same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-a`), the
 Scanner will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In
 order to not download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote
-cache hosted e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented, see
+storage hosted e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented, see
 [#752](https://github.com/heremaps/oss-review-toolkit/issues/752)). Using the example of configuring an Artifactory
-cache, the YAML-based configuration file would look like:
+storage, the YAML-based configuration file would look like:
 
 ```yaml
-artifactory_cache:
-  url: "https://artifactory.domain.com/artifactory/generic-repository-name"
+artifactory_storage:
+  url: "https://artifactory.domain.com/artifactory"
+  repository: "generic-repository-name"
   apiToken: $ARTIFACTORY_API_KEY
 ```
 
@@ -185,9 +186,9 @@ ORT comes with some example implementations for wrappers around license / copyri
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
-## Supported remote caches
+## Supported remote storages
 
-For reusing already known scan results, ORT can currently use one of the following backends as a remote cache:
+For reusing already known scan results, ORT can currently use one of the following backends as a remote storage:
 
 * [Artifactory](https://jfrog.com/artifactory/)
 

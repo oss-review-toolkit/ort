@@ -39,7 +39,7 @@ import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
-import com.here.ort.scanner.ScanResultsCache
+import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
@@ -73,7 +73,7 @@ import kotlin.math.absoluteValue
  * configuration options:
  *
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
- *   looking up results from the [ScanResultsCache]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
+ *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
  *   considered in [getConfiguration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  * * **"debugCommandLine":** Debug command line options that modify the result. Only used if the [log] level is set to

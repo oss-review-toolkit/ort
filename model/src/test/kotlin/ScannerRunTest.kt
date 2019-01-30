@@ -35,12 +35,12 @@ class ScannerRunTest : StringSpec() {
                   os: "Linux"
                   tool_versions: {}
                 config:
-                  artifactory_cache: null
+                  artifactory_storage: null
                   scanner: null
                 results:
                   scanned_scopes: []
                   scan_results: []
-                  cache_stats:
+                  storage_stats:
                     num_reads: 0
                     num_hits: 0
                   has_errors: false
@@ -61,12 +61,12 @@ class ScannerRunTest : StringSpec() {
                   os: "Linux"
                   tool_versions: {}
                 config:
-                  artifactory_cache: null
+                  artifactory_storage: null
                   scanner: null
                 results:
                   scanned_scopes: []
                   scan_results: []
-                  cache_stats:
+                  storage_stats:
                     num_reads: 0
                     num_hits: 0
                   has_errors: false
