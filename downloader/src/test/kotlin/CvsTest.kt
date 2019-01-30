@@ -19,7 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
@@ -55,7 +55,7 @@ class CvsTest : StringSpec() {
         }
 
         "CVS detects non-working-trees".config(enabled = cvs.isInPath()) {
-            cvs.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+            cvs.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
         "CVS correctly detects URLs to remote repositories".config(enabled = cvs.isInPath() && false) {

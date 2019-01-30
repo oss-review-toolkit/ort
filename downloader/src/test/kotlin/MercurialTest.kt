@@ -20,7 +20,7 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Mercurial
-import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
@@ -56,7 +56,7 @@ class MercurialTest : StringSpec() {
         }
 
         "Mercurial detects non-working-trees".config(enabled = hg.isInPath()) {
-            hg.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+            hg.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
         "Mercurial correctly detects URLs to remote repositories".config(enabled = hg.isInPath()) {
