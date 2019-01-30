@@ -60,7 +60,7 @@ class Yarn(
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
         PackageJsonUtils.mapDefinitionFilesForYarn(definitionFiles).toList()
 
-    override fun prepareResolution(definitionFiles: List<File>) =
+    override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
         checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)

@@ -142,7 +142,7 @@ class SBT(
         return pomFiles.distinct()
     }
 
-    override fun prepareResolution(definitionFiles: List<File>) {
+    override fun beforeResolution(definitionFiles: List<File>) {
         val workingDir = if (definitionFiles.size > 1) {
             // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
             // project's root directory. In order to determine the root directory, use the common prefix of all
