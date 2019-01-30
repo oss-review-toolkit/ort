@@ -15,6 +15,18 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
+# The source code for the binaries installed to the Docker image as part of this
+# Dockerfile can be downloaded from the locations listed below.
+#
+# - Base image: https://github.com/docker-library/openjdk/blob/master/11/jre/slim/Dockerfile
+# - Debian Sid packages: https://sources.debian.org/
+# - git-repo tool: https://gerrit-review.googlesource.com/admin/repos/git-repo
+# - NPM packages: https://www.npmjs.com/
+# - Python packages: https://pypi.org/
+# - Go language's dep tool: https://github.com/golang/dep
+# - Haskell language's stack tool: https://github.com/commercialhaskell/stack
+# - ScanCode tool: https://github.com/nexB/scancode-toolkit
+
 FROM openjdk:11-jre-slim-sid
 
 ENV SCANCODE_VERSION=2.9.7
