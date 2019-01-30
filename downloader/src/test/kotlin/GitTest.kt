@@ -19,7 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
@@ -55,7 +55,7 @@ class GitTest : StringSpec() {
         }
 
         "Git detects non-working-trees" {
-            git.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+            git.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
         "Git correctly detects URLs to remote repositories" {

@@ -31,7 +31,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
 import com.here.ort.utils.collectMessages
-import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
@@ -95,7 +95,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
-                DiskCache(File(getUserConfigDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
+                DiskCache(File(getUserOrtDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
                         MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS)
 
         private fun createContainer(): PlexusContainer {
