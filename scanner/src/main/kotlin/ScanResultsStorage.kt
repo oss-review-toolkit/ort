@@ -21,20 +21,20 @@ package com.here.ort.scanner
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.CacheStatistics
+import com.here.ort.model.AccessStatistics
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
-import com.here.ort.model.config.ArtifactoryCacheConfiguration
+import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.utils.log
 
 import java.util.SortedSet
 
-interface ScanResultsCache {
-    companion object : ScanResultsCache {
-        var cache = object : ScanResultsCache {
+interface ScanResultsStorage {
+    companion object : ScanResultsStorage {
+        var storage = object : ScanResultsStorage {
             override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
             override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
             override fun add(id: Identifier, scanResult: ScanResult) = false
@@ -42,27 +42,27 @@ interface ScanResultsCache {
         }
             private set
 
-        var stats = CacheStatistics()
+        var stats = AccessStatistics()
 
-        fun configure(config: ArtifactoryCacheConfiguration) {
+        fun configure(config: ArtifactoryStorageConfiguration) {
             require(config.url.isNotBlank()) {
-                "URL for Artifactory cache is missing."
+                "URL for Artifactory storage is missing."
             }
 
             require(config.repository.isNotBlank()) {
-                "Repository for Artifactory cache is missing."
+                "Repository for Artifactory storage is missing."
             }
 
             require(config.apiToken.isNotBlank()) {
-                "API token for Artifactory cache is missing."
+                "API token for Artifactory storage is missing."
             }
 
-            cache = ArtifactoryCache(config.url, config.repository, config.apiToken)
-            log.info { "Using Artifactory cache '${config.url}'." }
+            storage = ArtifactoryStorage(config.url, config.repository, config.apiToken)
+            log.info { "Using Artifactory storage '${config.url}'." }
         }
 
         override fun read(id: Identifier) =
-                cache.read(id).also {
+                storage.read(id).also {
                     ++stats.numReads
                     if (it.results.isNotEmpty()) {
                         ++stats.numHits
@@ -70,20 +70,20 @@ interface ScanResultsCache {
                 }
 
         override fun read(pkg: Package, scannerDetails: ScannerDetails) =
-                cache.read(pkg, scannerDetails).also {
+                storage.read(pkg, scannerDetails).also {
                     ++stats.numReads
                     if (it.results.isNotEmpty()) {
                         ++stats.numHits
                     }
                 }
 
-        override fun add(id: Identifier, scanResult: ScanResult) = cache.add(id, scanResult)
+        override fun add(id: Identifier, scanResult: ScanResult) = storage.add(id, scanResult)
 
-        override fun listPackages() = cache.listPackages()
+        override fun listPackages() = storage.listPackages()
     }
 
     /**
-     * Read all [ScanResult]s for this [id] from the cache.
+     * Read all [ScanResult]s for this [id] from the storage.
      *
      * @param id The [Identifier] of the scanned [Package].
      *
@@ -92,7 +92,7 @@ interface ScanResultsCache {
     fun read(id: Identifier): ScanResultContainer
 
     /**
-     * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the cache.
+     * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the storage.
      * [ScannerDetails.isCompatible] is used to check if the results are compatible with the provided [scannerDetails].
      * Also [Package.sourceArtifact], [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result
      * matches the expected source code location. This is important to find the correct results when different revisions
@@ -106,17 +106,17 @@ interface ScanResultsCache {
     fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
 
     /**
-     * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the cache.
+     * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the storage.
      *
      * @param id The [Identifier] of the scanned [Package].
      * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
      *
-     * @return If the [ScanResult] could be written to the cache.
+     * @return If the [ScanResult] could be written to the storage.
      */
     fun add(id: Identifier, scanResult: ScanResult): Boolean
 
     /**
-     * List the [Identifier]s of all cached packages.
+     * List the [Identifier]s of all stored packages.
      */
     fun listPackages(): SortedSet<Identifier>
 }

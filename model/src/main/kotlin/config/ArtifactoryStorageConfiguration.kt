@@ -17,19 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package com.here.ort.model.config
 
-/**
- * Statistics about reads and hits in a cache.
- */
-data class CacheStatistics(
-        /**
-         * The number of read operations in the cache.
-         */
-        var numReads: Int = 0,
+import com.fasterxml.jackson.annotation.JsonProperty
 
-        /**
-         * The number of read operations that returned an entry from the cache.
-         */
-        var numHits: Int = 0
+data class ArtifactoryStorageConfiguration(
+        val url: String,
+        val repository: String,
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        val apiToken: String = ""
 )

@@ -19,7 +19,7 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.model.config.ArtifactoryCacheConfiguration
+import com.here.ort.model.config.ArtifactoryStorageConfiguration
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -27,57 +27,57 @@ import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 @Suppress("UnsafeCallOnNullableType", "UnsafeCast")
-class ScanResultsCacheTest : WordSpec() {
-    private fun ArtifactoryCache.getStringField(name: String): String {
+class ScanResultsStorageTest : WordSpec() {
+    private fun ArtifactoryStorage.getStringField(name: String): String {
         javaClass.getDeclaredField(name).let {
             it.isAccessible = true
             return it.get(this) as String
         }
     }
 
-    private fun ArtifactoryCache.getApiToken() = getStringField("apiToken")
+    private fun ArtifactoryStorage.getApiToken() = getStringField("apiToken")
 
-    private fun ArtifactoryCache.getRepository() = getStringField("repository")
+    private fun ArtifactoryStorage.getRepository() = getStringField("repository")
 
-    private fun ArtifactoryCache.getUrl() = getStringField("url")
+    private fun ArtifactoryStorage.getUrl() = getStringField("url")
 
     init {
-        "ScanResultsCache.configure" should {
+        "ScanResultsStorage.configure" should {
             "fail if the Artifactory URL is empty" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    val config = ArtifactoryCacheConfiguration("", "someRepository", "someApiToken")
+                    val config = ArtifactoryStorageConfiguration("", "someRepository", "someApiToken")
 
-                    ScanResultsCache.configure(config)
+                    ScanResultsStorage.configure(config)
                 }
-                exception.message shouldBe "URL for Artifactory cache is missing."
+                exception.message shouldBe "URL for Artifactory storage is missing."
             }
 
             "fail if the Artifactory repository is empty" {
                 val exception = shouldThrow<java.lang.IllegalArgumentException> {
-                    val config = ArtifactoryCacheConfiguration("someUrl", "", "someApiToken")
+                    val config = ArtifactoryStorageConfiguration("someUrl", "", "someApiToken")
 
-                    ScanResultsCache.configure(config)
+                    ScanResultsStorage.configure(config)
                 }
-                exception.message shouldBe "Repository for Artifactory cache is missing."
+                exception.message shouldBe "Repository for Artifactory storage is missing."
             }
 
             "fail if the Artifactory apiToken is empty" {
                 val exception = shouldThrow<IllegalArgumentException> {
-                    val config = ArtifactoryCacheConfiguration("someUrl", "someRepository", "")
+                    val config = ArtifactoryStorageConfiguration("someUrl", "someRepository", "")
 
-                    ScanResultsCache.configure(config)
+                    ScanResultsStorage.configure(config)
                 }
-                exception.message shouldBe "API token for Artifactory cache is missing."
+                exception.message shouldBe "API token for Artifactory storage is missing."
             }
 
-            "configure the Artifactory cache correctly" {
-                val config = ArtifactoryCacheConfiguration("someUrl", "someRepository", "someApiToken")
+            "configure the Artifactory storage correctly" {
+                val config = ArtifactoryStorageConfiguration("someUrl", "someRepository", "someApiToken")
 
-                ScanResultsCache.configure(config)
+                ScanResultsStorage.configure(config)
 
-                ScanResultsCache.cache shouldNotBe null
-                ScanResultsCache.cache::class shouldBe ArtifactoryCache::class
-                (ScanResultsCache.cache as ArtifactoryCache).apply {
+                ScanResultsStorage.storage shouldNotBe null
+                ScanResultsStorage.storage::class shouldBe ArtifactoryStorage::class
+                (ScanResultsStorage.storage as ArtifactoryStorage).apply {
                     getUrl() shouldBe "someUrl"
                     getRepository() shouldBe "someRepository"
                     getApiToken() shouldBe "someApiToken"

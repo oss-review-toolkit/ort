@@ -26,9 +26,9 @@ import com.here.ort.model.yamlMapper
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
-class ArtifactoryCacheConfigurationTest : WordSpec() {
+class ArtifactoryStorageConfigurationTest : WordSpec() {
     init {
-        "ArtifactoryCacheConfiguration" should {
+        "ArtifactoryStorageConfiguration" should {
             "be deserializable" {
                 val yaml = """
                     ---
@@ -36,17 +36,17 @@ class ArtifactoryCacheConfigurationTest : WordSpec() {
                     repository: "repository"
                     api_token: "apiToken"""".trimIndent()
 
-                val artifactoryCacheConfiguration = yamlMapper.readValue<ArtifactoryCacheConfiguration>(yaml)
+                val artifactoryStorageConfiguration = yamlMapper.readValue<ArtifactoryStorageConfiguration>(yaml)
 
-                artifactoryCacheConfiguration.url shouldBe "url"
-                artifactoryCacheConfiguration.repository shouldBe "repository"
-                artifactoryCacheConfiguration.apiToken shouldBe "apiToken"
+                artifactoryStorageConfiguration.url shouldBe "url"
+                artifactoryStorageConfiguration.repository shouldBe "repository"
+                artifactoryStorageConfiguration.apiToken shouldBe "apiToken"
             }
 
             "not serialize the ApiToken" {
-                val artifactoryCacheConfiguration = ArtifactoryCacheConfiguration("url", "repository", "apiToken")
+                val artifactoryStorageConfiguration = ArtifactoryStorageConfiguration("url", "repository", "apiToken")
 
-                val yaml = yamlMapper.writeValueAsString(artifactoryCacheConfiguration).trim()
+                val yaml = yamlMapper.writeValueAsString(artifactoryStorageConfiguration).trim()
 
                 yaml shouldBe """
                     ---
@@ -62,11 +62,11 @@ class ArtifactoryCacheConfigurationTest : WordSpec() {
                     repository: "repository"
                     """.trimIndent()
 
-                val artifactoryCacheConfiguration = yamlMapper.readValue<ArtifactoryCacheConfiguration>(yaml)
+                val artifactoryStorageConfiguration = yamlMapper.readValue<ArtifactoryStorageConfiguration>(yaml)
 
-                artifactoryCacheConfiguration.url shouldBe "url"
-                artifactoryCacheConfiguration.repository shouldBe "repository"
-                artifactoryCacheConfiguration.apiToken shouldBe ""
+                artifactoryStorageConfiguration.url shouldBe "url"
+                artifactoryStorageConfiguration.repository shouldBe "repository"
+                artifactoryStorageConfiguration.apiToken shouldBe ""
             }
         }
     }

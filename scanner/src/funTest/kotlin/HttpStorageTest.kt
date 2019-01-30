@@ -52,7 +52,7 @@ import java.time.Instant
 
 import kotlin.random.Random
 
-class HttpCacheTest : StringSpec() {
+class HttpStorageTest : StringSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
     private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
 
@@ -164,81 +164,81 @@ class HttpCacheTest : StringSpec() {
         super.afterSpec(spec)
     }
 
-    private fun createCache() = ArtifactoryCache("http://${loopback.hostAddress}:$port", "repository", "apiToken")
+    private fun createStorage() = ArtifactoryStorage("http://${loopback.hostAddress}:$port", "repository", "apiToken")
 
     init {
-        "Scan result can be added to the cache" {
-            val cache = createCache()
+        "Scan result can be added to the storage" {
+            val storage = createStorage()
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
 
-            val result = cache.add(id, scanResult)
-            val cachedResults = cache.read(id)
+            val result = storage.add(id, scanResult)
+            val storedResults = storage.read(id)
 
             result shouldBe true
-            cachedResults.id shouldBe id
-            cachedResults.results.size shouldBe 1
-            cachedResults.results[0] shouldBe scanResult
+            storedResults.id shouldBe id
+            storedResults.results.size shouldBe 1
+            storedResults.results[0] shouldBe scanResult
         }
 
-        "Does not add scan result without raw result to cache" {
-            val cache = createCache()
+        "Does not add scan result without raw result to storage" {
+            val storage = createStorage()
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles)
 
-            val result = cache.add(id, scanResult)
-            val cachedResults = cache.read(id)
+            val result = storage.add(id, scanResult)
+            val storedResults = storage.read(id)
 
             result shouldBe false
-            cachedResults.id shouldBe id
-            cachedResults.results.size shouldBe 0
+            storedResults.id shouldBe id
+            storedResults.results.size shouldBe 0
         }
 
-        "Does not add scan result with fileCount 0 to cache" {
-            val cache = createCache()
+        "Does not add scan result with fileCount 0 to storage" {
+            val storage = createStorage()
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithoutFiles,
                     rawResultWithContent)
 
-            val result = cache.add(id, scanResult)
-            val cachedResults = cache.read(id)
+            val result = storage.add(id, scanResult)
+            val storedResults = storage.read(id)
 
             result shouldBe false
-            cachedResults.id shouldBe id
-            cachedResults.results.size shouldBe 0
+            storedResults.id shouldBe id
+            storedResults.results.size shouldBe 0
         }
 
-        "Does not add scan result without provenance information to cache" {
-            val cache = createCache()
+        "Does not add scan result without provenance information to storage" {
+            val storage = createStorage()
             val scanResult = ScanResult(provenanceEmpty, scannerDetails1, scanSummaryWithFiles,
                     rawResultEmpty)
 
-            val result = cache.add(id, scanResult)
-            val cachedResults = cache.read(id)
+            val result = storage.add(id, scanResult)
+            val storedResults = storage.read(id)
 
             result shouldBe false
-            cachedResults.id shouldBe id
-            cachedResults.results.size shouldBe 0
+            storedResults.id shouldBe id
+            storedResults.results.size shouldBe 0
         }
 
-        "Can retrieve all scan results from cache" {
-            val cache = createCache()
+        "Can retrieve all scan results from storage" {
+            val storage = createStorage()
             val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
             val scanResult2 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles,
                     rawResultWithContent)
 
-            val result1 = cache.add(id, scanResult1)
-            val result2 = cache.add(id, scanResult2)
-            val cachedResults = cache.read(id)
+            val result1 = storage.add(id, scanResult1)
+            val result2 = storage.add(id, scanResult2)
+            val storedResults = storage.read(id)
 
             result1 shouldBe true
             result2 shouldBe true
-            cachedResults.results.size shouldBe 2
-            cachedResults.results should contain(scanResult1)
-            cachedResults.results should contain(scanResult2)
+            storedResults.results.size shouldBe 2
+            storedResults.results should contain(scanResult1)
+            storedResults.results should contain(scanResult2)
         }
 
-        "Can retrieve all scan results for specific scanner from cache" {
-            val cache = createCache()
+        "Can retrieve all scan results for specific scanner from storage" {
+            val storage = createStorage()
             val scanResult1 = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
             val scanResult2 = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles,
@@ -246,21 +246,21 @@ class HttpCacheTest : StringSpec() {
             val scanResult3 = ScanResult(provenanceWithSourceArtifact, scannerDetails2, scanSummaryWithFiles,
                     rawResultWithContent)
 
-            val result1 = cache.add(id, scanResult1)
-            val result2 = cache.add(id, scanResult2)
-            val result3 = cache.add(id, scanResult3)
-            val cachedResults = cache.read(pkg, scannerDetails1)
+            val result1 = storage.add(id, scanResult1)
+            val result2 = storage.add(id, scanResult2)
+            val result3 = storage.add(id, scanResult3)
+            val storedResults = storage.read(pkg, scannerDetails1)
 
             result1 shouldBe true
             result2 shouldBe true
             result3 shouldBe true
-            cachedResults.results.size shouldBe 2
-            cachedResults.results should contain(scanResult1)
-            cachedResults.results should contain(scanResult2)
+            storedResults.results.size shouldBe 2
+            storedResults.results should contain(scanResult1)
+            storedResults.results should contain(scanResult2)
         }
 
-        "Can retrieve all scan results for compatible scanners from cache" {
-            val cache = createCache()
+        "Can retrieve all scan results for compatible scanners from storage" {
+            val storage = createStorage()
             val scanResult = ScanResult(provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
             val scanResultCompatible1 = ScanResult(provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1,
@@ -270,24 +270,24 @@ class HttpCacheTest : StringSpec() {
             val scanResultIncompatible = ScanResult(provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion,
                     scanSummaryWithFiles, rawResultWithContent)
 
-            val result = cache.add(id, scanResult)
-            val resultCompatible1 = cache.add(id, scanResultCompatible1)
-            val resultCompatible2 = cache.add(id, scanResultCompatible2)
-            val resultIncompatible = cache.add(id, scanResultIncompatible)
-            val cachedResults = cache.read(pkg, scannerDetails1)
+            val result = storage.add(id, scanResult)
+            val resultCompatible1 = storage.add(id, scanResultCompatible1)
+            val resultCompatible2 = storage.add(id, scanResultCompatible2)
+            val resultIncompatible = storage.add(id, scanResultIncompatible)
+            val storedResults = storage.read(pkg, scannerDetails1)
 
             result shouldBe true
             resultCompatible1 shouldBe true
             resultCompatible2 shouldBe true
             resultIncompatible shouldBe true
-            cachedResults.results.size shouldBe 3
-            cachedResults.results should contain(scanResult)
-            cachedResults.results should contain(scanResultCompatible1)
-            cachedResults.results should contain(scanResultCompatible2)
+            storedResults.results.size shouldBe 3
+            storedResults.results should contain(scanResult)
+            storedResults.results should contain(scanResultCompatible1)
+            storedResults.results should contain(scanResultCompatible2)
         }
 
         "Returns only packages with matching provenance" {
-            val cache = createCache()
+            val storage = createStorage()
             val scanResultSourceArtifactMatching = ScanResult(provenanceWithSourceArtifact, scannerDetails1,
                     scanSummaryWithFiles, rawResultWithContent)
             val scanResultVcsMatching = ScanResult(provenanceWithVcsInfo, scannerDetails1, scanSummaryWithFiles,
@@ -301,32 +301,32 @@ class HttpCacheTest : StringSpec() {
             val scanResultVcsInfoNonMatching = ScanResult(provenanceVcsInfoNonMatching, scannerDetails1,
                     scanSummaryWithFiles, rawResultWithContent)
 
-            val result1 = cache.add(id, scanResultSourceArtifactMatching)
-            val result2 = cache.add(id, scanResultVcsMatching)
-            val result3 = cache.add(id, scanResultSourceArtifactNonMatching)
-            val result4 = cache.add(id, scanResultVcsInfoNonMatching)
-            val cachedResults = cache.read(pkg, scannerDetails1)
+            val result1 = storage.add(id, scanResultSourceArtifactMatching)
+            val result2 = storage.add(id, scanResultVcsMatching)
+            val result3 = storage.add(id, scanResultSourceArtifactNonMatching)
+            val result4 = storage.add(id, scanResultVcsInfoNonMatching)
+            val storedResults = storage.read(pkg, scannerDetails1)
 
             result1 shouldBe true
             result2 shouldBe true
             result3 shouldBe true
             result4 shouldBe true
-            cachedResults.results.size shouldBe 2
-            cachedResults.results should contain(scanResultSourceArtifactMatching)
-            cachedResults.results should contain(scanResultVcsMatching)
+            storedResults.results.size shouldBe 2
+            storedResults.results should contain(scanResultSourceArtifactMatching)
+            storedResults.results should contain(scanResultVcsMatching)
         }
 
-        "Cached result is found if revision was detected from version" {
-            val cache = createCache()
+        "Stored result is found if revision was detected from version" {
+            val storage = createStorage()
             val scanResult = ScanResult(provenanceWithOriginalVcsInfo, scannerDetails1, scanSummaryWithFiles,
                     rawResultWithContent)
 
-            val result = cache.add(id, scanResult)
-            val cachedResults = cache.read(pkgWithoutRevision, scannerDetails1)
+            val result = storage.add(id, scanResult)
+            val storedResults = storage.read(pkgWithoutRevision, scannerDetails1)
 
             result shouldBe true
-            cachedResults.results.size shouldBe 1
-            cachedResults.results should contain(scanResult)
+            storedResults.results.size shouldBe 1
+            storedResults.results should contain(scanResult)
         }
     }
 }
