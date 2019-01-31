@@ -1,0 +1,148 @@
+---
+project:
+  id: "nuget::nuget:"
+  purl: "pkg://nuget//nuget@"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/nuget/nuget.xml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "nuget::WebGrease:1.5.2"
+      dependencies:
+      - id: "nuget::Antlr:3.4.1.9004"
+      - id: "nuget::Newtonsoft.Json:5.0.4"
+    - id: "nuget::jQuery:3.3.1"
+packages:
+- package:
+    id: "nuget::Antlr:3.4.1.9004"
+    purl: "pkg://nuget//Antlr@3.4.1.9004"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: "ANother Tool for Language Recognition, is a language tool that provides\
+      \ a framework for constructing recognizers, interpreters, compilers, and translators\
+      \ from grammatical descriptions containing actions in a variety of target languages."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://api.nuget.org/v3-flatcontainer/antlr/3.4.1.9004/antlr.3.4.1.9004.nupkg"
+      hash: "t4RqqB/yvSHU8okrySS1L2KaaPsAOCDM8NPbiOy8OJw/oiNIjjUzS5igIVJds0m5k5AmYyGWV9jBVpFQcq830w=="
+      hash_algorithm: "SHA-512"
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "nuget::Newtonsoft.Json:5.0.4"
+    purl: "pkg://nuget//Newtonsoft.Json@5.0.4"
+    declared_licenses:
+    - "http://json.codeplex.com/license"
+    declared_licenses_processed:
+      unmapped:
+      - "http://json.codeplex.com/license"
+    description: "Json.NET is a popular high-performance JSON framework for .NET"
+    homepage_url: "http://james.newtonking.com/projects/json-net.aspx"
+    binary_artifact:
+      url: "https://api.nuget.org/v3-flatcontainer/newtonsoft.json/5.0.4/newtonsoft.json.5.0.4.nupkg"
+      hash: "dg2TSL5YEyhbitOHlaKlr+eIvN2rT3GQ7VgcbqUkwNZ6fdW91ThPGX47WljAcKtb23BEk8yOCtY6s191O21hvw=="
+      hash_algorithm: "SHA-512"
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "nuget::WebGrease:1.5.2"
+    purl: "pkg://nuget//WebGrease@1.5.2"
+    declared_licenses:
+    - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+    declared_licenses_processed:
+      unmapped:
+      - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
+    description: "Web Grease is a suite of tools for optimizing javascript, css files\
+      \ and images."
+    homepage_url: ""
+    binary_artifact:
+      url: "https://api.nuget.org/v3-flatcontainer/webgrease/1.5.2/webgrease.1.5.2.nupkg"
+      hash: "RT+no0g7Qk28J/XVwHgn5lJ/qm4hyWFp7wt0I71Uw0j3SfTfOmNqPMxfedHanAjtf3dB2/0KjQ3fQkvVewsvsA=="
+      hash_algorithm: "SHA-512"
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "nuget::jQuery:3.3.1"
+    purl: "pkg://nuget//jQuery@3.3.1"
+    declared_licenses:
+    - "http://jquery.org/license"
+    declared_licenses_processed:
+      unmapped:
+      - "http://jquery.org/license"
+    description: "jQuery is a new kind of JavaScript Library.\n        jQuery is a\
+      \ fast and concise JavaScript Library that simplifies HTML document traversing,\
+      \ event handling, animating, and Ajax interactions for rapid web development.\
+      \ jQuery is designed to change the way that you write JavaScript.\n        NOTE:\
+      \ This package is maintained on behalf of the library owners by the NuGet Community\
+      \ Packages project at http://nugetpackages.codeplex.com/"
+    homepage_url: "http://jquery.com/"
+    binary_artifact:
+      url: "https://api.nuget.org/v3-flatcontainer/jquery/3.3.1/jquery.3.3.1.nupkg"
+      hash: "Emsts1D6E2AgHVBm4cTD2dxoRyWVG+3zK1x8mYbf+k6aAArPTXHR2Ip++o1utlNbmYIzaPFnhGw3YDexp8PjlQ=="
+      hash_algorithm: "SHA-512"
+    source_artifact:
+      url: ""
+      hash: ""
+      hash_algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
