@@ -50,15 +50,15 @@ class Git : GitBase() {
         log.info { "Using $type version ${getVersion()}." }
 
         try {
-            return createWorkingTree(pkg, targetDir, allowMovingRevisions).also {
-                if (recursive && File(targetDir, ".gitmodules").isFile) {
-                    run(targetDir, "submodule", "update", "--init", "--recursive")
+            return createWorkingTree(pkg, targetDir, allowMovingRevisions).also { workingTree ->
+                if (recursive && File(workingTree.workingDir, ".gitmodules").isFile) {
+                    run(workingTree.workingDir, "submodule", "update", "--init", "--recursive")
                 }
 
                 pkg.vcsProcessed.path.let {
-                    if (it.isNotEmpty() && !targetDir.resolve(it).isDirectory) {
-                        throw DownloadException("The $type working directory at '$targetDir' does not contain the " +
-                                "requested path '$it'.")
+                    if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).isDirectory) {
+                        throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
+                                "contain the requested path '$it'.")
                     }
                 }
             }
