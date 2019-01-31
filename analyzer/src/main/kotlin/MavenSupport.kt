@@ -115,7 +115,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         fun parseLicenses(mavenProject: MavenProject) =
                 mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
 
-        fun parseScm(scm: Scm?): VcsInfo {
+        private fun parseScm(scm: Scm?): VcsInfo {
             if (scm == null) return VcsInfo.EMPTY
 
             val connection = scm.connection ?: ""
