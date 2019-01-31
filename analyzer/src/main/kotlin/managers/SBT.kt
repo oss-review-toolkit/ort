@@ -41,8 +41,8 @@ import java.util.Properties
 /**
  * The SBT package manager for Scala, see https://www.scala-sbt.org/.
  */
-class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
+class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
@@ -62,11 +62,11 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         }
     }
 
-    class Factory : AbstractPackageManagerFactory<SBT>() {
+    class Factory : AbstractPackageManagerFactory<SBT>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                SBT(analyzerConfig, repoConfig)
+                SBT(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
@@ -100,7 +100,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             // project's root directory. In order to determine the root directory, use the common prefix of all
             // definition file paths.
             getCommonFilePrefix(definitionFiles).also {
-                log.info { "Determined '$it' as the ${toString()} project root directory." }
+                log.info { "Determined '$it' as the $managerName project root directory." }
             }
         } else {
             definitionFiles.first().parentFile
@@ -140,7 +140,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             // project's root directory. In order to determine the root directory, use the common prefix of all
             // definition file paths.
             getCommonFilePrefix(definitionFiles).also {
-                log.info { "Determined '$it' as the ${toString()} project root directory." }
+                log.info { "Determined '$it' as the $managerName project root directory." }
             }
         } else {
             definitionFiles.first().parentFile
@@ -172,7 +172,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
             val lowestSbtVersion = checkForSameSbtVersion(versions)
 
             if (!sbtVersionRequirement.isSatisfiedBy(lowestSbtVersion)) {
-                throw IOException("Unsupported ${toString()} version $lowestSbtVersion does not fulfill " +
+                throw IOException("Unsupported $managerName version $lowestSbtVersion does not fulfill " +
                         "$sbtVersionRequirement.")
             }
         }
@@ -180,7 +180,7 @@ class SBT(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            Maven(analyzerConfig, repoConfig)
+            Maven("SBT", analyzerConfig, repoConfig)
                     .enableSbtMode()
                     .resolveDependencies(analyzerRoot, definitionFiles)
 

@@ -66,8 +66,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -82,8 +81,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -98,8 +96,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -114,8 +111,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -130,8 +126,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -187,8 +182,7 @@ class GradleTest : StringSpec() {
                         revision = vcsRevision
                 )
 
-                val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                        .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
                 result!!.errors shouldBe emptyList()
@@ -213,4 +207,6 @@ class GradleTest : StringSpec() {
         ProcessCapture(projectDir, File(command).absolutePath, "--no-daemon", "wrapper", "--gradle-version", version)
                 .requireSuccess()
     }
+
+    private fun createGradle() = Gradle("Gradle", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

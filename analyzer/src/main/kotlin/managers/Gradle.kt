@@ -60,9 +60,9 @@ import org.gradle.tooling.GradleConnector
 /**
  * The Gradle package manager for Java, see https://gradle.org/.
  */
-class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Gradle>() {
+class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
         // "build" file.
@@ -70,7 +70,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
                 "settings.gradle", "settings.gradle.kts")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Gradle(analyzerConfig, repoConfig)
+                Gradle(managerName, analyzerConfig, repoConfig)
     }
 
     /**
@@ -146,7 +146,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
             val project = Project(
                     id = Identifier(
-                            type = toString(),
+                            type = managerName,
                             namespace = dependencyTreeModel.group,
                             name = dependencyTreeModel.name,
                             version = dependencyTreeModel.version
@@ -160,7 +160,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
             )
 
             val errors = dependencyTreeModel.errors.map {
-                OrtIssue(source = toString(), message = it)
+                OrtIssue(source = managerName, message = it)
             }
 
             return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), errors)
@@ -169,7 +169,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
                                 repositories: List<RemoteRepository>): PackageReference {
-        val errors = dependency.error?.let { mutableListOf(OrtIssue(source = toString(), message = it)) }
+        val errors = dependency.error?.let { mutableListOf(OrtIssue(source = managerName, message = it)) }
                 ?: mutableListOf()
 
         // Only look for a package when there was no error resolving the dependency.
@@ -206,7 +206,7 @@ class Gradle(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfig
                             "Could not get package information for dependency '$identifier': ${e.message}"
                         }
 
-                        errors += OrtIssue(source = toString(), message = e.collectMessagesAsString())
+                        errors += OrtIssue(source = managerName, message = e.collectMessagesAsString())
 
                         rawPackage
                     }

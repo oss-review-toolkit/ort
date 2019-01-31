@@ -30,6 +30,11 @@ import java.nio.file.PathMatcher
  */
 interface PackageManagerFactory {
     /**
+     * The name to use to refer to the package manager.
+     */
+    val managerName: String
+
+    /**
      * The glob matchers for all definition files.
      */
     val matchersForDefinitionFiles: List<PathMatcher>
@@ -43,7 +48,9 @@ interface PackageManagerFactory {
 /**
  * A generic factory class for a [PackageManager].
  */
-abstract class AbstractPackageManagerFactory<out T : PackageManager> : PackageManagerFactory {
+abstract class AbstractPackageManagerFactory<out T : PackageManager>(
+        override val managerName: String
+) : PackageManagerFactory {
     /**
      * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
      * the first glob having any matches are considered.
@@ -59,8 +66,8 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager> : PackageMa
     abstract override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): T
 
     /**
-     * Return the Java class name as a simple way to refer to the [AbstractPackageManagerFactory]. As factories are
-     * supposed to be implemented as inner classes we need to manually strip unwanted parts of the fully qualified name.
+     * Return the package manager's name here to allow JCommander to display something meaningful when listing the
+     * package managers which are enabled by default via their factories.
      */
-    override fun toString() = javaClass.name.substringBefore('$').substringAfterLast('.')
+    override fun toString() = managerName
 }

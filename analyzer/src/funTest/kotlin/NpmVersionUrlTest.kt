@@ -25,6 +25,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
+import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
@@ -57,8 +58,8 @@ class NpmVersionUrlTest : WordSpec() {
             "resolve dependencies with URLs as versions correctly" {
                 val packageFile = File(projectDir, "package.json")
 
-                val result = NPM(AnalyzerConfiguration(false, true), DEFAULT_REPOSITORY_CONFIGURATION)
-                        .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val config = AnalyzerConfiguration(false, true)
+                val result = createNPM(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
                         File(projectDir.parentFile, "npm-version-urls-expected-output.yml"),
@@ -72,4 +73,7 @@ class NpmVersionUrlTest : WordSpec() {
             }
         }
     }
+
+    private fun createNPM(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
+            NPM("NPM", config, DEFAULT_REPOSITORY_CONFIGURATION)
 }

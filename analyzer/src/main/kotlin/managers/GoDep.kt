@@ -59,13 +59,13 @@ val GO_LEGACY_MANIFESTS = mapOf(
 /**
  * The Dep package manager for Go, see https://golang.github.io/dep/.
  */
-class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<GoDep>() {
+class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    class Factory : AbstractPackageManagerFactory<GoDep>("GoDep") {
         override val globsForDefinitionFiles = listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                GoDep(analyzerConfig, repoConfig)
+                GoDep(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "dep"
@@ -84,7 +84,6 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         val projects = parseProjects(workingDir, gopath)
         val packages = mutableListOf<Package>()
         val packageRefs = mutableListOf<PackageReference>()
-        val packageType = toString()
 
         for (project in projects) {
             // parseProjects() made sure that all entries contain these keys
@@ -101,12 +100,12 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
                 log.error { "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}" }
 
-                errors += OrtIssue(source = toString(), message = e.collectMessagesAsString())
+                errors += OrtIssue(source = managerName, message = e.collectMessagesAsString())
                 VcsInfo.EMPTY
             }
 
             val pkg = Package(
-                    id = Identifier(packageType, "", name, version),
+                    id = Identifier(managerName, "", name, version),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
@@ -128,7 +127,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         return ProjectAnalyzerResult(
                 project = Project(
-                        id = Identifier(packageType, "", projectDir.name, projectVcs.revision),
+                        id = Identifier(managerName, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = sortedSetOf(),
                         vcs = VcsInfo.EMPTY,

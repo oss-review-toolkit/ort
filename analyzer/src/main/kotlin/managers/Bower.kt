@@ -54,8 +54,8 @@ import java.util.Stack
 /**
  * The Bower package manager for JavaScript, see https://bower.io/.
  */
-class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
+class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         // We do not actually depend on any features specific to this Bower version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
@@ -198,11 +198,11 @@ class Bower(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         }
     }
 
-    class Factory : AbstractPackageManagerFactory<Bower>() {
+    class Factory : AbstractPackageManagerFactory<Bower>("Bower") {
         override val globsForDefinitionFiles = listOf("bower.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Bower(analyzerConfig, repoConfig)
+                Bower(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bower.cmd" else "bower"

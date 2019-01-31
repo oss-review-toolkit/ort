@@ -51,10 +51,12 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
 /**
  * A class representing a package manager that handles software dependencies.
  *
+ * @param managerName The package manager's name.
  * @param analyzerConfig The configuration of the analyzer to use.
  * @param repoConfig The configuration of the repository to use.
  */
 abstract class PackageManager(
+        val managerName: String,
         protected val analyzerConfig: AnalyzerConfiguration,
         protected val repoConfig: RepositoryConfiguration
 ) {

@@ -54,13 +54,13 @@ import org.eclipse.aether.repository.WorkspaceRepository
 /**
  * The Maven package manager for Java, see https://maven.apache.org/.
  */
-class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Maven>() {
+class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
         override val globsForDefinitionFiles = listOf("pom.xml")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Maven(analyzerConfig, repoConfig)
+                Maven(managerName, analyzerConfig, repoConfig)
     }
 
     private inner class LocalProjectWorkspaceReader : WorkspaceReader {
@@ -189,9 +189,9 @@ class Maven(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
             }
 
             return PackageReference(
-                    Identifier(toString(), node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
+                    Identifier(managerName, node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
                     dependencies = sortedSetOf(),
-                    errors = listOf(OrtIssue(source = toString(), message = e.collectMessagesAsString()))
+                    errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))
             )
         }
     }
