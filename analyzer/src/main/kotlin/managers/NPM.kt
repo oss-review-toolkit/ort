@@ -69,8 +69,8 @@ import okhttp3.Request
 /**
  * The Node package manager for JavaScript, see https://www.npmjs.com/.
  */
-open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
+open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
@@ -112,11 +112,11 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
         }
     }
 
-    class Factory : AbstractPackageManagerFactory<NPM>() {
+    class Factory : AbstractPackageManagerFactory<NPM>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                NPM(analyzerConfig, repoConfig)
+                NPM(managerName, analyzerConfig, repoConfig)
     }
 
     protected open fun hasLockFile(projectDir: File) = PackageJsonUtils.hasNpmLockFile(projectDir)
@@ -423,8 +423,8 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
                         "fine if the module was not installed because it is specific to a different platform."
             }
 
-            val id = Identifier(toString(), "", name, "")
-            val issue = OrtIssue(source = toString(), message = "Package '$name' was not installed.")
+            val id = Identifier(managerName, "", name, "")
+            val issue = OrtIssue(source = managerName, message = "Package '$name' was not installed.")
             return PackageReference(id, errors = listOf(issue))
         } else {
             // Skip the package name directory when going up.
@@ -476,7 +476,7 @@ open class NPM(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConf
 
         val project = Project(
                 id = Identifier(
-                        type = toString(),
+                        type = managerName,
                         namespace = namespace,
                         name = name,
                         version = version

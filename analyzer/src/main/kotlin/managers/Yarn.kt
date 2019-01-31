@@ -32,13 +32,13 @@ import java.io.File
 /**
  * The Yarn package manager for JavaScript, see https://www.yarnpkg.com/.
  */
-class Yarn(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        NPM(analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<Yarn>() {
+class Yarn(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        NPM(name, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Yarn(analyzerConfig, repoConfig)
+                Yarn(managerName, analyzerConfig, repoConfig)
     }
 
     override fun hasLockFile(projectDir: File) = PackageJsonUtils.hasYarnLockFile(projectDir)

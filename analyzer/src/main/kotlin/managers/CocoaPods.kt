@@ -30,13 +30,13 @@ import java.io.File
 /**
  * The CocoaPods package manager for Objective-C, see https://cocoapods.org/.
  */
-class CocoaPods(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<CocoaPods>() {
+class CocoaPods(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<CocoaPods>("CocoaPods") {
         override val globsForDefinitionFiles = listOf("Podfile.lock", "Podfile")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                CocoaPods(analyzerConfig, repoConfig)
+                CocoaPods(managerName, analyzerConfig, repoConfig)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

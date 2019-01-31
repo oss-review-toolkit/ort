@@ -52,12 +52,13 @@ class BowerTest : StringSpec() {
                     revision = vcsRevision,
                     url = normalizeVcsUrl(vcsUrl))
 
-            val result = Bower(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createBower().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
+
+    private fun createBower() = Bower("Bower", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

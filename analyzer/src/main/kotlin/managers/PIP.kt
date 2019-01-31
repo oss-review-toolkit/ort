@@ -133,13 +133,13 @@ object PythonVersion : CommandLineTool {
  * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
  * https://caremad.io/posts/2013/07/setup-vs-requirement/.
  */
-class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<PIP>() {
+class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    class Factory : AbstractPackageManagerFactory<PIP>("PIP") {
         override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                PIP(analyzerConfig, repoConfig)
+                PIP(managerName, analyzerConfig, repoConfig)
     }
 
     private val INSTALL_OPTIONS = listOf(
@@ -373,7 +373,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
         val project = Project(
                 id = Identifier(
-                        type = toString(),
+                        type = managerName,
                         namespace = "",
                         name = projectName,
                         version = projectVersion
