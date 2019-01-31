@@ -9,3 +9,5 @@ com.here.ort.analyzer.managers.PIP$Factory
 com.here.ort.analyzer.managers.Bundler$Factory
 com.here.ort.analyzer.managers.PhpComposer$Factory
 com.here.ort.analyzer.managers.Stack$Factory
+com.here.ort.analyzer.managers.Nuget$Factory
+com.here.ort.analyzer.managers.DotNet$Factory
