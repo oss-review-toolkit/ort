@@ -184,7 +184,15 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 parent = parent.parent
             }
 
-            return parseScm(scm)
+            val projectVcsInfo = parseScm(mavenProject.scm)
+            val applicableVcsInfo = parseScm(scm)
+
+            // If we stripped a path from the URL, use that path as part of the VcsInfo.
+            return if (applicableVcsInfo.url != projectVcsInfo.url && applicableVcsInfo.path.isEmpty()) {
+                applicableVcsInfo.copy(path = projectVcsInfo.url.removePrefix("${applicableVcsInfo.url}/"))
+            } else {
+                applicableVcsInfo
+            }
         }
     }
 
