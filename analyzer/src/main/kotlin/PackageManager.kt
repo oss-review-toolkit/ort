@@ -174,11 +174,6 @@ abstract class PackageManager(
     }
 
     /**
-     * Return the Java class name as a simple way to refer to the [PackageManager].
-     */
-    override fun toString(): String = javaClass.simpleName
-
-    /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
     open fun mapDefinitionFiles(definitionFiles: List<File>): List<File> = definitionFiles
@@ -214,7 +209,7 @@ abstract class PackageManager(
 
                     val errorProject = Project.EMPTY.copy(
                             id = Identifier(
-                                    type = toString(),
+                                    type = managerName,
                                     namespace = "",
                                     name = relativePath,
                                     version = ""
