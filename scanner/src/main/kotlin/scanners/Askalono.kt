@@ -85,7 +85,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val scannerExe = command()
         val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$scannerExe"
 
-        log.info { "Downloading $scannerName from '$url'... " }
+        log.info { "Downloading $scannerName from $url... " }
 
         val request = Request.Builder().get().url(url).build()
 

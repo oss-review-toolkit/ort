@@ -265,7 +265,7 @@ class Downloader {
             if (vcsUrlNoCredentials != target.vcsProcessed.url) {
                 // Try once more with any user name / password stripped from the URL.
                 log.info {
-                    "Falling back to trying to download from '$vcsUrlNoCredentials' which has credentials removed."
+                    "Falling back to trying to download from $vcsUrlNoCredentials which has credentials removed."
                 }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
@@ -295,7 +295,7 @@ class Downloader {
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
         log.info {
-            "Trying to download source artifact for '${target.id}' from '${target.sourceArtifact.url}'..."
+            "Trying to download source artifact for '${target.id}' from ${target.sourceArtifact.url}..."
         }
 
         if (target.sourceArtifact.url.isBlank()) {
@@ -374,7 +374,7 @@ class Downloader {
         val pomUrl = target.binaryArtifact.url.replaceAfterLast('/', pomFilename)
 
         log.info {
-            "Trying to download POM artifact for '${target.id}' from '$pomUrl'..."
+            "Trying to download POM artifact for '${target.id}' from $pomUrl..."
         }
 
         return try {

@@ -235,7 +235,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                 getWorkingTree(File(targetDir, tagPath))
             }
         } catch (e: IOException) {
-            throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", e)
+            throw DownloadException("$type failed to download from ${pkg.vcsProcessed.url}.", e)
         }
 
         pkg.vcsProcessed.path.let {

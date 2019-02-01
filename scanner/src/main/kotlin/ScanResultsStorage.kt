@@ -58,7 +58,8 @@ interface ScanResultsStorage {
             }
 
             storage = ArtifactoryStorage(config.url, config.repository, config.apiToken)
-            log.info { "Using Artifactory storage '${config.url}'." }
+
+            log.info { "Using Artifactory storage at ${config.url}." }
         }
 
         override fun read(id: Identifier) =
