@@ -62,7 +62,7 @@ import java.time.Instant
  * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
  * serial order. Scan results can be stored in a [ScanResultsStorage].
  */
-abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), CommandLineTool {
+abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     /**
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
@@ -78,7 +78,9 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
             getVersion(it) == scannerVersion
         } ?: run {
             if (scannerExe.isNotEmpty()) {
-                log.info { "Bootstrapping scanner '$this' as required version $scannerVersion was not found in PATH." }
+                log.info {
+                    "Bootstrapping scanner '$scannerName' as required version $scannerVersion was not found in PATH."
+                }
 
                 bootstrap().also {
                     val actualScannerVersion = getVersion(it)
@@ -88,7 +90,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
                     }
                 }
             } else {
-                log.info { "Skipping to bootstrap scanner '$this' as it has no executable." }
+                log.info { "Skipping to bootstrap scanner '$scannerName' as it has no executable." }
 
                 File("")
             }
@@ -125,14 +127,9 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
     abstract fun getConfiguration(): String
 
     /**
-     * Return the name of this [LocalScanner].
-     */
-    fun getName() = toString().toLowerCase()
-
-    /**
      * Return the [ScannerDetails] of this [LocalScanner].
      */
-    fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
+    fun getDetails() = ScannerDetails(scannerName, getVersion(), getConfiguration())
 
     override fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
             : Map<Package, List<ScanResult>> {
@@ -222,7 +219,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
         }
 
         log.info {
-            "Running $this version ${scannerDetails.version} on directory " +
+            "Running $scannerName version ${scannerDetails.version} on directory " +
                     "'${downloadResult.downloadDirectory.absolutePath}'."
         }
 
@@ -270,7 +267,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
             val now = Instant.now()
             val summary = ScanSummary(now, now, 0, sortedSetOf(),
-                    listOf(OrtIssue(source = toString(), message = e.collectMessagesAsString())))
+                    listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString())))
             ScanResult(Provenance(), getDetails(), summary)
         }
 

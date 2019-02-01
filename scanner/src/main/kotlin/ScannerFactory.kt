@@ -26,6 +26,11 @@ import com.here.ort.model.config.ScannerConfiguration
  */
 interface ScannerFactory {
     /**
+     * The name to use to refer to the package manager.
+     */
+    val scannerName: String
+
+    /**
      * Create a [Scanner] using the specified [config].
      */
     fun create(config: ScannerConfiguration): Scanner
@@ -34,12 +39,14 @@ interface ScannerFactory {
 /**
  * A generic factory class for a [Scanner].
  */
-abstract class AbstractScannerFactory<out T : Scanner> : ScannerFactory {
+abstract class AbstractScannerFactory<out T : Scanner>(
+        override val scannerName: String
+) : ScannerFactory {
     abstract override fun create(config: ScannerConfiguration): T
 
     /**
-     * Return the Java class name as a simple way to refer to the [AbstractScannerFactory]. As factories are supposed to
-     * be implemented as inner classes we need to manually strip unwanted parts of the fully qualified name.
+     * Return the scanner's name here to allow JCommander to display something meaningful when listing the scanners
+     * which are enabled by default via their factories.
      */
-    override fun toString() = javaClass.name.substringBefore('$').substringAfterLast('.')
+    override fun toString() = scannerName
 }

@@ -47,8 +47,8 @@ class ScanPathTest : StringSpec() {
 
     init {
         "Askalono recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val scanner = Askalono(config)
-            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+            val scanner = Askalono("Askalono", config)
+            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
 
             val result = scanner.scanPath(licenseFilePath, resultsFile)
 
@@ -58,8 +58,8 @@ class ScanPathTest : StringSpec() {
         }
 
         "BoyterLc recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val scanner = BoyterLc(config)
-            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+            val scanner = BoyterLc("BoyterLc", config)
+            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
 
             val result = scanner.scanPath(licenseFilePath, resultsFile)
 
@@ -69,8 +69,8 @@ class ScanPathTest : StringSpec() {
         }
 
         "Licensee recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val scanner = Licensee(config)
-            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+            val scanner = Licensee("Licensee", config)
+            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
 
             val result = scanner.scanPath(licenseFilePath, resultsFile)
 
@@ -80,8 +80,8 @@ class ScanPathTest : StringSpec() {
         }
 
         "ScanCode recognizes our own LICENSE".config(tags = setOf(ExpensiveTag, ScanCodeTag)) {
-            val scanner = ScanCode(config)
-            val resultsFile = outputDir.resolve("${scanner.getName()}.${scanner.resultFileExt}")
+            val scanner = ScanCode("ScanCode", config)
+            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
 
             val result = scanner.scanPath(licenseFilePath, resultsFile)
 
