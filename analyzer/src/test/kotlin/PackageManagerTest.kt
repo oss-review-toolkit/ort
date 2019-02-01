@@ -41,7 +41,7 @@ class PackageManagerTest : WordSpec({
             // The keys in expected and actual maps of definition files are different instances of package manager
             // factories. So to compare values use the package manager names as keys instead.
             val managedFilesByName = managedFiles.mapKeys { (manager, _) ->
-                manager.toString()
+                manager.managerName
             }
 
             managedFilesByName["Bower"] shouldBe listOf(File(projectDir, "bower.json"))
@@ -66,7 +66,7 @@ class PackageManagerTest : WordSpec({
             // The keys in expected and actual maps of definition files are different instances of package manager
             // factories. So to compare values use the package manager names as keys instead.
             val managedFilesByName = managedFiles.mapKeys { (manager, _) ->
-                manager.toString()
+                manager.managerName
             }
 
             managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
