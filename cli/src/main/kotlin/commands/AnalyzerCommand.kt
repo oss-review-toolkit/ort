@@ -46,7 +46,7 @@ object AnalyzerCommand : CommandWithHelp() {
     private class PackageManagerConverter : IStringConverter<PackageManagerFactory> {
         companion object {
             // Map upper-cased package manager names to their instances.
-            val PACKAGE_MANAGERS = PackageManager.ALL.associateBy { it.toString().toUpperCase() }
+            val PACKAGE_MANAGERS = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
         }
 
         override fun convert(name: String): PackageManagerFactory {
