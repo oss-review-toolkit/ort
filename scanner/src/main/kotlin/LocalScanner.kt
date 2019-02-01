@@ -219,8 +219,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         }
 
         log.info {
-            "Running $scannerName version ${scannerDetails.version} on directory " +
-                    "'${downloadResult.downloadDirectory.absolutePath}'."
+            "Running $scannerDetails on directory '${downloadResult.downloadDirectory.absolutePath}'."
         }
 
         val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
