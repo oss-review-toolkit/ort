@@ -110,9 +110,7 @@ abstract class PackageManager(
                         // Create a list of lists of matching files per glob.
                         val matchesPerGlob = manager.matchersForDefinitionFiles.mapNotNull { glob ->
                             // Create a list of files in the current directory that match the current glob.
-                            val filesMatchingGlob = filesInDir.filter { file ->
-                                file != null && glob.matches(file.toPath())
-                            }
+                            val filesMatchingGlob = filesInDir.filter { glob.matches(it.toPath()) }
                             filesMatchingGlob.takeIf { it.isNotEmpty() }
                         }
 
