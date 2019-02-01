@@ -35,6 +35,11 @@ enum class OutputFormat(val mapper: ObjectMapper, val fileExtension: String, var
     JSON(jsonMapper, "json"),
 
     /**
+     * Specifies the [XML](http://www.xml.org/) format.
+     */
+    XML(xmlMapper, "xml"),
+
+    /**
      * Specifies the [YAML](http://yaml.org/) format.
      */
     YAML(yamlMapper, "yml", "yaml");
