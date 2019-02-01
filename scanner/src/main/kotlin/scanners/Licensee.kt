@@ -44,9 +44,9 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
-class Licensee(config: ScannerConfiguration) : LocalScanner(config) {
-    class Factory : AbstractScannerFactory<Licensee>() {
-        override fun create(config: ScannerConfiguration) = Licensee(config)
+class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+    class Factory : AbstractScannerFactory<Licensee>("Licensee") {
+        override fun create(config: ScannerConfiguration) = Licensee(scannerName, config)
     }
 
     override val scannerVersion = "9.11.0"

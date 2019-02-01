@@ -36,7 +36,7 @@ import java.io.File
 import java.time.Instant
 
 class ScanCodeTest : WordSpec({
-    val scanner = ScanCode(ScannerConfiguration())
+    val scanner = ScanCode("ScanCode", ScannerConfiguration())
 
     "mapTimeoutErrors()" should {
         "return true for scan results with only timeout errors" {
@@ -523,15 +523,13 @@ class ScanCodeTest : WordSpec({
 
     "getConfiguration()" should {
         "return the default values if the scanner configuration is empty" {
-            val scanCode = ScanCode(ScannerConfiguration())
-
-            scanCode.getConfiguration() shouldBe
+            scanner.getConfiguration() shouldBe
                     "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --json-pp " +
                     "--license-diag"
         }
 
         "return the non config values from the scanner configuration" {
-            val scanCode = ScanCode(ScannerConfiguration(scanner = mapOf(
+            val scannerWithConfig = ScanCode("ScanCode", ScannerConfiguration(scanner = mapOf(
                     "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
                             "commandLineNonConfig" to "--commandLineNonConfig",
@@ -540,21 +538,19 @@ class ScanCodeTest : WordSpec({
                     )
             )))
 
-            scanCode.getConfiguration() shouldBe "--command --line --json-pp --debug --commandLine"
+            scannerWithConfig.getConfiguration() shouldBe "--command --line --json-pp --debug --commandLine"
         }
     }
 
     "commandLineOptions" should {
         "contain the default values if the scanner configuration is empty" {
-            val scanCode = ScanCode(ScannerConfiguration())
-
-            scanCode.commandLineOptions.joinToString(" ") should
+            scanner.commandLineOptions.joinToString(" ") should
                     match("--copyright --license --ignore \\*.ort.yml --info --strip-root --timeout 300 " +
                             "--processes \\d+ --license-diag --verbose")
         }
 
         "contain the values from the scanner configuration" {
-            val scanCode = ScanCode(ScannerConfiguration(scanner = mapOf(
+            val scannerWithConfig = ScanCode("ScanCode", ScannerConfiguration(scanner = mapOf(
                     "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
                             "commandLineNonConfig" to "--commandLineNonConfig",
@@ -563,7 +559,7 @@ class ScanCodeTest : WordSpec({
                     )
             )))
 
-            scanCode.commandLineOptions.joinToString(" ") shouldBe
+            scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
                     "--command --line --commandLineNonConfig --debug --commandLine --debugCommandLineNonConfig"
         }
     }

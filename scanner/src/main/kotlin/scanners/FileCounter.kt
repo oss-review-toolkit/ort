@@ -38,9 +38,9 @@ import java.time.Instant
  * scanners it is useful for testing the scanner tool, for example during development or when integrating it with other
  * tools.
  */
-class FileCounter(config: ScannerConfiguration) : LocalScanner(config) {
-    class Factory : AbstractScannerFactory<FileCounter>() {
-        override fun create(config: ScannerConfiguration) = FileCounter(config)
+class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+    class Factory : AbstractScannerFactory<FileCounter>("FileCounter") {
+        override fun create(config: ScannerConfiguration) = FileCounter(scannerName, config)
     }
 
     data class FileCountResult(val fileCount: Int)

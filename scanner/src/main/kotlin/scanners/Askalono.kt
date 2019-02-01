@@ -49,9 +49,9 @@ import okhttp3.Request
 
 import okio.Okio
 
-class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
-    class Factory : AbstractScannerFactory<Askalono>() {
-        override fun create(config: ScannerConfiguration) = Askalono(config)
+class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+    class Factory : AbstractScannerFactory<Askalono>("Askalono") {
+        override fun create(config: ScannerConfiguration) = Askalono(scannerName, config)
     }
 
     override val scannerVersion = "0.3.0"
@@ -85,7 +85,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
         val scannerExe = command()
         val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$scannerExe"
 
-        log.info { "Downloading $this from '$url'... " }
+        log.info { "Downloading $scannerName from '$url'... " }
 
         val request = Request.Builder().get().url(url).build()
 
@@ -93,14 +93,14 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
             val body = response.body()
 
             if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $this from $url.")
+                throw IOException("Failed to download $scannerName from $url.")
             }
 
             if (response.cacheResponse() != null) {
-                log.info { "Retrieved $this from local cache." }
+                log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
+            val scannerDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             val scannerFile = File(scannerDir, scannerExe)
             Okio.buffer(Okio.sink(scannerFile)).use { it.writeAll(body.source()) }

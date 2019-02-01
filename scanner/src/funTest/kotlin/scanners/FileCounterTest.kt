@@ -56,8 +56,8 @@ class FileCounterTest : StringSpec() {
             val expectedResult = patchExpectedResult(
                     File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml"))
 
-            val ortResult = FileCounter(ScannerConfiguration()).scanOrtResult(analyzerResultFile, outputDir,
-                    outputDir.resolve("downloads"))
+            val scanner = FileCounter("FileCounter", ScannerConfiguration())
+            val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir, outputDir.resolve("downloads"))
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult

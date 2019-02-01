@@ -337,7 +337,7 @@ scanner:
             hash: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
             hash_algorithm: "SHA-1"
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -362,7 +362,7 @@ scanner:
             revision: "249b9a921e6ba318c52b87de21e8475bcb4050e5"
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -390,7 +390,7 @@ scanner:
             revision: "012a97a1d38737e096de2045b2b5f28768d8187e"
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -411,7 +411,7 @@ scanner:
             hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
             hash_algorithm: "SHA-1"
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -439,7 +439,7 @@ scanner:
             revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -467,7 +467,7 @@ scanner:
             revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -494,7 +494,7 @@ scanner:
             revision: ""
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -525,7 +525,7 @@ scanner:
             revision: "65cf80d1fd3413b823c16c626c1e7c326452bee5"
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -542,7 +542,7 @@ scanner:
       - provenance:
           download_time: "2018-08-21T16:20:45.663Z"
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -577,7 +577,7 @@ scanner:
             revision: "257338e5bbd53228236abd4cc09539b66b27dd11"
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"
@@ -604,7 +604,7 @@ scanner:
             revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
             path: ""
         scanner:
-          name: "scancode"
+          name: "ScanCode"
           version: "2.9.2"
           configuration: "--copyright --license --info --strip-root --timeout 300\
             \ --json-pp"

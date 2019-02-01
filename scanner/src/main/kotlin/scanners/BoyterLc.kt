@@ -50,9 +50,9 @@ import okhttp3.Request
 
 import okio.Okio
 
-class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
-    class Factory : AbstractScannerFactory<BoyterLc>() {
-        override fun create(config: ScannerConfiguration) = BoyterLc(config)
+class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+    class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
+        override fun create(config: ScannerConfiguration) = BoyterLc(scannerName, config)
     }
 
     override val scannerVersion = "1.3.1"
@@ -88,7 +88,7 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
 
         val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/lc-$scannerVersion-$platform.zip"
 
-        log.info { "Downloading $this from '$url'... " }
+        log.info { "Downloading $scannerName from '$url'... " }
 
         val request = Request.Builder().get().url(url).build()
 
@@ -96,17 +96,17 @@ class BoyterLc(config: ScannerConfiguration) : LocalScanner(config) {
             val body = response.body()
 
             if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $this from $url.")
+                throw IOException("Failed to download $scannerName from $url.")
             }
 
             if (response.cacheResponse() != null) {
-                log.info { "Retrieved $this from local cache." }
+                log.info { "Retrieved $scannerName from local cache." }
             }
 
             val scannerArchive = createTempFile("ort", url.substringAfterLast("/"))
             Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)

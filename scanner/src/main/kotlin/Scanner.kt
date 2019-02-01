@@ -45,7 +45,7 @@ const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
  * The class to run license / copyright scanners. The signatures of public functions in this class define the library
  * API.
  */
-abstract class Scanner(protected val config: ScannerConfiguration) {
+abstract class Scanner(val scannerName: String, protected val config: ScannerConfiguration) {
     companion object {
         private val LOADER = ServiceLoader.load(ScannerFactory::class.java)!!
 
@@ -54,11 +54,6 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
          */
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
     }
-
-    /**
-     * Return the Java class name as a simple way to refer to the [Scanner].
-     */
-    override fun toString(): String = javaClass.simpleName
 
     /**
      * Scan the list of [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to
