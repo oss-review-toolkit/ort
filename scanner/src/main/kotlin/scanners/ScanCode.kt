@@ -195,7 +195,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
         val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
-        log.info { "Downloading $scannerName from '$url'... " }
+        log.info { "Downloading $scannerName from $url... " }
 
         val request = Request.Builder().get().url(url).build()
 

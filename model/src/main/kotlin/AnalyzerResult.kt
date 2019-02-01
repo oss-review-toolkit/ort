@@ -122,8 +122,8 @@ class AnalyzerResultBuilder {
                     val error = OrtIssue(
                             source = "analyzer",
                             message = "Multiple projects with the same id '${existingProject.id}' found. Not adding " +
-                                    "the project defined in '$incomingDefinitionFileUrl' to the analyzer results " +
-                                    "as it duplicates the project defined in '$existingDefinitionFileUrl'."
+                                    "the project defined in $incomingDefinitionFileUrl to the analyzer results " +
+                                    "as it duplicates the project defined in $existingDefinitionFileUrl."
                     )
 
                     log.error { error.message }

@@ -88,7 +88,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
         val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/lc-$scannerVersion-$platform.zip"
 
-        log.info { "Downloading $scannerName from '$url'... " }
+        log.info { "Downloading $scannerName from $url... " }
 
         val request = Request.Builder().get().url(url).build()
 
