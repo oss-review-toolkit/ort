@@ -59,5 +59,6 @@ data class ScannerDetails(
      * the scanners.
      */
     fun isCompatible(other: ScannerDetails) =
-            Semver(version, Semver.SemverType.LOOSE).diff(other.version) !in MAJOR_MINOR
+            name.equals(other.name, true) && configuration == other.configuration &&
+                    Semver(version, Semver.SemverType.LOOSE).diff(other.version) !in MAJOR_MINOR
 }
