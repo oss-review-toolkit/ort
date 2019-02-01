@@ -184,7 +184,7 @@ scanner:
       - provenance:
           download_time: "1970-01-01T00:00:00Z"
         scanner:
-          name: "filecounter"
+          name: "FileCounter"
           version: "1.0"
           configuration: ""
         summary:
@@ -211,7 +211,7 @@ scanner:
             hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
             hash_algorithm: "SHA-1"
         scanner:
-          name: "filecounter"
+          name: "FileCounter"
           version: "1.0"
           configuration: ""
         summary:
@@ -228,7 +228,7 @@ scanner:
             hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
             hash_algorithm: "SHA-1"
         scanner:
-          name: "filecounter"
+          name: "FileCounter"
           version: "1.0"
           configuration: ""
         summary:
@@ -245,7 +245,7 @@ scanner:
             hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
             hash_algorithm: "SHA-1"
         scanner:
-          name: "filecounter"
+          name: "FileCounter"
           version: "1.0"
           configuration: ""
         summary:
@@ -262,7 +262,7 @@ scanner:
             hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
             hash_algorithm: "SHA-1"
         scanner:
-          name: "filecounter"
+          name: "FileCounter"
           version: "1.0"
           configuration: ""
         summary:

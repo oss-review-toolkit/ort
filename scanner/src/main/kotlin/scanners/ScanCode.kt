@@ -82,9 +82,9 @@ import kotlin.math.absoluteValue
  *   be considered in [getConfiguration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
  *   [DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS].
  */
-class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
-    class Factory : AbstractScannerFactory<ScanCode>() {
-        override fun create(config: ScannerConfiguration) = ScanCode(config)
+class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+    class Factory : AbstractScannerFactory<ScanCode>("ScanCode") {
+        override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
     }
 
     companion object {
@@ -195,7 +195,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
         val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
 
-        log.info { "Downloading $this from '$url'... " }
+        log.info { "Downloading $scannerName from '$url'... " }
 
         val request = Request.Builder().get().url(url).build()
 
@@ -203,17 +203,17 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
             val body = response.body()
 
             if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $this from $url.")
+                throw IOException("Failed to download $scannerName from $url.")
             }
 
             if (response.cacheResponse() != null) {
-                log.info { "Retrieved $this from local cache." }
+                log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerArchive = createTempFile("ort", "${getName()}-${url.substringAfterLast("/")}")
+            val scannerArchive = createTempFile("ort", "$scannerName-${url.substringAfterLast("/")}")
             Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)
