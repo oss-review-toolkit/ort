@@ -22,23 +22,47 @@ package com.here.ort.scanner
 import com.here.ort.model.ScannerDetails
 
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
-class ScannerDetailsTest : StringSpec({
-    val currentScannerDetails = ScannerDetails("ScanCode", "2.9.1", "")
+class ScannerDetailsTest : WordSpec() {
+    private val scanCodeDetails = ScannerDetails("ScanCode", "2.9.1", "")
 
-    "Patch level releases should be compatible" {
-        currentScannerDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1.post7.fd2e483e3", "")) shouldBe true
-        currentScannerDetails.isCompatible(ScannerDetails("ScanCode", "2.9.2", "")) shouldBe true
+    init {
+        "The same scanner" should {
+            "be compatible to itself" {
+                scanCodeDetails.isCompatible(scanCodeDetails) shouldBe true
+            }
+
+            "be compatible if the name differs in case" {
+                val detailsLowerCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toLowerCase())
+                val detailsUpperCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toUpperCase())
+                detailsLowerCaseName.isCompatible(detailsUpperCaseName) shouldBe true
+            }
+
+            "be compatible if only the patch level differs" {
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1.post7.fd2e483e3", "")) shouldBe true
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.2", "")) shouldBe true
+            }
+
+            "not be compatible if the minor level differs" {
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.8.1", "")) shouldBe false
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.10.2", "")) shouldBe false
+            }
+
+            "not be compatible if the major level differs" {
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "1.0", "")) shouldBe false
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "3.0.0", "")) shouldBe false
+            }
+
+            "not be compatible if the configuration differs" {
+                scanCodeDetails.isCompatible(scanCodeDetails.copy(configuration = "--foo-bar-option")) shouldBe false
+            }
+        }
+
+        "Different scanners" should {
+            "never be compatible" {
+                scanCodeDetails.isCompatible(scanCodeDetails.copy(name = "Other")) shouldBe false
+            }
+        }
     }
-
-    "Minor level releases should be not compatible" {
-        currentScannerDetails.isCompatible(ScannerDetails("ScanCode", "2.8.1", "")) shouldBe false
-        currentScannerDetails.isCompatible(ScannerDetails("ScanCode", "2.10.2", "")) shouldBe false
-    }
-
-    "Major level releases should be not compatible" {
-        currentScannerDetails.isCompatible(ScannerDetails("ScanCode", "1.0", "")) shouldBe false
-        currentScannerDetails.isCompatible(ScannerDetails("ScanCode", "3.0.0", "")) shouldBe false
-    }
-})
+}
