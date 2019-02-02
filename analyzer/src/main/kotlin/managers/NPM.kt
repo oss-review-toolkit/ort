@@ -29,8 +29,8 @@ import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageJsonUtils
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.Hash
 import com.here.ort.model.OrtIssue
-import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -51,7 +51,6 @@ import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.stashDirectories
 import com.here.ort.utils.textValueOrEmpty
-import com.here.ort.utils.toHexString
 
 import com.vdurmont.semver4j.Requirement
 
@@ -61,7 +60,6 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URLEncoder
-import java.util.Base64
 import java.util.SortedSet
 
 import okhttp3.Request
@@ -207,19 +205,7 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
 
             val identifier = "$rawName@$version"
 
-            var hash = json["_integrity"].textValueOrEmpty()
-            val splitHash = hash.split('-')
-
-            var hashAlgorithm = when {
-                splitHash.count() == 2 -> {
-                    // Support Subresource Integrity (SRI) hashes, see
-                    // https://w3c.github.io/webappsec-subresource-integrity/
-                    hash = Base64.getDecoder().decode(splitHash.last()).toHexString()
-                    HashAlgorithm.fromString(splitHash.first())
-                }
-                hash.isNotEmpty() -> HashAlgorithm.SHA1
-                else -> HashAlgorithm.UNKNOWN
-            }
+            var hash = Hash.fromValue(json["_integrity"].textValueOrEmpty())
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
@@ -267,8 +253,7 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
                                         }
                                     }
 
-                                    hash = dist["shasum"].textValueOrEmpty()
-                                    hashAlgorithm = HashAlgorithm.fromHash(hash)
+                                    hash = Hash.fromValue(dist["shasum"].textValueOrEmpty())
                                 }
 
                                 vcsFromPackage = parseVcsInfo(versionInfo)
@@ -301,8 +286,8 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = RemoteArtifact(
                             url = downloadUrl,
-                            hash = hash,
-                            hashAlgorithm = hashAlgorithm
+                            hash = hash.value,
+                            hashAlgorithm = hash.algorithm
                     ),
                     vcs = vcsFromPackage,
                     vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)

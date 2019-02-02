@@ -28,7 +28,7 @@ import com.beust.jcommander.Parameters
 import com.here.ort.CommandWithHelp
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Downloader
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
@@ -149,8 +149,8 @@ object DownloaderCommand : CommandWithHelp() {
                         id = dummyId,
                         sourceArtifact = RemoteArtifact(
                                 url = projectUrl!!,
-                                hash = "",
-                                hashAlgorithm = HashAlgorithm.UNKNOWN
+                                hash = Hash.UNKNOWN.value,
+                                hashAlgorithm = Hash.UNKNOWN.algorithm
                         )
                 )
             } else {
