@@ -22,7 +22,7 @@ package com.here.ort.downloader
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.vcs.GitRepo
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
@@ -335,7 +335,10 @@ class Downloader {
             }
         }
 
-        verifyChecksum(sourceArchive, target.sourceArtifact.hash, target.sourceArtifact.hashAlgorithm)
+        if (!Hash(target.sourceArtifact.hashAlgorithm, target.sourceArtifact.hash).verify(sourceArchive)) {
+            throw DownloadException("Source artifact does not match expected ${target.sourceArtifact.hashAlgorithm} " +
+                    "hash '${target.sourceArtifact.hash}'.")
+        }
 
         try {
             if (sourceArchive.extension == "gem") {
@@ -393,20 +396,6 @@ class Downloader {
             // TODO: Investigate why the binary artifact URL is actually empty and update
             // the implementation according to root cause.
             throw DownloadException("Failed to download the Maven POM for '${target.id}'.")
-        }
-    }
-
-    private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {
-        val digest = when (hashAlgorithm) {
-            HashAlgorithm.UNKNOWN -> {
-                log.warn { "Unknown hash algorithm." }
-                ""
-            }
-            else -> file.hash(hashAlgorithm.toString())
-        }
-
-        if (digest != hash) {
-            throw DownloadException("Calculated $hashAlgorithm hash '$digest' differs from expected hash '$hash'.")
         }
     }
 }
