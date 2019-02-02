@@ -382,7 +382,7 @@ class Downloader {
 
             val pomArtifact = RemoteArtifact(
                     url = pomUrl,
-                    hash = pomFile.hash(target.binaryArtifact.hashAlgorithm.name),
+                    hash = pomFile.hash(target.binaryArtifact.hashAlgorithm.toString()),
                     hashAlgorithm = target.binaryArtifact.hashAlgorithm
             )
 
