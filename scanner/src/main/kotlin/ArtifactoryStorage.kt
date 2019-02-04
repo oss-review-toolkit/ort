@@ -59,7 +59,7 @@ class ArtifactoryStorage(
         /**
          * An Artifactory API token with read/write access to [repository].
          */
-        private val apiToken: String
+        private val apiToken: String,
 
         private val rewriteArtifactoryCache: Boolean
     ) : ScanResultsStorage {
