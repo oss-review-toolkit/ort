@@ -62,16 +62,17 @@ object RequirementsCommand : CommandWithHelp() {
                     PackageManager::class.java.isAssignableFrom(it) -> {
                         key = "PackageManager"
                         log.debug { "$it is a $key." }
-                        it.getDeclaredConstructor(AnalyzerConfiguration::class.java,
-                                RepositoryConfiguration::class.java).newInstance(AnalyzerConfiguration(false, false),
-                                RepositoryConfiguration())
+                        it.getDeclaredConstructor(String::class.java, AnalyzerConfiguration::class.java,
+                                RepositoryConfiguration::class.java).newInstance(
+                                    "", AnalyzerConfiguration(false, false),
+                                    RepositoryConfiguration())
                     }
 
                     Scanner::class.java.isAssignableFrom(it) -> {
                         key = "Scanner"
                         log.debug { "$it is a $key." }
-                        it.getDeclaredConstructor(ScannerConfiguration::class.java)
-                                .newInstance(ScannerConfiguration())
+                        it.getDeclaredConstructor(String::class.java, ScannerConfiguration::class.java)
+                                .newInstance("", ScannerConfiguration())
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
