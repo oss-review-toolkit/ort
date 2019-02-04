@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -42,7 +42,7 @@ class YarnTest : WordSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
         // from failing tests.
         projectDir.listFiles().forEach {
@@ -60,8 +60,7 @@ class YarnTest : WordSpec() {
         "yarn" should {
             "resolve dependencies correctly" {
                 val packageFile = File(projectDir, "package.json")
-                val result = Yarn(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                        .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createYarn().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
                         File(projectDir.parentFile, "yarn-expected-output.yml"),
@@ -75,4 +74,6 @@ class YarnTest : WordSpec() {
             }
         }
     }
+
+    private fun createYarn() = Yarn("Yarn", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

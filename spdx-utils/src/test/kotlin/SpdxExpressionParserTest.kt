@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,15 +45,15 @@ class SpdxExpressionParserTest : WordSpec() {
             }
 
             "parse a document ref correctly" {
-                val spdxExpression = SpdxExpression.parse("DocumentRef-license")
+                val spdxExpression = SpdxExpression.parse("DocumentRef-document:LicenseRef-license")
 
-                spdxExpression shouldBe SpdxLicenseRefExpression("DocumentRef-license")
+                spdxExpression shouldBe SpdxLicenseReferenceExpression("DocumentRef-document:LicenseRef-license")
             }
 
             "parse a license ref correctly" {
                 val spdxExpression = SpdxExpression.parse("LicenseRef-license")
 
-                spdxExpression shouldBe SpdxLicenseRefExpression("LicenseRef-license")
+                spdxExpression shouldBe SpdxLicenseReferenceExpression("LicenseRef-license")
             }
 
             "parse a complex expression correctly" {

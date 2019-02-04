@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 package com.here.ort.utils
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.matchers.file.containNFiles
 import io.kotlintest.matchers.file.exist
@@ -36,7 +36,7 @@ class DirectoryStashTest : StringSpec() {
     private lateinit var b: File
     private lateinit var b1: File
 
-    override fun beforeTest(description: Description) {
+    override fun beforeTest(testCase: TestCase) {
         sandboxDir = createTempDir()
         a = File(sandboxDir, "a")
         a1 = File(a, "a1")
@@ -47,7 +47,7 @@ class DirectoryStashTest : StringSpec() {
         check(b1.mkdirs())
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         sandboxDir.safeDeleteRecursively(force = true)
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,17 +61,18 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-const val PIP_VERSION = "9.0.3"
+// The lowest version that supports "--prefer-binary".
+const val PIP_VERSION = "18.0"
 
 const val PIPDEPTREE_VERSION = "0.13.0"
 val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
 const val PYDEP_REVISION = "license-and-classifiers"
 
-// virtualenv bundles pip. In order to get pip 9.0.1 inside a virtualenv, which is a version that supports
-// installing packages from a Git URL that include a commit SHA1, we need at least virtualenv 15.1.0.
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
+
+    // Allow to use versions that are known to work. Note that virtualenv bundles a version of pip.
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,16.1]")
 }
 
@@ -132,14 +133,19 @@ object PythonVersion : CommandLineTool {
  * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
  * https://caremad.io/posts/2013/07/setup-vs-requirement/.
  */
-class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<PIP>() {
+class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    class Factory : AbstractPackageManagerFactory<PIP>("PIP") {
         override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                PIP(analyzerConfig, repoConfig)
+                PIP(managerName, analyzerConfig, repoConfig)
     }
+
+    private val INSTALL_OPTIONS = listOf(
+            "--no-warn-conflicts",
+            "--prefer-binary"
+    ).toTypedArray()
 
     // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
     private val TRUSTED_HOSTS = listOf(
@@ -367,7 +373,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
 
         val project = Project(
                 id = Identifier(
-                        type = toString(),
+                        type = managerName,
                         namespace = "",
                         name = projectName,
                         version = projectVersion
@@ -440,7 +446,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         // Try to determine the Python version the project requires.
         var projectPythonVersion = PythonVersion.getPythonVersion(workingDir)
 
-        // Try to create a virtualenv specific to the detected Python version anmd install dependencies in there.
+        // Try to create a virtualenv specific to the detected Python version and install dependencies in there.
         var virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
 
         if (installDependencies(workingDir, definitionFile, virtualEnvDir).isSuccess) {
@@ -469,7 +475,7 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
     }
 
     private fun createVirtualEnv(workingDir: File, pythonVersion: Int): File {
-        val virtualEnvDir = createTempDir(workingDir.name.padEnd(3, '_'), "virtualenv")
+        val virtualEnvDir = createTempDir("ort", "${workingDir.name}-virtualenv")
 
         val pythonInterpreter = PythonVersion.getPythonInterpreter(pythonVersion)
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()
@@ -503,10 +509,11 @@ class PIP(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigura
         log.info { "Installing dependencies for the '${workingDir.name}' project directory..." }
         pip = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", ".")
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, ".")
         } else {
             // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "-r", definitionFile.name)
+            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, "-r",
+                    definitionFile.name)
         }
 
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs

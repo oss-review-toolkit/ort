@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.type.CollectionType
+import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.databind.util.ClassUtil
 
 import com.vdurmont.semver4j.Semver
@@ -31,11 +33,15 @@ import java.net.MalformedURLException
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URL
+import java.nio.file.CopyOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
+import java.nio.file.LinkOption
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
+import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
+import java.util.TreeSet
 
 import org.apache.commons.codec.digest.DigestUtils
 
@@ -56,6 +62,45 @@ fun File.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).dige
 fun File.realFile(): File = toPath().toRealPath().toFile()
 
 /**
+ * Copy files recursively without following symbolic links (Unix) or junctions (Windows).
+ */
+fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
+    if (!exists()) {
+        return
+    }
+
+    val sourcePath = absoluteFile.toPath()
+    val targetPath = target.absoluteFile.toPath()
+
+    val copyOptions = mutableListOf<CopyOption>(LinkOption.NOFOLLOW_LINKS).apply {
+        if (overwrite) add(StandardCopyOption.REPLACE_EXISTING)
+    }.toTypedArray()
+
+    // This call to walkFileTree() implicitly uses EnumSet.noneOf(FileVisitOption.class), i.e.
+    // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
+    Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
+        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+            if ((!OS.isWindows && attrs.isSymbolicLink) || (OS.isWindows && attrs.isOther)) {
+                // Do not follow symbolic links or junctions.
+                return FileVisitResult.SKIP_SUBTREE
+            }
+
+            val targetDir = targetPath.resolve(sourcePath.relativize(dir))
+            targetDir.toFile().safeMkdirs()
+
+            return FileVisitResult.CONTINUE
+        }
+
+        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+            val targetFile = targetPath.resolve(sourcePath.relativize(file))
+            Files.copy(file, targetFile, *copyOptions)
+
+            return FileVisitResult.CONTINUE
+        }
+    })
+}
+
+/**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
  *
  * @throws IOException if the directory could not be deleted.
@@ -70,7 +115,7 @@ fun File.safeDeleteRecursively(force: Boolean = false) {
     Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
             if (OS.isWindows && attrs.isOther) {
-                // Unlink junctions to turn them into empty directories.
+                // delete() actually works to delete only the junction and not the directory it points to.
                 dir.toFile().delete()
                 return FileVisitResult.SKIP_SUBTREE
             }
@@ -276,6 +321,12 @@ fun Throwable.showStackTrace() {
     // https://discuss.kotlinlang.org/t/if-operator-in-function-expression/7227.
     if (printStackTrace) printStackTrace()
 }
+
+/**
+ * Function for constructing a [TreeSet] [CollectionType].
+ */
+fun TypeFactory.constructTreeSetType(elementClass: Class<*>): CollectionType =
+        constructCollectionType(TreeSet::class.java, elementClass)
 
 /**
  * Check whether the URI has a fragment that looks like a VCS revision.

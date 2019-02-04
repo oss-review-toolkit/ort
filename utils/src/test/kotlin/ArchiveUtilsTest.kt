@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 package com.here.ort.utils
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -29,11 +29,11 @@ import java.io.File
 class ArchiveUtilsTest : StringSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeTest(description: Description) {
+    override fun beforeTest(testCase: TestCase) {
         outputDir = createTempDir()
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         outputDir.safeDeleteRecursively(force = true)
     }
 

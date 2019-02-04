@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.mapper
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
@@ -104,9 +105,15 @@ object AnalyzerCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
-        val absoluteOutputPath = outputDir.absoluteFile
-        if (absoluteOutputPath.exists()) {
-            log.error { "The output directory '$absoluteOutputPath' must not exist yet." }
+        val absoluteOutputDir = outputDir.absoluteFile.normalize()
+
+        val outputFiles = outputFormats.distinct().map { format ->
+            File(absoluteOutputDir, "analyzer-result.${format.fileExtension}")
+        }
+
+        val existingOutputFiles = outputFiles.filter { it.exists() }
+        if (existingOutputFiles.isNotEmpty()) {
+            log.error { "None of the output files $existingOutputFiles must exist yet." }
             return 2
         }
 
@@ -124,20 +131,21 @@ object AnalyzerCommand : CommandWithHelp() {
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
 
-        val absoluteProjectPath = inputDir.absoluteFile
-        println("Scanning project path:\n\t$absoluteProjectPath")
+        val absoluteInputDir = inputDir.absoluteFile.normalize()
+        println("Scanning project path:\n\t$absoluteInputDir")
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(config)
-        val ortResult = analyzer.analyze(absoluteProjectPath, packageManagers, packageCurationsFile,
+        val ortResult = analyzer.analyze(absoluteInputDir, packageManagers, packageCurationsFile,
                 repositoryConfigurationFile)
 
-        absoluteOutputPath.safeMkdirs()
+        println("Found ${ortResult.analyzer?.result?.projects.orEmpty().size} project(s) in total.")
 
-        outputFormats.distinct().forEach { format ->
-            val outputFile = File(absoluteOutputPath, "analyzer-result.${format.fileExtension}")
-            println("Writing analyzer result to '$outputFile'.")
-            format.mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile, ortResult)
+        absoluteOutputDir.safeMkdirs()
+
+        outputFiles.forEach { file ->
+            println("Writing analyzer result to '$file'.")
+            file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
         }
 
         return 0

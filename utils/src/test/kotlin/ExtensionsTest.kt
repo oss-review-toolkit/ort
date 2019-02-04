@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,7 @@ class ExtensionsTest : WordSpec({
 
     "File.safeMkDirs()" should {
         "succeed if directory already exists" {
-            val directory = createTempDir()
-            directory.deleteOnExit()
+            val directory = createTempDir().apply { deleteOnExit() }
 
             directory.isDirectory shouldBe true
             directory.safeMkdirs() // should not throw exception
@@ -54,10 +53,8 @@ class ExtensionsTest : WordSpec({
         }
 
         "succeed if directory could be created" {
-            val parent = createTempDir()
-            parent.deleteOnExit()
-            val child = File(parent, "child")
-            child.deleteOnExit()
+            val parent = createTempDir().apply { deleteOnExit() }
+            val child = File(parent, "child").apply { deleteOnExit() }
 
             parent.isDirectory shouldBe true
             child.safeMkdirs() // should not throw exception
@@ -68,12 +65,9 @@ class ExtensionsTest : WordSpec({
             // Test case for an unexpected behaviour of File.mkdirs() which returns false for
             // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
             // directory was successfully created.
-            val parent = createTempDir()
-            parent.deleteOnExit()
-            val nonExistingParent = File(parent, "parent1/parent2")
-            nonExistingParent.deleteOnExit()
-            val child = File(nonExistingParent, "/")
-            child.deleteOnExit()
+            val parent = createTempDir().apply { deleteOnExit() }
+            val nonExistingParent = File(parent, "parent1/parent2").apply { deleteOnExit() }
+            val child = File(nonExistingParent, "/").apply { deleteOnExit() }
 
             parent.isDirectory shouldBe true
             nonExistingParent.exists() shouldBe false
@@ -83,8 +77,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "throw exception if file is not a directory" {
-            val file = createTempFile()
-            file.deleteOnExit()
+            val file = createTempFile().apply { deleteOnExit() }
 
             file.isFile shouldBe true
             shouldThrow<IOException> { file.safeMkdirs() }

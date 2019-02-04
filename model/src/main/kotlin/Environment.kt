@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,28 @@ import com.here.ort.utils.OS
  */
 data class Environment(
         /**
+         * The version of ORT used.
+         */
+        val ortVersion: String = ORT_VERSION,
+
+        /**
          * Name of the operating system, defaults to [OS.name].
           */
         val os: String = OS.name,
 
         /**
+         * Map of selected environment variables that might be relevant for debugging.
+         */
+        val variables: Map<String, String> = System.getenv().filterKeys { it.toUpperCase() in RELEVANT_VARIABLES },
+
+        /**
          * Map of used tools and their installed versions, defaults to an empty map.
          */
         val toolVersions: Map<String, String> = emptyMap()
-)
+) {
+    companion object {
+        val ORT_VERSION = this::class.java.getResource("/VERSION").readText()
+
+        private val RELEVANT_VARIABLES = listOf("COMSPEC", "OS", "OSTYPE", "SHELL")
+    }
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
@@ -40,9 +41,10 @@ data class ScanRecord(
         val scanResults: SortedSet<ScanResultContainer>,
 
         /**
-         * The [CacheStatistics] for the scan results cache.
+         * The [AccessStatistics] for the scan results storage.
          */
-        val cacheStats: CacheStatistics,
+        @JsonAlias("cache_stats")
+        val storageStats: AccessStatistics,
 
         /**
          * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
@@ -50,6 +52,21 @@ data class ScanRecord(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) {
+    /**
+     * Return a map of all de-duplicated errors associated by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+
+        scanResults.forEach { container ->
+            container.results.forEach {  result ->
+                collectedErrors.getOrPut(container.id) { mutableSetOf() } += result.summary.errors
+            }
+        }
+
+        return collectedErrors
+    }
+
     /**
      * True if any of the [scanResults] contain errors.
      */

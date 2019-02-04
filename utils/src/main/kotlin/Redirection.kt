@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.io.FileOutputStream
 import java.io.PrintStream
 
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val tempFile = createTempFile().apply { deleteOnExit() }
+    val tempFile = createTempFile("ort", "redirect").apply { deleteOnExit() }
     val fileStream = FileOutputStream(tempFile)
 
     try {

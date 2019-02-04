@@ -6,7 +6,7 @@ This BitTorrent Open Source License (the "License") applies to the BitTorrent cl
 well as any updates or maintenance releases of that software ("BitTorrent Products") that are distributed by
 BitTorrent, Inc. ("Licensor").  Any BitTorrent Product licensed pursuant to this License is a Licensed Product.
 Licensed Product, in its entirety, is protected by U.S. copyright law.  This License identifies the terms under which
-you may use, copy, distribute or modify Licensed Product. 
+you may use, copy, distribute or modify Licensed Product.
 
 Preamble
 
@@ -54,7 +54,7 @@ portions of your Derivative Works that consist of the Licensed Product, includin
 
 New versions of this License may be published from time to time.  You may choose to  continue to use the license
 terms in this version of the License or those from the new version.  However, only the Licensor has the right to
-change the License terms as they apply to the Licensed Product. 
+change the License terms as they apply to the Licensed Product.
 
 This License relies on precise definitions for certain terms.  Those terms are defined when they are first used, and
 the definitions are repeated for your convenience in a Glossary at the end of the License.
@@ -90,7 +90,7 @@ part of Derivative Works.
    2. Under claims of patents now or hereafter owned or controlled by Contributor, to make, use, sell, offer for
 sale, have made, and/or otherwise dispose of Modifications or portions thereof, but solely to the extent that any
 such claim is necessary to enable you to make, use, sell, offer for sale, have made, and/or otherwise dispose of
-Modifications or portions thereof or Derivative Works thereof. 
+Modifications or portions thereof or Derivative Works thereof.
 
 
 3.      Exclusions From License Grant.  Nothing in this License shall be deemed to grant any rights to trademarks,
@@ -102,7 +102,7 @@ Nothing in this License shall be interpreted to prohibit Licensor from licensing
 License any code that Licensor otherwise would have a right to license.
 
 
-4.      Your Obligations Regarding Distribution. 
+4.      Your Obligations Regarding Distribution.
 
 a.       Application of This License to Your Modifications.  As an express condition for your use of the Licensed
 Product, you hereby agree that any Modifications that you create or to which you contribute, and which you
@@ -123,7 +123,7 @@ months after the date it initially became available, or at least six (6) months 
 Licensed Product or Modifications has been made available.  You are responsible for ensuring that the Source Code
 version remains available even if the Electronic Distribution Mechanism is maintained by a third party.
 
-c.       Intellectual Property Matters.  
+c.       Intellectual Property Matters.
 
                                 i.            Third Party Claims.  If you have knowledge that a license to a third
 party's intellectual property right is required to exercise the rights granted by this License, you must include a
@@ -162,12 +162,12 @@ executable version, related documentation and collateral materials stating that 
 Licensed Product is available under the terms of this License, including a description of how and where you have
 fulfilled the obligations of Section 4(b), and (iii) you make it clear that any terms that differ from this License
 are offered by you alone, not by Licensor or any Contributor.  You hereby agree to indemnify the Licensor and every
-Contributor for any liability incurred by Licensor or such Contributor as a result of any terms you offer. 
+Contributor for any liability incurred by Licensor or such Contributor as a result of any terms you offer.
 
 f.       Distribution of Derivative Works.  You may create Derivative Works (e.g., combinations of some or all of the
 Licensed Product with other code) and distribute the Derivative Works as products under any other license you select,
 with the proviso that the requirements of this License are fulfilled for those portions of the Derivative Works that
-consist of the Licensed Product or any Modifications thereto. 
+consist of the Licensed Product or any Modifications thereto.
 
 
 5.      Inability to Comply Due to Statute or Regulation.  If it is impossible for you to comply with any of the
@@ -177,7 +177,7 @@ statute or regulation that prohibits you from adhering to the License, and (iii)
 code they affect. Such description must be included in the LEGAL file described in Section 4(d), and must be included
 with all distributions of the Source Code.  Except to the extent prohibited by statute or regulation, such
 description must be sufficiently detailed for a recipient of ordinary skill at computer programming to be able to
-understand it. 
+understand it.
 
 
 6.      Application of This License.  This License applies to code to which Licensor or Contributor has attached the
@@ -186,7 +186,7 @@ Notice in Exhibit A, which is incorporated herein by this reference.
 
 7.      Versions of This License.
 
-a.       New Versions.  Licensor may publish from time to time revised and/or new versions of the License. 
+a.       New Versions.  Licensor may publish from time to time revised and/or new versions of the License.
 
 b.       Effect of New Versions.  Once Licensed Product has been published under a particular version of the License,
 you may always continue to use it under the terms of that version.  You may also choose to use such Licensed Product
@@ -209,7 +209,7 @@ DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF 
 HEREUNDER EXCEPT UNDER THIS DISCLAIMER.
 
 
-9.      Termination. 
+9.      Termination.
 
 a.       Automatic Termination Upon Breach.  This license and the rights granted hereunder will terminate
 automatically if you fail to comply with the terms herein and fail to cure such breach within thirty (30) days of
@@ -248,7 +248,7 @@ MALFUNCTION, OR ANY AND ALL OTHER COMMERCIAL DAMAGES OR LOSSES, EVEN IF SUCH PAR
 POSSIBILITY OF SUCH DAMAGES.  THIS LIMITATION OF LIABILITY SHALL NOT APPLY TO LIABILITY FOR DEATH OR PERSONAL INJURY
 RESULTING FROM SUCH PARTYS NEGLIGENCE TO THE EXTENT APPLICABLE LAW PROHIBITS SUCH LIMITATION.  SOME JURISDICTIONS DO
 NOT ALLOW THE EXCLUSION OR LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THIS EXCLUSION AND LIMITATION MAY
-NOT APPLY TO YOU. 
+NOT APPLY TO YOU.
 
 
 11.  Responsibility for Claims.  As between Licensor and Contributors, each party is responsible for claims and
@@ -287,7 +287,7 @@ ownership of fifty percent (50%) or more of the outstanding shares, or (iii) ben
 
 15.  Glossary.  All defined terms in this License that are used in more than one Section of this License are repeated
 here, in alphabetical order, for the convenience of the reader.  The Section of this License in which each defined
-term is first used is shown in parentheses. 
+term is first used is shown in parentheses.
 
 Contributor:  Each person or entity who created or contributed to the creation of, and distributed, a Modification.
 (See Section 2)
@@ -328,4 +328,3 @@ obtain a copy of the License at http://www.bittorrent.com/license/.
 
 Software distributed under the License is distributed on an AS IS basis, WITHOUT WARRANTY OF ANY KIND, either express
 or implied.  See the License for the specific language governing rights and limitations under the License.
-

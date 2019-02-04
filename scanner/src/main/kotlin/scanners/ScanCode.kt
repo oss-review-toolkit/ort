@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,24 +23,26 @@ import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.here.ort.model.CopyrightFinding
 
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.LicenseFinding
-import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
-import com.here.ort.scanner.ScanResultsCache
+import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
@@ -58,6 +60,7 @@ import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 import java.time.Instant
+import java.util.SortedMap
 import java.util.SortedSet
 import java.util.regex.Pattern
 
@@ -70,7 +73,7 @@ import kotlin.math.absoluteValue
  * configuration options:
  *
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
- *   looking up results from the [ScanResultsCache]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
+ *   looking up results from the [ScanResultsStorage]. Defaults to [DEFAULT_CONFIGURATION_OPTIONS].
  * * **"commandLineNonConfig":** Command line options that do not modify the result and should therefore not be
  *   considered in [getConfiguration], like "--processes". Defaults to [DEFAULT_NON_CONFIGURATION_OPTIONS].
  * * **"debugCommandLine":** Debug command line options that modify the result. Only used if the [log] level is set to
@@ -94,6 +97,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
                 "--copyright",
                 "--license",
+                "--ignore", "*$ORT_CONFIG_FILENAME",
                 "--info",
                 "--strip-root",
                 "--timeout", TIMEOUT.toString()
@@ -206,14 +210,16 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
                 log.info { "Retrieved $this from local cache." }
             }
 
-            val scannerArchive = createTempFile(suffix = url.substringAfterLast("/"))
+            val scannerArchive = createTempFile("ort", "${getName()}-${url.substringAfterLast("/")}")
             Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir()
-            unpackDir.deleteOnExit()
+            val unpackDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)
+            if (!scannerArchive.delete()) {
+                log.warn { "Unable to delete temporary file '$scannerArchive'." }
+            }
 
             val scannerDir = unpackDir.resolve("scancode-toolkit-$scannerVersion")
 
@@ -230,8 +236,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
                 joinToString(" ")
             }
 
-    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
-            : ScanResult {
+    override fun scanPath(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -258,7 +263,7 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
 
         with(process) {
             if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(provenance, scannerDetails, summary.copy(errors = errors), result)
+                return ScanResult(Provenance(), getDetails(), summary.copy(errors = errors), result)
             } else {
                 throw ScanException(errorMessage)
             }
@@ -392,33 +397,49 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     /**
-     * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [startLine]. The default
-     * value of [toleranceLines] is set to 5 which seems to be a good balance between associating findings separated by
-     * blank lines but not skipping complete license statements.
+     * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
+     * file [path]. The default value of [toleranceLines] is set to 5 which seems to be a good balance between
+     * associating findings separated by blank lines but not skipping complete license statements.
      */
-    internal fun getClosestCopyrightStatements(copyrights: JsonNode, startLine: Int, toleranceLines: Int = 5):
-            SortedSet<String> {
+    internal fun getClosestCopyrightStatements(
+            path: String,
+            copyrights: JsonNode,
+            licenseStartLine: Int,
+            toleranceLines: Int = 5
+    ): SortedSet<CopyrightFinding> {
         val closestCopyrights = copyrights.filter {
-            (it["start_line"].asInt() - startLine).absoluteValue <= toleranceLines
+            (it["start_line"].intValue() - licenseStartLine).absoluteValue <= toleranceLines
         }
 
         // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
         return closestCopyrights.flatMap {
-            it["statements"] ?: listOf(it["value"])
-        }.map { it.asText() }.toSortedSet()
+            val startLine = it["start_line"].intValue()
+            val endLine = it["end_line"].intValue()
+            (it["statements"] ?: listOf(it["value"])).map { statements ->
+                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation(path, startLine, endLine)))
+            }
+        }.toSortedSet()
     }
 
     /**
      * Associate copyright findings to license findings within a single file.
      */
-    private fun associateFileFindings(licenses: JsonNode, copyrights: JsonNode, rootLicense: String = ""):
-            LicenseFindingsMap {
-        val copyrightsForLicenses = sortedMapOf<String, MutableSet<String>>()
+    private fun associateFileFindings(
+            path: String,
+            licenses: JsonNode,
+            copyrights: JsonNode,
+            rootLicense: String = ""
+    ): SortedMap<String, MutableSet<CopyrightFinding>> {
+        val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFinding>>()
 
         // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
         val allCopyrightStatements = copyrights.flatMap {
-            it["statements"] ?: listOf(it["value"])
-        }.map { it.asText() }.toSortedSet()
+            val startLine = it["start_line"].intValue()
+            val endLine = it["end_line"].intValue()
+            (it["statements"] ?: listOf(it["value"])).map { statements ->
+                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation(path, startLine, endLine)))
+            }
+        }.toSortedSet()
 
         when (licenses.size()) {
             0 -> {
@@ -439,8 +460,8 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
                 // for each of these, if any.
                 licenses.forEach {
                     val licenseId = getLicenseId(it)
-                    val licenseStartLine = it["start_line"].asInt()
-                    val closestCopyrights = getClosestCopyrightStatements(copyrights, licenseStartLine)
+                    val licenseStartLine = it["start_line"].intValue()
+                    val closestCopyrights = getClosestCopyrightStatements(path, copyrights, licenseStartLine)
                     copyrightsForLicenses.getOrPut(licenseId) { sortedSetOf() } += closestCopyrights
                 }
             }
@@ -453,20 +474,42 @@ class ScanCode(config: ScannerConfiguration) : LocalScanner(config) {
      * Associate copyright findings to license findings throughout the whole result.
      */
     internal fun associateFindings(result: JsonNode): SortedSet<LicenseFinding> {
-        val copyrightsForLicenses = sortedMapOf<String, SortedSet<String>>()
+        val locationsForLicenses = sortedMapOf<String, SortedSet<TextLocation>>()
+        val copyrightsForLicenses = sortedMapOf<String, SortedSet<CopyrightFinding>>()
         val rootLicense = getRootLicense(result)
 
         result["files"].forEach { file ->
+            val path = file["path"].asText()
+
             val licenses = file["licenses"] ?: EMPTY_JSON_NODE
+            licenses.forEach {
+                val licenseId = getLicenseId(it)
+                val licenseStartLine = it["start_line"].intValue()
+                val licenseEndLine = it["end_line"].intValue()
+
+                locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
+                        TextLocation(path, licenseStartLine, licenseEndLine)
+            }
+
             val copyrights = file["copyrights"] ?: EMPTY_JSON_NODE
-            val findings = associateFileFindings(licenses, copyrights, rootLicense)
+            val findings = associateFileFindings(path, licenses, copyrights, rootLicense)
             findings.forEach { license, copyrightsForLicense ->
-                copyrightsForLicenses.getOrPut(license) { sortedSetOf() } += copyrightsForLicense
+                copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
+                    copyrightsForLicense.forEach { copyrightFinding ->
+                        copyrightFindings.find { it.statement == copyrightFinding.statement }?.let {
+                            it.locations += copyrightFinding.locations
+                        } ?: copyrightFindings.add(copyrightFinding)
+                    }
+                }
             }
         }
 
-        return copyrightsForLicenses.map { (license, copyrights) ->
-            LicenseFinding(license, copyrights)
+        return (copyrightsForLicenses.keys + locationsForLicenses.keys).map { license ->
+            LicenseFinding(
+                    license,
+                    locationsForLicenses[license] ?: sortedSetOf(),
+                    copyrightsForLicenses[license] ?: sortedSetOf()
+            )
         }.toSortedSet()
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,11 @@ import java.time.Instant
  */
 data class Provenance(
         /**
-         * The time when the source code was downloaded.
+         * The time when the source code was downloaded, or [Instant.EPOCH] if unknown (e.g. for source code that was
+         * downloaded separately from running ORT).
          */
         @JsonAlias("downloadTime")
-        val downloadTime: Instant,
+        val downloadTime: Instant = Instant.EPOCH,
 
         /**
          * The source artifact that was downloaded, or null.

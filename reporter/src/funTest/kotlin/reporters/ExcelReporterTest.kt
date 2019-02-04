@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.OS
 import com.here.ort.utils.unpackZip
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -38,9 +39,10 @@ class ExcelReporterTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = OS.isWindows) {
             val outputDir = createTempDir().apply { deleteOnExit() }
-            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
 
             val actualFile = outputDir.resolve("scan-report.xlsx")
+            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(),
+                    actualFile.outputStream())
             val actualXlsxUnpacked = createTempDir().apply { deleteOnExit() }
             actualFile.unpackZip(actualXlsxUnpacked)
 
@@ -48,10 +50,16 @@ class ExcelReporterTest : WordSpec({
             val expectedXlsxUnpacked = createTempDir().apply { deleteOnExit() }
             expectedFile.unpackZip(expectedXlsxUnpacked)
 
+            val sharedStrings = "xl/sharedStrings.xml"
             val sheet1 = "xl/worksheets/sheet1.xml"
             val sheet2 = "xl/worksheets/sheet2.xml"
-            actualXlsxUnpacked.resolve(sheet1).readText() shouldBe expectedXlsxUnpacked.resolve(sheet1).readText()
-            actualXlsxUnpacked.resolve(sheet2).readText() shouldBe expectedXlsxUnpacked.resolve(sheet2).readText()
+
+            assertSoftly {
+                actualXlsxUnpacked.resolve(sharedStrings).readText() shouldBe
+                        expectedXlsxUnpacked.resolve(sharedStrings).readText()
+                actualXlsxUnpacked.resolve(sheet1).readText() shouldBe expectedXlsxUnpacked.resolve(sheet1).readText()
+                actualXlsxUnpacked.resolve(sheet2).readText() shouldBe expectedXlsxUnpacked.resolve(sheet2).readText()
+            }
         }
     }
 })

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@ import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 
-import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.WordSpec
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 class WebAppReporterTest : WordSpec({
@@ -35,9 +36,9 @@ class WebAppReporterTest : WordSpec({
 
     "WebAppReporter" should {
         "successfully export to a web application" {
-            val outputDir = createTempDir().apply { deleteOnExit() }
-            WebAppReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputDir)
-            outputDir.resolve("scan-report-web-app.html").isFile shouldBe true
+            val outputStream = ByteArrayOutputStream()
+            WebAppReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputStream)
+            outputStream.size() shouldNotBe 0
         }
     }
 })

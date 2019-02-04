@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
-import com.here.ort.utils.test.USER_DIR
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -43,7 +43,7 @@ class BabelTest : WordSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
         // from failing tests.
         projectDir.listFiles().forEach {
@@ -60,7 +60,6 @@ class BabelTest : WordSpec() {
     init {
         "Babel dependencies" should {
             "be correctly analyzed" {
-                val npm = NPM(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 val packageFile = File(projectDir, "package.json")
 
                 val expectedResult = patchExpectedResult(
@@ -68,10 +67,12 @@ class BabelTest : WordSpec() {
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision
                 )
-                val actualResult = npm.resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val actualResult = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
                 patchActualResult(yamlMapper.writeValueAsString(actualResult)) shouldBe expectedResult
             }
         }
     }
+
+    private fun createNPM() = NPM("NPM", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

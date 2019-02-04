@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,17 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
 /**
  * The configuration model of the scanner.
  */
 data class ScannerConfiguration(
         /**
-         * Configuration of the scan results Artifactory cache.
+         * Configuration of the scan results Artifactory storage.
          */
-        val artifactoryCache: ArtifactoryCacheConfiguration? = null,
+        @JsonAlias("artifactory_cache")
+        val artifactoryStorage: ArtifactoryStorageConfiguration? = null,
 
         /**
          * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"

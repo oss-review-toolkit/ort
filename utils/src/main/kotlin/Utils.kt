@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,11 @@ val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.clas
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
  */
 var printStackTrace = false
+
+/**
+ * The name of the ORT configuration file.
+ */
+const val ORT_CONFIG_FILENAME = ".ort.yml"
 
 /**
  * Ordinal for mandatory program parameters.
@@ -185,9 +190,14 @@ fun getPathFromEnvironment(executable: String): File? {
 }
 
 /**
- * Return the directory to store user-specific configuration in.
+ * Return the current user's home directory.
  */
-fun getUserConfigDirectory() = File(System.getProperty("user.home"), ".ort")
+fun getUserHomeDirectory() = File(System.getProperty("user.home"))
+
+/**
+ * Return the directory to store user-specific ORT data in.
+ */
+fun getUserOrtDirectory() = getUserHomeDirectory().resolve(".ort")
 
 /**
  * Normalize a VCS URL by converting it to a common pattern.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@
 
 package com.here.ort.spdx
 
+import com.here.ort.spdx.SpdxExpression.Strictness
 import com.here.ort.spdx.SpdxExpressionParser.CompoundExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseExceptionExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.LicenseIdExpressionContext
-import com.here.ort.spdx.SpdxExpressionParser.LicenseRefExpressionContext
+import com.here.ort.spdx.SpdxExpressionParser.LicenseReferenceExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.SimpleExpressionContext
 
-class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>() {
+class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
+        SpdxExpressionBaseVisitor<SpdxExpression>() {
     override fun visitLicenseExpression(ctx: LicenseExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
             2 -> visit(ctx.getChild(0))
@@ -52,11 +54,6 @@ class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>()
 
                     val right = visit(ctx.getChild(2))
 
-                    if (operator == SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression) {
-                        throw SpdxException("Argument '$right' for WITH is not an SPDX license exception id in " +
-                                "'${ctx.text}'.")
-                    }
-
                     SpdxCompoundExpression(left, operator, right)
                 }
             }
@@ -71,13 +68,12 @@ class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>()
         }
     }
 
-    override fun visitLicenseExceptionExpression(ctx: LicenseExceptionExpressionContext)
-            : SpdxExpression {
+    override fun visitLicenseExceptionExpression(ctx: LicenseExceptionExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
             1 -> SpdxLicenseExceptionExpression(ctx.text)
             else -> throw SpdxException("SpdxLicenseExceptionExpression has invalid amount of children: " +
                     "'${ctx.childCount}'")
-        }
+        }.apply { validate(strictness) }
     }
 
     override fun visitLicenseIdExpression(ctx: LicenseIdExpressionContext): SpdxExpression {
@@ -85,13 +81,14 @@ class SpdxExpressionDefaultVisitor : SpdxExpressionBaseVisitor<SpdxExpression>()
             1 -> SpdxLicenseIdExpression(ctx.text)
             2 -> SpdxLicenseIdExpression(ctx.text.dropLast(1), anyLaterVersion = true)
             else -> throw SpdxException("SpdxLicenseIdExpression has invalid amount of children: '${ctx.childCount}'")
-        }
+        }.apply { validate(strictness) }
     }
 
-    override fun visitLicenseRefExpression(ctx: LicenseRefExpressionContext): SpdxExpression {
+    override fun visitLicenseReferenceExpression(ctx: LicenseReferenceExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
-            1 -> SpdxLicenseRefExpression(ctx.text)
-            else -> throw SpdxException("SpdxLicenseRefExpression has invalid amount of children: '${ctx.childCount}'")
-        }
+            1 -> SpdxLicenseReferenceExpression(ctx.text)
+            else -> throw SpdxException("SpdxLicenseReferenceExpression has invalid amount of children:" +
+                    "'${ctx.childCount}'")
+        }.apply { validate(strictness) }
     }
 }

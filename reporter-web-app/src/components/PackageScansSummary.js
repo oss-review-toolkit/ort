@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,8 +59,8 @@ const PackageScansSummary = (props) => {
                                             </dl>
                                             <dl>
                                                 {row.copyrights.map(holder => (
-                                                    <dd key={`${row.license}-holder-${holder}`}>
-                                                        {holder}
+                                                    <dd key={`${row.license}-holder-${holder.statement}`}>
+                                                        {holder.statement}
                                                     </dd>
                                                 ))}
                                             </dl>

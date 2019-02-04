@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,19 @@
 
 package com.here.ort.reporter.reporters
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
+import com.here.ort.model.Severity
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
+import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.utils.isValidUrl
-import com.here.ort.utils.log
 import com.here.ort.utils.normalizeLineBreaks
 
-import java.io.File
+import java.io.OutputStream
 
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -41,7 +39,6 @@ import kotlinx.html.*
 import kotlinx.html.dom.*
 
 class StaticHtmlReporter : Reporter() {
-
     private val css = """
 
         body {
@@ -145,6 +142,11 @@ class StaticHtmlReporter : Reporter() {
           color: #573a08;
         }
 
+        .ort-report-table tr.ort-hint {
+          background: #f7f5ff;
+          color: #1c0859;
+        }
+
         .ort-report-table tr:last-child td {
           border-bottom: 1px solid rgba(34,36,38,.15);
         }
@@ -169,6 +171,8 @@ class StaticHtmlReporter : Reporter() {
         }
 
         .ort-report-table th:first-child {
+          width: 30px;
+          white-space: nowrap;
           border-top-left-radius: .28rem;
           border-left: 1px solid rgba(34,36,38,.15);
           border-top: 1px solid rgba(34,36,38,.15);
@@ -292,23 +296,21 @@ class StaticHtmlReporter : Reporter() {
 
         """.trimIndent()
 
+    override val defaultFilename = "scan-report.html"
+
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String?
-    ): File {
+    ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val html = renderHtml(tabularScanRecord)
 
-        val outputFile = File(outputDir, "scan-report.html")
-
-        log.info { "Writing static HTML report to '${outputFile.absolutePath}'." }
-
-        outputFile.writeText(html)
-
-        return outputFile
+        outputStream.bufferedWriter().use {
+            it.write(html)
+        }
     }
 
     private fun renderHtml(reportTableModel: ReportTableModel): String {
@@ -340,12 +342,12 @@ class StaticHtmlReporter : Reporter() {
 
                     index(reportTableModel)
 
-                    reportTableModel.evaluatorErrors?.let {
+                    reportTableModel.evaluatorIssues?.let {
                         evaluatorTable(it)
                     }
 
-                    if (reportTableModel.errorSummary.rows.count() > 0) {
-                        errorTable(reportTableModel.errorSummary)
+                    if (reportTableModel.issueSummary.rows.count() > 0) {
+                        issueTable(reportTableModel.issueSummary)
                     }
 
                     reportTableModel.projectDependencies.forEach { project, table ->
@@ -376,13 +378,13 @@ class StaticHtmlReporter : Reporter() {
         h2 { +"Index" }
 
         ul {
-            reportTableModel.evaluatorErrors?.let {
+            reportTableModel.evaluatorIssues?.let {
                 li { a("#policy-violation-summary") { +"Rule Violation Summary (${it.size} violations)" } }
             }
 
-            val numberOfErrors = reportTableModel.errorSummary.rows.count()
-            if (numberOfErrors > 0) {
-                li { a("#error-summary") { +"Error Summary ($numberOfErrors errors)" } }
+            val numberOfIssues = reportTableModel.issueSummary.rows.count()
+            if (numberOfIssues > 0) {
+                li { a("#issue-summary") { +"Issue Summary ($numberOfIssues issues)" } }
             }
 
             reportTableModel.projectDependencies.forEach { project, projectTable ->
@@ -400,79 +402,112 @@ class StaticHtmlReporter : Reporter() {
         }
     }
 
-    private fun DIV.evaluatorTable(evaluatorErrors: List<ResolvableIssue>) {
+    private fun DIV.evaluatorTable(ruleViolations: List<ResolvableIssue>) {
         h2 {
             id = "policy-violation-summary"
-            +"Rule Violation Summary (${evaluatorErrors.size} violations)"
+            +"Rule Violation Summary (${ruleViolations.size} violations)"
         }
 
-        if (evaluatorErrors.isEmpty()) {
+        if (ruleViolations.isEmpty()) {
             +"No issues found."
         } else {
             table("ort-report-table ort-violations") {
                 thead {
                     tr {
+                        th { +"#" }
                         th { +"Source" }
-                        th { +"Error" }
+                        th { +"Issue" }
                     }
                 }
 
-                tbody { evaluatorErrors.forEach { evaluatorRow(it) } }
+                tbody {
+                    ruleViolations.forEachIndexed { rowIndex, ruleViolation ->
+                        evaluatorRow(rowIndex + 1, ruleViolation)
+                    }
+                }
             }
         }
     }
 
-    private fun TBODY.evaluatorRow(error: ResolvableIssue) {
-        val cssClass = when {
-            error.isResolved -> "ort-resolved"
-            else -> "ort-error"
+    private fun TBODY.evaluatorRow(rowIndex: Int, ruleViolation: ResolvableIssue) {
+        val cssClass = if (ruleViolation.isResolved) {
+            "ort-resolved"
+        } else {
+            when (ruleViolation.severity) {
+                Severity.ERROR -> "ort-error"
+                Severity.WARNING -> "ort-warning"
+                Severity.HINT -> "ort-hint"
+            }
         }
+
+        val rowId = "violation-$rowIndex"
 
         tr(cssClass) {
-            td { +error.source }
+            id = rowId
             td {
-                p { +error.description }
-                p { +error.resolutionDescription }
+                a  {
+                    href = "#$rowId"
+                    +rowIndex.toString()
+                }
+            }
+            td { +ruleViolation.source }
+            td {
+                p { +ruleViolation.description }
+                p { +ruleViolation.resolutionDescription }
             }
         }
     }
 
-    private fun DIV.errorTable(errorSummary: ErrorTable) {
+    private fun DIV.issueTable(issueSummary: IssueTable) {
         h2 {
-            id = "error-summary"
-            +"Error Summary (${errorSummary.rows.count()} errors)"
+            id = "issue-summary"
+            +"Issue Summary (${issueSummary.rows.count()} issues)"
         }
 
-        p { +"Errors from excluded components are not shown in this summary." }
+        p { +"Issues from excluded components are not shown in this summary." }
 
         h3 { +"Packages" }
 
-        table("ort-report-table ort-errors") {
+        table("ort-report-table") {
             thead {
                 tr {
+                    th { +"#" }
                     th { +"Package" }
-                    th { +"Analyzer Errors" }
-                    th { +"Scanner Errors" }
+                    th { +"Analyzer Issues" }
+                    th { +"Scanner Issues" }
                 }
             }
 
-            tbody { errorSummary.rows.forEach { errorRow(it) } }
+            tbody {
+                issueSummary.rows.forEachIndexed { rowIndex, issue ->
+                    issueRow(rowIndex + 1, issue)
+                }
+            }
         }
     }
 
-    private fun TBODY.errorRow(row: ReportTableModel.ErrorRow) {
+    private fun TBODY.issueRow(rowIndex: Int, row: ReportTableModel.IssueRow) {
+        val rowId = "issue-$rowIndex"
+
         tr("ort-error") {
+            id = rowId
+            td {
+                a  {
+                    href = "#$rowId"
+                    +rowIndex.toString()
+                }
+            }
             td { +"${row.id}" }
 
             td {
-                row.analyzerErrors.forEach { id, errors ->
+                row.analyzerIssues.forEach { id, issues ->
                     a("#$id") { +"$id" }
 
                     ul {
-                        errors.forEach { error ->
+                        issues.forEach { issue ->
                             li {
-                                p { unsafe { +error.description.replace("\n", "<br/>") } }
-                                p { +error.resolutionDescription }
+                                issueDescription(issue)
+                                p { +issue.resolutionDescription }
                             }
                         }
                     }
@@ -480,14 +515,14 @@ class StaticHtmlReporter : Reporter() {
             }
 
             td {
-                row.scanErrors.forEach { id, errors ->
+                row.scanIssues.forEach { id, issues ->
                     a("#$id") { +"$id" }
 
                     ul {
-                        errors.forEach { error ->
+                        issues.forEach { issue ->
                             li {
-                                p { unsafe { +error.description.replace("\n", "<br/>") } }
-                                p { +error.resolutionDescription }
+                                issueDescription(issue)
+                                p { +issue.resolutionDescription }
                             }
                         }
                     }
@@ -543,30 +578,44 @@ class StaticHtmlReporter : Reporter() {
         table("ort-report-table ort-packages $excludedClass") {
             thead {
                 tr {
+                    th { +"#" }
                     th { +"Package" }
                     th { +"Scopes" }
                     th { +"Licenses" }
-                    th { +"Analyzer Errors" }
-                    th { +"Scanner Errors" }
+                    th { +"Analyzer Issues" }
+                    th { +"Scanner Issues" }
                 }
             }
 
-            tbody { table.rows.forEach { projectRow(it) } }
+            tbody {
+                table.rows.forEachIndexed { rowIndex, pkg ->
+                    projectRow(project.id.toString(), rowIndex + 1, pkg)
+                }
+            }
         }
     }
 
-    private fun TBODY.projectRow(row: ReportTableModel.DependencyRow) {
+    private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ReportTableModel.DependencyRow) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
                 if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
 
         val cssClass = when {
-            row.analyzerErrors.containsUnresolved() || row.scanErrors.containsUnresolved() -> "ort-error"
+            row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "ort-error"
             row.declaredLicenses.isEmpty() && row.detectedLicenses.isEmpty() -> "ort-warning"
             else -> "ort-success"
         }
 
+        val rowId = "$projectId-pkg-$rowIndex"
+
         tr("$cssClass $rowExcludedClass") {
+            id = rowId
+            td {
+                a  {
+                    href = "#$rowId"
+                    +rowIndex.toString()
+                }
+            }
             td { +"${row.id}" }
 
             td {
@@ -590,41 +639,49 @@ class StaticHtmlReporter : Reporter() {
             }
 
             td {
-                dl {
-                    row.concludedLicense?.let {
-                        dt { em { +"Concluded License:"}}
-                        dd { +"${row.concludedLicense}"}
-                    }
+                row.concludedLicense?.let {
+                    em { +"Concluded License:"}
+                    dl { dd { +"${row.concludedLicense}"} }
+                }
 
-                    if (row.declaredLicenses.isNotEmpty()) {
-                        dt { em { +"Declared Licenses:" } }
-                        dd { +row.declaredLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } }
-                    }
+                if (row.declaredLicenses.isNotEmpty()) {
+                    em { +"Declared Licenses:" }
+                    dl { dd { +row.declaredLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } } }
+                }
 
-                    if (row.detectedLicenses.isNotEmpty()) {
-                        dt { em { +"Declared Licenses:" } }
-                        dd { +row.detectedLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } }
-                    }
+                if (row.detectedLicenses.isNotEmpty()) {
+                    em { +"Detected Licenses:" }
+                    dl { dd { +row.detectedLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } } }
                 }
             }
 
-            td { errorList(row.analyzerErrors) }
+            td { issueList(row.analyzerIssues) }
 
-            td { errorList(row.scanErrors) }
+            td { issueList(row.scanIssues) }
         }
     }
 
-    private fun TD.errorList(errors: List<ResolvableIssue>) {
+    private fun TD.issueList(issues: List<ResolvableIssue>) {
         ul {
-            errors.forEach {
+            issues.forEach {
                 li {
-                    p { unsafe { +it.description.replace("\n", "<br/>") } }
+                    issueDescription(it)
 
                     if (it.isResolved) {
                         classes = setOf("ort-resolved")
                         p { +it.resolutionDescription }
                     }
                 }
+            }
+        }
+    }
+
+    private fun LI.issueDescription(issue: ResolvableIssue) {
+        p {
+            var first = true
+            issue.description.lines().forEach {
+                if (first) first = false else br
+                +it
             }
         }
     }

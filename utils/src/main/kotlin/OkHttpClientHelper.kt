@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ object OkHttpClientHelper {
      */
     fun execute(cachePath: String, request: Request): Response {
         val client = clients.getOrPut(cachePath) {
-            val cacheDirectory = File(getUserConfigDirectory(), cachePath)
+            val cacheDirectory = File(getUserOrtDirectory(), cachePath)
             val maxCacheSizeInBytes = 1024L * 1024L * 1024L
             val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)

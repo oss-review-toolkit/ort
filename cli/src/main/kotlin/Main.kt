@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
 import com.here.ort.commands.*
+import com.here.ort.model.Environment
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
@@ -57,6 +58,13 @@ object Main : CommandWithHelp() {
      */
     @JvmStatic
     fun main(args: Array<String>) {
+        exitProcess(run(args))
+    }
+
+    /**
+     * Run the ORT CLI with the provided [args] and return the exit code of [CommandWithHelp.run].
+     */
+    fun run(args: Array<String>): Int {
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
             addCommand(AnalyzerCommand)
@@ -68,7 +76,7 @@ object Main : CommandWithHelp() {
             parse(*args)
         }
 
-        exitProcess(run(jc))
+        return run(jc)
     }
 
     override fun runCommand(jc: JCommander): Int {
@@ -79,6 +87,8 @@ object Main : CommandWithHelp() {
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
+
+        println("Running ORT with ${Environment()}.")
 
         // JCommander already validates the command names.
         val command = jc.commands[jc.parsedCommand]!!

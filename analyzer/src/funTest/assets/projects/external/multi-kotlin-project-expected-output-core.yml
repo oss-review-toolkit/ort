@@ -1,0 +1,317 @@
+---
+project:
+  id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/external/multi-kotlin-project/core/build.gradle.kts"
+  declared_licenses: []
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/external/multi-kotlin-project/core"
+  homepage_url: ""
+  scopes:
+  - name: "annotationProcessor"
+    dependencies: []
+  - name: "apiDependenciesMetadata"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "archives"
+    dependencies: []
+  - name: "compile"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "compileClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "compileOnly"
+    dependencies: []
+  - name: "compileOnlyDependenciesMetadata"
+    dependencies: []
+  - name: "default"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "implementationDependenciesMetadata"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "kapt"
+    dependencies: []
+  - name: "kaptTest"
+    dependencies: []
+  - name: "kotlinCompilerClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.3.11"
+        dependencies:
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+          dependencies:
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+          - id: "Maven:org.jetbrains:annotations:13.0"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.3.11"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+        dependencies:
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+        - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "kotlinCompilerPluginClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.11"
+  - name: "kotlinNativeCompilerPluginClasspath"
+    dependencies: []
+  - name: "kotlinScriptDef"
+    dependencies: []
+  - name: "runtime"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "runtimeClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "runtimeOnlyDependenciesMetadata"
+    dependencies: []
+  - name: "testAnnotationProcessor"
+    dependencies: []
+  - name: "testApiDependenciesMetadata"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "testCompile"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "testCompileClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "testCompileOnly"
+    dependencies: []
+  - name: "testCompileOnlyDependenciesMetadata"
+    dependencies: []
+  - name: "testImplementationDependenciesMetadata"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "testKotlinScriptDef"
+    dependencies: []
+  - name: "testRuntime"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "testRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+      - id: "Maven:org.jetbrains:annotations:13.0"
+  - name: "testRuntimeOnlyDependenciesMetadata"
+    dependencies: []
+packages:
+- package:
+    id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.11"
+    declared_licenses:
+    - "The Apache License, Version 2.0"
+    description: "Kotlin Compiler (embeddable)"
+    homepage_url: "https://kotlinlang.org/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/1.3.11/kotlin-compiler-embeddable-1.3.11.jar"
+      hash: "a8db6c14f8b8ed74aa11b8379f961587b639c571"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/1.3.11/kotlin-compiler-embeddable-1.3.11-sources.jar"
+      hash: "86e3750eb7fc889a61af127ef5b2b843d141ba09"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.3.11"
+    declared_licenses:
+    - "The Apache License, Version 2.0"
+    description: "Kotlin Full Reflection Library"
+    homepage_url: "https://kotlinlang.org/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.3.11/kotlin-reflect-1.3.11.jar"
+      hash: "aae7b33412715e9ed441934c4ffaad1bb80e9d36"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.3.11/kotlin-reflect-1.3.11-sources.jar"
+      hash: "92835479c406bf6b1d55c41b0013f238a5ed5bd8"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.3.11"
+    declared_licenses:
+    - "The Apache License, Version 2.0"
+    description: "Kotlin Script Runtime"
+    homepage_url: "https://kotlinlang.org/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/1.3.11/kotlin-script-runtime-1.3.11.jar"
+      hash: "1ef3a816aeacb9cd051b3ed37e2abf88910f1503"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/1.3.11/kotlin-script-runtime-1.3.11-sources.jar"
+      hash: "819822a4658989d09761f8e3e9d31b4743897b22"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.3.11"
+    declared_licenses:
+    - "The Apache License, Version 2.0"
+    description: "Kotlin Scripting Compiler Plugin for embeddable compiler"
+    homepage_url: "https://kotlinlang.org/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/1.3.11/kotlin-scripting-compiler-embeddable-1.3.11.jar"
+      hash: "d7d145f70c063e3bb2edb41b766971e359155b99"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/1.3.11/kotlin-scripting-compiler-embeddable-1.3.11-sources.jar"
+      hash: "9ed059e6df49c3e812b4a8d9431287a629a0e5bb"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
+    declared_licenses:
+    - "The Apache License, Version 2.0"
+    description: "Kotlin Common Standard Library"
+    homepage_url: "https://kotlinlang.org/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.3.11/kotlin-stdlib-common-1.3.11.jar"
+      hash: "d8b8e746e279f1c4f5e08bc14a96b82e6bb1de02"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.3.11/kotlin-stdlib-common-1.3.11-sources.jar"
+      hash: "e49742d3259938ea3539346c8ca3babb54a5140f"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
+    declared_licenses:
+    - "The Apache License, Version 2.0"
+    description: "Kotlin Standard Library for JVM"
+    homepage_url: "https://kotlinlang.org/"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.3.11/kotlin-stdlib-1.3.11.jar"
+      hash: "4cbc5922a54376018307a731162ccaf3ef851a39"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.3.11/kotlin-stdlib-1.3.11-sources.jar"
+      hash: "d46e00faac79f8ec6bb956154ecde4282871a6bf"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/JetBrains/kotlin.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Maven:org.jetbrains:annotations:13.0"
+    declared_licenses:
+    - "The Apache Software License, Version 2.0"
+    description: "A set of annotations used for code inspection support and code documentation."
+    homepage_url: "http://www.jetbrains.org"
+    binary_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar"
+      hash: "919f0dfe192fb4e063e7dacadee7f8bb9a2672a9"
+      hash_algorithm: "SHA-1"
+    source_artifact:
+      url: "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar"
+      hash: "5991ca87ef1fb5544943d9abc5a9a37583fabe03"
+      hash_algorithm: "SHA-1"
+    vcs:
+      type: "git"
+      url: "https://github.com/JetBrains/intellij-community.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "git"
+      url: "https://github.com/JetBrains/intellij-community.git"
+      revision: ""
+      path: ""
+  curations: []

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
             vcs = VcsInfo(
                     type = "Git",
                     url = "https://github.com/vuejs/vue.git",
-                    revision = "v2.5.10"
+                    revision = "v2.5.11"
             )
     )
 
@@ -73,6 +73,4 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
         mapOf(NPM.Factory() as PackageManagerFactory to
                 listOf(File(downloadResult.downloadDirectory, "package.json")))
     }
-
-    override val identifiersWithExpectedErrors = setOf(Identifier("NPM::fsevents:"))
 }

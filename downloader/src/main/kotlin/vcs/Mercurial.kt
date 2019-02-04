@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,6 +150,13 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
             // Explicitly update the working tree to the desired revision.
             run(targetDir, "update", revision)
+
+            pkg.vcsProcessed.path.let {
+                if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).isDirectory) {
+                    throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
+                            "contain the requested path '$it'.")
+                }
+            }
 
             return workingTree
         } catch (e: IOException) {

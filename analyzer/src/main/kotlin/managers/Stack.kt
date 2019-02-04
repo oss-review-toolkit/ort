@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,13 +56,13 @@ import java.util.SortedSet
 /**
  * The Stack package manager for Haskell, see https://haskellstack.org/.
  */
-class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<Stack>() {
+class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Stack(analyzerConfig, repoConfig)
+                Stack(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "stack"
@@ -84,7 +84,7 @@ class Stack(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         }
 
         val projectPackage = parseCabalFile(cabalFile.readText())
-        val projectId = projectPackage.id.copy(type = toString())
+        val projectId = projectPackage.id.copy(type = managerName)
 
         // Parse package information from the stack.yaml file.
         fun runStack(vararg command: String): ProcessCapture {

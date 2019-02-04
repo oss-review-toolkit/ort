@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,6 +95,17 @@ class SpdxUtilsTest : WordSpec({
             enumValues<SpdxLicense>().forEach {
                 getLicenseText(it.id) shouldNot beBlank()
             }
+        }
+
+        "return the full license text for a known SPDX LicenseRef" {
+            val text = getLicenseText("LicenseRef-indiana-extreme").trim()
+
+            text should startWith("Indiana University Extreme! Lab Software License Version 1.1.1")
+            text should endWith("EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.")
+        }
+
+        "throw an exception for an unknown SPDX LicenseRef" {
+            shouldThrow<IOException> { getLicenseText("LicenseRef-foo-bar") }
         }
     }
 })

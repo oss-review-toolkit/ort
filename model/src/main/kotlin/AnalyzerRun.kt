@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,22 @@ package com.here.ort.model
 
 import com.here.ort.model.config.AnalyzerConfiguration
 
+import java.time.Instant
+
 /**
  * To summary of a single run of the analyzer.
  */
 data class AnalyzerRun(
+        /**
+         * The [Instant] the analyzer was started. The default value exists only for backward compatibility.
+         */
+        val startTime: Instant = Instant.EPOCH,
+
+        /**
+         * The [Instant] the analyzer has finished. The default value exists only for backward compatibility.
+         */
+        val endTime: Instant = Instant.EPOCH,
+
         val environment: Environment,
         val config: AnalyzerConfiguration,
         val result: AnalyzerResult

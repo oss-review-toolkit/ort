@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,12 @@ import com.here.ort.model.Repository
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
+import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 
 import java.io.File
+import java.time.Instant
 
 const val TOOL_NAME = "analyzer"
 const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
@@ -51,6 +53,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             packageCurationsFile: File? = null,
             repositoryConfigurationFile: File? = null
     ): OrtResult {
+        val startTime = Instant.now()
+
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
                 ?: locateRepositoryConfigurationFile(absoluteProjectPath)
 
@@ -127,7 +131,9 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
         val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
 
-        val run = AnalyzerRun(Environment(), config, analyzerResultBuilder.build())
+        val endTime = Instant.now()
+
+        val run = AnalyzerRun(startTime, endTime, Environment(), config, analyzerResultBuilder.build())
 
         return OrtResult(repository, run)
     }
@@ -135,8 +141,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
     private fun locateRepositoryConfigurationFile(absoluteProjectPath: File) =
             if (GitRepo().getWorkingTree(absoluteProjectPath).isValid()) {
                 val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
-                manifestFile.resolveSibling("${manifestFile.name}.ort.yml")
+                manifestFile.resolveSibling("${manifestFile.name}$ORT_CONFIG_FILENAME")
             } else {
-                File(absoluteProjectPath, ".ort.yml")
+                File(absoluteProjectPath, ORT_CONFIG_FILENAME)
             }
 }

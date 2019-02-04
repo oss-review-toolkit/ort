@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 import com.here.ort.analyzer.managers.Maven
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -46,8 +47,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
-            val result = Maven(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
+            val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -63,8 +63,7 @@ class MavenTest : StringSpec() {
             // jgnash-core depends on jgnash-resources, so we also have to pass the pom.xml of jgnash-resources to
             // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
             // of transitive dependencies would not work.
-            val result = Maven(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(pomFileCore, pomFileResources))[pomFileCore]
+            val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFileCore, pomFileResources))[pomFileCore]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -77,8 +76,7 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
+            val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -95,8 +93,7 @@ class MavenTest : StringSpec() {
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
             // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
             // not work.
-            val result = Maven(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(pomFileApp, pomFileLib))[pomFileApp]
+            val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFileApp, pomFileLib))[pomFileApp]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -109,16 +106,15 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
+            val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
         "Parent POM from Maven central can be resolved" {
             // Delete the parent POM from the local repository to make sure it has to be resolved from Maven central.
-            val userHome = File(System.getProperty("user.home"))
-            File(userHome, ".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
+            getUserHomeDirectory()
+                    .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                     .safeDeleteRecursively(force = true)
 
             val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent")
@@ -129,10 +125,11 @@ class MavenTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Maven(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
+            val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
+
+    private fun createMaven() = Maven("Maven", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

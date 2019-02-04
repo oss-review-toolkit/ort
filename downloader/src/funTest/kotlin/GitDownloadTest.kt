@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -43,11 +43,11 @@ class GitDownloadTest : StringSpec() {
     private val git = Git()
     private lateinit var outputDir: File
 
-    override fun beforeTest(description: Description) {
+    override fun beforeTest(testCase: TestCase) {
         outputDir = createTempDir()
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         outputDir.safeDeleteRecursively(force = true)
     }
 
@@ -95,7 +95,7 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Git", REPO_URL, "")
             )
 
@@ -107,7 +107,7 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier.EMPTY.copy(version = REPO_VERSION),
+                    id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Git", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(

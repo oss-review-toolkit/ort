@@ -1,0 +1,292 @@
+---
+repository:
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: ""
+    revision: ""
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+  config: {}
+analyzer:
+  start_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:00:00Z"
+  environment:
+    ort_version: "72463cc"
+    os: "Linux"
+    variables: {}
+    tool_versions: {}
+  config:
+    ignore_tool_versions: false
+    allow_dynamic_versions: false
+  result:
+    projects:
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: ""
+        revision: ""
+        path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+      homepage_url: ""
+      scopes:
+      - name: "compile"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - name: "testCompile"
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+    packages:
+    - package:
+        id: "Maven:junit:junit:4.12"
+        declared_licenses:
+        - "Eclipse Public License 1.0"
+        description: "JUnit is a unit testing framework for Java, created by Erich\
+          \ Gamma and Kent Beck."
+        homepage_url: "http://junit.org"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar"
+          hash: "2973d150c0dc1fefe998f834810d68f278ea58ec"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+          hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.apache.commons:commons-lang3:3.5"
+        declared_licenses:
+        - "Apache License, Version 2.0"
+        description: "Apache Commons Lang, a package of Java utility classes for the\n\
+          \  classes that are in java.lang's hierarchy, or are considered to be so\n\
+          \  standard as to justify existence in java.lang."
+        homepage_url: "http://commons.apache.org/proper/commons-lang/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
+          hash: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+          hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.apache.commons:commons-text:1.1"
+        declared_licenses:
+        - "Apache License, Version 2.0"
+        description: "Apache Commons Text is a library focused on algorithms working\
+          \ on strings."
+        homepage_url: "http://commons.apache.org/proper/commons-text/"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
+          hash: "c336bf600f44b88af356c8a85eef4af822b06a4d"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+          hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+      curations: []
+    - package:
+        id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        declared_licenses:
+        - "New BSD License"
+        description: "This is the core API of hamcrest matcher framework to be used\
+          \ by third-party framework providers. This includes the a foundation set\
+          \ of matcher implementations for common operations."
+        homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+          hash: "42a25dc3219429f0e5d060061f71acb49bf010a0"
+          hash_algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+          hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+          hash_algorithm: "SHA-1"
+        vcs:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+      curations: []
+    has_errors: false
+scanner:
+  start_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:00:00Z"
+  environment:
+    ort_version: "72463cc"
+    os: "Linux"
+    variables: {}
+    tool_versions: {}
+  config:
+    artifactory_storage: null
+    scanner: null
+  results:
+    scanned_scopes:
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      scanned_scopes:
+      - "compile"
+      - "testCompile"
+      ignored_scopes: []
+    scan_results:
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      results:
+      - provenance:
+          download_time: "1970-01-01T00:00:00Z"
+        scanner:
+          name: "filecounter"
+          version: "1.0"
+          configuration: ""
+        summary:
+          start_time: "1970-01-01T00:00:00Z"
+          end_time: "1970-01-01T00:00:00Z"
+          file_count: 0
+          license_findings:
+          - license: "MIT"
+            copyrights:
+            - "Copyright (c) example authors."
+          errors:
+          - timestamp: "1970-01-01T00:00:00Z"
+            source: "FileCounter"
+            message: "DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\n\
+              Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\
+              \ Please make sure the release POM file includes the SCM connection,\
+              \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file"
+    - id: "Maven:junit:junit:4.12"
+      results:
+      - provenance:
+          download_time: "1970-01-01T00:00:00Z"
+          source_artifact:
+            url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+            hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+            hash_algorithm: "SHA-1"
+        scanner:
+          name: "filecounter"
+          version: "1.0"
+          configuration: ""
+        summary:
+          start_time: "1970-01-01T00:00:00Z"
+          end_time: "1970-01-01T00:00:00Z"
+          file_count: 234
+          license_findings: []
+    - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      results:
+      - provenance:
+          download_time: "1970-01-01T00:00:00Z"
+          source_artifact:
+            url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+            hash: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+            hash_algorithm: "SHA-1"
+        scanner:
+          name: "filecounter"
+          version: "1.0"
+          configuration: ""
+        summary:
+          start_time: "1970-01-01T00:00:00Z"
+          end_time: "1970-01-01T00:00:00Z"
+          file_count: 168
+          license_findings: []
+    - id: "Maven:org.apache.commons:commons-text:1.1"
+      results:
+      - provenance:
+          download_time: "1970-01-01T00:00:00Z"
+          source_artifact:
+            url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+            hash: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+            hash_algorithm: "SHA-1"
+        scanner:
+          name: "filecounter"
+          version: "1.0"
+          configuration: ""
+        summary:
+          start_time: "1970-01-01T00:00:00Z"
+          end_time: "1970-01-01T00:00:00Z"
+          file_count: 80
+          license_findings: []
+    - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+      results:
+      - provenance:
+          download_time: "1970-01-01T00:00:00Z"
+          source_artifact:
+            url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+            hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+            hash_algorithm: "SHA-1"
+        scanner:
+          name: "filecounter"
+          version: "1.0"
+          configuration: ""
+        summary:
+          start_time: "1970-01-01T00:00:00Z"
+          end_time: "1970-01-01T00:00:00Z"
+          file_count: 47
+          license_findings: []
+    storage_stats:
+      num_reads: 5
+      num_hits: 0
+    has_errors: true
+evaluator:
+  start_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:00:00Z"
+  errors:
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "GPL-1.0-only"
+    message: "GPL 1 error"
+    severity: "ERROR"
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "GPL-2.0-only"
+    message: "GPL 2 warning"
+    severity: "WARNING"
+  - timestamp: "2019-01-02T17:23:55.486Z"
+    source: "GPL-3.0-only"
+    message: "GPL 3 hint"
+    severity: "HINT"

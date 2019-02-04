@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,19 +28,16 @@ import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.spdx.SpdxLicenseMapping
 import com.here.ort.spdx.getLicenseText
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
-import com.here.ort.utils.zipWithDefault
 
-import java.io.File
-import java.util.SortedSet
+import java.io.IOException
+import java.io.OutputStream
 
 class NoticeReporter : Reporter() {
     companion object {
         private const val NOTICE_SEPARATOR = "\n----\n\n"
-        private const val NOTICE_FILE_NAME = "NOTICE"
     }
 
     data class NoticeReport(
@@ -86,23 +83,22 @@ class NoticeReporter : Reporter() {
         override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
     }
 
+    override val defaultFilename = "NOTICE"
+
     override fun generateReport(
             ortResult: OrtResult,
             resolutionProvider: ResolutionProvider,
             copyrightGarbage: CopyrightGarbage,
-            outputDir: File,
+            outputStream: OutputStream,
             postProcessingScript: String?
-    ): File {
+    ) {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
 
         val licenseFindings = getLicenseFindings(ortResult)
 
-        // Remove all non-SPDX licenses because we can currently only get the license texts for SPDX licenses.
-        val spdxLicenseFindings = mapSpdxLicenses(licenseFindings)
-
-        val header = if (spdxLicenseFindings.isEmpty()) {
+        val header = if (licenseFindings.isEmpty()) {
             "This project neither contains or depends on any third-party software components.\n"
         } else {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
@@ -111,18 +107,17 @@ class NoticeReporter : Reporter() {
         val noticeReport = if (postProcessingScript != null) {
             PostProcessor(
                     ortResult,
-                    NoticeReport(listOf(header), spdxLicenseFindings, emptyList()),
+                    NoticeReport(listOf(header), licenseFindings, emptyList()),
                     copyrightGarbage
             ).run(postProcessingScript)
         } else {
-            val processedFindings = spdxLicenseFindings.removeGarbage(copyrightGarbage).processStatements()
+            val processedFindings = licenseFindings.removeGarbage(copyrightGarbage).processStatements()
             NoticeReport(listOf(header), processedFindings, emptyList())
         }
 
-        val outputFile = File(outputDir, NOTICE_FILE_NAME)
-        writeNoticeReport(noticeReport, outputFile)
-
-        return outputFile
+        outputStream.bufferedWriter().use {
+            it.write(generateNotices(noticeReport))
+        }
     }
 
     private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap {
@@ -136,7 +131,7 @@ class NoticeReporter : Reporter() {
             if (excludes?.isExcluded(container.id, analyzerResult) != true) {
                 container.results.forEach { result ->
                     result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
-                        licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights
+                        licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights.map { it.statement }
                     }
                 }
             }
@@ -145,60 +140,39 @@ class NoticeReporter : Reporter() {
         return licenseFindings
     }
 
-    private fun mapSpdxLicenses(licenseFindings: LicenseFindingsMap): LicenseFindingsMap {
-        var result = mapOf<String, SortedSet<String>>()
+    private fun generateNotices(noticeReport: NoticeReport) =
+            buildString {
+                append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-        licenseFindings.forEach { finding ->
-            SpdxLicenseMapping.map(finding.key).map { spdxLicense ->
-                sortedMapOf(spdxLicense.id to finding.value)
-            }.forEach {
-                result = result.zipWithDefault(it, sortedSetOf()) { left, right ->
-                    (left + right).toSortedSet()
+                noticeReport.findings.forEach { (license, copyrights) ->
+                    try {
+                        val licenseText = getLicenseText(license, true)
+
+                        append(NOTICE_SEPARATOR)
+
+                        // Note: Do not use appendln() here as that would write out platform-native line endings, but we
+                        // want to normalize on Unix-style line endings for consistency.
+                        copyrights.forEach { copyright ->
+                            append("$copyright\n")
+                        }
+                        if (copyrights.isNotEmpty()) append("\n")
+
+                        append(licenseText)
+                    } catch (e: IOException) {
+                        // Public domain licenses do not require attribution.
+                        if (license != "LicenseRef-public-domain") {
+                            // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
+                            // find license texts for non-public-domain licenses.
+                            log.warn {
+                                "No license text found for license '$license', it will be omitted from the report."
+                            }
+                        }
+                    }
+                }
+
+                noticeReport.footers.forEach { footer ->
+                    append(NOTICE_SEPARATOR)
+                    append(footer)
                 }
             }
-        }
-
-        return result.toSortedMap()
-    }
-
-    private fun writeNoticeReport(noticeReport: NoticeReport, outputFile: File) {
-        log.info { "Writing $NOTICE_FILE_NAME file to '${outputFile.absolutePath}'." }
-
-        val headers = noticeReport.headers.joinToString(NOTICE_SEPARATOR)
-        outputFile.appendText(headers)
-
-        if (noticeReport.findings.isNotEmpty()) {
-            val findings = noticeReport.findings.map { (license, copyrights) ->
-                val notice = buildString {
-                    // Note: Do not use appendln() here as that would write out platform-native line endings, but we
-                    // want to normalize on Unix-style line endings for consistency.
-                    copyrights.forEach { copyright ->
-                        append("$copyright\n")
-                    }
-
-                    if (copyrights.isNotEmpty()) append("\n")
-
-                    val licenseText = getLicenseText(license, true)
-                    append("$licenseText\n")
-                }
-
-                // Trim lines and remove consecutive blank lines as the license text formatting in SPDX JSON files is
-                // broken, see https://github.com/spdx/LicenseListPublisher/issues/30.
-                var previousLine = ""
-                val trimmedNoticeLines = notice.lines().mapNotNull { line ->
-                    val trimmedLine = line.trim()
-                    trimmedLine.takeIf { it.isNotBlank() || previousLine.isNotBlank() }
-                            .also { previousLine = trimmedLine }
-                }
-
-                trimmedNoticeLines.joinToString("\n")
-            }.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
-            outputFile.appendText(findings)
-        }
-
-        if (noticeReport.footers.isNotEmpty()) {
-            val footers = noticeReport.footers.joinToString(separator = NOTICE_SEPARATOR, prefix = NOTICE_SEPARATOR)
-            outputFile.appendText(footers)
-        }
-    }
 }

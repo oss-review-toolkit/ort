@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,21 @@ data class AnalyzerResult(
                 packages = sortedSetOf(),
                 errors = sortedMapOf()
         )
+    }
+
+    /**
+     * Return a map of all de-duplicated errors associated by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val collectedErrors = errors.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
+
+        projects.forEach { project ->
+            project.collectErrors().forEach { id, errors ->
+                collectedErrors.getOrPut(id) { mutableSetOf() } += errors
+            }
+        }
+
+        return collectedErrors
     }
 
     /**

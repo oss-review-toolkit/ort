@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
         directories.forEach { originalDir ->
             if (originalDir.isDirectory) {
                 // Create a temporary directory to move directories as-is into.
-                val stashDir = createTempDir("stash", ".tmp", originalDir.parentFile)
+                val stashDir = createTempDir("ort", "stash", originalDir.parentFile)
 
                 // Use a non-existing directory as the target to ensure the directory can be moved atomically.
                 val tempDir = File(stashDir, originalDir.name)

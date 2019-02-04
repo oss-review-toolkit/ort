@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,26 +81,27 @@ data class Identifier(
 
     init {
         require(components.none { ":" in it }) {
-            "Properties of Identifier must not contain ':' because it is used as a separator in the String " +
-                    "representation of the Identifier: type='$type', namespace='$namespace', name='$name', " +
-                    "version='$version'"
+            "An identifier's properties must not contain ':' because that character is used as a separator in the " +
+                    "string representation: type='$type', namespace='$namespace', name='$name', version='$version'."
         }
     }
 
     override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
 
     /**
-     * Return whether this [Identifier] is likely to belong to the vendor of the given [name].
+     * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].
      */
-    fun isFromVendor(name: String): Boolean {
-        val lowerName = name.toLowerCase()
-        val vendorNamespace = when (type) {
-            "NPM" -> "@$lowerName"
-            "Gradle", "Maven", "SBT" -> "com.$lowerName"
-            else -> ""
-        }
+    fun isFromOrg(vararg names: String): Boolean {
+        return names.any { name ->
+            val lowerName = name.toLowerCase()
+            val vendorNamespace = when (type) {
+                "NPM" -> "@$lowerName"
+                "Gradle", "Maven", "SBT" -> "(com|net|org)\\.$lowerName(\\..+)?"
+                else -> ""
+            }
 
-        return vendorNamespace.isNotEmpty() && namespace.startsWith(vendorNamespace)
+            vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
+        }
     }
 
     /**

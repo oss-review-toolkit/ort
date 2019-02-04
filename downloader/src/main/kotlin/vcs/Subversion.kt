@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,14 +173,14 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                           recursive: Boolean): WorkingTree {
         log.info { "Using $type version ${getVersion()}." }
 
-        try {
+        val workingTree = try {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
             run(targetDir, "checkout", pkg.vcsProcessed.url, "--depth", "empty", ".")
 
             var revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: "HEAD"
 
             val workingTree = getWorkingTree(targetDir)
-            return if (allowMovingRevisions || isFixedRevision(workingTree, revision)) {
+            if (allowMovingRevisions || isFixedRevision(workingTree, revision)) {
                 if (pkg.vcsProcessed.path.isBlank()) {
                     // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
                     run(targetDir, "update", "-r", revision, "--set-depth", "infinity")
@@ -237,5 +237,14 @@ class Subversion : VersionControlSystem(), CommandLineTool {
         } catch (e: IOException) {
             throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.", e)
         }
+
+        pkg.vcsProcessed.path.let {
+            if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).isDirectory) {
+                throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not contain " +
+                        "the requested path '$it'.")
+            }
+        }
+
+        return  workingTree
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
  * Resolutions for issues with a repository.
  */
-class Resolutions(
+data class Resolutions(
     /**
      * Resolutions for issues with the analysis or scan of the projects in this repository and their dependencies.
      */
@@ -34,6 +35,7 @@ class Resolutions(
     /**
      * Resolutions for license policy violations.
      */
+    @JsonAlias("evaluator_errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val ruleViolations: List<RuleViolationResolution> = emptyList()
 ) {

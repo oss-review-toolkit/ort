@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ package com.here.ort.spdx;
  * Parser Rules
  */
 
-licenseRefExpression
+licenseReferenceExpression
     :
-    LICENSEREF
+    LICENSEREFERENCE
     ;
 
 licenseExceptionExpression
@@ -44,12 +44,12 @@ licenseExceptionExpression
 licenseIdExpression
     :
     IDSTRING
-    (PLUS)?
+    PLUS?
     ;
 
 simpleExpression
     :
-    licenseRefExpression
+    licenseReferenceExpression
     | licenseIdExpression
     ;
 
@@ -81,9 +81,9 @@ WITH : ('WITH' | 'with') ;
 
 OPEN  : '(' ;
 CLOSE : ')' ;
-PLUS  : '+';
+PLUS  : '+' ;
 
-LICENSEREF : ('DocumentRef-' | 'LicenseRef-') IDSTRING ;
-IDSTRING   : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
+LICENSEREFERENCE : ('DocumentRef-' IDSTRING ':')? 'LicenseRef-' IDSTRING ;
+IDSTRING         : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
 
 WHITESPACE : ' ' -> skip ;

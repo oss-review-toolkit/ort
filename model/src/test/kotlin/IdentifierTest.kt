@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -131,6 +132,19 @@ class IdentifierTest : StringSpec() {
             val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
 
             map shouldBe mapOf(Identifier("type", "namespace", "", "") to 1)
+        }
+
+        "Checking the vendor works as expected" {
+            assertSoftly {
+                Identifier("Maven:com.here:name:version").isFromOrg("here", "traffic") shouldBe true
+                Identifier("Maven:com.here.project:name:version").isFromOrg("here") shouldBe true
+                Identifier("Maven:org.apache:name:version").isFromOrg("apache") shouldBe true
+                Identifier("NPM:@scope:name:version").isFromOrg("scope") shouldBe true
+
+                Identifier("").isFromOrg("here") shouldBe false
+                Identifier("type:namespace:name:version").isFromOrg("here") shouldBe false
+                Identifier("Maven:project.com.here:name:version").isFromOrg("here") shouldBe false
+            }
         }
     }
 }

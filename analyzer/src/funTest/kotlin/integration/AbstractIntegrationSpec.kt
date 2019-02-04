@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.USER_DIR
 
-import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.containExactly
@@ -75,12 +74,12 @@ abstract class AbstractIntegrationSpec : StringSpec() {
      */
     protected lateinit var downloadResult: Downloader.DownloadResult
 
-    override fun beforeSpec(description: Description, spec: Spec) {
+    override fun beforeSpec(spec: Spec) {
         outputDir = createTempDir()
         downloadResult = Downloader().download(pkg, outputDir)
     }
 
-    override fun afterSpec(description: Description, spec: Spec) {
+    override fun afterSpec(spec: Spec) {
         outputDir.safeDeleteRecursively(force = true)
     }
 

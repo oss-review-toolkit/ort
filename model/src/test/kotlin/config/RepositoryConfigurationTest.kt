@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ class RepositoryConfigurationTest : WordSpec() {
                         comment: "error comment"
                       rule_violations:
                       - message: "rule message"
-                        reason: "APPROVED"
+                        reason: "PATENT_GRANT_EXCEPTION"
                         comment: "rule comment"
                     """.trimIndent()
 
@@ -128,7 +128,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 evalErrors should haveSize(1)
                 val evalError = evalErrors.first()
                 evalError.message shouldBe "rule message"
-                evalError.reason shouldBe RuleViolationResolutionReason.APPROVED
+                evalError.reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
                 evalError.comment shouldBe "rule comment"
             }
         }

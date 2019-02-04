@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,9 +68,13 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
         EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
- * Retrieve the full text for the license with the provided SPDX [id]. If [handleExceptions] is enabled, the [id] may
- * also refer to an exception instead of a license.
+ * Retrieve the full text for the license with the provided SPDX [id], including "LicenseRefs". If [handleExceptions] is
+ * enabled, the [id] may also refer to an exception instead of a license.
  */
 fun getLicenseText(id: String, handleExceptions: Boolean = false) =
-        SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
-                ?: throw IOException("No license text found for id '$id'.")
+        if (id.startsWith("LicenseRef-")) {
+            val ref = id.removePrefix("LicenseRef-").toLowerCase()
+            object {}.javaClass.getResource("/licenserefs/$ref")?.readText()
+        } else {
+            SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
+        } ?: throw IOException("No license text found for id '$id'.")

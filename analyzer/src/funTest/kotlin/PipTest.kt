@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,62 +33,63 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class PipTest : WordSpec({
-    val projectsDir = File("src/funTest/assets/projects")
-    val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsRevision = vcsDir.getRevision()
+class PipTest : WordSpec() {
+    private val projectsDir = File("src/funTest/assets/projects")
+    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
+    private val vcsUrl = vcsDir.getRemoteUrl()
+    private val vcsRevision = vcsDir.getRevision()
 
-    "Python 2" should {
-        "resolve setup.py dependencies correctly for spdx-tools-python" {
-            val definitionFile = File(projectsDir, "external/spdx-tools-python/setup.py")
+    init {
+        "Python 2" should {
+            "resolve setup.py dependencies correctly for spdx-tools-python" {
+                val definitionFile = File(projectsDir, "external/spdx-tools-python/setup.py")
 
-            val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
-            val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
+                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
+
+            "resolve requirements.txt dependencies correctly for example-python-flask" {
+                val definitionFile = File(projectsDir, "external/example-python-flask/requirements.txt")
+
+                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
+
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
+
+            "capture metadata from setup.py even if requirements.txt is present" {
+                val definitionFile = File(projectsDir, "synthetic/pip/requirements.txt")
+                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
+
+                val expectedResult = patchExpectedResult(File(projectsDir, "synthetic/pip-expected-output.yml"),
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath)
+
+                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
         }
 
-        "resolve requirements.txt dependencies correctly for example-python-flask" {
-            val definitionFile = File(projectsDir, "external/example-python-flask/requirements.txt")
+        "Python 3" should {
+            "resolve dependencies correctly for python-django" {
+                val definitionFile = File(projectsDir, "synthetic/python3-django/requirements.txt")
+                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-            val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
-            val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
+                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val expectedResultFile = File(projectsDir, "synthetic/python3-django-expected-output.yml")
+                val expectedResult = patchExpectedResult(expectedResultFile,
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsPath)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
-
-        "capture metadata from setup.py even if requirements.txt is present" {
-            val definitionFile = File(projectsDir, "synthetic/pip/requirements.txt")
-            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
-
-            val expectedResult = patchExpectedResult(File(projectsDir, "synthetic/pip-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath)
-
-            val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
-
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
         }
     }
 
-    "Python 3" should {
-        "resolve dependencies correctly for python-django" {
-            val definitionFile = File(projectsDir, "synthetic/python3-django/requirements.txt")
-            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
-
-            val result = PIP(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
-            val expectedResult = patchExpectedResult(File(projectsDir, "synthetic/python3-django-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath)
-
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
-    }
-})
+    private fun createPIP() = PIP("PIP", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+}

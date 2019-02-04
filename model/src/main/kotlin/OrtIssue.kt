@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,10 @@ data class OrtIssue(
          */
         val severity: Severity = Severity.ERROR
 ) {
-    override fun toString() = "${if (timestamp == Instant.EPOCH) "n/a" else timestamp.toString()}: $source - $message"
+    override fun toString(): String {
+        val time = if (timestamp == Instant.EPOCH) "Unknown time" else timestamp.toString()
+        return "$time [$severity]: $source - $message"
+    }
 }
 
 class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
@@ -65,8 +68,20 @@ class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
             // For backward-compatibility if only an error string is specified.
             OrtIssue(Instant.EPOCH, "", node.textValue())
         } else {
-            OrtIssue(Instant.parse(node.get("timestamp").textValue()), node.get("source").textValue(),
-                    node.get("message").textValue())
+            if (node.has("severity")) {
+                OrtIssue(
+                        timestamp = Instant.parse(node.get("timestamp").textValue()),
+                        source = node.get("source").textValue(),
+                        message = node.get("message").textValue(),
+                        severity = Severity.valueOf(node.get("severity").textValue())
+                )
+            } else {
+                OrtIssue(
+                        timestamp = Instant.parse(node.get("timestamp").textValue()),
+                        source = node.get("source").textValue(),
+                        message = node.get("message").textValue()
+                )
+            }
         }
     }
 }
@@ -77,6 +92,7 @@ class OrtIssueSerializer : StdSerializer<OrtIssue>(OrtIssue::class.java) {
         gen.writeObjectField("timestamp", value.timestamp)
         gen.writeStringField("source", value.source)
         gen.writeStringField("message", value.message.normalizeLineBreaks())
+        gen.writeStringField("severity", value.severity.name)
         gen.writeEndObject()
     }
 }

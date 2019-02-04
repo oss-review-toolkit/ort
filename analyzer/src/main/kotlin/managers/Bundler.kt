@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,18 +63,18 @@ import okhttp3.Request
  * The Bundler package manager for Ruby, see https://bundler.io/. Also see
  * http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
  */
-class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<Bundler>() {
+class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Bundler(analyzerConfig, repoConfig)
+                Bundler(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bundle.bat" else "bundle"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,1.18[")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.1[")
 
     override fun prepareResolution(definitionFiles: List<File>) =
             // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
@@ -95,7 +95,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
             installDependencies(workingDir)
 
             val (projectName, version, homepageUrl, declaredLicenses) = parseProject(workingDir)
-            val projectId = Identifier(toString(), "", projectName, version)
+            val projectId = Identifier(managerName, "", projectName, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
             for ((groupName, dependencyList) in groupedDeps) {
@@ -135,7 +135,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
 
         try {
             var gemSpec = getGemspec(gemName, workingDir)
-            val gemId = Identifier(toString(), "", gemSpec.name, gemSpec.version)
+            val gemId = Identifier(managerName, "", gemSpec.name, gemSpec.version)
 
             // The project itself can be listed as a dependency if the project is a Gem (i.e. there is a .gemspec file
             // for it, and the Gemfile refers to it). In that case, skip querying Rubygems and adding Package and
@@ -174,7 +174,7 @@ class Bundler(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfi
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.collectMessagesAsString()}"
             log.error { errorMsg }
 
-            errors += OrtIssue(source = toString(), message = errorMsg)
+            errors += OrtIssue(source = managerName, message = errorMsg)
         }
     }
 

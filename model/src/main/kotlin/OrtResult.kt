@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.spdx.SpdxExpression
+import com.here.ort.utils.zipWithDefault
 
 import java.util.SortedSet
 
@@ -80,24 +81,33 @@ data class OrtResult(
     }
 
     /**
-     * Return all projects and packages that are likely to belong to the vendor of the given [name]. If [omitExcluded]
-     * is set to true, excluded projects / packages are omitted from the result. Projects are converted to packages in
-     * the result. If no analyzer result is present an empty set is returned.
+     * Return a map of all de-duplicated errors associated by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val analyzerErrors = analyzer?.result?.collectErrors() ?: emptyMap()
+        val scannerErrors = scanner?.results?.collectErrors() ?: emptyMap()
+        return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
+    }
+
+    /**
+     * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
+     * [omitExcluded] is set to true, excluded projects / packages are omitted from the result. Projects are converted
+     * to packages in the result. If no analyzer result is present an empty set is returned.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getVendorPackages(name: String, omitExcluded: Boolean = false): SortedSet<Package> {
+    fun getOrgPackages(vararg names: String, omitExcluded: Boolean = false): SortedSet<Package> {
         val vendorPackages = sortedSetOf<Package>()
         val excludes = repository.config.excludes.takeIf { omitExcluded }
 
         analyzer?.result?.apply {
             projects.filter {
-                it.id.isFromVendor(name) && excludes?.isProjectExcluded(it) != true
+                it.id.isFromOrg(*names) && excludes?.isProjectExcluded(it) != true
             }.mapTo(vendorPackages) {
                 it.toPackage()
             }
 
             packages.filter { (pkg, _) ->
-                pkg.id.isFromVendor(name) && excludes?.isPackageExcluded(pkg.id, analyzer.result) != true
+                pkg.id.isFromOrg(*names) && excludes?.isPackageExcluded(pkg.id, analyzer.result) != true
             }.mapTo(vendorPackages) {
                 it.pkg
             }

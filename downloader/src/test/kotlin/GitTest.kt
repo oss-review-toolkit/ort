@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,10 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
-import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -35,7 +34,7 @@ class GitTest : StringSpec() {
     private val git = Git()
     private lateinit var zipContentDir: File
 
-    override fun beforeSpec(description: Description, spec: Spec) {
+    override fun beforeSpec(spec: Spec) {
         val zipFile = File("src/test/assets/pipdeptree-2018-01-03-git.zip")
 
         zipContentDir = createTempDir()
@@ -44,7 +43,7 @@ class GitTest : StringSpec() {
         zipFile.unpack(zipContentDir)
     }
 
-    override fun afterSpec(description: Description, spec: Spec) {
+    override fun afterSpec(spec: Spec) {
         zipContentDir.safeDeleteRecursively(force = true)
     }
 
@@ -56,7 +55,7 @@ class GitTest : StringSpec() {
         }
 
         "Git detects non-working-trees" {
-            git.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+            git.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
         "Git correctly detects URLs to remote repositories" {
@@ -100,6 +99,7 @@ class GitTest : StringSpec() {
                     "0.12.1",
                     "0.13.0",
                     "0.13.1",
+                    "0.13.2",
                     "0.5.0",
                     "0.6.0",
                     "0.7.0",

@@ -17,18 +17,36 @@ results:
     file_count: 1
     license_findings:
     - license: "license 1.1"
+      locations:
+      - path: "path 1.1"
+        start_line: 1
+        end_line: 1
       copyrights:
-      - "copyright 1"
+      - statement: "copyright 1"
+        locations:
+        - path: "copyright path 1.1"
+          start_line: 1
+          end_line: 1
     - license: "license 1.2"
+      locations:
+      - path: "path 1.2"
+        start_line: 1
+        end_line: 2
       copyrights:
-      - "copyright 2"
+      - statement: "copyright 2"
+        locations:
+        - path: "copyright path 1.2"
+          start_line: 1
+          end_line: 2
     errors:
     - timestamp: "1970-01-01T00:00:00Z"
       source: "source-11"
       message: "error-11"
+      severity: "ERROR"
     - timestamp: "1970-01-01T00:00:00Z"
       source: "source-12"
       message: "error-12"
+      severity: "ERROR"
   raw_result: "key 1"
 - provenance:
     download_time: "1970-01-03T00:00:00Z"
@@ -48,16 +66,22 @@ results:
     file_count: 2
     license_findings:
     - license: "license 2.1"
+      locations: []
       copyrights:
-      - "copyright 3"
+      - statement: "copyright 3"
+        locations: []
     - license: "license 2.2"
+      locations: []
       copyrights:
-      - "copyright 4"
+      - statement: "copyright 4"
+        locations: []
     errors:
     - timestamp: "1970-01-01T00:00:00Z"
       source: "source-21"
       message: "error-21"
+      severity: "ERROR"
     - timestamp: "1970-01-01T00:00:00Z"
       source: "source-22"
       message: "error-22"
+      severity: "ERROR"
   raw_result: "key 2"

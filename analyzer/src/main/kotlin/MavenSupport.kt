@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
 import com.here.ort.utils.collectMessages
-import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
@@ -95,7 +95,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
-                DiskCache(File(getUserConfigDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
+                DiskCache(File(getUserOrtDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
                         MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS)
 
         private fun createContainer(): PlexusContainer {
@@ -115,7 +115,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         fun parseLicenses(mavenProject: MavenProject) =
                 mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
 
-        fun parseScm(scm: Scm?): VcsInfo {
+        private fun parseScm(scm: Scm?): VcsInfo {
             if (scm == null) return VcsInfo.EMPTY
 
             val connection = scm.connection ?: ""
@@ -363,7 +363,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 log.debug { "Checksums: $checksums" }
 
                 val checksum = checksums.first()
-                val tempFile = File.createTempFile("checksum", checksum.algorithm)
+                val tempFile = File.createTempFile("ort", "checksum-${checksum.algorithm}")
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
                 val actualChecksum = try {

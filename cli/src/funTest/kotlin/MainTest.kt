@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.Description
+import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -45,11 +45,11 @@ class MainTest : StringSpec() {
 
     private lateinit var outputDir: File
 
-    override fun beforeTest(description: Description) {
+    override fun beforeTest(testCase: TestCase) {
         outputDir = createTempDir()
     }
 
-    override fun afterTest(description: Description, result: TestResult) {
+    override fun afterTest(testCase: TestCase, result: TestResult) {
         outputDir.safeDeleteRecursively(force = true)
     }
 
@@ -63,16 +63,19 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                Main.main(arrayOf(
+                val exitCode = Main.run(arrayOf(
                         "analyze",
                         "-m", "Gradle",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "gradle").path
                 ))
 
-                val lines = streamOut.toString().lineSequence().iterator()
+                exitCode shouldBe 0
 
-                lines.next() shouldBe "The following package managers are activated:"
+                val lines = streamOut.toString().lineSequence().iterator()
+                while (lines.hasNext() && lines.next() != "The following package managers are activated:")
+
+                lines.hasNext() shouldBe true
                 lines.next() shouldBe "\tGradle"
             } finally {
                 // Restore standard output.
@@ -89,16 +92,19 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                Main.main(arrayOf(
+                val exitCode = Main.run(arrayOf(
                         "analyze",
                         "-m", "NPM",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "package-lock").path
                 ))
 
-                val lines = streamOut.toString().lineSequence().iterator()
+                exitCode shouldBe 0
 
-                lines.next() shouldBe "The following package managers are activated:"
+                val lines = streamOut.toString().lineSequence().iterator()
+                while (lines.hasNext() && lines.next() != "The following package managers are activated:")
+
+                lines.hasNext() shouldBe true
                 lines.next() shouldBe "\tNPM"
             } finally {
                 // Restore standard output.
@@ -115,13 +121,15 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                Main.main(arrayOf(
+                val exitCode = Main.run(arrayOf(
                         "analyze",
                         "-m", "Gradle",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "gradle").path,
                         "-f", "json,yaml,json"
                 ))
+
+                exitCode shouldBe 0
 
                 val lines = streamOut.toString().lines().filter { it.startsWith("Writing analyzer result to ") }
 
@@ -142,16 +150,18 @@ class MainTest : StringSpec() {
                     urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            Main.main(arrayOf(
+            val exitCode = Main.run(arrayOf(
                     "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
                     "-o", analyzerOutputDir.path
             ))
 
+            exitCode shouldBe 0
+
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            patchActualResult(result) shouldBe expectedResult
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
@@ -167,7 +177,7 @@ class MainTest : StringSpec() {
             // The command below should include the "--merge-results" option, but setting this option here would disable
             // the feature because JCommander just switches the value of boolean options, and the option was already set
             // to true by the test before. See: https://github.com/cbeust/jcommander/issues/378
-            Main.main(arrayOf(
+            val exitCode = Main.run(arrayOf(
                     "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
@@ -175,9 +185,11 @@ class MainTest : StringSpec() {
                     "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
             ))
 
+            exitCode shouldBe 0
+
             val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            patchActualResult(result) shouldBe expectedResult
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 }

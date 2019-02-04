@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,14 +59,14 @@ import java.io.IOException
 import java.time.Instant
 
 /**
- * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scan] are processed in serial
- * order. Scan results can be cached in a [ScanResultsCache].
+ * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
+ * serial order. Scan results can be stored in a [ScanResultsStorage].
  */
 abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), CommandLineTool {
     /**
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
-    protected abstract val resultFileExt: String
+    abstract val resultFileExt: String
 
     /**
      * The directory the scanner was bootstrapped to, if so.
@@ -134,11 +134,8 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
      */
     fun getDetails() = ScannerDetails(getName(), getVersion(), getConfiguration())
 
-    override fun scan(
-            packages: List<Package>,
-            outputDirectory: File,
-            downloadDirectory: File?
-    ): Map<Package, List<ScanResult>> {
+    override fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
+            : Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
         return packages.withIndex().associate { (index, pkg) ->
@@ -156,7 +153,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
                 val now = Instant.now()
                 listOf(ScanResult(
-                        provenance = Provenance(now),
+                        provenance = Provenance(),
                         scanner = scannerDetails,
                         summary = ScanSummary(
                                 startTime = now,
@@ -175,84 +172,32 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
     }
 
     /**
-     * Scan all files in [inputPath] using this [Scanner] and store the scan results in [outputDirectory].
-     */
-    fun scanInputPath(inputPath: File, outputDirectory: File): OrtResult {
-        val absoluteInputPath = inputPath.absoluteFile
-
-        require(inputPath.exists()) {
-            "Specified path '$absoluteInputPath' does not exist."
-        }
-
-        log.info { "Scanning path '$absoluteInputPath'..." }
-
-        val result = try {
-            scanPath(inputPath, outputDirectory).also {
-                log.info {
-                    "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
-                }
-            }
-        } catch (e: ScanException) {
-            e.showStackTrace()
-
-            log.error { "Could not scan path '$absoluteInputPath': ${e.message}" }
-
-            val now = Instant.now()
-            val summary = ScanSummary(now, now, 0, sortedSetOf(),
-                    listOf(OrtIssue(source = toString(), message = e.collectMessagesAsString())))
-            ScanResult(Provenance(now), getDetails(), summary)
-        }
-
-        // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
-        val id = Identifier(OS.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
-                inputPath.name.fileSystemEncode(), "")
-
-        val scanResultContainer = ScanResultContainer(id, listOf(result))
-        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsCache.stats)
-        val scannerRun = ScannerRun(Environment(), config, scanRecord)
-
-        val vcs = VersionControlSystem.getCloneInfo(inputPath)
-        val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration())
-
-        return OrtResult(repository, scanner = scannerRun)
-    }
-
-    /**
-     * Scan the provided [pkg] for license information, writing results to [outputDirectory]. If a scan result is found
-     * in the cache, it is used without running the actual scan. If no cached scan result is found, the package's source
-     * code is downloaded and scanned afterwards.
+     * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
+     * native file format. The results file name is derived from [pkg] and [scannerDetails].
      *
-     * @param pkg The package to scan.
-     * @param outputDirectory The base directory to store scan results in.
-     * @param downloadDirectory The directory to download source code to. Defaults to [outputDirectory]/downloads if
-     *                          null.
+     * If a scan result is found in the storage, it is used without running the actual scan. If no stored scan result is
+     * found, the package's source code is downloaded to [downloadDirectory] and scanned afterwards.
      *
-     * @return The set of found licenses.
-     *
-     * @throws ScanException In case the package could not be scanned.
+     * The return value is a list of [ScanResult]s. If a package could not be scanned, a [ScanException] is thrown.
      */
     private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
-                    downloadDirectory: File? = null): List<ScanResult> {
-        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val scanResultsForPackageDirectory = File(scanResultsDirectory, pkg.id.toPath()).apply { safeMkdirs() }
+                    downloadDirectory: File): List<ScanResult> {
+        val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
         val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
 
-        val cachedResults = ScanResultsCache.read(pkg, scannerDetails)
+        val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
 
-        if (cachedResults.results.isNotEmpty()) {
+        if (storedResults.results.isNotEmpty()) {
             // Some external tools rely on the raw results filer to be written to the scan results directory, so write
-            // the first cached result to resultsFile. This feature will be removed when the reporter tool becomes
+            // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
             // available.
-            resultsFile.mapper().writeValue(resultsFile, cachedResults.results.first().rawResult)
-            return cachedResults.results
+            resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
+            return storedResults.results
         }
 
         val downloadResult = try {
-            Downloader().download(
-                    pkg,
-                    downloadDirectory ?: File(outputDirectory, "downloads"),
-                    false
-            )
+
+            Downloader().download(pkg, downloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
 
@@ -260,7 +205,7 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
             val now = Instant.now()
             val scanResult = ScanResult(
-                    Provenance(now),
+                    Provenance(),
                     scannerDetails,
                     ScanSummary(
                             startTime = now,
@@ -284,52 +229,78 @@ abstract class LocalScanner(config: ScannerConfiguration) : Scanner(config), Com
 
         val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
                 downloadResult.originalVcsInfo)
-        val scanResult = scanPath(scannerDetails, downloadResult.downloadDirectory, provenance, resultsFile)
+        val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
-        ScanResultsCache.add(pkg.id, scanResult)
+        ScanResultsStorage.add(pkg.id, scanResult)
 
         return listOf(scanResult)
     }
 
     /**
-     * Scan the provided [path] for license information, writing results to [outputDirectory] using the scanner's native
-     * output file format. Note that no scan results cache is used by this function.
+     * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
+     * scanner's native file format. The results file name is derived from [inputPath] and [getDetails].
      *
-     * @param path The directory or file to scan.
-     * @param outputDirectory The base directory to store scan results in.
+     * No scan results storage is used by this function.
      *
-     * @return The [ScanResult] with empty [Provenance] except for the download time.
-     *
-     * @throws ScanException In case the path could not be scanned.
+     * The return value is an [OrtResult]. If the path could not be scanned, a [ScanException] is thrown.
      */
-    fun scanPath(path: File, outputDirectory: File): ScanResult {
-        val scannerDetails = getDetails()
-        val scanResultsDirectory = File(outputDirectory, "scanResults").apply { safeMkdirs() }
-        val resultsFile = File(scanResultsDirectory,
-                "${path.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
+    fun scanInputPath(inputPath: File, outputDirectory: File): OrtResult {
+        val startTime = Instant.now()
 
-        log.info { "Running $this version ${scannerDetails.version} on path '${path.absolutePath}'." }
+        val absoluteInputPath = inputPath.absoluteFile
 
-        return scanPath(scannerDetails, path, Provenance(downloadTime = Instant.now()), resultsFile).also {
-            log.info { "Stored $this results in '${resultsFile.absolutePath}'." }
+        require(inputPath.exists()) {
+            "Specified path '$absoluteInputPath' does not exist."
         }
+
+        val scannerDetails = getDetails()
+        log.info { "Scanning path '$absoluteInputPath' with $scannerDetails..." }
+
+        val result = try {
+            val resultsFile = File(outputDirectory.apply { safeMkdirs() },
+                    "${inputPath.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
+            scanPath(inputPath, resultsFile).also {
+                log.info {
+                    "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
+                }
+            }
+        } catch (e: ScanException) {
+            e.showStackTrace()
+
+            log.error { "Could not scan path '$absoluteInputPath': ${e.message}" }
+
+            val now = Instant.now()
+            val summary = ScanSummary(now, now, 0, sortedSetOf(),
+                    listOf(OrtIssue(source = toString(), message = e.collectMessagesAsString())))
+            ScanResult(Provenance(), getDetails(), summary)
+        }
+
+        // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
+        val id = Identifier(OS.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
+                inputPath.name.fileSystemEncode(), "")
+
+        val scanResultContainer = ScanResultContainer(id, listOf(result))
+        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsStorage.stats)
+
+        val endTime = Instant.now()
+
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
+
+        val vcs = VersionControlSystem.getCloneInfo(inputPath)
+        val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration())
+
+        return OrtResult(repository, scanner = scannerRun)
     }
 
     /**
-     * Scan the provided [path] for license information, writing results to [resultsFile] using the scanner's native
-     * output file format. Note that no scan results cache is used by this function.
+     * Scan the provided [path] for license information and write the results to [resultsFile] using the scanner's
+     * native file format.
      *
-     * @param scannerDetails The [ScannerDetails] of the current scanner.
-     * @param path The directory or file to scan.
-     * @param provenance [Provenance] information about the files in [path].
-     * @param resultsFile The file to store scan results in.
+     * No scan results storage is used by this function.
      *
-     * @return The [ScanResult], containing the provided [provenance] and [scannerDetails].
-     *
-     * @throws ScanException In case the path could not be scanned.
+     * The return value is a [ScanResult]. If the path could not be scanned, a [ScanException] is thrown.
      */
-    protected abstract fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance,
-                                    resultsFile: File): ScanResult
+    abstract fun scanPath(path: File, resultsFile: File): ScanResult
 
     internal abstract fun getResult(resultsFile: File): JsonNode
 

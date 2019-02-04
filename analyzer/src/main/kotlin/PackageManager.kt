@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,10 +51,12 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
 /**
  * A class representing a package manager that handles software dependencies.
  *
+ * @param managerName The package manager's name.
  * @param analyzerConfig The configuration of the analyzer to use.
  * @param repoConfig The configuration of the repository to use.
  */
 abstract class PackageManager(
+        val managerName: String,
         protected val analyzerConfig: AnalyzerConfiguration,
         protected val repoConfig: RepositoryConfiguration
 ) {
@@ -108,9 +110,7 @@ abstract class PackageManager(
                         // Create a list of lists of matching files per glob.
                         val matchesPerGlob = manager.matchersForDefinitionFiles.mapNotNull { glob ->
                             // Create a list of files in the current directory that match the current glob.
-                            val filesMatchingGlob = filesInDir.filter { file ->
-                                file != null && glob.matches(file.toPath())
-                            }
+                            val filesMatchingGlob = filesInDir.filter { glob.matches(it.toPath()) }
                             filesMatchingGlob.takeIf { it.isNotEmpty() }
                         }
 
@@ -172,11 +172,6 @@ abstract class PackageManager(
     }
 
     /**
-     * Return the Java class name as a simple way to refer to the [PackageManager].
-     */
-    override fun toString(): String = javaClass.simpleName
-
-    /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
     open fun mapDefinitionFiles(definitionFiles: List<File>): List<File> = definitionFiles
@@ -212,7 +207,7 @@ abstract class PackageManager(
 
                     val errorProject = Project.EMPTY.copy(
                             id = Identifier(
-                                    type = toString(),
+                                    type = managerName,
                                     namespace = "",
                                     name = relativePath,
                                     version = ""

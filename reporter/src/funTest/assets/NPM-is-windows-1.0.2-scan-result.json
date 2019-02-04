@@ -6225,7 +6225,7 @@
       "tool_versions" : { }
     },
     "config" : {
-      "artifactory_cache" : null
+      "artifactory_storage" : null
     },
     "results" : {
       "scanned_scopes" : [ {
@@ -11597,7 +11597,7 @@
           }
         } ]
       } ],
-      "cache_stats" : {
+      "storage_stats" : {
         "num_reads" : 154,
         "num_hits" : 0
       },

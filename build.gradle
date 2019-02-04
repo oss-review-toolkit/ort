@@ -5,6 +5,7 @@ plugins {
     id 'io.gitlab.arturbosch.detekt' apply false
 
     id 'com.github.ben-manes.versions'
+    id 'org.ajoberstar.grgit'
     id 'org.jetbrains.gradle.plugin.idea-ext'
 }
 
@@ -29,13 +30,13 @@ subprojects {
 
     if (it.name == 'reporter-web-app') return
 
+    // Apply core plugins.
+    apply plugin: 'jacoco'
+
     // Apply third-party plugins.
     apply plugin: 'org.jetbrains.kotlin.jvm'
     apply plugin: 'org.jetbrains.dokka'
     apply plugin: 'io.gitlab.arturbosch.detekt'
-
-    // Apply core plugins.
-    apply plugin: 'jacoco'
 
     sourceSets {
         funTest {
@@ -67,9 +68,9 @@ subprojects {
         }
     }
 
-    // TODO: Remove this once jackson-module-kotlin and kotlintest are updated.
     configurations.all {
         resolutionStrategy {
+            // Ensure that all transitive versions of "kotlin-reflect" match our version of "kotlin-stdlib".
             force "org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion"
         }
     }
@@ -103,6 +104,7 @@ subprojects {
         toolVersion = detektPluginVersion
 
         config = files('../detekt.yml')
+        input = files('src/main/kotlin', 'src/test/kotlin', 'src/funTest/kotlin')
     }
 
     task funTest(type: Test) {
@@ -195,7 +197,7 @@ task checkCopyright(type: Exec) {
     description = 'Checks for HERE Copyright headers in Kotlin files.'
     group = 'Verification'
 
-    commandLine 'git', 'grep', '-EL', 'Copyright.+HERE', '*.kt'
+    commandLine 'git', 'grep', '-EL', 'Copyright.+HERE', '*.kt', ':!analyzer/src/funTest/assets/projects/external'
     ignoreExitValue = true
     standardOutput = new ByteArrayOutputStream()
 

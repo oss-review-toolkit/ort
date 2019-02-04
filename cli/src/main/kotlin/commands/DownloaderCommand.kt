@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,8 +121,7 @@ object DownloaderCommand : CommandWithHelp() {
             val analyzerResult = it.readValue<OrtResult>().analyzer?.result
 
             requireNotNull(analyzerResult) {
-                "The provided dependencies file '${it.invariantSeparatorsPath}' does not contain an " +
-                        "analyzer result."
+                "The provided ORT result file '${it.invariantSeparatorsPath}' does not contain an analyzer result."
             }
 
             mutableListOf<Package>().apply {
@@ -144,7 +143,7 @@ object DownloaderCommand : CommandWithHelp() {
                 projectName = projectFile.nameWithoutExtension
             }
 
-            val dummyId = Identifier.EMPTY.copy(name = projectName!!)
+            val dummyId = Identifier("Downloader::$projectName:")
             val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
                 Package.EMPTY.copy(
                         id = dummyId,

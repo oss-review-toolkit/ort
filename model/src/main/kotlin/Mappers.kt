@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,12 +34,16 @@ import com.here.ort.model.config.AnalyzerConfigurationDeserializer
 
 private val ortModelModule = SimpleModule("OrtModelModule").apply {
     addDeserializer(AnalyzerConfiguration::class.java, AnalyzerConfigurationDeserializer())
+    addDeserializer(CopyrightFinding::class.java, CopyrightFindingDeserializer())
+    addDeserializer(LicenseFinding::class.java, LicenseFindingDeserializer())
     addDeserializer(OrtIssue::class.java, OrtIssueDeserializer())
     addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
 
     addSerializer(OrtIssue::class.java, OrtIssueSerializer())
     addSerializer(Identifier::class.java, IdentifierToStringSerializer())
 }
+
+val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategy.SNAKE_CASE as PropertyNamingStrategy.PropertyNamingStrategyBase
 
 /**
  * A lambda expression that can be [applied][apply] to all [ObjectMapper]s to configure them the same way.
@@ -52,7 +56,7 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
 
     registerModule(ortModelModule)
 
-    propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
+    propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
 }
 
 val jsonMapper = ObjectMapper().apply(mapperConfig)

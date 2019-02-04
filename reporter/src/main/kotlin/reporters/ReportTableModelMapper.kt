@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.getAllDetectedLicenses
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
-import com.here.ort.reporter.reporters.ReportTableModel.ErrorRow
-import com.here.ort.reporter.reporters.ReportTableModel.ErrorTable
+import com.here.ort.reporter.reporters.ReportTableModel.IssueRow
+import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryRow
@@ -51,7 +51,8 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         )
                     }
                 },
-                isResolved = resolutions.isNotEmpty()
+                isResolved = resolutions.isNotEmpty(),
+                severity = severity
         )
     }
 
@@ -67,14 +68,15 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         )
                     }
                 },
-                isResolved = resolutions.isNotEmpty()
+                isResolved = resolutions.isNotEmpty(),
+                severity = severity
         )
     }
 
     fun mapToReportTableModel(
             ortResult: OrtResult
     ): ReportTableModel {
-        val errorSummaryRows = mutableMapOf<Identifier, ErrorRow>()
+        val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
         requireNotNull(ortResult.analyzer?.result) {
@@ -112,12 +114,12 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
                 val detectedLicenses = scanResult.getAllDetectedLicenses()
 
-                val analyzerErrors = project.collectErrors(id).toMutableList()
+                val analyzerIssues = project.collectErrors(id).toMutableList()
                 analyzerResult.errors[id]?.let {
-                    analyzerErrors += it
+                    analyzerIssues += it
                 }
 
-                val scanErrors = scanResult?.results?.flatMap {
+                val scanIssues = scanResult?.results?.flatMap {
                     it.summary.errors
                 }?.distinct() ?: emptyList()
 
@@ -127,14 +129,14 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         concludedLicense = concludedLicense,
                         declaredLicenses = declaredLicenses,
                         detectedLicenses = detectedLicenses,
-                        analyzerErrors = analyzerErrors.map { it.toResolvableIssue() },
-                        scanErrors = scanErrors.map { it.toResolvableIssue() }
+                        analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
+                        scanIssues = scanIssues.map { it.toResolvableIssue() }
                 ).also { row ->
                     val isRowExcluded = projectExclude != null
                             || (scopes.isNotEmpty() && scopes.all { it.value.isNotEmpty() })
 
-                    val nonExcludedAnalyzerErrors = if (isRowExcluded) emptyList() else row.analyzerErrors
-                    val nonExcludedScanErrors = if (isRowExcluded) emptyList() else row.scanErrors
+                    val nonExcludedAnalyzerIssues = if (isRowExcluded) emptyList() else row.analyzerIssues
+                    val nonExcludedScanIssues = if (isRowExcluded) emptyList() else row.scanIssues
 
                     val summaryRow = SummaryRow(
                             id = row.id,
@@ -142,28 +144,28 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                             concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
                             declaredLicenses = row.declaredLicenses,
                             detectedLicenses = row.detectedLicenses,
-                            analyzerErrors = if (nonExcludedAnalyzerErrors.isNotEmpty())
-                                sortedMapOf(project.id to nonExcludedAnalyzerErrors) else sortedMapOf(),
-                            scanErrors = if (nonExcludedScanErrors.isNotEmpty())
-                                sortedMapOf(project.id to nonExcludedScanErrors) else sortedMapOf()
+                            analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty())
+                                sortedMapOf(project.id to nonExcludedAnalyzerIssues) else sortedMapOf(),
+                            scanIssues = if (nonExcludedScanIssues.isNotEmpty())
+                                sortedMapOf(project.id to nonExcludedScanIssues) else sortedMapOf()
                     )
 
                     summaryRows[row.id] = summaryRows[row.id]?.merge(summaryRow) ?: summaryRow
 
-                    val unresolvedAnalyzerErrors = row.analyzerErrors.filterUnresolved()
-                    val unresolvedScanErrors = row.scanErrors.filterUnresolved()
+                    val unresolvedAnalyzerIssues = row.analyzerIssues.filterUnresolved()
+                    val unresolvedScanIssues = row.scanIssues.filterUnresolved()
 
-                    if ((unresolvedAnalyzerErrors.isNotEmpty() || unresolvedScanErrors.isNotEmpty())
+                    if ((unresolvedAnalyzerIssues.isNotEmpty() || unresolvedScanIssues.isNotEmpty())
                             && !isRowExcluded) {
-                        val errorRow = ErrorRow(
+                        val issueRow = IssueRow(
                                 id = row.id,
-                                analyzerErrors = if (unresolvedAnalyzerErrors.isNotEmpty())
-                                    sortedMapOf(project.id to unresolvedAnalyzerErrors) else sortedMapOf(),
-                                scanErrors = if (unresolvedScanErrors.isNotEmpty())
-                                    sortedMapOf(project.id to unresolvedScanErrors) else sortedMapOf()
+                                analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty())
+                                    sortedMapOf(project.id to unresolvedAnalyzerIssues) else sortedMapOf(),
+                                scanIssues = if (unresolvedScanIssues.isNotEmpty())
+                                    sortedMapOf(project.id to unresolvedScanIssues) else sortedMapOf()
                         )
 
-                        errorSummaryRows[row.id] = errorSummaryRows[errorRow.id]?.merge(errorRow) ?: errorRow
+                        issueSummaryRows[row.id] = issueSummaryRows[issueRow.id]?.merge(issueRow) ?: issueRow
                     }
                 }
             }
@@ -171,7 +173,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             Pair(project, ProjectTable(tableRows, projectExclude))
         }.toSortedMap()
 
-        val errorSummaryTable = ErrorTable(errorSummaryRows.values.toList().sortedBy { it.id })
+        val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
 
         val projectExcludes = ortResult.analyzer?.result?.projects?.let { projects ->
             ortResult.repository.config.excludes?.projectExcludesById(projects)
@@ -203,14 +205,14 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             extraColumns.map { it.toString() }
         }.orEmpty()
 
-        val evaluatorErrors = ortResult.evaluator?.let {
+        val evaluatorIssues = ortResult.evaluator?.let {
             it.errors.map { it.toResolvableEvaluatorIssue() }
         } ?: emptyList()
 
         return ReportTableModel(
                 ortResult.repository.vcsProcessed,
-                evaluatorErrors,
-                errorSummaryTable,
+                evaluatorIssues,
+                issueSummaryTable,
                 summaryTable,
                 projectTables,
                 metadata,

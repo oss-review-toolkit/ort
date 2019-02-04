@@ -1,4 +1,6 @@
-# OSS Review Toolkit
+![OSS Review Toolkit Logo](./logos/ort.png)
+
+&nbsp;
 
 | Linux (OpenJDK 10)             | Windows (Oracle JDK 9)          |
 | :----------------------------- | :------------------------------ |
@@ -20,7 +22,7 @@
 
 # Introduction
 
-The goal of the OSS Review Toolkit (ORT) is to verify Free and Open Source Software licence compliance by checking
+The goal of the OSS Review Toolkit (ORT) is to verify Free and Open Source Software license compliance by checking
 project source code and dependencies.
 
 At a high level, it works by analyzing the source code for dependencies, downloading the
@@ -48,11 +50,17 @@ The toolkit is envisioned to consist of the following libraries:
 
 Follow these steps to run the OSS Review Toolkit from source code:
 
-1. Ensure OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler) is installed and the
-   `JAVA_HOME` environment variable set.
+1. Install the following basic prerequisites:
+
+   * Git (any recent version will do).
+   * OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler); also remember to the
+    `JAVA_HOME` environment variable accordingly.
+   * [Node.js](https://nodejs.org) 8.* (for the Web App reporter).
+   * [Yarn](https://yarnpkg.com) 1.9.* - 1.12.* (for the Web App reporter).
 
 2. Clone this repository with submodules by running `git clone --recurse-submodules`. If you have already cloned
-   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`.
+   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`. Note
+   that submodules are only required if you intend to run tests, though.
 
 3. Change into the created directory and run `./gradlew installDist` to build / install the start script for ORT. On
    the first run, this will also bootstrap Gradle and download required dependencies. The start script can then be run
@@ -78,41 +86,62 @@ Follow these steps to run the OSS Review Toolkit from source code:
 
    * `./gradlew cli:run --args="requirements"`
 
+Alternatively, you can also run the OSS Review Toolkit by building its Docker image:
+
+1. Ensure you have Docker installed and its daemon running.
+
+2. Clone this repository with submodules by running `git clone --recurse-submodules`. If you have already cloned
+   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`. Note
+   that submodules are only required if you intend to run tests, though.
+
+3. Change into the created directory and run `./gradlew cli:dockerBuildImage` to build the Docker image and send it to
+   the locally running daemon.
+
+4. Execute `docker run ort requirements` to verify all required command line tools are available in the container.
+
 ## Tools
 
-### [analyzer](./analyzer/src/main/kotlin)
+[![Analyzer](./logos/analyzer.png)](./analyzer/src/main/kotlin)
 
 The Analyzer determines the dependencies of software projects inside the specified input directory (`-i`). It does so by
 querying whatever [supported package manager](./analyzer/src/main/kotlin/managers) is found. No modifications to your
 existing project source code, or especially to the build system, are necessary for that to work. The tree of transitive
-dependencies per project is written out as [ABCD](https://github.com/nexB/aboutcode/tree/master/aboutcode-data)-style
-YAML (or JSON, see `-f`) file named `analyzer-result.yml` to the specified output directory (`-o`). The output file
+dependencies per project is written out as part of an
+[OrtResult](https://github.com/heremaps/oss-review-toolkit/blob/master/model/src/main/kotlin/OrtResult.kt) in YAML (or
+JSON, see `-f`) format to a file named `analyzer-result.yml` to the specified output directory (`-o`). The output file
 exactly documents the status quo of all package-related meta-data. It can be further processed or manually edited before
 passing it to one of the other tools.
 
-### [downloader](./downloader/src/main/kotlin)
+&nbsp;
 
-Taking the ABCD-syle dependencies file as the input (`-d`), the Downloader retrieves the source code of all contained
-packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs and using
-the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
+[![Downloader](./logos/downloader.png)](./downloader/src/main/kotlin)
 
-### [scanner](./scanner/src/main/kotlin)
+Taking an ORT result file with an analyzer result as the input (`-a`), the Downloader retrieves the source code of all
+contained packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs
+and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
-This tool wraps underlying license / copyright scanners with a common API. This way all supported scanners can be used
-in the same way to easily run them and compare their results. If passed a dependencies analysis file (`-d`), the Scanner
-will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In order to not
-download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote cache, hosted
-e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented, see
+&nbsp;
+
+[![Scanner](./logos/scanner.png)](./scanner/src/main/kotlin)
+
+This tool wraps underlying license / copyright scanners with a common API so all supported scanners can be used in the
+same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-a`), the
+Scanner will automatically download the sources of the dependencies via the Downloader and scan them afterwards. In
+order to not download or scan any previously scanned sources, the Scanner can be configured (`-c`) to use a remote
+storage hosted e.g. on [Artifactory](./scanner/src/main/kotlin/ArtifactoryCache.kt) or S3 (not yet implemented, see
 [#752](https://github.com/heremaps/oss-review-toolkit/issues/752)). Using the example of configuring an Artifactory
-cache, the YAML-based configuration file would look like:
+storage, the YAML-based configuration file would look like:
 
 ```yaml
-artifactory_cache:
-  url: "https://artifactory.domain.com/artifactory/generic-repository-name"
+artifactory_storage:
+  url: "https://artifactory.domain.com/artifactory"
+  repository: "generic-repository-name"
   apiToken: $ARTIFACTORY_API_KEY
 ```
 
-### [reporter](./reporter/src/main/kotlin)
+&nbsp;
+
+[![Reporter](./logos/reporter.png)](./reporter/src/main/kotlin)
 
 The reporter generates human-readable reports from the scan result file generated by the scanner (`-s`). It is designed
 to support multiple output formats. Currently the following report formats are supported:
@@ -157,9 +186,9 @@ ORT comes with some example implementations for wrappers around license / copyri
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
-## Supported remote caches
+## Supported remote storages
 
-For reusing already known scan results, ORT can currently use one of the following backends as a remote cache:
+For reusing already known scan results, ORT can currently use one of the following backends as a remote storage:
 
 * [Artifactory](https://jfrog.com/artifactory/)
 
@@ -181,6 +210,6 @@ The most important root project Gradle tasks are listed in the table below.
 
 ## License
 
-Copyright (C) 2017-2018 HERE Europe B.V.
+Copyright (C) 2017-2019 HERE Europe B.V.
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.

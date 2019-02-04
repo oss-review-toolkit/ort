@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,13 +61,13 @@ const val COMPOSER_LOCK_FILE = "composer.lock"
 /**
  * The Composer package manager for PHP, see https://getcomposer.org/.
  */
-class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<PhpComposer>() {
+class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    class Factory : AbstractPackageManagerFactory<PhpComposer>("PhpComposer") {
         override val globsForDefinitionFiles = listOf("composer.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                PhpComposer(analyzerConfig, repoConfig)
+                PhpComposer(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) =
@@ -177,7 +177,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
                     log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
 
-                    packageInfo.toReference(errors = listOf(OrtIssue(source = toString(),
+                    packageInfo.toReference(errors = listOf(OrtIssue(source = managerName,
                             message = e.collectMessagesAsString())))
                 }
             }
@@ -193,7 +193,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
         return Project(
                 id = Identifier(
-                        type = toString(),
+                        type = managerName,
                         namespace = rawName.substringBefore("/"),
                         name = rawName.substringAfter("/"),
                         version = json["version"].textValueOrEmpty()
@@ -225,7 +225,7 @@ class PhpComposer(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryC
 
                 packages[rawName] = Package(
                         id = Identifier(
-                                type = toString(),
+                                type = managerName,
                                 namespace = rawName.substringBefore("/"),
                                 name = rawName.substringAfter("/"),
                                 version = version

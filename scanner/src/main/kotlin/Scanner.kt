@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.log
 
 import java.io.File
+import java.time.Instant
 import java.util.ServiceLoader
 
 const val TOOL_NAME = "scanner"
@@ -60,33 +61,37 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
     override fun toString(): String = javaClass.simpleName
 
     /**
-     * Scan the list of [packages] using this [Scanner] and store the scan results in [outputDirectory]. If
-     * [downloadDirectory] is specified, it is used instead of [outputDirectory] to download the source code to.
-     * [ScanResult]s are returned associated by the [Package]. The map may contain multiple results for the same
-     * [Package] if the cache contains more than one result for the specification of this scanner.
+     * Scan the list of [packages] and store the scan results in [outputDirectory]. The [downloadDirectory] is used to
+     * download the source code to for scanning. [ScanResult]s are returned associated by the [Package]. The map may
+     * contain multiple results for the same [Package] if the storage contains more than one result for the
+     * specification of this scanner.
      */
-    abstract fun scan(
-            packages: List<Package>,
-            outputDirectory: File,
-            downloadDirectory: File? = null
-    ): Map<Package, List<ScanResult>>
+
+    protected abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
+            : Map<Package, List<ScanResult>>
 
     /**
-     * Scan the [Project]s and [Package]s specified in [dependenciesFile] using this [Scanner] and store the scan
-     * results in [outputDirectory]. If [downloadDirectory] is specified, it is used instead of [outputDirectory] to
-     * download the source code to. Return scan results as an [OrtResult].
+     * Scan the [Project]s and [Package]s specified in [ortResultFile] and store the scan results in [outputDirectory].
+     * The [downloadDirectory] is used to download the source code to for scanning. Return scan results as an
+     * [OrtResult].
      */
-    fun scanDependenciesFile(dependenciesFile: File, outputDirectory: File, downloadDirectory: File? = null,
-                             scopesToScan: Set<String> = emptySet()): OrtResult {
-        require(dependenciesFile.isFile) {
-            "Provided path for the configuration does not refer to a file: ${dependenciesFile.absolutePath}"
+    fun scanOrtResult(
+            ortResultFile: File,
+            outputDirectory: File,
+            downloadDirectory: File,
+            scopesToScan: Set<String> = emptySet()
+    ): OrtResult {
+        require(ortResultFile.isFile) {
+            "Provided path for the configuration does not refer to a file: ${ortResultFile.absolutePath}"
         }
 
-        val ortResult = dependenciesFile.readValue<OrtResult>()
+        val startTime = Instant.now()
+
+        val ortResult = ortResultFile.readValue<OrtResult>()
 
         requireNotNull(ortResult.analyzer) {
-            "The provided dependencies file '${dependenciesFile.invariantSeparatorsPath}' does not contain an " +
-                    "analyzer result."
+            "The provided ORT result file '${ortResultFile.invariantSeparatorsPath}' does not contain an analyzer " +
+                    "result."
         }
 
         val analyzerResult = ortResult.analyzer!!.result
@@ -120,7 +125,7 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
             consolidatedReferencePackages + analyzerResult.packages
         }.toSortedSet()
 
-        val results = scan(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory)
+        val results = scanPackages(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory)
         val resultContainers = results.map { (pkg, results) ->
             ScanResultContainer(pkg.id, results)
         }.toSortedSet()
@@ -134,9 +139,11 @@ abstract class Scanner(protected val config: ScannerConfiguration) {
             }
         }
 
-        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsCache.stats)
+        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsStorage.stats)
 
-        val scannerRun = ScannerRun(Environment(), config, scanRecord)
+        val endTime = Instant.now()
+
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
 
         // Note: This overwrites any existing ScannerRun from the input file.
         return ortResult.copy(scanner = scannerRun)

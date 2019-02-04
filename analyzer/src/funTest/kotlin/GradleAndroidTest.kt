@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,8 +50,7 @@ class GradleAndroidTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -66,8 +65,7 @@ class GradleAndroidTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -82,12 +80,13 @@ class GradleAndroidTest : StringSpec() {
                     revision = vcsRevision
             )
 
-            val result = Gradle(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
+
+    private fun createGradle() = Gradle("Gradle", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

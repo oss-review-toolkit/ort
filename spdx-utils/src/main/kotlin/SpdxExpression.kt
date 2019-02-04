@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,49 @@ import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 
+/**
+ * An SPDX expression as defined by version 2.1 of the SPDX specification, appendix IV, see
+ * https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
+ */
 @JsonSerialize(using = ToStringSerializer::class)
 sealed class SpdxExpression {
+    /**
+     * The level of strictness to apply when validating an [SpdxExpression].
+     */
+    enum class Strictness {
+        /**
+         * Any license identifier string is leniently allowed.
+         */
+        ALLOW_ANY,
+
+        /**
+         * All SPDX license identifier strings are allowed, including deprecated ones.
+         */
+        ALLOW_DEPRECATED,
+
+        /**
+         * Only current SPDX license identifier strings are allowed, excluding deprecated ones.
+         */
+        ALLOW_CURRENT
+    }
+
     companion object {
+        /**
+         * Parse a string into an [SpdxExpression]. Parsing only checks the syntax and the individual license
+         * expressions may be invalid SPDX identifiers, which is useful to parse expressions with non-SPDX declared
+         * licenses. Throws an [SpdxException] if the string cannot be parsed.
+         */
         @JsonCreator
         @JvmStatic
-        fun parse(expression: String): SpdxExpression {
+        fun parse(expression: String) = parse(expression, Strictness.ALLOW_ANY)
+
+        /**
+         * Parse a string into an [SpdxExpression]. [strictness] defines whether only the syntax is checked
+         * ([ALLOW_ANY][Strictness.ALLOW_ANY]), or semantics are also checked but deprecated license identifiers are
+         * allowed ([ALLOW_DEPRECATED][Strictness.ALLOW_DEPRECATED]) or only current license identifiers are allowed
+         * ([ALLOW_CURRENT][Strictness.ALLOW_CURRENT]). Throws an [SpdxException] if the string cannot be parsed.
+         */
+        fun parse(expression: String, strictness: Strictness): SpdxExpression {
             val charStream = CharStreams.fromString(expression)
             val lexer = SpdxExpressionLexer(charStream)
 
@@ -55,24 +92,50 @@ sealed class SpdxExpression {
 
             val tokenStream = CommonTokenStream(lexer)
             val parser = SpdxExpressionParser(tokenStream)
-            val visitor = SpdxExpressionDefaultVisitor()
+            val visitor = SpdxExpressionDefaultVisitor(strictness)
 
             return visitor.visit(parser.licenseExpression())
         }
     }
 
     /**
-     * Return all valid SPDX licenses contained in this expression. LicenseRefs and invalid licenses are ignored.
+     * Return all [SpdxLicense]s contained in this expression. Non-SPDX licenses and SPDX license references are
+     * ignored.
      */
     abstract fun spdxLicenses(): EnumSet<SpdxLicense>
+
+    /**
+     * Validate this expression. [strictness] defines whether only the syntax is checked
+     * ([ALLOW_ANY][Strictness.ALLOW_ANY]), or semantics are also checked but deprecated license identifiers are
+     * allowed ([ALLOW_DEPRECATED][Strictness.ALLOW_DEPRECATED]) or only current license identifiers are allowed
+     * ([ALLOW_CURRENT][Strictness.ALLOW_CURRENT]). Throws an [SpdxException] if validation fails.
+     */
+    abstract fun validate(strictness: Strictness)
 }
 
+/**
+ * An SPDX expression compound of two expressions with an operator.
+ */
 data class SpdxCompoundExpression(
         val left: SpdxExpression,
         val operator: SpdxOperator,
         val right: SpdxExpression
 ) : SpdxExpression() {
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
+
+    override fun validate(strictness: Strictness) {
+        left.validate(strictness)
+
+        if (operator == SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression) {
+            throw SpdxException("Argument '$right' for WITH is not an SPDX license exception id.")
+        }
+
+        if (operator != SpdxOperator.WITH && right is SpdxLicenseExceptionExpression) {
+            throw SpdxException("Argument '$right' for $operator must not be an SPDX license exception id.")
+        }
+
+        right.validate(strictness)
+    }
 
     override fun toString(): String {
         // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
@@ -90,19 +153,45 @@ data class SpdxCompoundExpression(
     }
 }
 
+/**
+ * An SPDX expression for a license exception as defined by version 2.1 of the SPDX specification, appendix I, see
+ * https://spdx.org/spdx-specification-21-web-version#h.ruv3yl8g6czd.
+ */
 data class SpdxLicenseExceptionExpression(
         val id: String
 ) : SpdxExpression() {
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
+    override fun validate(strictness: Strictness) {
+        val licenseException = SpdxLicenseException.forId(id)
+        when (strictness) {
+            Strictness.ALLOW_ANY -> id // Return something non-null.
+            Strictness.ALLOW_DEPRECATED -> licenseException
+            Strictness.ALLOW_CURRENT -> licenseException?.takeUnless { licenseException.deprecated }
+        } ?: throw SpdxException("'$id' is not a valid SPDX license exception id.")
+    }
+
     override fun toString() = id
 }
 
+/**
+ * An SPDX expression for a license id as defined by version 2.1 of the SPDX specification, appendix I, see
+ * https://spdx.org/spdx-specification-21-web-version#h.luq9dgcle9mo.
+ */
 data class SpdxLicenseIdExpression(
         val id: String,
         val anyLaterVersion: Boolean = false
 ) : SpdxExpression() {
     override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
+
+    override fun validate(strictness: Strictness) {
+        val license = SpdxLicense.forId(id)
+        when (strictness) {
+            Strictness.ALLOW_ANY -> id // Return something non-null.
+            Strictness.ALLOW_DEPRECATED -> license
+            Strictness.ALLOW_CURRENT -> license?.takeUnless { license.deprecated }
+        } ?: throw SpdxException("'$id' is not a valid SPDX license id.")
+    }
 
     override fun toString() =
             buildString {
@@ -111,14 +200,29 @@ data class SpdxLicenseIdExpression(
             }
 }
 
-data class SpdxLicenseRefExpression(
+/**
+ * An SPDX expression for a license reference as defined by version 2.1 of the SPDX specification, appendix IV, see
+ * https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
+ */
+data class SpdxLicenseReferenceExpression(
         val id: String
 ) : SpdxExpression() {
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
+    override fun validate(strictness: Strictness) {
+        if (!(id.startsWith("LicenseRef-") ||
+                (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")))) {
+            throw SpdxException("'$id' is not an SPDX license reference.")
+        }
+    }
+
     override fun toString() = id
 }
 
+/**
+ * An SPDX operator for use in compound expressions as defined by version 2.1 of the SPDX specification, appendix IV,
+ * see https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
+ */
 enum class SpdxOperator(
         /**
          * The priority of the operator. An operator with a larger priority value binds stronger than an operator with a

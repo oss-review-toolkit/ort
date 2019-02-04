@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
 
 package com.here.ort.commands
 
+import ch.frankel.slf4k.*
+
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
@@ -27,6 +29,7 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.evaluator.Evaluator
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
+import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
@@ -54,7 +57,8 @@ object EvaluatorCommand : CommandWithHelp() {
     private var rulesResource: String? = null
 
     @Parameter(description = "The directory to write the evaluation results as ORT result file(s) to, in the " +
-            "specified output format(s).",
+            "specified output format(s). If no output directory is specified, no output formats are written and " +
+            "only the exit code signals a success or failure.",
             names = ["--output-dir", "-o"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var outputDir: File? = null
@@ -93,22 +97,27 @@ object EvaluatorCommand : CommandWithHelp() {
             return if (evaluator.checkSyntax(script)) 0 else 2
         }
 
-        val evaluatorRun = evaluator.run(script)
+        val evaluatorRun by lazy { evaluator.run(script) }
 
-        outputDir?.let { dir ->
-            require(!dir.exists()) {
-                "The output directory '${dir.absolutePath}' must not exist yet."
+        outputDir?.absoluteFile?.normalize()?.let { absoluteOutputDir ->
+            val outputFiles = outputFormats.distinct().map { format ->
+                File(absoluteOutputDir, "evaluation-result.${format.fileExtension}")
             }
 
-            dir.safeMkdirs()
+            val existingOutputFiles = outputFiles.filter { it.exists() }
+            if (existingOutputFiles.isNotEmpty()) {
+                log.error { "None of the output files $existingOutputFiles must exist yet." }
+                return 2
+            }
 
             // Note: This overwrites any existing EvaluatorRun from the input file.
             val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
 
-            outputFormats.distinct().forEach { format ->
-                val evaluationResultFile = File(dir, "evaluation-result.${format.fileExtension}")
-                println("Writing evaluation result to '${evaluationResultFile.absolutePath}'.")
-                format.mapper.writerWithDefaultPrettyPrinter().writeValue(evaluationResultFile, ortResultOutput)
+            absoluteOutputDir.safeMkdirs()
+
+            outputFiles.forEach { file ->
+                println("Writing evaluation result to '${file.absolutePath}'.")
+                file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResultOutput)
             }
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
+import com.here.ort.utils.safeCopyRecursively
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
 
@@ -52,19 +53,19 @@ import java.nio.file.Paths
 
 val GO_LEGACY_MANIFESTS = mapOf(
         "glide.yaml" to "glide.lock",
-        "Godeps.json" to null
+        "Godeps.json" to ""
 )
 
 /**
  * The Dep package manager for Go, see https://golang.github.io/dep/.
  */
-class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<GoDep>() {
+class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    class Factory : AbstractPackageManagerFactory<GoDep>("GoDep") {
         override val globsForDefinitionFiles = listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                GoDep(analyzerConfig, repoConfig)
+                GoDep(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "dep"
@@ -72,17 +73,17 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
-        val gopath = createTempDir(projectDir.name.padEnd(3, '_'), "_gopath")
+        val gopath = createTempDir("ort", "${projectDir.name}-gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
-        if (definitionFile.name in GO_LEGACY_MANIFESTS.keys) {
-            importLegacyManifest(definitionFile, projectDir, workingDir, gopath)
+        GO_LEGACY_MANIFESTS[definitionFile.name]?.let { lockfileName ->
+            log.debug { "Importing legacy manifest file at '$definitionFile'." }
+            importLegacyManifest(lockfileName, workingDir, gopath)
         }
 
         val projects = parseProjects(workingDir, gopath)
         val packages = mutableListOf<Package>()
         val packageRefs = mutableListOf<PackageReference>()
-        val packageType = toString()
 
         for (project in projects) {
             // parseProjects() made sure that all entries contain these keys
@@ -99,12 +100,12 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
                 log.error { "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}" }
 
-                errors += OrtIssue(source = toString(), message = e.collectMessagesAsString())
+                errors += OrtIssue(source = managerName, message = e.collectMessagesAsString())
                 VcsInfo.EMPTY
             }
 
             val pkg = Package(
-                    id = Identifier(packageType, "", name, version),
+                    id = Identifier(managerName, "", name, version),
                     declaredLicenses = sortedSetOf(),
                     description = "",
                     homepageUrl = "",
@@ -126,7 +127,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         return ProjectAnalyzerResult(
                 project = Project(
-                        id = Identifier(packageType, "", projectDir.name, projectVcs.revision),
+                        id = Identifier(managerName, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = sortedSetOf(),
                         vcs = VcsInfo.EMPTY,
@@ -138,14 +139,13 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         )
     }
 
-    fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File {
-        if (vcs == VcsInfo.EMPTY) {
-            return Paths.get(gopath.path, "src", projectDir.name).toAbsolutePath().toFile()
-        }
-
-        val uri = URI(vcs.url)
-        return Paths.get(gopath.path, "src", uri.host, uri.path).toAbsolutePath().toFile()
-    }
+    fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
+            if (vcs == VcsInfo.EMPTY) {
+                Paths.get(gopath.path, "src", projectDir.name)
+            } else {
+                val uri = URI(vcs.url)
+                Paths.get(gopath.path, "src", uri.host, uri.path)
+            }.toAbsolutePath().toFile()
 
     private fun resolveProjectRoot(definitionFile: File): File {
         val projectDir = when (definitionFile.name) {
@@ -157,16 +157,12 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
         return projectDir.toPath().normalize().toFile()
     }
 
-    private fun importLegacyManifest(definitionFile: File, projectDir: File, workingDir: File, gopath: File) {
-        val lockfileName = GO_LEGACY_MANIFESTS[definitionFile.name]
-
-        if (lockfileName != null && !File(workingDir, lockfileName).isFile &&
+    private fun importLegacyManifest(lockfileName: String, workingDir: File, gopath: File) {
+        if (lockfileName.isNotEmpty() && !File(workingDir, lockfileName).isFile &&
                 !analyzerConfig.allowDynamicVersions) {
-            throw IllegalArgumentException("No lockfile found in ${projectDir.invariantSeparatorsPath}, dependency " +
+            throw IllegalArgumentException("No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency " +
                     "versions are unstable.")
         }
-
-        log.debug { "Running 'dep init' to import legacy manifest file ${definitionFile.name}" }
 
         run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.absolutePath))
     }
@@ -176,7 +172,7 @@ class GoDep(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfigu
 
         log.debug { "Copying $projectDir to temporary directory $destination" }
 
-        projectDir.copyRecursively(destination)
+        projectDir.safeCopyRecursively(destination)
 
         val dotGit = File(destination, ".git")
         if (dotGit.isFile) {

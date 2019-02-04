@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanResult
+import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
@@ -44,14 +45,14 @@ data class ReportTableModel(
         val vcsInfo: VcsInfo,
 
         /**
-         * A list containing all evaluator errors. `null` if no evaluator result is available.
+         * A list containing all evaluator issues. `null` if no evaluator result is available.
          */
-        val evaluatorErrors: List<ResolvableIssue>?,
+        val evaluatorIssues: List<ResolvableIssue>?,
 
         /**
-         * A [ErrorTable] containing all dependencies that caused errors.
+         * A [IssueTable] containing all dependencies that caused issues.
          */
-        val errorSummary: ErrorTable,
+        val issueSummary: IssueTable,
 
         /**
          * A [SummaryTable] containing the dependencies of all [Project]s.
@@ -112,14 +113,14 @@ data class ReportTableModel(
             val detectedLicenses: SortedSet<String>,
 
             /**
-             * All analyzer errors related to this package.
+             * All analyzer issues related to this package.
              */
-            val analyzerErrors: List<ResolvableIssue>,
+            val analyzerIssues: List<ResolvableIssue>,
 
             /**
-             * All scan errors related to this package.
+             * All scan issues related to this package.
              */
-            val scanErrors: List<ResolvableIssue>
+            val scanIssues: List<ResolvableIssue>
     )
 
     data class SummaryTable(
@@ -154,14 +155,14 @@ data class ReportTableModel(
             val detectedLicenses: SortedSet<String>,
 
             /**
-             * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
+             * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val analyzerErrors: SortedMap<Identifier, List<ResolvableIssue>>,
+            val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
 
             /**
-             * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
+             * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val scanErrors: SortedMap<Identifier, List<ResolvableIssue>>
+            val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
         fun merge(other: SummaryRow): SummaryRow {
             fun <T> plus(left: List<T>, right: List<T>) = left + right
@@ -174,41 +175,41 @@ data class ReportTableModel(
                     concludedLicenses = (concludedLicenses + other.concludedLicenses),
                     declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
                     detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
-                    analyzerErrors = analyzerErrors.zipWithDefault(other.analyzerErrors, emptyList(), ::plus)
+                    analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), ::plus)
                             .toSortedMap(),
-                    scanErrors = scanErrors.zipWithDefault(other.scanErrors, emptyList(), ::plus).toSortedMap()
+                    scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), ::plus).toSortedMap()
             )
         }
     }
 
-    data class ErrorTable(
-            val rows: List<ErrorRow>
+    data class IssueTable(
+            val rows: List<IssueRow>
     )
 
-    data class ErrorRow(
+    data class IssueRow(
             /**
              * The identifier of the package.
              */
             val id: Identifier,
 
             /**
-             * All analyzer errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
+             * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val analyzerErrors: SortedMap<Identifier, List<ResolvableIssue>>,
+            val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
 
             /**
-             * All scan errors related to this package, grouped by the [Identifier] of the [Project] they appear in.
+             * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
              */
-            val scanErrors: SortedMap<Identifier, List<ResolvableIssue>>
+            val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
-        fun merge(other: ErrorRow): ErrorRow {
+        fun merge(other: IssueRow): IssueRow {
             val plus = { left: List<ResolvableIssue>, right: List<ResolvableIssue> -> left + right }
 
-            return ErrorRow(
+            return IssueRow(
                     id = id,
-                    analyzerErrors = analyzerErrors.zipWithDefault(other.analyzerErrors, emptyList(), plus)
+                    analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), plus)
                             .toSortedMap(),
-                    scanErrors = scanErrors.zipWithDefault(other.scanErrors, emptyList(), plus).toSortedMap()
+                    scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), plus).toSortedMap()
             )
         }
     }
@@ -217,6 +218,7 @@ data class ReportTableModel(
             val source: String,
             val description: String,
             val resolutionDescription: String,
-            val isResolved: Boolean
+            val isResolved: Boolean,
+            val severity: Severity
     )
 }

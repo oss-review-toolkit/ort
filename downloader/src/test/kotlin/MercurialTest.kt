@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,10 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Mercurial
-import com.here.ort.utils.getUserConfigDirectory
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
-import io.kotlintest.Description
 import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -36,7 +35,7 @@ class MercurialTest : StringSpec() {
     private val hg = Mercurial()
     private lateinit var zipContentDir: File
 
-    override fun beforeSpec(description: Description, spec: Spec) {
+    override fun beforeSpec(spec: Spec) {
         val zipFile = File("src/test/assets/lz4revlog-2018-01-03-hg.zip")
 
         zipContentDir = createTempDir()
@@ -45,7 +44,7 @@ class MercurialTest : StringSpec() {
         zipFile.unpack(zipContentDir)
     }
 
-    override fun afterSpec(description: Description, spec: Spec) {
+    override fun afterSpec(spec: Spec) {
         zipContentDir.safeDeleteRecursively(force = true)
     }
 
@@ -57,7 +56,7 @@ class MercurialTest : StringSpec() {
         }
 
         "Mercurial detects non-working-trees".config(enabled = hg.isInPath()) {
-            hg.getWorkingTree(getUserConfigDirectory()).isValid() shouldBe false
+            hg.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
         "Mercurial correctly detects URLs to remote repositories".config(enabled = hg.isInPath()) {

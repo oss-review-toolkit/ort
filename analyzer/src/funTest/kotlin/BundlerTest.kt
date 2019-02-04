@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
                 try {
-                    val actualResult = Bundler(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+                    val actualResult = createBundler()
                             .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
@@ -66,9 +66,7 @@ class BundlerTest : WordSpec() {
 
             "show error if no lockfile is present" {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
-
-                val actualResult = Bundler(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                        .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val actualResult = createBundler().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
                 actualResult!!.project.id shouldBe
@@ -84,7 +82,7 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "gemspec/Gemfile")
 
                 try {
-                    val actualResult = Bundler(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+                    val actualResult = createBundler()
                             .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                             File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),
@@ -100,4 +98,6 @@ class BundlerTest : WordSpec() {
             }
         }
     }
+
+    private fun createBundler() = Bundler("Bundler", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

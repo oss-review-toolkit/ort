@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.LocalScanner
@@ -101,8 +100,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
                 log.info { "Retrieved $this from local cache." }
             }
 
-            val scannerDir = createTempDir()
-            scannerDir.deleteOnExit()
+            val scannerDir = createTempDir("ort", "${getName()}-$scannerVersion").apply { deleteOnExit() }
 
             val scannerFile = File(scannerDir, scannerExe)
             Okio.buffer(Okio.sink(scannerFile)).use { it.writeAll(body.source()) }
@@ -118,8 +116,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
 
     override fun getConfiguration() = ""
 
-    override fun scanPath(scannerDetails: ScannerDetails, path: File, provenance: Provenance, resultsFile: File)
-            : ScanResult {
+    override fun scanPath(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -138,7 +135,7 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, result)
-                return ScanResult(provenance, scannerDetails, summary, result)
+                return ScanResult(Provenance(), getDetails(), summary, result)
             } else {
                 throw ScanException(errorMessage)
             }
@@ -158,7 +155,8 @@ class Askalono(config: ScannerConfiguration) : LocalScanner(config) {
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val findings = result.map { LicenseFinding(it["License"].textValue()) }.toSortedSet()
+        val findings =
+                result.map { LicenseFinding(it["License"].textValue(), sortedSetOf(), sortedSetOf()) }.toSortedSet()
         return ScanSummary(startTime, endTime, result.size(), findings, errors = mutableListOf())
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,11 @@ import okio.Okio
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.io.FileNotFoundException
 import java.io.IOException
+import java.net.MalformedURLException
 import java.net.URI
+import java.net.URL
 import java.time.Instant
 import java.util.SortedSet
 
@@ -139,46 +142,84 @@ class Downloader {
 
         val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
 
-        try {
-            if (target.vcsProcessed.url.isBlank()) {
-                val details = when (target.id.type) {
-                    "Bundler" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, see: " +
-                            "https://guides.rubygems.org/specification-reference/#metadata"
-                    "Gradle" -> " Please make sure the release POM file includes the SCM connection, see: " +
-                            "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
-                            "example_customizing_the_pom_file"
-                    "Maven" -> " Please define the \"connection\" tag within the \"scm\" tag in the POM file, see: " +
-                            "http://maven.apache.org/pom.html#SCM"
-                    "NPM" -> " Please define the \"repository\" in the package.json file, see: " +
-                            "https://docs.npmjs.com/files/package.json#repository"
-                    "PIP", "PyPI" -> " Please make sure the setup.py defines the 'Source' attribute in " +
-                            "'project_urls', see: " +
-                            "https://packaging.python.org/guides/distributing-packages-using-setuptools/#project-urls"
-                    "SBT" -> " Please make sure the released POM file includes the SCM connection, see: " +
-                            "http://maven.apache.org/pom.html#SCM"
-                    else -> ""
-                }
-                throw DownloadException("No VCS URL provided for '${target.id}'.$details")
-            } else {
-                return downloadFromVcs(target, targetDir, allowMovingRevisions)
-            }
-        } catch (vcsDownloadException: DownloadException) {
-            log.debug { "VCS download failed for '${target.id}': ${vcsDownloadException.message}" }
+        require(!targetDir.exists() || targetDir.list().isEmpty()) {
+            "The output directory '$targetDir' must not contain any files yet."
+        }
 
-            // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
+        var previousException: DownloadException? = null
+
+        // Try downloading from VCS.
+        try {
+            try {
+                return downloadFromVcs(target, targetDir, allowMovingRevisions)
+            } catch (e: DownloadException) {
+                val message = if (target.vcsProcessed.url.isBlank()) {
+                    val hint = when (target.id.type) {
+                        "Bundler" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, " +
+                                "see: https://guides.rubygems.org/specification-reference/#metadata"
+                        "Gradle" -> " Please make sure the release POM file includes the SCM connection, see: " +
+                                "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
+                                "example_customizing_the_pom_file"
+                        "Maven" -> " Please define the \"connection\" tag within the \"scm\" tag in the POM file, " +
+                                "see: http://maven.apache.org/pom.html#SCM"
+                        "NPM" -> " Please define the \"repository\" in the package.json file, see: " +
+                                "https://docs.npmjs.com/files/package.json#repository"
+                        "PIP", "PyPI" -> " Please make sure the setup.py defines the 'Source' attribute in " +
+                                "'project_urls', see: https://packaging.python.org/guides/" +
+                                "distributing-packages-using-setuptools/#project-urls"
+                        "SBT" -> " Please make sure the released POM file includes the SCM connection, see: " +
+                                "http://maven.apache.org/pom.html#SCM"
+                        else -> ""
+                    }
+                    e.message + hint
+                } else {
+                    e.message
+                }
+                throw DownloadException(message)
+            }
+        } catch (e: DownloadException) {
+            log.debug { "VCS download failed for '${target.id}': ${e.message}" }
+
+            // Clean up any left-over files.
             targetDir.safeDeleteRecursively()
             targetDir.safeMkdirs()
 
+            e.initCause(previousException)
+            previousException = e
+        }
+
+        // Try downloading the source artifact.
+        try {
+            return downloadSourceArtifact(target, targetDir)
+        } catch (e: DownloadException) {
+            log.debug { "Source artifact download failed for '${target.id}': ${e.message}" }
+
+            // Clean up any left-over files.
+            targetDir.safeDeleteRecursively()
+            targetDir.safeMkdirs()
+
+            e.initCause(previousException)
+            previousException = e
+        }
+
+        // Try downloading the Maven POM.
+        if (target.id.type == "Maven") {
             try {
-                return downloadSourceArtifact(target, targetDir)
-            } catch (sourceDownloadException: DownloadException) {
-                if (sourceDownloadException.cause != null) {
-                    throw sourceDownloadException
-                } else {
-                    throw sourceDownloadException.initCause(vcsDownloadException)
-                }
+                return downloadPomArtifact(target, targetDir)
+            } catch (e: DownloadException) {
+                log.debug { "POM artifact download failed for '${target.id}': ${e.message}" }
+
+                // Clean up any left-over files.
+                targetDir.safeDeleteRecursively()
+                targetDir.safeMkdirs()
+
+                e.initCause(previousException)
+                previousException = e
             }
         }
+
+        // By now we know there must have been a previous exception, otherwise we would have returned earlier.
+        throw previousException!!
     }
 
     private fun downloadFromVcs(
@@ -188,6 +229,10 @@ class Downloader {
     ): DownloadResult {
         log.info {
             "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from VCS..."
+        }
+
+        if (target.vcsProcessed.url.isBlank()) {
+            throw DownloadException("No VCS URL provided for '${target.id}'.")
         }
 
         if (target.vcsProcessed != target.vcs) {
@@ -270,12 +315,12 @@ class Downloader {
     }
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
-        if (target.sourceArtifact.url.isBlank()) {
-            throw DownloadException("No source artifact URL provided for '${target.id}'.")
-        }
-
         log.info {
             "Trying to download source artifact for '${target.id}' from '${target.sourceArtifact.url}'..."
+        }
+
+        if (target.sourceArtifact.url.isBlank()) {
+            throw DownloadException("No source artifact URL provided for '${target.id}'.")
         }
 
         val startTime = Instant.now()
@@ -305,7 +350,7 @@ class Downloader {
                 throw DownloadException("Failed to download source artifact: $response")
             }
 
-            createTempFile(suffix = target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
+            createTempFile("ort", target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
                 Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
                 tempFile.deleteOnExit()
             }
@@ -316,7 +361,7 @@ class Downloader {
         try {
             if (sourceArchive.extension == "gem") {
                 // Unpack the nested data archive for Ruby Gems.
-                val gemDirectory = createTempDir()
+                val gemDirectory = createTempDir("ort", "gem")
                 val dataFile = File(gemDirectory, "data.tar.gz")
 
                 try {
@@ -340,6 +385,36 @@ class Downloader {
         }
 
         return DownloadResult(startTime, outputDirectory, sourceArtifact = target.sourceArtifact)
+    }
+
+    private fun downloadPomArtifact(target: Package, outputDirectory: File): DownloadResult {
+        val pomFilename = "${target.id.name}-${target.id.version}.pom"
+        val pomUrl = target.binaryArtifact.url.replaceAfterLast('/', pomFilename)
+
+        log.info {
+            "Trying to download POM artifact for '${target.id}' from '$pomUrl'..."
+        }
+
+        return try {
+            val startTime = Instant.now()
+
+            val pomFile = File(outputDirectory, pomFilename)
+            pomFile.writeBytes(URL(pomUrl).readBytes())
+
+            val pomArtifact = RemoteArtifact(
+                    url = pomUrl,
+                    hash = pomFile.hash(target.binaryArtifact.hashAlgorithm.name),
+                    hashAlgorithm = target.binaryArtifact.hashAlgorithm
+            )
+
+            DownloadResult(startTime, outputDirectory, sourceArtifact = pomArtifact)
+        } catch (e: FileNotFoundException) {
+            throw DownloadException("Failed to download the Maven POM for '${target.id}'.")
+        } catch (e: MalformedURLException) {
+            // TODO: Investigate why the binary artifact URL is actually empty and update
+            // the implementation according to root cause.
+            throw DownloadException("Failed to download the Maven POM for '${target.id}'.")
+        }
     }
 
     private fun verifyChecksum(file: File, hash: String, hashAlgorithm: HashAlgorithm) {

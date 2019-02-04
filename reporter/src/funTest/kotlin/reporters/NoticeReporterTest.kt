@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,47 +23,18 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
-import com.here.ort.utils.safeDeleteRecursively
 
-import io.kotlintest.Description
-import io.kotlintest.TestResult
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.matchers.string.shouldNotContain
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 class NoticeReporterTest : WordSpec() {
     companion object {
         private fun readOrtResult(file: String) = File(file).readValue<OrtResult>()
-    }
-
-    private lateinit var tempDir: File
-
-    override fun beforeTest(description: Description) {
-        super.beforeTest(description)
-        tempDir = createTempDir()
-    }
-
-    override fun afterTest(description: Description, result: TestResult) {
-        tempDir.safeDeleteRecursively(force = true)
-        super.afterTest(description, result)
-    }
-
-    private fun generateReport(ortResult: OrtResult,
-                               copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-                               postProcessingScript: String? = null
-    ): String {
-        NoticeReporter().generateReport(
-                ortResult,
-                DefaultResolutionProvider(),
-                copyrightGarbage,
-                tempDir,
-                postProcessingScript
-        )
-
-        return File(tempDir, "NOTICE").readText()
     }
 
     init {
@@ -153,4 +124,19 @@ class NoticeReporterTest : WordSpec() {
             }
         }
     }
+
+    private fun generateReport(
+            ortResult: OrtResult,
+            copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+            postProcessingScript: String? = null
+    ) =
+            ByteArrayOutputStream().also { outputStream ->
+                NoticeReporter().generateReport(
+                        ortResult,
+                        DefaultResolutionProvider(),
+                        copyrightGarbage,
+                        outputStream,
+                        postProcessingScript
+                )
+            }.toString("UTF-8")
 }

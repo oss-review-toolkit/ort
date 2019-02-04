@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -224,7 +224,7 @@ abstract class VersionControlSystem {
                             VcsInfo("git", "$url.git", "", null, path)
                         }
 
-                        vcsUrl.contains(".git#") || Regex("^git.+#[a-fA-F0-9]{7,}$").matches(vcsUrl) -> {
+                        vcsUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(vcsUrl) -> {
                             val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
                             val revision = vcsUrl.substringAfterLast('#')
                             VcsInfo("git", url, revision, null, "")

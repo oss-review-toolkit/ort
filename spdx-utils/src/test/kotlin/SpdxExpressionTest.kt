@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 HERE Europe B.V.
+ * Copyright (C) 2017-2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import com.here.ort.spdx.SpdxExpression.Strictness
+
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 class SpdxExpressionTest : WordSpec() {
@@ -61,19 +65,19 @@ class SpdxExpressionTest : WordSpec() {
             }
         }
 
-        "An SpdxExpression" should {
-            val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
+        "An dummy SpdxExpression" should {
+            val dummyExpression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
 
             "be serializable to a string representation" {
-                val spdxExpression = SpdxExpression.parse(expression)
+                val spdxExpression = SpdxExpression.parse(dummyExpression)
 
                 val serializedExpression = yamlMapper.writeValueAsString(spdxExpression)
 
-                serializedExpression shouldBe "--- \"$expression\"\n"
+                serializedExpression shouldBe "--- \"$dummyExpression\"\n"
             }
 
             "be deserializable from a string representation" {
-                val serializedExpression = "--- \"$expression\"\n"
+                val serializedExpression = "--- \"$dummyExpression\"\n"
 
                 val deserializedExpression = yamlMapper.readValue<SpdxExpression>(serializedExpression)
 
@@ -98,6 +102,88 @@ class SpdxExpressionTest : WordSpec() {
                                 SpdxLicenseExceptionExpression("exception2")
                         )
                 )
+            }
+
+            "be valid in lenient mode" {
+                SpdxExpression.parse(dummyExpression, Strictness.ALLOW_ANY)
+            }
+
+            "be invalid in deprecated mode" {
+                shouldThrow<SpdxException> {
+                    SpdxExpression.parse(dummyExpression, Strictness.ALLOW_DEPRECATED)
+                }
+            }
+
+            "be invalid in strict mode" {
+                shouldThrow<SpdxException> {
+                    SpdxExpression.parse(dummyExpression, Strictness.ALLOW_CURRENT)
+                }
+            }
+        }
+
+        "An SpdxExpression with deprecated identifiers" should {
+            val deprecatedExpression = "GPL-1.0+"
+            val deprecatedExpressionWithException = "GPL-2.0-with-classpath-exception"
+
+            "be valid in lenient mode" {
+                assertSoftly {
+                    SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_ANY)
+                    SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_ANY)
+                }
+            }
+
+            "be valid in deprecated mode" {
+                assertSoftly {
+                    SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_DEPRECATED)
+                    SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_DEPRECATED)
+                }
+            }
+
+            "be invalid in strict mode" {
+                assertSoftly {
+                    shouldThrow<SpdxException> {
+                        SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_CURRENT)
+                    }
+                    shouldThrow<SpdxException> {
+                        SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_CURRENT)
+                    }
+                }
+            }
+        }
+
+        "An SpdxExpression with current identifiers" should {
+            val currentExpression = "GPL-1.0-only"
+            val currentExpressionWithException = "GPL-2.0-or-later WITH Classpath-exception-2.0"
+
+            "be valid in lenient mode" {
+                assertSoftly {
+                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_ANY)
+                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_ANY)
+                }
+            }
+
+            "be valid in deprecated mode" {
+                assertSoftly {
+                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_DEPRECATED)
+                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_DEPRECATED)
+                }
+            }
+
+            "be valid in strict mode" {
+                assertSoftly {
+                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_CURRENT)
+                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_CURRENT)
+                }
+            }
+        }
+
+        "The expression parser" should {
+            "work for deprecated license identifiers" {
+                assertSoftly {
+                    SpdxExpression.parse("Nunit") shouldBe SpdxLicenseIdExpression("Nunit")
+                    SpdxExpression.parse("StandardML-NJ") shouldBe SpdxLicenseIdExpression("StandardML-NJ")
+                    SpdxExpression.parse("wxWindows") shouldBe SpdxLicenseIdExpression("wxWindows")
+                }
             }
         }
     }
