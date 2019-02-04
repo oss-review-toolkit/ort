@@ -83,6 +83,7 @@ class NoticeReporter : Reporter() {
         override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
     }
 
+    override val reporterName = "Notice"
     override val defaultFilename = "NOTICE"
 
     override fun generateReport(

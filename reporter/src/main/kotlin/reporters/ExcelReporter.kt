@@ -80,6 +80,7 @@ class ExcelReporter : Reporter() {
 
     private lateinit var creationHelper: CreationHelper
 
+    override val reporterName = "Excel"
     override val defaultFilename = "scan-report.xlsx"
 
     override fun generateReport(
