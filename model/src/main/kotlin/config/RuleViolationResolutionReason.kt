@@ -36,6 +36,11 @@ enum class RuleViolationResolutionReason {
     EXAMPLE_OF_EXCEPTION,
 
     /**
+     * The rule violation is acceptable because the license for the respective package has been acquired.
+     */
+    LICENSE_ACQUIRED_EXCEPTION,
+
+    /**
      * The implied patent grant is acceptable in this case.
      */
     PATENT_GRANT_EXCEPTION
