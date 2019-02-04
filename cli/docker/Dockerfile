@@ -19,10 +19,10 @@ FROM openjdk:11-jre-slim-sid
 
 ENV SCANCODE_VERSION=2.9.7
 
-RUN apt update && apt install -y --no-install-recommends curl
+RUN apt-get update && apt-get install -y --no-install-recommends curl
 
 # Add VCS tools (no specific versions required here).
-RUN apt install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         cvs \
         git \
         mercurial \
@@ -33,7 +33,7 @@ RUN apt install -y --no-install-recommends \
     chmod a+x /usr/local/bin/repo
 
 # Add package managers (in versions known to work).
-RUN apt install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         composer=1.8.0-1 \
         npm=5.8.0+ds6-3 \
         python-pip=18.1-4 \
