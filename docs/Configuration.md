@@ -179,7 +179,7 @@ pattern:
 resolutions:
   rule_violations:
   - message: "A regular expression matching the rule violation message."
-    reason: "One of: CANT_FIX_EXCEPTION|DYNAMIC_LINKAGE_EXCEPTION|EXAMPLE_OF_EXCEPTION|PATENT_GRANT_EXCEPTION"
+    reason: "One of: CANT_FIX_EXCEPTION|DYNAMIC_LINKAGE_EXCEPTION|EXAMPLE_OF_EXCEPTION|LICENSE_ACQUIRED_EXCEPTION|PATENT_GRANT_EXCEPTION"
     comment: "A comment further explaining why the reason above is applicable."
 ```
 
@@ -272,7 +272,7 @@ errors:
   comment: "A comment further explaining why the reason above is applicable here."
 rule_violations:
 - message: "A regular expression matching the rule violation message."
-  reason: "One of: CANT_FIX_EXCEPTION|DYNAMIC_LINKAGE_EXCEPTION|EXAMPLE_OF_EXCEPTION|PATENT_GRANT_EXCEPTION"
+  reason: "One of: CANT_FIX_EXCEPTION|DYNAMIC_LINKAGE_EXCEPTION|EXAMPLE_OF_EXCEPTION|LICENSE_ACQUIRED_EXCEPTION|PATENT_GRANT_EXCEPTION"
   comment: "A comment further explaining why the reason above is applicable here."
 ```
 
