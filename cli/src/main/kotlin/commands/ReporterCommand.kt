@@ -47,8 +47,8 @@ import java.io.File
 object ReporterCommand : CommandWithHelp() {
     private class ReporterConverter : IStringConverter<Reporter> {
         companion object {
-            // Map upper-cased reporter names without the "Reporter" suffix names to their instances.
-            val REPORTERS = Reporter.ALL.associateBy { it.toString().removeSuffix("Reporter").toUpperCase() }
+            // Map upper-cased reporter names to their instances.
+            val REPORTERS = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
         }
 
         override fun convert(name: String): Reporter {
@@ -127,8 +127,6 @@ object ReporterCommand : CommandWithHelp() {
         absoluteOutputDir.safeMkdirs()
 
         reports.forEach { reporter, file ->
-            val name = reporter.toString().removeSuffix("Reporter")
-
             try {
                 reporter.generateReport(
                         ortResult,
@@ -138,11 +136,11 @@ object ReporterCommand : CommandWithHelp() {
                         postProcessingScript?.readText()
                 )
 
-                println("Created '$name' report:\n\t$file")
+                println("Created '${reporter.reporterName}' report:\n\t$file")
             } catch (e: Exception) {
                 e.showStackTrace()
 
-                log.error { "Could not create '$name' report: ${e.message}" }
+                log.error { "Could not create '${reporter.reporterName}' report: ${e.message}" }
 
                 exitCode = 1
             }

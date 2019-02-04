@@ -296,6 +296,7 @@ class StaticHtmlReporter : Reporter() {
 
         """.trimIndent()
 
+    override val reporterName = "StaticHtml"
     override val defaultFilename = "scan-report.html"
 
     override fun generateReport(

@@ -42,14 +42,14 @@ abstract class Reporter {
     }
 
     /**
+     * The name to use to refer to the reporter.
+     */
+    abstract val reporterName: String
+
+    /**
      * The default output filename to use with this reporter format.
      */
     abstract val defaultFilename: String
-
-    /**
-     * Return the Java class name as a simple way to refer to the [Reporter].
-     */
-    override fun toString(): String = javaClass.simpleName
 
     /**
      * Generate a report for the [ortResult], taking into account any issue resolutions provided by [resolutionProvider]
