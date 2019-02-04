@@ -34,10 +34,10 @@ RUN apt-get install -y --no-install-recommends \
 
 # Add package managers (in versions known to work).
 RUN apt-get install -y --no-install-recommends \
-        composer=1.8.0-1 \
+        composer=1.8.3-1 \
         npm=5.8.0+ds6-3 \
         python-pip=18.1-4 \
-        bundler=1.16.1-3 \
+        bundler=1.17.3-1 \
         sbt=0.13.13-2 \
     && \
 
