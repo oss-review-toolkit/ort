@@ -86,7 +86,8 @@ class Git : GitBase() {
             log.info { "Configuring Git to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
             run(targetDir, "config", "core.sparseCheckout", "true")
             val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-            File(gitInfoDir, "sparse-checkout").writeText(pkg.vcsProcessed.path + "\n" +
+            val path = pkg.vcsProcessed.path.let { if (it.startsWith("/")) it else "/$it" }
+            File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
                     LICENSE_FILE_NAMES.joinToString("\n"))
         }
 
