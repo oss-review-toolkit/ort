@@ -210,7 +210,13 @@ class ExcludesTest : WordSpec() {
                 val excludesById = excludes.projectExcludesById(setOf(project1, project2, project3))
 
                 excludesById.keys should haveSize(3)
-                excludesById.keys should containAll(projectId1, projectId2, projectId3)
+
+                // Note: kotlintest's containAll() calls toString() on the elements which is not desired here, also see
+                // https://github.com/kotlintest/kotlintest/pull/638
+                excludesById.containsKey(projectId1) shouldBe true
+                excludesById.containsKey(projectId2) shouldBe true
+                excludesById.containsKey(projectId3) shouldBe true
+
                 excludesById.values should containOnlyNulls()
             }
 

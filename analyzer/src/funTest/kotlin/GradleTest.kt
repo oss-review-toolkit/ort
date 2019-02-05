@@ -34,8 +34,8 @@ import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.Spec
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 import io.kotlintest.tables.forAll
 import io.kotlintest.tables.headers
@@ -59,77 +59,87 @@ class GradleTest : StringSpec() {
 
     init {
         "Root project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "build.gradle")
+            val definitionFile = File(projectDir, "build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-expected-output-root.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "Project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "app/build.gradle")
+            val definitionFile = File(projectDir, "app/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-expected-output-app.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "External dependencies are detected correctly" {
-            val packageFile = File(projectDir, "lib/build.gradle")
+            val definitionFile = File(projectDir, "lib/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-expected-output-lib.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "Unresolved dependencies are detected correctly" {
-            val packageFile = File(projectDir, "lib-without-repo/build.gradle")
+            val definitionFile = File(projectDir, "lib-without-repo/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-expected-output-lib-without-repo.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                patchActualResult(yamlMapper.writeValueAsString(resultForDefinitionFile)) shouldBe expectedResult
+            }
         }
 
         "Fails nicely for Gradle version < 2.14".config(enabled = false) {
-            val packageFile = File(projectDir.parentFile, "gradle-unsupported-version/build.gradle")
+            val definitionFile = File(projectDir.parentFile, "gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-expected-output-unsupported-version.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "Is compatible with Gradle >= 2.14".config(tags = setOf(ExpensiveTag), enabled = false) {
@@ -175,18 +185,20 @@ class GradleTest : StringSpec() {
             forAll(gradleVersionTable) { version, resultsFileSuffix ->
                 installGradleWrapper(version)
 
-                val packageFile = File(projectDir, "app/build.gradle")
+                val definitionFile = File(projectDir, "app/build.gradle")
                 val expectedResult = patchExpectedResult(
                         File(projectDir.parentFile, "gradle-expected-output-app$resultsFileSuffix.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision
                 )
 
-                val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-                result shouldNotBe null
-                result!!.errors shouldBe emptyList()
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result shouldContainKey definitionFile
+                result[definitionFile]!!.let { resultForDefinitionFile ->
+                    resultForDefinitionFile.errors shouldBe emptyList()
+                    yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+                }
             }
         }
     }

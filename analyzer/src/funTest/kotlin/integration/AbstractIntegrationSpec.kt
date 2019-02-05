@@ -32,8 +32,8 @@ import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.USER_DIR
 
 import io.kotlintest.Spec
-import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.containExactly
+import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNot
@@ -124,8 +124,8 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     VersionControlSystem.forType(result.project.vcsProcessed.type) shouldBe
                             VersionControlSystem.forType(pkg.vcs.type)
                     result.project.vcsProcessed.url shouldBe pkg.vcs.url
-                    result.project.scopes shouldNot beEmpty()
-                    result.packages shouldNot beEmpty()
+                    result.project.scopes shouldNot haveSize(0)
+                    result.packages shouldNot haveSize(0)
                     result.collectErrors().keys should containExactly(identifiersWithExpectedErrors)
                 }
             }

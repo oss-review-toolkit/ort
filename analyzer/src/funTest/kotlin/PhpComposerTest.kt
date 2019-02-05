@@ -29,10 +29,10 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.matchers.startWith
 import io.kotlintest.should
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -60,16 +60,19 @@ class PhpComposerTest : StringSpec() {
 
         "Error is shown when no lock file is present" {
             val definitionFile = File(projectsDir, "no-lockfile/composer.json")
-            val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+            val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.project.id shouldBe Identifier("PhpComposer::src/funTest/assets/projects/synthetic/" +
-                    "php-composer/no-lockfile/composer.json:")
-            result.project.definitionFilePath shouldBe
-                    "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
-            result.packages.size shouldBe 0
-            result.errors.size shouldBe 1
-            result.errors.first().message should startWith("IllegalArgumentException: No lock file found in")
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.project.id shouldBe Identifier("PhpComposer::src/funTest/assets/projects/" +
+                        "synthetic/php-composer/no-lockfile/composer.json:")
+                resultForDefinitionFile.project.definitionFilePath shouldBe
+                        "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
+                resultForDefinitionFile.packages.size shouldBe 0
+                resultForDefinitionFile.errors.size shouldBe 1
+                resultForDefinitionFile.errors.first().message should
+                        startWith("IllegalArgumentException: No lock file found in")
+            }
         }
 
         "No composer.lock is required for projects without dependencies" {
