@@ -38,7 +38,7 @@ class OrtResultTest : WordSpec({
             val result = resultFile.readValue<OrtResult>()
 
             val pkg = Package.EMPTY.copy(id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"))
-            result.collectAllDependencies(pkg, 1).map { it.id.toString() } shouldBe expectedDependencies
+            result.collectAllDependencies(pkg, 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
         }
     }
 })

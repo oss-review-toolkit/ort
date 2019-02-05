@@ -390,8 +390,8 @@ class StaticHtmlReporter : Reporter() {
 
             reportTableModel.projectDependencies.forEach { project, projectTable ->
                 li {
-                    a("#${project.id}") {
-                        +"${project.id}"
+                    a("#${project.id.toCoordinates()}") {
+                        +"${project.id.toCoordinates()}"
 
                         projectTable.exclude?.let { exclude ->
                             +" "
@@ -498,11 +498,11 @@ class StaticHtmlReporter : Reporter() {
                     +rowIndex.toString()
                 }
             }
-            td { +"${row.id}" }
+            td { +"${row.id.toCoordinates()}" }
 
             td {
                 row.analyzerIssues.forEach { id, issues ->
-                    a("#$id") { +"$id" }
+                    a("#${id.toCoordinates()}") { +"${id.toCoordinates()}" }
 
                     ul {
                         issues.forEach { issue ->
@@ -517,7 +517,7 @@ class StaticHtmlReporter : Reporter() {
 
             td {
                 row.scanIssues.forEach { id, issues ->
-                    a("#$id") { +"$id" }
+                    a("#${id.toCoordinates()}") { +"${id.toCoordinates()}" }
 
                     ul {
                         issues.forEach { issue ->
@@ -536,8 +536,8 @@ class StaticHtmlReporter : Reporter() {
         val excludedClass = if (table.exclude != null) "ort-excluded" else ""
 
         h2 {
-            id = "${project.id}"
-            +"${project.id} (${project.definitionFilePath})"
+            id = "${project.id.toCoordinates()}"
+            +"${project.id.toCoordinates()} (${project.definitionFilePath})"
         }
 
         table.exclude?.let { exclude ->
@@ -590,7 +590,7 @@ class StaticHtmlReporter : Reporter() {
 
             tbody {
                 table.rows.forEachIndexed { rowIndex, pkg ->
-                    projectRow(project.id.toString(), rowIndex + 1, pkg)
+                    projectRow(project.id.toCoordinates(), rowIndex + 1, pkg)
                 }
             }
         }
@@ -617,7 +617,7 @@ class StaticHtmlReporter : Reporter() {
                     +rowIndex.toString()
                 }
             }
-            td { +"${row.id}" }
+            td { +"${row.id.toCoordinates()}" }
 
             td {
                 if (row.scopes.isNotEmpty()) {
