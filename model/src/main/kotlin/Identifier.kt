@@ -143,4 +143,12 @@ data class Identifier(
      * [encodeOrUnknown].
      */
     fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
+
+    /**
+     * Create package URL ("purl") based on the properties of the [Identifier] as specified at
+     * https://github.com/package-url/purl-spec.
+     */
+    // TODO: This is a preliminary implementation as some open questions remain, see e.g.
+    // https://github.com/package-url/purl-spec/issues/33.
+    fun toPurl() = "pkg://$type/$namespace/$name@$version"
 }
