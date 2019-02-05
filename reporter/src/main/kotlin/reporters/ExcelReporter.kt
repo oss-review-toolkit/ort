@@ -153,8 +153,8 @@ class ExcelReporter : Reporter() {
         createSummarySheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
                 tabularScanRecord.extraColumns)
         tabularScanRecord.projectDependencies.forEach { project, table ->
-            createProjectSheet(workbook, project.id.toString(), project.definitionFilePath, table, project.vcsProcessed,
-                    tabularScanRecord.extraColumns)
+            createProjectSheet(workbook, project.id.toCoordinates(), project.definitionFilePath, table,
+                    project.vcsProcessed, tabularScanRecord.extraColumns)
         }
 
         workbook.write(outputStream)
@@ -218,10 +218,11 @@ class ExcelReporter : Reporter() {
                 val projectExclude = table.projectExcludes[id]
 
                 if (projectExclude != null) {
-                    scopesText.append("$id (Excluded: ${projectExclude.reason} - ${projectExclude.comment})\n",
+                    scopesText.append("${id.toCoordinates()} " +
+                            "(Excluded: ${projectExclude.reason} - ${projectExclude.comment})\n",
                             excludedFont)
                 } else {
-                    scopesText.append("$id\n", font)
+                    scopesText.append("${id.toCoordinates()}\n", font)
                 }
 
                 scopes.entries.sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
@@ -241,7 +242,7 @@ class ExcelReporter : Reporter() {
 
             val analyzerIssuesText = buildString {
                 row.analyzerIssues.forEach { (id, issues) ->
-                    append("$id\n")
+                    append("${id.toCoordinates()}\n")
 
                     issues.forEach { issue ->
                         append("  ${issue.description}\n")
@@ -253,7 +254,7 @@ class ExcelReporter : Reporter() {
 
             val scanIssuesText = buildString {
                 row.scanIssues.forEach { (id, issues) ->
-                    append("$id\n")
+                    append("${id.toCoordinates()}\n")
 
                     issues.forEach { issue ->
                         append("  ${issue.description}\n")
@@ -264,7 +265,7 @@ class ExcelReporter : Reporter() {
             val scanIssuesLines = row.scanIssues.size + row.scanIssues.flatMap { it.value }.size
 
             sheet.createRow(currentRow).apply {
-                createCell(this, 0, row.id.toString(), font, cellStyle)
+                createCell(this, 0, row.id.toCoordinates(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
@@ -317,7 +318,7 @@ class ExcelReporter : Reporter() {
             val scopesLines = row.scopes.size + row.scopes.flatMap { it.value }.size
 
             sheet.createRow(currentRow).apply {
-                createCell(this, 0, row.id.toString(), font, cellStyle)
+                createCell(this, 0, row.id.toCoordinates(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)

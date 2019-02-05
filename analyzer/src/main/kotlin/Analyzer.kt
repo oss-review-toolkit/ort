@@ -114,7 +114,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                                 val curations = provider.getCurationsFor(curatedPackage.pkg.id)
                                 curations.fold(curatedPackage) { cur, packageCuration ->
                                     log.debug {
-                                        "Applying curation '$packageCuration' to package '${curatedPackage.pkg.id}'."
+                                        "Applying curation '$packageCuration' to package " +
+                                                "'${curatedPackage.pkg.id.toCoordinates()}'."
                                     }
                                     packageCuration.apply(cur)
                                 }

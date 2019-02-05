@@ -304,7 +304,7 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                     val body = response.body()?.string()?.trim()
 
                     if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                        log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id}'." }
+                        log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id.toCoordinates()}'." }
                         if (body != null) {
                             log.warn { "The response was '$body' (code ${response.code()})." }
                         }
@@ -318,7 +318,9 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                     } catch (e: IOException) {
                         e.showStackTrace()
 
-                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
+                        log.warn {
+                            "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': ${e.message}"
+                        }
 
                         // Fall back to returning the original package data.
                         return@use pkg
@@ -353,7 +355,9 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                     } catch (e: NullPointerException) {
                         e.showStackTrace()
 
-                        log.warn { "Unable to parse PyPI meta-data for package '${pkg.id}': ${e.message}" }
+                        log.warn {
+                            "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': ${e.message}"
+                        }
 
                         // Fall back to returning the original package data.
                         pkg

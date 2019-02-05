@@ -132,7 +132,7 @@ class Downloader {
      * @throws DownloadException In case the download failed.
      */
     fun download(target: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
-        log.info { "Trying to download source code for '${target.id}'." }
+        log.info { "Trying to download source code for '${target.id.toCoordinates()}'." }
 
         val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
 
@@ -172,7 +172,7 @@ class Downloader {
                 throw DownloadException(message)
             }
         } catch (e: DownloadException) {
-            log.debug { "VCS download failed for '${target.id}': ${e.message}" }
+            log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.message}" }
 
             // Clean up any left-over files.
             targetDir.safeDeleteRecursively()
@@ -186,7 +186,7 @@ class Downloader {
         try {
             return downloadSourceArtifact(target, targetDir)
         } catch (e: DownloadException) {
-            log.debug { "Source artifact download failed for '${target.id}': ${e.message}" }
+            log.debug { "Source artifact download failed for '${target.id.toCoordinates()}': ${e.message}" }
 
             // Clean up any left-over files.
             targetDir.safeDeleteRecursively()
@@ -201,7 +201,7 @@ class Downloader {
             try {
                 return downloadPomArtifact(target, targetDir)
             } catch (e: DownloadException) {
-                log.debug { "POM artifact download failed for '${target.id}': ${e.message}" }
+                log.debug { "POM artifact download failed for '${target.id.toCoordinates()}': ${e.message}" }
 
                 // Clean up any left-over files.
                 targetDir.safeDeleteRecursively()
@@ -218,11 +218,11 @@ class Downloader {
 
     private fun downloadFromVcs(target: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
         log.info {
-            "Trying to download '${target.id}' sources to '${outputDirectory.absolutePath}' from VCS..."
+            "Trying to download '${target.id.toCoordinates()}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
 
         if (target.vcsProcessed.url.isBlank()) {
-            throw DownloadException("No VCS URL provided for '${target.id}'.")
+            throw DownloadException("No VCS URL provided for '${target.id.toCoordinates()}'.")
         }
 
         if (target.vcsProcessed != target.vcs) {
@@ -295,11 +295,11 @@ class Downloader {
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
         log.info {
-            "Trying to download source artifact for '${target.id}' from ${target.sourceArtifact.url}..."
+            "Trying to download source artifact for '${target.id.toCoordinates()}' from ${target.sourceArtifact.url}..."
         }
 
         if (target.sourceArtifact.url.isBlank()) {
-            throw DownloadException("No source artifact URL provided for '${target.id}'.")
+            throw DownloadException("No source artifact URL provided for '${target.id.toCoordinates()}'.")
         }
 
         val startTime = Instant.now()
@@ -363,7 +363,8 @@ class Downloader {
         }
 
         log.info {
-            "Successfully downloaded source artifact for '${target.id}' to '${outputDirectory.absolutePath}'..."
+            "Successfully downloaded source artifact for '${target.id.toCoordinates()}' to " +
+                    "'${outputDirectory.absolutePath}'..."
         }
 
         return DownloadResult(startTime, outputDirectory, sourceArtifact = target.sourceArtifact)
@@ -374,7 +375,7 @@ class Downloader {
         val pomUrl = target.binaryArtifact.url.replaceAfterLast('/', pomFilename)
 
         log.info {
-            "Trying to download POM artifact for '${target.id}' from $pomUrl..."
+            "Trying to download POM artifact for '${target.id.toCoordinates()}' from $pomUrl..."
         }
 
         return try {
@@ -391,11 +392,11 @@ class Downloader {
 
             DownloadResult(startTime, outputDirectory, sourceArtifact = pomArtifact)
         } catch (e: FileNotFoundException) {
-            throw DownloadException("Failed to download the Maven POM for '${target.id}'.")
+            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}'.")
         } catch (e: MalformedURLException) {
             // TODO: Investigate why the binary artifact URL is actually empty and update
             // the implementation according to root cause.
-            throw DownloadException("Failed to download the Maven POM for '${target.id}'.")
+            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}'.")
         }
     }
 }

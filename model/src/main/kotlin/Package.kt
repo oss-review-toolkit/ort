@@ -118,7 +118,9 @@ data class Package(
      * [PackageCurationData] are compared.
      */
     fun diff(other: Package): PackageCurationData {
-        require(id == other.id) { "Cannot diff packages with different ids: '$id' vs '${other.id}'" }
+        require(id == other.id) {
+            "Cannot diff packages with different ids: '${id.toCoordinates()}' vs. '${other.id.toCoordinates()}'"
+        }
 
         return PackageCurationData(
                 declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },

@@ -137,7 +137,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         return packages.withIndex().associate { (index, pkg) ->
             val result = try {
-                log.info { "Starting scan of '${pkg.id}' (${index + 1}/${packages.size})." }
+                log.info { "Starting scan of '${pkg.id.toCoordinates()}' (${index + 1}/${packages.size})." }
 
                 scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).map {
                     // Remove the now unneeded reference to rawResult here to allow garbage collection to clean it up.
@@ -146,7 +146,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             } catch (e: ScanException) {
                 e.showStackTrace()
 
-                log.error { "Could not scan '${pkg.id}': ${e.collectMessagesAsString()}" }
+                log.error { "Could not scan '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
 
                 val now = Instant.now()
                 listOf(ScanResult(
@@ -197,7 +197,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         } catch (e: DownloadException) {
             e.showStackTrace()
 
-            log.error { "Could not download '${pkg.id}': ${e.collectMessagesAsString()}" }
+            log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
 
             val now = Instant.now()
             val scanResult = ScanResult(

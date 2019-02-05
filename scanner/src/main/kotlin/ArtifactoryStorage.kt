@@ -64,7 +64,7 @@ class ArtifactoryStorage(
     override fun read(id: Identifier): ScanResultContainer {
         val storagePath = storagePath(id)
 
-        log.info { "Trying to read scan results for '$id' from Artifactory storage: $storagePath" }
+        log.info { "Trying to read scan results for '${id.toCoordinates()}' from Artifactory storage: $storagePath" }
 
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
@@ -131,7 +131,8 @@ class ArtifactoryStorage(
         }
 
         log.info {
-            "Found ${scanResults.size} stored scan result(s) for $pkg that are compatible with $scannerDetails."
+            "Found ${scanResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} that are compatible with " +
+                    "$scannerDetails."
         }
 
         return ScanResultContainer(pkg.id, scanResults)
@@ -141,7 +142,7 @@ class ArtifactoryStorage(
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
         // it is cheap to re-create them.
         if (scanResult.summary.fileCount == 0) {
-            log.info { "Not storing scan result for '$id' because no files were scanned." }
+            log.info { "Not storing scan result for '${id.toCoordinates()}' because no files were scanned." }
 
             return false
         }
@@ -149,7 +150,7 @@ class ArtifactoryStorage(
         // Do not store scan results without raw result. The raw result can be set to null for other usages, but in the
         // storage it must never be null.
         if (scanResult.rawResult == null) {
-            log.info { "Not storing scan result for '$id' because the raw result is null." }
+            log.info { "Not storing scan result for '${id.toCoordinates()}' because the raw result is null." }
 
             return false
         }
@@ -157,7 +158,9 @@ class ArtifactoryStorage(
         // Do not store scan results without provenance information, because they cannot be assigned to the revision of
         // the package source code later.
         if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
-            log.info { "Not storing scan result for '$id' because no provenance information is available." }
+            log.info {
+                "Not storing scan result for '${id.toCoordinates()}' because no provenance information is available."
+            }
 
             return false
         }
@@ -169,7 +172,7 @@ class ArtifactoryStorage(
 
         val storagePath = storagePath(id)
 
-        log.info { "Writing scan results for '$id' to Artifactory storage: $storagePath" }
+        log.info { "Writing scan results for '${id.toCoordinates()}' to Artifactory storage: $storagePath" }
 
         val request = Request.Builder()
                 .header("X-JFrog-Art-Api", apiToken)
