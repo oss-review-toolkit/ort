@@ -29,8 +29,8 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.patchExpectedResult
 import com.here.ort.utils.test.USER_DIR
 
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -43,48 +43,54 @@ class GradleAndroidTest : StringSpec() {
 
     init {
         "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = File(projectDir, "build.gradle")
+            val definitionFile = File(projectDir, "build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-android-expected-output-root.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = File(projectDir, "app/build.gradle")
+            val definitionFile = File(projectDir, "app/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-android-expected-output-app.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = File(projectDir, "lib/build.gradle")
+            val definitionFile = File(projectDir, "lib/build.gradle")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "gradle-android-expected-output-lib.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
     }
 

@@ -30,8 +30,8 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.matchers.startWith
 import io.kotlintest.specs.WordSpec
 
@@ -66,16 +66,19 @@ class BundlerTest : WordSpec() {
 
             "show error if no lockfile is present" {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
-                val actualResult = createBundler().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val result = createBundler().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-                actualResult shouldNotBe null
-                actualResult!!.project.id shouldBe
-                        Identifier("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
-                actualResult.project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
-                actualResult.packages.size shouldBe 0
-                actualResult.errors.size shouldBe 1
-                actualResult.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                result shouldContainKey definitionFile
+                result[definitionFile]!!.let { resultForDefinitionFile ->
+                    resultForDefinitionFile.project.id shouldBe
+                            Identifier("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
+                    resultForDefinitionFile.project.definitionFilePath shouldBe
+                            "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
+                    resultForDefinitionFile.packages.size shouldBe 0
+                    resultForDefinitionFile.errors.size shouldBe 1
+                    resultForDefinitionFile.errors.first().message should
+                            startWith("IllegalArgumentException: No lockfile found in")
+                }
             }
 
             "resolve dependencies correctly when the project is a Gem" {

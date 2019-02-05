@@ -29,9 +29,9 @@ import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.matchers.beEmpty
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.should
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -44,7 +44,7 @@ class BowerTest : StringSpec() {
 
     init {
         "Project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "bower.json")
+            val definitionFile = File(projectDir, "bower.json")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(File(projectDir.parentFile, "bower-expected-output.yml"),
                     definitionFilePath = "$vcsPath/bower.json",
@@ -52,11 +52,13 @@ class BowerTest : StringSpec() {
                     revision = vcsRevision,
                     url = normalizeVcsUrl(vcsUrl))
 
-            val result = createBower().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createBower().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors should beEmpty()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors should beEmpty()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
     }
 

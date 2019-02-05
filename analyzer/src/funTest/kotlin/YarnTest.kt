@@ -31,6 +31,7 @@ import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -59,8 +60,8 @@ class YarnTest : WordSpec() {
     init {
         "yarn" should {
             "resolve dependencies correctly" {
-                val packageFile = File(projectDir, "package.json")
-                val result = createYarn().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val definitionFile = File(projectDir, "package.json")
+                val result = createYarn().resolveDependencies(USER_DIR, listOf(definitionFile))
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
                         File(projectDir.parentFile, "yarn-expected-output.yml"),
@@ -70,7 +71,10 @@ class YarnTest : WordSpec() {
                         path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result shouldContainKey definitionFile
+                result[definitionFile]!!.let { resultForDefinitionFile ->
+                    yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+                }
             }
         }
     }

@@ -32,6 +32,7 @@ import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -60,16 +61,20 @@ class BabelTest : WordSpec() {
     init {
         "Babel dependencies" should {
             "be correctly analyzed" {
-                val packageFile = File(projectDir, "package.json")
+                val definitionFile = File(projectDir, "package.json")
 
                 val expectedResult = patchExpectedResult(
                         File(projectDir.parentFile, "${projectDir.name}-expected-output.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision
                 )
-                val actualResult = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
-                patchActualResult(yamlMapper.writeValueAsString(actualResult)) shouldBe expectedResult
+                val result = createNPM().resolveDependencies(USER_DIR, listOf(definitionFile))
+
+                result shouldContainKey definitionFile
+                result[definitionFile]!!.let { resultForDefinitionFile ->
+                    patchActualResult(yamlMapper.writeValueAsString(resultForDefinitionFile)) shouldBe expectedResult
+                }
             }
         }
     }

@@ -28,8 +28,8 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -42,48 +42,54 @@ class GradleKotlinScriptTest : StringSpec() {
 
     init {
         "root project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "build.gradle.kts")
+            val definitionFile = File(projectDir, "build.gradle.kts")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "multi-kotlin-project-expected-output-root.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "core project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "core/build.gradle.kts")
+            val definitionFile = File(projectDir, "core/build.gradle.kts")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "multi-kotlin-project-expected-output-core.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
 
         "cli project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "cli/build.gradle.kts")
+            val definitionFile = File(projectDir, "cli/build.gradle.kts")
             val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "multi-kotlin-project-expected-output-cli.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(USER_DIR, listOf(definitionFile))
 
-            result shouldNotBe null
-            result!!.errors shouldBe emptyList()
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result shouldContainKey definitionFile
+            result[definitionFile]!!.let { resultForDefinitionFile ->
+                resultForDefinitionFile.errors shouldBe emptyList()
+                yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+            }
         }
     }
 

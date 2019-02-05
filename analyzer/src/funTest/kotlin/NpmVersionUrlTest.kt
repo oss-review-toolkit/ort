@@ -32,6 +32,7 @@ import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult
+import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -56,10 +57,10 @@ class NpmVersionUrlTest : WordSpec() {
     init {
         "NPM" should {
             "resolve dependencies with URLs as versions correctly" {
-                val packageFile = File(projectDir, "package.json")
+                val definitionFile = File(projectDir, "package.json")
 
                 val config = AnalyzerConfiguration(false, true)
-                val result = createNPM(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createNPM(config).resolveDependencies(USER_DIR, listOf(definitionFile))
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
                         File(projectDir.parentFile, "npm-version-urls-expected-output.yml"),
@@ -69,7 +70,10 @@ class NpmVersionUrlTest : WordSpec() {
                         path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result shouldContainKey definitionFile
+                result[definitionFile]!!.let { resultForDefinitionFile ->
+                    yamlMapper.writeValueAsString(resultForDefinitionFile) shouldBe expectedResult
+                }
             }
         }
     }
