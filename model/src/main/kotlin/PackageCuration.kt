@@ -43,8 +43,8 @@ data class PackageCuration(
      */
     fun apply(curatedPackage: CuratedPackage): CuratedPackage {
         if (!id.matches(curatedPackage.pkg.id)) {
-            throw IllegalArgumentException(
-                    "Package curation identifier '$id' does not match package identifier '${curatedPackage.pkg.id}'.")
+            throw IllegalArgumentException("Package curation identifier '${id.toCoordinates()}' does not match " +
+                    "package identifier '${curatedPackage.pkg.id.toCoordinates()}'.")
         }
 
         return data.apply(curatedPackage)

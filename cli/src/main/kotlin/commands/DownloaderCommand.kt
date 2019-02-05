@@ -183,7 +183,7 @@ object DownloaderCommand : CommandWithHelp() {
                     } catch (e: IllegalArgumentException) {
                         e.showStackTrace()
 
-                        log.error { "Could not archive '${pkg.id}': ${e.message}" }
+                        log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.message}" }
                     } finally {
                         val relativePath = outputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
                         File(outputDir, relativePath.toString()).safeDeleteRecursively()
@@ -192,7 +192,7 @@ object DownloaderCommand : CommandWithHelp() {
             } catch (e: DownloadException) {
                 e.showStackTrace()
 
-                log.error { "Could not download '${pkg.id}': ${e.message}" }
+                log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.message}" }
 
                 error = true
             }

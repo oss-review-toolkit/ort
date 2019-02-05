@@ -40,7 +40,7 @@ class IdentifierTest : StringSpec() {
             )
 
             mapping.forEach { identifier, stringRepresentation ->
-                identifier.toString() shouldBe stringRepresentation
+                identifier.toCoordinates() shouldBe stringRepresentation
             }
         }
 

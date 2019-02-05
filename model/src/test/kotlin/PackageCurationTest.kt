@@ -72,7 +72,7 @@ class PackageCurationTest : StringSpec() {
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.pkg.apply {
-                id.toString() shouldBe pkg.id.toString()
+                id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 declaredLicenses shouldBe curation.data.declaredLicenses
                 concludedLicense shouldBe curation.data.concludedLicense
                 description shouldBe curation.data.description
@@ -123,7 +123,7 @@ class PackageCurationTest : StringSpec() {
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.pkg.apply {
-                id.toString() shouldBe pkg.id.toString()
+                id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 declaredLicenses shouldBe pkg.declaredLicenses
                 concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description

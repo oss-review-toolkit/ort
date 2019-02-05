@@ -213,7 +213,7 @@ class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             val body = response.body()?.string()?.trim()
 
             if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                log.warn { "Unable to retrieve Hackage meta-data for package '${pkg.id}'." }
+                log.warn { "Unable to retrieve Hackage meta-data for package '${pkg.id.toCoordinates()}'." }
                 if (body != null) {
                     log.warn { "The response was '$body' (code ${response.code()})." }
                 }

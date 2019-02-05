@@ -42,7 +42,7 @@ class ProjectTest : WordSpec({
                     File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
-            project.collectDependencies().map { it.id.toString() } shouldBe expectedDependencies
+            project.collectDependencies().map { it.id.toCoordinates() } shouldBe expectedDependencies
         }
 
         "get no dependencies for a depth of 0" {
@@ -64,7 +64,7 @@ class ProjectTest : WordSpec({
                     File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
-            project.collectDependencies(maxDepth = 1).map { it.id.toString() } shouldBe expectedDependencies
+            project.collectDependencies(maxDepth = 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
         }
     }
 

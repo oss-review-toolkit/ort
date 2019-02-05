@@ -84,7 +84,7 @@ data class Identifier(
         }
     }
 
-    override fun compareTo(other: Identifier) = toString().compareTo(other.toString())
+    override fun compareTo(other: Identifier) = toCoordinates().compareTo(other.toCoordinates())
 
     /**
      * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].
@@ -131,13 +131,15 @@ data class Identifier(
     }
 
     /**
-     * Create a path based on the properties of the [Identifier]. All properties are encoded using [encodeOrUnknown].
+     * Create Maven-like coordinates based on the properties of the [Identifier].
      */
-    fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
-
-    // TODO: Consider using a PURL here, see https://github.com/package-url/purl-spec#purl.
     // TODO: We probably want to already sanitize the individual properties, also in other classes, but Kotlin does not
     // seem to offer a generic / elegant way to do so.
     @JsonValue
-    override fun toString() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
+    fun toCoordinates() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
+
+    /**
+     * Create a path based on the properties of the [Identifier]. All properties are encoded using [encodeOrUnknown].
+     */
+    fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
 }
