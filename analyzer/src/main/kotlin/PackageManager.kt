@@ -234,4 +234,8 @@ abstract class PackageManager(
      * Resolve dependencies for a single [definitionFile] and return a [ProjectAnalyzerResult].
      */
     abstract fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult?
+
+    override fun toString(): String {
+        throw NotImplementedError("BOOM!")
+    }
 }

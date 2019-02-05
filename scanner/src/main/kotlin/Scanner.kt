@@ -142,4 +142,8 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         // Note: This overwrites any existing ScannerRun from the input file.
         return ortResult.copy(scanner = scannerRun)
     }
+
+    override fun toString(): String {
+        throw NotImplementedError("BOOM!")
+    }
 }

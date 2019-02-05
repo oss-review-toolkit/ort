@@ -63,4 +63,8 @@ abstract class Reporter {
             outputStream: OutputStream,
             postProcessingScript: String? = null
     )
+
+    override fun toString(): String {
+        throw NotImplementedError("BOOM!")
+    }
 }

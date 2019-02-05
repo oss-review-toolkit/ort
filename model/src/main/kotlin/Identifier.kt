@@ -151,4 +151,8 @@ data class Identifier(
     // TODO: This is a preliminary implementation as some open questions remain, see e.g.
     // https://github.com/package-url/purl-spec/issues/33.
     fun toPurl() = "pkg://$type/$namespace/$name@$version"
+
+    override fun toString(): String {
+        throw NotImplementedError("BOOM!")
+    }
 }

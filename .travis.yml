@@ -53,7 +53,7 @@ script:
       ./gradlew --no-daemon --stacktrace :cli:dockerBuildImage;
       ./gradlew --no-daemon --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag check jacocoReport | tee log.txt;
     else
-      ./gradlew --no-daemon --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag check jacocoReport | tee log.txt;
+      ./gradlew --no-daemon --stacktrace check jacocoReport | tee log.txt;
     fi
   - if grep -A1 ".+Test.+STARTED$" log.txt | grep -q "^:"; then
       echo "Some tests seemingly have been aborted.";
