@@ -139,7 +139,8 @@ data class Identifier(
     fun toCoordinates() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
 
     /**
-     * Create a path based on the properties of the [Identifier]. All properties are encoded using [encodeOrUnknown].
+     * Create a file system path based on the properties of the [Identifier]. All properties are encoded using
+     * [encodeOrUnknown].
      */
     fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
 }
