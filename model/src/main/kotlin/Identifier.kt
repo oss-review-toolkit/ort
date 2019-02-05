@@ -20,9 +20,7 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import com.fasterxml.jackson.annotation.JsonValue
 
 import com.here.ort.utils.encodeOrUnknown
 
@@ -140,11 +138,6 @@ data class Identifier(
     // TODO: Consider using a PURL here, see https://github.com/package-url/purl-spec#purl.
     // TODO: We probably want to already sanitize the individual properties, also in other classes, but Kotlin does not
     // seem to offer a generic / elegant way to do so.
+    @JsonValue
     override fun toString() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
-}
-
-class IdentifierToStringSerializer : StdSerializer<Identifier>(Identifier::class.java) {
-    override fun serialize(value: Identifier, gen: JsonGenerator, provider: SerializerProvider) {
-        gen.writeString(value.toString())
-    }
 }
