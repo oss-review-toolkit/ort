@@ -40,7 +40,6 @@ private val ortModelModule = SimpleModule("OrtModelModule").apply {
     addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
 
     addSerializer(OrtIssue::class.java, OrtIssueSerializer())
-    addSerializer(Identifier::class.java, IdentifierToStringSerializer())
 }
 
 val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategy.SNAKE_CASE as PropertyNamingStrategy.PropertyNamingStrategyBase
