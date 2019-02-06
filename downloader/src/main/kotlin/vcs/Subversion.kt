@@ -238,13 +238,6 @@ class Subversion : VersionControlSystem(), CommandLineTool {
             throw DownloadException("$type failed to download from ${pkg.vcsProcessed.url}.", e)
         }
 
-        pkg.vcsProcessed.path.let {
-            if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).isDirectory) {
-                throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not contain " +
-                        "the requested path '$it'.")
-            }
-        }
-
         return  workingTree
     }
 }
