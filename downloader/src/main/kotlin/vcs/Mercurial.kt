@@ -152,7 +152,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             run(targetDir, "update", revision)
 
             pkg.vcsProcessed.path.let {
-                if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).isDirectory) {
+                if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).exists()) {
                     throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
                             "contain the requested path '$it'.")
                 }
