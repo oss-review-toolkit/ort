@@ -65,6 +65,26 @@ object Main : CommandWithHelp() {
      * Run the ORT CLI with the provided [args] and return the exit code of [CommandWithHelp.run].
      */
     fun run(args: Array<String>): Int {
+        val env = Environment()
+        val variables = env.variables.entries.map { (key, value) -> "$key = $value" }
+
+        println("""
+            ________ _____________________
+            \_____  \\______   \__    ___/ version ${env.ortVersion} running on ${env.os} with
+             /   |   \|       _/ |    |    ${variables.getOrElse(0) { "" }}
+            /    |    \    |   \ |    |    ${variables.getOrElse(1) { "" }}
+            \_______  /____|_  / |____|    ${variables.getOrElse(2) { "" }}
+                    \/       \/
+        """.trimIndent())
+
+        val moreVariables = variables.drop(3)
+        if (moreVariables.isNotEmpty()) {
+            println("More environment variables:")
+            moreVariables.forEach(::println)
+        }
+
+        println()
+
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
             addCommand(AnalyzerCommand)
@@ -87,8 +107,6 @@ object Main : CommandWithHelp() {
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
-
-        println("Running ORT with ${Environment()}.")
 
         // JCommander already validates the command names.
         val command = jc.commands[jc.parsedCommand]!!
