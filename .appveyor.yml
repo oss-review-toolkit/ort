@@ -22,7 +22,7 @@ clone_depth: 50
 
 install:
   - git submodule update --init --recursive
-  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.12.1
+  - npm install -g bower@1.8.4 npm@6.4.0 yarn@1.13.0
   - pip install virtualenv==15.1.0
   - cinst sbt --version 1.0.2 -y
   - cinst php --version 7.2.0 -y
