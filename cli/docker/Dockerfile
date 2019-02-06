@@ -53,7 +53,7 @@ RUN apt-get install -y --no-install-recommends \
         sbt=0.13.13-2 \
     && \
 
-    npm install --global bower@1.8.4 yarn@1.9.4 && \
+    npm install --global bower@1.8.4 yarn@1.13.0 && \
     pip install virtualenv==15.1.0 && \
 
     curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | \
