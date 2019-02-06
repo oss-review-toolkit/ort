@@ -87,9 +87,9 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
 
         for (project in projects) {
             // parseProjects() made sure that all entries contain these keys
-            val name = project["name"]!!
-            val revision = project["revision"]!!
-            val version = project["version"]!!
+            val name = project.getValue("name")
+            val revision = project.getValue("revision")
+            val version = project.getValue("version")
 
             val errors = mutableListOf<OrtIssue>()
 
