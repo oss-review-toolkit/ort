@@ -107,8 +107,8 @@ class DownloaderTest : StringSpec() {
             }
 
             exception.cause shouldNotBe null
-            exception.cause!!.message shouldBe "Calculated SHA-1 hash 'a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa' " +
-                    "differs from expected hash '0123456789abcdef0123456789abcdef01234567'."
+            exception.cause!!.message shouldBe "Source artifact does not match expected SHA-1 hash " +
+                    "'0123456789abcdef0123456789abcdef01234567'."
         }
 
         "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
