@@ -32,21 +32,21 @@ a. Consent for Internet-Based Services. The software features described below co
 
 · Package Restore.  This software feature will allow you to add package references to your project.  If you attempt to build a project that includes package references, the software will automatically download and install any missing packages from your configured package sources, some of which may reside on external computer systems.  For more information about this feature, see http://docs.nuget.org/docs/reference/package-restore. To prevent the software from automatically downloading missing packages during build time, open the Tools > Options dialog from within Visual Studio, select "Package Manager" from the options, and uncheck the "Allow NuGet to download missing packages" checkbox.  By leaving this checkbox checked, you consent to the transmission of Computer Information.
 
-· Use of Information by Microsoft. We will treat any Computer Information that we receive from the software in accordance with our Privacy Statement set forth at http://www.microsoft.com/web/webpi/eula/package-manager-for-net-privacy.htm or another web page that we may specify from time to time. 
+· Use of Information by Microsoft. We will treat any Computer Information that we receive from the software in accordance with our Privacy Statement set forth at http://www.microsoft.com/web/webpi/eula/package-manager-for-net-privacy.htm or another web page that we may specify from time to time.
 
 · Use of Information by Third Parties. Computer Information may be sent to third-party external computer systems, as described above.  Any information you provide to a third party through your use of the software is governed by their privacy statements and policies.  We do not control, and we disclaim any responsibility for, how third-party service providers may use Computer Information.
 
 b. Misuse of Internet-based Services. You may not use these Internet-based Services in any way that could harm them or impair anyone else’s use of them. You may not use these Internet-based Services to try to gain unauthorized access to any service, data, account or network by any means.
 
-3. THIRD-PARTY SOFTWARE.  Packages that are downloaded from external package sources are offered and distributed in some cases by third parties and in some cases by Microsoft, but each such package is under its own license terms. Microsoft is not developing, distributing or licensing any third-party packages to you, but instead, as a convenience, enables you to use the software to access or obtain those packages directly from the third-party package providers. By using any of the above features, you acknowledge and agree that: 
+3. THIRD-PARTY SOFTWARE.  Packages that are downloaded from external package sources are offered and distributed in some cases by third parties and in some cases by Microsoft, but each such package is under its own license terms. Microsoft is not developing, distributing or licensing any third-party packages to you, but instead, as a convenience, enables you to use the software to access or obtain those packages directly from the third-party package providers. By using any of the above features, you acknowledge and agree that:
 
 ·  you are obtaining any third-party packages from such third parties and under separate license terms applicable to each package (including any terms applicable to software dependencies that may be included in the packages);
 
 ·  it is your responsibility to locate, understand and comply with all applicable license terms for each such package; and
 
-·  this includes your responsibility to follow the package source (feed) URL and to review the packages for embedded notices or license terms. 
+·  this includes your responsibility to follow the package source (feed) URL and to review the packages for embedded notices or license terms.
 
-Microsoft makes no representations, warranties or guarantees as to any package source, including any information or content contained therein, any package source URL, or any packages referenced in or accessed by you through such URLs or package sources. Microsoft grants you no license rights for any third-party software applications or packages that are obtained using the software. 
+Microsoft makes no representations, warranties or guarantees as to any package source, including any information or content contained therein, any package source URL, or any packages referenced in or accessed by you through such URLs or package sources. Microsoft grants you no license rights for any third-party software applications or packages that are obtained using the software.
 
 4. THIRD PARTY NOTICES. The software (not including any packages that you obtain using the software) includes third-party code. However, all such code is licensed to you by Microsoft under this license agreement, rather than licensed to you by any third party under some other license terms. Notices, if any, for the third-party code are included with this software for your information only.
 

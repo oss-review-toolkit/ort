@@ -1,20 +1,20 @@
 MELANGE CHAT SERVER/CLIENT PUBLIC LICENSE
 Version 1.1, 21 October 1998
-	
+
 Copyright (C) 1998,1999 by Christian Walter, chris@terminal.at
 http://www.terminal.at/melange
-		 
+
 1. This software may be freely copied, modified and redistributed without
 fee for NON-COMMERCIAL (for commercial use see below) purposes provided that
 this copyright notice and my name are preserved intact on all copies and
 modified copies, so I get my credit for the work I put into this.
 Feel free to run this, modify it, debug it, send me comments, insults etc.
-	 
+
 2. There is no warranty or other guarantee of fitness of this software.
 It is provided solely "as is". The author disclaims all
 responsibility and liability with respect to this software's usage
 or its effect upon hardware or computer systems.
-	
+
 3. This software is free of charge for non-commercial & commerical USE.
 No money, donations, etc are required. If you want to sell this software,
 no matter if it's sold "as is" or modified, a licensing agreement is
@@ -32,11 +32,11 @@ Details at the MELANGE homepage: http://www.terminal.at/melange
 Chris
 
 Vienna, October 1998
-	
-	 
-	
+
+
+
                          NO WARRANTY
-	
+
 	BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
 	FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
 	OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
@@ -46,7 +46,7 @@ Vienna, October 1998
 	TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
 	PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
 	REPAIR OR CORRECTION.
-	
+
 	IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
 	WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
 	REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,

@@ -1,7 +1,7 @@
 Microsoft Windows Server 2003 SP1 Platform SDK License
 
 MICROSOFT SOFTWARE LICENSE TERMS
-MICROSOFT PLATFORM SOFTWARE DEVELOPMENT KIT 
+MICROSOFT PLATFORM SOFTWARE DEVELOPMENT KIT
 FOR MICROSOFT WINDOWS SERVER 2003 SERVICE PACK 1
 These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its affiliates) and you.  Please read them.  They apply to the software named above, which includes the media on which you received it, if any.  The terms also apply to any Microsoft:
   •   updates,
@@ -12,7 +12,7 @@ for this software, unless other terms accompany those items.  If so, those terms
 By using this software, you accept these terms.  If you do not accept them, do not use the software.
 If you comply with these license terms, you have the rights below:
 
-1.      USE RIGHTS. 
+1.      USE RIGHTS.
 a.      Use.  You may install the software on any number of devices to design, develop and test your programs that run on a Microsoft Windows operating system.
 b.      Other Microsoft Programs.  The software contains other Microsoft programs.  The license terms with those programs apply to your use of them.
 c.       Distributable Code.  The software contains code that you are permitted to copy and distribute in programs you develop if you comply with the terms below.
@@ -47,7 +47,7 @@ c.       Distributable Code.  The software contains code that you are permitted 
 
 5.      EXPORT RESTRICTIONS.  The software is subject to United States export laws and regulations.  You must comply with all domestic and international export laws and regulations that apply to the software.  These laws include restrictions on destinations, end users and end use.  For additional information, see www.microsoft.com/exporting.
 
-6.      SUPPORT SERVICES.  Because this software is "as is," we may not provide support services for it. 
+6.      SUPPORT SERVICES.  Because this software is "as is," we may not provide support services for it.
 
 7.      SCOPE OF LICENSE.  The software is licensed, not sold. This agreement only gives you some rights to use the software.  Microsoft reserves all other rights.  Unless applicable law gives you more rights despite this limitation, you may use the software only as expressly permitted in this agreement.  In doing so, you must comply with any technical limitations in the software that only allow you to use it in certain ways.  You may not:
   •   work around any technical limitations in the software,

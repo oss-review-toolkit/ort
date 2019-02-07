@@ -1,8 +1,8 @@
 Adobe AIR SDK License
 http://www.adobe.com/products/eulas/
 
-ADOBE SYSTEMS INCORPORATED 
-WARRANTY DISCLAIMER AND LICENSE AGREEMENT 
+ADOBE SYSTEMS INCORPORATED
+WARRANTY DISCLAIMER AND LICENSE AGREEMENT
 ADOBE® AIR® SDK
 
 NOTICE TO USER: THIS DOCUMENT INCLUDES A WARRANTY DISCLAIMER (PART I) AND AN SDK LICENSE AGREEMENT (PART II).
@@ -16,7 +16,7 @@ NOTICE TO USER: THIS LICENSE AGREEMENT GOVERNS INSTALLATION AND USE OF THE SDK C
 YOU MAY HAVE A SEPARATE WRITTEN AGREEMENT WITH ADOBE THAT SUPPLEMENTS OR SUPERSEDES ALL OR PORTIONS OF THIS AGREEMENT.
 Use of some third party materials included in the SDK Components may be subject to other terms and conditions typically found in a separate license agreement or a "Read Me" file located near such materials or in the "Third Party Software Notices and/or Additional Terms and Conditions" found at http://www.adobe.com/go/thirdparty.
 
-1.	DEFINITIONS. 
+1.	DEFINITIONS.
 "Adobe" means Adobe Systems Incorporated, a Delaware corporation, 345 Park Avenue, San Jose, California 95110.
 "Build Tools" means build files, compilers, runtime libraries (but not the complete Runtime Software), and other tools accompanying this agreement, including, for example, the contents of the Bin, Lib, and runtime directories, adl.exe, adl.bat, and adt.jar.
 "Developer Application" means your application software that interoperates with the Runtime Software and complies with the requirements of this Agreement, for example, Section 4.1.

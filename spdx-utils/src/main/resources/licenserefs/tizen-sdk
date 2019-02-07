@@ -29,17 +29,17 @@ IMPORTANT NOTE: This license is primarily applicable to several proprietary comp
 
 3.2 Samsung may extend, enhance, or otherwise modify the Tizen SDK at any time without notice. If updates are made available by Samsung, the terms of this Agreement will govern such updates, unless the update is accompanied by a separate license, in which case the terms of that license will govern. Samsung is not obligated to provide any maintenance, technical or other support for the Tizen SDK. You acknowledge that Samsung has no express or implied obligation to announce or make available any updates to the Tizen SDK.
 
-4. Use of the Tizen SDK. 
+4. Use of the Tizen SDK.
 
 4.1 Your Applications must not (i) breach any applicable laws, regulations or generally accepted practices or guidelines in the applicable jurisdictions; (ii) contain any material, component or code which could damage, destroy, unduly burden or unreasonably affect software, firmware, hardware, data, systems, services, or networks; or (iii) disable, hack or otherwise interfere with any authentication, content protection, digital signing, digital rights management, security or verification mechanisms implemented in or by the Tizen Certified platform.
 
-4.2 Your Applications must not breach any applicable laws, regulations or generally accepted practices or guidelines in the applicable jurisdictions or disable, unduly burden or unreasonably interfere with software, firmware, hardware, data, systems, services, or networks. 
+4.2 Your Applications must not breach any applicable laws, regulations or generally accepted practices or guidelines in the applicable jurisdictions or disable, unduly burden or unreasonably interfere with software, firmware, hardware, data, systems, services, or networks.
 
 4.3 You agree that You are solely liable for any breach of your obligations under this Agreement or any applicable laws or regulations, and for the consequences of any such breach.
 
 5. Open Source Software.
 
-5.1 You hereby acknowledge that the Tizen SDK may contain Open Source Software. You agree to review any documentation that accompanies the Tizen SDK in order to determine which portions of the Tizen SDK are Open Source Software and are licensed under an Open Source Software license. To the extent any such license requires that Samsung provides Developer the rights to copy, modify, distribute or otherwise use any Open Source Software that are inconsistent with the limited rights granted to You in this Agreement, then such rights in the applicable Open Source Software license shall take precedence over the rights and restrictions granted in this Agreement, but solely with respect to such Open Source Software. 
+5.1 You hereby acknowledge that the Tizen SDK may contain Open Source Software. You agree to review any documentation that accompanies the Tizen SDK in order to determine which portions of the Tizen SDK are Open Source Software and are licensed under an Open Source Software license. To the extent any such license requires that Samsung provides Developer the rights to copy, modify, distribute or otherwise use any Open Source Software that are inconsistent with the limited rights granted to You in this Agreement, then such rights in the applicable Open Source Software license shall take precedence over the rights and restrictions granted in this Agreement, but solely with respect to such Open Source Software.
 
 5.2 You acknowledge that the Open Source Software license is solely between You and the applicable Open Source Software. You shall comply with the terms of all applicable Open Source Software licenses, if any.
 

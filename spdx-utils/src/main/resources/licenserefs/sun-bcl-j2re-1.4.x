@@ -1,4 +1,4 @@
-Sun Microsystems, Inc. 
+Sun Microsystems, Inc.
                     Binary Code License Agreement
 
 READ THE TERMS OF THIS AGREEMENT AND ANY PROVIDED SUPPLEMENTAL LICENSE

@@ -1,7 +1,7 @@
 MICROSOFT SOFTWARE SUPPLEMENTAL LICENSE TERMS
 MICROSOFT SILVERLIGHT 3 TOOLS FOR VISUAL STUDIO 2008, Service Pack 1
 
-PLEASE NOTE: Microsoft Corporation (or based on where you live, one of its affiliates) licenses this supplement to you. You may use it with each validly licensed copy of Microsoft Visual Studio 2008 Service Pack 1 and Microsoft Visual Web Developer 2008 Express Edition software (for which this supplement is applicable) (the "software"). You may not use the supplement if you do not have a license for the software. The license terms for the software apply to your use of this supplement. Microsoft provides support services for the supplement as described at www.support.microsoft.com/common/international.aspx. 
+PLEASE NOTE: Microsoft Corporation (or based on where you live, one of its affiliates) licenses this supplement to you. You may use it with each validly licensed copy of Microsoft Visual Studio 2008 Service Pack 1 and Microsoft Visual Web Developer 2008 Express Edition software (for which this supplement is applicable) (the "software"). You may not use the supplement if you do not have a license for the software. The license terms for the software apply to your use of this supplement. Microsoft provides support services for the supplement as described at www.support.microsoft.com/common/international.aspx.
 
 =============================================
 
@@ -12,7 +12,7 @@ These license terms are an agreement between Microsoft Corporation (or based on 
 
 ·	Updates (including but not limited to bug fixes, patches, updates, upgrades, enhancements, new versions, and successors to the software, collectively called "Updates"),
 ·	supplements,
-·	Internet-based services, and 
+·	Internet-based services, and
 ·	support services
 for this software, unless other terms accompany those items. If so, those terms apply.
 
@@ -31,18 +31,18 @@ If you comply with these license terms, you have the rights below.
 ·	rent, lease or lend the software; or
 ·	transfer the software or this agreement to any third party.
 
-3.	INTERNET-BASED SERVICES. Microsoft provides Internet-based services with the software. It may change or cancel them at any time. 
+3.	INTERNET-BASED SERVICES. Microsoft provides Internet-based services with the software. It may change or cancel them at any time.
 
 a.	Automatic Updates. This software contains an Automatic Update feature that is on by default. For more information about this feature, including instructions for to turning it off, see go.microsoft.com/fwlink/?LinkId=147032. You may turn off this feature while the software is running ("opt out"). Unless you expressly opt out of this feature, this feature will (a) connect to Microsoft or service provider computer systems over the Internet, (b) use Internet protocols to send to the appropriate systems standard computer information, such as your computer’s Internet protocol address, the type of operating system, browser and name and version of the software you are using, and the language code of the device where you installed the software, and (c) automatically download and install, or prompt you to download and/or install, current Updates to the software. In some cases, you will not receive a separate notice before this feature takes effect. By installing the software, you consent to the transmission of standard computer information and the automatic downloading and installation of Updates.
 
 b.	Microsoft Digital Rights Management. If you use the software to access content that has been protected with Microsoft Digital Rights Management (DRM), in order to let you play the content, the software may automatically request media usage rights from a rights server on the Internet and download and install available DRM Updates. For more information, see go.microsoft.com/fwlink/?LinkId=147032.
 
-4.	NOTICE ABOUT THE H.264/AVC VISUAL STANDARD, AND THE VC-1 VIDEO STANDARD. This software may include H.264/MPEG-4 AVC and/or VC-1decoding technology. MPEG LA, L.L.C. requires this notice: 
+4.	NOTICE ABOUT THE H.264/AVC VISUAL STANDARD, AND THE VC-1 VIDEO STANDARD. This software may include H.264/MPEG-4 AVC and/or VC-1decoding technology. MPEG LA, L.L.C. requires this notice:
 
 THIS PRODUCT IS LICENSED UNDER THE AVC AND THE VC-1 PATENT PORTFOLIO LICENSES FOR THE PERSONAL AND NON-COMMERCIAL USE OF A CONSUMER TO (A) ENCODE VIDEO IN COMPLIANCE WITH THE ABOVE STANDARDS ("VIDEO STANDARDS") AND/OR (B) DECODE AVC AND VC-1 VIDEO THAT WAS ENCODED BY A CONSUMER ENGAGED IN A PERSONAL AND NON-COMMERCIAL ACTIVITY AND/OR WAS OBTAINED FROM A VIDEO PROVIDER LICENSED TO PROVIDE SUCH VIDEO. NONE OF THE LICENSES EXTEND TO ANY OTHER PRODUCT REGARDLESS OF WHETHER SUCH PRODUCT IS INCLUDED WITH THIS SOFTWARE IN A SINGLE ARTICLE. NO LICENSE IS GRANTED OR SHALL BE IMPLIED FOR ANY OTHER USE. ADDITIONAL INFORMATION MAY BE OBTAINED FROM MPEG LA, L.L.C. SEE WWW.MPEGLA.COM.
 For clarification purposes only, the Notice in this Section does not limit or inhibit the use of the software provided under this agreement for normal business uses that are personal to that business which do not include (i) redistribution of the software to third parties, or (ii) creation of content with the VIDEO STANDARDS compliant technologies for distribution to third parties.
 
-5.	EXPORT RESTRICTIONS. The software is subject to United States export laws and regulations. You must comply with all domestic and international export laws and regulations that apply to the software. These laws include restrictions on destinations, end users and end use. For additional information, see www.microsoft.com/exporting. 
+5.	EXPORT RESTRICTIONS. The software is subject to United States export laws and regulations. You must comply with all domestic and international export laws and regulations that apply to the software. These laws include restrictions on destinations, end users and end use. For additional information, see www.microsoft.com/exporting.
 
 6.	SUPPORT SERVICES. Because this software is "as is," we may not provide support services for it.
 
@@ -119,7 +119,7 @@ iii.	Distribution Restrictions. You may not
 
 5.	DOCUMENTATION. Any person that has valid access to your computer or internal network may copy and use the documentation for your internal, reference purposes.
 
-6.	NOTICE ABOUT THE H.264/AVC VISUAL STANDARD, AND THE VC-1 VIDEO STANDARD. This software may include H.264/MPEG-4 AVC and/or VC-1. MPEG LA, L.L.C. requires this notice: 
+6.	NOTICE ABOUT THE H.264/AVC VISUAL STANDARD, AND THE VC-1 VIDEO STANDARD. This software may include H.264/MPEG-4 AVC and/or VC-1. MPEG LA, L.L.C. requires this notice:
 
 THIS PRODUCT IS LICENSED UNDER THE AVC AND THE VC-1 PATENT PORTFOLIO LICENSES FOR THE PERSONAL AND NON-COMMERCIAL USE OF A CONSUMER TO (1) ENCODE VIDEO IN COMPLIANCE WITH THE ABOVE STANDARDS ("VIDEO STANDARDS") AND/OR (2) DECODE AVC AND VC-1 VIDEO THAT WAS ENCODED BY A CONSUMER ENGAGED IN A PERSONAL AND NON-COMMERCIAL ACTIVITY AND/OR WAS OBTAINED FROM A VIDEO PROVIDER LICENSED TO PROVIDE SUCH VIDEO. NO LICENSE IS GRANTED OR SHALL BE IMPLIED FOR ANY OTHER USE. ADDITIONAL INFORMATION MAY BE OBTAINED FROM MPEG LA, L.L.C. SEE WWW.MPEGLA.COM.
 

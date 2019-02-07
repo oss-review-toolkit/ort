@@ -36,7 +36,7 @@ vi. remove or obscure any proprietary rights notices or labels on the Software.
    c. You may not distribute the Software via OEM Distribution (as defined below) without entering into a separate OEM Distribution Agreement with ACTIVESTATE. "OEM Distribution" means permitting others outside Your organization to use the Software, distribution and/or use of the Software as either a bundled add-on to, or embedded component of, another application, with such application being made available to its users as, but not limited to, an on-premises application, a hosted application, a Software-as-a-Service offering or a subscription service for which the distributor of the application receives a license fee or any form of direct or indirect compensation. Except as expressly provided herein, you may not:
 i. permit others outside Your organization to use the Software,
 ii. redistribute:
- 
+
 1. the Software as a whole whether as a wrapped application or on a stand alone basis, or
 2. parts of the Software to create a language distribution, or
 3. the ACTIVESTATE components with Your Wrapped Application.

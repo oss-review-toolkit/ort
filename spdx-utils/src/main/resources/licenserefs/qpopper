@@ -49,18 +49,18 @@ Qpopper(tm) is licensed by QUALCOMM Incorporated under the following
     Qpopper software, distribute such derivative works to third
     parties, and permit such third parties to copy and use such
     derivative works subject to the following restrictions:
-   
+
     (a)  The protocol greeting banner and the CAPA IMPLEMENTATION
          response tag must include clear notification that Qpopper has
          been modified (for example,
          "FooPopper-by-Foo-Networks-hacked-from-Qpopper-4.0").
-   
+
     (b)  Detailed notification of all modifications must be clearly and
          conspicuously included within the modified source files, and
          in a separate document.  All of the source files and the
          document describing the changes must be distributed with the
          modified software.
-   
+
     (c)  When distributing the modified software the distributing party
          must clearly and conspicuously communicate to all recipients
          that the modified software is produced by the party that

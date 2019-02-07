@@ -1,4 +1,4 @@
-AGENTX++ LICENSE AGREEMENT 
+AGENTX++ LICENSE AGREEMENT
 ==========================
 
 THIS LICENSE AGREEMENT (this "Agreement") is  made effective as of the date  the
@@ -25,12 +25,12 @@ rights, trade secret rights, and any other intellectual property rights.
 contains any code derived from the Software Product. It can no longer be altered
 or combined with any  other code. Executable code  is ready to be  executed by a
 computer and  is essentially  a complete  software image  for use  in a specific
-product. 
+product.
 
 1.4 The term "Object Code" is any compiled version of the Software Product  that
 can be linked and therefore combined with other code to create Executable  Code.
 Examples  of  Object  Code  are  libraries  and  software  development  kits, in
-particular SNMP agent development kits. 
+particular SNMP agent development kits.
 
 1.5 The term "Source Code" is  the human readable form of the  Software Product,
 as specified in Exhibit A.
@@ -56,7 +56,7 @@ agents at  the Site  (hereafter "Licensed  Site") specified  by LICENSEE  during
 license purchase. Additionally,  Customer’s contractors and  employees reporting
 directly and only to a manager at the Licensed Site, such as telecommuters,  may
 use the Software Product at  remote locations. Off-site employees re-porting  in
-any way to a manager at their location are not covered under this Site License.  
+any way to a manager at their location are not covered under this Site License.
 
 2.2 Except as  specified in 2.1,  neither the Software  Product Source Code  nor
 Object Code derived  from the Software  Product may be  redistributed or resold.
@@ -67,7 +67,7 @@ Functionality in this context refers to the program's behavior, not appearance.
 
 2.3  No Sublicense  Right.  LICENSEE  has no  right to  transfer, or  sublicense
 the Licensed Software  to  any third   party, except  as  specified in 2.2   and
-except if the third  party takes over  the business  of LICENSEE. 
+except if the third  party takes over  the business  of LICENSEE.
 
 2.4  Other Restrictions  in License  Grants.  LICENSEE  may not:  (i) copy   the
 Licensed  Software,  except  as  necessary  to  use  the  Licensed  Software  in
@@ -131,7 +131,7 @@ hardware or software.
 negligence or wilful default.
 
 3.7 General Provision. This warranty shall not apply in any case of amendment or
-alterations of the Software Product made by LICENSEE.  
+alterations of the Software Product made by LICENSEE.
 
 
 
@@ -195,7 +195,7 @@ fully  with LICENSOR  in  any  litigation  relating to  or  arising  from   such
 unauthorized possession or use.
 
 
-6. TERMINATION.  
+6. TERMINATION.
 
 6.1. LICENSOR may terminate this Agreement  at any time after the occurrence  of
 any of the following events if LICENSOR provides 30 days notice of its intention
@@ -205,10 +205,10 @@ occurrence within such 30 days:
 (a)  LICENSEE is  declared or  acknowledges that  it is  insolvent or  otherwise
 unable to pay its debts as they become due or upon the filing of any  proceeding
 (whether voluntary  or involuntary)  for bankruptcy,  insolvency or  relief from
-creditors of LICENSEE;  
+creditors of LICENSEE;
 
 (b)  LICENSEE  assigns or  transfers  this Agreement  or  any of  its  rights to
-obligations hereunder, without LICENSOR's  prior written consent;  or 
+obligations hereunder, without LICENSOR's  prior written consent;  or
 
 (c) LICENSEE  violates  any  material provision   of this  Agreement,  including
 without limitation,  the payment obligations set forth in Addendum A.
@@ -216,12 +216,12 @@ without limitation,  the payment obligations set forth in Addendum A.
 6.2. LICENSEE may terminate this Agreement  at any time after the occurrence  of
 any of the following events if LICENSEE provides 30 days notice of its intention
 to terminate  as a  result of  the occurrence  and LICENSOR  fails to  cure such
-occurrence within such 30 days: 
+occurrence within such 30 days:
 
 (a)  LICENSOR is  declared or  acknowledges that  it is  insolvent or  otherwise
 unable   to pay  its debts   as they  become due   or upon  the filing   of any
 proceeding (whether  voluntary or   involuntary) for  bankruptcy, insolvency  or
-relief  from creditors or  LICENSOR; or 
+relief  from creditors or  LICENSOR; or
 
 (b)  LICENSOR violates any material provision of this Agreement.
 
@@ -244,7 +244,7 @@ principles. All controversies  and disputes arising  out of or  relating to this
 Agreement  shall be  submitted to  the exclusive  jurisdiction of  Esslingen  am
 Neckar,  Germany, as long as LICENSEE is deemed to be a merchant (as  defined by
 Handelsgesetzbuch,  §1-7).  The   United   Nations   Convention   on   Contracts
-for the International Sale of Goods is specifically disclaimed. 
+for the International Sale of Goods is specifically disclaimed.
 
 
 
@@ -284,8 +284,8 @@ order to be deemed effective when sent to the following:
 
 FOR LICENSOR:
 
-Frank Fock 
-Maximilian-Kolbe-Str. 10 
+Frank Fock
+Maximilian-Kolbe-Str. 10
 73257 Koengen, Germany
 
 
@@ -295,7 +295,7 @@ Licensed Software
 
 AgentX++
 
-a.   Source  Code  - (ANSI  C++  for  Linux, Solaris,  Win32) 
+a.   Source  Code  - (ANSI  C++  for  Linux, Solaris,  Win32)
      Includes AgentX++ and Agent++Win32 Source Code.
 
 b.   Executable Code - AgentX++Win32 Master Agent (Win XP/2000/NT4)
@@ -304,7 +304,7 @@ b.   Executable Code - AgentX++Win32 Master Agent (Win XP/2000/NT4)
 ADDENDUM A
 
 For evaluation purposes and non commercial use only, a free license is  granted,
-provided that the LINCENSEE accepts this license agreement. 
+provided that the LINCENSEE accepts this license agreement.
 
 In  order to  obtain a  license to  use AgentX++  in a  commercial environment,
 LICENSEE has to purchase a commercial license from LICENSOR. The actual  pricing

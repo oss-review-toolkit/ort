@@ -106,7 +106,7 @@ The most notable instance of legal conflict between the FSF definition
 of "free software" and the Debian Free Software Guidelines is in regard
 to the GNU Free Documentation License when "invariant sections" (e.g.,
 Front-Cover Texts, Back-Cover Texts, or Invariant Sections) are
-included.  (FSF considers it free, of course, and Debian doesn't.) 
+included.  (FSF considers it free, of course, and Debian doesn't.)
 
 The most common instance of such a license is in documentation for
 official GNU packages -- such as GNU Texinfo, which is included in TeX

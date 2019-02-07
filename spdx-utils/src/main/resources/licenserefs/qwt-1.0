@@ -12,7 +12,7 @@ exceptions:
        Qwt libraries, or link their applications or
        widgets against a user-supplied version of Qwt.
        If you link the application or widget to a modified
-       version of Qwt, then the changes to Qwt must be 
+       version of Qwt, then the changes to Qwt must be
        provided under the terms of the LGPL in sections
        1, 2, and 4.
     3. You do not have to provide a copy of the Qwt license

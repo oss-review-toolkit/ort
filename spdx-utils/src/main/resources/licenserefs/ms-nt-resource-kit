@@ -1,6 +1,6 @@
 Microsoft NT Resource Kit License
 MICROSOFT WINDOWS NT RESOURCE KIT SUPPORT TOOLS
-END-USER LICENSE AGREEMENT FOR MICROSOFT SOFTWARE 
+END-USER LICENSE AGREEMENT FOR MICROSOFT SOFTWARE
 
 IMPORTANT-READ CAREFULLY: This Microsoft End-User License Agreement ("EULA") is a legal agreement between you (either an individual or a single entity) and Microsoft Corporation for the Microsoft software identified above, which includes computer software and may include associated media, printed materials, and "online" or electronic documentation ("SOFTWARE"). The SOFTWARE also includes any updates and supplements to the original SOFTWARE provided to you by Microsoft. Any software provided along with the SOFTWARE that is associated with a separate end-user license agreement is licensed to you under the terms of that license agreement. By installing, copying, or otherwise using the SOFTWARE, you agree to be bound by the terms of this EULA. If you do not agree to the terms of this EULA, do not install or use the SOFTWARE.
 
@@ -8,17 +8,17 @@ SOFTWARE LICENSE: The SOFTWARE is protected by copyright laws and international 
 
 1. GRANT OF LICENSE. This EULA grants you the following rights:
 
-*Installation and Use. Except as otherwise provided herein, you, as an individual may install and use copies of the SOFTWARE on an unlimited number of computers, including workstations, terminals or other electronic devices ("Computer(s)") provided that you are the only individual using the SOFTWARE. If you are an entity, you may designate one individual within your organization to have the right to use the SOFTWARE in the manner provided above. The SOFTWARE is in "use" on a Computer when it is loaded into temporary memory (i.e., RAM) or installed into permanent memory (e.g., hard disk, CD-ROM, or other storage device) of that Computer. 
+*Installation and Use. Except as otherwise provided herein, you, as an individual may install and use copies of the SOFTWARE on an unlimited number of computers, including workstations, terminals or other electronic devices ("Computer(s)") provided that you are the only individual using the SOFTWARE. If you are an entity, you may designate one individual within your organization to have the right to use the SOFTWARE in the manner provided above. The SOFTWARE is in "use" on a Computer when it is loaded into temporary memory (i.e., RAM) or installed into permanent memory (e.g., hard disk, CD-ROM, or other storage device) of that Computer.
 
 *Client/Server Software. The SOFTWARE may contain one or more components which consist of both the following types of software: "Server Software" that is installed and provides services on a computer acting as a server ("Server"); and "Client Software" that allows a Computer to access or utilize the services provided by the Server Software. If the component of the SOFTWARE consists of both Server Software and Client Software which are used together, you may also install and use copies of such Client Software on Computers within your organization and which are connected to your internal network. Such Computers running this Client Software may be used by more than one individual.
 
-2. DESCRIPTION OF OTHER RIGHTS AND LIMITATIONS. 
+2. DESCRIPTION OF OTHER RIGHTS AND LIMITATIONS.
 
-*Limitations on Reverse Engineering, Decompilation, and Disassembly. You may not reverse engineer, decompile, or disassemble the SOFTWARE, except and only to the extent that such activity is expressly permitted by applicable law notwithstanding this limitation. 
+*Limitations on Reverse Engineering, Decompilation, and Disassembly. You may not reverse engineer, decompile, or disassemble the SOFTWARE, except and only to the extent that such activity is expressly permitted by applicable law notwithstanding this limitation.
 
-*Rental. You may not rent, lease or lend the SOFTWARE. 
+*Rental. You may not rent, lease or lend the SOFTWARE.
 
-*Support Services. Microsoft may provide you with support services related to the SOFTWARE ("Support Services").  Use of Support Services is governed by the Microsoft polices and programs described in the user manual, in "on line" documentation and/or other Microsoft-provided materials.  Any supplemental software code provided to you as part of the Support Services shall be considered part of the SOFTWARE and subject to the terms and conditions of this EULA. With respect to technical information you provide to Microsoft as part of the Support Services, Microsoft may use such information for its business purposes, including for product support and development. Microsoft will not utilize such technical information in a form that personally identifies you. 
+*Support Services. Microsoft may provide you with support services related to the SOFTWARE ("Support Services").  Use of Support Services is governed by the Microsoft polices and programs described in the user manual, in "on line" documentation and/or other Microsoft-provided materials.  Any supplemental software code provided to you as part of the Support Services shall be considered part of the SOFTWARE and subject to the terms and conditions of this EULA. With respect to technical information you provide to Microsoft as part of the Support Services, Microsoft may use such information for its business purposes, including for product support and development. Microsoft will not utilize such technical information in a form that personally identifies you.
 
 *Termination. Without prejudice to any other rights, Microsoft may terminate this EULA if you fail to comply with the terms and conditions of this EULA. In such event, you must destroy all copies of the SOFTWARE and all of its component parts.
 
