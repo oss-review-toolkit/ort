@@ -1,4 +1,4 @@
-ActiveState Community License 
+ActiveState Community License
 Preamble:
 The intent of this document is to state the conditions under which the Package may be copied and distributed, such that ActiveState maintains control over the development and distribution of the Package, while allowing the users of the Package to use the Package in a variety of ways.
 
@@ -10,7 +10,7 @@ Definitions:
 
 "You" is you, if you're thinking about copying or distributing this Package.
 
-1.	You may use this Package for commercial or non-commercial purposes without charge. 
+1.	You may use this Package for commercial or non-commercial purposes without charge.
 
 2.	You may make and give away verbatim copies of this Package for personal use, or for use within your organization, provided that you duplicate all of the original copyright notices and associated disclaimers. You may not distribute copies of this Package, or copies of packages derived from this Package, to others outside your organization without specific prior written permission from ActiveState (although you are encouraged to direct them to sources from which they may obtain it for themselves).
 
@@ -26,6 +26,6 @@ Definitions:
 
 The Package may contain software covered by other licenses and copyrights.
  Copyright © 2001 Python Software Foundation. All Rights Reserved.
- Copyright © 2000 BeOpen.com. All Rights Reserved. 
- Copyright © 1995-2001 Corporation for National Research Initiatives. All Rights Reserved. 
+ Copyright © 2000 BeOpen.com. All Rights Reserved.
+ Copyright © 1995-2001 Corporation for National Research Initiatives. All Rights Reserved.
  Copyright © 1991-1995 Stichting Mathematisch Centrum, Amsterdam. All Rights Reserved.

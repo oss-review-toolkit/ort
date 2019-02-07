@@ -46,7 +46,7 @@ the terms and conditions of this agreement.
 "Adobe" means Adobe Systems Incorporated, a Delaware corporation, 345 Park Avenue, San Jose,
 California 95110, if subsection 12(a) of this agreement applies; otherwise it means Adobe Systems
 Software Ireland Limited, 4-6 Riverwalk, Citywest Business Campus, Dublin 24, Ireland, a company
-organized under the laws of Ireland and an affiliate and licensee of Adobe Systems Incorporated. 
+organized under the laws of Ireland and an affiliate and licensee of Adobe Systems Incorporated.
 "Compatible Computer" means a Computer that conforms to the system requirements of the Software
 as specified in the Documentation.
 "Computer" means a virtual machine or physical personal electronic device that accepts information in
@@ -97,7 +97,7 @@ http://www.adobe.com/go/licensing for information about the Adobe Runtimes.
 
 3.4 Backup Copy. You may make one backup copy of the Software, provided your backup copy is not
 installed or used other than for archival purposes. You may not transfer the rights to a backup copy
-unless you transfer all rights in the Software as provided under Section 5. 
+unless you transfer all rights in the Software as provided under Section 5.
 
 4. Obligations and Restrictions.
 
@@ -153,7 +153,7 @@ Feature or otherwise circumvent the technology that controls activation of any s
 information on disabled features, please refer to http://www.adobe.com/go/readerextensions.
 
 4.4 Notices. You shall not alter or remove any copyright or other proprietary notice that appears on or
-in the Software. 
+in the Software.
 
 4.5 No Modification or Reverse Engineering. You shall not modify, adapt, translate, or create derivative
 works based upon the Software. You shall not reverse engineer, decompile, disassemble, or otherwise
@@ -205,7 +205,7 @@ jurisdictions. The use of such information, including your IP Address, as provid
 process is governed by the Adobe Online Privacy Policy. Please consult the Documentation for
 information about changing default update settings at http://www.adobe.com/go/settingsmanager for
 Flash Player, http://www.adobe.com/go/update_details_url (or successor website) for Reader, and
-http://www.adobe.com/go/air_update_details for Adobe AIR. 
+http://www.adobe.com/go/air_update_details for Adobe AIR.
 
 7.3 Local Storage. Flash Player and Adobe AIR may allow third parties to store certain information on
 your Computer in a local data file known as a local shared object. The type and amount of information
@@ -262,7 +262,7 @@ Software connects to the Internet as a function of an Adobe Online Service, your
 and password may be sent to Adobe’s servers and stored by Adobe in accordance with the Additional
 Terms of Use or the "help" menu in the Software. This information may be used by Adobe to send you
 transactional messages to facilitate the Adobe Online Service. Adobe may display in-product marketing
-to provide information about the Software and other Adobe products and Services, including but not 
+to provide information about the Software and other Adobe products and Services, including but not
 limited to Adobe Online Services, based on certain Software specific features including but not limited
 to, the version of the Software, including without limitation, platform version, version of the Software,
 and language. For further information about in-product marketing, please see the "help" menu in the
@@ -315,7 +315,7 @@ Certification Authority services, you should review the applicable terms and con
 relevant Certification Authority provides services, including, for example, any subscriber agreements,
 relying party agreements, certificate policies, and practice statements. See the links on
 http://www.adobe.com/go/partners_cds for information about Adobe’s CDS vendors and
-http://www.adobe.com/go/aatl for information about Adobe’s AATL vendors. 
+http://www.adobe.com/go/aatl for information about Adobe’s AATL vendors.
 
 9.3 Acknowledgement. You agree that (a) a digital certificate may have been revoked prior to the time
 of verification, making the digital signature or certificate appear valid when in fact it is not, (b) the
@@ -364,7 +364,7 @@ controlled items under the Export Laws, you represent and warrant that you are n
 otherwise located within, an embargoed nation (including without limitation Iran, Syria, Sudan, Cuba,
 and North Korea) and that you are not otherwise prohibited under the Export Laws from receiving the
 Software. All rights to Use the Software are granted on condition that such rights are forfeited if you fail
-to comply with the terms of this agreement. 
+to comply with the terms of this agreement.
 
 12. Governing Law.
 If you are a consumer who uses the Software for only personal non-business purposes, then this
@@ -415,7 +415,7 @@ shall be incorporated by reference in this agreement.
 15. Compliance with Licenses.
 If you are a business or organization, you agree that upon request from Adobe or Adobe’s authorized
 representative, you will, within thirty (30) days, fully document and certify that use of any and all
-Software at the time of the request is in conformity with your valid licenses from Adobe. 
+Software at the time of the request is in conformity with your valid licenses from Adobe.
 
 16. European Union Provisions.
 Nothing included in this agreement (including Section 4.5) shall limit any non-waivable right to

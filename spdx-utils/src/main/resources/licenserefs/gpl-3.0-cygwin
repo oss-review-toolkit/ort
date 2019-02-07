@@ -59,7 +59,7 @@ or are not derived from Cygwin itself.
 winsup\cygserver\sysv_shm.cc
 
 
-3.  Alternative License. 
+3.  Alternative License.
 
 Red Hat sells a special Cygwin License for customers who are unable to
 provide their application in open source code form.  For more

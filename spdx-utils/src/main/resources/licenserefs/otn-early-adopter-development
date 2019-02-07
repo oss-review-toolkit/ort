@@ -15,7 +15,7 @@ Accordingly, you confirm:
 
 Oracle Employees: Under no circumstances are Oracle Employees authorized to download software for the purpose of distributing it to customers. Oracle products are available to employees for internal use or demonstration purposes only. In keeping with Oracle's trade compliance obligations under U.S. and applicable multilateral law, failure to comply with this policy could result in disciplinary action up to and including termination.
 
- 
+
 
 Note: You are bound by the Oracle Technology Network ("OTN") Early Adopter Development License Agreement ("OTN License Agreement") terms. The OTN License Agreement terms also apply to all updates You receive under Your Technology Track subscription.
 
@@ -62,7 +62,7 @@ Feedback
 "Feedback" shall mean any input provided to Us, in any manner, regarding Oracle’s products, documentation and/or services, including changes or suggested changes to Oracle’s current or future products, documentation, and/or services, and benchmark test results. You grant to Oracle a worldwide, royalty-free, non-exclusive, perpetual, and irrevocable right to use Feedback for any purpose, including but not limited to, incorporation of such Feedback into the Software or other software products without compensation to You. Any Feedback shall be Oracle Confidential Information. Company shall not be identified with Feedback if Oracle provides it to a third party.
 
 Export
-You agree to comply fully with export laws and regulations of the United States and any other applicable export laws ("Export Laws") to assure that neither the Software, Confidential Information nor any direct product thereof are:  (1) exported, directly or indirectly, in violation of this Agreement or Export Laws; or (2) used for any purposes prohibited by the Export Laws, including, without limitation, nuclear, chemical, or biological weapons proliferation, or development of missile technology.  
+You agree to comply fully with export laws and regulations of the United States and any other applicable export laws ("Export Laws") to assure that neither the Software, Confidential Information nor any direct product thereof are:  (1) exported, directly or indirectly, in violation of this Agreement or Export Laws; or (2) used for any purposes prohibited by the Export Laws, including, without limitation, nuclear, chemical, or biological weapons proliferation, or development of missile technology.
 
 Disclaimer of Warranty and Exclusive Remedies
 THE ORACLE TECHNOLOGY IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. WE FURTHER DISCLAIM ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, TIMELINESS OR NONINFRINGEMENT.
@@ -79,11 +79,11 @@ End of Agreement
 This agreement, and Your right to use the Programs, will be terminated: (i) automatically upon the general commercial availability of the Programs, or six months from the date You download the Programs, whichever is first to occur, in which case You shall cease using and destroy all copies of the Oracle Technology in Your possession or control; (ii) by You, by ceasing to use and destroying all copies of the Oracle Technology in Your possession or control; or, (iii) by Us if You fail to comply with any of the terms of this agreement, in which case You shall cease using and destroy all copies of the Oracle Technology in Your possession or control.
 
 Relationship Between the Parties
-The relationship between You and Us is that of licensee/licensor. Neither party will represent that it has any authority to assume or create any obligation, express or implied, on behalf of the other party, nor to represent the other party as agent, employee, franchisee, or in any other capacity. Nothing in this agreement shall be construed to limit either party's right to independently develop or distribute software that is functionally similar to the other party's products, so long as proprietary information of the other party is not included in such software.  
+The relationship between You and Us is that of licensee/licensor. Neither party will represent that it has any authority to assume or create any obligation, express or implied, on behalf of the other party, nor to represent the other party as agent, employee, franchisee, or in any other capacity. Nothing in this agreement shall be construed to limit either party's right to independently develop or distribute software that is functionally similar to the other party's products, so long as proprietary information of the other party is not included in such software.
 
 Third-Party Technology
 
-The Oracle Technology may be distributed to You with third party technology or derivatives of third party technology ("Third Party Technology").  Oracle may provide certain notices to You in Oracle Technology documentation, readmes or otherwise in connection with such Third Party Technology. 
+The Oracle Technology may be distributed to You with third party technology or derivatives of third party technology ("Third Party Technology").  Oracle may provide certain notices to You in Oracle Technology documentation, readmes or otherwise in connection with such Third Party Technology.
 
 Third Party Technology will be licensed to You either under the terms of this agreement, or, if specified in the Oracle Technology documentation, readme files or otherwise, under separate license terms ("Separate Terms") and not under the terms of this agreement ("Separately Licensed Third Party Technology").   Your rights to use such Separately Licensed Third Party Technology under the Separate Terms are not restricted or modified in any way by this agreement.
 
@@ -92,9 +92,9 @@ You agree that this agreement is the complete agreement for the Oracle Technolog
 
 Last updated: 19 April 2013
 
-Should You have any questions concerning this License Agreement, or if You desire to contact Oracle for any reason, please write: 
-Oracle America, Inc. 
-500 Oracle Parkway, 
+Should You have any questions concerning this License Agreement, or if You desire to contact Oracle for any reason, please write:
+Oracle America, Inc.
+500 Oracle Parkway,
 Redwood City, CA 94065
 
 Oracle may contact You to ask if You had a satisfactory experience installing and using this software download and/or accessing and using the hosted environment.

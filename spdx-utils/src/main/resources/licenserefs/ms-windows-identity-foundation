@@ -1,5 +1,5 @@
 MICROSOFT SOFTWARE SUPPLEMENTAL LICENSE TERMS
-WINDOWS IDENTITY FOUNDATION FOR MICROSOFT WINDOWS OPERATING SYSTEMS 
+WINDOWS IDENTITY FOUNDATION FOR MICROSOFT WINDOWS OPERATING SYSTEMS
 
 Microsoft Corporation (or based on where you live, one of its affiliates) licenses this supplement to you. If you are licensed to use Microsoft Windows operating systems software (for which this supplement is applicable) (the "software"), you may use this supplement. You may not use it if you do not have a license for the software. You may use this supplement with each validly licensed copy of the software.
 The following license terms describe additional use terms for this supplement. These terms and the license terms for the software apply to your use of the supplement. If there is a conflict, these supplemental license terms apply.
@@ -9,14 +9,14 @@ If you comply with these license terms, you have the rights below.
 
 1.	DISTRIBUTABLE CODE. The supplement is comprised of Distributable Code. "Distributable Code" is code that you are permitted to distribute in programs you develop if you comply with the terms below.
 
-a.	Right to Use and Distribute. 
+a.	Right to Use and Distribute.
 •	You may copy and distribute the object code form of the supplement.
 •	Third Party Distribution. You may permit distributors of your programs to copy and distribute the Distributable Code as part of those programs.
 
 b.	Distribution Requirements. For any Distributable Code you distribute, you must
 •	add significant primary functionality to it in your programs;
 •	for any Distributable Code having a filename extension of .lib, distribute only the results of running such Distributable Code through a linker with your program;
-•	distribute Distributable Code included in a setup program only as part of that setup program without modification; 
+•	distribute Distributable Code included in a setup program only as part of that setup program without modification;
 •	require distributors and external end users to agree to terms that protect it at least as much as this agreement;
 •	display your valid copyright notice on your programs; and
 •	indemnify, defend, and hold harmless Microsoft from any claims, including attorneys’ fees, related to the distribution or use of your programs.
@@ -34,13 +34,13 @@ c.	Distribution Restrictions. You may not
 
 Please note: As this software is distributed in Quebec, Canada, these license terms are provided below in French.
 Remarque : Ce logiciel étant distribué au Québec, Canada, les termes de cette licence sont fournis ci-dessous en français.TERMES DU CONTRAT DE LICENCE D’UN SUPPLÉMENT MICROSOFT
-WINDOWS IDENTITY FOUNDATION POUR MICROSOFT WINDOWS OPERATING SYSTEMS 
+WINDOWS IDENTITY FOUNDATION POUR MICROSOFT WINDOWS OPERATING SYSTEMS
 Microsoft Corporation (ou en fonction du lieu où vous vivez, l’un de ses affiliés) vous accorde une licence pour ce supplément. Si vous êtes titulaire d’une licence d’utilisation du logiciel Microsoft Windows operating systems (auquel s’applique ce supplément) (le « logiciel »), vous pouvez utiliser ce supplément. Vous n’êtes pas autorisé à utiliser ce supplément si vous n’êtes pas titulaire d’une licence pour le logiciel. Vous pouvez utiliser une copie de ce supplément avec chaque copie concédée sous licence du logiciel.
 Les conditions de licence suivantes décrivent les conditions d’utilisation supplémentaires applicables pour ce supplément. Les présentes conditions et les conditions de licence pour le logiciel s'appliquent à l'utilisation du supplément. En cas de conflit, les présentes conditions de licence supplémentaires s’appliquent.
 En utilisant ce supplément, vous acceptez ces termes. Si vous ne les acceptez pas, n’utilisez pas ce supplément.
 Dans le cadre du présent accord de licence, vous disposez des droits ci-dessous.
 1.	CODE DISTRIBUABLE. Le supplément constitue du Code Distribuable. Le « Code Distribuable » est le code que vous êtes autorisé à distribuer dans les programmes que vous développez, sous réserve de vous conformer aux termes ci-après.
-a.	Droit d’utilisation et de distribution. 
+a.	Droit d’utilisation et de distribution.
 •	Vous êtes autorisé à copier et à distribuer la version en code objet du supplément.
 •	Distribution par des tierces parties. Vous pouvez autoriser les distributeurs de vos programmes à copier et à distribuer le code distribuable en tant que partie intégrante de ces programmes.
 b.	Conditions de distribution. Pour pouvoir distribuer du code distribuable, vous devez :

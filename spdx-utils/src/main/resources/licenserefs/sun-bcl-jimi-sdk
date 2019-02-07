@@ -32,21 +32,21 @@ For inquiries please contact: Sun Microsystems, Inc. 901 San Antonio Road, Palo 
 
 JIMI SDK, Version 2.0 SUPPLEMENTAL LICENSE TERMS
 
-These supplemental terms ("Supplement") add to the terms of the Binary Code License Agreement ("Agreement"). Capitalized terms not defined herein shall have the same meanings ascribed toh them in the Agreement. The Supplement terms shall supersede any inconsistent or conflicting terms in the Agreement. 
+These supplemental terms ("Supplement") add to the terms of the Binary Code License Agreement ("Agreement"). Capitalized terms not defined herein shall have the same meanings ascribed toh them in the Agreement. The Supplement terms shall supersede any inconsistent or conflicting terms in the Agreement.
 
 1. Limited License Grant.
 
 a. Software Development License. Subject to your obligation to indemnify Sun pursuant to Section 3 below, Sun grants to you a non-exclusive, non-transferable limited license to use the Software without fee for evaluation of the Software and for development of Java(TM) applets and applications provided that you may not re-distribute the Software in whole or in part, except as provided in Section 1.b below. The Software may contain source code which is provided for reference purposes only, and may not be modified (except for the purpose of correcting errors) or redistributed.
 
-b. License to Distribute Runtime. Subject to your obligation to indemnify Sun pursuant to Section 3 below, Sun grants to you a non-exclusive, non-transferable limited, royalty-free license to reproduce, distribute offer to sell and sell the Software provided that you: 
-(i)distribute the Software complete and unmodified (except for error corrections), only as part of, and for the sole purpose of running, your Java applet or application ("Program") into which the Software is incorporated; 
-(ii) do not distribute additional software intended to replace any component(s) of the Software; 
-(iii) do not remove or alter any proprietary legends or notices contained in the Software; 
-(iv) only distribute the Program subject to a license agreement that protects Sun's interests consistent with the terms contained herein; and 
+b. License to Distribute Runtime. Subject to your obligation to indemnify Sun pursuant to Section 3 below, Sun grants to you a non-exclusive, non-transferable limited, royalty-free license to reproduce, distribute offer to sell and sell the Software provided that you:
+(i)distribute the Software complete and unmodified (except for error corrections), only as part of, and for the sole purpose of running, your Java applet or application ("Program") into which the Software is incorporated;
+(ii) do not distribute additional software intended to replace any component(s) of the Software;
+(iii) do not remove or alter any proprietary legends or notices contained in the Software;
+(iv) only distribute the Program subject to a license agreement that protects Sun's interests consistent with the terms contained herein; and
 (v) may not create, or authorize your licensees to create additional classes, interfaces, or subpackages that are contained in the "java" or "sun" packages or similar as ! specified by Sun in any class file naming convention.
 
-2. Java Platform Interface. In the event that Licensee creates an additional API(s) which: 
-(i) extends the functionality of a Java Environment; and, 
+2. Java Platform Interface. In the event that Licensee creates an additional API(s) which:
+(i) extends the functionality of a Java Environment; and,
 (ii) is exposed to third party software developers for the purpose of developing additional software which invokes such additional API, Licensee must promptly publish broadly an accurate specification for such API for free use by all developers.
 
 3.Indemnity to Sun. As a condition precedent to each license grant in this Agreement, you agree to indemnify, hold harmless, and defend Sun and its licensors from and against any and all claims, lawsuits, liabilities, demands and expenses (including attorneys' fees), that arise or result from the use or distribution of the Software or the Program, including without limitation, those brought by Unisys Corporation, its successors and assigns, with respect to U.S. Patent Number 4,558,302 and all foreign counterparts thereto which Unisys Corporation may now have or acquire in the future (the "LZW Patents") relating to your making, using, selling, licensing, importing, offering to sell, or otherwise transferring the GIF encoding and/or decoding feature of the Software or the Program. This Agreement does not grant any rights to you with respect to the LZW Patents.

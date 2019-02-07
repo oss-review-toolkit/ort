@@ -1,4 +1,4 @@
-Tanuki Software, Inc. 
+Tanuki Software, Inc.
 Community Software License Agreement
 Version 1.0
 
@@ -23,7 +23,7 @@ A copy of this license must be distributed in full with the Product
 in a location that is obvious to Your customers.  The Software
 Program may not be modified, nor may the Product in any way obfuscate
 or obstruct the copyright notice and license information displayed in
-the console and log files by the Software Program on startup. 
+the console and log files by the Software Program on startup.
 
 
 Section 3 - GPLv2 License Agreement
@@ -298,7 +298,7 @@ Section 3 - GPLv2 License Agreement
     decision will be guided by the two goals of preserving the free
     status of all derivatives of our free software and of promoting
     the sharing and reuse of software generally.
-    
+
     NO WARRANTY
 
     11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO
@@ -333,24 +333,24 @@ developed in part by Silver Egg Technology, Inc.("SET") prior to
 2001.  All SET components were released under the following license.
 
     Copyright (c) 2001 Silver Egg Technology
-    
+
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
-    files (the "Software"), to deal in the Software without 
-    restriction, including without limitation the rights to use, 
-    copy, modify, merge, publish, distribute, sub-license, and/or 
+    files (the "Software"), to deal in the Software without
+    restriction, including without limitation the rights to use,
+    copy, modify, merge, publish, distribute, sub-license, and/or
     sell copies of the Software, and to permit persons to whom the
-    Software is furnished to do so, subject to the following 
+    Software is furnished to do so, subject to the following
     conditions:
-    
+
     The above copyright notice and this permission notice shall be
     included in all copies or substantial portions of the Software.
-    
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
-    NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     OTHER DEALINGS IN THE SOFTWARE.

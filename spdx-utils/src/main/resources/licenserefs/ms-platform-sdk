@@ -18,14 +18,14 @@ IMPORTANT—READ CAREFULLY: This End-User License Agreement ("EULA") is a legal 
 
 3.	DISTRIBUTION REQUIREMENTS AND LICENSE LIMITATIONS
 
-3.1	Your licenses under Section 2 to distribute Source Code, any modifications you make to the Source Code under Section 2.1, and Redistributable Code (collectively, "Redistributables") are conditioned on the following: (a) you will distribute Redistributables only in object code form and in conjunction with and as a part of a software application developed by you that adds significant and primary functionality to the Redistributables ("Application"); 
-(b) the Redistributables will operate only in conjunction with a Microsoft Operating System Product; 
-(c) your Application will invoke the Software only via interfaces described in the documentation accompanying the Software; 
-(d) you will distribute your Application containing the Redistributables only pursuant to an end-user license agreement (which may be break-the-seal, click- wrap or signed) with terms no less protective than those contained in this EULA; 
-(e) you will not use Microsoft’s name, logo, or trademarks to market your Application; 
-(f) you will include a valid copyright notice on your Application sufficient to protect Microsoft’s copyright in the Software; 
-(g) you will not remove or obscure any copyright, trademark or patent notices that appear on or in the Software as delivered to you; 
-(h) you will indemnify, hold harmless, and defend Microsoft from and against any claims or lawsuits, including attorneys’ and experts’ fees, that arise or result from the use or distribution of your Application; and 
+3.1	Your licenses under Section 2 to distribute Source Code, any modifications you make to the Source Code under Section 2.1, and Redistributable Code (collectively, "Redistributables") are conditioned on the following: (a) you will distribute Redistributables only in object code form and in conjunction with and as a part of a software application developed by you that adds significant and primary functionality to the Redistributables ("Application");
+(b) the Redistributables will operate only in conjunction with a Microsoft Operating System Product;
+(c) your Application will invoke the Software only via interfaces described in the documentation accompanying the Software;
+(d) you will distribute your Application containing the Redistributables only pursuant to an end-user license agreement (which may be break-the-seal, click- wrap or signed) with terms no less protective than those contained in this EULA;
+(e) you will not use Microsoft’s name, logo, or trademarks to market your Application;
+(f) you will include a valid copyright notice on your Application sufficient to protect Microsoft’s copyright in the Software;
+(g) you will not remove or obscure any copyright, trademark or patent notices that appear on or in the Software as delivered to you;
+(h) you will indemnify, hold harmless, and defend Microsoft from and against any claims or lawsuits, including attorneys’ and experts’ fees, that arise or result from the use or distribution of your Application; and
 (i) you will otherwise comply with the terms of this EULA.  You may not permit further distribution of Redistributables by your end users except that you may permit further redistribution of Redistributables by your distributors to end users if your distributors only distribute the Redistributables in conjunction with and as part of your Application or Applications, you comply with all other terms of this EULA, and your distributors comply with all restrictions of this EULA that are applicable to you.
 
 3.2	Renaming MFC, ATL or CRTs. You must rename all files containing MFC, ATL or CRTs prior to distributing them or any modifications to them.
@@ -47,11 +47,11 @@ distribute those Redistributables as part of that setup program, without alterat
 
 6.	LIMITATIONS ON REVERSE ENGINEERING, DECOMPILATION, AND DISASSEMBLY. You may not reverse engineer, decompile, or disassemble the Software, except and only to the extent that such activity is expressly permitted by applicable law notwithstanding this limitation.
 
-7.	NO RENTAL OR COMMERCIAL HOSTING. You may not rent, lease, lend or provide commercial hosting services with the Software. 
+7.	NO RENTAL OR COMMERCIAL HOSTING. You may not rent, lease, lend or provide commercial hosting services with the Software.
 
 8.	CONSENT TO USE OF DATA.You agree that Microsoft and its affiliates may collect and use technical information gathered as part of the product support services provided to you, if any, related to the Software. Microsoft may use this information solely to improve our products or to provide customized services or technologies to you and will not disclose this information in a form that personally identifies you.
 
-9.	LINKS TO THIRD-PARTY SITES. You may link to third-party sites through the use of the Software. The third-party sites are not under the control of Microsoft, and Microsoft is not responsible for the contents of any third-party sites, any links contained in third-party sites, or any changes or updates to third-party sites. Microsoft is not responsible for web-casting or any other form of transmission received from any third- party sites. Microsoft is providing these links to third-party sites to you only as a convenience, and the inclusion of any link does not imply an endorsement by Microsoft of the third-party site. 
+9.	LINKS TO THIRD-PARTY SITES. You may link to third-party sites through the use of the Software. The third-party sites are not under the control of Microsoft, and Microsoft is not responsible for the contents of any third-party sites, any links contained in third-party sites, or any changes or updates to third-party sites. Microsoft is not responsible for web-casting or any other form of transmission received from any third- party sites. Microsoft is providing these links to third-party sites to you only as a convenience, and the inclusion of any link does not imply an endorsement by Microsoft of the third-party site.
 
 10.	ADDITIONAL SOFTWARE OR SERVICES. This EULA applies to updates, supplements, add-on components or Internet-based services components of the Software that Microsoft may provide to you or make available to you after the date you obtain your initial copy of the Software, unless Microsoft provides other terms along with the update, supplement, add-on component, or Internet-based services component. Microsoft reserves the right to discontinue any Internet-based services provided to you or made available to you through the use of the Software.
 

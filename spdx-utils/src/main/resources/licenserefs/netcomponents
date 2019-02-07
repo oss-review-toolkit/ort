@@ -6,7 +6,7 @@ NetComponents License
 Daniel F. Savarese, hereinafter referred to as Daniel, grants you a non-exclusive, non-transferable limited license to use the software components comprising the NetComponents Java class package ("Licensed Software"). There is no fee for this license. You may not redistribute any of the Licensed Software except as follows:
 
    1. You may reproduce and redistribute the Licensed Software in object code form only (Java .class files) and only when incorporated into your software product which adds substantial and primary functionality to the Licensed Software.
-   2. You may not permit further redistribution of the Licensed Software by your end users except as part of a new software product you develop that meets the restricions of item 1. 
+   2. You may not permit further redistribution of the Licensed Software by your end users except as part of a new software product you develop that meets the restricions of item 1.
 
 To clarify, you may use the Licensed Software only to build new software you develop, and you may only distribute the Licensed Software as part of this new software. You may not include the Licensed Software in a software development kit or other library or development tool that exposes the API's of the Licensed Software without first negotiating a specific license for that purpose with Daniel. Except as permitted by applicable law and this License, you may not decompile, reverse engineer, disassemble, modify, rent, lease, loan, distribute, create derivative works from the Licensed Software or transmit the Licensed Software over a network.
 

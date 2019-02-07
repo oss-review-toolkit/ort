@@ -90,7 +90,7 @@ Rushing:
   server, ftp server, utilities, etc.  Medusa is therefore under the
   following license:
 
-  ============================== 
+  ==============================
   Permission to use, copy, modify, and distribute this software and
   its documentation for any purpose and without fee is hereby granted,
   provided that the above copyright notice appear in all copies and
@@ -181,12 +181,12 @@ Supervisor is Copyright (c) 2006-2011 Agendaless Consulting and Contributors.
 
 TrackRefs code Copyright (c) 2007 Zope Corporation and Contributors
 
-  This software is subject to the provisions of the Zope Public License, 
-  Version 2.1 (ZPL). A copy of the ZPL should accompany this distribution. 
-  THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED 
-  WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS 
-  FOR A PARTICULAR PURPOSE. 
+  This software is subject to the provisions of the Zope Public License,
+  Version 2.1 (ZPL). A copy of the ZPL should accompany this distribution.
+  THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+  WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+  FOR A PARTICULAR PURPOSE.
 
 medusa was (is?) Copyright (c) Sam Rushing.
 

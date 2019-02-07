@@ -18,10 +18,10 @@ Please also observe the following clause:
    files comprising the Work, as listed in the manifest, also be given
    new names. Any exceptions to this request are also given in the
    manifest.
-   
+
    We recommend the manifest be given in a separate file named
    MANIFEST-<fontid>.txt, where <fontid> is some unique identification
-   of the font family. If a separate "readme" file accompanies the Work, 
+   of the font family. If a separate "readme" file accompanies the Work,
    we recommend a name of the form README-<fontid>.txt.
 
 The latest version of the LaTeX Project Public License is in

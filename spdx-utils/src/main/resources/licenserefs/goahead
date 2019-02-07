@@ -1,16 +1,16 @@
-License Agreement 
+License Agreement
 
 THIS LICENSE ALLOWS ONLY THE LIMITED USE OF GO AHEAD SOFTWARE,
 INC. PROPRIETARY CODE.  PLEASE CAREFULLY READ THIS AGREEMENT AS IT
 PERTAINS TO THIS LICENSE, YOU CERTIFY THAT YOU WILL USE THE SOFTWARE
 ONLY IN THE MANNER PERMITTED HEREIN.
 
-1. Definitions. 
+1. Definitions.
 
 1.1 "Documentation" means any documentation GoAhead includes with the
 Original Code.
 
-1.2 "GoAhead" means Go Ahead Software, Inc. 
+1.2 "GoAhead" means Go Ahead Software, Inc.
 
 1.3 "Intellectual Property Rights" means all rights, whether now existing
 or hereinafter acquired, in and to trade secrets, patents, copyrights,
@@ -19,7 +19,7 @@ type under the laws of any governmental authority, domestic or foreign,
 including rights in and to all applications and registrations relating
 to any of the foregoing.
 
-1.4 "License" or "Agreement" means this document. 
+1.4 "License" or "Agreement" means this document.
 
 1.5 "Modifications" means any addition to or deletion from the substance
 or structure of either the Original Code or any previous Modifications.
@@ -43,21 +43,21 @@ indirect, to cause the direction or management of such entity, whether
 by contract or otherwise, or (b) ownership of fifty percent (50%) or
 more of the outstanding shares or beneficial ownership of such entity.
 
-2. Source Code License. 
+2. Source Code License.
 
-2.1 Limited Source Code Grant. 
+2.1 Limited Source Code Grant.
 
 GoAhead hereby grants You a world-wide, royalty-free, non-exclusive
 license, subject to third party intellectual property claims, to use,
 reproduce, modify, copy and distribute the Original Code.
 
-2.2 Binary Code. 
+2.2 Binary Code.
 
 GoAhead hereby grants You a world-wide, royalty-free, non-exclusive
 license to copy and distribute the binary code versions of the Original
 Code together with Your Modifications.
 
-2.3 License Back to GoAhead. 
+2.3 License Back to GoAhead.
 
 You hereby grant in both source code and binary code to GoAhead a
 world-wide, royalty-free, non-exclusive license to copy, modify, display,
@@ -71,7 +71,7 @@ the date on which the product is initially shipped, and a contact name,
 phone number and e-mail address for future correspondence. GoAhead will
 keep confidential all data specifically marked as such.
 
-2.4 Restrictions on Use. 
+2.4 Restrictions on Use.
 
 You may sublicense Modifications to third parties such as subcontractors
 or OEM's provided that You enter into license agreements with such third
@@ -79,7 +79,7 @@ parties that bind such third parties to all the obligations under this
 Agreement applicable to you and that are otherwise substantially similar
 in scope and application to this Agreement.
 
-3. Term. 
+3. Term.
 
 This Agreement and license are effective from the time You accept the
 terms of this Agreement until this Agreement is terminated. You may
@@ -94,9 +94,9 @@ termination of this Agreement for any reason. Upon termination, You agree
 to uninstall or destroy all copies of the Original Code, Modifications,
 and Documentation.
 
-4. Trademarks and Brand. 
+4. Trademarks and Brand.
 
-4.1 License and Use. 
+4.1 License and Use.
 
 GoAhead hereby grants to You a limited world-wide, royalty-free,
 non-exclusive license to use the GoAhead trade names, trademarks, logos,
@@ -113,7 +113,7 @@ shall not create any right, title or interest in or to such GoAhead
 Marks and that all such use and goodwill associated with GoAhead Marks
 will inure to the benefit of GoAhead.
 
-4.2 Promotion by You of GoAhead WebServer Mark. 
+4.2 Promotion by You of GoAhead WebServer Mark.
 
 In consideration for the licenses granted by GoAhead to You herein, You
 agree to notify GoAhead when You incorporate the GoAhead WebServer in
@@ -127,7 +127,7 @@ the Original Code by displaying the GoAhead WebServer mark in marketing
 and promotional materials such as the home page of your web site or web
 pages promoting the product.
 
-4.3 Placement of Copyright Notice by You. 
+4.3 Placement of Copyright Notice by You.
 
 You agree to include copies of the following notice (the "Notice")
 regarding proprietary rights in all copies of the products that You
@@ -141,12 +141,12 @@ the year 20xx is to be replaced with the year during which the release of
 the Original Code containing the notice is issued by GoAhead. If this year
 is not supplied with Documentation, GoAhead will supply it upon request.
 
-4.4 No Modifications to Server Identification Field.  
+4.4 No Modifications to Server Identification Field.
 
 You agree not to remove or modify the Server identification Field
 contained in the Response Header as defined in Section 1.6 and 1.7.
 
-5. Warranty Disclaimers. 
+5. Warranty Disclaimers.
 
 THE ORIGINAL CODE, THE DOCUMENTATION AND THE MEDIA UPON WHICH THE ORIGINAL
 CODE IS RECORDED (IF ANY) ARE PROVIDED "AS IS" AND WITHOUT WARRANTIES OF
@@ -177,7 +177,7 @@ OTHER SUCH ACTIONS.
 Any warranties that by law survive the foregoing disclaimers shall
 terminate ninety (90) days from the date You received the Original Code.
 
-6. Limitation of Liability. 
+6. Limitation of Liability.
 
 YOUR SOLE REMEDIES AND GOAHEAD'S ENTIRE LIABILITY ARE SET FORTH ABOVE. IN
 NO EVENT WILL GOAHEAD OR ITS DISTRIBUTORS OR DEALERS BE LIABLE FOR
@@ -201,7 +201,7 @@ OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE ABOVE LIMITATIONS OR
 EXCLUSIONS MAY NOT APPLY TO YOU. THIS WARRANTY GIVES YOU SPECIFIC LEGAL
 RIGHTS AND YOU MAY ALSO HAVE OTHER RIGHTS WHICH VARY FROM STATE TO STATE.
 
-7. Indemnification by You. 
+7. Indemnification by You.
 
 You agree to indemnify and hold GoAhead harmless against any and all
 claims, losses, damages and costs (including legal expenses and reasonable
@@ -209,7 +209,7 @@ counsel fees) arising out of any claim of a third party with respect to
 the contents of the Your products, and any intellectual property rights
 or other rights or interests related thereto.
 
-8. High Risk Activities.  
+8. High Risk Activities.
 
 The Original Code is not fault-tolerant and is not designed , manufactured
 or intended for use or resale as online control equipment in hazardous
@@ -221,7 +221,7 @@ personal injury, or severe physical or environmental damage.  GoAhead and
 its suppliers specifically disclaim any express or implied warranty of
 fitness for any high risk uses listed above.
 
-9. Government Restricted Rights. 
+9. Government Restricted Rights.
 
 For units of the Department of Defense, use, duplication, or disclosure
 by the Government is subject to restrictions as set forth in subparagraph
@@ -243,7 +243,7 @@ provided in the contract between the vendor and the governmental entity;
 and (iv) in all respects is proprietary data belonging solely to GoAhead
 (or its licensor(s)).
 
-10. Governing Law and Interpretation. 
+10. Governing Law and Interpretation.
 
 This Agreement shall be interpreted under and governed by the laws of the
 State of Washington, without regard to its rules governing the conflict of
@@ -252,7 +252,7 @@ by a court or tribunal of competent jurisdiction, the remaining provisions
 of this Agreement shall remain in effect and the invalid provision deemed
 modified to the least degree necessary to remedy such invalidity.
 
-11. Entire Agreement. 
+11. Entire Agreement.
 
 This Agreement is the complete agreement between GoAhead and You and
 supersedes all prior agreements, oral or written, with respect to the
@@ -268,8 +268,8 @@ FORTH IN THIS AGREEMENT. IF YOU DO NOT WISH TO ACCEPT THIS LICENSE OR
 YOU DO NOT QUALIFY FOR A LICENSE BASED ON THE TERMS SET FORTH ABOVE,
 YOU MUST NOT CLICK THE "Register" BUTTON.
 
-Exhibit A 
+Exhibit A
 
-GoAhead Trademarks, Logos, and Product Designation Information 
+GoAhead Trademarks, Logos, and Product Designation Information
 
 01/28/00

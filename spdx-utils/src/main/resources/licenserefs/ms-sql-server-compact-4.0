@@ -1,5 +1,5 @@
 MICROSOFT SOFTWARE LICENSE TERMS
-MICROSOFT SQL SERVER COMPACT 4.0 
+MICROSOFT SQL SERVER COMPACT 4.0
 
 These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its affiliates) and you. Please read them. They apply to the software named above, which includes the media on which you received it, if any. The terms also apply to any Microsoft
 •	updates,
@@ -10,9 +10,9 @@ for this software, unless other terms accompany those items. If so, those terms 
 BY USING THE SOFTWARE, YOU ACCEPT THESE TERMS. IF YOU DO NOT ACCEPT THEM, DO NOT USE THE SOFTWARE.
 If you comply with these license terms, you have the rights below.
 
-1.	INSTALLATION AND USE RIGHTS. 
+1.	INSTALLATION AND USE RIGHTS.
 a.	Installation and Use. You may install and use any number of copies of the software on your devices to design, develop and test your programs for use with the software.
-b.	Included Microsoft Programs. The software contains the Microsoft Visual C++ 2008 Express Edition components listed below. You may only use these components with the software. The Microsoft Visual C++ 2008 Express license terms located at %Program Files%\Microsoft SQL Server Compact Edition\v4.0 apply to your use of them, except that the components listed below may be used for commercial hosting services when used in conjunction with the software. 
+b.	Included Microsoft Programs. The software contains the Microsoft Visual C++ 2008 Express Edition components listed below. You may only use these components with the software. The Microsoft Visual C++ 2008 Express license terms located at %Program Files%\Microsoft SQL Server Compact Edition\v4.0 apply to your use of them, except that the components listed below may be used for commercial hosting services when used in conjunction with the software.
 •	Microsoft_VC90_CRT_x86.msm
 •	policy_9_0_Microsoft_VC90_CRT_x86.msm
 •	Microsoft_VC90_CRT_x86_x64.msm
@@ -31,7 +31,7 @@ ii.	Distribution Requirements. For any Distributable Code you distribute, you mu
 •	add significant primary functionality to it in your programs;
 •	for any Distributable Code having a filename extension of .lib, distribute only the results of running such Distributable Code through a linker with your program;
 •	distribute Distributable Code included in a setup program only as part of that setup program without modification;
-•	require distributors and external end users to agree to terms that protect it at least as much as this agreement; 
+•	require distributors and external end users to agree to terms that protect it at least as much as this agreement;
 •	display your valid copyright notice on your programs; and
 •	indemnify, defend, and hold harmless Microsoft from any claims, including attorneys’ fees, related to the distribution or use of your programs.
 iii.	Distribution Restrictions. You may not
@@ -49,7 +49,7 @@ iii.	Distribution Restrictions. You may not
 •	make more copies of the software than specified in this agreement or allowed by applicable law, despite this limitation;
 •	publish the software for others to copy;
 •	rent, lease or lend the software; or
-•	transfer the software or this agreement to any third party. 
+•	transfer the software or this agreement to any third party.
 
 4.	BACKUP COPY. You may make one backup copy of the software. You may use it only to reinstall the software.
 

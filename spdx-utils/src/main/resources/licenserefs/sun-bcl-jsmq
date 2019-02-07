@@ -27,7 +27,7 @@ READ THE TERMS OF THIS AGREEMENT AND ANY PROVIDED SUPPLEMENTAL LICENSE TERMS (CO
 
 Sun Microsystems, Inc.
 
-Supplemental Terms and Conditions for 
+Supplemental Terms and Conditions for
 Sun Java System Message Queue Platform Edition 3 2005Q1 and
 Sun Java System Message Queue Enterprise Edition 3 2005Q1
 
@@ -54,21 +54,21 @@ C. License to Use Software. The following terms and conditions apply to your use
 3. License to Distribute Redistributables. Subject to the terms and conditions of this Agreement, Sun grants you a non-exclusive, non-transferable, limited license to reproduce and distribute the binary form of those files specifically identified as redistributable below in Paragraph 3.(a) ("Redistributables"), provided that: (i) you do not distribute additional software intended to supersede any component(s) of the Redistributables, (ii) you do not remove or alter any proprietary legends or notices contained in or on the Redistributables, (iii) you only distribute the Redistributables pursuant to a license agreement that protects Sun's interests consistent with the terms contained in the Agreement, and (iv) you agree to defend and indemnify Sun and its licensors from and against any damages, costs, liabilities, settlement amounts and/or expenses (including attorneys' fees) incurred in connection with any claim, lawsuit or action by any third party that arises or results from the use or distribution of
 
 (a). Only the following jar files may be redistributed in accordance with the license in Section C, Paragraph 3 of these SupplementalTerms.
-jms.jar 
-imq.jar 
-imqxm.jar 
-fscontext.jar 
-providerutil.jar 
-jndi.jar 
-ldap.jar 
-ldapbp.jar 
-jaas.jar 
-jsse.jar 
-jnet.jar 
+jms.jar
+imq.jar
+imqxm.jar
+fscontext.jar
+providerutil.jar
+jndi.jar
+ldap.jar
+ldapbp.jar
+jaas.jar
+jsse.jar
+jnet.jar
 jcert.jar
 
 Additionally the following files can be redistributed:
-LICENSE 
+LICENSE
 COPYRIGHT
 
 All other files distributed with the product are NOT redistributable.

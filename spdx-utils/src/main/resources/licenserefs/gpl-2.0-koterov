@@ -6,16 +6,16 @@ You should have received a copy of the GNU General Public License along with thi
 
 ADDITIONAL LICENSE TERMS
 
-In addition to the standard GPL 2.0 license, here are some 
+In addition to the standard GPL 2.0 license, here are some
 conditions I'd like clarify.
 
 0. If you modify this product, you MUST publish your changes. Period.
 
-1. If you re-write this product in other language (e.g. C++) and 
-   "intently view" the product's Perl sources while coding, you must 
+1. If you re-write this product in other language (e.g. C++) and
+   "intently view" the product's Perl sources while coding, you must
    also license your results as GPL 2.0.
 
-2. The author of this product (Dmitry Koterov, http://dmitry.moikrug.ru) may 
+2. The author of this product (Dmitry Koterov, http://dmitry.moikrug.ru) may
    change the product's license type and any of license conditions.
    He is also permitted to make private modifications and do not publish them.
 

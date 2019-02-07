@@ -1,6 +1,6 @@
 MICROSOFT PRE-RELEASE SOFTWARE LICENSE TERMS
 MICROSOFT ASP.NET TOOLS
- 
+
 These license terms are an agreement between Microsoft Corporation (or based on where you live, one of its affiliates) and you. Please read them. They apply to the pre-release software named above, which includes the media on which you received it, if any. The terms also apply to any Microsoft
 
 ·         updates,
@@ -33,13 +33,13 @@ o    you may not make any representation, warranty or promise on behalf of Micro
 
 o    you may not use the software for hazardous environments that require fail safe controls.
 
-·         Distributable Code.  You may copy and distribute the object code form of code and files listed in the packages at             http://go.microsoft.com/fwlink/?LinkId=296594 as part of your ASP.NET programs deployed to a hosting provider if you comply with the terms below. 
+·         Distributable Code.  You may copy and distribute the object code form of code and files listed in the packages at             http://go.microsoft.com/fwlink/?LinkId=296594 as part of your ASP.NET programs deployed to a hosting provider if you comply with the terms below.
 
 i.    Distribution Requirements. For any Distributable Code you distribute, you must
 
 ·                     use the Distributable Code in your programs and not as a standalone distribution;
 
-·                     require distributors and your external users to agree to terms that protect it at least as much as            this agreement; and      
+·                     require distributors and your external users to agree to terms that protect it at least as much as            this agreement; and
 
 ·                     indemnify, defend, and hold harmless, Microsoft from any claims, including attorneys' fees                         related to the distribution of your programs.
 
