@@ -157,8 +157,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                 endTime = now,
                                 fileCount = 0,
                                 licenseFindings = sortedSetOf(),
-                                errors = listOf(OrtIssue(source = javaClass.simpleName,
-                                        message = e.collectMessagesAsString()))
+                                errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
                         ),
                         rawResult = EMPTY_JSON_NODE)
                 )
@@ -208,10 +207,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                             endTime = now,
                             fileCount = 0,
                             licenseFindings = sortedSetOf(),
-                            errors = listOf(OrtIssue(
-                                    source = javaClass.simpleName,
-                                    message = e.collectMessagesAsString()
-                            ))
+                            errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
                     ),
                     EMPTY_JSON_NODE
             )

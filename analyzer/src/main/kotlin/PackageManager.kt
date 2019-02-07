@@ -191,7 +191,7 @@ abstract class PackageManager(
         prepareResolution(definitionFiles)
 
         definitionFiles.forEach { definitionFile ->
-            log.info { "Resolving ${javaClass.simpleName} dependencies for '$definitionFile'..." }
+            log.info { "Resolving $managerName dependencies for '$definitionFile'..." }
 
             val elapsed = measureTimeMillis {
                 try {
@@ -216,14 +216,14 @@ abstract class PackageManager(
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    val errors = listOf(OrtIssue(source = javaClass.simpleName, message = e.collectMessagesAsString()))
+                    val errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))
 
                     result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), errors)
                 }
             }
 
             log.info {
-                "Resolving ${javaClass.simpleName} dependencies for '${definitionFile.name}' took ${elapsed / 1000}s."
+                "Resolving $managerName dependencies for '${definitionFile.name}' took ${elapsed / 1000}s."
             }
         }
 
