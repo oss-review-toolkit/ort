@@ -291,7 +291,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         result["files"]?.forEach { file ->
             val path = file["path"].textValue()
             errors += file["scan_errors"].map {
-                OrtIssue(source = javaClass.simpleName, message = "${it.textValue()} (File: $path)")
+                OrtIssue(source = scannerName, message = "${it.textValue()} (File: $path)")
             }
         }
 
