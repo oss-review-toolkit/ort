@@ -59,7 +59,7 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
     companion object {
         // We do not actually depend on any features specific to this Bower version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
-        private const val REQUIRED_BOWER_VERSION = "1.8.4"
+        private const val REQUIRED_BOWER_VERSION = "1.8.8"
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 
