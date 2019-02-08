@@ -44,6 +44,7 @@ RUN apt-get update && \
         # Install package managers (in versions known to work).
         bundler=1.17.3-2 \
         composer=1.8.3-1 \
+        go-dep=0.5.0-1+b10 \
         npm=5.8.0+ds6-3 \
         python-pip=18.1-4 \
         sbt=0.13.13-2 \
@@ -56,8 +57,6 @@ RUN \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
-    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | \
-        DEP_RELEASE_TAG="v0.5.0" GOPATH=/tmp/gopath INSTALL_DIRECTORY=/usr/local/bin sh && \
     npm install --global bower@1.8.4 yarn@1.13.0 && \
     pip install virtualenv==15.1.0 && \
     curl -sSL https://get.haskellstack.org/ | sh && \
