@@ -197,11 +197,11 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                 if (it instanceof DefaultMavenArtifactRepository) {
                     it.url.toString()
                 } else if (it instanceof DefaultFlatDirArtifactRepository) {
-                    errors.add('Project uses a flat dir repository which is not supported by the analyzer. ' +
+                    warnings.add('Project uses a flat dir repository which is not supported by the analyzer. ' +
                             "Dependencies from this repository will be ignored: ${it.dirs}".toString())
                     null
                 } else if (it instanceof DefaultIvyArtifactRepository) {
-                    errors.add('Project uses an Ivy repository which is not supported by the analyzer. ' +
+                    warnings.add('Project uses an Ivy repository which is not supported by the analyzer. ' +
                             "Dependencies from this repository will be ignored: ${it.url}".toString())
                     null
                 } else {
