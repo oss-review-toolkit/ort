@@ -28,6 +28,7 @@ interface DependencyTreeModel {
     val configurations: List<Configuration>
     val repositories: List<String>
     val errors: List<String>
+    val warnings: List<String>
 }
 
 interface Configuration {
@@ -43,6 +44,7 @@ interface Dependency {
     val extension: String
     val dependencies: List<Dependency>
     val error: String?
+    val warning: String?
     val pomFile: String
     val localPath: String?
 }
