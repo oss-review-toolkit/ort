@@ -40,6 +40,14 @@ val LICENSE_FILE_NAMES = listOf(
 )
 
 /**
+ * A list of globs that match file names which are not license files but typically trigger false-positives.
+ */
+val NON_LICENSE_FILENAMES = listOf(
+        "HERE_NOTICE",
+        "META-INF/DEPENDENCIES"
+)
+
+/**
  * Calculate the [SPDX package verification code][1] for a list of known SHA1s of files.
  *
  * [1]: https://spdx.github.io/spdx-spec/chapters/3-package-information.html#39-package-verification-code-

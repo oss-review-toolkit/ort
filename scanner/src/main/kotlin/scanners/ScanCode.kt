@@ -41,6 +41,7 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.spdx.LICENSE_FILE_NAMES
+import com.here.ort.spdx.NON_LICENSE_FILENAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.OS
@@ -101,7 +102,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 "--info",
                 "--strip-root",
                 "--timeout", TIMEOUT.toString()
-        )
+        ) + NON_LICENSE_FILENAMES.flatMap { listOf("--ignore", it) }
 
         /**
          * Configuration options that are not relevant for [getConfiguration] because they do not change the result
