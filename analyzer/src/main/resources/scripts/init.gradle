@@ -48,6 +48,7 @@ interface DependencyTreeModel {
     List<Configuration> getConfigurations()
     List<String> getRepositories()
     List<String> getErrors()
+    List<String> getWarnings()
 }
 
 interface Configuration {
@@ -63,6 +64,7 @@ interface Dependency {
     String getExtension()
     List<Dependency> getDependencies()
     String getError()
+    String getWarning()
     String getPomFile()
     String getLocalPath()
 }
@@ -75,6 +77,7 @@ class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
     List<Configuration> configurations
     List<String> repositories
     List<String> errors
+    List<String> warnings
 }
 
 @Immutable
@@ -92,6 +95,7 @@ class DependencyImpl implements Dependency, Serializable {
     String extension = ''
     List<Dependency> dependencies = []
     String error
+    String warning
     String pomFile = ''
     String localPath
 }
@@ -128,22 +132,22 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
     private static class DependencyTreeModelBuilder implements ToolingModelBuilder {
         static DependencyImpl dependencyFromDisplayName(String displayName, List<Dependency> dependencies,
-                                                        String error) {
+                                                        String error, String warning) {
             if (displayName.startsWith('project :')) {
                 def coordinates = displayName.split(':', 2)
                 return new DependencyImpl(groupId: '<project>', artifactId: coordinates[1], dependencies: dependencies,
-                        error: error.toString())
+                        error: error, warning: warning)
             }
 
             def coordinates = displayName.split(':')
 
             if (coordinates.length == 3) {
                 return new DependencyImpl(groupId: coordinates[0], artifactId: coordinates[1], version: coordinates[2],
-                        dependencies: dependencies, error: error.toString())
+                        dependencies: dependencies, error: error, warning: warning)
             }
 
             return new DependencyImpl(groupId: '<unknown>', artifactId: displayName.replace(':', '_'),
-                    dependencies: dependencies, error: error.toString())
+                    dependencies: dependencies, error: error, warning: warning)
         }
 
         @Override
@@ -155,11 +159,13 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
         Object buildAll(String modelName, Project project) {
 
             List<String> errors = []
+            List<String> warnings = []
 
             if (!isCompatibleGradleVersion(project.gradle.gradleVersion)) {
+                def error = ("This project uses the unsupported Gradle version ${project.gradle.gradleVersion}. " +
+                        'At least Gradle 2.14 is required.').toString()
                 return new DependencyTreeModelImpl(project.group.toString(), project.name, project.version.toString(),
-                        [], [], [("This project uses the unsupported Gradle version ${project.gradle.gradleVersion}. " +
-                                'At least Gradle 2.14 is required.').toString()])
+                        [], [], [error], [])
             }
 
             List<Configuration> configurations = project.configurations.findResults { configuration ->
@@ -207,7 +213,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             def version = project.version.toString()
             if (version == 'unspecified') version = ''
             return new DependencyTreeModelImpl(project.group.toString(), project.name, version, configurations,
-                    repositories, errors.unique())
+                    repositories, errors.unique(), warnings.unique())
         }
 
         Dependency parseDependency(DependencyResult dependencyResult, Project project,
@@ -235,6 +241,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     def result = resolvedComponents?.find { true }?.getArtifacts(MavenPomArtifact)?.find { true }
 
                     String error = null
+                    String warning = null
                     String pomFile = null
 
                     if (result instanceof ResolvedArtifactResult) {
@@ -263,22 +270,22 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     def extension = artifact?.extension ?: ''
 
                     return new DependencyImpl(id.group, id.module, id.version, classifier, extension, dependencies,
-                            error, pomFile, null)
+                            error, warning, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     def dependencyProject = project.rootProject.findProject(id.projectPath)
                     return new DependencyImpl(dependencyProject.group.toString(), dependencyProject.name,
-                            dependencyProject.version.toString(), '', '', dependencies, null, '',
+                            dependencyProject.version.toString(), '', '', dependencies, null, null, '',
                             dependencyProject.projectDir.absolutePath)
                 } else {
                     return dependencyFromDisplayName(id.displayName, dependencies,
-                            "Unknown id type: ${id.getClass().simpleName}")
+                            "Unknown id type: ${id.getClass().simpleName}", null)
                 }
             } else if (dependencyResult instanceof UnresolvedDependencyResult) {
                 return dependencyFromDisplayName(dependencyResult.attempted.displayName, [],
-                        "Unresolved: ${collectCauses(dependencyResult.failure)}")
+                        "Unresolved: ${collectCauses(dependencyResult.failure)}", null)
             } else {
                 return dependencyFromDisplayName(dependencyResult.requested.displayName, [],
-                        "Unknown result type: ${dependencyResult.getClass().simpleName}")
+                        "Unknown result type: ${dependencyResult.getClass().simpleName}", null)
             }
         }
 

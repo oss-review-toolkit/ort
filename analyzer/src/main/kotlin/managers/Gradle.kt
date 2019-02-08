@@ -37,6 +37,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
+import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
@@ -159,18 +160,26 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
                     scopes = scopes.toSortedSet()
             )
 
-            val errors = dependencyTreeModel.errors.map {
-                OrtIssue(source = managerName, message = it)
+            val issues = mutableListOf<OrtIssue>()
+
+            dependencyTreeModel.errors.mapTo(issues) {
+                OrtIssue(source = managerName, message = it, severity = Severity.ERROR)
             }
 
-            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), errors)
+            dependencyTreeModel.warnings.mapTo(issues) {
+                OrtIssue(source = managerName, message = it, severity = Severity.WARNING)
+            }
+
+            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), issues)
         }
     }
 
     private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
                                 repositories: List<RemoteRepository>): PackageReference {
-        val errors = dependency.error?.let { mutableListOf(OrtIssue(source = managerName, message = it)) }
-                ?: mutableListOf()
+        val issues = mutableListOf<OrtIssue>()
+
+        dependency.error?.let { issues += OrtIssue(source = managerName, message = it, severity = Severity.ERROR) }
+        dependency.warning?.let { issues += OrtIssue(source = managerName, message = it, severity = Severity.WARNING) }
 
         // Only look for a package when there was no error resolving the dependency.
         if (dependency.error == null) {
@@ -206,7 +215,7 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
                             "Could not get package information for dependency '$identifier': ${e.message}"
                         }
 
-                        errors += OrtIssue(source = managerName, message = e.collectMessagesAsString())
+                        issues += OrtIssue(source = managerName, message = e.collectMessagesAsString())
 
                         rawPackage
                     }
@@ -221,6 +230,6 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
         val id = Identifier("Maven", dependency.groupId, dependency.artifactId, dependency.version)
-        return PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = errors)
+        return PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = issues)
     }
 }
