@@ -528,7 +528,7 @@ class ScanCodeTest : WordSpec({
                     "--ignore META-INF/DEPENDENCIES --json-pp --license-diag"
         }
 
-        "return the non config values from the scanner configuration" {
+        "return the non-config values from the scanner configuration" {
             val scannerWithConfig = ScanCode("ScanCode", ScannerConfiguration(scanner = mapOf(
                     "ScanCode" to mapOf(
                             "commandLine" to "--command --line",
