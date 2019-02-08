@@ -524,8 +524,8 @@ class ScanCodeTest : WordSpec({
     "getConfiguration()" should {
         "return the default values if the scanner configuration is empty" {
             scanner.getConfiguration() shouldBe
-                    "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --json-pp " +
-                    "--license-diag"
+                    "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE " +
+                    "--ignore META-INF/DEPENDENCIES --json-pp --license-diag"
         }
 
         "return the non config values from the scanner configuration" {
@@ -546,7 +546,8 @@ class ScanCodeTest : WordSpec({
         "contain the default values if the scanner configuration is empty" {
             scanner.commandLineOptions.joinToString(" ") should
                     match("--copyright --license --ignore \\*.ort.yml --info --strip-root --timeout 300 " +
-                            "--processes \\d+ --license-diag --verbose")
+                            "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --processes \\d+ --license-diag " +
+                            "--verbose")
         }
 
         "contain the values from the scanner configuration" {
