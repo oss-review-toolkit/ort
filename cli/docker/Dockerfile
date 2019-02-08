@@ -56,7 +56,7 @@ RUN \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
-    curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | \
+    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | \
         DEP_RELEASE_TAG="v0.4.1" GOPATH=/tmp/gopath INSTALL_DIRECTORY=/usr/local/bin sh && \
     npm install --global bower@1.8.4 yarn@1.13.0 && \
     pip install virtualenv==15.1.0 && \
