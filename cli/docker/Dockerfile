@@ -57,7 +57,7 @@ RUN \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
-    npm install --global bower@1.8.4 yarn@1.13.0 && \
+    npm install --global bower@1.8.8 yarn@1.13.0 && \
     pip install virtualenv==15.1.0 && \
     curl -sSL https://get.haskellstack.org/ | sh && \
     # Add scanners (in versions known to work).
