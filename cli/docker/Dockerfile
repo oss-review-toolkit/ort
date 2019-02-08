@@ -29,7 +29,19 @@
 
 FROM openjdk:11-jre-slim-sid
 
-ENV SCANCODE_VERSION=2.9.7
+ENV \
+    # Package manager versions.
+    BOWER_VERSION=1.8.8 \
+    BUNDLER_VERSION=1.17.3-2 \
+    COMPOSER_VERSION=1.8.3-1 \
+    GO_DEP_VERSION=0.5.0-1+B10 \
+    NPM_VERSION=5.8.0+DS6-3 \
+    PYTHON_PIP_VERSION=18.1-4 \
+    PYTHON_VIRTUALENV_VERSION=15.1.0 \
+    SBT_VERSION=0.13.13-2 \
+    YARN_VERSION=1.13.0 \
+    # Scanner versions.
+    SCANCODE_VERSION=2.9.7
 
 # Apt install commands.
 RUN apt-get update && \
@@ -42,12 +54,12 @@ RUN apt-get update && \
         mercurial \
         subversion \
         # Install package managers (in versions known to work).
-        bundler=1.17.3-2 \
-        composer=1.8.3-1 \
-        go-dep=0.5.0-1+b10 \
-        npm=5.8.0+ds6-3 \
-        python-pip=18.1-4 \
-        sbt=0.13.13-2 \
+        bundler=$BUNDLER_VERSION \
+        composer=$COMPOSER_VERSION \
+        go-dep=$GO_DEP_VERSION \
+        npm=$NPM_VERSION \
+        python-pip=$PYTHON_PIP_VERSION \
+        sbt=$SBT_VERSION \
     && \
     rm -rf /var/lib/apt/lists/*
 
@@ -57,8 +69,8 @@ RUN \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
-    npm install --global bower@1.8.8 yarn@1.13.0 && \
-    pip install virtualenv==15.1.0 && \
+    npm install --global bower@$BOWER_VERSION yarn@$YARN_VERSION && \
+    pip install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     curl -sSL https://get.haskellstack.org/ | sh && \
     # Add scanners (in versions known to work).
     curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
