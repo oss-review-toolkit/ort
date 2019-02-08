@@ -31,41 +31,39 @@ FROM openjdk:11-jre-slim-sid
 
 ENV SCANCODE_VERSION=2.9.7
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl
-
-# Add VCS tools (no specific versions required here).
-RUN apt-get install -y --no-install-recommends \
+# Apt install commands.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        # Install general tools required by this Dockefile.
+        curl \
+        # Install VCS tools (no specific versions required here).
         cvs \
         git \
         mercurial \
         subversion \
-    && \
-
-    curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
-    chmod a+x /usr/local/bin/repo
-
-# Add package managers (in versions known to work).
-RUN apt-get install -y --no-install-recommends \
+        # Install package managers (in versions known to work).
+        bundler=1.17.3-2 \
         composer=1.8.3-1 \
         npm=5.8.0+ds6-3 \
         python-pip=18.1-4 \
-        bundler=1.17.3-2 \
         sbt=0.13.13-2 \
     && \
+    rm -rf /var/lib/apt/lists/*
 
-    npm install --global bower@1.8.4 yarn@1.13.0 && \
-    pip install virtualenv==15.1.0 && \
-
+# Custom install commands.
+RUN \
+    # Install VCS tools (no specific versions required here).
+    curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
+    chmod a+x /usr/local/bin/repo && \
+    # Install package managers (in versions known to work).
     curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | \
         DEP_RELEASE_TAG="v0.4.1" GOPATH=/tmp/gopath INSTALL_DIRECTORY=/usr/local/bin sh && \
-
-    curl -sSL https://get.haskellstack.org/ | sh
-
-# Add scanners (in versions known to work).
-RUN curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
+    npm install --global bower@1.8.4 yarn@1.13.0 && \
+    pip install virtualenv==15.1.0 && \
+    curl -sSL https://get.haskellstack.org/ | sh && \
+    # Add scanners (in versions known to work).
+    curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
-        # Trigger configuration for end-users:
+        # Trigger configuration for end-users.
         /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --version && \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
-
-RUN rm -rf /var/lib/apt/lists/*
