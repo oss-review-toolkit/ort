@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-// These interfaces must match the interfaces defined in src/resources/init.gradle because they are used to deserialize
-// the model created there. As it is not possible to declare a package in init.gradle also no package is declared
-// here.
+// The following three interfaces have to match the interfaces defined in "analyzer/src/resources/init.gradle" because
+// they are used to deserialize the model produced there.
+// As it is not possible to declare a package in "init.gradle" also no package is declared here.
 
 interface DependencyTreeModel {
     val group: String

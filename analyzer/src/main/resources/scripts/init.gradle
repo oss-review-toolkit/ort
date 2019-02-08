@@ -38,7 +38,9 @@ if (AbstractDependencyTreePlugin.isCompatibleGradleVersion(gradle.gradleVersion)
     apply plugin: LegacyDependencyTreePlugin
 }
 
-// This needs to be kept in sync with the same interface in "GradleSupport.kt".
+// The following three interfaces have to match the interfaces defined in "analyzer/src/main/kotlin/GradleSupport.kt"
+// because they are used to deserialize the model consumed there.
+
 interface DependencyTreeModel {
     String getGroup()
     String getName()
@@ -46,6 +48,23 @@ interface DependencyTreeModel {
     List<Configuration> getConfigurations()
     List<String> getRepositories()
     List<String> getErrors()
+}
+
+interface Configuration {
+    String getName()
+    List<Dependency> getDependencies()
+}
+
+interface Dependency {
+    String getGroupId()
+    String getArtifactId()
+    String getVersion()
+    String getClassifier()
+    String getExtension()
+    List<Dependency> getDependencies()
+    String getError()
+    String getPomFile()
+    String getLocalPath()
 }
 
 @Immutable
@@ -58,29 +77,10 @@ class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
     List<String> errors
 }
 
-// This needs to be kept in sync with the same interface in "GradleSupport.kt".
-interface Configuration {
-    String getName()
-    List<Dependency> getDependencies()
-}
-
 @Immutable
 class ConfigurationImpl implements Configuration, Serializable {
     String name
     List<Dependency> dependencies
-}
-
-// This needs to be kept in sync with the same interface in "GradleSupport.kt".
-interface Dependency {
-    String getGroupId()
-    String getArtifactId()
-    String getVersion()
-    String getClassifier()
-    String getExtension()
-    List<Dependency> getDependencies()
-    String getError()
-    String getPomFile()
-    String getLocalPath()
 }
 
 @Immutable
