@@ -35,6 +35,7 @@ ENV \
     BUNDLER_VERSION=1.17.3-2 \
     COMPOSER_VERSION=1.8.3-1 \
     GO_DEP_VERSION=0.5.0-1+B10 \
+    HASKELL_STACK_VERSION=1.7.1-3 \
     NPM_VERSION=5.8.0+DS6-3 \
     PYTHON_PIP_VERSION=18.1-4 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
@@ -57,6 +58,7 @@ RUN apt-get update && \
         bundler=$BUNDLER_VERSION \
         composer=$COMPOSER_VERSION \
         go-dep=$GO_DEP_VERSION \
+        haskell-stack=$HASKELL_STACK_VERSION \
         npm=$NPM_VERSION \
         python-pip=$PYTHON_PIP_VERSION \
         sbt=$SBT_VERSION \
@@ -71,7 +73,6 @@ RUN \
     # Install package managers (in versions known to work).
     npm install --global bower@$BOWER_VERSION yarn@$YARN_VERSION && \
     pip install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
-    curl -sSL https://get.haskellstack.org/ | sh && \
     # Add scanners (in versions known to work).
     curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
