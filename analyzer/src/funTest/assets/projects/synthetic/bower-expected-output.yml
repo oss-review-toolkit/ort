@@ -21,7 +21,7 @@ project:
     - id: "Bower::polymer:2.4.0"
       dependencies:
       - id: "Bower::shadycss:1.9.0"
-      - id: "Bower::webcomponentsjs:1.3.2"
+      - id: "Bower::webcomponentsjs:1.3.3"
   - name: "devDependencies"
     dependencies:
     - id: "Bower::jquery:3.3.1"
@@ -101,7 +101,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bower::webcomponentsjs:1.3.2"
+    id: "Bower::webcomponentsjs:1.3.3"
     declared_licenses:
     - "BSD-3-Clause"
     description: "Web components polyfill"
@@ -117,11 +117,11 @@ packages:
     vcs:
       type: "git"
       url: "https://github.com/webcomponents/webcomponentsjs.git"
-      revision: "7260c0ef23dc9ddad8f7c290e8d24c9285bc0b04"
+      revision: "0dc4cd2cb4233e0e63ee8bd3ee5db90035856933"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/webcomponents/webcomponentsjs.git"
-      revision: "7260c0ef23dc9ddad8f7c290e8d24c9285bc0b04"
+      revision: "0dc4cd2cb4233e0e63ee8bd3ee5db90035856933"
       path: ""
   curations: []
