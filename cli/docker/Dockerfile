@@ -57,7 +57,7 @@ RUN \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
     curl https://raw.githubusercontent.com/golang/dep/master/install.sh | \
-        DEP_RELEASE_TAG="v0.4.1" GOPATH=/tmp/gopath INSTALL_DIRECTORY=/usr/local/bin sh && \
+        DEP_RELEASE_TAG="v0.5.0" GOPATH=/tmp/gopath INSTALL_DIRECTORY=/usr/local/bin sh && \
     npm install --global bower@1.8.4 yarn@1.13.0 && \
     pip install virtualenv==15.1.0 && \
     curl -sSL https://get.haskellstack.org/ | sh && \
