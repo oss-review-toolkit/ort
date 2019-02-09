@@ -19,7 +19,7 @@
 
 import React from 'react';
 import {
-    Col, Table, Tabs, Tag, Row
+    Col, Icon, Table, Tabs, Row
 } from 'antd';
 import PropTypes from 'prop-types';
 import LicenseChart from './LicenseChart';
@@ -79,9 +79,10 @@ const SummaryViewLicenses = (props) => {
                 sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
                 key: 'name',
                 render: (text, row) => (
-                    <Tag color={row.color}>
-                        {text}
-                    </Tag>
+                    <span>
+                        <Icon type="file-text" style={{ color: row.color }} />
+                        {` ${text}`}
+                    </span>
                 )
             }, {
                 title: 'Packages',
