@@ -155,12 +155,15 @@ class TableView extends React.Component {
                 title: 'Detected Licenses',
                 render: (text, row) => (
                     <ul className="ort-table-list">
-                        {row.detected_licenses.map(license => (
-                            <li key={license}>
-                                <LicenseTag text={license} ellipsisAtChar={20} />
-                            </li>
-                        ))}
-                    </ul>),
+                        {
+                            row.detected_licenses.map(license => (
+                                <li key={license}>
+                                    <LicenseTag text={license} ellipsisAtChar={20} />
+                                </li>
+                            ))
+                        }
+                    </ul>
+                ),
                 width: 160
             },
             {
