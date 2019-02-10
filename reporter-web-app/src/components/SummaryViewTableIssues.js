@@ -95,7 +95,8 @@ const SummaryViewTableIssues = (props) => {
             }
             rowKey="key"
             size="small"
-        />);
+        />
+    );
 
     const renderViolationsTable = violationData => (
         <Table
@@ -150,7 +151,8 @@ const SummaryViewTableIssues = (props) => {
             }
             rowKey="key"
             size="small"
-        />);
+        />
+    );
 
     if (errors.totalOpen !== 0 || errors.totalResolved !== 0
             || violations.totalOpen !== 0 || violations.totalResolved !== 0) {

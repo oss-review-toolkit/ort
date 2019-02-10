@@ -82,7 +82,8 @@ export default class LicenseTag extends React.Component {
                             && this.tagText.length >= this.ellipsisAtChar)
                             ? `${this.tagText.substr(0, this.ellipsisAtChar)}...` : this.tagText}
                     </Tag>
-                </Tooltip>);
+                </Tooltip>
+            );
         }
         return (
             <div>

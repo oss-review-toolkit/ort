@@ -97,7 +97,14 @@ class SummaryView extends React.Component {
 
 SummaryView.propTypes = {
     issues: PropTypes.object.isRequired,
-    licenses: PropTypes.object.isRequired
+    levelsTotal: PropTypes.number.isRequired,
+    licenses: PropTypes.object.isRequired,
+    metadata: PropTypes.object.isRequired,
+    packagesTotal: PropTypes.number.isRequired,
+    projectsTotal: PropTypes.number.isRequired,
+    scopesTotal: PropTypes.number.isRequired,
+    shouldComponentUpdate: PropTypes.bool.isRequired,
+    repository: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
