@@ -82,7 +82,7 @@ const SummaryViewTimeline = (props) => {
     const renderCompletedText = () => {
         if (errorsOpenTotal !== 0 && violationsOpenTotal === 0) {
             return (
-                <span className="ort-issues-msg">
+                <span className="ort-error">
                     <b>
                         Completed scan with
                         {' '}
@@ -96,7 +96,7 @@ const SummaryViewTimeline = (props) => {
 
         if (errorsOpenTotal === 0 && violationsOpenTotal !== 0) {
             return (
-                <span className="ort-issues-msg">
+                <span className="ort-error">
                     <b>
                         Completed scan with
                         {' '}
@@ -110,7 +110,7 @@ const SummaryViewTimeline = (props) => {
 
         if (errorsOpenTotal !== 0 && violationsOpenTotal !== 0) {
             return (
-                <span className="ort-issues-msg">
+                <span className="ort-error">
                     <b>
                         Completed scan with
                         {' '}
@@ -129,10 +129,7 @@ const SummaryViewTimeline = (props) => {
         }
 
         return (
-            <span style={
-                { color: '#52c41a', fontSize: 18, lineHeight: '1.2' }
-            }
-            >
+            <span className="ort-success">
                 <b>
                     Completed scan successfully
                 </b>
