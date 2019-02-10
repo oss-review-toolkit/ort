@@ -23,8 +23,8 @@ import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.here.ort.model.CopyrightFinding
 
+import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtIssue
@@ -50,10 +50,6 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.unpack
 
-import okhttp3.Request
-
-import okio.Okio
-
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -66,6 +62,10 @@ import java.util.SortedSet
 import java.util.regex.Pattern
 
 import kotlin.math.absoluteValue
+
+import okhttp3.Request
+
+import okio.Okio
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).

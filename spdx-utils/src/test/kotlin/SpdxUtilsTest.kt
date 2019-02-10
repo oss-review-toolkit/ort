@@ -19,9 +19,9 @@
 
 package com.here.ort.spdx
 
-import io.kotlintest.matchers.string.beBlank
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.startWith
+import io.kotlintest.matchers.string.beBlank
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNot

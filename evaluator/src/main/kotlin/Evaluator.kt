@@ -19,8 +19,8 @@
 
 package com.here.ort.evaluator
 
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.EvaluatorRun
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.utils.ScriptRunner
 

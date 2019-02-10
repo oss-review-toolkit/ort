@@ -19,8 +19,8 @@
 
 package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.AbstractPackageManagerFactory
+import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration

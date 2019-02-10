@@ -21,12 +21,12 @@ package com.here.ort.utils
 
 import ch.frankel.slf4k.*
 
-import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-
 import javax.script.Compilable
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
+
+import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 
 /**
  * A class providing the framework to run Kotlin scripts.
