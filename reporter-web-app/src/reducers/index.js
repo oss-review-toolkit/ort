@@ -87,8 +87,8 @@ export default (state = initState, action) => {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: 'Processing done...',
-                    percentage: 100
+                    text: 'Processing report data done...',
+                    percentage: 95
                 }
             },
             data: {
@@ -101,7 +101,7 @@ export default (state = initState, action) => {
         const { index, total } = action;
         const { loading } = state.app;
         const { percentage: currentPercentage } = loading;
-        const newPercentage = Math.floor(currentPercentage + (99 - currentPercentage) / (total - index));
+        const newPercentage = Math.floor(currentPercentage + (95 - currentPercentage) / (total - index));
 
         return {
             ...state,
@@ -122,7 +122,7 @@ export default (state = initState, action) => {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: 'Ready to display scan report...',
+                    text: 'Almost ready to display scan report...',
                     percentage: 100
                 }
             }
