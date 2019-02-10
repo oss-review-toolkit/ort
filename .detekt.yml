@@ -1,21 +1,34 @@
-# Configuration of Detekt rule sets, see: https://github.com/arturbosch/detekt#rulesets
+# Configuration of detekt rule sets, see https://arturbosch.github.io/detekt/comments.html.
+# This file only lists the differences to the default configuration at
+# https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml.
 
 build:
   maxIssues: 0
-  weights:
-    comments: 0
-
-comments:
-  CommentOverPrivateMethod:
-    active: false
-  CommentOverPrivateProperty:
-    active: false
 
 complexity:
-  LargeClass:
-    threshold: 150
+  ComplexMethod:
+    threshold: 33
+  LongMethod:
+    threshold: 158
+  LongParameterList:
+    threshold: 8
   NestedBlockDepth:
-    threshold: 4
+    threshold: 10
+  TooManyFunctions:
+    thresholdInClasses: 19
+    thresholdInObjects: 14
+
+# Formatting rules are implemented via the ktlint plugin. As ktlint does not allow exceptions, we need to disable
+# respective rules completely.
+formatting:
+  ChainWrapping:
+    active: false
+  NoItParamInMultilineLambda:
+    active: false
+  NoWildcardImports:
+    active: false
+  ParameterListWrapping:
+    active: false
 
 performance:
   SpreadOperator:
@@ -24,17 +37,17 @@ performance:
 style:
   ForbiddenComment:
     active: false
-  MaxLineLength:
-    active: true
-    maxLineLength: 120
-  NewLineAtEndOfFile:
-    active: true
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: false
   SpacingBetweenPackageAndImports:
     active: true
+  ThrowsCount:
+    max: 5
   UnusedImports:
     active: true
   WildcardImport:
-    active: true
     excludeImports: '
       ch.frankel.slf4k.*,
       com.here.ort.analyzer.managers.*,

@@ -35,6 +35,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 import java.time.Instant
 
+@Suppress("LargeClass")
 class ScanCodeTest : WordSpec({
     val scanner = ScanCode("ScanCode", ScannerConfiguration())
 

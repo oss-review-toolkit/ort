@@ -52,6 +52,7 @@ object RequirementsCommand : CommandWithHelp() {
         classes.filterNot {
             Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
         }.sortedBy { it.simpleName }.forEach {
+            @Suppress("TooGenericExceptionCaught")
             try {
                 val kotlinObject = it.kotlin.objectInstance
 

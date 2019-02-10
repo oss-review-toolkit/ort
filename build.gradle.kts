@@ -145,7 +145,10 @@ subprojects {
         // Align the detekt core and plugin versions.
         toolVersion = detektPluginVersion
 
+        // Only configure differences to the default.
+        buildUponDefaultConfig = true
         config = files("../.detekt.yml")
+
         input = files("src/main/kotlin", "src/test/kotlin", "src/funTest/kotlin")
     }
 
