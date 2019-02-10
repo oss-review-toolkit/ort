@@ -152,8 +152,8 @@ const SummaryViewTableIssues = (props) => {
             size="small"
         />);
 
-    if (errors.totalOpen !== 0 || errors.totalAddressed !== 0
-            || violations.totalOpen !== 0 || violations.totalAddressed !== 0) {
+    if (errors.totalOpen !== 0 || errors.totalResolved !== 0
+            || violations.totalOpen !== 0 || violations.totalResolved !== 0) {
         return (
             <Tabs tabPosition="top" className="ort-summary-issues">
                 <TabPane
@@ -183,29 +183,29 @@ const SummaryViewTableIssues = (props) => {
                 <TabPane
                     tab={(
                         <span>
-                            Addressed Violations (
-                            {violations.addressedTotal}
+                            Resolved Violations (
+                            {violations.resolvedTotal}
                             )
                         </span>
                     )}
                     key="3"
                 >
                     {
-                        renderViolationsTable(violations.addressed)
+                        renderViolationsTable(violations.resolved)
                     }
                 </TabPane>
                 <TabPane
                     tab={(
                         <span>
-                            Addressed Errors (
-                            {errors.addressedTotal}
+                            Resolved Errors (
+                            {errors.resolvedTotal}
                             )
                         </span>
                     )}
                     key="4"
                 >
                     {
-                        renderErrorTable(errors.addressed)
+                        renderErrorTable(errors.resolved)
                     }
                 </TabPane>
             </Tabs>

@@ -86,9 +86,9 @@ export const getAppViewShowKey = state => state.app.showKey;
 
 export const getReportData = state => state.data.report;
 export const getReportMetaData = state => state.data.report.metadata;
-export const getReportErrorsAddressed = state => state.data.report.errors.addressed;
-export const getReportErrorsAddressedTotal = memoizeOne(
-    state => state.data.report.errors.addressed.length || 0,
+export const getReportErrorsResolved = state => state.data.report.errors.resolved;
+export const getReportErrorsResolvedTotal = memoizeOne(
+    state => state.data.report.errors.resolved.length || 0,
     hasReportDataChanged
 );
 export const getReportErrorsOpen = state => state.data.report.errors.open;
@@ -96,9 +96,9 @@ export const getReportErrorsOpenTotal = memoizeOne(
     state => state.data.report.errors.open.length || 0,
     hasReportDataChanged
 );
-export const getReportViolationsAddressed = state => state.data.report.violations.addressed;
+export const getReportViolationsResolved = state => state.data.report.violations.resolved;
 export const getReportViolationsAdressedTotal = memoizeOne(
-    state => state.data.report.violations.addressed.length || 0,
+    state => state.data.report.violations.resolved.length || 0,
     hasReportDataChanged
 );
 export const getReportViolationsOpen = state => state.data.report.violations.open;
