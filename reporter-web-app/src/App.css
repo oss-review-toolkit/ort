@@ -101,11 +101,28 @@ button.ort-btn-expand .anticon {
     margin-top: 20px;
 }
 
-.ort-summary span.ort-issues-msg {
+.ort-summary .ort-error {
     color: #f5222d;
-    font-size: 18;
-    line-height: 1.2;
+    font-size: 1.1em;
+    line-height: 1.6;
 }
+
+.ort-summary .ort-success {
+    color: #52c41a;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.ort-summary .ort-warning {
+    color: #faad14;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.ort-summary .anticon.ort-error,
+.ort-summary .anticon.ort-warning {
+    margin-left: 12px;
+} 
 
 .ort-summary .ant-table-wrapper {
     min-height: 350px;

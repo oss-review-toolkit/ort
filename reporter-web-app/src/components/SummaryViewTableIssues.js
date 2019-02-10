@@ -20,7 +20,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Table, Tabs
+    Icon, Table, Tabs
 } from 'antd';
 import { hashCode } from '../utils';
 
@@ -31,81 +31,125 @@ const SummaryViewTableIssues = (props) => {
     const { data } = props;
     const { errors, violations } = data;
 
-    const renderErrorTable = (errorData, pageSize) => (
+    const renderErrorTable = errorData => (
         <Table
-            columns={[{
-                title: 'id',
-                dataIndex: 'id',
-                render: (text, row) => (
-                    <div>
-                        <dl>
-                            <dt>
-                                {row.id}
-                            </dt>
-                            <dd>
-                                Dependency defined in
-                                {' '}
-                                {Array.from(row.files).join(', ')}
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dd>
-                                {Array.from(row.messages).map(message => (
-                                    <p key={`ort-error-message-${hashCode(message)}`}>
-                                        {message}
-                                    </p>
-                                ))}
-                            </dd>
-                        </dl>
-                    </div>
-                )
-            }]}
+            columns={[
+                {
+                    dataIndex: 'severity',
+                    filters: (() => [
+                        { text: 'Errors', value: 'ERROR' },
+                        { text: 'Warning', value: 'WARNING' }
+                    ])(),
+                    onFilter: (value, record) => record.severity.includes(value),
+                    render: (text, row) => (
+                        row.severity === 'ERROR'
+                            ? (
+                                <Icon type="exclamation-circle" className="ort-error" />
+                            ) : (
+                                <Icon type="warning" className="ort-warning" />
+                            )
+                    )
+                },
+                {
+                    title: 'Description',
+                    dataIndex: 'id',
+                    render: (text, row) => (
+                        <div>
+                            <dl>
+                                <dt>
+                                    {row.source}
+                                </dt>
+                                <dd>
+                                    Dependency defined in
+                                    {' '}
+                                    {Array.from(row.files).join(', ')}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dd>
+                                    {Array.from(row.message).map(message => (
+                                        <p key={hashCode(message)}>
+                                            {message}
+                                        </p>
+                                    ))}
+                                </dd>
+                            </dl>
+                        </div>
+                    )
+                }
+            ]}
             dataSource={errorData}
             locale={{
                 emptyText: 'No errors'
             }}
-            pagination={{
-                hideOnSinglePage: true,
-                pageSize
-            }}
-            rowKey="id"
-            scroll={{
-                y: 300
-            }}
-            showHeader={false}
+            pagination={
+                {
+                    defaultPageSize: 25,
+                    hideOnSinglePage: true,
+                    pageSizeOptions: ['50', '100', '250', '500'],
+                    position: 'bottom',
+                    showQuickJumper: true,
+                    showSizeChanger: true,
+                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} errors`
+                }
+            }
+            rowKey="key"
+            size="small"
         />);
 
-    const renderViolationsTable = (violationData, pageSize) => (
+    const renderViolationsTable = violationData => (
         <Table
-            columns={[{
-                title: 'id',
-                dataIndex: 'id',
-                render: (text, row) => (
-                    <div>
-                        <dl>
-                            <dt>
-                                {row.source}
-                            </dt>
-                            <dd>
-                                {row.message}
-                            </dd>
-                        </dl>
-                    </div>
-                )
-            }]}
+            columns={[
+                {
+                    dataIndex: 'severity',
+                    filters: (() => [
+                        { text: 'Errors', value: 'ERROR' },
+                        { text: 'Warning', value: 'WARNING' }
+                    ])(),
+                    onFilter: (value, record) => record.severity.includes(value),
+                    render: (text, row) => (
+                        row.severity === 'ERROR'
+                            ? (
+                                <Icon type="exclamation-circle" className="ort-error" />
+                            ) : (
+                                <Icon type="warning" className="ort-warning" />
+                            )
+                    )
+                },
+                {
+                    title: 'Description',
+                    dataIndex: 'id',
+                    render: (text, row) => (
+                        <div>
+                            <dl>
+                                <dt>
+                                    {row.source}
+                                </dt>
+                                <dd>
+                                    {row.message}
+                                </dd>
+                            </dl>
+                        </div>
+                    )
+                }
+            ]}
             dataSource={violationData}
             locale={{
                 emptyText: 'No violations'
             }}
-            pagination={{
-                hideOnSinglePage: true,
-                pageSize
-            }}
-            rowKey="source"
-            scroll={{
-                y: 300
-            }}
-            showHeader={false}
+            pagination={
+                {
+                    defaultPageSize: 25,
+                    hideOnSinglePage: true,
+                    pageSizeOptions: ['50', '100', '250', '500'],
+                    position: 'bottom',
+                    showQuickJumper: true,
+                    showSizeChanger: true,
+                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} violations`
+                }
+            }
+            rowKey="key"
+            size="small"
         />);
 
     if (errors.totalOpen !== 0 || errors.totalAddressed !== 0
@@ -115,40 +159,26 @@ const SummaryViewTableIssues = (props) => {
                 <TabPane
                     tab={(
                         <span>
-                            Errors (
-                            {errors.openTotal}
-                            )
-                        </span>
-                    )}
-                    key="1"
-                >
-                    {renderErrorTable(errors.open, errors.openTotal)}
-                </TabPane>
-                <TabPane
-                    tab={(
-                        <span>
-                            Addressed Errors (
-                            {errors.addressedTotal}
-                            )
-                        </span>
-                    )}
-                    key="2"
-                >
-                    {
-                        renderErrorTable(errors.addressed, errors.addressedTotal)
-                    }
-                </TabPane>
-                <TabPane
-                    tab={(
-                        <span>
                             Violations (
                             {violations.openTotal}
                             )
                         </span>
                     )}
-                    key="3"
+                    key="1"
                 >
-                    {renderViolationsTable(violations.open, violations.openTotal)}
+                    {renderViolationsTable(violations.open)}
+                </TabPane>
+                <TabPane
+                    tab={(
+                        <span>
+                            Errors (
+                            {errors.openTotal}
+                            )
+                        </span>
+                    )}
+                    key="2"
+                >
+                    {renderErrorTable(errors.open)}
                 </TabPane>
                 <TabPane
                     tab={(
@@ -158,10 +188,24 @@ const SummaryViewTableIssues = (props) => {
                             )
                         </span>
                     )}
+                    key="3"
+                >
+                    {
+                        renderViolationsTable(violations.addressed)
+                    }
+                </TabPane>
+                <TabPane
+                    tab={(
+                        <span>
+                            Addressed Errors (
+                            {errors.addressedTotal}
+                            )
+                        </span>
+                    )}
                     key="4"
                 >
                     {
-                        renderViolationsTable(violations.addressed, violations.addressedTotal)
+                        renderErrorTable(errors.addressed)
                     }
                 </TabPane>
             </Tabs>
