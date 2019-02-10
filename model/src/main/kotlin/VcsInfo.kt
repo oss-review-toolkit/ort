@@ -22,13 +22,13 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 
 import com.here.ort.utils.fieldNamesOrEmpty
-import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.textValueOrEmpty
 
 import kotlin.reflect.full.memberProperties
 

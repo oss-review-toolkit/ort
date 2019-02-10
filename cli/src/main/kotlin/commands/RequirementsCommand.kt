@@ -34,9 +34,9 @@ import com.here.ort.scanner.Scanner
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.log
 
-import org.reflections.Reflections
-
 import java.lang.reflect.Modifier
+
+import org.reflections.Reflections
 
 @Parameters(commandNames = ["requirements"], commandDescription = "List the required command line tools.")
 object RequirementsCommand : CommandWithHelp() {

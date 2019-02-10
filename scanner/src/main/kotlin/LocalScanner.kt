@@ -28,8 +28,8 @@ import com.here.ort.downloader.Downloader
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Environment
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.Provenance

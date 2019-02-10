@@ -26,8 +26,8 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.AndroidTag
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
-import com.here.ort.utils.test.patchExpectedResult
 import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe

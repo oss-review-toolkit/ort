@@ -22,8 +22,8 @@ package com.here.ort.analyzer
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
@@ -35,9 +35,9 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.nio.file.FileSystems
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
-import java.nio.file.FileSystems
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes

@@ -30,8 +30,8 @@ import com.here.ort.analyzer.PackageJsonUtils
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
