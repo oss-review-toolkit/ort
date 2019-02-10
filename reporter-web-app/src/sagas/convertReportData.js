@@ -708,9 +708,9 @@ function* convertReportData() {
     };
 
     yield put({ type: 'APP::LOADING_CONVERTING_REPORT_DONE', payload: convertedData });
-    yield delay(300);
+    yield delay(50);
     yield put({ type: 'APP::LOADING_DONE' });
-    yield delay(300);
+    yield delay(50);
     yield put({ type: 'APP::SHOW_TABS' });
 
     return convertedData;
