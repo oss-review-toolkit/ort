@@ -36,10 +36,6 @@ import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.stripCredentialsFromUrl
 import com.here.ort.utils.unpack
 
-import okhttp3.Request
-
-import okio.Okio
-
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -48,6 +44,10 @@ import java.net.URI
 import java.net.URL
 import java.time.Instant
 import java.util.SortedSet
+
+import okhttp3.Request
+
+import okio.Okio
 
 const val TOOL_NAME = "downloader"
 const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"

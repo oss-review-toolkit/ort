@@ -19,6 +19,9 @@
 
 package com.here.ort.utils
 
+import java.io.File
+import java.net.URLConnection
+
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
 import okhttp3.MediaType
@@ -26,9 +29,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-
-import java.io.File
-import java.net.URLConnection
 
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.

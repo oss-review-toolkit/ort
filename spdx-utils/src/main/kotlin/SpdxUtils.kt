@@ -19,12 +19,12 @@
 
 package com.here.ort.spdx
 
-import org.apache.commons.codec.binary.Hex
-import org.apache.commons.codec.digest.DigestUtils
-
 import java.io.File
 import java.io.IOException
 import java.util.EnumSet
+
+import org.apache.commons.codec.binary.Hex
+import org.apache.commons.codec.digest.DigestUtils
 
 /**
  * A list of globs that match typical license file names.

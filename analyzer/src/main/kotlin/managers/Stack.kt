@@ -21,9 +21,9 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
@@ -44,14 +44,14 @@ import com.here.ort.utils.safeDeleteRecursively
 
 import com.paypal.digraph.parser.GraphParser
 
-import okhttp3.Request
-
 import java.io.File
 import java.io.FileFilter
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.util.SortedSet
+
+import okhttp3.Request
 
 /**
  * The Stack package manager for Haskell, see https://haskellstack.org/.
