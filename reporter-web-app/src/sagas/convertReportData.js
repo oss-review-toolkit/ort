@@ -41,6 +41,12 @@ function* convertReportData() {
     let reportDataLevels = new Set([]);
     let reportDataScopes = new Set([]);
 
+    // Add `key` to prevent warning rendering table with two children with same key
+    const addKeyToArrayItems = arr => arr.map((item, index) => {
+        const tmp = item;
+        tmp.key = index;
+        return tmp;
+    });
     // Transform Analyer results to be indexed by package Id for faster lookups
     const packagesFromAnalyzer = ((dataArr) => {
         const tmp = {};
@@ -69,27 +75,47 @@ function* convertReportData() {
     const addErrorsToReportDataReportData = (pkgObj) => {
         const pkg = pkgObj;
         const { errors } = pkg;
-        let errorSummaryPkgObj;
+        let summaryPkgErrorObj;
+        let summaryPkgWarningObj;
 
         if (Array.isArray(errors) && errors.length !== 0) {
-            if (!reportDataOpenErrors[pkg.id]) {
-                errorSummaryPkgObj = {
-                    id: pkg.id,
-                    files: new Set([]),
-                    messages: new Set([])
-                };
-            } else {
-                errorSummaryPkgObj = reportDataOpenErrors[pkg.id];
-            }
-
             for (let i = errors.length - 1; i >= 0; i -= 1) {
                 const error = errors[i];
 
-                errorSummaryPkgObj.files.add(error.file);
-                errorSummaryPkgObj.messages.add(error.message);
-            }
+                if (error.severity === 'ERROR') {
+                    if (!reportDataOpenErrors[`${pkg.id}-errors`]) {
+                        summaryPkgErrorObj = {
+                            source: pkg.id,
+                            severity: 'ERROR',
+                            files: new Set([]),
+                            message: new Set([])
+                        };
+                    } else {
+                        summaryPkgErrorObj = reportDataOpenErrors[`${pkg.id}-errors`];
+                    }
 
-            reportDataOpenErrors[pkg.id] = errorSummaryPkgObj;
+                    summaryPkgErrorObj.files.add(error.file);
+                    summaryPkgErrorObj.message.add(error.message);
+
+                    reportDataOpenErrors[`${pkg.id}-errors`] = summaryPkgErrorObj;
+                } else {
+                    if (!reportDataOpenErrors[`${pkg.id}-warnings`]) {
+                        summaryPkgWarningObj = {
+                            source: pkg.id,
+                            severity: 'WARNING',
+                            files: new Set([]),
+                            message: new Set([])
+                        };
+                    } else {
+                        summaryPkgWarningObj = reportDataOpenErrors[`${pkg.id}-warnings`];
+                    }
+
+                    summaryPkgWarningObj.files.add(error.file);
+                    summaryPkgWarningObj.message.add(error.message);
+
+                    reportDataOpenErrors[`${pkg.id}-warnings`] = summaryPkgWarningObj;
+                }
+            }
         }
     };
     const addErrorsToPackage = (projectIndex, pkgObj, analyzerErrors) => {
@@ -102,6 +128,7 @@ function* convertReportData() {
         const createErrorObj = (type, error) => ({
             id: project.id,
             code: `${hashCode(project.id)}x${hashCode(pkg.id)}${error.message.length}`,
+            severity: error.severity,
             source: error.source,
             timestamp: error.timestamp,
             type,
@@ -656,8 +683,8 @@ function* convertReportData() {
         hasErrors: reportData.has_errors || false,
         errors: {
             // Flatten errors into an array of errors
-            addressed: Object.values(reportDataAddressedErrors) || [],
-            open: Object.values(reportDataOpenErrors) || []
+            addressed: addKeyToArrayItems(Object.values(reportDataAddressedErrors)) || [],
+            open: addKeyToArrayItems(Object.values(reportDataOpenErrors)) || []
         },
         levels: reportDataLevels || new Set(),
         licenses: {
@@ -674,8 +701,9 @@ function* convertReportData() {
         scopes: reportDataScopes || new Set(),
         repository: reportData.repository || {},
         violations: {
-            addressed: [],
-            open: (reportData.evaluator && reportData.evaluator.errors) ? reportData.evaluator.errors : []
+            addressed: addKeyToArrayItems([]),
+            open: (reportData.evaluator && reportData.evaluator.errors)
+                ? addKeyToArrayItems(reportData.evaluator.errors) : []
         }
     };
 
