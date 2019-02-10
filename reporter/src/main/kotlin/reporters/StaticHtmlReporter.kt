@@ -45,6 +45,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
+@Suppress("LargeClass")
 class StaticHtmlReporter : Reporter() {
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
 

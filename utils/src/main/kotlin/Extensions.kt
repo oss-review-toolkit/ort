@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package com.here.ort.utils
 
 import com.fasterxml.jackson.databind.JsonNode

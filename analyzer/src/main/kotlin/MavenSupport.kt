@@ -401,6 +401,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 val tempFile = File.createTempFile("ort", "checksum-${checksum.algorithm}")
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
+
+                @Suppress("TooGenericExceptionCaught")
                 val actualChecksum = try {
                     transporter.get(GetTask(checksum.location).setDataFile(tempFile))
 

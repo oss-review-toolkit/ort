@@ -36,6 +36,7 @@ import java.util.SortedSet
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
  */
+@Suppress("TooManyFunctions")
 data class OrtResult(
     /**
      * Information about the repository that was used as input.
