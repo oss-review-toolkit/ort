@@ -19,11 +19,11 @@ import {
     getSummaryViewShouldComponentUpdate,
     getSummaryRepository,
     getReportMetaData,
-    getReportErrorsAddressed,
+    getReportErrorsResolved,
     getReportErrorsOpen,
-    getReportErrorsAddressedTotal,
+    getReportErrorsResolvedTotal,
     getReportErrorsOpenTotal,
-    getReportViolationsAddressed,
+    getReportViolationsResolved,
     getReportViolationsOpen,
     getReportViolationsAdressedTotal,
     getReportViolationsOpenTotal,
@@ -103,14 +103,14 @@ SummaryView.propTypes = {
 const mapStateToProps = state => ({
     issues: {
         errors: {
-            addressed: getReportErrorsAddressed(state),
-            addressedTotal: getReportErrorsAddressedTotal(state),
+            resolved: getReportErrorsResolved(state),
+            resolvedTotal: getReportErrorsResolvedTotal(state),
             open: getReportErrorsOpen(state),
             openTotal: getReportErrorsOpenTotal(state)
         },
         violations: {
-            addressed: getReportViolationsAddressed(state),
-            addressedTotal: getReportViolationsAdressedTotal(state),
+            resolved: getReportViolationsResolved(state),
+            resolvedTotal: getReportViolationsAdressedTotal(state),
             open: getReportViolationsOpen(state),
             openTotal: getReportViolationsOpenTotal(state)
         }

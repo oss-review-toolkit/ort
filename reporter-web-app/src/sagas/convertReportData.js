@@ -37,7 +37,7 @@ function* convertReportData() {
     const declaredLicensesFromAnalyzer = {};
     const detectedLicensesFromScanner = {};
     const reportDataOpenErrors = {};
-    const reportDataAddressedErrors = {};
+    const reportDataResolvedErrors = {};
     let reportDataLevels = new Set([]);
     let reportDataScopes = new Set([]);
 
@@ -683,7 +683,7 @@ function* convertReportData() {
         hasErrors: reportData.has_errors || false,
         errors: {
             // Flatten errors into an array of errors
-            addressed: addKeyToArrayItems(Object.values(reportDataAddressedErrors)) || [],
+            resolved: addKeyToArrayItems(Object.values(reportDataResolvedErrors)) || [],
             open: addKeyToArrayItems(Object.values(reportDataOpenErrors)) || []
         },
         levels: reportDataLevels || new Set(),
@@ -701,7 +701,7 @@ function* convertReportData() {
         scopes: reportDataScopes || new Set(),
         repository: reportData.repository || {},
         violations: {
-            addressed: addKeyToArrayItems([]),
+            resolved: addKeyToArrayItems([]),
             open: (reportData.evaluator && reportData.evaluator.errors)
                 ? addKeyToArrayItems(reportData.evaluator.errors) : []
         }
