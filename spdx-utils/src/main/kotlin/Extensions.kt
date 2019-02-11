@@ -27,6 +27,44 @@ import java.util.EnumSet
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
 
 /**
+ * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
+ */
+infix fun SpdxLicense.and(other: SpdxLicense) = this and other.toExpression()
+
+/**
+ * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
+ */
+infix fun SpdxLicense.and(other: SpdxExpression) =
+        SpdxCompoundExpression(toExpression(), SpdxOperator.AND, other)
+
+/**
+ * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
+ */
+infix fun SpdxLicense.or(other: SpdxLicense) = this or other.toExpression()
+
+/**
+ * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
+ */
+infix fun SpdxLicense.or(other: SpdxExpression) =
+        SpdxCompoundExpression(toExpression(), SpdxOperator.OR, other)
+
+/**
+ * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [exception] using [SpdxOperator.WITH].
+ */
+infix fun SpdxLicense.with(exception: SpdxLicenseException) =
+        SpdxCompoundExpression(toExpression(), SpdxOperator.WITH, exception.toExpression())
+
+/**
+ * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
+ */
+fun SpdxLicense.toExpression() = SpdxLicenseIdExpression(id)
+
+/**
+ * Create an [SpdxLicenseExceptionExpression] from this [SpdxLicenseException].
+ */
+fun SpdxLicenseException.toExpression() = SpdxLicenseExceptionExpression(id)
+
+/**
  * Return whether this [String] is a LicenseRef to [name], by default [ignoring case][ignoreCase]. Any possible
  * (scanner-specific) namespaces are ignored.
  */
