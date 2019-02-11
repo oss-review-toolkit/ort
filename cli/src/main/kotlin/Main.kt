@@ -25,6 +25,7 @@ import com.beust.jcommander.Parameter
 import com.here.ort.commands.*
 import com.here.ort.model.Environment
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
 
@@ -51,6 +52,11 @@ object Main : CommandWithHelp() {
             order = PARAMETER_ORDER_LOGGING)
     private var stacktrace = false
 
+    @Parameter(description = "Show version information and exit.",
+            names = ["--version", "-v"],
+            order = PARAMETER_ORDER_OPTIONAL)
+    private var version = false
+
     /**
      * The entry point for the application.
      *
@@ -65,26 +71,6 @@ object Main : CommandWithHelp() {
      * Run the ORT CLI with the provided [args] and return the exit code of [CommandWithHelp.run].
      */
     fun run(args: Array<String>): Int {
-        val env = Environment()
-        val variables = env.variables.entries.map { (key, value) -> "$key = $value" }
-
-        println("""
-            ________ _____________________
-            \_____  \\______   \__    ___/ version ${env.ortVersion} running on ${env.os} with
-             /   |   \|       _/ |    |    ${variables.getOrElse(0) { "" }}
-            /    |    \    |   \ |    |    ${variables.getOrElse(1) { "" }}
-            \_______  /____|_  / |____|    ${variables.getOrElse(2) { "" }}
-                    \/       \/
-        """.trimIndent())
-
-        val moreVariables = variables.drop(3)
-        if (moreVariables.isNotEmpty()) {
-            println("More environment variables:")
-            moreVariables.forEach(::println)
-        }
-
-        println()
-
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
             addCommand(AnalyzerCommand)
@@ -96,7 +82,9 @@ object Main : CommandWithHelp() {
             parse(*args)
         }
 
-        return run(jc)
+        showVersionHeader(jc.parsedCommand)
+
+        return if (version) 0 else run(jc)
     }
 
     override fun runCommand(jc: JCommander): Int {
@@ -114,5 +102,31 @@ object Main : CommandWithHelp() {
 
         // Delegate running actions to the specified command.
         return commandObject.run(jc)
+    }
+
+    private fun showVersionHeader(commandName: String?) {
+        val env = Environment()
+        val variables = env.variables.entries.map { (key, value) -> "$key = $value" }
+
+        val command = commandName?.let { " '$commandName'" } ?: ""
+
+        var variableIndex = 0
+
+        println("""
+            ________ _____________________
+            \_____  \\______   \__    ___/ version ${env.ortVersion} running$command on ${env.os} with
+             /   |   \|       _/ |    |    ${variables.getOrElse(variableIndex++) { "" }}
+            /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
+            \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
+                    \/       \/
+        """.trimIndent())
+
+        val moreVariables = variables.drop(variableIndex)
+        if (moreVariables.isNotEmpty()) {
+            println("More environment variables:")
+            moreVariables.forEach(::println)
+        }
+
+        println()
     }
 }
