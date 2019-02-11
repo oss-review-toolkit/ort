@@ -151,9 +151,17 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                         else -> VcsInfo(type = type, url = url, revision = tag)
                     }
                 } else {
-                    log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
+                    // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
+                    // clear cases.
+                    if (connection.startsWith("git://") || connection.endsWith(".git")) {
+                        log.warn { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
 
-                    VcsInfo.EMPTY
+                        VcsInfo("git", connection, tag)
+                    } else {
+                        log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
+
+                        VcsInfo.EMPTY
+                    }
                 }
             }
         }

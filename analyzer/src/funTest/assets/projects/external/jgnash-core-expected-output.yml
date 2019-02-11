@@ -961,13 +961,13 @@ packages:
       hash: "f285ac123f201fb4b028bac556928d7cf527ef48"
       hash_algorithm: "SHA-1"
     vcs:
-      type: ""
-      url: ""
+      type: "git"
+      url: "git@github.com:qos-ch/slf4j.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "ssh://git@github.com/qos-ch/slf4j.git"
       revision: ""
       path: ""
   curations: []
@@ -986,13 +986,13 @@ packages:
       hash: "16b1333786ea93d16bff6fb0f5e3b82716d1b008"
       hash_algorithm: "SHA-1"
     vcs:
-      type: ""
-      url: ""
+      type: "git"
+      url: "git@github.com:qos-ch/slf4j.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
+      type: "git"
+      url: "ssh://git@github.com/qos-ch/slf4j.git"
       revision: ""
       path: ""
   curations: []

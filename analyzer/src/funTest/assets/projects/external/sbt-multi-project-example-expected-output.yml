@@ -224,13 +224,13 @@ analyzer:
           hash: "cfd5385e0c5ed1c8a5dce57d86e79cf357153a64"
           hash_algorithm: "SHA-1"
         vcs:
-          type: ""
-          url: ""
+          type: "git"
+          url: "git@github.com:ceki/logback.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: ""
-          url: ""
+          type: "git"
+          url: "ssh://git@github.com/ceki/logback.git"
           revision: ""
           path: ""
       curations: []
@@ -250,13 +250,13 @@ analyzer:
           hash: "3ebabe69eba0196af9ad3a814f723fb720b9101e"
           hash_algorithm: "SHA-1"
         vcs:
-          type: ""
-          url: ""
+          type: "git"
+          url: "git@github.com:ceki/logback.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: ""
-          url: ""
+          type: "git"
+          url: "ssh://git@github.com/ceki/logback.git"
           revision: ""
           path: ""
       curations: []
@@ -954,13 +954,13 @@ analyzer:
           hash: "ffd0827a7c67d5915b7dc611afbda56a1f247191"
           hash_algorithm: "SHA-1"
         vcs:
-          type: ""
-          url: ""
+          type: "git"
+          url: "git@github.com:qos-ch/slf4j.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: ""
-          url: ""
+          type: "git"
+          url: "ssh://git@github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
       curations: []
@@ -979,13 +979,13 @@ analyzer:
           hash: "962153db4a9ea71b79d047dfd1b2a0d80d8f4739"
           hash_algorithm: "SHA-1"
         vcs:
-          type: ""
-          url: ""
+          type: "git"
+          url: "git@github.com:qos-ch/slf4j.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: ""
-          url: ""
+          type: "git"
+          url: "ssh://git@github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
       curations: []
