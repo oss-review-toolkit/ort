@@ -208,6 +208,13 @@ data class OrtResult(
             }
 
     /**
+     * Return true if the project or package with the given identifier is excluded.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun isExcluded(id: Identifier) =
+            analyzer?.result?.let { repository.config.excludes?.isExcluded(id, it) } == true
+
+    /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
      */
     fun replaceConfig(config: RepositoryConfiguration) = copy(repository = repository.copy(config = config))
