@@ -26,6 +26,20 @@ import java.util.EnumSet
  */
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
 
+infix fun SpdxExpression.and(other: SpdxExpression) =
+        SpdxCompoundExpression(this, SpdxOperator.AND, other)
+
+infix fun SpdxExpression.or(other: SpdxExpression) =
+        SpdxCompoundExpression(this, SpdxOperator.OR, other)
+
+infix fun SpdxLicense.and(other: SpdxLicense) =
+        SpdxCompoundExpression(toExpression(), SpdxOperator.AND, other.toExpression())
+
+infix fun SpdxLicense.or(other: SpdxLicense) =
+        SpdxCompoundExpression(toExpression(), SpdxOperator.OR, other.toExpression())
+
+fun SpdxLicense.toExpression() = SpdxLicenseIdExpression(id)
+
 /**
  * Return whether this [String] is a LicenseRef to [name], by default [ignoring case][ignoreCase]. Any possible
  * (scanner-specific) namespaces are ignored.
