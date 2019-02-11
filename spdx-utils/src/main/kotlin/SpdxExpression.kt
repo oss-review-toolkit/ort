@@ -116,6 +116,16 @@ sealed class SpdxExpression {
      * ([ALLOW_CURRENT][Strictness.ALLOW_CURRENT]). Throws an [SpdxException] if validation fails.
      */
     abstract fun validate(strictness: Strictness)
+
+    /**
+     * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.AND].
+     */
+    infix fun and(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.AND, other)
+
+    /**
+     * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.OR].
+     */
+    infix fun or(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.OR, other)
 }
 
 /**
@@ -203,6 +213,11 @@ data class SpdxLicenseIdExpression(
             Strictness.ALLOW_CURRENT -> license?.takeUnless { license.deprecated }
         } ?: throw SpdxException("'$id' is not a valid SPDX license id.")
     }
+
+    /**
+     * Concatenate [this][SpdxLicenseIdExpression] and [other] using [SpdxOperator.WITH].
+     */
+    infix fun with(other: SpdxLicenseExceptionExpression) = SpdxCompoundExpression(this, SpdxOperator.WITH, other)
 
     override fun toString() =
             buildString {
