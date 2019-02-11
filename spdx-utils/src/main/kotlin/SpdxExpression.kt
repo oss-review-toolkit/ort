@@ -116,6 +116,16 @@ sealed class SpdxExpression {
      * ([ALLOW_CURRENT][Strictness.ALLOW_CURRENT]). Throws an [SpdxException] if validation fails.
      */
     abstract fun validate(strictness: Strictness)
+
+    /**
+     * Concatenate [this] and [other] using [SpdxOperator.AND].
+     */
+    infix fun and(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.AND, other)
+
+    /**
+     * Concatenate [this] and [other] using [SpdxOperator.OR].
+     */
+    infix fun or(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.OR, other)
 }
 
 /**
@@ -224,7 +234,7 @@ data class SpdxLicenseReferenceExpression(
 
     override fun validate(strictness: Strictness) {
         if (!(id.startsWith("LicenseRef-") ||
-                (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")))) {
+                        (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")))) {
             throw SpdxException("'$id' is not an SPDX license reference.")
         }
     }
