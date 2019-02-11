@@ -91,8 +91,8 @@ data class AnalyzerResult(
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasErrors by lazy {
-        errors.any { it.value.isNotEmpty() }
-                || projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
+        errors.any { it.value.isNotEmpty() } ||
+                projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
     }
 }
 
