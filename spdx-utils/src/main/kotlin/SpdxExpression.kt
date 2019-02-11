@@ -99,6 +99,11 @@ sealed class SpdxExpression {
     }
 
     /**
+     * Return all license IDs contained in this expression. Non-SPDX licenses and SPDX license references are included.
+     */
+    abstract fun licenses(): List<String>
+
+    /**
      * Return all [SpdxLicense]s contained in this expression. Non-SPDX licenses and SPDX license references are
      * ignored.
      */
@@ -121,6 +126,8 @@ data class SpdxCompoundExpression(
         val operator: SpdxOperator,
         val right: SpdxExpression
 ) : SpdxExpression() {
+    override fun licenses() = left.licenses() + right.licenses()
+
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
 
     override fun validate(strictness: Strictness) {
@@ -160,6 +167,8 @@ data class SpdxCompoundExpression(
 data class SpdxLicenseExceptionExpression(
         val id: String
 ) : SpdxExpression() {
+    override fun licenses() = emptyList<String>()
+
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
     override fun validate(strictness: Strictness) {
@@ -182,6 +191,8 @@ data class SpdxLicenseIdExpression(
         val id: String,
         val anyLaterVersion: Boolean = false
 ) : SpdxExpression() {
+    override fun licenses() = listOf(id)
+
     override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
 
     override fun validate(strictness: Strictness) {
@@ -207,6 +218,8 @@ data class SpdxLicenseIdExpression(
 data class SpdxLicenseReferenceExpression(
         val id: String
 ) : SpdxExpression() {
+    override fun licenses() = listOf(id)
+
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
     override fun validate(strictness: Strictness) {
