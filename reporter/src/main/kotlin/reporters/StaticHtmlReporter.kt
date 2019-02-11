@@ -410,7 +410,7 @@ class StaticHtmlReporter : Reporter() {
         }
 
         if (ruleViolations.isEmpty()) {
-            +"No issues found."
+            +"No rule violations found."
         } else {
             table("ort-report-table ort-violations") {
                 thead {
