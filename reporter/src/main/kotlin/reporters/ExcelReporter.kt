@@ -184,7 +184,7 @@ class ExcelReporter : Reporter() {
             }
         }
 
-        (0..1).forEach { sheet.autoSizeColumn(it) }
+        repeat(2) { sheet.autoSizeColumn(it) }
     }
 
     private fun createSummarySheet(workbook: XSSFWorkbook, name: String, file: String, table: SummaryTable,
