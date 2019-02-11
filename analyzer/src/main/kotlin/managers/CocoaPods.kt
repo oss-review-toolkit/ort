@@ -40,6 +40,6 @@ class CocoaPods(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig:
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

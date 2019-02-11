@@ -55,7 +55,7 @@ class PolymerIntegrationTest : AbstractIntegrationSpec() {
 
     override val expectedManagedFiles by lazy {
         val bowerJsonFiles = findDownloadedFiles("bower.json")
-        val packageJsonFiles = findDownloadedFiles( "package.json")
+        val packageJsonFiles = findDownloadedFiles("package.json")
 
         mapOf(
                 Bower.Factory() as PackageManagerFactory to bowerJsonFiles,

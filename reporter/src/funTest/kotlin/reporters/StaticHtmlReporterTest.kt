@@ -49,7 +49,7 @@ class StaticHtmlReporterTest : WordSpec() {
 
                 val expectedReport = File("src/funTest/assets/static-html-reporter-test-expected-output.html")
                         .readText()
-                
+
                 actualReport shouldBe expectedReport
             }
         }

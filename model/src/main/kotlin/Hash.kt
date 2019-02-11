@@ -43,7 +43,7 @@ data class Hash(
         /**
          * A constant to specify an unknown hash.
          */
-        val UNKNOWN =  Hash(HashAlgorithm.UNKNOWN, HashAlgorithm.UNKNOWN.toString())
+        val UNKNOWN = Hash(HashAlgorithm.UNKNOWN, HashAlgorithm.UNKNOWN.toString())
 
         /**
          * Create a hash from it a [value].

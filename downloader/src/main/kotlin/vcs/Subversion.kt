@@ -238,6 +238,6 @@ class Subversion : VersionControlSystem(), CommandLineTool {
             throw DownloadException("$type failed to download from ${pkg.vcsProcessed.url}.", e)
         }
 
-        return  workingTree
+        return workingTree
     }
 }
