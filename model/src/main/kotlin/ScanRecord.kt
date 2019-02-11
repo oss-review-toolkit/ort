@@ -59,7 +59,7 @@ data class ScanRecord(
         val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
         scanResults.forEach { container ->
-            container.results.forEach {  result ->
+            container.results.forEach { result ->
                 collectedErrors.getOrPut(container.id) { mutableSetOf() } += result.summary.errors
             }
         }

@@ -99,7 +99,7 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             }
         }
 
-        private fun extractPackage(node: JsonNode ): Package {
+        private fun extractPackage(node: JsonNode): Package {
             val vcsInfo = extractVcsInfo(node)
             return Package(
                     id = extractPackageId(node),

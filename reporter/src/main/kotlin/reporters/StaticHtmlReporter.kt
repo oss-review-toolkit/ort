@@ -446,7 +446,7 @@ class StaticHtmlReporter : Reporter() {
         tr(cssClass) {
             id = rowId
             td {
-                a  {
+                a {
                     href = "#$rowId"
                     +rowIndex.toString()
                 }
@@ -509,7 +509,7 @@ class StaticHtmlReporter : Reporter() {
         tr(cssClass) {
             id = rowId
             td {
-                a  {
+                a {
                     href = "#$rowId"
                     +rowIndex.toString()
                 }
@@ -628,7 +628,7 @@ class StaticHtmlReporter : Reporter() {
         tr("$cssClass $rowExcludedClass") {
             id = rowId
             td {
-                a  {
+                a {
                     href = "#$rowId"
                     +rowIndex.toString()
                 }
@@ -657,8 +657,8 @@ class StaticHtmlReporter : Reporter() {
 
             td {
                 row.concludedLicense?.let {
-                    em { +"Concluded License:"}
-                    dl { dd { +"${row.concludedLicense}"} }
+                    em { +"Concluded License:" }
+                    dl { dd { +"${row.concludedLicense}" } }
                 }
 
                 if (row.declaredLicenses.isNotEmpty()) {
