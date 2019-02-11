@@ -163,8 +163,8 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
             // as well. The special package "composer-plugin-api" is also excluded since it's only used to specify the
             // supported composer plugin versions.
             // Virtual packages are also ignored, since otherwise we would mark them as missing.
-            if (packageName != "php" && !packageName.startsWith("ext-") && packageName != "composer-plugin-api"
-                    && packageName !in virtualPackages) {
+            if (packageName != "php" && !packageName.startsWith("ext-") && packageName != "composer-plugin-api" &&
+                    packageName !in virtualPackages) {
                 val packageInfo = packages[packageName]
                         ?: throw IOException("Could not find package info for $packageName")
                 try {

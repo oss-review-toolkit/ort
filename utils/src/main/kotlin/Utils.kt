@@ -119,13 +119,13 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
                     val currentSeparators = if (versionHasSeparator) versionVariant.separators else versionSeparators
 
                     // Full match with the current version variant.
-                    last == null
+                    last == null ||
                             // The prefix does not end with the current separators or a digit.
-                            || (last !in currentSeparators && !last.isDigit())
+                            (last !in currentSeparators && !last.isDigit()) ||
                             // The prefix ends with the current separators but the forelast character is not a digit.
-                            || (last in currentSeparators && (forelast == null || !forelast.isDigit()))
+                            (last in currentSeparators && (forelast == null || !forelast.isDigit())) ||
                             // The prefix ends with 'v' and the forelast character is a separator.
-                            || (last == 'v' && (forelast == null || forelast in currentSeparators))
+                            (last == 'v' && (forelast == null || forelast in currentSeparators))
                 }
 
                 else -> false

@@ -157,8 +157,8 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
                 val currentNode = stack.pop()
 
                 val key = dependencyKeyOf(currentNode)
-                if (key != null && hasCompleteDependencies(node, SCOPE_NAME_DEPENDENCIES)
-                        && hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)) {
+                if (key != null && hasCompleteDependencies(node, SCOPE_NAME_DEPENDENCIES) &&
+                        hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)) {
                     result[key] = currentNode
                 }
 

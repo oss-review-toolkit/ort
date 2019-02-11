@@ -292,8 +292,8 @@ class ExcelReporter : Reporter() {
         var currentRow = headerRows
 
         table.rows.forEach { row ->
-            val isExcluded = table.exclude != null
-                    || (row.scopes.values.let { it.isNotEmpty() && it.all { it.isNotEmpty() } })
+            val isExcluded = table.exclude != null ||
+                    (row.scopes.values.let { it.isNotEmpty() && it.all { it.isNotEmpty() } })
 
             val font = if (isExcluded) excludedFont else defaultFont
 
