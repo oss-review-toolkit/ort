@@ -116,10 +116,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
 
         private fun parseScm(scm: Scm?): VcsInfo {
-            if (scm == null) return VcsInfo.EMPTY
+            val connection = scm?.connection ?: ""
+            val tag = scm?.tag?.takeIf { it != "HEAD" } ?: ""
 
-            val connection = scm.connection ?: ""
-            val tag = scm.tag?.takeIf { it != "HEAD" } ?: ""
+            if (connection.isEmpty()) return VcsInfo.EMPTY
 
             return SCM_REGEX.matcher(connection).let {
                 if (it.matches()) {
@@ -151,9 +151,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                         else -> VcsInfo(type = type, url = url, revision = tag)
                     }
                 } else {
-                    if (connection.isNotEmpty()) {
-                        log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
-                    }
+                    log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
 
                     VcsInfo.EMPTY
                 }
