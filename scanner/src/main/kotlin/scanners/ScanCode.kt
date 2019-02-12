@@ -371,7 +371,13 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
         if (name.isEmpty()) {
             val key = license["key"].asText()
-            name = if (key == "unknown") "NOASSERTION" else "LicenseRef-$key"
+            name = if (key == "unknown") {
+                "NOASSERTION"
+            } else {
+                // Note that ScanCode uses a lower-case LicenseRef "namespace", see
+                // https://github.com/nexB/scancode-toolkit/pull/1307.
+                "LicenseRef-${scannerName.toLowerCase()}-$key"
+            }
         }
 
         return name
