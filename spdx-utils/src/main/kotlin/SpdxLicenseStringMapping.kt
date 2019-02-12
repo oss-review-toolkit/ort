@@ -28,7 +28,7 @@ import com.here.ort.spdx.SpdxLicenseException.*
  * license names contain white space. See [SpdxLicenseIdMapping] for a mapping of misspelled license IDs.
  */
 object SpdxLicenseStringMapping {
-    private val mapping = mapOf(
+    val mapping = mapOf(
             "(MIT-style) netCDF C library license" to NETCDF.toExpression(),
             "2-clause BSD license" to BSD_2_CLAUSE.toExpression(),
             "2-clause BSDL" to BSD_2_CLAUSE.toExpression(),
