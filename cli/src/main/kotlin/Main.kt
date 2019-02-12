@@ -109,12 +109,13 @@ object Main : CommandWithHelp() {
         val variables = env.variables.entries.map { (key, value) -> "$key = $value" }
 
         val command = commandName?.let { " '$commandName'" } ?: ""
+        val with = if (variables.isNotEmpty()) "with" else ""
 
         var variableIndex = 0
 
         println("""
             ________ _____________________
-            \_____  \\______   \__    ___/ version ${env.ortVersion} running$command on ${env.os} with
+            \_____  \\______   \__    ___/ version ${env.ortVersion} running$command on ${env.os} $with
              /   |   \|       _/ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
