@@ -135,8 +135,33 @@ class ArtifactoryStorage(
                     "$scannerDetails."
         }
 
-        return ScanResultContainer(pkg.id, scanResults)
+        // TODO: Remove this code again once we migrated our scan result storage to contain the new "namespaced" license
+        //  names for ScanCode.
+        val patchedScanResults = patchScanCodeLicenseRefs(scanResults)
+
+        return ScanResultContainer(pkg.id, patchedScanResults)
     }
+
+    internal fun patchScanCodeLicenseRefs(scanResults: List<ScanResult>) =
+            scanResults.map { result ->
+                if (result.scanner.name == "ScanCode") {
+                    val findings = result.summary.licenseFindings.map { finding ->
+                        if (finding.license.startsWith("LicenseRef-") &&
+                                !finding.license.startsWith("LicenseRef-scancode-")) {
+                            val suffix = finding.license.removePrefix("LicenseRef-")
+                            val license = "LicenseRef-scancode-$suffix"
+                            log.info { "Patched license name '${finding.license}' to '$license'." }
+                            finding.copy(license = license)
+                        } else {
+                            finding
+                        }
+                    }
+
+                    result.copy(summary = result.summary.copy(licenseFindings = findings.toSortedSet()))
+                } else {
+                    result
+                }
+            }
 
     override fun add(id: Identifier, scanResult: ScanResult): Boolean {
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
