@@ -25,3 +25,16 @@ import java.util.EnumSet
  * Return an [EnumSet] that contains the elements of [this] and [other].
  */
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
+
+/**
+ * Return whether this [String] is a LicenseRef to [name]. Any possible (scanner-specific) namespaces are ignored.
+ */
+fun String.isLicenseRefTo(name: String): Boolean {
+    val withoutPrefix = removePrefix("LicenseRef-")
+    if (withoutPrefix == this) return false
+
+    val infix = withoutPrefix.removeSuffix(name)
+    if (infix == withoutPrefix) return false
+
+    return infix.indexOf('-') == infix.length - 1
+}
