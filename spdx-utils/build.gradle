@@ -211,12 +211,16 @@ task generateLicenseRefTextResources(dependsOn: importScanCodeLicenseTexts) {
         licensesDir.listFiles({ it.name.endsWith('.yml') && !it.name.endsWith('-exception.yml')} as FileFilter).each {
             def isSpdxLicense = it.readLines().any { it.startsWith('spdx_license_key: ') }
             if (!isSpdxLicense) {
+                // The base name of a ScanCode license YML file matches the ScanCode-internal license key.
                 def baseName = it.name.take(it.name.lastIndexOf('.'))
                 def licenseFile = new File(licensesDir, "${baseName}.LICENSE")
                 if (licenseFile.file) {
-                    def resourceFile = new File(resourcesDir, baseName)
                     def lines = licenseFile.readLines('UTF-8').collect { it.replaceAll(/\s+$/, '') }
                             .reverse().dropWhile { it.empty }.reverse().dropWhile { it.empty }
+
+                    // Use a "namespaced" LicenseRef ID string as the file name, similar to ScanCode itself does for
+                    // SPDX output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.
+                    def resourceFile = new File(resourcesDir, "LicenseRef-scancode-$baseName")
                     resourceFile.write(lines.join('\n') + '\n', 'UTF-8')
                 } else {
                     logger.warn("No license text found for license '$baseName'.")
