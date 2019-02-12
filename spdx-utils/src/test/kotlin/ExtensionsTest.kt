@@ -47,6 +47,7 @@ class ExtensionsTest : WordSpec({
             assertSoftly {
                 "LicenseRef-proprietary".isLicenseRefTo("proprietary") shouldBe true
                 "LicenseRef-scancode-public-domain".isLicenseRefTo("public-domain") shouldBe true
+                "LicenseRef-ScanCode-Public-Domain".isLicenseRefTo("public-domain") shouldBe true
             }
         }
 

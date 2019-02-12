@@ -27,14 +27,17 @@ import java.util.EnumSet
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
 
 /**
- * Return whether this [String] is a LicenseRef to [name]. Any possible (scanner-specific) namespaces are ignored.
+ * Return whether this [String] is a LicenseRef to [name], by default [ignoring case][ignoreCase]. Any possible
+ * (scanner-specific) namespaces are ignored.
  */
-fun String.isLicenseRefTo(name: String): Boolean {
+fun String.isLicenseRefTo(name: String, ignoreCase: Boolean = true): Boolean {
+    if (name.isBlank()) return false
+
     val withoutPrefix = removePrefix("LicenseRef-")
     if (withoutPrefix == this) return false
 
-    val infix = withoutPrefix.removeSuffix(name)
-    if (infix == withoutPrefix) return false
+    if (!withoutPrefix.endsWith(name, ignoreCase)) return false
+    val infix = withoutPrefix.dropLast(name.length)
 
     return infix.indexOf('-') == infix.length - 1
 }
