@@ -164,8 +164,15 @@ def generateLicenseTextResources(String description, Map<String, Map<String, Str
         }
     }
 
+    def resourcesDir = file("src/main/resources/$resourcePath").tap {
+        if (directory && !deleteDir()) {
+            throw new GradleException("Failed to delete the existing '$it' directory.")
+        }
+        mkdirs()
+    }
+
     ids.each { id, meta ->
-        def resourceFile = file("src/main/resources/$resourcePath/$id")
+        def resourceFile = new File(resourcesDir, id)
 
         // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
         def candidates = [
@@ -207,7 +214,14 @@ task generateLicenseRefTextResources(dependsOn: importScanCodeLicenseTexts) {
 
     doLast {
         def licensesDir = file("$buildDir/SvnExport/licenses/scancode-toolkit")
-        def resourcesDir = file('src/main/resources/licenserefs').tap { mkdirs() }
+
+        def resourcesDir = file('src/main/resources/licenserefs').tap {
+            if (directory && !deleteDir()) {
+                throw new GradleException("Failed to delete the existing '$it' directory.")
+            }
+            mkdirs()
+        }
+
         licensesDir.listFiles({ it.name.endsWith('.yml') && !it.name.endsWith('-exception.yml')} as FileFilter).each {
             def isSpdxLicense = it.readLines().any { it.startsWith('spdx_license_key: ') }
             if (!isSpdxLicense) {
