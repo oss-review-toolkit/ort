@@ -81,8 +81,7 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
  */
 fun getLicenseText(id: String, handleExceptions: Boolean = false) =
         if (id.startsWith("LicenseRef-")) {
-            val ref = id.removePrefix("LicenseRef-").toLowerCase()
-            object {}.javaClass.getResource("/licenserefs/$ref")?.readText()
+            object {}.javaClass.getResource("/licenserefs/$id")?.readText()
         } else {
             SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
         } ?: throw IOException("No license text found for id '$id'.")

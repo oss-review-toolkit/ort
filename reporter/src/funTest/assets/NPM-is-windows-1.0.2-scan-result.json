@@ -7073,7 +7073,7 @@
             "end_time" : "2018-07-31T13:09:50.863Z",
             "file_count" : 6,
             "license_findings" : [ {
-              "license" : "LicenseRef-mit-taylor-variant",
+              "license" : "LicenseRef-scancode-mit-taylor-variant",
               "copyrights" : [ ]
             }, {
               "license" : "MIT",
@@ -8812,10 +8812,10 @@
               "license" : "ISC",
               "copyrights" : [ "Copyright (c) Isaac Z. Schlueter" ]
             }, {
-              "license" : "LicenseRef-json-js-pd",
+              "license" : "LicenseRef-scancode-json-js-pd",
               "copyrights" : [ ]
             }, {
-              "license" : "LicenseRef-json-pd",
+              "license" : "LicenseRef-scancode-json-pd",
               "copyrights" : [ ]
             }, {
               "license" : "MIT",
@@ -9069,10 +9069,10 @@
               "license" : "GPL-1.0-or-later",
               "copyrights" : [ "Copyright 2009, The Dojo Foundation" ]
             }, {
-              "license" : "LicenseRef-json-pd",
+              "license" : "LicenseRef-scancode-json-pd",
               "copyrights" : [ ]
             }, {
-              "license" : "LicenseRef-public-domain",
+              "license" : "LicenseRef-scancode-public-domain",
               "copyrights" : [ ]
             }, {
               "license" : "MIT",
@@ -9116,10 +9116,10 @@
               "license" : "GPL-1.0-or-later",
               "copyrights" : [ "Copyright 2009, The Dojo Foundation" ]
             }, {
-              "license" : "LicenseRef-json-pd",
+              "license" : "LicenseRef-scancode-json-pd",
               "copyrights" : [ ]
             }, {
-              "license" : "LicenseRef-public-domain",
+              "license" : "LicenseRef-scancode-public-domain",
               "copyrights" : [ ]
             }, {
               "license" : "MIT",
@@ -9271,10 +9271,10 @@
               "license" : "GPL-1.0-or-later",
               "copyrights" : [ "Copyright 2009, The Dojo Foundation" ]
             }, {
-              "license" : "LicenseRef-json-pd",
+              "license" : "LicenseRef-scancode-json-pd",
               "copyrights" : [ ]
             }, {
-              "license" : "LicenseRef-public-domain",
+              "license" : "LicenseRef-scancode-public-domain",
               "copyrights" : [ ]
             }, {
               "license" : "MIT",
@@ -10072,7 +10072,7 @@
             "end_time" : "2018-07-31T13:27:11.723Z",
             "file_count" : 176,
             "license_findings" : [ {
-              "license" : "LicenseRef-dco-1.1",
+              "license" : "LicenseRef-scancode-dco-1.1",
               "copyrights" : [ ]
             }, {
               "license" : "MIT",

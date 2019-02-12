@@ -98,7 +98,7 @@ class SpdxUtilsTest : WordSpec({
         }
 
         "return the full license text for a known SPDX LicenseRef" {
-            val text = getLicenseText("LicenseRef-indiana-extreme").trim()
+            val text = getLicenseText("LicenseRef-scancode-indiana-extreme").trim()
 
             text should startWith("Indiana University Extreme! Lab Software License Version 1.1.1")
             text should endWith("EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.")
