@@ -52,6 +52,19 @@ data class Environment(
     companion object {
         val ORT_VERSION = this::class.java.getResource("/VERSION").readText()
 
-        private val RELEVANT_VARIABLES = listOf("COMSPEC", "OS", "OSTYPE", "SHELL")
+        private val RELEVANT_VARIABLES = listOf(
+                // Windows variables.
+                "OS",
+                "COMSPEC",
+                // Unix variables.
+                "OSTYPE",
+                "HOSTTYPE",
+                "SHELL",
+                "TERM",
+                // General variables.
+                "JAVA_HOME",
+                "ANDROID_HOME",
+                "GOPATH"
+        )
     }
 }
