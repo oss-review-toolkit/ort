@@ -18,6 +18,8 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:$okhttpVersion"
     api "com.vdurmont:semver4j:$semverVersion"
 
+    implementation project(':spdx-utils')
+
     implementation "com.jakewharton:disklrucache:$disklrucacheVersion"
 
     implementation "commons-codec:commons-codec:$commonsCodecVersion"
