@@ -29,6 +29,7 @@ import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.spdx.getLicenseText
+import com.here.ort.spdx.isLicenseRefTo
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 
@@ -161,7 +162,7 @@ class NoticeReporter : Reporter() {
                         append(licenseText)
                     } catch (e: IOException) {
                         // Public domain licenses do not require attribution.
-                        if (license != "LicenseRef-public-domain") {
+                        if (!license.isLicenseRefTo("public-domain")) {
                             // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
                             // find license texts for non-public-domain licenses.
                             log.warn {
