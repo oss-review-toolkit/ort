@@ -73,8 +73,8 @@ const getTotalNrLicenses = (projectsLicenses) => {
         return accumulator;
     }, licensesSet).size;
 };
-const hasReportDataChanged = (newArgs, oldArgs) => newArgs.length === oldArgs.length
-    && newArgs[0].data.reportLastUpdate === oldArgs[0].data.reportLastUpdate;
+const hasReportDataChanged = (newArgs, oldArgs) => newArgs.length !== oldArgs.length
+    || newArgs[0].data.reportLastUpdate !== oldArgs[0].data.reportLastUpdate;
 
 // ---- App selectors ----
 
