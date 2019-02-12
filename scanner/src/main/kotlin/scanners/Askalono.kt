@@ -155,8 +155,11 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val findings =
-                result.map { LicenseFinding(it["License"].textValue(), sortedSetOf(), sortedSetOf()) }.toSortedSet()
+        val findings = result.map {
+            val license = getSpdxLicenseIdString(it["License"].textValue())
+            LicenseFinding(license, sortedSetOf(), sortedSetOf())
+        }.toSortedSet()
+
         return ScanSummary(startTime, endTime, result.size(), findings, errors = mutableListOf())
     }
 }

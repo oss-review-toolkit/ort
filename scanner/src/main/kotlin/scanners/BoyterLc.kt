@@ -164,8 +164,9 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val findings = sortedSetOf<LicenseFinding>()
 
         result.forEach { file ->
-            file["LicenseGuesses"].mapTo(findings) { license ->
-                LicenseFinding(license["LicenseId"].textValue(), sortedSetOf(), sortedSetOf())
+            file["LicenseGuesses"].mapTo(findings) {
+                val license = getSpdxLicenseIdString(it["LicenseId"].textValue())
+                LicenseFinding(license, sortedSetOf(), sortedSetOf())
             }
         }
 

@@ -136,7 +136,8 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val matchedFiles = result["matched_files"]
 
         val findings = matchedFiles.map {
-            LicenseFinding(it["matched_license"].textValue(), sortedSetOf(), sortedSetOf())
+            val license = getSpdxLicenseIdString(it["matched_license"].textValue())
+            LicenseFinding(license, sortedSetOf(), sortedSetOf())
         }.toSortedSet()
 
         return ScanSummary(startTime, endTime, matchedFiles.count(), findings, errors = mutableListOf())
