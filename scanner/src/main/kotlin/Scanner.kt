@@ -32,6 +32,7 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerRun
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.readValue
+import com.here.ort.spdx.SpdxLicense
 import com.here.ort.utils.log
 
 import java.io.File
@@ -63,6 +64,12 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      */
     protected abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
             : Map<Package, List<ScanResult>>
+
+    /**
+     * Return the scanner-specific SPDX idstring for the given [license].
+     */
+    fun getSpdxLicenseIdString(license: String) =
+            SpdxLicense.forId(license)?.let { it.id } ?: "LicenseRef-$scannerName-$license"
 
     /**
      * Scan the [Project]s and [Package]s specified in [ortResultFile] and store the scan results in [outputDirectory].
