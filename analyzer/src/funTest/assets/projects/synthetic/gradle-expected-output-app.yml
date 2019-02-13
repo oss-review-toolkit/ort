@@ -21,7 +21,7 @@ project:
     dependencies: []
   - name: "compile"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -29,7 +29,7 @@ project:
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "compileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -39,7 +39,7 @@ project:
     dependencies: []
   - name: "default"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -47,7 +47,7 @@ project:
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "runtime"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -55,7 +55,7 @@ project:
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "runtimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -65,7 +65,7 @@ project:
     dependencies: []
   - name: "testCompile"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -73,7 +73,7 @@ project:
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "testCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -83,7 +83,7 @@ project:
     dependencies: []
   - name: "testRuntime"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -91,37 +91,13 @@ project:
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "testRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.5"
       - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
 packages:
-- package:
-    id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-    declared_licenses: []
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    source_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "<REPLACE_URL>"
-      revision: "<REPLACE_REVISION>"
-      path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
-  curations: []
 - package:
     id: "Maven:org.apache.commons:commons-lang3:3.5"
     declared_licenses:

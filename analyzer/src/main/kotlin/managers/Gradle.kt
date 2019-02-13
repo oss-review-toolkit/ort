@@ -181,55 +181,47 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
         dependency.error?.let { issues += OrtIssue(source = managerName, message = it, severity = Severity.ERROR) }
         dependency.warning?.let { issues += OrtIssue(source = managerName, message = it, severity = Severity.WARNING) }
 
-        // Only look for a package when there was no error resolving the dependency.
-        if (dependency.error == null) {
+        // Only look for a package if there was no error resolving the dependency and it is no project dependency.
+        if (dependency.error == null && dependency.localPath == null) {
             val identifier = "${dependency.groupId}:${dependency.artifactId}:${dependency.version}"
 
-            val rawPackage by lazy {
-                Package(
-                        id = Identifier(
-                                type = "Maven",
-                                namespace = dependency.groupId,
-                                name = dependency.artifactId,
-                                version = dependency.version
-                        ),
-                        declaredLicenses = sortedSetOf(),
-                        description = "",
-                        homepageUrl = "",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact.EMPTY,
-                        vcs = VcsInfo.EMPTY
-                )
-            }
-
             packages.getOrPut(identifier) {
-                val pkg = if (dependency.pomFile != null) {
+                try {
                     val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, dependency.classifier,
                             dependency.extension, dependency.version)
-                    try {
-                        maven.parsePackage(artifact, repositories)
-                    } catch (e: ProjectBuildingException) {
-                        e.showStackTrace()
 
-                        log.error {
-                            "Could not get package information for dependency '$identifier': ${e.message}"
-                        }
+                    maven.parsePackage(artifact, repositories)
+                } catch (e: ProjectBuildingException) {
+                    e.showStackTrace()
 
-                        issues += OrtIssue(source = managerName, message = e.collectMessagesAsString())
-
-                        rawPackage
+                    log.error {
+                        "Could not get package information for dependency '$identifier': ${e.message}"
                     }
-                } else {
-                    rawPackage
-                }
 
-                pkg.copy(vcsProcessed = dependency.localPath?.let { processProjectVcs(File(it), pkg.vcs) }
-                        ?: processPackageVcs(pkg.vcs))
+                    issues += OrtIssue(source = managerName, message = e.collectMessagesAsString())
+
+                    Package(
+                            id = Identifier(
+                                    type = "Maven",
+                                    namespace = dependency.groupId,
+                                    name = dependency.artifactId,
+                                    version = dependency.version
+                            ),
+                            declaredLicenses = sortedSetOf(),
+                            description = "",
+                            homepageUrl = "",
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            sourceArtifact = RemoteArtifact.EMPTY,
+                            vcs = VcsInfo.EMPTY,
+                            vcsProcessed = VcsInfo.EMPTY
+                    )
+                }
             }
         }
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-        val id = Identifier("Maven", dependency.groupId, dependency.artifactId, dependency.version)
+        val type = dependency.localPath?.let { managerName } ?: dependency.pomFile?.let { "Maven" } ?: "Unknown"
+        val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
         return PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = issues)
     }
 }
