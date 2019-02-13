@@ -96,7 +96,7 @@ class DependencyImpl implements Dependency, Serializable {
     List<Dependency> dependencies = []
     String error
     String warning
-    String pomFile = ''
+    String pomFile
     String localPath
 }
 
@@ -274,7 +274,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                 } else if (id instanceof ProjectComponentIdentifier) {
                     def dependencyProject = project.rootProject.findProject(id.projectPath)
                     return new DependencyImpl(dependencyProject.group.toString(), dependencyProject.name,
-                            dependencyProject.version.toString(), '', '', dependencies, null, null, '',
+                            dependencyProject.version.toString(), '', '', dependencies, null, null, null,
                             dependencyProject.projectDir.absolutePath)
                 } else {
                     return dependencyFromDisplayName(id.displayName, dependencies,
