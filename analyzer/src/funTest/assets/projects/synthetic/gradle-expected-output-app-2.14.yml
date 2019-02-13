@@ -20,6 +20,7 @@ project:
   - name: "compile"
     dependencies:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -28,6 +29,7 @@ project:
   - name: "compileOnly"
     dependencies:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -36,6 +38,7 @@ project:
   - name: "default"
     dependencies:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -44,6 +47,7 @@ project:
   - name: "runtime"
     dependencies:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -52,6 +56,7 @@ project:
   - name: "testCompile"
     dependencies:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -60,6 +65,7 @@ project:
   - name: "testCompileOnly"
     dependencies:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:
@@ -68,6 +74,7 @@ project:
   - name: "testRuntime"
     dependencies:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.commons:commons-text:1.1"
         dependencies:

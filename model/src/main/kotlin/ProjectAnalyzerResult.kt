@@ -49,16 +49,15 @@ data class ProjectAnalyzerResult(
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.
         val packageIds = packages.map { it.pkg.id }
-        val referencedIds = project.collectDependencies(includeErroneous = false).map { it.id }
-
-        // Exclude project dependencies in multi-projects from the check as these appear as references in the dependency
-        // tree but not in the list of packages used.
-        val referencedIdsWithoutProjectDependencies = referencedIds.filter { it.type != "Gradle" }
+        val referencedIds = project.collectDependencies(includeErroneous = false).mapNotNull { ref ->
+            // Exclude project dependencies in multi-projects from the check as these appear as references in the
+            // dependency tree but not in the list of packages used.
+            ref.id.takeUnless { ref.linkage in PackageLinkage.PROJECT_LINKAGE }
+        }
 
         // Note that not all packageIds have to be contained in the referencedIds, e.g. for NPM optional dependencies.
-        require(packageIds.containsAll(referencedIdsWithoutProjectDependencies)) {
-            "The following references do not actually refer to packages: " +
-                    "${referencedIdsWithoutProjectDependencies - packageIds}."
+        require(packageIds.containsAll(referencedIds)) {
+            "The following references do not actually refer to packages: ${referencedIds - packageIds}."
         }
     }
 
