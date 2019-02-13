@@ -113,14 +113,14 @@ object Main : CommandWithHelp() {
 
         var variableIndex = 0
 
-        println("""
+        """
             ________ _____________________
             \_____  \\______   \__    ___/ version ${env.ortVersion} running$command on ${env.os} $with
              /   |   \|       _/ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
                     \/       \/
-        """.trimIndent())
+        """.trimIndent().lines().forEach { println(it.trimEnd()) }
 
         val moreVariables = variables.drop(variableIndex)
         if (moreVariables.isNotEmpty()) {
