@@ -25,7 +25,7 @@ import com.here.ort.spdx.SpdxLicenseException.*
 /**
  * A mapping from license strings collected from the declared licenses of open source packages to SPDX expressions.
  */
-object SpdxLicenseMapping {
+object SpdxLicenseStringMapping {
     private val mapping = mapOf(
             "(EDL-1.0 OR EPL-1.0)" to (BSD_3_CLAUSE or EPL_1_0),
             "(MIT-style) netCDF C library license" to NETCDF.toExpression(),
