@@ -490,7 +490,25 @@ class StaticHtmlReporter : Reporter() {
     private fun TBODY.issueRow(rowIndex: Int, row: ReportTableModel.IssueRow) {
         val rowId = "issue-$rowIndex"
 
-        tr("ort-error") {
+        val worstSeverity = row.analyzerIssues.map { (_, issues) ->
+            issues.map { it.severity }.min() ?: Severity.ERROR
+        }.min() ?: Severity.ERROR
+
+        val areAllResolved = row.analyzerIssues.isNotEmpty() && row.analyzerIssues.map { (_, issues) ->
+            issues.all { it.isResolved }
+        }.all { it }
+
+        val cssClass = if (areAllResolved) {
+            "ort-resolved"
+        } else {
+            when (worstSeverity) {
+                Severity.ERROR -> "ort-error"
+                Severity.WARNING -> "ort-warning"
+                Severity.HINT -> "ort-hint"
+            }
+        }
+
+        tr(cssClass) {
             id = rowId
             td {
                 a  {
