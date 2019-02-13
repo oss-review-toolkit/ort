@@ -97,6 +97,13 @@ class SpdxUtilsTest : WordSpec({
             }
         }
 
+        "return the full license text for the HERE proprietary license" {
+            val text = getLicenseText("LicenseRef-scancode-here-proprietary").trim()
+
+            text should startWith("This software and other materials contain proprietary information")
+            text should endWith("allowed.")
+        }
+
         "return the full license text for a known SPDX LicenseRef" {
             val text = getLicenseText("LicenseRef-scancode-indiana-extreme").trim()
 
