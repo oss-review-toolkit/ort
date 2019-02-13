@@ -85,6 +85,7 @@ analyzer:
       - name: "compile"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -93,6 +94,7 @@ analyzer:
       - name: "compileClasspath"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -103,6 +105,7 @@ analyzer:
       - name: "default"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -111,6 +114,7 @@ analyzer:
       - name: "runtime"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -119,6 +123,7 @@ analyzer:
       - name: "runtimeClasspath"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -129,6 +134,7 @@ analyzer:
       - name: "testCompile"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -137,6 +143,7 @@ analyzer:
       - name: "testCompileClasspath"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -147,6 +154,7 @@ analyzer:
       - name: "testRuntime"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:
@@ -155,6 +163,7 @@ analyzer:
       - name: "testRuntimeClasspath"
         dependencies:
         - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+          linkage: "PROJECT_DYNAMIC"
           dependencies:
           - id: "Maven:org.apache.commons:commons-text:1.1"
             dependencies:

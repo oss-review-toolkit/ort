@@ -32,6 +32,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -220,8 +221,14 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
         }
 
         val transitiveDependencies = dependency.dependencies.map { parseDependency(it, packages, repositories) }
-        val type = dependency.localPath?.let { managerName } ?: dependency.pomFile?.let { "Maven" } ?: "Unknown"
-        val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
-        return PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = issues)
+
+        return if (dependency.localPath != null) {
+            val id = Identifier(managerName, dependency.groupId, dependency.artifactId, dependency.version)
+            PackageReference(id, PackageLinkage.PROJECT_DYNAMIC, transitiveDependencies.toSortedSet(), issues)
+        } else {
+            val type = dependency.pomFile?.let { "Maven" } ?: "Unknown"
+            val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
+            PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = issues)
+        }
     }
 }
