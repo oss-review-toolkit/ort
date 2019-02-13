@@ -19,13 +19,13 @@ project:
     dependencies: []
   - name: "amazonDemoDebugAndroidTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugAndroidTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -38,13 +38,13 @@ project:
     dependencies: []
   - name: "amazonDemoDebugCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -57,7 +57,7 @@ project:
     dependencies: []
   - name: "amazonDemoDebugUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
@@ -66,7 +66,7 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonDemoDebugUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -84,13 +84,13 @@ project:
     dependencies: []
   - name: "amazonDemoReleaseCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoReleaseRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -103,7 +103,7 @@ project:
     dependencies: []
   - name: "amazonDemoReleaseUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
@@ -112,7 +112,7 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonDemoReleaseUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -130,13 +130,13 @@ project:
     dependencies: []
   - name: "amazonFullDebugAndroidTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonFullDebugAndroidTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -149,13 +149,13 @@ project:
     dependencies: []
   - name: "amazonFullDebugCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonFullDebugRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -168,7 +168,7 @@ project:
     dependencies: []
   - name: "amazonFullDebugUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
@@ -177,7 +177,7 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonFullDebugUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -195,13 +195,13 @@ project:
     dependencies: []
   - name: "amazonFullReleaseCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonFullReleaseRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -214,7 +214,7 @@ project:
     dependencies: []
   - name: "amazonFullReleaseUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
@@ -223,7 +223,7 @@ project:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonFullReleaseUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -249,10 +249,10 @@ project:
     dependencies: []
   - name: "googleDemoDebugAndroidTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   - name: "googleDemoDebugAndroidTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -262,10 +262,10 @@ project:
     dependencies: []
   - name: "googleDemoDebugCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   - name: "googleDemoDebugRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -275,13 +275,13 @@ project:
     dependencies: []
   - name: "googleDemoDebugUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:junit:junit:4.12"
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleDemoDebugUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -296,10 +296,10 @@ project:
     dependencies: []
   - name: "googleDemoReleaseCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   - name: "googleDemoReleaseRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -309,13 +309,13 @@ project:
     dependencies: []
   - name: "googleDemoReleaseUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:junit:junit:4.12"
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleDemoReleaseUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.2"
@@ -330,10 +330,10 @@ project:
     dependencies: []
   - name: "googleFullDebugAndroidTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   - name: "googleFullDebugAndroidTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -343,10 +343,10 @@ project:
     dependencies: []
   - name: "googleFullDebugCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   - name: "googleFullDebugRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -356,13 +356,13 @@ project:
     dependencies: []
   - name: "googleFullDebugUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:junit:junit:4.12"
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleFullDebugUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -377,10 +377,10 @@ project:
     dependencies: []
   - name: "googleFullReleaseCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
   - name: "googleFullReleaseRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -390,13 +390,13 @@ project:
     dependencies: []
   - name: "googleFullReleaseUnitTestCompileClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
     - id: "Maven:junit:junit:4.12"
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleFullReleaseUnitTestRuntimeClasspath"
     dependencies:
-    - id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       dependencies:
       - id: "Maven:org.apache.commons:commons-compress:1.17"
       - id: "Maven:org.apache.commons:commons-text:1.3"
@@ -414,30 +414,6 @@ project:
   - name: "testCompile"
     dependencies: []
 packages:
-- package:
-    id: "Maven:com.here.ort.gradle.example:lib:1.0.0"
-    declared_licenses: []
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    source_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "<REPLACE_URL>"
-      revision: "<REPLACE_REVISION>"
-      path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/lib"
-  curations: []
 - package:
     id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"
     declared_licenses:

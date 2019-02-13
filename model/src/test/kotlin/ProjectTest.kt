@@ -75,7 +75,7 @@ class ProjectTest : WordSpec({
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
             project.collectErrors() shouldBe mapOf(
-                    Identifier("Maven:org.apache.commons:commons-text:1.1") to setOf(
+                    Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
                             OrtIssue(
                                     Instant.EPOCH,
                                     "Gradle",
@@ -83,7 +83,7 @@ class ProjectTest : WordSpec({
                                             "org.apache.commons:commons-text:1.1 because no repositories are defined."
                             )
                     ),
-                    Identifier("Maven:junit:junit:4.12") to setOf(
+                    Identifier("Unknown:junit:junit:4.12") to setOf(
                             OrtIssue(
                                     Instant.EPOCH,
                                     "Gradle",

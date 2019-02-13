@@ -51,9 +51,14 @@ data class ProjectAnalyzerResult(
         val packageIds = packages.map { it.pkg.id }
         val referencedIds = project.collectDependencies(includeErroneous = false).map { it.id }
 
+        // Exclude project dependencies in multi-projects from the check as these appear as references in the dependency
+        // tree but not in the list of packages used.
+        val referencedIdsWithoutProjectDependencies = referencedIds.filter { it.type != "Gradle" }
+
         // Note that not all packageIds have to be contained in the referencedIds, e.g. for NPM optional dependencies.
-        require(packageIds.containsAll(referencedIds)) {
-            "The following references do not actually refer to packages: ${referencedIds - packageIds}."
+        require(packageIds.containsAll(referencedIdsWithoutProjectDependencies)) {
+            "The following references do not actually refer to packages: " +
+                    "${referencedIdsWithoutProjectDependencies - packageIds}."
         }
     }
 
