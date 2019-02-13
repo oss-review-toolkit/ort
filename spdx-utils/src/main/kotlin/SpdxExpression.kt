@@ -110,6 +110,13 @@ sealed class SpdxExpression {
     abstract fun spdxLicenses(): EnumSet<SpdxLicense>
 
     /**
+     * Try to normalize all license IDs using a mapping containing common misspellings of license IDs. This function
+     * does not throw any exception in case a license ID cannot be mapped to a valid ID. Use [validate] to check the
+     * returned [SpdxExpression] for validity afterwards.
+     */
+    abstract fun normalize(): SpdxExpression
+
+    /**
      * Validate this expression. [strictness] defines whether only the syntax is checked
      * ([ALLOW_ANY][Strictness.ALLOW_ANY]), or semantics are also checked but deprecated license identifiers are
      * allowed ([ALLOW_DEPRECATED][Strictness.ALLOW_DEPRECATED]) or only current license identifiers are allowed
@@ -129,6 +136,8 @@ data class SpdxCompoundExpression(
     override fun licenses() = left.licenses() + right.licenses()
 
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
+
+    override fun normalize() = SpdxCompoundExpression(left.normalize(), operator, right.normalize())
 
     override fun validate(strictness: Strictness) {
         left.validate(strictness)
@@ -171,6 +180,8 @@ data class SpdxLicenseExceptionExpression(
 
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
+    override fun normalize() = this
+
     override fun validate(strictness: Strictness) {
         val licenseException = SpdxLicenseException.forId(id)
         when (strictness) {
@@ -194,6 +205,8 @@ data class SpdxLicenseIdExpression(
     override fun licenses() = listOf(id)
 
     override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
+
+    override fun normalize() = SpdxLicenseIdMapping.map(id) ?: this
 
     override fun validate(strictness: Strictness) {
         val license = SpdxLicense.forId(id)
@@ -221,6 +234,8 @@ data class SpdxLicenseReferenceExpression(
     override fun licenses() = listOf(id)
 
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
+
+    override fun normalize() = this
 
     override fun validate(strictness: Strictness) {
         if (!(id.startsWith("LicenseRef-") ||
