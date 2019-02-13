@@ -203,7 +203,7 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
             }
 
             packages.getOrPut(identifier) {
-                val pkg = if (dependency.pomFile.isNotBlank()) {
+                val pkg = if (dependency.pomFile != null) {
                     val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, dependency.classifier,
                             dependency.extension, dependency.version)
                     try {
