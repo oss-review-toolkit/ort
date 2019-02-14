@@ -3,6 +3,7 @@ project:
   id: "PIP::python3-django:<REPLACE_REVISION>"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django/requirements.txt"
   declared_licenses: []
+  declared_licenses_processed: {}
   vcs:
     type: ""
     url: ""

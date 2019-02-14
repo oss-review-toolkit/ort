@@ -3,6 +3,7 @@ project:
   id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:cli:1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/external/multi-kotlin-project/cli/build.gradle.kts"
   declared_licenses: []
+  declared_licenses_processed: {}
   vcs:
     type: ""
     url: ""
