@@ -180,7 +180,7 @@ class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
             // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            Maven("SBT", analyzerConfig, repoConfig)
+            Maven(managerName, analyzerConfig, repoConfig)
                     .enableSbtMode()
                     .resolveDependencies(analyzerRoot, definitionFiles)
 
