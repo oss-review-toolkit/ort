@@ -36,6 +36,8 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.toOrtIssue
+import com.here.ort.utils.DeclaredLicenseProcessor
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
@@ -147,22 +149,35 @@ class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             workingDir
         }
 
+        val id = Identifier(
+                type = if (sbtMode) "SBT" else managerName,
+                namespace = mavenProject.groupId,
+                name = mavenProject.artifactId,
+                version = mavenProject.version
+        )
+
+        val declaredLicenses = MavenSupport.parseLicenses(mavenProject)
+
+        val errors = mutableListOf<OrtIssue>()
+        val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
+        processedLicenses.toOrtIssue(id)?.let { errors.add(it) }
+
         val project = Project(
-                id = Identifier(
-                        type = if (sbtMode) "SBT" else managerName,
-                        namespace = mavenProject.groupId,
-                        name = mavenProject.artifactId,
-                        version = mavenProject.version
-                ),
+                id = id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = MavenSupport.parseLicenses(mavenProject),
+                declaredLicensesProcessed = processedLicenses.spdxExpression,
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: ""),
                 homepageUrl = mavenProject.url ?: "",
                 scopes = scopes.values.toSortedSet()
         )
 
-        return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(
+                project = project,
+                packages = packages.values.map { it.toCuratedPackage() }.toSortedSet(),
+                errors = errors
+        )
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {

@@ -22,6 +22,9 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.spdx.SpdxExpression
+import com.here.ort.spdx.SpdxOperator
+
 import java.util.SortedSet
 
 /**
@@ -47,6 +50,13 @@ data class Project(
          * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
          */
         val declaredLicenses: SortedSet<String>,
+
+        /**
+         * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
+         * concatenated with [SpdxOperator.AND].
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val declaredLicensesProcessed: SpdxExpression?,
 
         /**
          * Original VCS-related information as defined in the [Project]'s meta-data.
@@ -83,6 +93,7 @@ data class Project(
                 id = Identifier.EMPTY,
                 definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
+                declaredLicensesProcessed = null,
                 vcs = VcsInfo.EMPTY,
                 homepageUrl = "",
                 scopes = sortedSetOf()

@@ -31,6 +31,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -41,7 +42,9 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.model.toOrtIssue
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.DeclaredLicenseProcessor
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
@@ -375,15 +378,22 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                 Scope("install", installDependencies)
         )
 
+        val id = Identifier(
+                type = managerName,
+                namespace = "",
+                name = projectName,
+                version = projectVersion
+        )
+
+        val errors = mutableListOf<OrtIssue>()
+        val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
+        processedLicenses.toOrtIssue(id)?.let { errors.add(it) }
+
         val project = Project(
-                id = Identifier(
-                        type = managerName,
-                        namespace = "",
-                        name = projectName,
-                        version = projectVersion
-                ),
+                id = id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = declaredLicenses,
+                declaredLicensesProcessed = processedLicenses.spdxExpression,
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, homepageUrl = projectHomepage),
                 homepageUrl = projectHomepage,
@@ -393,7 +403,11 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.safeDeleteRecursively()
 
-        return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(
+                project = project,
+                packages = packages.map { it.toCuratedPackage() }.toSortedSet(),
+                errors = errors
+        )
     }
 
     private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {

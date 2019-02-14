@@ -100,6 +100,7 @@ class Unmanaged(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig:
                 id = id,
                 definitionFilePath = "",
                 declaredLicenses = sortedSetOf(),
+                declaredLicensesProcessed = null,
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = vcsInfo,
                 homepageUrl = "",

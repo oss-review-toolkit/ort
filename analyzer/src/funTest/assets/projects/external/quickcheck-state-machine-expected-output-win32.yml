@@ -4,6 +4,7 @@ project:
   definition_file_path: "stack.yaml"
   declared_licenses:
   - "BSD3"
+  declared_licenses_processed: "BSD-3-Clause"
   vcs:
     type: "git"
     url: "https://github.com/advancedtelematic/quickcheck-state-machine"

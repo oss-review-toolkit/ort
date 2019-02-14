@@ -27,6 +27,7 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -37,7 +38,9 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.model.toOrtIssue
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.DeclaredLicenseProcessor
 import com.here.ort.utils.OS
 import com.here.ort.utils.fieldNamesOrEmpty
 import com.here.ort.utils.fieldsOrEmpty
@@ -232,10 +235,16 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             )
 
             val projectPackage = extractPackage(rootNode)
+
+            val errors = mutableListOf<OrtIssue>()
+            val processedLicenses = DeclaredLicenseProcessor.process(projectPackage.declaredLicenses)
+            processedLicenses.toOrtIssue(projectPackage.id)?.let { errors.add(it) }
+
             val project = Project(
                     id = projectPackage.id,
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     declaredLicenses = projectPackage.declaredLicenses,
+                    declaredLicensesProcessed = processedLicenses.spdxExpression,
                     vcs = projectPackage.vcs,
                     vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
                     homepageUrl = projectPackage.homepageUrl,
@@ -244,7 +253,8 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
 
             return ProjectAnalyzerResult(
                     project = project,
-                    packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
+                    packages = packages.map { it.value.toCuratedPackage() }.toSortedSet(),
+                    errors = errors
             )
         }
     }

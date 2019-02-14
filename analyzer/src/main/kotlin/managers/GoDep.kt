@@ -130,6 +130,7 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
                         id = Identifier(managerName, "", projectDir.name, projectVcs.revision),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         declaredLicenses = sortedSetOf(),
+                        declaredLicensesProcessed = null,
                         vcs = VcsInfo.EMPTY,
                         vcsProcessed = projectVcs,
                         homepageUrl = "",

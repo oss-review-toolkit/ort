@@ -155,6 +155,7 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     declaredLicenses = sortedSetOf(),
+                    declaredLicensesProcessed = null,
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",

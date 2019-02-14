@@ -38,6 +38,7 @@ class ProjectAnalyzerResultTest : StringSpec({
                         id = Identifier("type", "namespace", "name", "version"),
                         definitionFilePath = "definitionFilePath",
                         declaredLicenses = sortedSetOf(),
+                        declaredLicensesProcessed = null,
                         vcs = VcsInfo.EMPTY,
                         vcsProcessed = VcsInfo.EMPTY,
                         homepageUrl = "",

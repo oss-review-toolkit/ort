@@ -5,6 +5,7 @@ project:
   declared_licenses:
   - "Apache Software"
   - "Apache-2.0"
+  declared_licenses_processed: "Apache-2.0"
   vcs:
     type: ""
     url: ""

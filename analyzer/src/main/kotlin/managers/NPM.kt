@@ -43,7 +43,9 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
+import com.here.ort.model.toOrtIssue
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.DeclaredLicenseProcessor
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.hasFragmentRevision
@@ -127,8 +129,8 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
             PackageJsonUtils.mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun prepareResolution(definitionFiles: List<File>) =
-            // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
-            // fixed minor version to be sure to get consistent results.
+    // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
+    // fixed minor version to be sure to get consistent results.
             checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
@@ -448,6 +450,13 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
             log.warn { "'$packageJson' does not define a version." }
         }
 
+        val id = Identifier(
+                type = managerName,
+                namespace = namespace,
+                name = name,
+                version = version
+        )
+
         val declaredLicenses = sortedSetOf<String>()
         setOf(json["license"]).mapNotNullTo(declaredLicenses) {
             it?.textValue()
@@ -459,22 +468,26 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
 
         val vcsFromPackage = parseVcsInfo(json)
 
+        val errors = mutableListOf<OrtIssue>()
+        val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
+        processedLicenses.toOrtIssue(id)?.let { errors.add(it) }
+
         val project = Project(
-                id = Identifier(
-                        type = managerName,
-                        namespace = namespace,
-                        name = name,
-                        version = version
-                ),
+                id = id,
                 definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
                 declaredLicenses = declaredLicenses,
+                declaredLicensesProcessed = processedLicenses.spdxExpression,
                 vcs = vcsFromPackage,
                 vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
 
-        return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(
+                project = project,
+                packages = packages.map { it.toCuratedPackage() }.toSortedSet(),
+                errors = errors
+        )
     }
 
     /**

@@ -40,8 +40,10 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.model.toOrtIssue
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.DeclaredLicenseProcessor
 import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.collectMessagesAsString
@@ -102,10 +104,14 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
                 parseScope(workingDir, projectId, groupName, dependencyList, scopes, packages, errors)
             }
 
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
+            processedLicenses.toOrtIssue(projectId)?.let { errors.add(it) }
+
             val project = Project(
                     id = projectId,
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    declaredLicenses = declaredLicenses.toSortedSet(),
+                    declaredLicenses = declaredLicenses,
+                    declaredLicensesProcessed = processedLicenses.spdxExpression,
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(workingDir, homepageUrl = homepageUrl),
                     homepageUrl = homepageUrl,

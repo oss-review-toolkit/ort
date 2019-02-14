@@ -40,7 +40,9 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.model.toOrtIssue
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.DeclaredLicenseProcessor
 import com.here.ort.utils.OS
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
@@ -140,9 +142,13 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
 
             log.info { "Reading ${definitionFile.name} file in ${workingDir.absolutePath}..." }
 
-            val project = parseProject(definitionFile, scopes)
+            val (project, errors) = parseProject(definitionFile, scopes)
 
-            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
+            return ProjectAnalyzerResult(
+                    project = project,
+                    packages = packages.values.map { it.toCuratedPackage() }.toSortedSet(),
+                    errors = errors
+            )
         }
     }
 
@@ -185,26 +191,37 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
         return packageReferences.toSortedSet()
     }
 
-    private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
+    private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Pair<Project, List<OrtIssue>> {
         val json = jsonMapper.readTree(definitionFile)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
         val rawName = json["name"]?.textValue() ?: definitionFile.parentFile.name
 
-        return Project(
-                id = Identifier(
-                        type = managerName,
-                        namespace = rawName.substringBefore("/"),
-                        name = rawName.substringAfter("/"),
-                        version = json["version"].textValueOrEmpty()
-                ),
+        val id = Identifier(
+                type = managerName,
+                namespace = rawName.substringBefore("/"),
+                name = rawName.substringAfter("/"),
+                version = json["version"].textValueOrEmpty()
+        )
+
+        val declaredLicenses = parseDeclaredLicenses(json)
+
+        val errors = mutableListOf<OrtIssue>()
+        val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
+        processedLicenses.toOrtIssue(id)?.let { errors.add(it) }
+
+        val project = Project(
+                id = id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = parseDeclaredLicenses(json),
+                declaredLicenses = declaredLicenses,
+                declaredLicensesProcessed = processedLicenses.spdxExpression,
                 vcs = vcs,
                 vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
                 homepageUrl = homepageUrl,
                 scopes = scopes
         )
+
+        return Pair(project, errors)
     }
 
     private fun parseInstalledPackages(json: JsonNode): Map<String, Package> {
