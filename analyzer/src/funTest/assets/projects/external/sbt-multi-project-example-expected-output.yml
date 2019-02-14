@@ -101,7 +101,6 @@ analyzer:
         - id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
           dependencies:
           - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
-        - id: "Maven:com.pbassiner:common_2.12:0.1-SNAPSHOT"
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
@@ -121,6 +120,8 @@ analyzer:
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+        - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+          linkage: "PROJECT_DYNAMIC"
       - name: "test"
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
@@ -159,7 +160,6 @@ analyzer:
             dependencies:
             - id: "Maven:org.scala-lang:scala-compiler:2.12.3"
             - id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
-        - id: "Maven:com.pbassiner:common_2.12:0.1-SNAPSHOT"
         - id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
           dependencies:
           - id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
@@ -179,6 +179,8 @@ analyzer:
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+        - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+          linkage: "PROJECT_DYNAMIC"
       - name: "test"
         dependencies:
         - id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
@@ -461,30 +463,6 @@ analyzer:
           url: "ssh://git@github.com/pureconfig/pureconfig.git"
           revision: ""
           path: ""
-      curations: []
-    - package:
-        id: "Maven:com.pbassiner:common_2.12:0.1-SNAPSHOT"
-        declared_licenses: []
-        description: "common"
-        homepage_url: ""
-        binary_artifact:
-          url: ""
-          hash: ""
-          hash_algorithm: ""
-        source_artifact:
-          url: ""
-          hash: ""
-          hash_algorithm: ""
-        vcs:
-          type: ""
-          url: ""
-          revision: ""
-          path: ""
-        vcs_processed:
-          type: "git"
-          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
-          path: "common"
       curations: []
     - package:
         id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"

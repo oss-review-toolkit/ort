@@ -32,6 +32,7 @@ project:
           - id: "Maven:io.netty:netty-common:4.1.9.Final"
         - id: "Maven:io.netty:netty-resolver:4.1.9.Final"
     - id: "Maven:jgnash:jgnash-resources:2.30.0"
+      linkage: "PROJECT_DYNAMIC"
     - id: "Maven:log4j:log4j:1.2.17"
     - id: "Maven:net.sf.kxml:kxml2:2.3.0"
     - id: "Maven:org.apache.poi:poi-ooxml:3.14"
@@ -458,30 +459,6 @@ packages:
       url: "https://github.com/netty/netty.git"
       revision: "netty-4.1.9.Final"
       path: ""
-  curations: []
-- package:
-    id: "Maven:jgnash:jgnash-resources:2.30.0"
-    declared_licenses: []
-    description: "jGnash Resources"
-    homepage_url: "http://sourceforge.net/projects/jgnash/jgnash-resources/"
-    binary_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    source_artifact:
-      url: ""
-      hash: ""
-      hash_algorithm: ""
-    vcs:
-      type: "git"
-      url: "git://github.com:ccavanaugh/jgnash.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "https://github.com/ccavanaugh/jgnash.git"
-      revision: "2aa4cce7d7fd46164030f2b4d244c4b89e77f722"
-      path: "jgnash-resources"
   curations: []
 - package:
     id: "Maven:junit:junit:4.12"
