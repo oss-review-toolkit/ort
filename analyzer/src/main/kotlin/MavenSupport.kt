@@ -485,6 +485,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         val vcsFromPackage = parseVcsInfo(mavenProject)
         val localDirectory = localProject?.file?.parentFile?.let {
+            // TODO: Once SBT is implemented independently of Maven we can completely remove the "localProjects"
+            // parameter to this function as no other caller is actually using it.
             if (sbtMode) {
                 it.searchUpwardsForSubdirectory("target") ?: it
             } else {
