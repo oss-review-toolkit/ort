@@ -23,8 +23,8 @@ import com.here.ort.spdx.SpdxExpression
 import com.here.ort.spdx.SpdxLicenseIdExpression
 import com.here.ort.spdx.SpdxLicenseIdMapping
 import com.here.ort.spdx.SpdxLicenseStringMapping
-import io.kotlintest.shouldBe
 
+import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
