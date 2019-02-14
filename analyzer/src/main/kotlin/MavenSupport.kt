@@ -129,7 +129,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                     when {
                         // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
                         // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
-                        //  here.
+                        // here.
                         type == "cvs" && !url.startsWith(":") -> {
                             VcsInfo(type = type, url = ":$url", revision = tag)
                         }
