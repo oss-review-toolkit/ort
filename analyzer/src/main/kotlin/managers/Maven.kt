@@ -29,6 +29,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -165,12 +166,9 @@ class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {
-        try {
-            val pkg = packages.getOrPut(node.artifact.identifier()) {
-                val localProjects = localProjectBuildingResults.mapValues { it.value.project }
-                maven.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
-            }
+        val identifier = node.artifact.identifier()
 
+        try {
             val dependencies = node.children.mapNotNull { child ->
                 if (child.artifact.identifier().startsWith("jdk.tools:jdk.tools:")) {
                     log.info { "Omitting the Java < 1.9 system dependency on 'tools.jar'." }
@@ -180,12 +178,33 @@ class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
                 }
             }.toSortedSet()
 
-            return pkg.toReference(dependencies = dependencies)
+            val localProjects = localProjectBuildingResults.mapValues { it.value.project }
+
+            return if (localProjects.contains(identifier)) {
+                val id = Identifier(
+                        type = "Maven",
+                        namespace = node.artifact.groupId,
+                        name = node.artifact.artifactId,
+                        version = node.artifact.version
+                )
+
+                log.info { "'${id.toCoordinates()}' refers to a local project." }
+
+                PackageReference(id, PackageLinkage.PROJECT_DYNAMIC, dependencies)
+            } else {
+                val pkg = packages.getOrPut(identifier) {
+                    // TODO: Omit the "localProjects" argument here once SBT is implemented independently of Maven as at
+                    // this point we know already that "identifier" is not a local project.
+                    maven.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
+                }
+
+                pkg.toReference(dependencies = dependencies)
+            }
         } catch (e: ProjectBuildingException) {
             e.showStackTrace()
 
             log.error {
-                "Could not get package information for dependency '${node.artifact.identifier()}': ${e.message}"
+                "Could not get package information for dependency '$identifier': ${e.message}"
             }
 
             return PackageReference(
