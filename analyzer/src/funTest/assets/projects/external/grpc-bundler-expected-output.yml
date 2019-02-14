@@ -69,6 +69,21 @@ analyzer:
         path: "test/distrib/ruby"
       homepage_url: ""
       scopes: []
+    - id: "Bundler::grpc/third_party/protobuf/ruby/Gemfile:"
+      definition_file_path: "ruby/Gemfile"
+      declared_licenses: []
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "git"
+        url: "https://github.com/google/protobuf.git"
+        revision: "80a37e0782d2d702d52234b62dd4b9ec74fd2c95"
+        path: "ruby"
+      homepage_url: ""
+      scopes: []
     - id: "Unmanaged:git-repo:manifest:<REPLACE_REVISION>"
       definition_file_path: ""
       declared_licenses: []
@@ -102,6 +117,12 @@ analyzer:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Bundler"
         message: "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/test/distrib/ruby,\
+          \ dependency versions are unstable."
+        severity: "ERROR"
+      'Bundler::grpc/third_party/protobuf/ruby/Gemfile:':
+      - timestamp: "1970-01-01T00:00:00Z"
+        source: "Bundler"
+        message: "IllegalArgumentException: No lockfile found in <REPLACE_PATH>/grpc/third_party/protobuf/ruby,\
           \ dependency versions are unstable."
         severity: "ERROR"
     has_errors: true
