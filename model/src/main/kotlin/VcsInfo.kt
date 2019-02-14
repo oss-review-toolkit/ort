@@ -37,7 +37,7 @@ import kotlin.reflect.full.memberProperties
  */
 data class VcsInfo(
         /**
-         * The name of the VCS type, for example Git, Hg or SVN.
+         * The name of the VCS type, for example Git, GitRepo, Mercurial or Subversion.
          */
         val type: String,
 
