@@ -27,6 +27,7 @@ analyzer:
     - id: "Bundler::grpc/Gemfile:"
       definition_file_path: "Gemfile"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""
@@ -42,6 +43,7 @@ analyzer:
     - id: "Bundler::grpc/examples/ruby/Gemfile:"
       definition_file_path: "examples/ruby/Gemfile"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""
@@ -57,6 +59,7 @@ analyzer:
     - id: "Bundler::grpc/test/distrib/ruby/Gemfile:"
       definition_file_path: "test/distrib/ruby/Gemfile"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""
@@ -72,6 +75,7 @@ analyzer:
     - id: "Bundler::grpc/third_party/protobuf/ruby/Gemfile:"
       definition_file_path: "ruby/Gemfile"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""
@@ -87,6 +91,7 @@ analyzer:
     - id: "Unmanaged:git-repo:manifest:<REPLACE_REVISION>"
       definition_file_path: ""
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""

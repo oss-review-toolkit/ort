@@ -2,7 +2,10 @@
 project:
   id: "Maven:com.here.ort.maven:maven-lib:1.0-SNAPSHOT"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven/lib/pom.xml"
-  declared_licenses: []
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   vcs:
     type: ""
     url: ""

@@ -28,6 +28,8 @@ analyzer:
       definition_file_path: "target/directories-10.pom"
       declared_licenses:
       - "Mozilla Public License 2.0"
+      declared_licenses_processed:
+        spdx_expression: "MPL-2.0"
       vcs:
         type: "git"
         url: "git@github.com:soc/directories-jvm.git"

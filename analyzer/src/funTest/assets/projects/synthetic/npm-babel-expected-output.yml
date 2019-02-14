@@ -4,6 +4,8 @@ project:
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/npm-babel/package.json"
   declared_licenses:
   - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   vcs:
     type: "git"
     url: "https://github.com/heremaps/oss-review-toolkit.git"

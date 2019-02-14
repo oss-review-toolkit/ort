@@ -51,6 +51,7 @@ analyzer:
     - id: "Gradle::Gradle-Example:"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/build.gradle"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""
@@ -66,6 +67,7 @@ analyzer:
     - id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""
@@ -172,6 +174,7 @@ analyzer:
     - id: "Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""
@@ -315,6 +318,7 @@ analyzer:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
+      declared_licenses_processed: {}
       vcs:
         type: ""
         url: ""

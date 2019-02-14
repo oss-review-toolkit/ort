@@ -235,6 +235,7 @@ object SpdxLicenseStringMapping {
             "Mockrunner License, based on Apache Software License, version 1.1" to APACHE_1_1.toExpression(),
             "Mozilla Public License" to MPL_2_0.toExpression(),
             "Mozilla Public License 1.1 (MPL 1.1)" to MPL_1_1.toExpression(),
+            "Mozilla Public License 2.0" to MPL_2_0.toExpression(),
             "Mozilla Public License 2.0 (MPL 2.0)" to MPL_2_0.toExpression(),
             "Mozilla Public License Version 1.0" to MPL_1_0.toExpression(),
             "Mozilla Public License Version 1.1" to MPL_1_1.toExpression(),
