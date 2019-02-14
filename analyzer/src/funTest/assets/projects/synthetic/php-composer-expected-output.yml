@@ -5,6 +5,8 @@ project:
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND MIT"
   vcs:
     type: ""
     url: ""

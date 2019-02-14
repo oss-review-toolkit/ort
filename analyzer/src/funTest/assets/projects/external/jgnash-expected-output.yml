@@ -3,6 +3,7 @@ project:
   id: "Maven:jgnash:jgnash2:2.30.0"
   definition_file_path: "pom.xml"
   declared_licenses: []
+  declared_licenses_processed: {}
   vcs:
     type: "git"
     url: "git://github.com:ccavanaugh/jgnash.git"
