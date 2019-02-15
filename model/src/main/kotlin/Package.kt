@@ -22,6 +22,9 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.spdx.SpdxExpression
+import com.here.ort.spdx.SpdxOperator
+import com.here.ort.utils.DeclaredLicenseProcessor
+import com.here.ort.utils.ProcessedDeclaredLicense
 
 import java.util.SortedSet
 
@@ -45,6 +48,12 @@ data class Package(
          * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
          */
         val declaredLicenses: SortedSet<String>,
+
+        /**
+         * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
+         * concatenated with [SpdxOperator.AND].
+         */
+        val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
 
         /**
          * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the

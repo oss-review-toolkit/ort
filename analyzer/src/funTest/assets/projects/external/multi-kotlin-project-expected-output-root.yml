@@ -46,6 +46,8 @@ packages:
     id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11"
     declared_licenses:
     - "The Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Kotlin Common Standard Library"
     homepage_url: "https://kotlinlang.org/"
     binary_artifact:
@@ -71,6 +73,8 @@ packages:
     id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.3.11"
     declared_licenses:
     - "The Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Kotlin Standard Library for JVM"
     homepage_url: "https://kotlinlang.org/"
     binary_artifact:
@@ -96,6 +100,8 @@ packages:
     id: "Maven:org.jetbrains:annotations:13.0"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "A set of annotations used for code inspection support and code documentation."
     homepage_url: "http://www.jetbrains.org"
     binary_artifact:

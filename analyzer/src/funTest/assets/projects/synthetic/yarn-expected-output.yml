@@ -107,6 +107,8 @@ packages:
     id: "NPM::asap:2.0.5"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "High-priority task queue for Node.js and browsers"
     homepage_url: "https://github.com/kriskowal/asap#readme"
     binary_artifact:
@@ -132,6 +134,8 @@ packages:
     id: "NPM::boolbase:1.0.0"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "two functions: One that returns true, one that returns false"
     homepage_url: "https://github.com/fb55/boolbase"
     binary_artifact:
@@ -157,6 +161,8 @@ packages:
     id: "NPM::cheerio:1.0.0-rc.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Tiny, fast, and elegant implementation of core jQuery designed specifically\
       \ for the server"
     homepage_url: "https://github.com/cheeriojs/cheerio#readme"
@@ -183,6 +189,8 @@ packages:
     id: "NPM::coffee-script:1.12.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Unfancy JavaScript"
     homepage_url: "http://coffeescript.org"
     binary_artifact:
@@ -208,6 +216,8 @@ packages:
     id: "NPM::core-util-is:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The `util.is*` functions introduced in Node v0.12."
     homepage_url: "https://github.com/isaacs/core-util-is#readme"
     binary_artifact:
@@ -233,6 +243,8 @@ packages:
     id: "NPM::cson-parser:1.3.5"
     declared_licenses:
     - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "Safe parsing of CSON files"
     homepage_url: "https://github.com/groupon/cson-parser"
     binary_artifact:
@@ -258,6 +270,8 @@ packages:
     id: "NPM::cson:4.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "CoffeeScript-Object-Notation Parser. Same as JSON but for CoffeeScript\
       \ objects."
     homepage_url: "https://github.com/bevry/cson"
@@ -284,6 +298,8 @@ packages:
     id: "NPM::css-select:1.2.0"
     declared_licenses:
     - "BSD-like"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "a CSS selector compiler/engine"
     homepage_url: "https://github.com/fb55/css-select#readme"
     binary_artifact:
@@ -309,6 +325,8 @@ packages:
     id: "NPM::css-what:2.1.0"
     declared_licenses:
     - "BSD-like"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "a CSS selector parser"
     homepage_url: "https://github.com/fb55/css-what#readme"
     binary_artifact:
@@ -334,6 +352,8 @@ packages:
     id: "NPM::dom-serializer:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "render dom nodes to string"
     homepage_url: "https://github.com/cheeriojs/dom-renderer"
     binary_artifact:
@@ -358,6 +378,7 @@ packages:
 - package:
     id: "NPM::domelementtype:1.1.3"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: "all the types of nodes in htmlparser2's dom"
     homepage_url: "https://github.com/FB55/domelementtype"
     binary_artifact:
@@ -382,6 +403,7 @@ packages:
 - package:
     id: "NPM::domelementtype:1.3.0"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: "all the types of nodes in htmlparser2's dom"
     homepage_url: "https://github.com/FB55/domelementtype"
     binary_artifact:
@@ -407,6 +429,8 @@ packages:
     id: "NPM::domhandler:2.4.1"
     declared_licenses:
     - "BSD-2-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
     description: "handler for htmlparser2 that turns pages into a dom"
     homepage_url: "https://github.com/fb55/DomHandler#readme"
     binary_artifact:
@@ -431,6 +455,7 @@ packages:
 - package:
     id: "NPM::domutils:1.5.1"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: "utilities for working with htmlparser2's dom"
     homepage_url: "https://github.com/FB55/domutils"
     binary_artifact:
@@ -456,6 +481,8 @@ packages:
     id: "NPM::eachr:3.2.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Give eachr an item to iterate (array, object or map) and an iterator,\
       \ then in return eachr gives iterator the value and key of each item, and will\
       \ stop if the iterator returned false."
@@ -483,6 +510,8 @@ packages:
     id: "NPM::editions:1.3.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Publish multiple editions for your JavaScript packages consistently\
       \ and easily (e.g. source edition, esnext edition, es2015 edition)"
     homepage_url: "https://github.com/bevry/editions"
@@ -509,6 +538,8 @@ packages:
     id: "NPM::entities:1.1.1"
     declared_licenses:
     - "BSD-like"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "Encode & decode XML/HTML entities with ease"
     homepage_url: "https://github.com/fb55/node-entities"
     binary_artifact:
@@ -534,6 +565,8 @@ packages:
     id: "NPM::extract-opts:3.3.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Extract the options and callback from a function's arguments easily"
     homepage_url: "https://github.com/bevry/extract-opts"
     binary_artifact:
@@ -559,6 +592,8 @@ packages:
     id: "NPM::graceful-fs:4.1.11"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "A drop-in replacement for fs, making various improvements."
     homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
     binary_artifact:
@@ -584,6 +619,8 @@ packages:
     id: "NPM::htmlparser2:3.9.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Fast & forgiving HTML/XML/RSS parser"
     homepage_url: "https://github.com/fb55/htmlparser2#readme"
     binary_artifact:
@@ -609,6 +646,8 @@ packages:
     id: "NPM::inherits:2.0.3"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "Browser-friendly inheritance fully compatible with standard node.js\
       \ inherits()"
     homepage_url: "https://github.com/isaacs/inherits#readme"
@@ -635,6 +674,8 @@ packages:
     id: "NPM::isarray:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Array#isArray for older browsers"
     homepage_url: "https://github.com/juliangruber/isarray"
     binary_artifact:
@@ -660,6 +701,8 @@ packages:
     id: "NPM::lodash:4.17.4"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Lodash modular utilities."
     homepage_url: "https://lodash.com/"
     binary_artifact:
@@ -685,6 +728,8 @@ packages:
     id: "NPM::long:3.2.0"
     declared_licenses:
     - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "A Long class for representing a 64-bit two's-complement integer\
       \ value."
     homepage_url: "https://github.com/dcodeIO/long.js#readme"
@@ -711,6 +756,8 @@ packages:
     id: "NPM::nth-check:1.0.1"
     declared_licenses:
     - "BSD"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
     description: "performant nth-check parser & compiler"
     homepage_url: "https://github.com/fb55/nth-check"
     binary_artifact:
@@ -736,6 +783,8 @@ packages:
     id: "NPM::parse5:3.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "HTML parsing/serialization toolset for Node.js. WHATWG HTML Living\
       \ Standard (aka HTML5)-compliant."
     homepage_url: "https://github.com/inikulin/parse5"
@@ -762,6 +811,8 @@ packages:
     id: "NPM::process-nextick-args:1.0.7"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "process.nextTick but always with args"
     homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
     binary_artifact:
@@ -787,6 +838,8 @@ packages:
     id: "NPM::promise:7.3.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Bare bones Promises/A+ implementation"
     homepage_url: "https://github.com/then/promise#readme"
     binary_artifact:
@@ -812,6 +865,8 @@ packages:
     id: "NPM::readable-stream:2.3.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Streams3, a user-land copy of the stream library from Node.js"
     homepage_url: "https://github.com/nodejs/readable-stream#readme"
     binary_artifact:
@@ -837,6 +892,8 @@ packages:
     id: "NPM::requirefresh:2.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Require a file without adding it into the require cache"
     homepage_url: "https://github.com/bevry/requirefresh"
     binary_artifact:
@@ -862,6 +919,8 @@ packages:
     id: "NPM::safe-buffer:5.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Safer Node.js Buffer API"
     homepage_url: "https://github.com/feross/safe-buffer"
     binary_artifact:
@@ -887,6 +946,8 @@ packages:
     id: "NPM::safefs:4.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Stop getting EMFILE errors! Open only as many files as the operating\
       \ system supports."
     homepage_url: "https://github.com/bevry/safefs"
@@ -913,6 +974,8 @@ packages:
     id: "NPM::string_decoder:1.0.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The string_decoder module from Node core"
     homepage_url: "https://github.com/rvagg/string_decoder"
     binary_artifact:
@@ -938,6 +1001,8 @@ packages:
     id: "NPM::typechecker:4.4.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Utilities to get and check variable types (isString, isPlainObject,\
       \ isRegExp, etc)"
     homepage_url: "https://github.com/bevry/typechecker"
@@ -964,6 +1029,8 @@ packages:
     id: "NPM::util-deprecate:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The Node.js `util.deprecate()` function with browser support"
     homepage_url: "https://github.com/TooTallNate/util-deprecate"
     binary_artifact:
@@ -989,6 +1056,8 @@ packages:
     id: "NPM:@types:node:6.0.79"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "TypeScript definitions for Node.js"
     homepage_url: ""
     binary_artifact:

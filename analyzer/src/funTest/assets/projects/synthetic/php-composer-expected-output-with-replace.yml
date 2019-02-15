@@ -29,6 +29,7 @@ packages:
 - package:
     id: "PhpComposer:ort:child2:1.0.0"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
@@ -53,6 +54,7 @@ packages:
 - package:
     id: "PhpComposer:ort:child4:2.0.0"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:

@@ -44,6 +44,8 @@ packages:
     - "Artistic-2.0"
     - "GPL-2.0+"
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "Artistic-2.0 AND GPL-2.0+ AND MIT"
     description: "Diff::LCS computes the difference between two Enumerable sequences\
       \ using the\nMcIlroy-Hunt longest common subsequence (LCS) algorithm. It includes\
       \ utilities\nto create a simple HTML diff output format and a standard diff-like\
@@ -75,6 +77,8 @@ packages:
     id: "Bundler::mini_portile2:2.3.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Simplistic port-like solution for developers. It provides a standard\
       \ and simplified way to compile against dependency libraries without messing\
       \ up your system."
@@ -104,6 +108,8 @@ packages:
     id: "Bundler::nokogiri:1.8.5"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
       \ many features is the ability to search documents via XPath\nor CSS3 selectors."
     homepage_url: ""
@@ -130,6 +136,8 @@ packages:
     id: "Bundler::rack:1.6.11"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Rack provides a minimal, modular and adaptable interface for developing\n\
       web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
       \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
@@ -159,6 +167,8 @@ packages:
     id: "Bundler::rspec-core:3.7.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "BDD for Ruby. RSpec runner and example groups."
     homepage_url: "https://github.com/rspec/rspec-core"
     binary_artifact:
@@ -184,6 +194,8 @@ packages:
     id: "Bundler::rspec-expectations:3.7.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "rspec-expectations provides a simple, readable API to express expected\
       \ outcomes of a code example."
     homepage_url: "https://github.com/rspec/rspec-expectations"
@@ -210,6 +222,8 @@ packages:
     id: "Bundler::rspec-mocks:3.7.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "RSpec's 'test double' framework, with support for stubbing and mocking"
     homepage_url: "https://github.com/rspec/rspec-mocks"
     binary_artifact:
@@ -235,6 +249,8 @@ packages:
     id: "Bundler::rspec-support:3.7.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Support utilities for RSpec gems"
     homepage_url: "https://github.com/rspec/rspec-support"
     binary_artifact:
@@ -262,6 +278,8 @@ packages:
     id: "Bundler::rspec:3.7.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "BDD for Ruby"
     homepage_url: "http://github.com/rspec"
     binary_artifact:

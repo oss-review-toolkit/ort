@@ -26,6 +26,8 @@ packages:
     id: "PyPI::Django:2.1.5"
     declared_licenses:
     - "BSD"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
     description: "A high-level Python Web framework that encourages rapid development\
       \ and clean, pragmatic design."
     homepage_url: "https://www.djangoproject.com/"
@@ -52,6 +54,8 @@ packages:
     id: "PyPI::pytz:2018.9"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "World timezone definitions, modern and historical"
     homepage_url: "http://pythonhosted.org/pytz"
     binary_artifact:

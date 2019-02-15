@@ -49,6 +49,8 @@ packages:
     id: "Bundler::addressable:2.5.2"
     declared_licenses:
     - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Addressable is a replacement for the URI implementation that is\
       \ part of\nRuby's standard library. It more closely conforms to the relevant\
       \ RFCs and\nadds support for IRIs and URI templates.\n"
@@ -78,6 +80,8 @@ packages:
     - "Artistic-2.0"
     - "GPL-2.0+"
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "Artistic-2.0 AND GPL-2.0+ AND MIT"
     description: "Diff::LCS computes the difference between two Enumerable sequences\
       \ using the\nMcIlroy-Hunt longest common subsequence (LCS) algorithm. It includes\
       \ utilities\nto create a simple HTML diff output format and a standard diff-like\
@@ -109,6 +113,8 @@ packages:
     id: "Bundler::faraday:0.15.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: ""
     homepage_url: "https://github.com/lostisland/faraday"
     binary_artifact:
@@ -136,6 +142,8 @@ packages:
     id: "Bundler::jwt:2.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "A pure ruby implementation of the RFC 7519 OAuth JSON Web Token\
       \ (JWT) standard."
     homepage_url: "http://github.com/jwt/ruby-jwt"
@@ -164,6 +172,8 @@ packages:
     id: "Bundler::multi_json:1.13.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "A common interface to multiple JSON libraries, including Oj, Yajl,\
       \ the JSON gem (with C-extensions), the pure-Ruby JSON gem, NSJSONSerialization,\
       \ gson.rb, JrJackson, and OkJson."
@@ -193,6 +203,8 @@ packages:
     id: "Bundler::multipart-post:2.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Use with Net::HTTP to do multipart form posts.  IO values that have\
       \ #content_type, #original_filename, and #local_path will be posted as a binary\
       \ file."
@@ -222,6 +234,8 @@ packages:
     id: "Bundler::public_suffix:3.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "PublicSuffix can parse and decompose a domain name into top level\
       \ domain, domain and subdomains."
     homepage_url: "https://simonecarletti.com/code/publicsuffix-ruby"
@@ -248,6 +262,8 @@ packages:
     id: "Bundler::rack:1.6.11"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Rack provides a minimal, modular and adaptable interface for developing\n\
       web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
       \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
@@ -277,6 +293,8 @@ packages:
     id: "Bundler::rspec-core:3.7.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "BDD for Ruby. RSpec runner and example groups."
     homepage_url: "https://github.com/rspec/rspec-core"
     binary_artifact:
@@ -302,6 +320,8 @@ packages:
     id: "Bundler::rspec-expectations:3.7.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "rspec-expectations provides a simple, readable API to express expected\
       \ outcomes of a code example."
     homepage_url: "https://github.com/rspec/rspec-expectations"
@@ -328,6 +348,8 @@ packages:
     id: "Bundler::rspec-mocks:3.7.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "RSpec's 'test double' framework, with support for stubbing and mocking"
     homepage_url: "https://github.com/rspec/rspec-mocks"
     binary_artifact:
@@ -353,6 +375,8 @@ packages:
     id: "Bundler::rspec-support:3.7.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Support utilities for RSpec gems"
     homepage_url: "https://github.com/rspec/rspec-support"
     binary_artifact:
@@ -380,6 +404,8 @@ packages:
     id: "Bundler::rspec:3.7.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "BDD for Ruby"
     homepage_url: "http://github.com/rspec"
     binary_artifact:
@@ -405,6 +431,8 @@ packages:
     id: "Bundler::signet:0.8.1"
     declared_licenses:
     - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Signet is an OAuth 1.0 / OAuth 2.0 implementation.\n"
     homepage_url: "https://github.com/google/signet/"
     binary_artifact:

@@ -610,6 +610,8 @@ packages:
     id: "NPM::ansi-green:0.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The color green, in ansi."
     homepage_url: "https://github.com/jonschlinkert/ansi-green"
     binary_artifact:
@@ -635,6 +637,8 @@ packages:
     id: "NPM::ansi-wrap:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Create ansi colors by passing the open and close codes."
     homepage_url: "https://github.com/jonschlinkert/ansi-wrap"
     binary_artifact:
@@ -660,6 +664,8 @@ packages:
     id: "NPM::argparse:0.1.16"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Very powerful CLI arguments parser. Native port of argparse - python's\
       \ options parsing library"
     homepage_url: "https://github.com/nodeca/argparse"
@@ -686,6 +692,8 @@ packages:
     id: "NPM::arr-union:3.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Combines a list of arrays, returning a single array with unique\
       \ values, using strict equality for comparisons."
     homepage_url: "https://github.com/jonschlinkert/arr-union"
@@ -712,6 +720,8 @@ packages:
     id: "NPM::array-each:1.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Loop over each item in an array and call the given function on every\
       \ element."
     homepage_url: "https://github.com/jonschlinkert/array-each"
@@ -738,6 +748,8 @@ packages:
     id: "NPM::array-slice:0.2.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Array-slice method. Slices `array` from the `start` index up to,\
       \ but not including, the `end` index."
     homepage_url: "https://github.com/jonschlinkert/array-slice"
@@ -764,6 +776,8 @@ packages:
     id: "NPM::assign-symbols:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Assign the enumerable es6 Symbol properties from an object (or objects)\
       \ to the first object passed on the arguments. Can be used as a supplement to\
       \ other extend, assign or merge methods as a polyfill for the Symbols part of\
@@ -792,6 +806,8 @@ packages:
     id: "NPM::atob:2.1.2"
     declared_licenses:
     - "(MIT OR Apache-2.0)"
+    declared_licenses_processed:
+      spdx_expression: "MIT OR Apache-2.0"
     description: "atob for Node.JS and Linux / Mac / Windows CLI (it's a one-liner)"
     homepage_url: "https://git.coolaj86.com/coolaj86/atob.js.git"
     binary_artifact:
@@ -817,6 +833,8 @@ packages:
     id: "NPM::autolinker:0.15.3"
     declared_licenses:
     - "MIT Licensed. http://www.opensource.org/licenses/mit-license.php"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Utility to automatically link the URLs, email addresses, and Twitter\
       \ handles in a given block of text/HTML"
     homepage_url: "https://github.com/gregjacobs/Autolinker.js"
@@ -843,6 +861,8 @@ packages:
     id: "NPM::balanced-match:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Match balanced character pairs, like \"{\" and \"}\""
     homepage_url: "https://github.com/juliangruber/balanced-match"
     binary_artifact:
@@ -868,6 +888,8 @@ packages:
     id: "NPM::base:0.11.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "base is the foundation for creating modular, unit testable and highly\
       \ pluggable node.js applications, starting with a handful of common methods,\
       \ like `set`, `get`, `del` and `use`."
@@ -895,6 +917,8 @@ packages:
     id: "NPM::brace-expansion:1.1.11"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Brace expansion as known from sh/bash"
     homepage_url: "https://github.com/juliangruber/brace-expansion"
     binary_artifact:
@@ -920,6 +944,8 @@ packages:
     id: "NPM::browser-stdout:1.3.1"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "`process.stdout` in your browser."
     homepage_url: "https://github.com/kumavis/browser-stdout#readme"
     binary_artifact:
@@ -945,6 +971,8 @@ packages:
     id: "NPM::cache-base:1.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Basic object cache with `get`, `set`, `del`, and `has` methods for\
       \ node.js/javascript projects."
     homepage_url: "https://github.com/jonschlinkert/cache-base"
@@ -971,6 +999,8 @@ packages:
     id: "NPM::class-utils:0.3.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Utils for working with JavaScript classes and prototype methods."
     homepage_url: "https://github.com/jonschlinkert/class-utils"
     binary_artifact:
@@ -996,6 +1026,8 @@ packages:
     id: "NPM::clone-buffer:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Easier Buffer cloning in node."
     homepage_url: "https://github.com/gulpjs/clone-buffer#readme"
     binary_artifact:
@@ -1021,6 +1053,8 @@ packages:
     id: "NPM::clone-stats:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Safely clone node's fs.Stats instances without losing their class\
       \ methods"
     homepage_url: "https://github.com/hughsk/clone-stats"
@@ -1047,6 +1081,8 @@ packages:
     id: "NPM::clone:2.1.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "deep cloning of objects and arrays"
     homepage_url: "https://github.com/pvorb/node-clone#readme"
     binary_artifact:
@@ -1072,6 +1108,8 @@ packages:
     id: "NPM::cloneable-readable:1.1.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Clone a Readable stream, safely"
     homepage_url: "https://github.com/mcollina/cloneable-readable#readme"
     binary_artifact:
@@ -1097,6 +1135,8 @@ packages:
     id: "NPM::collection-visit:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Visit a method over the items in an object, or map visit over the\
       \ objects in an array."
     homepage_url: "https://github.com/jonschlinkert/collection-visit"
@@ -1123,6 +1163,8 @@ packages:
     id: "NPM::commander:2.15.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "the complete solution for node.js command-line programs"
     homepage_url: "https://github.com/tj/commander.js#readme"
     binary_artifact:
@@ -1148,6 +1190,8 @@ packages:
     id: "NPM::component-emitter:1.2.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Event emitter"
     homepage_url: "https://github.com/component/emitter#readme"
     binary_artifact:
@@ -1173,6 +1217,8 @@ packages:
     id: "NPM::concat-map:0.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "concatenative mapdashery"
     homepage_url: "https://github.com/substack/node-concat-map"
     binary_artifact:
@@ -1198,6 +1244,8 @@ packages:
     id: "NPM::copy-descriptor:0.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Copy a descriptor from object A to object B"
     homepage_url: "https://github.com/jonschlinkert/copy-descriptor"
     binary_artifact:
@@ -1223,6 +1271,8 @@ packages:
     id: "NPM::core-util-is:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The `util.is*` functions introduced in Node v0.12."
     homepage_url: "https://github.com/isaacs/core-util-is#readme"
     binary_artifact:
@@ -1248,6 +1298,8 @@ packages:
     id: "NPM::debug:2.6.9"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "small debugging utility"
     homepage_url: "https://github.com/visionmedia/debug#readme"
     binary_artifact:
@@ -1273,6 +1325,8 @@ packages:
     id: "NPM::debug:3.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "small debugging utility"
     homepage_url: "https://github.com/visionmedia/debug#readme"
     binary_artifact:
@@ -1298,6 +1352,8 @@ packages:
     id: "NPM::decode-uri-component:0.2.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "A better decodeURIComponent"
     homepage_url: "https://github.com/samverschueren/decode-uri-component#readme"
     binary_artifact:
@@ -1323,6 +1379,8 @@ packages:
     id: "NPM::define-property:0.2.5"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Define a non-enumerable property on an object."
     homepage_url: "https://github.com/jonschlinkert/define-property"
     binary_artifact:
@@ -1348,6 +1406,8 @@ packages:
     id: "NPM::define-property:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Define a non-enumerable property on an object."
     homepage_url: "https://github.com/jonschlinkert/define-property"
     binary_artifact:
@@ -1373,6 +1433,8 @@ packages:
     id: "NPM::define-property:2.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Define a non-enumerable property on an object. Uses Reflect.defineProperty\
       \ when available, otherwise Object.defineProperty."
     homepage_url: "https://github.com/jonschlinkert/define-property"
@@ -1399,6 +1461,8 @@ packages:
     id: "NPM::diff:3.5.0"
     declared_licenses:
     - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "A javascript text diff implementation."
     homepage_url: "https://github.com/kpdecker/jsdiff#readme"
     binary_artifact:
@@ -1424,6 +1488,8 @@ packages:
     id: "NPM::escape-string-regexp:1.0.5"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Escape RegExp special characters"
     homepage_url: "https://github.com/sindresorhus/escape-string-regexp"
     binary_artifact:
@@ -1449,6 +1515,8 @@ packages:
     id: "NPM::expand-range:1.8.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Fast, bash-like range expansion. Expand a range of numbers or letters,\
       \ uppercase or lowercase. See the benchmarks. Used by micromatch."
     homepage_url: "https://github.com/jonschlinkert/expand-range"
@@ -1475,6 +1543,8 @@ packages:
     id: "NPM::expand-reflinks:0.2.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Expand variables in reflinks."
     homepage_url: "https://github.com/jonschlinkert/expand-reflinks"
     binary_artifact:
@@ -1500,6 +1570,8 @@ packages:
     id: "NPM::extend-shallow:2.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Extend an object with the properties of additional objects. node.js/javascript\
       \ util."
     homepage_url: "https://github.com/jonschlinkert/extend-shallow"
@@ -1526,6 +1598,8 @@ packages:
     id: "NPM::extend-shallow:3.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Extend an object with the properties of additional objects. node.js/javascript\
       \ util."
     homepage_url: "https://github.com/jonschlinkert/extend-shallow"
@@ -1552,6 +1626,8 @@ packages:
     id: "NPM::fill-range:2.2.4"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Fill in a range of numbers or letters, optionally passing an increment\
       \ or multiplier to use."
     homepage_url: "https://github.com/jonschlinkert/fill-range"
@@ -1578,6 +1654,8 @@ packages:
     id: "NPM::for-in:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Iterate over the own and inherited enumerable properties of an object,\
       \ and return an object with properties that evaluate to true from the callback.\
       \ Exit early by returning `false`. JavaScript/Node.js"
@@ -1605,6 +1683,8 @@ packages:
     id: "NPM::fs-exists-sync:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Drop-in replacement for `fs.existsSync` with zero dependencies.\
       \ Other libs I found either have crucial differences from fs.existsSync, or\
       \ unnecessary dependencies. See README.md for more info."
@@ -1632,6 +1712,8 @@ packages:
     id: "NPM::fs.realpath:1.0.0"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "Use node's fs.realpath, but fall back to the JS implementation if\
       \ the native one fails"
     homepage_url: "https://github.com/isaacs/fs.realpath#readme"
@@ -1658,6 +1740,8 @@ packages:
     id: "NPM::get-value:2.0.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Use property paths (`a.b.c`) to get a nested value from an object."
     homepage_url: "https://github.com/jonschlinkert/get-value"
     binary_artifact:
@@ -1683,6 +1767,8 @@ packages:
     id: "NPM::gfm-code-block-regex:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "RegExp for gfm (GitHub Flavored Markdown) fenced code blocks."
     homepage_url: "https://github.com/regexhq/gfm-code-block-regex"
     binary_artifact:
@@ -1708,6 +1794,8 @@ packages:
     id: "NPM::gfm-code-blocks:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Extract gfm (GitHub Flavored Markdown) fenced code blocks from a\
       \ string."
     homepage_url: "https://github.com/jonschlinkert/gfm-code-blocks"
@@ -1734,6 +1822,8 @@ packages:
     id: "NPM::glob:7.1.2"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "a little globber"
     homepage_url: "https://github.com/isaacs/node-glob#readme"
     binary_artifact:
@@ -1759,6 +1849,8 @@ packages:
     id: "NPM::growl:1.10.5"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Growl unobtrusive notifications"
     homepage_url: "https://github.com/tj/node-growl#readme"
     binary_artifact:
@@ -1784,6 +1876,8 @@ packages:
     id: "NPM::gulp-format-md:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Gulp plugin for beautifying markdown using pretty-remarkable."
     homepage_url: "https://github.com/jonschlinkert/gulp-format-md"
     binary_artifact:
@@ -1809,6 +1903,8 @@ packages:
     id: "NPM::has-flag:3.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Check if argv has a specific flag"
     homepage_url: "https://github.com/sindresorhus/has-flag#readme"
     binary_artifact:
@@ -1834,6 +1930,8 @@ packages:
     id: "NPM::has-value:0.3.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value exists, false if empty. Works with deeply\
       \ nested values using object paths."
     homepage_url: "https://github.com/jonschlinkert/has-value"
@@ -1860,6 +1958,8 @@ packages:
     id: "NPM::has-value:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value exists, false if empty. Works with deeply\
       \ nested values using object paths."
     homepage_url: "https://github.com/jonschlinkert/has-value"
@@ -1886,6 +1986,8 @@ packages:
     id: "NPM::has-values:0.1.4"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if any values exist, false if empty. Works for booleans,\
       \ functions, numbers, strings, nulls, objects and arrays. "
     homepage_url: "https://github.com/jonschlinkert/has-values"
@@ -1912,6 +2014,8 @@ packages:
     id: "NPM::has-values:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if any values exist, false if empty. Works for booleans,\
       \ functions, numbers, strings, nulls, objects and arrays. "
     homepage_url: "https://github.com/jonschlinkert/has-values"
@@ -1938,6 +2042,8 @@ packages:
     id: "NPM::he:1.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "A robust HTML entities encoder/decoder with full Unicode support."
     homepage_url: "https://mths.be/he"
     binary_artifact:
@@ -1963,6 +2069,8 @@ packages:
     id: "NPM::inflight:1.0.6"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "Add callbacks to requests in flight to avoid async duplication"
     homepage_url: "https://github.com/isaacs/inflight"
     binary_artifact:
@@ -1988,6 +2096,8 @@ packages:
     id: "NPM::inherits:2.0.3"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "Browser-friendly inheritance fully compatible with standard node.js\
       \ inherits()"
     homepage_url: "https://github.com/isaacs/inherits#readme"
@@ -2014,6 +2124,8 @@ packages:
     id: "NPM::is-accessor-descriptor:0.1.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value has the characteristics of a valid JavaScript\
       \ accessor descriptor."
     homepage_url: "https://github.com/jonschlinkert/is-accessor-descriptor"
@@ -2040,6 +2152,8 @@ packages:
     id: "NPM::is-accessor-descriptor:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value has the characteristics of a valid JavaScript\
       \ accessor descriptor."
     homepage_url: "https://github.com/jonschlinkert/is-accessor-descriptor"
@@ -2066,6 +2180,8 @@ packages:
     id: "NPM::is-buffer:1.1.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Determine if an object is a Buffer"
     homepage_url: "https://github.com/feross/is-buffer#readme"
     binary_artifact:
@@ -2091,6 +2207,8 @@ packages:
     id: "NPM::is-data-descriptor:0.1.4"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value has the characteristics of a valid JavaScript\
       \ data descriptor."
     homepage_url: "https://github.com/jonschlinkert/is-data-descriptor"
@@ -2117,6 +2235,8 @@ packages:
     id: "NPM::is-data-descriptor:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value has the characteristics of a valid JavaScript\
       \ data descriptor."
     homepage_url: "https://github.com/jonschlinkert/is-data-descriptor"
@@ -2143,6 +2263,8 @@ packages:
     id: "NPM::is-descriptor:0.1.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value has the characteristics of a valid JavaScript\
       \ descriptor. Works for data descriptors and accessor descriptors."
     homepage_url: "https://github.com/jonschlinkert/is-descriptor"
@@ -2169,6 +2291,8 @@ packages:
     id: "NPM::is-descriptor:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value has the characteristics of a valid JavaScript\
       \ descriptor. Works for data descriptors and accessor descriptors."
     homepage_url: "https://github.com/jonschlinkert/is-descriptor"
@@ -2195,6 +2319,8 @@ packages:
     id: "NPM::is-extendable:0.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value is any of the object types: array, regexp,\
       \ plain object, function or date. This is useful for determining if a value\
       \ can be extended, e.g. \"can the value have keys?\""
@@ -2222,6 +2348,8 @@ packages:
     id: "NPM::is-extendable:1.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if a value is a plain object, array or function."
     homepage_url: "https://github.com/jonschlinkert/is-extendable"
     binary_artifact:
@@ -2247,6 +2375,8 @@ packages:
     id: "NPM::is-number:2.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if the value is a number. comprehensive tests."
     homepage_url: "https://github.com/jonschlinkert/is-number"
     binary_artifact:
@@ -2272,6 +2402,8 @@ packages:
     id: "NPM::is-number:3.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if the value is a number. comprehensive tests."
     homepage_url: "https://github.com/jonschlinkert/is-number"
     binary_artifact:
@@ -2297,6 +2429,8 @@ packages:
     id: "NPM::is-number:4.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if the value is a number. comprehensive tests."
     homepage_url: "https://github.com/jonschlinkert/is-number"
     binary_artifact:
@@ -2322,6 +2456,8 @@ packages:
     id: "NPM::is-plain-object:2.0.4"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if an object was created by the `Object` constructor."
     homepage_url: "https://github.com/jonschlinkert/is-plain-object"
     binary_artifact:
@@ -2347,6 +2483,8 @@ packages:
     id: "NPM::is-win:1.0.8"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Check if the machine is running Windows or not."
     homepage_url: "https://github.com/IonicaBizau/is-win#readme"
     binary_artifact:
@@ -2372,6 +2510,8 @@ packages:
     id: "NPM::is-windows:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if the platform is windows. UMD module, works with\
       \ node.js, commonjs, browser, AMD, electron, etc."
     homepage_url: "https://github.com/jonschlinkert/is-windows"
@@ -2398,6 +2538,8 @@ packages:
     id: "NPM::isarray:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Array#isArray for older browsers"
     homepage_url: "https://github.com/juliangruber/isarray"
     binary_artifact:
@@ -2423,6 +2565,8 @@ packages:
     id: "NPM::isobject:2.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if the value is an object and not an array or null."
     homepage_url: "https://github.com/jonschlinkert/isobject"
     binary_artifact:
@@ -2448,6 +2592,8 @@ packages:
     id: "NPM::isobject:3.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Returns true if the value is an object and not an array or null."
     homepage_url: "https://github.com/jonschlinkert/isobject"
     binary_artifact:
@@ -2473,6 +2619,8 @@ packages:
     id: "NPM::kind-of:3.2.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Get the native type of a value."
     homepage_url: "https://github.com/jonschlinkert/kind-of"
     binary_artifact:
@@ -2498,6 +2646,8 @@ packages:
     id: "NPM::kind-of:4.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Get the native type of a value."
     homepage_url: "https://github.com/jonschlinkert/kind-of"
     binary_artifact:
@@ -2523,6 +2673,8 @@ packages:
     id: "NPM::kind-of:5.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Get the native type of a value."
     homepage_url: "https://github.com/jonschlinkert/kind-of"
     binary_artifact:
@@ -2548,6 +2700,8 @@ packages:
     id: "NPM::kind-of:6.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Get the native type of a value."
     homepage_url: "https://github.com/jonschlinkert/kind-of"
     binary_artifact:
@@ -2573,6 +2727,8 @@ packages:
     id: "NPM::lazy-cache:2.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Cache requires to be lazy-loaded when needed."
     homepage_url: "https://github.com/jonschlinkert/lazy-cache"
     binary_artifact:
@@ -2598,6 +2754,8 @@ packages:
     id: "NPM::list-item:1.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Generate a single formatted list item, allowing you to easily generate\
       \ lists with proper indentation, bullets, numbers or other leading characters."
     homepage_url: "https://github.com/jonschlinkert/list-item"
@@ -2624,6 +2782,8 @@ packages:
     id: "NPM::log-ok:0.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "just `console.log` prefixed with a green check"
     homepage_url: "https://github.com/jonschlinkert/log-ok"
     binary_artifact:
@@ -2649,6 +2809,8 @@ packages:
     id: "NPM::map-cache:0.2.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Basic cache object for storing key-value pairs."
     homepage_url: "https://github.com/jonschlinkert/map-cache"
     binary_artifact:
@@ -2674,6 +2836,8 @@ packages:
     id: "NPM::map-visit:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Map `visit` over an array of objects."
     homepage_url: "https://github.com/jonschlinkert/map-visit"
     binary_artifact:
@@ -2699,6 +2863,8 @@ packages:
     id: "NPM::markdown-utils:0.7.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Micro-utils for creating markdown snippets."
     homepage_url: "https://github.com/jonschlinkert/markdown-utils"
     binary_artifact:
@@ -2724,6 +2890,8 @@ packages:
     id: "NPM::math-random:1.0.4"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "math-random is an drop-in replacement for Math.random that uses\
       \ cryptographically secure random number generation, where available. It works\
       \ in both browser and node environments."
@@ -2751,6 +2919,8 @@ packages:
     id: "NPM::minimatch:3.0.4"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "a glob matcher in javascript"
     homepage_url: "https://github.com/isaacs/minimatch#readme"
     binary_artifact:
@@ -2776,6 +2946,8 @@ packages:
     id: "NPM::minimist:0.0.8"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "parse argument options"
     homepage_url: "https://github.com/substack/minimist"
     binary_artifact:
@@ -2801,6 +2973,8 @@ packages:
     id: "NPM::minimist:1.2.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "parse argument options"
     homepage_url: "https://github.com/substack/minimist"
     binary_artifact:
@@ -2826,6 +3000,8 @@ packages:
     id: "NPM::mixin-deep:1.3.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Deeply mix the properties of objects into the first object. Like\
       \ merge-deep, but doesn't clone."
     homepage_url: "https://github.com/jonschlinkert/mixin-deep"
@@ -2852,6 +3028,8 @@ packages:
     id: "NPM::mkdirp:0.5.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Recursively mkdir, like `mkdir -p`"
     homepage_url: "https://github.com/substack/node-mkdirp#readme"
     binary_artifact:
@@ -2877,6 +3055,8 @@ packages:
     id: "NPM::mocha:5.2.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "simple, flexible, fun test framework"
     homepage_url: "https://mochajs.org"
     binary_artifact:
@@ -2902,6 +3082,8 @@ packages:
     id: "NPM::ms:2.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Tiny milisecond conversion utility"
     homepage_url: "https://github.com/zeit/ms#readme"
     binary_artifact:
@@ -2927,6 +3109,8 @@ packages:
     id: "NPM::object-copy:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Copy static properties, prototype properties, and descriptors from\
       \ one object to another."
     homepage_url: "https://github.com/jonschlinkert/object-copy"
@@ -2953,6 +3137,8 @@ packages:
     id: "NPM::object-visit:1.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Call a specified method on each value in the given object."
     homepage_url: "https://github.com/jonschlinkert/object-visit"
     binary_artifact:
@@ -2978,6 +3164,8 @@ packages:
     id: "NPM::once:1.4.0"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "Run a function exactly one time"
     homepage_url: "https://github.com/isaacs/once#readme"
     binary_artifact:
@@ -3003,6 +3191,8 @@ packages:
     id: "NPM::pascalcase:0.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Convert a string to pascal-case."
     homepage_url: "https://github.com/jonschlinkert/pascalcase"
     binary_artifact:
@@ -3028,6 +3218,8 @@ packages:
     id: "NPM::path-is-absolute:1.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Node.js 0.12 path.isAbsolute() ponyfill"
     homepage_url: "https://github.com/sindresorhus/path-is-absolute#readme"
     binary_artifact:
@@ -3053,6 +3245,8 @@ packages:
     id: "NPM::pretty-remarkable:0.4.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Plugin for prettifying markdown with Remarkable using custom renderer\
       \ rules."
     homepage_url: "https://github.com/jonschlinkert/pretty-remarkable"
@@ -3079,6 +3273,8 @@ packages:
     id: "NPM::process-nextick-args:2.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "process.nextTick but always with args"
     homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
     binary_artifact:
@@ -3104,6 +3300,8 @@ packages:
     id: "NPM::randomatic:3.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Generate randomized strings of a specified length using simple character\
       \ sequences. The original generate-password."
     homepage_url: "https://github.com/jonschlinkert/randomatic"
@@ -3130,6 +3328,8 @@ packages:
     id: "NPM::readable-stream:2.3.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Streams3, a user-land copy of the stream library from Node.js"
     homepage_url: "https://github.com/nodejs/readable-stream#readme"
     binary_artifact:
@@ -3155,6 +3355,8 @@ packages:
     id: "NPM::regex-not:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Create a javascript regular expression for matching everything except\
       \ for the given string."
     homepage_url: "https://github.com/jonschlinkert/regex-not"
@@ -3181,6 +3383,8 @@ packages:
     id: "NPM::remarkable:1.7.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Markdown parser, done right. 100% Commonmark support, extensions,\
       \ syntax plugins, high speed - all in one."
     homepage_url: "https://github.com/jonschlinkert/remarkable"
@@ -3207,6 +3411,8 @@ packages:
     id: "NPM::remove-trailing-separator:1.1.0"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "Removes separators from the end of the string."
     homepage_url: "https://github.com/darsain/remove-trailing-separator#readme"
     binary_artifact:
@@ -3232,6 +3438,8 @@ packages:
     id: "NPM::repeat-element:1.1.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Create an array by repeating the given value n times."
     homepage_url: "https://github.com/jonschlinkert/repeat-element"
     binary_artifact:
@@ -3257,6 +3465,8 @@ packages:
     id: "NPM::repeat-string:1.6.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Repeat the given string n times. Fastest implementation for repeating\
       \ a string."
     homepage_url: "https://github.com/jonschlinkert/repeat-string"
@@ -3283,6 +3493,8 @@ packages:
     id: "NPM::replace-ext:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Replaces a file extension with another one"
     homepage_url: "https://github.com/gulpjs/replace-ext#readme"
     binary_artifact:
@@ -3308,6 +3520,8 @@ packages:
     id: "NPM::resolve-url:0.2.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Like Node.js’ `path.resolve`/`url.resolve` for the browser."
     homepage_url: "https://github.com/lydell/resolve-url"
     binary_artifact:
@@ -3333,6 +3547,8 @@ packages:
     id: "NPM::ret:0.1.15"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Tokenizes a string that represents a regular expression."
     homepage_url: "https://github.com/fent/ret.js#readme"
     binary_artifact:
@@ -3358,6 +3574,8 @@ packages:
     id: "NPM::safe-buffer:5.1.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Safer Node.js Buffer API"
     homepage_url: "https://github.com/feross/safe-buffer"
     binary_artifact:
@@ -3383,6 +3601,8 @@ packages:
     id: "NPM::safe-regex:1.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "detect possibly catastrophic, exponential-time regular expressions"
     homepage_url: "https://github.com/substack/safe-regex"
     binary_artifact:
@@ -3408,6 +3628,8 @@ packages:
     id: "NPM::sections:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Manipulate sections in a markdown string. A 'section' is a block\
       \ of content preceded by a valid markdown ATX heading."
     homepage_url: "https://github.com/jonschlinkert/sections"
@@ -3434,6 +3656,8 @@ packages:
     id: "NPM::set-getter:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Create nested getter properties and any intermediary dot notation\
       \ (`'a.b.c'`) paths"
     homepage_url: "https://github.com/doowb/set-getter"
@@ -3460,6 +3684,8 @@ packages:
     id: "NPM::set-value:0.4.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Create nested values and any intermediaries using dot notation (`'a.b.c'`)\
       \ paths."
     homepage_url: "https://github.com/jonschlinkert/set-value"
@@ -3486,6 +3712,8 @@ packages:
     id: "NPM::set-value:2.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Create nested values and any intermediaries using dot notation (`'a.b.c'`)\
       \ paths."
     homepage_url: "https://github.com/jonschlinkert/set-value"
@@ -3512,6 +3740,8 @@ packages:
     id: "NPM::snapdragon-node:1.0.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Snapdragon utility for creating a new AST node in custom code, such\
       \ as plugins."
     homepage_url: "https://github.com/jonschlinkert/snapdragon-node"
@@ -3538,6 +3768,8 @@ packages:
     id: "NPM::snapdragon-util:1.0.6"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Utilities for the snapdragon parser/compiler."
     homepage_url: "https://github.com/jonschlinkert/snapdragon-util"
     binary_artifact:
@@ -3563,6 +3795,8 @@ packages:
     id: "NPM::snapdragon-util:2.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Utilities for the snapdragon parser/compiler."
     homepage_url: "https://github.com/jonschlinkert/snapdragon-util"
     binary_artifact:
@@ -3588,6 +3822,8 @@ packages:
     id: "NPM::snapdragon:0.11.5"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Easy-to-use plugin system for creating powerful, fast and versatile\
       \ parsers and compilers, with built-in source-map support."
     homepage_url: "https://github.com/here-be/snapdragon"
@@ -3614,6 +3850,8 @@ packages:
     id: "NPM::snapdragon:0.8.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Fast, pluggable and easy-to-use parser-renderer factory."
     homepage_url: "https://github.com/jonschlinkert/snapdragon"
     binary_artifact:
@@ -3639,6 +3877,8 @@ packages:
     id: "NPM::sort-by-value:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Re-order the objects in an array so that values of a specified property\
       \ match the order of a provided array of values."
     homepage_url: "https://github.com/jonschlinkert/sort-by-value"
@@ -3665,6 +3905,8 @@ packages:
     id: "NPM::source-map-resolve:0.5.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Resolve the source map and/or sources for a generated file."
     homepage_url: "https://github.com/lydell/source-map-resolve#readme"
     binary_artifact:
@@ -3690,6 +3932,8 @@ packages:
     id: "NPM::source-map-url:0.4.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Tools for working with sourceMappingURL comments."
     homepage_url: "https://github.com/lydell/source-map-url#readme"
     binary_artifact:
@@ -3715,6 +3959,8 @@ packages:
     id: "NPM::source-map:0.5.7"
     declared_licenses:
     - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "Generates and consumes source maps"
     homepage_url: "https://github.com/mozilla/source-map"
     binary_artifact:
@@ -3740,6 +3986,8 @@ packages:
     id: "NPM::split-string:3.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Split a string on a character except when the character is escaped."
     homepage_url: "https://github.com/jonschlinkert/split-string"
     binary_artifact:
@@ -3765,6 +4013,8 @@ packages:
     id: "NPM::static-extend:0.1.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Adds a static `extend` method to a class, to simplify inheritance.\
       \ Extends the static properties, prototype properties, and descriptors from\
       \ a `Parent` constructor onto `Child` constructors."
@@ -3792,6 +4042,8 @@ packages:
     id: "NPM::string_decoder:1.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The string_decoder module from Node core"
     homepage_url: "https://github.com/nodejs/string_decoder"
     binary_artifact:
@@ -3817,6 +4069,8 @@ packages:
     id: "NPM::success-symbol:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Cross-platform success symbol."
     homepage_url: "https://github.com/jonschlinkert/success-symbol"
     binary_artifact:
@@ -3842,6 +4096,8 @@ packages:
     id: "NPM::supports-color:5.4.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Detect whether a terminal supports color"
     homepage_url: "https://github.com/chalk/supports-color#readme"
     binary_artifact:
@@ -3867,6 +4123,8 @@ packages:
     id: "NPM::through2:2.0.5"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "A tiny wrapper around Node streams2 Transform to avoid explicit\
       \ subclassing noise"
     homepage_url: "https://github.com/rvagg/through2#readme"
@@ -3893,6 +4151,8 @@ packages:
     id: "NPM::to-gfm-code-block:0.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Generate a github-flavored-markdown fenced-code-block snippet."
     homepage_url: "https://github.com/jonschlinkert/to-gfm-code-block"
     binary_artifact:
@@ -3918,6 +4178,8 @@ packages:
     id: "NPM::to-object-path:0.3.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Create an object path from a list or array of strings."
     homepage_url: "https://github.com/jonschlinkert/to-object-path"
     binary_artifact:
@@ -3943,6 +4205,8 @@ packages:
     id: "NPM::to-regex:3.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Generate a regex from a string or array of strings."
     homepage_url: "https://github.com/jonschlinkert/to-regex"
     binary_artifact:
@@ -3968,6 +4232,8 @@ packages:
     id: "NPM::tokenize-comment:1.0.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Uses snapdragon to tokenize a single JavaScript block comment into\
       \ an object, with description, tags, and code example sections that can be passed\
       \ to any other comment parsers for further parsing."
@@ -3995,6 +4261,8 @@ packages:
     id: "NPM::underscore.string:2.4.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "String manipulation extensions for Underscore.js javascript library."
     homepage_url: "http://epeli.github.com/underscore.string/"
     binary_artifact:
@@ -4020,6 +4288,8 @@ packages:
     id: "NPM::underscore:1.7.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "JavaScript's functional programming helper library."
     homepage_url: "http://underscorejs.org"
     binary_artifact:
@@ -4045,6 +4315,8 @@ packages:
     id: "NPM::union-value:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Set an array of unique values as the property of an object. Supports\
       \ setting deeply nested properties using using object-paths/dot notation."
     homepage_url: "https://github.com/jonschlinkert/union-value"
@@ -4071,6 +4343,8 @@ packages:
     id: "NPM::unset-value:1.0.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Delete nested properties from an object using dot notation."
     homepage_url: "https://github.com/jonschlinkert/unset-value"
     binary_artifact:
@@ -4096,6 +4370,8 @@ packages:
     id: "NPM::urix:0.1.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Makes Windows-style paths more unix and URI friendly."
     homepage_url: "https://github.com/lydell/urix"
     binary_artifact:
@@ -4121,6 +4397,8 @@ packages:
     id: "NPM::use:3.1.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Easily add plugin support to your node.js application."
     homepage_url: "https://github.com/jonschlinkert/use"
     binary_artifact:
@@ -4146,6 +4424,8 @@ packages:
     id: "NPM::util-deprecate:1.0.2"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The Node.js `util.deprecate()` function with browser support"
     homepage_url: "https://github.com/TooTallNate/util-deprecate"
     binary_artifact:
@@ -4171,6 +4451,8 @@ packages:
     id: "NPM::vinyl:2.2.0"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Virtual file format."
     homepage_url: "https://github.com/gulpjs/vinyl#readme"
     binary_artifact:
@@ -4196,6 +4478,8 @@ packages:
     id: "NPM::wrappy:1.0.2"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "Callback wrapping utility"
     homepage_url: "https://github.com/npm/wrappy"
     binary_artifact:
@@ -4221,6 +4505,8 @@ packages:
     id: "NPM::write:0.3.3"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "Write files to disk, creating intermediate directories if they don't\
       \ exist."
     homepage_url: "https://github.com/jonschlinkert/write"
@@ -4247,6 +4533,8 @@ packages:
     id: "NPM::xtend:4.0.1"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "extend like a boss"
     homepage_url: "https://github.com/Raynos/xtend"
     binary_artifact:
