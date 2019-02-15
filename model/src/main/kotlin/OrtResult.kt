@@ -62,8 +62,8 @@ data class OrtResult(
         val data: CustomData = emptyMap()
 ) {
     /**
-     * Return the concluded licenses associated to their package. If [omitExcluded] is set to true, excluded packages
-     * are omitted from the result.
+     * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
+     * from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectConcludedLicenses(omitExcluded: Boolean = false) =
@@ -77,8 +77,8 @@ data class OrtResult(
             }
 
     /**
-     * Return the declared licenses associated to their project / package. If [omitExcluded] is set to true, excluded
-     * projects / packages are omitted from the result.
+     * Return the declared licenses associated to their project / package identifiers. If [omitExcluded] is set to true,
+     * excluded projects / packages are omitted from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectDeclaredLicenses(omitExcluded: Boolean = false) =
@@ -105,8 +105,8 @@ data class OrtResult(
             }
 
     /**
-     * Return the detected licenses associated to their project / package. If [omitExcluded] is set to true, excluded
-     * projects / packages are omitted from the result.
+     * Return the detected licenses associated to their project / package identifiers. If [omitExcluded] is set to true,
+     * excluded projects / packages are omitted from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectDetectedLicenses(omitExcluded: Boolean = false) =
