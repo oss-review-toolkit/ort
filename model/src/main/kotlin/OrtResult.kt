@@ -126,15 +126,20 @@ data class OrtResult(
             }
 
     /**
-     * Return the dependencies of the given [pkg], up to and including a depth of [maxDepth] where counting starts at 0
-     * (for the [Package] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the depth.
+     * Return the dependencies of the given [id] (which can refer to a [Project] or a [Package]), up to and including a
+     * depth of [maxDepth] where counting starts at 0 (for the [Project] or [Package] itself) and 1 are direct
+     * dependencies etc. A value below 0 means to not limit the depth.
      */
-    fun collectDependencies(pkg: Package, maxLevel: Int = -1): SortedSet<PackageReference> {
+    fun collectDependencies(id: Identifier, maxLevel: Int = -1): SortedSet<PackageReference> {
         val dependencies = sortedSetOf<PackageReference>()
 
         analyzer?.result?.apply {
             projects.forEach { project ->
-                project.findReferences(pkg.id).forEach { ref ->
+                if (project.id == id) {
+                    dependencies += project.collectDependencies(maxLevel)
+                }
+
+                project.findReferences(id).forEach { ref ->
                     dependencies += ref.collectDependencies(maxLevel)
                 }
             }

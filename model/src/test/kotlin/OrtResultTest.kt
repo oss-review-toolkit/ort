@@ -37,8 +37,8 @@ class OrtResultTest : WordSpec({
             val resultFile = projectsDir.resolve("external/sbt-multi-project-example-expected-output.yml")
             val result = resultFile.readValue<OrtResult>()
 
-            val pkg = Package.EMPTY.copy(id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"))
-            result.collectDependencies(pkg, 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
+            val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+            result.collectDependencies(id, 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
         }
     }
 })
