@@ -65,7 +65,6 @@ data class OrtResult(
      * Return all dependencies of the given [pkg], up to and including a depth of [maxDepth] where counting starts at 0
      * (for the [Package] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the depth.
      */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectAllDependencies(pkg: Package, maxLevel: Int = -1): SortedSet<PackageReference> {
         val dependencies = sortedSetOf<PackageReference>()
 
@@ -119,7 +118,6 @@ data class OrtResult(
     /**
      * Return the concluded license for the given package [id], or null if there is no concluded license.
      */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getConcludedLicensesForId(id: Identifier) =
             analyzer?.result?.run {
                 packages.find { it.pkg.id == id }?.pkg?.concludedLicense
