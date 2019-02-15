@@ -1062,6 +1062,7 @@ packages:
 - package:
     id: "GHC::rts:1.0"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
@@ -1087,6 +1088,8 @@ packages:
     id: "Hackage:Compatibility:transformers-compat:0.5.1.4"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package includes backported versions of types that were added\n\
       to transformers in transformers 0.3, 0.4, and 0.5 for users who need strict\n\
       transformers 0.2 or 0.3 compatibility to run on old versions of the\nplatform,\
@@ -1117,6 +1120,8 @@ packages:
     id: "Hackage:Concurrency:async:2.1.1.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides a higher-level interface over\nthreads, in\
       \ which an @Async a@ is a concurrent\nthread that will eventually deliver a\
       \ value of\ntype @a@.  The package provides ways to create\n@Async@ computations,\
@@ -1150,6 +1155,8 @@ packages:
     id: "Hackage:Concurrency:lifted-async:0.9.3.3"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides IO operations from @async@ package lifted\
       \ to any\ninstance of 'MonadBase' or 'MonadBaseControl'."
     homepage_url: "https://github.com/maoe/lifted-async"
@@ -1176,6 +1183,8 @@ packages:
     id: "Hackage:Concurrency:stm:2.4.5.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "Software Transactional Memory, or STM, is an abstraction for\nconcurrent\
       \ communication. The main benefits of STM are\n/composability/ and /modularity/.\
       \ That is, using STM you can write\nconcurrent abstractions that can be easily\
@@ -1206,6 +1215,8 @@ packages:
     id: "Hackage:Constraints:constraints:0.9.1"
     declared_licenses:
     - "BSD2"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
     description: "GHC 7.4 gave us the ability to talk about @ConstraintKinds@. They\
       \ stopped crashing the compiler in GHC 7.6.\n\nThis package provides a vocabulary\
       \ for working with them."
@@ -1233,6 +1244,8 @@ packages:
     id: "Hackage:Control:deepseq:1.4.3.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides methods for fully evaluating data structures\n\
       (\\\"deep evaluation\\\"). Deep evaluation is often used for adding\nstrictness\
       \ to a program, e.g. in order to force pending exceptions,\nremove space leaks,\
@@ -1266,6 +1279,8 @@ packages:
     id: "Hackage:Control:lifted-base:0.2.3.11"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "@lifted-base@ exports IO operations from the base library lifted\
       \ to\nany instance of 'MonadBase' or 'MonadBaseControl'.\n\nNote that not all\
       \ modules from @base@ are converted yet. If\nyou need a lifted version of a\
@@ -1296,6 +1311,8 @@ packages:
     id: "Hackage:Control:monad-control:1.0.2.2"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package defines the type class @MonadBaseControl@, a subset\
       \ of\n@MonadBase@ into which generic control operations such as @catch@ can\
       \ be\nlifted from @IO@ or any other base monad. Instances are based on monad\n\
@@ -1331,6 +1348,8 @@ packages:
     id: "Hackage:Control:mtl:2.2.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "Monad classes using functional dependencies, with instances\nfor\
       \ various monad transformers, inspired by the paper\n/Functional Programming\
       \ with Overloading and Higher-Order Polymorphism/,\nby Mark P Jones, in /Advanced\
@@ -1359,6 +1378,8 @@ packages:
     id: "Hackage:Control:transformers-base:0.4.4"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides a straightforward port of @monadLib@'s BaseM\n\
       typeclass to @transformers@."
     homepage_url: "https://github.com/mvv/transformers-base"
@@ -1385,6 +1406,8 @@ packages:
     id: "Hackage:Control:transformers:0.5.2.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "A portable library of functor and monad transformers, inspired by\n\
       the paper \\\"Functional Programming with Overloading and Higher-Order\nPolymorphism\\\
       \", by Mark P Jones,\nin /Advanced School of Functional Programming/, 1995\n\
@@ -1422,6 +1445,8 @@ packages:
     id: "Hackage:Data Structures:array:0.5.2.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "In addition to providing the \"Data.Array\" module\n<http://www.haskell.org/onlinereport/haskell2010/haskellch14.html\
       \ as specified in the Haskell 2010 Language Report>,\nthis package also defines\
       \ the classes 'IArray' of\nimmutable arrays and 'MArray' of arrays mutable within\
@@ -1450,6 +1475,8 @@ packages:
     id: "Hackage:Data Structures:containers:0.5.10.2"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package contains efficient general-purpose implementations\n\
       of various basic immutable container types.  The declared cost of\neach operation\
       \ is either worst-case or amortized, but remains\nvalid even if structures are\
@@ -1478,6 +1505,8 @@ packages:
     id: "Hackage:Data, Parsing:binary:0.8.5.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "Efficient, pure binary serialisation using lazy ByteStrings.\nHaskell\
       \ values may be encoded to and from binary formats,\nwritten to disk as binary,\
       \ or sent over the network.\nThe format used can be automatically generated,\
@@ -1508,6 +1537,8 @@ packages:
     id: "Hackage:Data, Text:text:1.2.2.2"
     declared_licenses:
     - "BSD2"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
     description: "An efficient packed, immutable Unicode text type (both strict and\n\
       lazy), with a powerful loop fusion optimization framework.\n\nThe 'Text' type\
       \ represents Unicode character strings, in a time and\nspace-efficient manner.\
@@ -1546,6 +1577,8 @@ packages:
     id: "Hackage:Data:bytestring:0.10.8.2"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "An efficient compact, immutable byte string type (both strict and\
       \ lazy)\nsuitable for binary or 8-bit character data.\n\nThe 'ByteString' type\
       \ represents sequences of bytes or 8-bit characters.\nIt is suitable for high\
@@ -1592,6 +1625,8 @@ packages:
     id: "Hackage:Data:hashable:1.2.6.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package defines a class, 'Hashable', for types that\ncan be\
       \ converted to a hash value.  This class\nexists for the benefit of hashing-based\
       \ data\nstructures.  The package provides instances for\nbasic types and a way\
@@ -1620,6 +1655,8 @@ packages:
     id: "Hackage:Data:primitive:0.6.3.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides various primitive memory-related operations."
     homepage_url: "https://github.com/haskell/primitive"
     binary_artifact:
@@ -1645,6 +1682,8 @@ packages:
     id: "Hackage:Development:th-abstraction:0.2.6.0"
     declared_licenses:
     - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
     description: "This package normalizes variations in the interface for\ninspecting\
       \ datatype information via Template Haskell\nso that packages and support a\
       \ single, easier to use\ninformational datatype while supporting many versions\n\
@@ -1673,6 +1712,8 @@ packages:
     id: "Hackage:GHC:ghc-boot-th:8.2.2"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This library contains various bits shared between the @ghc@ and\n\
       @template-haskell@ libraries.\n\nThis package exists to ensure that @template-haskell@\
       \ has a\nminimal set of transitive dependencies, since it is intended to\nbe\
@@ -1701,6 +1742,8 @@ packages:
     id: "Hackage:GHC:ghc-prim:0.5.1.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package contains the primitive types and operations supplied\
       \ by GHC."
     homepage_url: ""
@@ -1727,6 +1770,8 @@ packages:
     id: "Hackage:Numeric, Algebra:integer-gmp:1.0.1.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides the low-level implementation of the standard\n\
       'Integer' type based on the\n<http://gmplib.org/ GNU Multiple Precision Arithmetic\
       \ Library (GMP)>.\n\nThis package provides access to the internal representation\
@@ -1756,6 +1801,8 @@ packages:
     id: "Hackage:Prelude:base:4.10.1.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package contains the Standard Haskell \"Prelude\" and its support\
       \ libraries,\nand a large collection of useful libraries ranging from data\n\
       structures to parsing combinators and debugging utilities."
@@ -1783,6 +1830,8 @@ packages:
     id: "Hackage:Random:tf-random:0.5"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package contains an implementation of a high-quality splittable\
       \ pseudorandom number generator. The generator is based on a cryptographic hash\
       \ function built on top of the ThreeFish block cipher. See the paper /Splittable\
@@ -1826,6 +1875,8 @@ packages:
     id: "Hackage:System:random:1.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides a basic random number generation\nlibrary,\
       \ including the ability to split random number\ngenerators."
     homepage_url: ""
@@ -1852,6 +1903,8 @@ packages:
     id: "Hackage:Template Haskell:template-haskell:2.12.0.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package provides modules containing facilities for manipulating\n\
       Haskell source code using Template Haskell.\n\nSee <http://www.haskell.org/haskellwiki/Template_Haskell>\
       \ for more\ninformation."
@@ -1879,6 +1932,8 @@ packages:
     id: "Hackage:Testing:QuickCheck:2.10.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "QuickCheck is a library for random testing of program properties.\n\
       \nThe programmer provides a specification of the program, in the form of\nproperties\
       \ which functions should satisfy, and QuickCheck then tests that the\nproperties\
@@ -1914,6 +1969,8 @@ packages:
     id: "Hackage:Testing:quickcheck-with-counterexamples:1.0"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "When QuickCheck finds a counterexample, it prints it out but\ndoesn't\
       \ save it so that the programmer can access it. This can be\nannoying when debugging.\n\
       \nThis library provides a small extension to QuickCheck that returns\ncounterexamples\
@@ -1946,6 +2003,8 @@ packages:
     id: "Hackage:Text:pretty:1.1.3.3"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This package contains a pretty-printing library, a set of API's\n\
       that provides a way to easily print out text in a consistent\nformat of your\
       \ choosing. This is useful for compilers and related\ntools.\n\nThis library\
@@ -1975,6 +2034,8 @@ packages:
     id: "Hackage:Time:time:1.8.0.2"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "A time library"
     homepage_url: "https://github.com/haskell/time"
     binary_artifact:
@@ -2000,6 +2061,8 @@ packages:
     id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "This is a pretty printing library based on Wadler's paper [\"A Prettier\
       \ Printer\"](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf).\
       \ It has been enhanced with support for ANSI terminal colored output using the\
@@ -2028,6 +2091,8 @@ packages:
     id: "Hackage:User Interfaces:ansi-terminal:0.7.1.1"
     declared_licenses:
     - "BSD3"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "ANSI terminal support for Haskell: allows cursor movement,\nscreen\
       \ clearing, color output, showing or hiding the\ncursor, and changing the title.\
       \ Works on UNIX and Windows."
@@ -2055,6 +2120,8 @@ packages:
     id: "Hackage:data, graphics:colour:2.3.4"
     declared_licenses:
     - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "This package provides a data type for colours and transparency.\n\
       Colours can be blended and composed.\nVarious colour spaces are supported.\n\
       A module of colour names (\"Data.Colour.Names\") is provided."

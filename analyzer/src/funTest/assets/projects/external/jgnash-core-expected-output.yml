@@ -70,6 +70,8 @@ packages:
     id: "Maven:antlr:antlr:2.7.7"
     declared_licenses:
     - "BSD License"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
     description: "A framework for constructing recognizers, compilers,\n    and translators\
       \ from grammatical descriptions containing\n    Java, C#, C++, or Python actions."
     homepage_url: "http://www.antlr.org/"
@@ -96,6 +98,8 @@ packages:
     id: "Maven:com.fasterxml:classmate:1.3.0"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Library for introspecting types with full generic information\n\
       \        including resolving of field and method types."
     homepage_url: "http://github.com/cowtowncoder/java-classmate"
@@ -122,6 +126,8 @@ packages:
     id: "Maven:com.github.virtuald:curvesapi:1.03"
     declared_licenses:
     - "BSD License"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
     description: "Implementation of various mathematical curves that define themselves\
       \ over a set of control points. The API is written in Java. The curves supported\
       \ are: Bezier, B-Spline, Cardinal Spline, Catmull-Rom Spline, Lagrange, Natural\
@@ -150,6 +156,8 @@ packages:
     id: "Maven:com.h2database:h2:1.4.194"
     declared_licenses:
     - "MPL 2.0 or EPL 1.0"
+    declared_licenses_processed:
+      spdx_expression: "MPL-2.0 OR EPL-1.0"
     description: "H2 Database Engine"
     homepage_url: "http://www.h2database.com"
     binary_artifact:
@@ -176,6 +184,8 @@ packages:
     declared_licenses:
     - "Eclipse Public License, Version 1.0"
     - "GNU Lesser General Public License, Version 2.1"
+    declared_licenses_processed:
+      spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
     description: "a JDBC Connection pooling / Statement caching library"
     homepage_url: "https://github.com/swaldman/c3p0"
     binary_artifact:
@@ -202,6 +212,8 @@ packages:
     declared_licenses:
     - "Eclipse Public License, Version 1.0"
     - "GNU Lesser General Public License, Version 2.1"
+    declared_licenses_processed:
+      spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
     description: "mchange-commons-java"
     homepage_url: "https://github.com/swaldman/mchange-commons-java"
     binary_artifact:
@@ -227,6 +239,8 @@ packages:
     id: "Maven:com.thoughtworks.xstream:xstream-hibernate:1.4.9"
     declared_licenses:
     - "BSD style"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "XStream extension for Hibernate 3/4 to untie Java objects from Hibernate."
     homepage_url: "http://x-stream.github.io/xstream-hibernate"
     binary_artifact:
@@ -252,6 +266,8 @@ packages:
     id: "Maven:com.thoughtworks.xstream:xstream:1.4.9"
     declared_licenses:
     - "BSD style"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "XStream is a serialization library from Java objects to XML and\
       \ back."
     homepage_url: "http://x-stream.github.io/xstream"
@@ -278,6 +294,8 @@ packages:
     id: "Maven:commons-codec:commons-codec:1.10"
     declared_licenses:
     - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "The Apache Commons Codec package contains simple encoder and decoders\
       \ for\n     various formats such as Base64 and Hexadecimal.  In addition to\
       \ these\n     widely used encoders and decoders, the codec package also maintains\
@@ -305,6 +323,7 @@ packages:
 - package:
     id: "Maven:dom4j:dom4j:1.6.1"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: "dom4j: the flexible XML framework for Java"
     homepage_url: "http://dom4j.org"
     binary_artifact:
@@ -330,6 +349,8 @@ packages:
     id: "Maven:io.netty:netty-buffer:4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Netty is an asynchronous event-driven network application framework\
       \ for\n    rapid development of maintainable high performance protocol servers\
       \ and\n    clients."
@@ -357,6 +378,8 @@ packages:
     id: "Maven:io.netty:netty-codec:4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Netty is an asynchronous event-driven network application framework\
       \ for\n    rapid development of maintainable high performance protocol servers\
       \ and\n    clients."
@@ -384,6 +407,8 @@ packages:
     id: "Maven:io.netty:netty-common:4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Netty is an asynchronous event-driven network application framework\
       \ for\n    rapid development of maintainable high performance protocol servers\
       \ and\n    clients."
@@ -411,6 +436,8 @@ packages:
     id: "Maven:io.netty:netty-resolver:4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Netty is an asynchronous event-driven network application framework\
       \ for\n    rapid development of maintainable high performance protocol servers\
       \ and\n    clients."
@@ -438,6 +465,8 @@ packages:
     id: "Maven:io.netty:netty-transport:4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Netty is an asynchronous event-driven network application framework\
       \ for\n    rapid development of maintainable high performance protocol servers\
       \ and\n    clients."
@@ -465,6 +494,8 @@ packages:
     id: "Maven:junit:junit:4.12"
     declared_licenses:
     - "Eclipse Public License 1.0"
+    declared_licenses_processed:
+      spdx_expression: "EPL-1.0"
     description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
       \ and Kent Beck."
     homepage_url: "http://junit.org"
@@ -491,6 +522,8 @@ packages:
     id: "Maven:log4j:log4j:1.2.17"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Apache Log4j 1.2"
     homepage_url: "http://logging.apache.org/log4j/1.2/"
     binary_artifact:
@@ -517,6 +550,8 @@ packages:
     declared_licenses:
     - "BSD style"
     - "Public Domain"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause AND LicenseRef-scancode-public-domain-disclaimer"
     description: "kXML is a small XML pull parser, specially designed for constrained\
       \ environments such as Applets, Personal Java or MIDP devices. In contrast to\
       \ kXML 1, kXML 2 is based on the common XML pull API."
@@ -544,6 +579,8 @@ packages:
     id: "Maven:org.apache.commons:commons-lang3:3.3.2"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Apache Commons Lang, a package of Java utility classes for the\n\
       \  classes that are in java.lang's hierarchy, or are considered to be so\n \
       \ standard as to justify existence in java.lang."
@@ -571,6 +608,8 @@ packages:
     id: "Maven:org.apache.poi:poi-ooxml-schemas:3.14"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Apache POI - Java API To Access Microsoft Format Files"
     homepage_url: "http://poi.apache.org/"
     binary_artifact:
@@ -596,6 +635,8 @@ packages:
     id: "Maven:org.apache.poi:poi-ooxml:3.14"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Apache POI - Java API To Access Microsoft Format Files"
     homepage_url: "http://poi.apache.org/"
     binary_artifact:
@@ -621,6 +662,8 @@ packages:
     id: "Maven:org.apache.poi:poi:3.14"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Apache POI - Java API To Access Microsoft Format Files"
     homepage_url: "http://poi.apache.org/"
     binary_artifact:
@@ -646,6 +689,8 @@ packages:
     id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "XmlBeans main jar"
     homepage_url: "http://xmlbeans.apache.org"
     binary_artifact:
@@ -671,6 +716,8 @@ packages:
     id: "Maven:org.hamcrest:hamcrest-all:1.3"
     declared_licenses:
     - "New BSD License"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "A self-contained hamcrest jar containing all of the sub-modules\
       \ in a single artifact."
     homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-all"
@@ -697,6 +744,8 @@ packages:
     id: "Maven:org.hibernate.common:hibernate-commons-annotations:5.0.1.Final"
     declared_licenses:
     - "GNU Lesser General Public License"
+    declared_licenses_processed:
+      spdx_expression: "LGPL-2.1-only"
     description: "Common reflection code used in support of annotation processing"
     homepage_url: "http://hibernate.org"
     binary_artifact:
@@ -723,6 +772,8 @@ packages:
     declared_licenses:
     - "Eclipse Distribution License (EDL), Version 1.0"
     - "Eclipse Public License (EPL), Version 1.0"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause AND EPL-1.0"
     description: "Clean-room definition of JPA APIs intended for use in developing\
       \ Hibernate JPA implementation.  See README.md for details"
     homepage_url: "http://hibernate.org"
@@ -749,6 +800,8 @@ packages:
     id: "Maven:org.hibernate:hibernate-c3p0:5.2.10.Final"
     declared_licenses:
     - "GNU Lesser General Public License"
+    declared_licenses_processed:
+      spdx_expression: "LGPL-2.1-only"
     description: "Integration for c3p0 Connection pooling into Hibernate O/RM"
     homepage_url: "http://hibernate.org"
     binary_artifact:
@@ -774,6 +827,8 @@ packages:
     id: "Maven:org.hibernate:hibernate-core:5.2.10.Final"
     declared_licenses:
     - "GNU Lesser General Public License"
+    declared_licenses_processed:
+      spdx_expression: "LGPL-2.1-only"
     description: "The core O/RM functionality as provided by Hibernate"
     homepage_url: "http://hibernate.org"
     binary_artifact:
@@ -799,6 +854,8 @@ packages:
     id: "Maven:org.hsqldb:hsqldb:2.4.0"
     declared_licenses:
     - "HSQLDB License, a BSD open source license"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
     description: "HSQLDB - Lightweight 100% Java SQL Database Engine"
     homepage_url: "http://hsqldb.org"
     binary_artifact:
@@ -826,6 +883,8 @@ packages:
     - "Apache License 2.0"
     - "LGPL 2.1"
     - "MPL 1.1"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0 AND LGPL-2.1-only AND MPL-1.1"
     description: "Javassist (JAVA programming ASSISTant) makes Java bytecode manipulation\n\
       \    simple.  It is a class library for editing bytecodes in Java."
     homepage_url: "http://www.javassist.org/"
@@ -852,6 +911,8 @@ packages:
     id: "Maven:org.jboss.logging:jboss-logging:3.3.0.Final"
     declared_licenses:
     - "Apache License, version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "The JBoss Logging Framework"
     homepage_url: "http://www.jboss.org"
     binary_artifact:
@@ -878,6 +939,8 @@ packages:
     declared_licenses:
     - "Common Development and Distribution License"
     - "GNU General Public License, Version 2 with the Classpath Exception"
+    declared_licenses_processed:
+      spdx_expression: "CDDL-1.0 AND GPL-2.0-only WITH Classpath-exception-2.0"
     description: "The Java Transaction 1.2 API classes"
     homepage_url: "http://www.jboss.org/jboss-transaction-api_1.2_spec"
     binary_artifact:
@@ -903,6 +966,8 @@ packages:
     id: "Maven:org.jboss:jandex:2.0.3.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
     description: "Parent POM for JBoss projects. Provides default project build configuration."
     homepage_url: "http://www.jboss.org/jandex"
     binary_artifact:
@@ -928,6 +993,8 @@ packages:
     id: "Maven:org.slf4j:slf4j-api:1.7.21"
     declared_licenses:
     - "MIT License"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "The slf4j API"
     homepage_url: "http://www.slf4j.org"
     binary_artifact:
@@ -953,6 +1020,8 @@ packages:
     id: "Maven:org.slf4j:slf4j-log4j12:1.7.21"
     declared_licenses:
     - "MIT License"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
     description: "SLF4J LOG4J-12 Binding"
     homepage_url: "http://www.slf4j.org"
     binary_artifact:
