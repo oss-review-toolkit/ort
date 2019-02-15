@@ -25,7 +25,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class OrtResultTest : WordSpec({
-    "collectAllDependencies" should {
+    "collectDependencies" should {
         "be able to get all direct dependencies of a package" {
             val expectedDependencies = listOf(
                     "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
@@ -38,7 +38,7 @@ class OrtResultTest : WordSpec({
             val result = resultFile.readValue<OrtResult>()
 
             val pkg = Package.EMPTY.copy(id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"))
-            result.collectAllDependencies(pkg, 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
+            result.collectDependencies(pkg, 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
         }
     }
 })
