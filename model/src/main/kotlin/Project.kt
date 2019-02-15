@@ -147,6 +147,18 @@ data class Project(
     }
 
     /**
+     * Return the set of [PackageReference]s that refer to sub-projects of this [Project].
+     */
+    fun collectSubProjects() =
+            scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
+                refs.also {
+                    it += scope.collectDependencies().filter {
+                        ref -> ref.linkage in PackageLinkage.PROJECT_LINKAGE
+                    }
+                }
+            }
+
+    /**
      * A comparison function to sort projects by their identifier.
      */
     override fun compareTo(other: Project) = id.compareTo(other.id)

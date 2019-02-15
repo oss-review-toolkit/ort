@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import io.kotlintest.matchers.haveSize
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -39,6 +41,25 @@ class OrtResultTest : WordSpec({
 
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
             result.collectDependencies(id, 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
+        }
+    }
+
+    "collectProjectsAndPackages" should {
+        "be able to get all ids except for ones for sub-projects" {
+            val projectsDir = File("../analyzer/src/funTest/assets/projects")
+            val resultFile = projectsDir.resolve("synthetic/gradle-all-dependencies-expected-result.yml")
+            val result = resultFile.readValue<OrtResult>()
+
+            val ids = result.collectProjectsAndPackages()
+            val idsWithoutSubProjects = result.collectProjectsAndPackages(false)
+
+            val actualIds = ids - idsWithoutSubProjects
+            val expectedIds = sortedSetOf(Identifier("Gradle:com.here.ort.gradle.example:lib:1.0.0"))
+
+            ids should haveSize(9)
+            idsWithoutSubProjects should haveSize(8)
+
+            actualIds shouldBe expectedIds
         }
     }
 })

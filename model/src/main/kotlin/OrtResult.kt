@@ -158,6 +158,33 @@ data class OrtResult(
     }
 
     /**
+     * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
+     * [includeSubProjects].
+     */
+    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): SortedSet<Identifier> {
+        val projectsAndPackages = sortedSetOf<Identifier>()
+        val allSubProjects = sortedSetOf<Identifier>()
+
+        if (!includeSubProjects) {
+            analyzer?.result?.apply {
+                projects.forEach {
+                    it.collectSubProjects().mapTo(allSubProjects) { ref -> ref.id }
+                }
+            }
+        }
+
+        analyzer?.result?.apply {
+            projects.mapNotNullTo(projectsAndPackages) { project ->
+                project.id.takeUnless { it in allSubProjects }
+            }
+
+            packages.mapTo(projectsAndPackages) { it.pkg.id }
+        }
+
+        return projectsAndPackages
+    }
+
+    /**
      * Return the concluded license for the given package [id], or null if there is no concluded license.
      */
     fun getConcludedLicensesForId(id: Identifier) =
