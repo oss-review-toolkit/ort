@@ -32,6 +32,7 @@ packages:
 - package:
     id: "GoDep::github.com/kr/fs:2788f0dbd16903de03cb8186e5c7d97b69ad387b"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
@@ -56,6 +57,7 @@ packages:
 - package:
     id: "GoDep::github.com/kr/pretty:f31442d60e51465c69811e2107ae978868dbea5c"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
@@ -80,6 +82,7 @@ packages:
 - package:
     id: "GoDep::github.com/kr/text:6807e777504f54ad073ecef66747de158294b639"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
@@ -104,6 +107,7 @@ packages:
 - package:
     id: "GoDep::github.com/pmezard/go-difflib:f78a839676152fd9f4863704f5d516195c18fc14"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
@@ -128,6 +132,7 @@ packages:
 - package:
     id: "GoDep::golang.org/x/tools:1f1b3322f67af76803c942fd237291538ec68262"
     declared_licenses: []
+    declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:

@@ -412,6 +412,8 @@ analyzer:
         id: "Maven:junit:junit:4.12"
         declared_licenses:
         - "Eclipse Public License 1.0"
+        declared_licenses_processed:
+          spdx_expression: "EPL-1.0"
         description: "JUnit is a unit testing framework for Java, created by Erich\
           \ Gamma and Kent Beck."
         homepage_url: "http://junit.org"
@@ -438,6 +440,8 @@ analyzer:
         id: "Maven:org.apache.commons:commons-lang3:3.5"
         declared_licenses:
         - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "Apache Commons Lang, a package of Java utility classes for the\n\
           \  classes that are in java.lang's hierarchy, or are considered to be so\n\
           \  standard as to justify existence in java.lang."
@@ -465,6 +469,8 @@ analyzer:
         id: "Maven:org.apache.commons:commons-text:1.1"
         declared_licenses:
         - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "Apache Commons Text is a library focused on algorithms working\
           \ on strings."
         homepage_url: "http://commons.apache.org/proper/commons-text/"
@@ -491,6 +497,8 @@ analyzer:
         id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "Apache Struts 2"
         homepage_url: "http://struts.apache.org/struts2-assembly/"
         binary_artifact:
@@ -517,6 +525,10 @@ analyzer:
         declared_licenses:
         - "curated license a"
         - "curated license b"
+        declared_licenses_processed:
+          unmapped:
+          - "curated license a"
+          - "curated license b"
         description: "Curated description."
         homepage_url: "http://hamcrest.org/JavaHamcrest/"
         binary_artifact:

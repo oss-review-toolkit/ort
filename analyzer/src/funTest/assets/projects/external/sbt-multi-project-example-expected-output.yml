@@ -219,6 +219,8 @@ analyzer:
         declared_licenses:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
+        declared_licenses_processed:
+          spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
         description: "logback-classic module"
         homepage_url: "http://logback.qos.ch/logback-classic"
         binary_artifact:
@@ -245,6 +247,8 @@ analyzer:
         declared_licenses:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
+        declared_licenses_processed:
+          spdx_expression: "EPL-1.0 AND LGPL-2.1-only"
         description: "logback-core module"
         homepage_url: "http://logback.qos.ch/logback-core"
         binary_artifact:
@@ -270,6 +274,8 @@ analyzer:
         id: "Maven:com.chuusai:shapeless_2.12:2.3.2"
         declared_licenses:
         - "Apache 2"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "core"
         homepage_url: "https://github.com/milessabin/shapeless"
         binary_artifact:
@@ -295,6 +301,8 @@ analyzer:
         id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "Core annotations used for value types, used by Jackson data\
           \ binding package."
         homepage_url: "http://github.com/FasterXML/jackson"
@@ -321,6 +329,8 @@ analyzer:
         id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "Core Jackson abstractions, basic JSON streaming API implementation"
         homepage_url: "https://github.com/FasterXML/jackson-core"
         binary_artifact:
@@ -346,6 +356,8 @@ analyzer:
         id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "General data-binding functionality for Jackson: works on core\
           \ streaming API"
         homepage_url: "http://github.com/FasterXML/jackson"
@@ -372,6 +384,8 @@ analyzer:
         id: "Maven:com.github.julien-truffaut:monocle-core_2.12:1.4.0"
         declared_licenses:
         - "MIT"
+        declared_licenses_processed:
+          spdx_expression: "MIT"
         description: "core"
         homepage_url: "https://github.com/julien-truffaut/Monocle"
         binary_artifact:
@@ -397,6 +411,8 @@ analyzer:
         id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
         declared_licenses:
         - "MIT"
+        declared_licenses_processed:
+          spdx_expression: "MIT"
         description: "macros"
         homepage_url: "https://github.com/julien-truffaut/Monocle"
         binary_artifact:
@@ -422,6 +438,8 @@ analyzer:
         id: "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
         declared_licenses:
         - "Mozilla Public License, version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "MPL-2.0"
         description: "pureconfig-macros"
         homepage_url: "https://github.com/pureconfig/pureconfig"
         binary_artifact:
@@ -447,6 +465,8 @@ analyzer:
         id: "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
         declared_licenses:
         - "Mozilla Public License, version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "MPL-2.0"
         description: "pureconfig"
         homepage_url: "https://github.com/pureconfig/pureconfig"
         binary_artifact:
@@ -472,6 +492,8 @@ analyzer:
         id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
         declared_licenses:
         - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "akka-actor"
         homepage_url: "http://akka.io/"
         binary_artifact:
@@ -497,6 +519,8 @@ analyzer:
         id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
         declared_licenses:
         - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "akka-stream"
         homepage_url: "http://akka.io/"
         binary_artifact:
@@ -522,6 +546,8 @@ analyzer:
         id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
         declared_licenses:
         - "Apache 2.0 License"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "scala-logging"
         homepage_url: "https://github.com/typesafehub/scala-logging"
         binary_artifact:
@@ -547,6 +573,8 @@ analyzer:
         id: "Maven:com.typesafe:config:1.3.1"
         declared_licenses:
         - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "config"
         homepage_url: "https://github.com/typesafehub/config"
         binary_artifact:
@@ -572,6 +600,8 @@ analyzer:
         id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
         declared_licenses:
         - "Apache License, Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "ssl-config-core"
         homepage_url: "https://github.com/typesafehub/ssl-config"
         binary_artifact:
@@ -598,6 +628,8 @@ analyzer:
         declared_licenses:
         - "Apache License, Version 2.0"
         - "MIT License"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0 AND MIT"
         description: "Logback encoder which will output events as Logstash-compatible\
           \ JSON"
         homepage_url: "https://github.com/logstash/logstash-logback-encoder"
@@ -624,6 +656,8 @@ analyzer:
         id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
         declared_licenses:
         - "CC0"
+        declared_licenses_processed:
+          spdx_expression: "CC0-1.0"
         description: "A Protocol for Asynchronous Non-Blocking Data Sequence"
         homepage_url: "http://www.reactive-streams.org/"
         binary_artifact:
@@ -649,6 +683,8 @@ analyzer:
         id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
         declared_licenses:
         - "BSD 3-clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "scala-java8-compat"
         homepage_url: "http://www.scala-lang.org/"
         binary_artifact:
@@ -674,6 +710,8 @@ analyzer:
         id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
         declared_licenses:
         - "BSD 3-clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "scala-parser-combinators"
         homepage_url: "http://www.scala-lang.org/"
         binary_artifact:
@@ -699,6 +737,8 @@ analyzer:
         id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
         declared_licenses:
         - "BSD 3-clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "scala-xml"
         homepage_url: "http://www.scala-lang.org/"
         binary_artifact:
@@ -724,6 +764,8 @@ analyzer:
         id: "Maven:org.scala-lang:scala-compiler:2.12.3"
         declared_licenses:
         - "BSD 3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "Compiler for the Scala Programming Language"
         homepage_url: "http://www.scala-lang.org/"
         binary_artifact:
@@ -749,6 +791,8 @@ analyzer:
         id: "Maven:org.scala-lang:scala-library:2.12.3"
         declared_licenses:
         - "BSD 3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "Standard library for the Scala Programming Language"
         homepage_url: "http://www.scala-lang.org/"
         binary_artifact:
@@ -774,6 +818,8 @@ analyzer:
         id: "Maven:org.scala-lang:scala-reflect:2.12.2"
         declared_licenses:
         - "BSD 3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "Compiler for the Scala Programming Language"
         homepage_url: "http://www.scala-lang.org/"
         binary_artifact:
@@ -799,6 +845,8 @@ analyzer:
         id: "Maven:org.scala-sbt:test-interface:1.0"
         declared_licenses:
         - "BSD"
+        declared_licenses_processed:
+          spdx_expression: "BSD-2-Clause"
         description: "Uniform test interface to Scala/Java test frameworks (specs,\
           \ ScalaCheck, ScalaTest, JUnit and other)"
         homepage_url: "http://www.scala-sbt.org"
@@ -825,6 +873,8 @@ analyzer:
         id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
         declared_licenses:
         - "BSD-style"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "scalacheck"
         homepage_url: "http://www.scalacheck.org"
         binary_artifact:
@@ -850,6 +900,8 @@ analyzer:
         id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
         declared_licenses:
         - "the Apache License, ASL Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "scalactic"
         homepage_url: "http://www.scalatest.org"
         binary_artifact:
@@ -875,6 +927,8 @@ analyzer:
         id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
         declared_licenses:
         - "the Apache License, ASL Version 2.0"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "scalatest"
         homepage_url: "http://www.scalatest.org"
         binary_artifact:
@@ -900,6 +954,8 @@ analyzer:
         id: "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
         declared_licenses:
         - "BSD-style"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
         description: "scalaz-core"
         homepage_url: "http://scalaz.org"
         binary_artifact:
@@ -925,6 +981,8 @@ analyzer:
         id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
         declared_licenses:
         - "MIT License"
+        declared_licenses_processed:
+          spdx_expression: "MIT"
         description: "JCL 1.2 implemented over SLF4J"
         homepage_url: "http://www.slf4j.org"
         binary_artifact:
@@ -950,6 +1008,8 @@ analyzer:
         id: "Maven:org.slf4j:slf4j-api:1.7.25"
         declared_licenses:
         - "MIT License"
+        declared_licenses_processed:
+          spdx_expression: "MIT"
         description: "The slf4j API"
         homepage_url: "http://www.slf4j.org"
         binary_artifact:
@@ -975,6 +1035,8 @@ analyzer:
         id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
         declared_licenses:
         - "Apache 2"
+        declared_licenses_processed:
+          spdx_expression: "Apache-2.0"
         description: "core"
         homepage_url: "https://github.com/milessabin/macro-compat"
         binary_artifact:
