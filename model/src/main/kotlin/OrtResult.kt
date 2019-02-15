@@ -62,11 +62,11 @@ data class OrtResult(
         val data: CustomData = emptyMap()
 ) {
     /**
-     * Return all concluded licenses associated to their package. If [omitExcluded] is set to true, excluded packages
+     * Return the concluded licenses associated to their package. If [omitExcluded] is set to true, excluded packages
      * are omitted from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectAllConcludedLicenses(omitExcluded: Boolean = false) =
+    fun collectConcludedLicenses(omitExcluded: Boolean = false) =
             sortedMapOf<Identifier, SpdxExpression?>().also { licenses ->
                 val excludes = repository.config.excludes.takeIf { omitExcluded }
 
@@ -77,11 +77,11 @@ data class OrtResult(
             }
 
     /**
-     * Return all declared licenses associated to the projects / packages they occur in. If [omitExcluded] is set to
-     * true, excluded projects / packages are omitted from the result.
+     * Return the declared licenses associated to their project / package. If [omitExcluded] is set to true, excluded
+     * projects / packages are omitted from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectAllDeclaredLicenses(omitExcluded: Boolean = false) =
+    fun collectDeclaredLicenses(omitExcluded: Boolean = false) =
             sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
                 val excludes = repository.config.excludes.takeIf { omitExcluded }
 
@@ -105,11 +105,11 @@ data class OrtResult(
             }
 
     /**
-     * Return all detected licenses associated to the projects / packages they occur in. If [omitExcluded] is set to
-     * true, excluded projects / packages are omitted from the result.
+     * Return the detected licenses associated to their project / package. If [omitExcluded] is set to true, excluded
+     * projects / packages are omitted from the result.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectAllDetectedLicenses(omitExcluded: Boolean = false) =
+    fun collectDetectedLicenses(omitExcluded: Boolean = false) =
             sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
                 // Note that we require the analyzer result here to determine whether a package has been implicitly
                 // excluded via its project or scope.
@@ -126,10 +126,10 @@ data class OrtResult(
             }
 
     /**
-     * Return all dependencies of the given [pkg], up to and including a depth of [maxDepth] where counting starts at 0
+     * Return the dependencies of the given [pkg], up to and including a depth of [maxDepth] where counting starts at 0
      * (for the [Package] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the depth.
      */
-    fun collectAllDependencies(pkg: Package, maxLevel: Int = -1): SortedSet<PackageReference> {
+    fun collectDependencies(pkg: Package, maxLevel: Int = -1): SortedSet<PackageReference> {
         val dependencies = sortedSetOf<PackageReference>()
 
         analyzer?.result?.apply {
