@@ -62,68 +62,6 @@ data class OrtResult(
         val data: CustomData = emptyMap()
 ) {
     /**
-     * Return all dependencies of the given [pkg], up to and including a depth of [maxDepth] where counting starts at 0
-     * (for the [Package] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the depth.
-     */
-    fun collectAllDependencies(pkg: Package, maxLevel: Int = -1): SortedSet<PackageReference> {
-        val dependencies = sortedSetOf<PackageReference>()
-
-        analyzer?.result?.apply {
-            projects.forEach { project ->
-                project.findReferences(pkg.id).forEach { ref ->
-                    dependencies += ref.collectDependencies(maxLevel)
-                }
-            }
-        }
-
-        return dependencies
-    }
-
-    /**
-     * Return a map of all de-duplicated errors associated by [Identifier].
-     */
-    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val analyzerErrors = analyzer?.result?.collectErrors() ?: emptyMap()
-        val scannerErrors = scanner?.results?.collectErrors() ?: emptyMap()
-        return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
-    }
-
-    /**
-     * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
-     * [omitExcluded] is set to true, excluded projects / packages are omitted from the result. Projects are converted
-     * to packages in the result. If no analyzer result is present an empty set is returned.
-     */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getOrgPackages(vararg names: String, omitExcluded: Boolean = false): SortedSet<Package> {
-        val vendorPackages = sortedSetOf<Package>()
-        val excludes = repository.config.excludes.takeIf { omitExcluded }
-
-        analyzer?.result?.apply {
-            projects.filter {
-                it.id.isFromOrg(*names) && excludes?.isProjectExcluded(it) != true
-            }.mapTo(vendorPackages) {
-                it.toPackage()
-            }
-
-            packages.filter { (pkg, _) ->
-                pkg.id.isFromOrg(*names) && excludes?.isPackageExcluded(pkg.id, analyzer.result) != true
-            }.mapTo(vendorPackages) {
-                it.pkg
-            }
-        }
-
-        return vendorPackages
-    }
-
-    /**
-     * Return the concluded license for the given package [id], or null if there is no concluded license.
-     */
-    fun getConcludedLicensesForId(id: Identifier) =
-            analyzer?.result?.run {
-                packages.find { it.pkg.id == id }?.pkg?.concludedLicense
-            }
-
-    /**
      * Return all concluded licenses associated to their package. If [omitExcluded] is set to true, excluded packages
      * are omitted from the result.
      */
@@ -137,16 +75,6 @@ data class OrtResult(
                             .associateTo(licenses) { it.pkg.id to it.pkg.concludedLicense }
                 }
             }
-
-    /**
-     * Return the declared licenses for the given [id] which may either refer to a project or to a package. If [id] is
-     * not found an empty set is returned.
-     */
-    fun getDeclaredLicensesForId(id: Identifier) =
-            analyzer?.result?.run {
-                projects.find { it.id == id }?.declaredLicenses
-                        ?: packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
-            } ?: sortedSetOf<String>()
 
     /**
      * Return all declared licenses associated to the projects / packages they occur in. If [omitExcluded] is set to
@@ -177,14 +105,6 @@ data class OrtResult(
             }
 
     /**
-     * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
-     * scanning, the [id] may either refer to a project or to a package. If [id] is not found an empty set is returned.
-     */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getDetectedLicensesForId(id: Identifier) =
-            scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
-
-    /**
      * Return all detected licenses associated to the projects / packages they occur in. If [omitExcluded] is set to
      * true, excluded projects / packages are omitted from the result.
      */
@@ -204,6 +124,86 @@ data class OrtResult(
                     }
                 }
             }
+
+    /**
+     * Return all dependencies of the given [pkg], up to and including a depth of [maxDepth] where counting starts at 0
+     * (for the [Package] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the depth.
+     */
+    fun collectAllDependencies(pkg: Package, maxLevel: Int = -1): SortedSet<PackageReference> {
+        val dependencies = sortedSetOf<PackageReference>()
+
+        analyzer?.result?.apply {
+            projects.forEach { project ->
+                project.findReferences(pkg.id).forEach { ref ->
+                    dependencies += ref.collectDependencies(maxLevel)
+                }
+            }
+        }
+
+        return dependencies
+    }
+
+    /**
+     * Return a map of all de-duplicated errors associated by [Identifier].
+     */
+    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
+        val analyzerErrors = analyzer?.result?.collectErrors() ?: emptyMap()
+        val scannerErrors = scanner?.results?.collectErrors() ?: emptyMap()
+        return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
+    }
+
+    /**
+     * Return the concluded license for the given package [id], or null if there is no concluded license.
+     */
+    fun getConcludedLicensesForId(id: Identifier) =
+            analyzer?.result?.run {
+                packages.find { it.pkg.id == id }?.pkg?.concludedLicense
+            }
+
+    /**
+     * Return the declared licenses for the given [id] which may either refer to a project or to a package. If [id] is
+     * not found an empty set is returned.
+     */
+    fun getDeclaredLicensesForId(id: Identifier) =
+            analyzer?.result?.run {
+                projects.find { it.id == id }?.declaredLicenses
+                        ?: packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
+            } ?: sortedSetOf<String>()
+
+    /**
+     * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
+     * scanning, the [id] may either refer to a project or to a package. If [id] is not found an empty set is returned.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun getDetectedLicensesForId(id: Identifier) =
+            scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
+
+    /**
+     * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
+     * [omitExcluded] is set to true, excluded projects / packages are omitted from the result. Projects are converted
+     * to packages in the result. If no analyzer result is present an empty set is returned.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun getOrgPackages(vararg names: String, omitExcluded: Boolean = false): SortedSet<Package> {
+        val vendorPackages = sortedSetOf<Package>()
+        val excludes = repository.config.excludes.takeIf { omitExcluded }
+
+        analyzer?.result?.apply {
+            projects.filter {
+                it.id.isFromOrg(*names) && excludes?.isProjectExcluded(it) != true
+            }.mapTo(vendorPackages) {
+                it.toPackage()
+            }
+
+            packages.filter { (pkg, _) ->
+                pkg.id.isFromOrg(*names) && excludes?.isPackageExcluded(pkg.id, analyzer.result) != true
+            }.mapTo(vendorPackages) {
+                it.pkg
+            }
+        }
+
+        return vendorPackages
+    }
 
     /**
      * Return true if the project or package with the given identifier is excluded.
