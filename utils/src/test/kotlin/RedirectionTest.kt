@@ -76,7 +76,7 @@ class RedirectionTest : WordSpec({
         }
 
         "work when trapping exit calls" {
-            var exitCode : Int? = null
+            var exitCode: Int? = null
 
             val stdout = redirectStdout {
                 exitCode = trapSystemExitCall {

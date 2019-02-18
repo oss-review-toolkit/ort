@@ -131,8 +131,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     fun getDetails() = ScannerDetails(scannerName, getVersion(), getConfiguration())
 
-    override fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
-            : Map<Package, List<ScanResult>> {
+    override fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
+            Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
         return packages.withIndex().associate { (index, pkg) ->

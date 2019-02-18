@@ -55,8 +55,8 @@ fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, defi
             .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
 }
 
-fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchStartAndEndTime: Boolean = false)
-        : String {
+fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchStartAndEndTime: Boolean = false):
+        String {
     fun String.replaceIf(condition: Boolean, regex: Regex, transform: (MatchResult) -> CharSequence) =
             if (condition) replace(regex, transform) else this
 

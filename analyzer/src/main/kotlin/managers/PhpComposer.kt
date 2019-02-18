@@ -252,8 +252,8 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
      * packages not accidentally containing a package which is actually installed, we make sure to only return virtual
      * packages for which are not in the installed package map.
      */
-    private fun parseVirtualPackageNames(packages: Map<String, Package>, manifest: JsonNode, lockFile: JsonNode)
-            : Set<String> {
+    private fun parseVirtualPackageNames(packages: Map<String, Package>, manifest: JsonNode, lockFile: JsonNode):
+            Set<String> {
         val replacedNames = mutableSetOf<String>()
 
         // The contents of the manifest file, which can also define replacements, is not included in the lock file, so 
