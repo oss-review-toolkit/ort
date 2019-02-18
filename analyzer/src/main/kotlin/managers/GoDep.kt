@@ -51,9 +51,12 @@ import java.io.IOException
 import java.net.URI
 import java.nio.file.Paths
 
+/**
+ * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
+ */
 val GO_LEGACY_MANIFESTS = mapOf(
-        "glide.yaml" to "glide.lock",
-        "Godeps.json" to ""
+        "glide.yaml" to "glide.lock", // https://github.com/Masterminds/glide
+        "Godeps.json" to ""           // https://github.com/tools/godep
 )
 
 /**
