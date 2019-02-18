@@ -336,8 +336,8 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
         return modulesDir.takeIf { it.name == "node_modules" }
     }
 
-    private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>)
-            : SortedSet<PackageReference> {
+    private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>):
+            SortedSet<PackageReference> {
         // Read package.json
         val json = jsonMapper.readTree(packageJson)
         val dependencies = sortedSetOf<PackageReference>()
@@ -431,8 +431,8 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
         }
     }
 
-    private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>)
-            : ProjectAnalyzerResult {
+    private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>):
+            ProjectAnalyzerResult {
         log.debug { "Parsing project info from '${packageJson.absolutePath}'." }
 
         val json = jsonMapper.readTree(packageJson)

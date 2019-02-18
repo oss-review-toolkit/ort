@@ -62,8 +62,8 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      * contain multiple results for the same [Package] if the storage contains more than one result for the
      * specification of this scanner.
      */
-    protected abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File)
-            : Map<Package, List<ScanResult>>
+    protected abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
+            Map<Package, List<ScanResult>>
 
     /**
      * Return the scanner-specific SPDX idstring for the given [license].

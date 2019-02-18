@@ -88,7 +88,7 @@ internal class PackageJsonUtils {
             definitionFiles.forEach { definitionFile ->
                 val workspaceMatchers = getWorkspaceMatchers(definitionFile)
                 workspaceMatchers.forEach { matcher ->
-                    definitionFiles.forEach inner@ { other ->
+                    definitionFiles.forEach inner@{ other ->
                         // Since yarn workspaces matchers support '*' and '**' to match multiple directories the matcher
                         // cannot be used as is for matching the 'package.json' file. Thus matching against the project
                         // directory since this works out of the box. See also:

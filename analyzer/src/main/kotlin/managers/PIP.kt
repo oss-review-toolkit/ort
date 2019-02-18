@@ -158,8 +158,8 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
             runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 
-    private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String)
-            : ProcessCapture {
+    private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
+            ProcessCapture {
         val binDir = if (OS.isWindows) "Scripts" else "bin"
         var command = File(virtualEnvDir, binDir + File.separator + commandName)
 

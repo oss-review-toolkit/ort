@@ -82,7 +82,7 @@ class CopyrightStatementsProcessor {
         ).map { it.toRegex() }
 
         private fun prettyPrintYears(years: Collection<Int>) =
-                getYearRanges(years).joinToString (separator = ", ") { (fromYear, toYear) ->
+                getYearRanges(years).joinToString(separator = ", ") { (fromYear, toYear) ->
                     if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
                 }
 

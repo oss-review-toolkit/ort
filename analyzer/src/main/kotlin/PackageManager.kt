@@ -88,8 +88,8 @@ abstract class PackageManager(
          * @param directory The root directory to search for managed files.
          * @param packageManagers A list of package managers to use, defaults to [ALL].
          */
-        fun findManagedFiles(directory: File, packageManagers: List<PackageManagerFactory> = ALL)
-                : ManagedProjectFiles {
+        fun findManagedFiles(directory: File, packageManagers: List<PackageManagerFactory> = ALL):
+                ManagedProjectFiles {
             require(directory.isDirectory) {
                 "The provided path is not a directory: ${directory.absolutePath}"
             }
