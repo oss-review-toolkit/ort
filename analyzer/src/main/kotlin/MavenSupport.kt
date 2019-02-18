@@ -113,7 +113,13 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         }
 
         fun parseLicenses(mavenProject: MavenProject) =
-                mavenProject.licenses.mapNotNull { it.name ?: it.url ?: it.comments }.toSortedSet()
+                mavenProject.licenses.mapNotNull {
+                    if (it.comments?.startsWith("SPDX-License-Identifier:") == true) {
+                        it.comments.removePrefix("SPDX-License-Identifier:")
+                    } else {
+                        it.name ?: it.url ?: it.comments
+                    }?.trim()
+                }.toSortedSet()
 
         private fun parseScm(scm: Scm?): VcsInfo {
             val connection = scm?.connection ?: ""
