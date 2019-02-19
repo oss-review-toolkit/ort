@@ -20,9 +20,9 @@
 package com.here.ort.utils
 
 import com.here.ort.spdx.SpdxExpression
+import com.here.ort.spdx.SpdxDeclaredLicenseMapping
+import com.here.ort.spdx.SpdxLicenseAliasMapping
 import com.here.ort.spdx.SpdxLicenseIdExpression
-import com.here.ort.spdx.SpdxLicenseIdMapping
-import com.here.ort.spdx.SpdxLicenseStringMapping
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -32,7 +32,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
     /**
      * A collection of declared license strings found in open source packages.
      */
-    private val declaredLicenses = SpdxLicenseIdMapping.mapping.keys + SpdxLicenseStringMapping.mapping.keys
+    private val declaredLicenses = SpdxLicenseAliasMapping.mapping.keys + SpdxDeclaredLicenseMapping.mapping.keys
 
     init {
         "Declared licenses can be processed" {
