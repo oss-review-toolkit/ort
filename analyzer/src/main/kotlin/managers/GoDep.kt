@@ -40,6 +40,7 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
+import com.here.ort.utils.realFile
 import com.here.ort.utils.safeCopyRecursively
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
@@ -167,7 +168,7 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
                     "versions are unstable.")
         }
 
-        run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.absolutePath))
+        run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.realFile().path))
     }
 
     private fun setUpWorkspace(projectDir: File, vcs: VcsInfo, gopath: File): File {
