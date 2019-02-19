@@ -23,12 +23,12 @@ import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.spdx.SpdxDeclaredLicenseMapping
 import com.here.ort.spdx.SpdxExpression
-import com.here.ort.spdx.SpdxLicenseStringMapping
 
 object DeclaredLicenseProcessor {
     fun process(declaredLicense: String) =
-            (SpdxLicenseStringMapping.map(declaredLicense) ?: parseLicense(declaredLicense))?.normalize()
+            (SpdxDeclaredLicenseMapping.map(declaredLicense) ?: parseLicense(declaredLicense))?.normalize()
 
     fun process(declaredLicenses: Collection<String>): ProcessedDeclaredLicense {
         val processedLicenses = mutableSetOf<SpdxExpression>()

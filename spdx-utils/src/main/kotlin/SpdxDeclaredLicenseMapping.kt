@@ -25,9 +25,9 @@ import com.here.ort.spdx.SpdxLicenseException.*
 /**
  * A mapping from license strings collected from the declared licenses of open source packages to SPDX expressions. This
  * mapping only contains license strings which cannot be parsed by [SpdxExpression.parse], for example because the
- * license names contain white space. See [SpdxLicenseIdMapping] for a mapping of misspelled license IDs.
+ * license names contain white space. See [SpdxLicenseAliasMapping] for a mapping of misspelled license IDs.
  */
-object SpdxLicenseStringMapping {
+object SpdxDeclaredLicenseMapping {
     val mapping = mapOf(
             "(MIT-style) netCDF C library license" to NETCDF.toExpression(),
             "2-clause BSD license" to BSD_2_CLAUSE.toExpression(),

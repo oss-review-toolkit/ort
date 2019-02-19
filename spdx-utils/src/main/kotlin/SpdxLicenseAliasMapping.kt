@@ -24,7 +24,7 @@ import com.here.ort.spdx.SpdxLicense.*
 /**
  * A mapping from misspelled SPDX license IDs to valid SPDX IDs.
  */
-object SpdxLicenseIdMapping {
+object SpdxLicenseAliasMapping {
     val mapping = mapOf(
             "AFLv2.1" to AFL_2_1,
             "ALv2" to APACHE_2_0,

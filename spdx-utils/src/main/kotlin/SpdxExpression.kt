@@ -216,7 +216,7 @@ data class SpdxLicenseIdExpression(
 
     override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
 
-    override fun normalize() = SpdxLicenseIdMapping.map(id)?.toExpression() ?: this
+    override fun normalize() = SpdxLicenseAliasMapping.map(id)?.toExpression() ?: this
 
     override fun validate(strictness: Strictness) {
         val license = SpdxLicense.forId(id)
